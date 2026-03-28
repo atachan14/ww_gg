@@ -1,0 +1,51 @@
+﻿<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ page_title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='/styles.css') }}">
+</head>
+<body>
+    <div class="page-shell">
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+    (function () {
+        const optionGroups = Array.from(document.querySelectorAll('[data-open-name]'));
+        if (!optionGroups.length) {
+            return;
+        }
+
+        async function persistOpenState(name, isOpen) {
+            try {
+                await fetch('/session/ui', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        key: name,
+                        value: isOpen ? '1' : '0',
+                    }),
+                });
+            } catch (error) {
+                console.debug('failed to persist option open state', error);
+            }
+        }
+
+        optionGroups.forEach((group) => {
+            const name = group.dataset.openName;
+            const hiddenInput = document.querySelector(`[data-open-input="${name}"]`);
+            group.addEventListener('toggle', () => {
+                const value = group.open ? '1' : '0';
+                if (hiddenInput) {
+                    hiddenInput.value = value;
+                }
+                persistOpenState(name, group.open);
+            });
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+﻿{% macro render_tree(node) -%}
+<div class="tree-entry">
+    <div class="tree-prob-badge">{{ node.probability_text }}</div>
+    <div class="tree-card-wrap">
+        <div class="tree-card">
+            <div class="tree-card-top">
+                <span class="tree-card-result">{{ node.result_text }}</span>
+            </div>
+            <div class="tree-card-bottom">
+                <span class="tree-card-label">{{ node.label }}</span>
+            </div>
+        </div>
+    </div>
+    {% if node.children %}
+    <div class="tree-next-col">
+        {% for child in node.children %}
+            {{ render_tree(child) }}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{%- endmacro %}

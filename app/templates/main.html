@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="main-page">
+    <div class="regulation-head">
+        <div class="regulation-left">
+            <strong>?? :</strong>
+            <span>{{ main.regulation_cast }}</span>
+            <button class="mini-button" type="button" disabled>??????</button>
+        </div>
+        <a class="mini-link" href="/">???????</a>
+    </div>
+
+    <div class="day-phase">Day{{ main.day }} / {{ main.phase }}</div>
+
+    <div class="win-rate-wrap">
+        {% if main.terminal_winner == 'village' %}
+        <div class="terminal-banner village-win">????</div>
+        {% elif main.terminal_winner == 'wolf' %}
+        <div class="terminal-banner wolf-win">????</div>
+        {% else %}
+        <div class="win-rate-grid">
+            <div class="rate-label">?????</div>
+            <div class="rate-slash">/</div>
+            <div class="rate-label">?????</div>
+            <div class="rate-value">{{ '%.1f'|format(main.white_win_rate) }}%</div>
+            <div></div>
+            <div class="rate-value">{{ '%.1f'|format(main.black_win_rate) }}%</div>
+        </div>
+        {% endif %}
+    </div>
+
+    <form method="post" action="/main/advance" class="main-advance-form" id="main-advance-form">
+        <input type="hidden" name="action" id="main-action" value="tree">
+        <section class="main-table-wrap">
+            <div class="main-table">
+                <div class="table-row table-head">
+                    <div class="cell col-index">#</div>
+                    <div class="cell col-name">&#x540D;&#x524D;</div>
+                    <div class="cell col-status">&#x751F;&#x6B7B;</div>
+                    <div class="cell col-co">CO</div>
+                    <a class="cell col-rate camp-cell-white head-link" href="/main?white_details={{ 0 if main.show_white_details else 1 }}&black_details={{ 1 if main.show_black_details else 0 }}">&#x767D;&#x9663;&#x55B6;%</a>
+                    {% if main.show_white_details %}
+                        {% for label in main.white_detail_columns %}
+                        <div class="cell col-rate">{{ label }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <a class="cell col-rate camp-cell-black head-link" href="/main?white_details={{ 1 if main.show_white_details else 0 }}&black_details={{ 0 if main.show_black_details else 1 }}">&#x9ED2;&#x9663;&#x55B6;%</a>
+                    {% if main.show_black_details %}
+                        {% for label in main.black_detail_columns %}
+                        <div class="cell col-rate">{{ label }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="cell col-rate">&#x767D;&#x52DD;&#x7387;</div>
+                    <div class="cell col-rate">&#x9ED2;&#x52DD;&#x7387;</div>
+                    <div class="cell col-target">{{ main.target_action_label }}</div>
+                </div>
+
+                {% for player in main.players %}
+                <div class="table-row {% if player.status_tone %}table-row-state-{{ player.status_tone }}{% endif %}">
+                    <div class="cell col-index">{{ player.index }}</div>
+                    <div class="cell col-name left">{{ player.name }}</div>
+                    <div class="cell col-status">{{ player.status }}</div>
+                    <div class="cell col-co">{{ player.co }}</div>
+                    <div class="cell col-rate camp-cell-white">{{ '%.1f'|format(player.white_total) }}%</div>
+                    {% if main.show_white_details %}
+                        {% for label in main.white_detail_columns %}
+                        <div class="cell col-rate">
+                            {% if label == '?' %}{{ '%.1f'|format(player.white_breakdown.get('seer', 0)) }}%
+                            {% elif label == '?' %}{{ '%.1f'|format(player.white_breakdown.get('medium', 0)) }}%
+                            {% elif label == '?' %}{{ '%.1f'|format(player.white_breakdown.get('hunter', 0)) }}%
+                            {% elif label == '??' %}{{ '%.1f'|format(player.white_breakdown.get('villager', 0)) }}%
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="cell col-rate camp-cell-black">{{ '%.1f'|format(player.black_total) }}%</div>
+                    {% if main.show_black_details %}
+                        {% for label in main.black_detail_columns %}
+                        <div class="cell col-rate">
+                            {% if label == '?' %}{{ '%.1f'|format(player.black_breakdown.get('madman', 0)) }}%
+                            {% elif label == '?' %}{{ '%.1f'|format(player.black_breakdown.get('wolf', 0)) }}%
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="cell col-rate">{{ '%.1f'|format(player.white_win_rate) }}%</div>
+                    <div class="cell col-rate">{{ '%.1f'|format(player.black_win_rate) }}%</div>
+                    <label class="cell col-target target-cell">
+                        <input type="radio" name="selected_target" value="{{ player.index }}" {% if main.selected_target == player.index %}checked{% endif %} {% if main.terminal_winner or player.status != '??' %}disabled{% endif %}>
+                    </label>
+                </div>
+                {% if main.show_ability_rows %}
+                <div class="table-row ability-row">
+                    <button class="cell ability-button ability-button-wide" type="button">?? ?</button>
+                    <div class="ability-fill">{{ player.name }} ???????????????????</div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </section>
+
+        <div class="node-foot">
+            <div class="node-foot-spacer"></div>
+            <button class="mini-button" type="button" disabled>??</button>
+            <button class="mini-button primary" id="advance-button" type="submit" {% if main.terminal_winner %}disabled{% endif %}>??</button>
+        </div>
+    </form>
+
+    <section class="panel tree-panel">
+        <h2>Tree</h2>
+        {% if main.selected_tree_layout %}
+        <div class="tree-grid-wrap">
+            <div class="tree-grid" style="grid-template-columns: repeat({{ main.selected_tree_layout.max_col }}, 136px); grid-template-rows: 22px repeat({{ main.selected_tree_layout.max_row }}, minmax(24px, auto));">
+                {% for header in main.selected_tree_layout.column_headers %}
+                <div class="tree-grid-header tree-grid-header-{{ header.tone }}" style="grid-column: {{ loop.index }}; grid-row: 1;">{{ header.label }}</div>
+                {% endfor %}
+                {% for item in main.selected_tree_layout.items %}
+                <div class="tree-grid-item tree-grid-item-{{ item.tone }} {% if item.is_current %}tree-grid-item-current{% endif %}" style="grid-column: {{ item.col }}; grid-row: {{ item.row + 1 }};">
+                    <div class="tree-prob-badge">{{ item.probability_text }}</div>
+                    <div class="tree-card">
+                        <div class="tree-card-top">
+                            <span class="tree-card-result">{{ item.result_text }}</span>
+                        </div>
+                        <div class="tree-card-bottom">
+                            <span class="tree-card-label">{{ item.label }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="tree-empty">????????????</div>
+        {% endif %}
+    </section>
+
+    <section class="panel tactics-panel fixed-option-panel">
+        <h2>???????</h2>
+        {% with groups=main.tactics_groups, option_scope='tactics', persist_open_state=False %}
+            {% include "_option_groups.html" %}
+        {% endwith %}
+    </section>
+</section>
+
+<script>
+(function () {
+    const form = document.getElementById('main-advance-form');
+    const actionInput = document.getElementById('main-action');
+    const advanceButton = document.getElementById('advance-button');
+    const targetRadios = Array.from(document.querySelectorAll('input[name="selected_target"]'));
+    if (!form || !actionInput || !advanceButton || !targetRadios.length) {
+        return;
+    }
+
+    const isTerminal = {{ 'true' if main.terminal_winner else 'false' }};
+
+    function hasChecked() {
+        return targetRadios.some((radio) => radio.checked);
+    }
+
+    function syncAdvanceButton() {
+        advanceButton.disabled = isTerminal || !hasChecked();
+    }
+
+    targetRadios.forEach((radio) => {
+        radio.addEventListener('change', () => {
+            syncAdvanceButton();
+            actionInput.value = 'tree';
+            form.requestSubmit();
+        });
+    });
+
+    advanceButton.addEventListener('click', () => {
+        actionInput.value = 'advance';
+    });
+
+    syncAdvanceButton();
+})();
+</script>
+{% endblock %}

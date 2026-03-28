@@ -1,0 +1,116 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+<section class="top-page">
+    <header class="page-header">
+        <h1>ww_gg</h1>
+        <p>人狼ゲームの公開情報から期待勝率を確認する v1 骨組み</p>
+    </header>
+
+    <form method="post" action="/main" class="top-stack">
+        <div class="top-upper-grid">
+            <section class="panel">
+                <h2>配役</h2>
+                <div class="role-columns role-columns-top">
+                    <div class="role-column">
+                        <h3>白陣営</h3>
+                        <div class="role-grid single-column">
+                            {% for key in ["villager", "seer", "medium", "hunter"] %}
+                                {% for role_key, label, count in top.regulation_roles if role_key == key %}
+                                <label class="field-card">
+                                    <span class="field-label">{{ label }}</span>
+                                    <input type="number" name="role_{{ role_key }}" value="{{ count }}" min="0" max="20" data-role-key="{{ role_key }}" data-default-value="{{ top.default_role_counts[role_key] }}">
+                                </label>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="role-column role-column-top">
+                        <h3>黒陣営</h3>
+                        <div class="role-grid single-column">
+                            {% for key in ["wolf", "madman"] %}
+                                {% for role_key, label, count in top.regulation_roles if role_key == key %}
+                                <label class="field-card">
+                                    <span class="field-label">{{ label }}</span>
+                                    <input type="number" name="role_{{ role_key }}" value="{{ count }}" min="0" max="20" data-role-key="{{ role_key }}" data-default-value="{{ top.default_role_counts[role_key] }}">
+                                </label>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-actions">
+                    <button class="mini-button" type="button" data-role-reset>Reset</button>
+                </div>
+            </section>
+
+            <section class="panel rules-panel">
+                <h2>ルール</h2>
+                {% with groups=top.rule_groups, option_scope='rules', persist_open_state=True %}
+                    {% include "_option_groups.html" %}
+                {% endwith %}
+                <div class="panel-actions">
+                    <button class="mini-button" type="button">Default</button>
+                </div>
+            </section>
+        </div>
+
+        <div class="top-cta-row">
+            <button class="primary-link primary-submit wide-link" type="submit">Day1 昼へ進む</button>
+        </div>
+
+        <section class="panel tactics-panel fixed-option-panel">
+            <h2>戦略オプション</h2>
+            {% with groups=top.tactics_groups, option_scope='tactics', persist_open_state=True %}
+                {% include "_option_groups.html" %}
+            {% endwith %}
+        </section>
+    </form>
+</section>
+
+<script>
+(function () {
+    const roleInputs = Array.from(document.querySelectorAll('[data-role-key]'));
+    const optionGroups = Array.from(document.querySelectorAll('[data-option-key]'));
+    const resetButton = document.querySelector('[data-role-reset]');
+
+    function getCount(roleKey) {
+        const input = roleInputs.find((item) => item.dataset.roleKey === roleKey);
+        return input ? Number(input.value || 0) : 0;
+    }
+
+    function syncOptionVisibility() {
+        const hasWhiteCamp = ['villager', 'seer', 'medium', 'hunter'].some((key) => getCount(key) > 0);
+        const hasBlackCamp = ['wolf', 'madman'].some((key) => getCount(key) > 0);
+        const hasSeer = getCount('seer') > 0;
+        const hasHunter = getCount('hunter') > 0;
+
+        optionGroups.forEach((group) => {
+            const key = group.dataset.optionKey;
+            let visible = true;
+            if (key === 'village') visible = hasWhiteCamp;
+            if (key === 'wolf') visible = hasBlackCamp;
+            if (key === 'seer') visible = hasSeer;
+            if (key === 'hunter') visible = hasHunter;
+            group.hidden = !visible;
+        });
+    }
+
+    roleInputs.forEach((input) => {
+        input.addEventListener('input', syncOptionVisibility);
+        input.addEventListener('change', syncOptionVisibility);
+    });
+
+    if (resetButton) {
+        resetButton.addEventListener('click', () => {
+            roleInputs.forEach((input) => {
+                input.value = input.dataset.defaultValue || '0';
+            });
+            syncOptionVisibility();
+        });
+    }
+
+    syncOptionVisibility();
+})();
+</script>
+{% endblock %}
