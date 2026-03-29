@@ -14,6 +14,7 @@
 - `app/README.md`: 新実装の作業場所
 - `archive/legacy_proto/README.md`: 旧試作コードの扱い
 
+
 ## ディレクトリ構成
 ```text
 /
