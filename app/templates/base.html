@@ -13,10 +13,25 @@
     <script>
     (function () {
         const optionGroups = Array.from(document.querySelectorAll('[data-open-name]'));
-        if (!optionGroups.length) {
-            return;
-        }
+        const optionSelects = Array.from(document.querySelectorAll('.option-groups select[name]'));
 
+        async function persistSelectValue(name, value) {
+            const endpoint = window.location.pathname === '/main' ? '/main/tactics' : '/session/ui';
+            try {
+                await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        key: name,
+                        value,
+                    }),
+                });
+            } catch (error) {
+                console.debug('failed to persist select value', error);
+            }
+        }
         async function persistOpenState(name, isOpen) {
             try {
                 await fetch('/session/ui', {
@@ -34,17 +49,27 @@
             }
         }
 
-        optionGroups.forEach((group) => {
-            const name = group.dataset.openName;
-            const hiddenInput = document.querySelector(`[data-open-input="${name}"]`);
-            group.addEventListener('toggle', () => {
-                const value = group.open ? '1' : '0';
-                if (hiddenInput) {
-                    hiddenInput.value = value;
-                }
-                persistOpenState(name, group.open);
+        if (window.location.pathname !== '/main') {
+            optionSelects.forEach((select) => {
+                select.addEventListener('change', async () => {
+                    await persistSelectValue(select.name, select.value);
+                });
             });
-        });
+        }
+
+        if (optionGroups.length) {
+            optionGroups.forEach((group) => {
+                const name = group.dataset.openName;
+                const hiddenInput = document.querySelector(`[data-open-input="${name}"]`);
+                group.addEventListener('toggle', () => {
+                    const value = group.open ? '1' : '0';
+                    if (hiddenInput) {
+                        hiddenInput.value = value;
+                    }
+                    persistOpenState(name, group.open);
+                });
+            });
+        }
     })();
     </script>
 </body>

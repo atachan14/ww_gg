@@ -630,6 +630,7 @@ input[type="number"] {
     grid-template-columns: 48px 82px;
     column-gap: 6px;
     align-items: center;
+    margin: 0;
 }
 
 .tree-prob-badge {
@@ -675,5 +676,67 @@ input[type="number"] {
 }
 
 .tree-card-result {
+    white-space: nowrap;
+}
+
+.tree-jump-button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+}
+
+.tree-prob-badge.tree-jump-button,
+.tree-card.tree-jump-button {
+    border: 1px solid var(--border);
+}
+
+.tree-prob-badge.tree-jump-button:hover,
+.tree-card.tree-jump-button:hover {
+    border-color: #7d93c7;
+}
+
+
+.details-toggle-button {
+    border-left: 1px solid var(--border);
+}
+
+.co-cell {
+    position: relative;
+    padding: 0;
+    overflow: visible;
+}
+
+.co-toggle {
+    width: 100%;
+    min-height: 24px;
+    font: inherit;
+    cursor: pointer;
+    background: #fff;
+    border: 0;
+}
+
+.co-selector[hidden] {
+    display: none !important;
+}
+
+.co-selector {
+    position: absolute;
+    top: calc(100% + 2px);
+    left: -1px;
+    z-index: 20;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    min-width: 180px;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(20, 24, 40, 0.12);
+}
+
+.co-check-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     white-space: nowrap;
 }

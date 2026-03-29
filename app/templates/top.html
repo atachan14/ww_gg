@@ -59,12 +59,6 @@
             <button class="primary-link primary-submit wide-link" type="submit">Day1 昼へ進む</button>
         </div>
 
-        <section class="panel tactics-panel fixed-option-panel">
-            <h2>戦略オプション</h2>
-            {% with groups=top.tactics_groups, option_scope='tactics', persist_open_state=True %}
-                {% include "_option_groups.html" %}
-            {% endwith %}
-        </section>
     </form>
 </section>
 

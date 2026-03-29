@@ -1,28 +1,28 @@
-{% extends "base.html" %}
+﻿{% extends "base.html" %}
 
 {% block content %}
 <section class="main-page">
     <div class="regulation-head">
         <div class="regulation-left">
-            <strong>?? :</strong>
+            <strong>&#x914D;&#x5F79; :</strong>
             <span>{{ main.regulation_cast }}</span>
-            <button class="mini-button" type="button" disabled>??????</button>
+            <button class="mini-button" type="button" disabled>&#x30EB;&#x30FC;&#x30EB;&#x3092;&#x78BA;&#x8A8D;</button>
         </div>
-        <a class="mini-link" href="/">???????</a>
+        <a class="mini-link" href="/">&#x914D;&#x5F79;&#x8A2D;&#x5B9A;&#x306B;&#x623B;&#x308B;</a>
     </div>
 
     <div class="day-phase">Day{{ main.day }} / {{ main.phase }}</div>
 
     <div class="win-rate-wrap">
         {% if main.terminal_winner == 'village' %}
-        <div class="terminal-banner village-win">????</div>
+        <div class="terminal-banner village-win">&#x6751;&#x306E;&#x52DD;&#x5229;</div>
         {% elif main.terminal_winner == 'wolf' %}
-        <div class="terminal-banner wolf-win">????</div>
+        <div class="terminal-banner wolf-win">&#x72FC;&#x306E;&#x52DD;&#x5229;</div>
         {% else %}
         <div class="win-rate-grid">
-            <div class="rate-label">?????</div>
+            <div class="rate-label">&#x767D;&#x9663;&#x55B6;&#x52DD;&#x7387;</div>
             <div class="rate-slash">/</div>
-            <div class="rate-label">?????</div>
+            <div class="rate-label">&#x9ED2;&#x9663;&#x55B6;&#x52DD;&#x7387;</div>
             <div class="rate-value">{{ '%.1f'|format(main.white_win_rate) }}%</div>
             <div></div>
             <div class="rate-value">{{ '%.1f'|format(main.black_win_rate) }}%</div>
@@ -39,15 +39,15 @@
                     <div class="cell col-name">&#x540D;&#x524D;</div>
                     <div class="cell col-status">&#x751F;&#x6B7B;</div>
                     <div class="cell col-co">CO</div>
-                    <a class="cell col-rate camp-cell-white head-link" href="/main?white_details={{ 0 if main.show_white_details else 1 }}&black_details={{ 1 if main.show_black_details else 0 }}">&#x767D;&#x9663;&#x55B6;%</a>
+                    <button class="cell col-rate camp-cell-white head-link details-toggle-button" type="button" data-view-key="main_white_details" data-view-value="{{ 0 if main.show_white_details else 1 }}">&#x767D;&#x9663;&#x55B6;%</button>
                     {% if main.show_white_details %}
-                        {% for label in main.white_detail_columns %}
+                        {% for role_key, label in main.white_detail_columns %}
                         <div class="cell col-rate">{{ label }}</div>
                         {% endfor %}
                     {% endif %}
-                    <a class="cell col-rate camp-cell-black head-link" href="/main?white_details={{ 1 if main.show_white_details else 0 }}&black_details={{ 0 if main.show_black_details else 1 }}">&#x9ED2;&#x9663;&#x55B6;%</a>
+                    <button class="cell col-rate camp-cell-black head-link details-toggle-button" type="button" data-view-key="main_black_details" data-view-value="{{ 0 if main.show_black_details else 1 }}">&#x9ED2;&#x9663;&#x55B6;%</button>
                     {% if main.show_black_details %}
-                        {% for label in main.black_detail_columns %}
+                        {% for role_key, label in main.black_detail_columns %}
                         <div class="cell col-rate">{{ label }}</div>
                         {% endfor %}
                     {% endif %}
@@ -61,39 +61,39 @@
                     <div class="cell col-index">{{ player.index }}</div>
                     <div class="cell col-name left">{{ player.name }}</div>
                     <div class="cell col-status">{{ player.status }}</div>
-                    <div class="cell col-co">{{ player.co }}</div>
+                    <div class="cell col-co co-cell">
+                        <button class="co-toggle" type="button" data-co-toggle="{{ player.index }}">{{ player.co }}</button>
+                        <div class="co-selector" data-co-row="{{ player.index }}" hidden>
+                            {% for role_key, label in main.co_role_options %}
+                            <label class="co-check-item">
+                                <input type="checkbox" name="co_{{ player.index }}_{{ role_key }}" value="1" {% if role_key in player.claim_role_keys %}checked{% endif %}>
+                                <span>{{ label }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
                     <div class="cell col-rate camp-cell-white">{{ '%.1f'|format(player.white_total) }}%</div>
                     {% if main.show_white_details %}
-                        {% for label in main.white_detail_columns %}
-                        <div class="cell col-rate">
-                            {% if label == '?' %}{{ '%.1f'|format(player.white_breakdown.get('seer', 0)) }}%
-                            {% elif label == '?' %}{{ '%.1f'|format(player.white_breakdown.get('medium', 0)) }}%
-                            {% elif label == '?' %}{{ '%.1f'|format(player.white_breakdown.get('hunter', 0)) }}%
-                            {% elif label == '??' %}{{ '%.1f'|format(player.white_breakdown.get('villager', 0)) }}%
-                            {% endif %}
-                        </div>
+                        {% for role_key, label in main.white_detail_columns %}
+                        <div class="cell col-rate">{{ '%.1f'|format(player.white_breakdown.get(role_key, 0)) }}%</div>
                         {% endfor %}
                     {% endif %}
                     <div class="cell col-rate camp-cell-black">{{ '%.1f'|format(player.black_total) }}%</div>
                     {% if main.show_black_details %}
-                        {% for label in main.black_detail_columns %}
-                        <div class="cell col-rate">
-                            {% if label == '?' %}{{ '%.1f'|format(player.black_breakdown.get('madman', 0)) }}%
-                            {% elif label == '?' %}{{ '%.1f'|format(player.black_breakdown.get('wolf', 0)) }}%
-                            {% endif %}
-                        </div>
+                        {% for role_key, label in main.black_detail_columns %}
+                        <div class="cell col-rate">{{ '%.1f'|format(player.black_breakdown.get(role_key, 0)) }}%</div>
                         {% endfor %}
                     {% endif %}
                     <div class="cell col-rate">{{ '%.1f'|format(player.white_win_rate) }}%</div>
                     <div class="cell col-rate">{{ '%.1f'|format(player.black_win_rate) }}%</div>
                     <label class="cell col-target target-cell">
-                        <input type="radio" name="selected_target" value="{{ player.index }}" {% if main.selected_target == player.index %}checked{% endif %} {% if main.terminal_winner or player.status != '??' %}disabled{% endif %}>
+                        <input type="radio" name="selected_target" value="{{ player.index }}" {% if main.selected_target == player.index %}checked{% endif %} {% if main.terminal_winner or player.status_tone %}disabled{% endif %}>
                     </label>
                 </div>
                 {% if main.show_ability_rows %}
                 <div class="table-row ability-row">
-                    <button class="cell ability-button ability-button-wide" type="button">?? ?</button>
-                    <div class="ability-fill">{{ player.name }} ???????????????????</div>
+                    <button class="cell ability-button ability-button-wide" type="button">&#x80FD;&#x529B; &#x25BE;</button>
+                    <div class="ability-fill">{{ player.name }} &#x306E;&#x80FD;&#x529B;&#x6B04;&#x306F;&#x5F8C;&#x3067;&#x5B9F;&#x88C5;&#x3059;&#x308B;&#x4E88;&#x5B9A;&#x3067;&#x3059;</div>
                 </div>
                 {% endif %}
                 {% endfor %}
@@ -102,8 +102,8 @@
 
         <div class="node-foot">
             <div class="node-foot-spacer"></div>
-            <button class="mini-button" type="button" disabled>??</button>
-            <button class="mini-button primary" id="advance-button" type="submit" {% if main.terminal_winner %}disabled{% endif %}>??</button>
+            <button class="mini-button" type="submit" onclick="document.getElementById('main-action').value='back'" {% if not main.can_go_back %}disabled{% endif %}>&#x623B;&#x308B;</button>
+            <button class="mini-button primary" id="advance-button" type="submit" {% if main.terminal_winner %}disabled{% endif %}>&#x9032;&#x3080;</button>
         </div>
     </form>
 
@@ -116,27 +116,28 @@
                 <div class="tree-grid-header tree-grid-header-{{ header.tone }}" style="grid-column: {{ loop.index }}; grid-row: 1;">{{ header.label }}</div>
                 {% endfor %}
                 {% for item in main.selected_tree_layout.items %}
-                <div class="tree-grid-item tree-grid-item-{{ item.tone }} {% if item.is_current %}tree-grid-item-current{% endif %}" style="grid-column: {{ item.col }}; grid-row: {{ item.row + 1 }};">
-                    <div class="tree-prob-badge">{{ item.probability_text }}</div>
-                    <div class="tree-card">
-                        <div class="tree-card-top">
+                <form method="post" action="/main/jump" class="tree-grid-item tree-grid-item-{{ item.tone }} {% if item.is_current %}tree-grid-item-current{% endif %}" style="grid-column: {{ item.col }}; grid-row: {{ item.row + 1 }};">
+                    <input type="hidden" name="node_id" value="{{ item.node_id }}">
+                    <button class="tree-prob-badge tree-jump-button" type="submit">{{ item.probability_text }}</button>
+                    <button class="tree-card tree-jump-button" type="submit">
+                        <span class="tree-card-top">
                             <span class="tree-card-result">{{ item.result_text }}</span>
-                        </div>
-                        <div class="tree-card-bottom">
+                        </span>
+                        <span class="tree-card-bottom">
                             <span class="tree-card-label">{{ item.label }}</span>
-                        </div>
-                    </div>
-                </div>
+                        </span>
+                    </button>
+                </form>
                 {% endfor %}
             </div>
         </div>
         {% else %}
-        <div class="tree-empty">????????????</div>
+        <div class="tree-empty">&#x5BFE;&#x8C61;&#x3092;&#x9078;&#x629E;&#x3059;&#x308B;&#x3068;Tree&#x304C;&#x8868;&#x793A;&#x3055;&#x308C;&#x307E;&#x3059;</div>
         {% endif %}
     </section>
 
     <section class="panel tactics-panel fixed-option-panel">
-        <h2>???????</h2>
+        <h2>&#x6226;&#x7565;&#x30AA;&#x30D7;&#x30B7;&#x30E7;&#x30F3;</h2>
         {% with groups=main.tactics_groups, option_scope='tactics', persist_open_state=False %}
             {% include "_option_groups.html" %}
         {% endwith %}
@@ -149,10 +150,10 @@
     const actionInput = document.getElementById('main-action');
     const advanceButton = document.getElementById('advance-button');
     const targetRadios = Array.from(document.querySelectorAll('input[name="selected_target"]'));
-    if (!form || !actionInput || !advanceButton || !targetRadios.length) {
-        return;
-    }
-
+    const coToggles = Array.from(document.querySelectorAll('[data-co-toggle]'));
+    const coRows = Array.from(document.querySelectorAll('[data-co-row]'));
+    const viewToggleButtons = Array.from(document.querySelectorAll('[data-view-key]'));
+    const tacticSelects = Array.from(document.querySelectorAll('.tactics-panel select[name]'));
     const isTerminal = {{ 'true' if main.terminal_winner else 'false' }};
 
     function hasChecked() {
@@ -163,19 +164,92 @@
         advanceButton.disabled = isTerminal || !hasChecked();
     }
 
-    targetRadios.forEach((radio) => {
-        radio.addEventListener('change', () => {
-            syncAdvanceButton();
-            actionInput.value = 'tree';
-            form.requestSubmit();
+    function toggleCoRow(playerIndex) {
+        coRows.forEach((row) => {
+            if (row.dataset.coRow === playerIndex) {
+                row.hidden = !row.hidden;
+            } else {
+                row.hidden = true;
+            }
+        });
+    }
+
+    if (form && actionInput && targetRadios.length) {
+        targetRadios.forEach((radio) => {
+            radio.addEventListener('change', () => {
+                syncAdvanceButton();
+                actionInput.value = 'tree';
+                form.requestSubmit();
+            });
+        });
+    }
+
+    coToggles.forEach((button) => {
+        button.addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleCoRow(button.dataset.coToggle);
         });
     });
 
-    advanceButton.addEventListener('click', () => {
-        actionInput.value = 'advance';
+    document.addEventListener('click', () => {
+        coRows.forEach((row) => {
+            row.hidden = true;
+        });
     });
 
-    syncAdvanceButton();
+    coRows.forEach((row) => {
+        row.addEventListener('click', (event) => {
+            event.stopPropagation();
+        });
+    });
+
+    document.querySelectorAll('.co-selector input[type="checkbox"]').forEach((checkbox) => {
+        checkbox.addEventListener('change', async () => {
+            await fetch('/main/claims', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    player_index: Number(checkbox.name.split('_')[1]),
+                    role_key: checkbox.name.split('_').slice(2).join('_'),
+                    checked: checkbox.checked,
+                }),
+            });
+            window.location.reload();
+        });
+    });
+
+    viewToggleButtons.forEach((button) => {
+        button.addEventListener('click', async () => {
+            await fetch('/session/ui', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: button.dataset.viewKey, value: button.dataset.viewValue }),
+            });
+            window.location.reload();
+        });
+    });
+
+    tacticSelects.forEach((select) => {
+        select.addEventListener('change', async () => {
+            await fetch('/main/tactics', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ key: select.name, value: select.value }),
+            });
+            window.location.reload();
+        });
+    });
+
+    if (advanceButton && actionInput) {
+        advanceButton.addEventListener('click', () => {
+            actionInput.value = 'advance';
+        });
+    }
+
+    if (advanceButton && targetRadios.length) {
+        syncAdvanceButton();
+    }
 })();
 </script>
 {% endblock %}
+
