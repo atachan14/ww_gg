@@ -1,9 +1,9 @@
 ﻿import unittest
 
-from app.game_tree import build_initial_node_state
+from app.core.game_tree import build_initial_node_state
 from app.persistent_tree import build_stored_tree_record
 from app.storage import InMemoryTreeStorage, StoredTreeRecord
-from app.tree_state import advance_current_path, create_tree_session
+from app.modes.parallel.tree_state import advance_current_path, create_tree_session
 
 
 class PersistentTreeTests(unittest.TestCase):

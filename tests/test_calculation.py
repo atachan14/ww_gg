@@ -1,6 +1,6 @@
 ﻿import unittest
 
-from app.calculation import evaluate_count_state, get_terminal_winner
+from app.core.calculation import evaluate_count_state, get_terminal_winner
 
 
 class CalculationTests(unittest.TestCase):

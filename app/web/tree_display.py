@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import Literal
 
-from app.tree_state import TreeNode
+from app.modes.parallel.tree_state import TreeNode
 
 
 HeaderTone = Literal["day", "night"]
@@ -13,6 +13,7 @@ HeaderTone = Literal["day", "night"]
 class TreeLayoutItem:
     row: int
     col: int
+    kind: str
     probability_text: str
     result_text: str
     label: str
@@ -56,6 +57,7 @@ def build_tree_layout(root: TreeNode | None, current_node_id: str = "", start_da
             TreeLayoutItem(
                 row=current_row,
                 col=col,
+                kind=node.kind,
                 probability_text=node.probability_text,
                 result_text=node.result_text,
                 label=node.label,

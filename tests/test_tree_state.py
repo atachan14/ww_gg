@@ -1,7 +1,7 @@
 ﻿import unittest
 
-from app.game_tree import build_initial_node_state
-from app.tree_state import (
+from app.core.game_tree import build_initial_node_state
+from app.modes.parallel.tree_state import (
     advance_current_path,
     create_tree_session,
     deserialize_tree_session,

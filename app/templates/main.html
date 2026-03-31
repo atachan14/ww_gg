@@ -116,9 +116,9 @@
                 <div class="tree-grid-header tree-grid-header-{{ header.tone }}" style="grid-column: {{ loop.index }}; grid-row: 1;">{{ header.label }}</div>
                 {% endfor %}
                 {% for item in main.selected_tree_layout.items %}
-                <form method="post" action="/main/jump" class="tree-grid-item tree-grid-item-{{ item.tone }} {% if item.is_current %}tree-grid-item-current{% endif %}" style="grid-column: {{ item.col }}; grid-row: {{ item.row + 1 }};">
+                <form method="post" action="/main/jump" class="tree-grid-item tree-grid-item-{{ item.tone }} {% if item.is_current %}tree-grid-item-current{% endif %}" style="grid-column: {{ item.col }}; grid-row: {{ item.row + 1 }};{% if item.is_current %} outline: 2px solid #2c5fb2; outline-offset: 1px;{% endif %}">
                     <input type="hidden" name="node_id" value="{{ item.node_id }}">
-                    <button class="tree-prob-badge tree-jump-button" type="submit">{{ item.probability_text }}</button>
+                    <button class="tree-prob-badge tree-jump-button" type="submit">{% if item.kind == "chance" %}{{ item.probability_text }}{% endif %}</button>
                     <button class="tree-card tree-jump-button" type="submit">
                         <span class="tree-card-top">
                             <span class="tree-card-result">{{ item.result_text }}</span>

@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
-from app.game_tree import build_initial_node_state
+from app.core.game_tree import build_initial_node_state
 from app.persistent_tree import build_stored_tree_record
 from app.runtime_config import load_runtime_config
 from app.storage import build_tree_storage
@@ -21,8 +21,8 @@ from app.settings import (
     parse_role_counts,
     pick_session_values,
 )
-from app.tree_display import build_tree_layout
-from app.tree_state import (
+from app.web.tree_display import build_tree_layout
+from app.modes.parallel.tree_state import (
     advance_current_path,
     build_tree,
     create_tree_session,
@@ -36,7 +36,7 @@ from app.tree_state import (
     set_current_target,
     set_node_claims,
 )
-from app.view_models import build_main_page_view_model, build_top_page_view_model
+from app.web.view_models import build_main_page_view_model, build_top_page_view_model
 
 
 BASE_DIR = Path(__file__).resolve().parent

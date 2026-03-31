@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from app.calculation import evaluate_count_state, get_terminal_winner
-from app.game_tree import HIDDEN_CO_LABEL, NodeState, build_co_label, analyze_node_state
+from app.core.calculation import evaluate_count_state, get_terminal_winner
+from app.core.game_tree import HIDDEN_CO_LABEL, NodeState, build_co_label, analyze_node_state
 from app.settings import (
     BLACK_ROLE_ORDER,
     DEFAULT_ROLE_COUNTS,
@@ -16,7 +16,7 @@ from app.settings import (
     is_group_expanded,
     parse_game_config,
 )
-from app.tree_display import TreeLayout
+from app.web.tree_display import TreeLayout
 
 
 @dataclass

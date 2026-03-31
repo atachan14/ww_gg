@@ -2,8 +2,8 @@
 
 from dataclasses import dataclass, field
 
-from app.calculation import evaluate_count_state, get_terminal_winner
-from app.game_tree import NodeState, PlayerState, analyze_node_state, deserialize_node_state, serialize_node_state
+from app.core.calculation import evaluate_count_state, get_terminal_winner
+from app.core.game_tree import NodeState, PlayerState, analyze_node_state, deserialize_node_state, serialize_node_state
 
 
 @dataclass

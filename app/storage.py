@@ -9,7 +9,7 @@ import psycopg
 from psycopg.rows import dict_row
 from psycopg.types.json import Jsonb
 
-from app.game_tree import NodeState, deserialize_node_state, serialize_node_state
+from app.core.game_tree import NodeState, deserialize_node_state, serialize_node_state
 from app.runtime_config import RuntimeConfig
 
 

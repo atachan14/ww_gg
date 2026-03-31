@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Literal
 
-from app.calculation import evaluate_count_state, get_terminal_winner
+from app.core.calculation import evaluate_count_state, get_terminal_winner
 from app.settings import DEFAULT_TACTIC_VALUES
 
 PhaseKey = Literal["day", "night"]

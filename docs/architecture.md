@@ -48,11 +48,11 @@
 
 ## 2. State / Tree
 対象ファイル:
-- `app/tree_state.py`
-- `app/game_tree.py`
+- `app/modes/parallel/tree_state.py`
+- `app/core/game_tree.py`
 - `app/persistent_tree.py`
 
-### `app/tree_state.py`
+### `app/modes/parallel/tree_state.py`
 責務:
 - 現在の Tree 走査ロジックを持つ
 - `current_node_id` の更新規則を持つ
@@ -73,7 +73,7 @@
 - server 保存用 record の構築
 - HTML 用レイアウト生成
 
-### `app/game_tree.py`
+### `app/core/game_tree.py`
 責務:
 - `NodeState` / `PlayerState` の定義
 - node の公開盤面遷移生成

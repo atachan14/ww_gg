@@ -660,6 +660,26 @@ input[type="number"] {
 .tree-grid-item-current .tree-card {
     border-width: 2px;
     border-color: #2c5fb2;
+    background: #dce9ff;
+    box-shadow: 0 0 0 2px rgba(44, 95, 178, 0.12);
+}
+
+.tree-grid-item-current .tree-card {
+    position: relative;
+}
+
+.tree-current-badge {
+    position: absolute;
+    top: -8px;
+    right: 4px;
+    padding: 1px 6px;
+    border: 1px solid #2c5fb2;
+    background: #2c5fb2;
+    color: #fff;
+    font-size: 9px;
+    line-height: 1.2;
+    font-weight: 700;
+    border-radius: 999px;
 }
 
 .tree-card-top {
