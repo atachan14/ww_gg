@@ -95,12 +95,29 @@ class GroupWebTests(unittest.TestCase):
         normalize=lambda html: re.sub(r'name="revision" value="[0-9]+"', 'name="revision" value="X"',html)
         self.assertEqual(normalize(first),normalize(self.c.get('/main').get_data(as_text=True)))
         self.assertEqual(self.state()['history'],[])
-        self.c.post('/strategy',data=self.form(model='equal'))
-        html=self.c.get('/main').get_data(as_text=True)
-        self.assertIn('現行・全配役一様',html)
+        before=self.state()
+        self.assertEqual(self.c.post('/strategy',data=self.form(model='equal')).status_code,400)
+        self.assertEqual(self.state(),before)
         self.c.post('/strategy',data=self.form(model='group',co_1='latent',co_2='latent'))
         html=self.c.get('/main').get_data(as_text=True)
         self.assertIn('data-fraction="5/9"',html)
+    def test_normal_group_default_and_legacy_equal_board_preserved(self):
+        data={'citizens':'5','mediums':'2','wolves':'2','day':'max','night':'max','cco_medium':'none'}
+        self.assertEqual(self.c.post('/start',data=data).status_code,303)
+        self.assertEqual(self.state()['model'],'group')
+        self.assertEqual(self.c.post('/start',data={**data,'model':'equal'}).status_code,400)
+        self.assertEqual(self.state()['model'],'group')
+        with self.c.session_transaction() as session:
+            state=session['game'];state['model']='equal';session['game']=state
+        self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium')).status_code,303)
+        self.assertEqual(self.state()['model'],'equal')
+        html=self.c.get('/main').get_data(as_text=True)
+        self.assertIn('既存Boardを元のモデルで継続',html)
+        self.assertIn('data-fraction="1/2"',html)
+        before=self.state()
+        self.assertEqual(self.c.post('/strategy',data=self.form(model='group')).status_code,400)
+        self.assertEqual(self.state(),before)
+
     def test_phase_history_weight_back_and_later_edit(self):
         self.c.post('/strategy',data=self.form(co_1='medium',target='2'))
         self.c.post('/advance',data=self.form(target='2'))

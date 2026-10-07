@@ -167,7 +167,11 @@ class ClaimWebTests(unittest.TestCase):
         self.assertEqual(self.state()['history'],[])
 
     def test_co_changes_probability_and_comparing_ccos(self):
-        self.start(); self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium')).status_code,303)
+        self.start()
+        # Preserve the original uniform-model regression as a saved legacy Board.
+        with self.c.session_transaction() as session:
+            state = dict(session['game']); state['model'] = 'equal'; session['game'] = state
+        self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium')).status_code,303)
         html=self.c.get('/main').get_data(as_text=True)
         self.assertIn('<th>CO</th>',html);self.assertIn('id="village-rate" class="probability" data-fraction="1/2"',html)
         self.assertEqual(self.c.post('/strategy',data=self.form(cco_medium='none')).status_code,303)

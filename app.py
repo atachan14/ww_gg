@@ -270,9 +270,9 @@ def create_app(test_config=None):
             initial_board(players, wolves, mediums, seers, hunters)
             claim_policy = parse_claim_policy()
             models=request.form.getlist("model")
-            if models not in ([],["equal"],["group"]):
+            if models not in ([],["group"]):
                 raise ValueError("計算モデルを確認してください。")
-            model=models[0] if models else "equal"
+            model="group"
             permission = request.form.getlist("allow_self_bite")
             if permission not in ([], ["1"]):
                 raise ValueError("自噛みのルールが不正です。")
@@ -316,8 +316,8 @@ def create_app(test_config=None):
             if models not in ([],['equal'],['group']):
                 raise ValueError('計算モデルを確認してください。')
             model=models[0] if models else state.get('model','equal')
-            if state['history'] and model!=state.get('model','equal'):
-                raise ValueError('進行後のモデル変更はTOPから開始し直してください。')
+            if model!=state.get('model','equal'):
+                raise ValueError('このBoardのモデルは変更できません。TOPから新規開始してください。')
             policy = parse_policy(rules,state)
             claims = parse_claims(state)
             claim_policy = parse_claim_policy(state)

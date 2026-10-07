@@ -175,3 +175,17 @@ summary:focus-visible { outline:2px solid var(--village); outline-offset:3px; bo
  .game-information { flex-wrap:wrap; }
  .board-layout .tip { display:block; }
 }
+
+/* Use available player-table width; keep a readable mobile overflow fallback. */
+#player-panel .player-table { table-layout:fixed; min-width:760px; width:100%; }
+#player-panel .player-table th { white-space:normal; padding:9px 4px; line-height:1.45; }
+#player-panel .player-table td { padding:13px 4px; }
+#player-panel .player-table th:first-child { width:3%; }
+#player-panel .player-table th:nth-child(2) { width:8%; }
+#player-panel .player-table th:nth-child(3) { width:6%; }
+#player-panel .player-table th:nth-child(4) { width:9%; }
+#player-panel .player-table th:last-child { width:7%; }
+#player-panel .player-table td strong { font-size:13px; overflow-wrap:anywhere; }
+#player-panel .co-select { padding:7px 3px; font-size:12px; min-width:0; }
+#player-panel .role-breakdown-toggle { white-space:normal; }
+#player-panel .player-name { font-size:11px; }
