@@ -9,7 +9,8 @@
         <div><p class="eyebrow">MAIN · DAY {{ board.day }} / {{ '昼' if board.phase == 'day' else '夜' }}</p><h1 id="phase-title">{{ '決着画面' if finished else ('処刑対象を確認' if board.phase == 'day' else '襲撃対象を確認') }}</h1></div>
         <a class="text-link" href="{{ url_for('top') }}">TOPへ戻る</a>
       </div>
-      <div class="information-meta"><span>開始配役：村人 {{ state.players - 1 }} / 狼 1</span><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>自噛みルール：{{ '許可' if rules.allow_self_bite else '禁止' }}</span></div>
+      <div class="information-meta"><span>開始配役：村人 {{ state.players - state.get("wolves", 1) }} / 狼 {{ state.get("wolves", 1) }}</span><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>自噛みルール：{{ '許可' if rules.allow_self_bite else '禁止' }}</span></div>
+      {% if not finished %}<p class="count-distribution">生存狼の可能性（現在Board条件付き）：{% for count, weight in counts.items() %}<span>{{ count }}w {{ probability(weight) }}</span>{% if not loop.last %} / {% endif %}{% endfor %}</p>{% endif %}
       <p class="rate-caption">{{ '直前のBoardで指定した行動の決着確率' if finished else '現在のBoardから、最後まで続けた場合の勝率' }}</p>
       <div class="win-grid">
         <div class="win-card village"><span>村の勝率</span><div>{{ probability(rates.village_win, 'village-rate') }}</div></div>

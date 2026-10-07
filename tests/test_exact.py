@@ -99,7 +99,7 @@ class PublicBoardTests(unittest.TestCase):
         self.assertEqual(progress.last_outcomes[0].board.wolf_probability(2), 0)
 
     def test_invalid_inputs_and_terminal_cannot_advance(self):
-        for count in (2, 6, True, '5'):
+        for count in (2, 10, True, '5'):
             with self.assertRaises(ValueError): initial_board(count)
         for target in (0, 6, True, '1'):
             with self.assertRaises(ValueError): action_outcomes(initial_board(5), target, Rules(), Strategy())

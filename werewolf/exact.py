@@ -1,7 +1,10 @@
-"""Public Board calculations for 3–5 players and one wolf, using exact fractions."""
+"""Public Board calculations for 3–9 players and multiple wolves, using exact fractions."""
 
 from dataclasses import dataclass
 from fractions import Fraction
+from functools import lru_cache
+from itertools import combinations
+from math import comb
 from typing import Literal
 
 Phase = Literal["day", "night"]
@@ -48,19 +51,21 @@ class Board:
 
     player_count: int
     alive: tuple[int, ...]
-    wolf_count: int = 1
+    wolf_count: int | None = 1
     day: int = 1
     phase: Phase = "day"
     history: tuple[PublicEvent, ...] = ()
 
+    belief: tuple[tuple[int, Fraction], ...] = ()
+
     def __post_init__(self):
-        if type(self.player_count) is not int or self.player_count not in (3, 4, 5):
-            raise ValueError("v0.1 supports 3–5 players and one initial wolf")
+        if type(self.player_count) is not int or not 3 <= self.player_count <= 9:
+            raise ValueError("v0.2 supports 3–9 players")
         if not isinstance(self.alive, tuple) or len(set(self.alive)) != len(self.alive):
             raise ValueError("Alive IDs must be a distinct tuple")
         if any(type(player) is not int or not 1 <= player <= self.player_count for player in self.alive):
             raise ValueError("Unknown player")
-        if type(self.wolf_count) is not int or self.wolf_count not in (0, 1) or self.wolf_count > len(self.alive):
+        if self.wolf_count is not None and (type(self.wolf_count) is not int or not 0 <= self.wolf_count <= len(self.alive)):
             raise ValueError("Invalid public wolf-count constraint")
         if type(self.day) is not int or self.day < 1 or self.phase not in ("day", "night"):
             raise ValueError("Invalid Day/Phase")
@@ -70,32 +75,68 @@ class Board:
         if len(set(dead)) != len(dead) or set(dead) != set(range(1, self.player_count + 1)) - set(self.alive):
             raise ValueError("History and alive players must agree")
 
+        if not self.belief:
+            if self.wolf_count is None:
+                raise ValueError("A mixed count needs an exact belief")
+            masks = [sum(1 << (i - 1) for i in ids) for ids in combinations(self.alive, self.wolf_count)]
+            # Compatibility for direct one-wolf terminal Board construction.
+            if self.wolf_count == 0 and self.history:
+                masks = [1 << (self.history[-1].target - 1)]
+            object.__setattr__(self, 'belief', tuple((mask, Fraction(1, len(masks))) for mask in masks))
+        if (len({m for m, _ in self.belief}) != len(self.belief)
+                or any(type(m) is not int or not 0 <= m < 1 << self.player_count
+                       or not isinstance(q, Fraction) or q <= 0 for m, q in self.belief)
+                or sum((q for _, q in self.belief), Fraction(0)) != 1):
+            raise ValueError("Belief must be a normalized exact joint distribution")
+        counts = self.wolf_count_distribution
+        exact = next(iter(counts)) if len(counts) == 1 else None
+        if self.wolf_count is not None and self.wolf_count != exact:
+            raise ValueError("Count and joint distribution disagree")
+        object.__setattr__(self, 'wolf_count', exact)
+
     @property
-    def villagers(self) -> int:
-        return len(self.alive) - self.wolf_count
+    def alive_mask(self):
+        return sum(1 << (i - 1) for i in self.alive)
+
+    @property
+    def wolf_count_distribution(self) -> dict[int, Fraction]:
+        result = {}
+        for mask, weight in self.belief:
+            count = (mask & self.alive_mask).bit_count()
+            result[count] = result.get(count, Fraction(0)) + weight
+        return dict(sorted(result.items()))
+
+    @property
+    def villagers(self) -> int | None:
+        return None if self.wolf_count is None else len(self.alive) - self.wolf_count
 
     @property
     def winner(self) -> Winner | None:
-        if self.wolf_count == 0:
-            return "village"
-        if self.wolf_count >= self.villagers:
-            return "wolf"
-        return None
+        winners = {winner_for(len(self.alive), w) for w in self.wolf_count_distribution}
+        return next(iter(winners)) if len(winners) == 1 else None
 
     def wolf_probability(self, player: int) -> Fraction:
         if type(player) is not int or not 1 <= player <= self.player_count:
             raise ValueError("Unknown player")
-        if player in self.alive:
-            return Fraction(self.wolf_count, len(self.alive))
-        # In this one-wolf scope, continuation proves earlier victims non-wolf.
-        # A village-win announcement identifies the final victim as that wolf.
-        return Fraction(int(self.wolf_count == 0 and self.history[-1].target == player))
+        return sum((q for mask, q in self.belief if mask & (1 << (player - 1))), Fraction(0))
+
+    def joint_wolf_probability(self, players: tuple[int, ...]) -> Fraction:
+        if any(type(i) is not int or not 1 <= i <= self.player_count for i in players):
+            raise ValueError("Unknown player")
+        required = sum(1 << (i - 1) for i in set(players))
+        return sum((q for mask, q in self.belief if mask & required == required), Fraction(0))
 
 
-def initial_board(player_count: int = 5) -> Board:
-    if type(player_count) is not int or player_count not in (3, 4, 5):
-        raise ValueError("Choose 3, 4, or 5 players")
-    return Board(player_count, tuple(range(1, player_count + 1)))
+def winner_for(n: int, wolves: int) -> Winner | None:
+    return "village" if wolves == 0 else "wolf" if wolves >= n - wolves else None
+
+
+def initial_board(player_count: int = 5, wolf_count: int = 1) -> Board:
+    if type(player_count) is not int or not 3 <= player_count <= 9:
+        raise ValueError("Choose 3–9 players")
+    if type(wolf_count) is not int or not 1 <= wolf_count <= (player_count - 1) // 2:
+        raise ValueError("Choose wolves fewer than villagers")
+    return Board(player_count, tuple(range(1, player_count + 1)), wolf_count)
 
 
 @dataclass(frozen=True)
@@ -110,22 +151,42 @@ def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy)
         raise ValueError("A terminal Board cannot advance")
     if type(target) is not int or target not in board.alive:
         raise ValueError("Choose a living player")
-    # This scope is exchangeable: no CO, private information, or role locations.
-    # If bite excludes wolves, the resulting public bite conditions the victim
-    # to non-wolf. Otherwise the current Board's role probabilities apply.
-    wolf_probability = board.wolf_probability(target) if board.phase == "day" or strategy.include_self_bite else Fraction(0)
     alive = tuple(player for player in board.alive if player != target)
+    bit = 1 << (target - 1)
+    groups = {}
+    count_weights = board.wolf_count_distribution
+    alive_mask = board.alive_mask
+    if board.phase == "night" and not strategy.include_self_bite:
+        # A forced legal bite, within each count hypothesis. This is not a
+        # globally observed random location (which would reweight the counts).
+        normalizers = {}
+        for mask, q in board.belief:
+            w = (mask & alive_mask).bit_count()
+            if not mask & bit:
+                normalizers[w] = normalizers.get(w, Fraction(0)) + q
+        if set(normalizers) != set(count_weights):
+            raise ValueError("Target cannot be legally bitten in every count hypothesis")
+    for mask, q in board.belief:
+        if board.phase == "night" and not strategy.include_self_bite:
+            if mask & bit:
+                continue
+            w = (mask & alive_mask).bit_count()
+            q *= count_weights[w] / normalizers[w]
+        w = (mask & (alive_mask ^ bit)).bit_count()
+        winner = winner_for(len(alive), w)
+        groups.setdefault(winner, []).append((mask, q))
     event = PublicEvent(board.day, board.phase, target)
     outcomes = []
-    for hit_wolf, probability in ((True, wolf_probability), (False, 1 - wolf_probability)):
-        if not probability:
+    for winner in ('village', 'wolf', None):
+        entries = groups.get(winner)
+        if not entries:
             continue
-        wolves = board.wolf_count - int(hit_wolf)
-        terminal = wolves == 0 or wolves >= len(alive) - wolves
-        phase = board.phase if terminal else ("night" if board.phase == "day" else "day")
-        day = board.day + int(not terminal and board.phase == "night")
-        child = Board(board.player_count, alive, wolves, day, phase, board.history + (event,))
-        outcomes.append(BoardOutcome(probability, child))
+        mass = sum((q for _, q in entries), Fraction(0))
+        phase = board.phase if winner else ('night' if board.phase == 'day' else 'day')
+        day = board.day + int(not winner and board.phase == 'night')
+        child = Board(board.player_count, alive, None, day, phase, board.history + (event,),
+                      tuple((m, q / mass) for m, q in entries))
+        outcomes.append(BoardOutcome(mass, child))
     return tuple(outcomes)
 
 
@@ -143,19 +204,23 @@ class Chance:
 
 @dataclass(frozen=True)
 class TreeNode:
+    """Lazy view of every exact action/chance branch; histories are never pruned."""
     board: Board
-    actions: tuple[Action, ...] = ()
+    rules: Rules = Rules()
+    strategy: Strategy = Strategy()
+
+    @property
+    def actions(self) -> tuple[Action, ...]:
+        if self.board.winner:
+            return ()
+        return tuple(Action(target, tuple(Chance(o.probability, TreeNode(o.board, self.rules, self.strategy))
+                     for o in action_outcomes(self.board, target, self.rules, self.strategy)))
+                     for target in self.board.alive)
 
 
 def build_tree(board: Board, rules: Rules, strategy: Strategy) -> TreeNode:
-    """Build all action candidates to terminal leaves before evaluating values."""
     validate_strategy(rules, strategy)
-    if board.winner is not None:
-        return TreeNode(board)
-    return TreeNode(board, tuple(Action(target, tuple(
-        Chance(outcome.probability, build_tree(outcome.board, rules, strategy))
-        for outcome in action_outcomes(board, target, rules, strategy)
-    )) for target in board.alive))
+    return TreeNode(board, rules, strategy)
 
 
 @dataclass(frozen=True)
@@ -184,37 +249,83 @@ def aggregate_values(phase: Phase, candidates: tuple[Values, ...], strategy: Str
     return Values(village, 1 - village)
 
 
+def marginal_state(board):
+    result = {}
+    for mask, q in board.belief:
+        compact = sum(1 << j for j, i in enumerate(board.alive) if mask & (1 << (i - 1)))
+        result[compact] = result.get(compact, Fraction(0)) + q
+    return tuple(sorted(result.items()))
+
+
+@lru_cache(maxsize=4096)
+def solve(n, phase, belief, strategy):
+    """Backward induction on exact public states, sharing equivalent histories.
+
+    Exchangeable survivors have identical action subtrees up to relabeling.
+    Their count distribution is a sufficient statistic for future values,
+    but full correlated location beliefs remain on displayed Boards.
+    """
+    counts = {}
+    for mask, q in belief:
+        w = mask.bit_count()
+        counts[w] = counts.get(w, Fraction(0)) + q
+    winners = {winner_for(n, w) for w in counts}
+    if len(winners) == 1 and None not in winners:
+        return Values(Fraction(int('village' in winners)), Fraction(int('wolf' in winners)))
+    symmetric = all(q == counts[m.bit_count()] / comb(n, m.bit_count()) for m, q in belief)
+    symmetric &= len(belief) == sum(comb(n, w) for w in counts)
+    if symmetric:
+        candidates = (symmetric_action(n, phase, tuple(sorted(counts.items())), strategy),) * n
+    else:
+        # General joint beliefs: one public optimization after all candidates.
+        board = Board(max(3, n), tuple(range(1, n + 1)), None, phase=phase, belief=belief)
+        candidates = tuple(value_for_action(board, i, Rules(strategy.include_self_bite), strategy)
+                           for i in board.alive)
+    return aggregate_values(phase, candidates, strategy)
+
+
+@lru_cache(maxsize=4096)
+def symmetric_action(n, phase, counts, strategy):
+    village, continuing = Fraction(0), {}
+    for w, mass in counts:
+        hits = ((w - 1, Fraction(w, n)), (w, Fraction(n - w, n))) if phase == 'day' or strategy.include_self_bite else ((w, Fraction(1)),)
+        for remaining, probability in hits:
+            if not probability:
+                continue
+            q = mass * probability
+            winner = winner_for(n - 1, remaining)
+            if winner == 'village':
+                village += q
+            elif winner is None:
+                continuing[remaining] = continuing.get(remaining, Fraction(0)) + q
+    mass = sum(continuing.values(), Fraction(0))
+    if mass:
+        belief = tuple(sorted((sum(1 << i for i in ids), q / mass / comb(n - 1, w))
+                       for w, q in continuing.items() for ids in combinations(range(n - 1), w)))
+        village += mass * solve(n - 1, 'night' if phase == 'day' else 'day', belief, strategy).village_win
+    return Values(village, 1 - village)
+
+
+def value_for_action(board, target, rules, strategy):
+    village = sum((o.probability * solve(len(o.board.alive), o.board.phase, marginal_state(o.board), strategy).village_win
+                   for o in action_outcomes(board, target, rules, strategy)), Fraction(0))
+    return Values(village, 1 - village)
+
+
 @dataclass
 class Evaluation:
-    boards: dict[int, Values]
-    actions: dict[tuple[int, int], Values]
+    strategy: Strategy
 
     def board_value(self, node: TreeNode) -> Values:
-        return self.boards[id(node)]
+        return solve(len(node.board.alive), node.board.phase, marginal_state(node.board), self.strategy)
 
     def action_value(self, node: TreeNode, target: int) -> Values:
-        return self.actions[(id(node), target)]
+        return value_for_action(node.board, target, node.rules, self.strategy)
 
 
 def evaluate_tree(root: TreeNode, strategy: Strategy) -> Evaluation:
-    result = Evaluation({}, {})
-
-    def visit(node):
-        winner = node.board.winner
-        if winner:
-            value = Values(Fraction(int(winner == "village")), Fraction(int(winner == "wolf")))
-        else:
-            candidates = []
-            for action in node.actions:
-                village = sum((chance.probability * visit(chance.child).village_win for chance in action.outcomes), Fraction(0))
-                value = Values(village, 1 - village)
-                result.actions[(id(node), action.target)] = value
-                candidates.append(value)
-            value = aggregate_values(node.board.phase, tuple(candidates), strategy)
-        result.boards[id(node)] = value
-        return value
-
-    visit(root)
+    result = Evaluation(strategy)
+    result.board_value(root)  # Complete terminal-to-root evaluation before rendering.
     return result
 
 
@@ -264,5 +375,5 @@ def advance(progress: Progress, target: int, rules: Rules, strategy: Strategy) -
         else:
             continuing.append(outcome.board)
     if len(continuing) > 1:
-        raise ValueError("Multiple continuing Boards need a broader public-information model")
+        raise ValueError("Continuing hypotheses must be merged into one public Board")
     return Progress(continuing[0] if continuing else None, village, wolf, progress.board, outcomes)

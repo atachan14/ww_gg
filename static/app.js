@@ -52,10 +52,20 @@ document.querySelectorAll('input[name="target"]').forEach((radio) => {
 });
 
 const count = document.querySelector('#player-count');
-if (count) count.addEventListener('change', () => {
-  document.querySelector('#villager-count').innerHTML = `${Number(count.value) - 1}<small>人</small>`;
-  document.querySelector('#total-count').innerHTML = `${Number(count.value)}<small>人</small>`;
-});
+const wolves = document.querySelector('#wolf-count');
+function updateCast() {
+  const maximum = Math.floor((Number(count.value) - 1) / 2);
+  for (const option of wolves.options) option.disabled = Number(option.value) > maximum;
+  if (Number(wolves.value) > maximum) wolves.value = String(maximum);
+  document.querySelector('#villager-count').innerHTML = `${Number(count.value) - Number(wolves.value)}<small>人</small>`;
+  document.querySelector('#wolf-summary').innerHTML = `${wolves.value}<small>人</small>`;
+  document.querySelector('#total-count').innerHTML = `${count.value}<small>人</small>`;
+}
+if (count && wolves) {
+  count.addEventListener('change', updateCast);
+  wolves.addEventListener('change', updateCast);
+  updateCast();
+}
 const permission = document.querySelector('#allow-self-bite');
 const inclusion = document.querySelector('#include-self-bite');
 if (permission && inclusion) permission.addEventListener('change', () => {

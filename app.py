@@ -27,8 +27,8 @@ def create_app(test_config=None):
 
     def replay(state):
         rules = Rules(**state["rules"])
-        progress = Progress(initial_board(state["players"]))
-        if len(state["history"]) > 3:
+        progress = Progress(initial_board(state["players"], state.get("wolves", 1)))
+        if len(state["history"]) > state["players"] - 2:
             raise ValueError("Too much history")
         for step in state["history"]:
             if set(step) != {"target", "policy"}:
@@ -40,7 +40,7 @@ def create_app(test_config=None):
     def game():
         state = session.get("game")
         try:
-            if not isinstance(state, dict) or set(state) != {"players", "rules", "policy", "history", "selection", "revision"}:
+            if not isinstance(state, dict) or set(state) not in ({"players", "rules", "policy", "history", "selection", "revision"}, {"players", "wolves", "rules", "policy", "history", "selection", "revision"}):
                 return None
             if type(state["revision"]) is not int or state["revision"] < 0 or not isinstance(state["history"], list):
                 return None
@@ -107,7 +107,7 @@ def create_app(test_config=None):
                             "action": action_values.get(player)})
         return render_template("main.html", state=state, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, error=error), status
+                               players=players, error=error, counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
     @app.after_request
     def no_stale_pages(response):
@@ -122,9 +122,13 @@ def create_app(test_config=None):
     @app.post("/start")
     def start():
         try:
-            allowed = {"players", "day", "night", "allow_self_bite", "include_self_bite"}
-            if not set(request.form) <= allowed or request.form.getlist("players") not in (["3"], ["4"], ["5"]):
-                raise ValueError("人数は3・4・5人から選んでください。")
+            allowed = {"players", "wolves", "day", "night", "allow_self_bite", "include_self_bite"}
+            if not set(request.form) <= allowed or request.form.getlist("players") not in ([str(n)] for n in range(3, 10)):
+                raise ValueError("人数は3〜9人から選んでください。")
+            wolves = request.form.getlist("wolves") or ["1"]
+            if len(wolves) != 1 or wolves[0] not in {str(w) for w in range(1, 5)}:
+                raise ValueError("狼の人数を選んでください。")
+            initial_board(int(request.form["players"]), int(wolves[0]))
             permission = request.form.getlist("allow_self_bite")
             if permission not in ([], ["1"]):
                 raise ValueError("自噛みのルールが不正です。")
@@ -133,7 +137,7 @@ def create_app(test_config=None):
         except ValueError as exc:
             return render_template("top.html", error=str(exc)), 400
         previous = game()
-        session["game"] = {"players": int(request.form["players"]), "rules": {"allow_self_bite": rules.allow_self_bite},
+        session["game"] = {"players": int(request.form["players"]), "wolves": int(wolves[0]), "rules": {"allow_self_bite": rules.allow_self_bite},
                            "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
         return redirect(url_for("main"), code=303)
@@ -210,7 +214,7 @@ def create_app(test_config=None):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="ww_gg local public Board v0.1")
+    parser = argparse.ArgumentParser(description="ww_gg local public Board v0.2")
     parser.add_argument("--port", type=int, default=8771)
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
