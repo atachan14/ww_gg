@@ -7,11 +7,12 @@ import secrets
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from werewolf.exact import PLAYERS, evaluate_execution, evaluate_uniform_strategy, initial_belief
+from werewolf.exact import PLAYERS, evaluate_execution, initial_belief
 
 
 def percent(value: Fraction) -> str:
-    return str((Decimal(value.numerator) * 100 / Decimal(value.denominator)).quantize(Decimal("0.1")))
+    displayed = (Decimal(value.numerator) * 100 / Decimal(value.denominator)).quantize(Decimal("0.01"))
+    return format(displayed, "f").rstrip("0").rstrip(".")
 
 
 def create_app(test_config=None):
@@ -31,7 +32,7 @@ def create_app(test_config=None):
         value = session.get("game")
         if not isinstance(value, dict) or value.get("phase") not in ("day", "finished"):
             return None
-        if type(value.get("revision")) is not int or value.get("strategy") != "uniform":
+        if type(value.get("revision")) is not int:
             return None
         target = value.get("target")
         if target is not None and (type(target) is not int or target not in PLAYERS):
@@ -46,15 +47,17 @@ def create_app(test_config=None):
     def render_main(state, error=None, status=200):
         prior = initial_belief()
         finished = state["phase"] == "finished"
-        chosen = evaluate_execution(prior, state["target"]) if finished else None
-        rates = chosen or evaluate_uniform_strategy(prior)
+        actions = {player: evaluate_execution(prior, player) for player in PLAYERS}
+        chosen = actions[state["target"]] if state["target"] else None
+        common = len({(action.village_win, action.wolf_win, action.unresolved) for action in actions.values()}) == 1
+        rates = chosen or (actions[PLAYERS[0]] if common else None)
         players = [{
             "id": player,
             "name": f"Player {player}",
             "status": "処刑" if finished and player == state["target"] else "生存",
             "village_probability": prior.role_probability(player, "village"),
             "wolf_probability": prior.role_probability(player, "wolf"),
-            "action": evaluate_execution(prior, player),
+            "action": actions[player],
         } for player in PLAYERS]
         return render_template("main.html", state=state, finished=finished, rates=rates,
                                chosen=chosen, players=players, error=error), status
@@ -71,11 +74,11 @@ def create_app(test_config=None):
 
     @app.post("/start")
     def start():
-        expected = {"villagers": "2", "wolves": "1", "strategy": "uniform"}
+        expected = {"villagers": "2", "wolves": "1"}
         if set(request.form) != set(expected) or any(request.form.getlist(key) != [value] for key, value in expected.items()):
-            return render_template("top.html", error="最初の基準例は村人2・狼1、全生存者から等確率の処刑です。"), 400
+            return render_template("top.html", error="この確認画面の配役は村人2・狼1です。昼は対象ごとに評価します。"), 400
         previous = game()
-        session["game"] = {"phase": "day", "target": None, "strategy": "uniform",
+        session["game"] = {"phase": "day", "target": None,
                            "revision": previous["revision"] + 1 if previous else 0}
         return redirect(url_for("main"), code=303)
 
@@ -97,8 +100,8 @@ def create_app(test_config=None):
             return redirect(url_for("result"), code=303)
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面からもう一度選んでください。", 409)
-        if set(request.form) != {"revision", "target", "strategy"} or request.form.getlist("strategy") != ["uniform"]:
-            return render_main(state, "この基準例の戦略・公開情報は固定です。", 400)
+        if set(request.form) != {"revision", "target"}:
+            return render_main(state, "処刑対象を1人指定してください。公開情報の追加入力はありません。", 400)
         target_values = request.form.getlist("target")
         if len(target_values) != 1 or target_values[0] not in {str(player) for player in PLAYERS}:
             return render_main(state, "処刑対象を1人選んでください。", 400)

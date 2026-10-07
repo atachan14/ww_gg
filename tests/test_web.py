@@ -14,7 +14,7 @@ class MinimalWebTests(unittest.TestCase):
 
     def start(self, client=None):
         client = client or self.client
-        return client.post("/start", data={"villagers": "2", "wolves": "1", "strategy": "uniform"}, follow_redirects=True)
+        return client.post("/start", data={"villagers": "2", "wolves": "1"}, follow_redirects=True)
 
     def state(self):
         with self.client.session_transaction() as session:
@@ -25,7 +25,7 @@ class MinimalWebTests(unittest.TestCase):
         if revision is None:
             with client.session_transaction() as session:
                 revision = session["game"]["revision"]
-        return client.post("/execute", data={"revision": str(revision), "target": str(target), "strategy": "uniform"}, follow_redirects=True)
+        return client.post("/execute", data={"revision": str(revision), "target": str(target)}, follow_redirects=True)
 
     def test_top_main_execution_and_result_for_every_target(self):
         for target in (1, 2, 3):
@@ -38,8 +38,8 @@ class MinimalWebTests(unittest.TestCase):
                 html = result.get_data(as_text=True)
                 self.assertEqual(result.status_code, 200)
                 self.assertIn('data-screen="result"', html)
-                self.assertIn('id="village-exact">1/3', html)
-                self.assertIn('id="wolf-exact">2/3', html)
+                self.assertRegex(html, r'id="village-rate"[^>]*data-fraction="1/3"[^>]*>33\.33%')
+                self.assertRegex(html, r'id="wolf-rate"[^>]*data-fraction="2/3"[^>]*>66\.67%')
                 self.assertIn(f"処刑対象：Player {target}", html)
                 self.assertIn("すべての分岐で決着", html)
                 self.assertIn("夜の襲撃は行いません", html)
@@ -54,17 +54,18 @@ class MinimalWebTests(unittest.TestCase):
         self.assertEqual(html.count('<td class="muted">未確定</td>'), 3)
         self.assertNotIn('name="wolf_id"', html)
         self.assertNotIn('name="co"', html)
-        self.assertEqual(self.state(), {"phase": "day", "revision": 0, "strategy": "uniform", "target": None})
+        self.assertEqual(self.state(), {"phase": "day", "revision": 0, "target": None})
 
     def test_information_panel_precedes_the_table_and_strategy(self):
         html = self.start().get_data(as_text=True)
         self.assertLess(html.index('id="information-panel"'), html.index('id="player-panel"'))
         self.assertLess(html.index('id="player-panel"'), html.index('id="strategy-panel"'))
 
-    def test_fixed_cast_and_strategy_reject_tampered_top_input(self):
-        for data in ({"villagers": "3", "wolves": "0", "strategy": "uniform"},
+    def test_fixed_cast_rejects_invalid_cast_and_injected_policy(self):
+        for data in ({"villagers": "3", "wolves": "0"},
                      {"villagers": "2", "wolves": "1", "strategy": "max"},
-                     {"villagers": "2", "wolves": "1", "strategy": "uniform", "wolf_id": "1"}):
+                     {"villagers": "2", "wolves": "1", "wolf_id": "1"},
+                     {"villagers": "2", "wolves": "1", "strategy": "uniform"}):
             with self.subTest(data=data):
                 response = self.client.post("/start", data=data)
                 self.assertEqual(response.status_code, 400)
@@ -83,14 +84,14 @@ class MinimalWebTests(unittest.TestCase):
 
     def test_duplicate_target_fields_are_rejected(self):
         self.start()
-        response = self.client.post("/execute", data=MultiDict([("revision", "0"), ("strategy", "uniform"), ("target", "1"), ("target", "2")]))
+        response = self.client.post("/execute", data=MultiDict([("revision", "0"), ("target", "1"), ("target", "2")]))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(self.state()["phase"], "day")
 
     def test_execution_cannot_inject_true_roles_or_another_strategy(self):
         self.start()
-        for extra in ({"wolf_id": "1"}, {"strategy": "max"}):
-            response = self.client.post("/execute", data={"revision": "0", "target": "1", "strategy": "uniform", **extra})
+        for extra in ({"wolf_id": "1"}, {"strategy": "max"}, {"strategy": "uniform"}):
+            response = self.client.post("/execute", data={"revision": "0", "target": "1", **extra})
             self.assertEqual(response.status_code, 400)
             self.assertEqual(self.state()["phase"], "day")
 
@@ -138,7 +139,7 @@ class MinimalWebTests(unittest.TestCase):
         self.assertEqual(self.client.post("/night").status_code, 404)
 
     def test_request_without_a_started_game_does_not_create_a_state(self):
-        response = self.client.post("/execute", data={"revision": "0", "target": "1", "strategy": "uniform"})
+        response = self.client.post("/execute", data={"revision": "0", "target": "1"})
         self.assertEqual(response.status_code, 303)
         self.assertEqual(response.headers["Location"], "/")
         with self.client.session_transaction() as session:
@@ -148,8 +149,30 @@ class MinimalWebTests(unittest.TestCase):
         response = self.start()
         self.assertEqual(response.headers["Cache-Control"], "no-store")
         fraction = Fraction(1, 3)
-        self.assertEqual(percent(fraction), "33.3")
+        self.assertEqual(percent(fraction), "33.33")
         self.assertEqual(fraction, Fraction(1, 3))
+
+    def test_no_equal_action_mixture_is_shown_or_stored(self):
+        for page in (self.client.get("/"), self.start()):
+            html = page.get_data(as_text=True)
+            self.assertNotIn("全生存者から等確率", html)
+            self.assertNotIn('name="strategy"', html)
+        self.assertNotIn("strategy", self.state())
+        self.assertIn("どの処刑対象でも同じ勝率", self.client.get("/main").get_data(as_text=True))
+
+    def test_percentage_is_default_and_fraction_format_is_only_display_data(self):
+        html = self.start().get_data(as_text=True)
+        self.assertIn('id="display-panel"', html)
+        self.assertIn('name="probability-format" value="percent" checked', html)
+        self.assertIn('name="probability-format" value="fraction"', html)
+        self.assertRegex(html, r'data-fraction="1/3" data-percent="33\.33%">33\.33%')
+        self.assertIn("配役：村人 2 / 狼 1", html)
+        before = self.state()
+        self.client.get("/main")
+        self.assertEqual(self.state(), before)
+        self.assertEqual(percent(Fraction(1)), "100")
+        self.assertEqual(percent(Fraction(0)), "0")
+        self.assertEqual(percent(Fraction(1, 4)), "25")
 
     def test_two_browser_sessions_keep_their_selected_actions_separate(self):
         other = self.app.test_client()

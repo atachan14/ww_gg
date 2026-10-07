@@ -1,5 +1,27 @@
 "use strict";
 
+const formatInputs = document.querySelectorAll('input[name="probability-format"]');
+let probabilityFormat = "percent";
+try {
+  if (localStorage.getItem("ww_gg.probability-format") === "fraction") probabilityFormat = "fraction";
+} catch (_) { /* Display still works if browser storage is unavailable. */ }
+
+function applyProbabilityFormat() {
+  document.querySelectorAll(".probability").forEach((element) => {
+    element.textContent = probabilityFormat === "fraction" ? element.dataset.fraction : element.dataset.percent;
+  });
+  formatInputs.forEach((input) => { input.checked = input.value === probabilityFormat; });
+}
+
+formatInputs.forEach((input) => {
+  input.addEventListener("change", () => {
+    probabilityFormat = input.value;
+    try { localStorage.setItem("ww_gg.probability-format", probabilityFormat); } catch (_) {}
+    applyProbabilityFormat();
+  });
+});
+applyProbabilityFormat();
+
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) window.location.reload();
 });
@@ -26,5 +48,16 @@ document.querySelectorAll('input[name="target"]').forEach((radio) => {
   radio.addEventListener("change", () => {
     const preview = document.querySelector("[data-target-preview]");
     if (preview) preview.textContent = `Player ${radio.value}`;
+    const caption = document.querySelector("[data-rate-caption]");
+    if (caption) caption.textContent = `Player ${radio.value}を処刑した場合の勝率`;
+    const row = radio.closest("tr");
+    for (const side of ["village", "wolf"]) {
+      const rate = document.querySelector(`#${side}-rate`);
+      if (rate) {
+        rate.dataset.fraction = row.dataset[`action${side[0].toUpperCase()}${side.slice(1)}Fraction`];
+        rate.dataset.percent = row.dataset[`action${side[0].toUpperCase()}${side.slice(1)}Percent`];
+      }
+    }
+    applyProbabilityFormat();
   });
 });

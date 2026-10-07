@@ -43,7 +43,10 @@ button { font: inherit; font-size: 14px; border-radius: 8px; padding: 12px 20px;
 .secondary { background: #fff; color: var(--ink); border: 1px solid #cbd4da; }
 button:disabled { cursor: default; background: #dce4e0; color: #83968e; border-color: #dce4e0; }
 button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible { outline: 3px solid #81bda8; outline-offset: 3px; }
-.information-panel { margin-bottom: 20px; }
+.information-row { display: grid; grid-template-columns: minmax(0, 1fr) 210px; gap: 20px; margin-bottom: 20px; align-items: stretch; }
+.display-options { padding: 0; margin: 0; border: 0; }
+.display-options legend { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+.display-options label { display: flex; align-items: center; gap: 8px; margin: 13px 0; font-size: 14px; cursor: pointer; }
 .information-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; }
 .information-head h1 { font-size: 23px; margin-bottom: 12px; }
 .text-link { color: var(--muted); font-size: 12px; text-underline-offset: 3px; }
@@ -84,6 +87,7 @@ tr:has(input:checked):not(.executed) { background: #f5faf7; }
 .site-foot { margin-top: 36px; color: #869189; font-size: 11px; text-align: center; }
 @media (max-width: 1050px) { .main-grid { grid-template-columns: minmax(0, 1fr); } .main-grid .strategy-panel { max-width: 400px; } }
 @media (max-width: 700px) {
+  .information-row { grid-template-columns: minmax(0, 1fr); }
   .page-shell { padding: 18px 14px 24px; }
   .site-head { margin-bottom: 22px; }
   .brand { font-size: 23px; }
