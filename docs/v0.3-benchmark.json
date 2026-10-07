@@ -1,0 +1,996 @@
+[
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 0,
+    "cco": "counter",
+    "self_bite_included": false,
+    "complete_history_seconds": 0.842443,
+    "peak_python_bytes": 601491,
+    "initial_village": "94/315",
+    "manual_history_cumulative_village": "94/315",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.193999,
+        "village": "94/315",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.166821,
+        "village": "94/315",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.1262,
+        "village": "94/315",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.097398,
+        "village": "84/305",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.064204,
+        "village": "84/305",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.034707,
+        "village": "1/3",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.032382,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 12
+  },
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 0,
+    "cco": "counter",
+    "self_bite_included": true,
+    "complete_history_seconds": 0.922139,
+    "peak_python_bytes": 434076,
+    "initial_village": "5/9",
+    "manual_history_cumulative_village": "5/9",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.187026,
+        "village": "5/9",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.167707,
+        "village": "5/9",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.141883,
+        "village": "19/35",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.11739,
+        "village": "17/33",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.087899,
+        "village": "7/15",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.049219,
+        "village": "1/2",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.038704,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 15
+  },
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 2,
+    "cco": "counter",
+    "self_bite_included": false,
+    "complete_history_seconds": 0.255708,
+    "peak_python_bytes": 133792,
+    "initial_village": "1/3",
+    "manual_history_cumulative_village": "8/35",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.173081,
+        "village": "1/3",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.015341,
+        "village": "8/35",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.012267,
+        "village": "8/35",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.010923,
+        "village": "8/35",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.008861,
+        "village": "8/35",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.004532,
+        "village": "1/3",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.004944,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 36
+  },
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 2,
+    "cco": "counter",
+    "self_bite_included": true,
+    "complete_history_seconds": 0.20952,
+    "peak_python_bytes": 102152,
+    "initial_village": "3/7",
+    "manual_history_cumulative_village": "3/7",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.121696,
+        "village": "3/7",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.014112,
+        "village": "3/7",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.012397,
+        "village": "3/7",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.012387,
+        "village": "3/7",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.011421,
+        "village": "2/5",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.005719,
+        "village": "1/2",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.00608,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 29
+  },
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 3,
+    "cco": "counter",
+    "self_bite_included": false,
+    "complete_history_seconds": 0.375628,
+    "peak_python_bytes": 218240,
+    "initial_village": "13/36",
+    "manual_history_cumulative_village": "7/15",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.306432,
+        "village": "13/36",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.013624,
+        "village": "13/36",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.008915,
+        "village": "7/15",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.008435,
+        "village": "7/15",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.006277,
+        "village": "7/15",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.004155,
+        "village": "1/3",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.004713,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 81
+  },
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 3,
+    "cco": "counter",
+    "self_bite_included": true,
+    "complete_history_seconds": 0.227457,
+    "peak_python_bytes": 111404,
+    "initial_village": "2/3",
+    "manual_history_cumulative_village": "2/3",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.147786,
+        "village": "2/3",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.013252,
+        "village": "2/3",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.011574,
+        "village": "2/3",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.010259,
+        "village": "2/3",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.008334,
+        "village": "3/5",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.005742,
+        "village": "1/2",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.006332,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 36
+  },
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 4,
+    "cco": "counter",
+    "self_bite_included": false,
+    "complete_history_seconds": 0.144773,
+    "peak_python_bytes": 85160,
+    "initial_village": "1",
+    "manual_history_cumulative_village": "1",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.105899,
+        "village": "1",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.00616,
+        "village": "1",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.004406,
+        "village": "1",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.002591,
+        "village": "1",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.003062,
+        "village": "1",
+        "manual_target": 6
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.001845,
+        "village": "1",
+        "manual_target": 7
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.002679,
+        "village": "1",
+        "manual_target": 4
+      }
+    ],
+    "cache_states": 36
+  },
+  {
+    "players": 9,
+    "wolves": 2,
+    "mediums": 2,
+    "medium_claims": 4,
+    "cco": "counter",
+    "self_bite_included": true,
+    "complete_history_seconds": 0.123526,
+    "peak_python_bytes": 85160,
+    "initial_village": "1",
+    "manual_history_cumulative_village": "1",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.080743,
+        "village": "1",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.006942,
+        "village": "1",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.004997,
+        "village": "1",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.003406,
+        "village": "1",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.003483,
+        "village": "1",
+        "manual_target": 6
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.00272,
+        "village": "1",
+        "manual_target": 7
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.00261,
+        "village": "1",
+        "manual_target": 4
+      }
+    ],
+    "cache_states": 31
+  },
+  {
+    "players": 9,
+    "wolves": 3,
+    "mediums": 2,
+    "medium_claims": 4,
+    "cco": "none",
+    "self_bite_included": false,
+    "complete_history_seconds": 0.508005,
+    "peak_python_bytes": 249408,
+    "initial_village": "107534/328185",
+    "manual_history_cumulative_village": "13/27",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.409187,
+        "village": "107534/328185",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.023269,
+        "village": "107534/328185",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.011063,
+        "village": "13/27",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.009168,
+        "village": "13/27",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.008707,
+        "village": "13/27",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.005137,
+        "village": "1/3",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.005661,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 87
+  },
+  {
+    "players": 9,
+    "wolves": 3,
+    "mediums": 2,
+    "medium_claims": 4,
+    "cco": "none",
+    "self_bite_included": true,
+    "complete_history_seconds": 0.40433,
+    "peak_python_bytes": 158124,
+    "initial_village": "17/25",
+    "manual_history_cumulative_village": "19/25",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.264795,
+        "village": "17/25",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.023721,
+        "village": "17/25",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.022901,
+        "village": "19/25",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.018403,
+        "village": "11/15",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.012965,
+        "village": "3/5",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.009588,
+        "village": "1/2",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.009007,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 58
+  },
+  {
+    "players": 9,
+    "wolves": 1,
+    "mediums": 8,
+    "medium_claims": 0,
+    "cco": "counter",
+    "self_bite_included": false,
+    "complete_history_seconds": 0.049202,
+    "peak_python_bytes": 37402,
+    "initial_village": "187/315",
+    "manual_history_cumulative_village": "187/315",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.011409,
+        "village": "187/315",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.007325,
+        "village": "19/35",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.006823,
+        "village": "19/35",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.004758,
+        "village": "7/15",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.004321,
+        "village": "7/15",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.002732,
+        "village": "1/3",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.004693,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 12
+  },
+  {
+    "players": 9,
+    "wolves": 1,
+    "mediums": 8,
+    "medium_claims": 0,
+    "cco": "counter",
+    "self_bite_included": true,
+    "complete_history_seconds": 0.052462,
+    "peak_python_bytes": 37840,
+    "initial_village": "7/9",
+    "manual_history_cumulative_village": "7/9",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.011195,
+        "village": "7/9",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.008139,
+        "village": "3/4",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.007437,
+        "village": "5/7",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.005509,
+        "village": "2/3",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.004527,
+        "village": "3/5",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.004007,
+        "village": "1/2",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.004139,
+        "village": "1/3",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 15
+  },
+  {
+    "players": 9,
+    "wolves": 1,
+    "mediums": 8,
+    "medium_claims": 8,
+    "cco": "counter",
+    "self_bite_included": false,
+    "complete_history_seconds": 0.036097,
+    "peak_python_bytes": 30224,
+    "initial_village": "1",
+    "manual_history_cumulative_village": "0",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.018937,
+        "village": "1",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.002841,
+        "village": "1",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.002638,
+        "village": "1",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.00215,
+        "village": "1",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.002189,
+        "village": "1",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.001449,
+        "village": "1",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.001942,
+        "village": "1",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 12
+  },
+  {
+    "players": 9,
+    "wolves": 1,
+    "mediums": 8,
+    "medium_claims": 8,
+    "cco": "counter",
+    "self_bite_included": true,
+    "complete_history_seconds": 0.039289,
+    "peak_python_bytes": 42472,
+    "initial_village": "1",
+    "manual_history_cumulative_village": "0",
+    "phases": [
+      {
+        "day": 1,
+        "phase": "day",
+        "alive": 9,
+        "seconds": 0.022818,
+        "village": "1",
+        "manual_target": 1
+      },
+      {
+        "day": 1,
+        "phase": "night",
+        "alive": 8,
+        "seconds": 0.002805,
+        "village": "1",
+        "manual_target": 2
+      },
+      {
+        "day": 2,
+        "phase": "day",
+        "alive": 7,
+        "seconds": 0.002613,
+        "village": "1",
+        "manual_target": 3
+      },
+      {
+        "day": 2,
+        "phase": "night",
+        "alive": 6,
+        "seconds": 0.002242,
+        "village": "1",
+        "manual_target": 4
+      },
+      {
+        "day": 3,
+        "phase": "day",
+        "alive": 5,
+        "seconds": 0.001844,
+        "village": "1",
+        "manual_target": 5
+      },
+      {
+        "day": 3,
+        "phase": "night",
+        "alive": 4,
+        "seconds": 0.001561,
+        "village": "1",
+        "manual_target": 6
+      },
+      {
+        "day": 4,
+        "phase": "day",
+        "alive": 3,
+        "seconds": 0.0019,
+        "village": "1",
+        "manual_target": 7
+      }
+    ],
+    "cache_states": 15
+  }
+]

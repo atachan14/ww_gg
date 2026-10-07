@@ -9,7 +9,7 @@
         <div><p class="eyebrow">MAIN · DAY {{ board.day }} / {{ '昼' if board.phase == 'day' else '夜' }}</p><h1 id="phase-title">{{ '決着画面' if finished else ('処刑対象を確認' if board.phase == 'day' else '襲撃対象を確認') }}</h1></div>
         <a class="text-link" href="{{ url_for('top') }}">TOPへ戻る</a>
       </div>
-      <div class="information-meta"><span>開始配役：村人 {{ state.players - state.get("wolves", 1) }} / 狼 {{ state.get("wolves", 1) }}</span><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>自噛みルール：{{ '許可' if rules.allow_self_bite else '禁止' }}</span></div>
+      <div class="information-meta"><span>開始配役：市民 {{ state.players - state.get("wolves", 1) - state.get("mediums", 0) }} / 霊能 {{ state.get("mediums", 0) }} / 狼 {{ state.get("wolves", 1) }}</span><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>自噛みルール：{{ '許可' if rules.allow_self_bite else '禁止' }}</span></div>
       {% if not finished %}<p class="count-distribution">生存狼の可能性（現在Board条件付き）：{% for count, weight in counts.items() %}<span>{{ count }}w {{ probability(weight) }}</span>{% if not loop.last %} / {% endif %}{% endfor %}</p>{% endif %}
       <p class="rate-caption">{{ '直前のBoardで指定した行動の決着確率' if finished else '現在のBoardから、最後まで続けた場合の勝率' }}</p>
       <div class="win-grid">
@@ -18,7 +18,7 @@
       </div>
       <p class="cumulative">開始時点からの累積：村 {{ probability(cumulative.village_win, 'cumulative-village-rate') }} / 狼 {{ probability(cumulative.wolf_win, 'cumulative-wolf-rate') }}</p>
       {% if finished %}<p class="result-note">すべての可能性で決着しました。</p><p class="hint">直前の指定対象：Player {{ state.selection }}。役職や勝者を1つに決めず、決着の確率を表示しています。</p>
-      {% else %}<p class="hint">{{ '前の行動で未決着だった場合のBoardです。先に決着した確率は累積値に保持しています。' if state.history else 'この条件では生存者の情報が対称なので、候補ごとの勝率は同じです。' }}</p>{% endif %}
+      {% else %}<p class="hint">{{ '前の行動で未決着だった場合のBoardです。先に決着した確率は累積値に保持しています。' if state.history else 'COと計算条件から、各位置の役職確率と対象別の勝率を評価します。' }}</p>{% endif %}
       {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     </section>
     <aside class="panel display-panel" id="display-panel" aria-labelledby="display-title">
@@ -31,23 +31,21 @@
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
         <div class="panel-heading"><h2 id="players-title">プレイヤー</h2><span class="muted">{{ '直前の行動の結果全体' if finished else '現在Boardの公開情報' }}</span></div>
         <div class="table-scroll"><table class="player-table">
-          <thead><tr><th>#</th><th>名前</th><th>状態</th><th>役職</th><th>村人の確率<small>村陣営</small></th><th>狼の確率<small>狼陣営</small></th><th>村の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
+          <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>村陣営の確率<small>市民＋霊能</small></th>{% if state.get("mediums", 0) %}<th>市民の確率</th><th>霊能の確率</th>{% endif %}<th>狼の確率<small>狼陣営</small></th><th>村の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
           <tbody>{% for player in players %}
             <tr class="{{ 'executed' if not player.alive else '' }}" data-player="{{ player.id }}">
-              <td class="index">{{ player.id }}</td><td class="player-name">{{ player.name }}</td><td><span class="status {{ 'alive' if player.alive else 'dead' }}">{{ player.status }}</span></td><td class="muted">未確定</td>
-              <td class="village-text">{{ probability(player.village_probability) }}</td><td class="wolf-text">{{ probability(player.wolf_probability) }}</td>
+              <td class="index">{{ player.id }}</td><td class="player-name">{{ player.name }}</td><td><span class="status {{ 'alive' if player.alive else 'dead' }}">{{ player.status }}</span></td><td><select class="co-select" name="co_{{ player.id }}" aria-label="Player {{ player.id }}のCO" {% if finished or not player.alive %}disabled{% endif %}>
+                {% for key, label in [('latent', '潜伏'), ('villager', '市民'), ('medium', '霊能'), ('wolf', '狼')] %}{% if (key != 'medium' or state.get('mediums', 0)) and (key != 'villager' or state.players - state.get('wolves', 1) - state.get('mediums', 0)) %}<option value="{{ key }}" {% if player.claim == key %}selected{% endif %}>{{ label }}</option>{% endif %}{% endfor %}</select></td>
+              <td class="village-text">{{ probability(player.village_probability) }}</td>{% if state.get("mediums", 0) %}<td>{{ probability(player.citizen_probability) }}</td><td>{{ probability(player.medium_probability) }}</td>{% endif %}<td class="wolf-text">{{ probability(player.wolf_probability) }}</td>
               <td>{{ probability(player.action.village_win) if player.action else '—' }}</td><td>{{ probability(player.action.wolf_win) if player.action else '—' }}</td>
-              <td><label class="target-label"><input type="radio" name="target" value="{{ player.id }}" aria-label="Player {{ player.id }}を対象にする" required {% if state.selection == player.id %}checked{% endif %} {% if finished or not player.alive %}disabled{% endif %}></label></td>
+              <td><label class="target-label"><input type="radio" name="target" value="{{ player.id }}" aria-label="Player {{ player.id }}を対象にする" required {% if state.selection == player.id %}checked{% endif %} {% if finished or not player.alive or not player.legal %}disabled{% endif %}></label></td>
             </tr>{% endfor %}</tbody>
         </table></div>
-        <p class="hint">役職の可能性と、対象に選んだ場合の最終勝率を表示しています。</p>
+        <p class="hint">COは本人の申告です。霊能の能力結果はまだ使用しません。各役職の確率には人数制約と相関があります。</p>
       </section>
       <aside class="panel strategy-panel" id="strategy-panel">
-        <h2>戦略</h2>
-        <label class="field-label" for="day-strategy">昼の処刑</label><select id="day-strategy" name="day" {% if finished %}disabled{% endif %}><option value="max" {% if state.policy.day == 'max' %}selected{% endif %}>村の最終勝率が最大</option><option value="random" {% if state.policy.day == 'random' %}selected{% endif %}>random：候補を等確率で評価</option></select>
-        <label class="field-label spaced" for="night-strategy">夜の襲撃</label><select id="night-strategy" name="night" {% if finished %}disabled{% endif %}><option value="max" {% if state.policy.night == 'max' %}selected{% endif %}>狼の最終勝率が最大</option><option value="random" {% if state.policy.night == 'random' %}selected{% endif %}>random：候補を等確率で評価</option></select>
-        <label class="checkbox-label"><input type="checkbox" name="include_self_bite" value="1" {% if state.policy.include_self_bite %}checked{% endif %} {% if finished or not rules.allow_self_bite %}disabled{% endif %}>自噛みの可能性を計算に含める</label>
-        {% if not finished %}<button class="secondary strategy-apply" type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">戦略を反映</button><p class="hint">現在以後の勝率に反映します。過去の指定対象と設定は保持します。</p>{% endif %}
+        {% include 'calculation.html' %}
+        {% if not finished %}<button class="secondary strategy-apply" type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">CO・計算条件を反映</button><p class="hint">COを編集して反映すると、現在の公開情報に適合する確率と勝率を再計算します。過去の対象と条件は履歴に保持します。</p>{% endif %}
         <div class="selection-preview"><span class="field-label">指定対象</span><strong data-target-preview>{{ 'Player ' ~ state.selection if state.selection else '未選択' }}</strong></div>
       </aside>
     </div>

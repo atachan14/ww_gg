@@ -7,24 +7,27 @@
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
       <section class="panel cast-panel">
-        <div class="panel-heading"><h2>配役</h2><span class="muted">3〜9人・複数狼</span></div>
-        <label class="field-label" for="player-count">プレイヤー数</label>
-        <select id="player-count" name="players"><option value="3">3人</option><option value="4">4人</option><option value="5" selected>5人</option><option value="6">6人</option><option value="7">7人</option><option value="8">8人</option><option value="9">9人</option></select>
-        <label class="field-label spaced" for="wolf-count">狼の人数</label>
-        <select id="wolf-count" name="wolves"><option value="1" selected>1人</option><option value="2">2人</option><option value="3" disabled>3人</option><option value="4" disabled>4人</option></select>
+        <div class="panel-heading"><h2>配役</h2><span class="muted">3〜9人・市民／霊能／狼</span></div>
+        <div class="role-columns">
+          <section class="role-column"><h3>村陣営</h3>
+            <label class="role-count-row" for="citizen-count"><span>市民</span><input type="number" id="citizen-count" name="citizens" value="4" min="0" max="8" required></label>
+            <label class="role-count-row" for="medium-count"><span>霊能</span><input type="number" id="medium-count" name="mediums" value="0" min="0" max="8" required></label>
+          </section>
+          <section class="role-column"><h3>狼陣営</h3>
+            <label class="role-count-row" for="wolf-count"><span>狼</span><input type="number" id="wolf-count" name="wolves" value="1" min="1" max="4" required></label>
+          </section>
+        </div>
         <div class="cast-grid cast-summary">
-          <div class="cast-card village"><span>村人</span><strong id="villager-count">4<small>人</small></strong></div>
-          <div class="cast-card wolf"><span>狼</span><strong id="wolf-summary">1<small>人</small></strong></div>
+          <div class="cast-card village"><span>村陣営</span><strong id="villager-count">4<small>人</small></strong></div>
+          <div class="cast-card wolf"><span>狼陣営</span><strong id="wolf-summary">1<small>人</small></strong></div>
           <div class="cast-card total"><span>合計</span><strong id="total-count">5<small>人</small></strong></div>
         </div>
-        <p class="hint">生存者全員が同じ公開情報を持ちます。役職の位置を決める入力はありません。</p>
+        <p class="hint" id="cast-validation">合計3〜9人、狼より村陣営が多い配役にしてください。</p>
+        <p class="hint">全員潜伏から開始します。霊能は人数・COの計算に参加し、能力結果はまだ使用しません。</p>
       </section>
       <section class="panel strategy-panel">
-        <h2>戦略</h2>
-        <label class="field-label" for="day-strategy">昼の処刑</label><select id="day-strategy" name="day"><option value="max">村の最終勝率が最大</option><option value="random">random：候補を等確率で評価</option></select>
-        <label class="field-label spaced" for="night-strategy">夜の襲撃</label><select id="night-strategy" name="night"><option value="max">狼の最終勝率が最大</option><option value="random">random：候補を等確率で評価</option></select>
-        <label class="checkbox-label"><input type="checkbox" name="include_self_bite" value="1" id="include-self-bite" disabled>自噛みの可能性を計算に含める</label>
-        <p class="hint">最大値が同じでも対象は自動で選びません。進行時には対象を手動で指定します。</p>
+        {% set finished = false %}{% set claim_policy = none %}
+        {% include 'calculation.html' %}
       </section>
     </div>
     <section class="panel rules-panel">

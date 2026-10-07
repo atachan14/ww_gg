@@ -40,7 +40,7 @@ class WebTests(unittest.TestCase):
 
     def test_top_default_five_rule_and_strategy_defaults(self):
         html = self.page('/')
-        self.assertIn('value="5" selected', html)
+        self.assertIn('id="citizen-count" name="citizens" value="4"', html)
         self.assertIn('id="include-self-bite" disabled', html)
         self.start()
         self.assertEqual(self.state()['rules'], {'allow_self_bite': False})
@@ -176,7 +176,7 @@ class WebTests(unittest.TestCase):
     def test_no_role_state_and_malformed_session_returns_top(self):
         self.start()
         state = self.state()
-        self.assertEqual(set(state), {'players','wolves','rules','policy','history','selection','revision'})
+        self.assertEqual(set(state), {'players','wolves','mediums','claims','claim_policy','rules','policy','history','selection','revision'})
         with self.client.session_transaction() as session:
             session['game'] = {**state, 'actual_roles': {1:'wolf'}}
         self.assertTrue(self.client.get('/main').location.endswith('/'))

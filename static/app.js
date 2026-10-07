@@ -51,24 +51,26 @@ document.querySelectorAll('input[name="target"]').forEach((radio) => {
   });
 });
 
-const count = document.querySelector('#player-count');
+const citizens = document.querySelector('#citizen-count');
+const mediums = document.querySelector('#medium-count');
 const wolves = document.querySelector('#wolf-count');
 function updateCast() {
-  const maximum = Math.floor((Number(count.value) - 1) / 2);
-  for (const option of wolves.options) option.disabled = Number(option.value) > maximum;
-  if (Number(wolves.value) > maximum) wolves.value = String(maximum);
-  document.querySelector('#villager-count').innerHTML = `${Number(count.value) - Number(wolves.value)}<small>人</small>`;
+  const village = Number(citizens.value) + Number(mediums.value);
+  const total = village + Number(wolves.value);
+  document.querySelector('#villager-count').innerHTML = `${village}<small>人</small>`;
   document.querySelector('#wolf-summary').innerHTML = `${wolves.value}<small>人</small>`;
-  document.querySelector('#total-count').innerHTML = `${count.value}<small>人</small>`;
+  document.querySelector('#total-count').innerHTML = `${total}<small>人</small>`;
+  const valid = Number.isInteger(total) && total >= 3 && total <= 9 && Number(wolves.value) >= 1 && Number(wolves.value) < village;
+  document.querySelector('#cast-validation').textContent = valid ? '役職ごとの人数から合計を算出します。' : '合計3〜9人、狼より村陣営が多い配役にしてください。';
+  document.querySelector('[data-medium-calculation]').hidden = Number(mediums.value) === 0;
 }
-if (count && wolves) {
-  count.addEventListener('change', updateCast);
-  wolves.addEventListener('change', updateCast);
+if (citizens && mediums && wolves) {
+  for (const input of [citizens, mediums, wolves]) input.addEventListener('input', updateCast);
   updateCast();
 }
 const permission = document.querySelector('#allow-self-bite');
 const inclusion = document.querySelector('#include-self-bite');
 if (permission && inclusion) permission.addEventListener('change', () => {
   inclusion.disabled = !permission.checked;
-  if (!permission.checked) inclusion.checked = false;
+  if (!permission.checked) inclusion.value = "0";
 });
