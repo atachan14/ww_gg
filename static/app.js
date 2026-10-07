@@ -28,7 +28,7 @@ window.addEventListener("pageshow", (event) => {
 
 document.querySelectorAll("form[data-submit-once]").forEach((form) => {
   form.addEventListener("submit", (event) => {
-    if (!form.checkValidity()) {
+    if (!event.submitter?.formNoValidate && !form.checkValidity()) {
       event.preventDefault();
       form.reportValidity();
       return;
@@ -48,16 +48,17 @@ document.querySelectorAll('input[name="target"]').forEach((radio) => {
   radio.addEventListener("change", () => {
     const preview = document.querySelector("[data-target-preview]");
     if (preview) preview.textContent = `Player ${radio.value}`;
-    const caption = document.querySelector("[data-rate-caption]");
-    if (caption) caption.textContent = `Player ${radio.value}を処刑した場合の勝率`;
-    const row = radio.closest("tr");
-    for (const side of ["village", "wolf"]) {
-      const rate = document.querySelector(`#${side}-rate`);
-      if (rate) {
-        rate.dataset.fraction = row.dataset[`action${side[0].toUpperCase()}${side.slice(1)}Fraction`];
-        rate.dataset.percent = row.dataset[`action${side[0].toUpperCase()}${side.slice(1)}Percent`];
-      }
-    }
-    applyProbabilityFormat();
   });
+});
+
+const count = document.querySelector('#player-count');
+if (count) count.addEventListener('change', () => {
+  document.querySelector('#villager-count').innerHTML = `${Number(count.value) - 1}<small>人</small>`;
+  document.querySelector('#total-count').innerHTML = `${Number(count.value)}<small>人</small>`;
+});
+const permission = document.querySelector('#allow-self-bite');
+const inclusion = document.querySelector('#include-self-bite');
+if (permission && inclusion) permission.addEventListener('change', () => {
+  inclusion.disabled = !permission.checked;
+  if (!permission.checked) inclusion.checked = false;
 });

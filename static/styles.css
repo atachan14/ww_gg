@@ -29,6 +29,12 @@ h2 { font-size: 16px; margin-bottom: 20px; }
 .cast-card > strong { font-size: 42px; line-height: 1.5; font-weight: 750; }
 .cast-card small { font-size: 14px; margin-left: 8px; }
 .field-label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 8px; }
+.spaced { margin-top: 18px; }
+.cast-summary { margin-top: 18px; }
+.checkbox-label { display: flex; gap: 8px; align-items: flex-start; font-size: 12px; margin: 18px 0; }
+.checkbox-label input { margin-top: 4px; accent-color: #1b614e; }
+.strategy-apply { width: 100%; padding: 9px; }
+.cumulative { margin: 15px 0 0; font-size: 12px; color: var(--muted); }
 select { width: 100%; color: var(--ink); background: #fff; border: 1px solid #ccd4d9; border-radius: 7px; font: inherit; font-size: 13px; padding: 11px 9px; }
 select:disabled { color: var(--muted); background: #f8f9f9; opacity: 1; }
 .rules-panel { margin-top: 20px; }

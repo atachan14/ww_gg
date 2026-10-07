@@ -1,167 +1,113 @@
-from fractions import Fraction
 import unittest
+from dataclasses import fields
+from fractions import Fraction as F
 
-from werewolf.exact import (
-    AnalysisState, Belief, WeightedWorld, World, apply_execution,
-    attack_world, evaluate_execution, initial_belief, legal_attacks,
-)
+from werewolf.exact import (Action, Board, Progress, Rules, Strategy, Values,
+                            action_outcomes, advance, aggregate_values,
+                            build_tree, evaluate_tree, initial_board)
 
 
-class ExactCalculationTests(unittest.TestCase):
-    def test_initial_roles_are_complete_exact_and_normalized_for_three_to_five(self):
-        for count in (3, 4, 5):
-            with self.subTest(count=count):
-                belief = initial_belief(count)
-                self.assertEqual(len(belief.worlds), count)
-                self.assertEqual({item.world.wolves for item in belief.worlds}, {frozenset({player}) for player in belief.players})
-                self.assertEqual(sum(item.probability for item in belief.worlds), 1)
-                for player in belief.players:
-                    self.assertEqual(belief.role_probability(player, "wolf"), Fraction(1, count))
-                    self.assertEqual(belief.role_probability(player, "village"), Fraction(count - 1, count))
-                self.assertEqual(sum(belief.role_probability(player, "wolf") for player in belief.players), 1)
+class PublicBoardTests(unittest.TestCase):
+    def value(self, n, rules=Rules(), strategy=Strategy()):
+        root = build_tree(initial_board(n), rules, strategy)
+        return root, evaluate_tree(root, strategy)
 
-    def test_three_player_targets_are_independent_terminal_evaluations(self):
-        prior = initial_belief()
-        evaluations = tuple(evaluate_execution(prior, target) for target in prior.alive)
-        self.assertEqual(tuple(item.target_id for item in evaluations), (1, 2, 3))
-        for action in evaluations:
-            self.assertEqual((action.village_win, action.wolf_win, action.unresolved), (Fraction(1, 3), Fraction(2, 3), 0))
-            self.assertEqual(sum(outcome.probability for outcome in action.outcomes), 1)
+    def test_complete_tree_all_candidates_and_exact_chance_mass(self):
+        for n in (3, 4, 5):
+            for include in (False, True):
+                strategy = Strategy(include_self_bite=include)
+                root, evaluation = self.value(n, Rules(True), strategy)
+                def visit(node):
+                    self.assertEqual(evaluation.board_value(node).village_win + evaluation.board_value(node).wolf_win, 1)
+                    if node.board.winner:
+                        self.assertEqual(node.actions, ())
+                        return
+                    self.assertEqual(tuple(a.target for a in node.actions), node.board.alive)
+                    for action in node.actions:
+                        self.assertEqual(sum(c.probability for c in action.outcomes), 1)
+                        for chance in action.outcomes:
+                            self.assertIsInstance(chance.probability, F)
+                            visit(chance.child)
+                visit(root)
 
-    def test_each_fixed_target_preserves_nonterminal_mass_in_four_and_five(self):
-        for count in (4, 5):
-            prior = initial_belief(count)
-            for target in prior.alive:
-                with self.subTest(count=count, target=target):
-                    action = evaluate_execution(prior, target)
-                    self.assertEqual(action.village_win, Fraction(1, count))
-                    self.assertEqual(action.wolf_win, 0)
-                    self.assertEqual(action.unresolved, Fraction(count - 1, count))
-                    by_role = {outcome.removed_role: outcome for outcome in action.outcomes}
-                    self.assertEqual(by_role["wolf"].winner, "village")
-                    self.assertIsNone(by_role["village"].winner)
-                    self.assertEqual(by_role["village"].counts, (count - 2, 1))
+    def test_initial_final_win_probabilities(self):
+        for n, expected, included in ((3, F(1, 3), F(1, 3)), (4, F(1, 4), F(1, 2)), (5, F(7, 15), F(3, 5))):
+            for mode in ('max', 'random'):
+                root, evaluation = self.value(n, strategy=Strategy(mode, mode))
+                self.assertEqual(evaluation.board_value(root).village_win, expected)
+                self.assertTrue(all(evaluation.action_value(root, a.target).village_win == expected for a in root.actions))
+                root, evaluation = self.value(n, Rules(True), Strategy(mode, mode, True))
+                self.assertEqual(evaluation.board_value(root).village_win, included)
 
-    def test_action_candidates_do_not_become_a_random_policy(self):
-        prior = initial_belief(3)
-        world = next(item.world for item in prior.worlds if item.world.wolves == frozenset({2}))
-        known = Belief((WeightedWorld(world, Fraction(1)),))
-        values = {target: evaluate_execution(known, target).village_win for target in known.alive}
-        self.assertEqual(values, {1: 0, 2: 1, 3: 0})
+    def test_max_and_random_aggregate_different_asymmetric_values(self):
+        candidates = (Values(F(1, 5), F(4, 5)), Values(F(3, 5), F(2, 5)))
+        self.assertEqual(aggregate_values('day', candidates, Strategy()).village_win, F(3, 5))
+        self.assertEqual(aggregate_values('night', candidates, Strategy()).village_win, F(1, 5))
+        self.assertEqual(aggregate_values('day', candidates, Strategy('random', 'random')).village_win, F(2, 5))
+        self.assertEqual(aggregate_values('night', candidates, Strategy('random', 'random')).village_win, F(2, 5))
 
-    def test_execution_removes_target_from_every_outcome_without_revealing_one_truth(self):
-        result = evaluate_execution(initial_belief(5), 2)
-        self.assertEqual(sum(len(outcome.posterior.worlds) for outcome in result.outcomes), 5)
-        for outcome in result.outcomes:
-            self.assertEqual(outcome.posterior.alive, (1, 3, 4, 5))
+    def test_max_ties_keep_all_candidates_and_no_action_probability(self):
+        root, _ = self.value(5)
+        self.assertEqual(len(root.actions), 5)
+        self.assertEqual({f.name for f in fields(Action)}, {'target', 'outcomes'})
+        self.assertNotIn('role', {f.name for f in fields(Board)})
+        self.assertNotIn('worlds', {f.name for f in fields(Board)})
 
-    def test_role_conditioning_keeps_remaining_uncertainty(self):
-        result = evaluate_execution(initial_belief(), 2)
-        branches = {outcome.removed_role: outcome for outcome in result.outcomes}
-        self.assertEqual(len(branches["wolf"].posterior.worlds), 1)
-        self.assertEqual(len(branches["village"].posterior.worlds), 2)
-        for player in (1, 3):
-            self.assertEqual(branches["village"].posterior.role_probability(player, "wolf"), Fraction(1, 2))
+    def test_five_player_manual_progression_conditions_current_board(self):
+        rules, strategy = Rules(), Strategy()
+        progress = advance(Progress(initial_board(5)), 1, rules, strategy)
+        self.assertEqual((progress.board.day, progress.board.phase, progress.board.alive), (1, 'night', (2, 3, 4, 5)))
+        self.assertEqual(progress.settled_village, F(1, 5))
+        self.assertEqual(progress.active_mass, F(4, 5))
+        self.assertEqual(progress.board.wolf_probability(1), 0)
+        self.assertEqual(progress.board.wolf_probability(2), F(1, 4))
+        root = build_tree(progress.board, rules, strategy)
+        current = evaluate_tree(root, strategy).board_value(root)
+        self.assertEqual(current.village_win, F(1, 3))
+        self.assertEqual(progress.total_values(current).village_win, F(7, 15))
+        progress = advance(progress, 2, rules, strategy)
+        self.assertEqual((progress.board.day, progress.board.phase), (2, 'day'))
+        self.assertEqual(progress.active_mass, F(4, 5))
+        progress = advance(progress, 3, rules, strategy)
+        self.assertTrue(progress.finished)
+        self.assertEqual(progress.total_values(), Values(F(7, 15), F(8, 15)))
+        self.assertEqual(tuple(o.board.winner for o in progress.last_outcomes), ('village', 'wolf'))
 
-    def test_absolute_mass_and_conditional_distribution_are_distinct(self):
-        state = apply_execution(AnalysisState(initial_belief(5)), 1)
-        self.assertEqual((state.village_win, state.wolf_win, state.active_mass), (Fraction(1, 5), 0, Fraction(4, 5)))
-        self.assertEqual(len(state.settled), 1)
-        self.assertEqual(len(state.active.worlds), 4)
-        for player in (2, 3, 4, 5):
-            self.assertEqual(state.active.role_probability(player, "wolf"), Fraction(1, 4))
-        self.assertEqual(sum(item.probability for item in state.all_worlds), 1)
-        self.assertEqual({item.probability for item in state.all_worlds}, {Fraction(1, 5)})
-
-    def test_next_action_preserves_stopped_world_and_uses_supplied_belief(self):
-        # A supplied next-day belief, not an assumed nighttime policy.
-        players = (1, 2, 3, 4, 5)
-        stopped = WeightedWorld(World(players, frozenset({1}), (2, 3, 4, 5)), Fraction(1, 5))
-        active = Belief(tuple(WeightedWorld(World(players, frozenset({wolf}), (2, 3, 4)), probability)
-                              for wolf, probability in ((2, Fraction(1, 2)), (3, Fraction(1, 3)), (4, Fraction(1, 6)))))
-        state = AnalysisState(active, (stopped,))
-        result = apply_execution(state, 2)
-        self.assertTrue(result.finished)
-        self.assertEqual(result.village_win, Fraction(3, 5))
-        self.assertEqual(result.wolf_win, Fraction(2, 5))
-        self.assertIn(stopped, result.settled)
-        self.assertEqual(stopped.world.alive, (2, 3, 4, 5))
-        self.assertEqual(sum(item.probability for item in result.all_worlds), 1)
-        alternative = apply_execution(state, 4)
-        self.assertEqual(alternative.village_win, Fraction(1, 3))
-        self.assertEqual(state.active.alive, (2, 3, 4))
-
-    def test_three_player_state_retains_all_terminal_worlds(self):
-        result = apply_execution(AnalysisState(initial_belief()), 2)
-        self.assertTrue(result.finished)
-        self.assertEqual(len(result.settled), 3)
-        self.assertEqual((result.village_win, result.wolf_win, result.active_mass), (Fraction(1, 3), Fraction(2, 3), 0))
+    def test_self_bite_rule_and_strategy_are_independent(self):
+        initial = Progress(initial_board(5))
+        progress = advance(initial, 1, Rules(True), Strategy())
+        self.assertEqual(len(action_outcomes(progress.board, 2, Rules(True), Strategy())), 1)
+        self.assertEqual(len(action_outcomes(progress.board, 2, Rules(True), Strategy(include_self_bite=True))), 2)
         with self.assertRaises(ValueError):
-            apply_execution(result, 1)
+            build_tree(initial.board, Rules(), Strategy(include_self_bite=True))
+        strategy = Strategy(include_self_bite=True)
+        progress = advance(initial, 1, Rules(True), strategy)
+        progress = advance(progress, 2, Rules(True), strategy)
+        self.assertEqual(progress.settled_village, F(2, 5))
+        self.assertEqual(progress.active_mass, F(3, 5))
+        progress = advance(progress, 3, Rules(True), strategy)
+        self.assertEqual(progress.total_values().village_win, F(3, 5))
 
-    def test_night_candidates_obey_each_possible_world_without_weighting_actions(self):
-        for count in (4, 5):
-            state = apply_execution(AnalysisState(initial_belief(count)), 1)
-            for item in state.active.worlds:
-                choices = legal_attacks(item.world)
-                self.assertEqual(len(choices), count - 2)
-                self.assertTrue(set(choices).isdisjoint(item.world.wolves))
-                for target in choices:
-                    child = attack_world(item.world, target)
-                    self.assertEqual(child.counts, (count - 3, 1))
-                    self.assertEqual(child.winner, "wolf" if count == 4 else None)
-                with self.assertRaises(ValueError):
-                    attack_world(item.world, next(iter(item.world.wolves)))
-            for item in state.settled:
-                self.assertEqual(legal_attacks(item.world), ())
+    def test_four_player_night_finishes_without_self_bite(self):
+        progress = advance(Progress(initial_board(4)), 1, Rules(), Strategy())
+        outcomes = action_outcomes(progress.board, 2, Rules(), Strategy())
+        self.assertEqual(len(outcomes), 1)
+        self.assertEqual(outcomes[0].probability, 1)
+        self.assertEqual(outcomes[0].board.winner, 'wolf')
+        progress = advance(progress, 2, Rules(), Strategy())
+        self.assertEqual(progress.total_values().village_win, F(1, 4))
+        self.assertEqual(progress.last_outcomes[0].board.wolf_probability(2), 0)
 
-    def test_multiwolf_first_step_has_exact_marginals_and_terminal_partition(self):
-        prior = initial_belief(9, 4)
-        self.assertEqual(len(prior.worlds), 126)
-        for player in prior.players:
-            self.assertEqual(prior.role_probability(player, "wolf"), Fraction(4, 9))
-        result = evaluate_execution(prior, 1)
-        self.assertEqual((result.village_win, result.wolf_win, result.unresolved), (0, Fraction(5, 9), Fraction(4, 9)))
-        advanced = apply_execution(AnalysisState(prior), 1)
-        self.assertEqual(advanced.wolf_win, Fraction(5, 9))
-        self.assertEqual(len(advanced.all_worlds), 126)
-
-    def test_victory_uses_exact_alive_role_counts(self):
-        players = (1, 2, 3, 4, 5)
-        self.assertEqual(World(players, frozenset({1, 2}), (3, 4, 5)).winner, "village")
-        self.assertEqual(World(players, frozenset({1, 2}), (1, 2, 3)).winner, "wolf")
-        self.assertIsNone(World(players, frozenset({1}), (1, 2, 3)).winner)
-
-    def test_invalid_target_and_cast_are_rejected(self):
-        prior = initial_belief()
-        for target in (0, 4, -1, True, 1.0, "1", None):
-            with self.subTest(target=target), self.assertRaises(ValueError):
-                evaluate_execution(prior, target)
-        for count, wolves in ((2, 1), (10, 1), (3, 0), (4, 2), (True, 1), (5, True)):
-            with self.subTest(count=count, wolves=wolves), self.assertRaises(ValueError):
-                initial_belief(count, wolves)
-
-    def test_invalid_probabilities_and_mixed_public_histories_are_rejected(self):
-        worlds = tuple(item.world for item in initial_belief().worlds)
-        with self.assertRaises(ValueError):
-            WeightedWorld(worlds[0], 0.5)
-        with self.assertRaises(ValueError):
-            Belief((WeightedWorld(worlds[0], Fraction(1, 2)),))
-        with self.assertRaises(ValueError):
-            Belief((WeightedWorld(worlds[0], Fraction(1, 2)), WeightedWorld(worlds[0], Fraction(1, 2))))
-        with self.assertRaises(ValueError):
-            Belief((WeightedWorld(worlds[0].remove(1), Fraction(1, 2)), WeightedWorld(worlds[1].remove(2), Fraction(1, 2))))
-        with self.assertRaises(ValueError):
-            AnalysisState(None)
-
-    def test_repeated_evaluation_is_deterministic_and_does_not_mutate_input(self):
-        prior = initial_belief(5)
-        before = prior.worlds
-        result = evaluate_execution(prior, 1)
-        for _ in range(10):
-            self.assertEqual(evaluate_execution(prior, 1), result)
-            self.assertEqual(prior.worlds, before)
+    def test_invalid_inputs_and_terminal_cannot_advance(self):
+        for count in (2, 6, True, '5'):
+            with self.assertRaises(ValueError): initial_board(count)
+        for target in (0, 6, True, '1'):
+            with self.assertRaises(ValueError): action_outcomes(initial_board(5), target, Rules(), Strategy())
+        progress = advance(Progress(initial_board(3)), 1, Rules(), Strategy())
+        with self.assertRaises(ValueError): advance(progress, 2, Rules(), Strategy())
+        with self.assertRaises(ValueError): Strategy('minimum', 'max')
+        with self.assertRaises(ValueError): Board(3, (1, 1, 2))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

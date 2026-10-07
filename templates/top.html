@@ -2,38 +2,38 @@
 {% block title %}TOP{% endblock %}
 {% block content %}
 <main data-screen="top">
-  <div class="page-heading">
-    <p class="eyebrow">TOP</p>
-    <h1>最初の3人村</h1>
-    <p>村人2人と狼1人。誰の役職もわからない初日昼から始めます。</p>
-  </div>
+  <div class="page-heading"><p class="eyebrow">TOP</p><h1>村の条件を決める</h1><p>誰の役職もわからない初日昼から、最後の決着までの勝率を確認します。</p></div>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
       <section class="panel cast-panel">
-        <div class="panel-heading"><h2>配役</h2><span class="muted">基準例に固定</span></div>
-        <div class="cast-grid">
-          <label class="cast-card village"><span>村人</span><input type="number" name="villagers" value="2" readonly aria-label="村人の人数"></label>
-          <label class="cast-card wolf"><span>狼</span><input type="number" name="wolves" value="1" readonly aria-label="狼の人数"></label>
-          <div class="cast-card total"><span>合計</span><strong>3<small>人</small></strong></div>
+        <div class="panel-heading"><h2>配役</h2><span class="muted">3〜5人・狼1人</span></div>
+        <label class="field-label" for="player-count">プレイヤー数</label>
+        <select id="player-count" name="players"><option value="3">3人</option><option value="4">4人</option><option value="5" selected>5人</option></select>
+        <div class="cast-grid cast-summary">
+          <div class="cast-card village"><span>村人</span><strong id="villager-count">4<small>人</small></strong></div>
+          <div class="cast-card wolf"><span>狼</span><strong>1<small>人</small></strong></div>
+          <div class="cast-card total"><span>合計</span><strong id="total-count">5<small>人</small></strong></div>
         </div>
-        <p class="hint">3人全員が生存。誰が狼かを1つに決めず、3通りの可能性を保ちます。</p>
+        <p class="hint">生存者全員が同じ公開情報を持ちます。役職の位置を決める入力はありません。</p>
       </section>
       <section class="panel strategy-panel">
-        <h2>行動の評価</h2>
-        <span class="field-label">昼の処刑候補</span>
-        <p>生存者それぞれを処刑した場合</p>
-        <p class="hint">対象ごとに、役職の可能性から勝率を確認します。MAINで閲覧する処刑対象を指定できます。</p>
+        <h2>戦略</h2>
+        <label class="field-label" for="day-strategy">昼の処刑</label><select id="day-strategy" name="day"><option value="max">村の最終勝率が最大</option><option value="random">random：候補を等確率で評価</option></select>
+        <label class="field-label spaced" for="night-strategy">夜の襲撃</label><select id="night-strategy" name="night"><option value="max">狼の最終勝率が最大</option><option value="random">random：候補を等確率で評価</option></select>
+        <label class="checkbox-label"><input type="checkbox" name="include_self_bite" value="1" id="include-self-bite" disabled>自噛みの可能性を計算に含める</label>
+        <p class="hint">最大値が同じでも対象は自動で選びません。進行時には対象を手動で指定します。</p>
       </section>
     </div>
     <section class="panel rules-panel">
       <h2>ゲームルール</h2>
+      <label class="checkbox-label"><input type="checkbox" name="allow_self_bite" value="1" id="allow-self-bite">自噛みを許可する</label>
       <div class="rules-grid">
         <div><span class="rule-label">開始</span><strong>Day 1 · 昼</strong></div>
         <div><span class="rule-label">村の勝利</span><strong>生存する狼が0人</strong></div>
         <div><span class="rule-label">狼の勝利</span><strong>生存狼数 ≥ 生存村人数</strong></div>
       </div>
-      <p class="hint">処刑直後に決着を判定。未決着のときだけ夜へ進み、狼が村人を1人襲撃します。</p>
+      <p class="hint">処刑・襲撃の直後に決着を判定。未決着の可能性が残る場合だけ、次の昼夜へ進みます。</p>
     </section>
     <div class="page-actions"><button class="primary" type="submit">初日昼へ進む <span aria-hidden="true">→</span></button></div>
   </form>

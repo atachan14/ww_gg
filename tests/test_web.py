@@ -1,188 +1,191 @@
-from fractions import Fraction
-import re
 import unittest
-
+from fractions import Fraction
 from werkzeug.datastructures import MultiDict
 
 from app import create_app, percent
 
 
-class MinimalWebTests(unittest.TestCase):
+class WebTests(unittest.TestCase):
     def setUp(self):
-        self.app = create_app({"TESTING": True, "SECRET_KEY": "local-test-key"})
+        self.app = create_app({'TESTING': True, 'SECRET_KEY': 'test-only'})
         self.client = self.app.test_client()
-
-    def start(self, client=None):
-        client = client or self.client
-        return client.post("/start", data={"villagers": "2", "wolves": "1"}, follow_redirects=True)
 
     def state(self):
         with self.client.session_transaction() as session:
-            return dict(session["game"])
+            return session.get('game')
 
-    def execute(self, target, revision=None, client=None):
-        client = client or self.client
-        if revision is None:
-            with client.session_transaction() as session:
-                revision = session["game"]["revision"]
-        return client.post("/execute", data={"revision": str(revision), "target": str(target)}, follow_redirects=True)
+    def start(self, n=5, allow=False, include=False):
+        data = {'players': str(n), 'day': 'max', 'night': 'max'}
+        if allow: data['allow_self_bite'] = '1'
+        if include: data['include_self_bite'] = '1'
+        response = self.client.post('/start', data=data)
+        self.assertEqual(response.status_code, 303)
+        return response
 
-    def test_top_main_execution_and_result_for_every_target(self):
-        for target in (1, 2, 3):
-            with self.subTest(target=target):
-                client = self.app.test_client()
-                self.assertIn('data-screen="top"', client.get("/").get_data(as_text=True))
-                main = self.start(client)
-                self.assertIn('data-screen="main"', main.get_data(as_text=True))
-                result = self.execute(target, client=client)
-                html = result.get_data(as_text=True)
-                self.assertEqual(result.status_code, 200)
-                self.assertIn('data-screen="result"', html)
-                self.assertRegex(html, r'id="village-rate"[^>]*data-fraction="1/3"[^>]*>33\.33%')
-                self.assertRegex(html, r'id="wolf-rate"[^>]*data-fraction="2/3"[^>]*>66\.67%')
-                self.assertIn(f"処刑対象：Player {target}", html)
-                self.assertIn("すべての分岐で決着", html)
-                self.assertIn("夜の襲撃は行いません", html)
-                self.assertEqual(html.count('name="target"'), 3)
-                self.assertEqual(len(re.findall(r'<input type="radio"[^>]*disabled', html)), 3)
-                self.assertIn('id="advance-button" disabled', html)
+    def form(self, target=None, **changes):
+        state = self.state()
+        data = {'revision': str(state['revision']), 'day': state['policy']['day'], 'night': state['policy']['night']}
+        if state['policy']['include_self_bite']: data['include_self_bite'] = '1'
+        if target is not None: data['target'] = str(target)
+        data.update(changes)
+        return data
 
-    def test_main_starts_with_fixed_public_information_and_no_role_input(self):
-        html = self.start().get_data(as_text=True)
-        self.assertIn("全員生存・役職未確定", html)
-        self.assertEqual(html.count('class="status alive"'), 3)
-        self.assertEqual(html.count('<td class="muted">未確定</td>'), 3)
-        self.assertNotIn('name="wolf_id"', html)
-        self.assertNotIn('name="co"', html)
-        self.assertEqual(self.state(), {"phase": "day", "revision": 0, "target": None})
+    def advance(self, target):
+        response = self.client.post('/advance', data=self.form(target))
+        self.assertEqual(response.status_code, 303)
+        return response
 
-    def test_information_panel_precedes_the_table_and_strategy(self):
-        html = self.start().get_data(as_text=True)
-        self.assertLess(html.index('id="information-panel"'), html.index('id="player-panel"'))
-        self.assertLess(html.index('id="player-panel"'), html.index('id="strategy-panel"'))
+    def page(self, path='/main'):
+        return self.client.get(path, follow_redirects=True).get_data(as_text=True)
 
-    def test_fixed_cast_rejects_invalid_cast_and_injected_policy(self):
-        for data in ({"villagers": "3", "wolves": "0"},
-                     {"villagers": "2", "wolves": "1", "strategy": "max"},
-                     {"villagers": "2", "wolves": "1", "wolf_id": "1"},
-                     {"villagers": "2", "wolves": "1", "strategy": "uniform"}):
-            with self.subTest(data=data):
-                response = self.client.post("/start", data=data)
-                self.assertEqual(response.status_code, 400)
-                with self.client.session_transaction() as session:
-                    self.assertNotIn("game", session)
-
-    def test_invalid_target_keeps_the_initial_state(self):
+    def test_top_default_five_rule_and_strategy_defaults(self):
+        html = self.page('/')
+        self.assertIn('value="5" selected', html)
+        self.assertIn('id="include-self-bite" disabled', html)
         self.start()
-        before = self.state()
-        for target in ("", "0", "4", "-1", "1.0", "true", "<script>"):
-            with self.subTest(target=target):
-                response = self.execute(target)
-                self.assertEqual(response.status_code, 400)
-                self.assertIn("処刑対象を1人選んで", response.get_data(as_text=True))
-                self.assertEqual(self.state(), before)
+        self.assertEqual(self.state()['rules'], {'allow_self_bite': False})
+        self.assertEqual(self.state()['policy'], {'day': 'max', 'night': 'max', 'include_self_bite': False})
+        self.assertIn('data-fraction="7/15" data-percent="46.67%"', self.page())
 
-    def test_duplicate_target_fields_are_rejected(self):
-        self.start()
-        response = self.client.post("/execute", data=MultiDict([("revision", "0"), ("target", "1"), ("target", "2")]))
+    def test_three_player_terminal_both_chances_retained(self):
+        self.start(3)
+        response = self.advance(1)
+        self.assertTrue(response.location.endswith('/result'))
+        html = self.page('/result')
+        self.assertIn('data-screen="result"', html)
+        self.assertIn('data-fraction="1/3" data-percent="33.33%"', html)
+        self.assertIn('data-fraction="2/3" data-percent="66.67%"', html)
+        self.assertNotIn('id="advance-button"', html)
+
+    def test_five_player_day_night_day_conditional_and_cumulative(self):
+        self.start(5)
+        self.advance(1)
+        html = self.page()
+        self.assertIn('DAY 1 / 夜', html)
+        self.assertIn('id="village-rate" class="probability" data-fraction="1/3"', html)
+        self.assertIn('id="cumulative-village-rate" class="probability" data-fraction="7/15"', html)
+        self.assertIn('value="1" aria-label="Player 1を対象にする" required  disabled', html)
+        self.advance(2)
+        self.assertIn('DAY 2 / 昼', self.page())
+        self.advance(3)
+        html = self.page('/result')
+        self.assertIn('id="village-rate" class="probability" data-fraction="1/3"', html)
+        self.assertIn('id="cumulative-village-rate" class="probability" data-fraction="7/15"', html)
+        self.assertEqual(len(self.state()['history']), 3)
+
+    def test_four_player_terminal_night(self):
+        self.start(4)
+        self.advance(1)
+        self.advance(2)
+        html = self.page('/result')
+        self.assertIn('id="village-rate" class="probability" data-fraction="0"', html)
+        self.assertIn('id="cumulative-village-rate" class="probability" data-fraction="1/4"', html)
+
+    def test_rule_allowed_strategy_excluded_then_included(self):
+        self.start(5, allow=True)
+        self.advance(1)
+        response = self.client.post('/strategy', data=self.form(2, include_self_bite='1'))
+        self.assertEqual(response.status_code, 303)
+        html = self.page()
+        self.assertIn('id="village-rate" class="probability" data-fraction="1/2"', html)
+        self.assertIn('id="cumulative-village-rate" class="probability" data-fraction="3/5"', html)
+        self.advance(2)
+        self.advance(3)
+        self.assertIn('id="cumulative-village-rate" class="probability" data-fraction="3/5"', self.page('/result'))
+
+    def test_rule_forbidden_tampered_inclusion_rejected(self):
+        response = self.client.post('/start', data={'players':'5','day':'max','night':'max','include_self_bite':'1'})
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(self.state()["phase"], "day")
-
-    def test_execution_cannot_inject_true_roles_or_another_strategy(self):
         self.start()
-        for extra in ({"wolf_id": "1"}, {"strategy": "max"}, {"strategy": "uniform"}):
-            response = self.client.post("/execute", data={"revision": "0", "target": "1", **extra})
-            self.assertEqual(response.status_code, 400)
-            self.assertEqual(self.state()["phase"], "day")
-
-    def test_double_submission_is_idempotent_even_if_target_changes(self):
-        self.start()
-        self.execute(1)
         before = self.state()
-        response = self.execute(3, revision=0)
-        self.assertEqual(response.status_code, 200)
+        response = self.client.post('/strategy', data=self.form(include_self_bite='1'))
+        self.assertEqual(response.status_code, 400)
         self.assertEqual(self.state(), before)
-        self.assertIn("処刑対象：Player 1", response.get_data(as_text=True))
 
-    def test_result_refresh_and_browser_back_do_not_execute_again(self):
-        self.start()
-        self.execute(2)
-        before = self.state()
-        for _ in range(3):
-            response = self.client.get("/result")
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(self.state(), before)
-        response = self.client.get("/main")
+    def test_history_snapshots_do_not_change_when_strategy_changes(self):
+        self.start(5, allow=True)
+        self.advance(1)
+        self.advance(2)
+        history = self.state()['history']
+        response = self.client.post('/strategy', data=self.form(3, day='random', night='random', include_self_bite='1'))
         self.assertEqual(response.status_code, 303)
-        self.assertEqual(response.headers["Location"], "/result")
+        self.assertEqual(self.state()['history'], history)
+        self.assertEqual(self.state()['selection'], 3)
+        self.assertIn('id="cumulative-village-rate" class="probability" data-fraction="7/15"', self.page())
 
-    def test_explicit_back_restores_pre_execution_analysis_and_rejects_stale_forms(self):
-        self.start()
-        self.execute(1)
-        response = self.client.post("/back", data={"revision": "0"}, follow_redirects=True)
-        html = response.get_data(as_text=True)
-        self.assertIn('data-screen="main"', html)
-        self.assertEqual(html.count('class="status alive"'), 3)
-        self.assertEqual(self.state()["target"], 1)
-        self.assertEqual(self.state()["revision"], 1)
-        stale = self.execute(3, revision=0)
-        self.assertEqual(stale.status_code, 409)
-        self.assertEqual(self.state()["phase"], "day")
-        self.assertIn("処刑対象：Player 3", self.execute(3).get_data(as_text=True))
-
-    def test_result_is_unavailable_before_action_and_night_has_no_route(self):
-        self.assertEqual(self.client.get("/result").headers["Location"], "/")
-        self.start()
-        self.assertEqual(self.client.get("/result").headers["Location"], "/main")
-        self.execute(1)
-        self.assertEqual(self.client.get("/night").status_code, 404)
-        self.assertEqual(self.client.post("/night").status_code, 404)
-
-    def test_request_without_a_started_game_does_not_create_a_state(self):
-        response = self.client.post("/execute", data={"revision": "0", "target": "1"})
+    def test_back_restores_policy_target_and_discards_suffix(self):
+        self.start(5, allow=True)
+        self.advance(1)
+        self.client.post('/strategy', data=self.form(2, include_self_bite='1', night='random'))
+        self.advance(2)
+        self.advance(3)
+        response = self.client.post('/back', data={'revision':str(self.state()['revision'])})
         self.assertEqual(response.status_code, 303)
-        self.assertEqual(response.headers["Location"], "/")
+        self.assertEqual(self.state()['selection'], 3)
+        self.assertEqual(len(self.state()['history']), 2)
+        self.client.post('/back', data={'revision':str(self.state()['revision'])})
+        self.assertEqual(self.state()['selection'], 2)
+        self.assertEqual(self.state()['policy']['night'], 'random')
+        self.assertTrue(self.state()['policy']['include_self_bite'])
+        self.advance(4)
+        self.assertEqual([s['target'] for s in self.state()['history']], [1, 4])
+
+    def test_strategy_apply_without_target_does_not_advance(self):
+        self.start()
+        response = self.client.post('/strategy', data=self.form(day='random'))
+        self.assertEqual(response.status_code, 303)
+        self.assertEqual(self.state()['history'], [])
+        self.assertEqual(self.state()['policy']['day'], 'random')
+        self.assertIsNone(self.state()['selection'])
+        self.client.post('/strategy', data=self.form(2))
+        self.client.post('/strategy', data=self.form(night='random'))
+        self.assertEqual(self.state()['selection'], 2)
+
+    def test_missing_duplicate_invalid_and_dead_targets(self):
+        self.start()
+        data = self.form()
+        for form in (data, {**data, 'target':'6'}, {**data,'target':'0'}, {**data,'role':'wolf'},
+                     MultiDict([*data.items(), ('target','1'), ('target','2')])):
+            self.assertEqual(self.client.post('/advance', data=form).status_code, 400)
+        self.assertEqual(self.state()['history'], [])
+        self.advance(1)
+        self.assertEqual(self.client.post('/advance', data=self.form(1)).status_code, 400)
+
+    def test_stale_and_rapid_repeated_posts_cannot_advance_twice(self):
+        self.start()
+        data = self.form(1)
+        self.assertEqual(self.client.post('/advance', data=data).status_code, 303)
+        self.assertEqual(self.client.post('/advance', data=data).status_code, 409)
+        self.assertEqual(len(self.state()['history']), 1)
+        self.assertEqual(self.client.post('/back', data={'revision':'0'}).status_code, 409)
+        self.start(3)
+        data = self.form(1)
+        self.client.post('/advance', data=data)
+        self.assertTrue(self.client.post('/advance', data=data).location.endswith('/result'))
+        self.assertEqual(len(self.state()['history']), 1)
+
+    def test_navigation_and_no_store(self):
+        for path in ('/main', '/result'):
+            self.assertTrue(self.client.get(path).location.endswith('/'))
+        self.start()
+        self.assertTrue(self.client.get('/result').location.endswith('/main'))
+        response = self.client.get('/main')
+        self.assertEqual(response.headers['Cache-Control'], 'no-store')
+        self.assertEqual(response.headers['X-Content-Type-Options'], 'nosniff')
+
+    def test_no_role_state_and_malformed_session_returns_top(self):
+        self.start()
+        state = self.state()
+        self.assertEqual(set(state), {'players','rules','policy','history','selection','revision'})
         with self.client.session_transaction() as session:
-            self.assertNotIn("game", session)
+            session['game'] = {**state, 'actual_roles': {1:'wolf'}}
+        self.assertTrue(self.client.get('/main').location.endswith('/'))
 
-    def test_pages_have_no_stale_cache_and_percent_is_only_display_rounding(self):
-        response = self.start()
-        self.assertEqual(response.headers["Cache-Control"], "no-store")
-        fraction = Fraction(1, 3)
-        self.assertEqual(percent(fraction), "33.33")
-        self.assertEqual(fraction, Fraction(1, 3))
-
-    def test_no_equal_action_mixture_is_shown_or_stored(self):
-        for page in (self.client.get("/"), self.start()):
-            html = page.get_data(as_text=True)
-            self.assertNotIn("全生存者から等確率", html)
-            self.assertNotIn('name="strategy"', html)
-        self.assertNotIn("strategy", self.state())
-        self.assertIn("どの処刑対象でも同じ勝率", self.client.get("/main").get_data(as_text=True))
-
-    def test_percentage_is_default_and_fraction_format_is_only_display_data(self):
-        html = self.start().get_data(as_text=True)
-        self.assertIn('id="display-panel"', html)
-        self.assertIn('name="probability-format" value="percent" checked', html)
-        self.assertIn('name="probability-format" value="fraction"', html)
-        self.assertRegex(html, r'data-fraction="1/3" data-percent="33\.33%">33\.33%')
-        self.assertIn("配役：村人 2 / 狼 1", html)
-        before = self.state()
-        self.client.get("/main")
-        self.assertEqual(self.state(), before)
-        self.assertEqual(percent(Fraction(1)), "100")
-        self.assertEqual(percent(Fraction(0)), "0")
-        self.assertEqual(percent(Fraction(1, 4)), "25")
-
-    def test_two_browser_sessions_keep_their_selected_actions_separate(self):
-        other = self.app.test_client()
-        self.start()
-        self.start(other)
-        self.execute(1)
-        self.execute(3, client=other)
-        self.assertIn("処刑対象：Player 1", self.client.get("/result").get_data(as_text=True))
-        self.assertIn("処刑対象：Player 3", other.get("/result").get_data(as_text=True))
+    def test_exact_display_rounding_only(self):
+        self.assertEqual(percent(Fraction(1,3)), '33.33')
+        self.assertEqual(percent(Fraction(0)), '0')
+        self.assertEqual(percent(Fraction(1)), '100')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()

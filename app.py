@@ -1,4 +1,4 @@
-"""Local-only V2/W1 web UI. No dotenv, database, external API, or role sampling."""
+"""Local public-Board analysis. No role assignment/sampling, dotenv, or database."""
 
 import argparse
 from decimal import Decimal
@@ -7,7 +7,8 @@ import secrets
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from werewolf.exact import PLAYERS, evaluate_execution, initial_belief
+from werewolf.exact import (Progress, Rules, Strategy, Values, advance, build_tree,
+                            evaluate_tree, initial_board, validate_strategy)
 
 
 def percent(value: Fraction) -> str:
@@ -17,50 +18,96 @@ def percent(value: Fraction) -> str:
 
 def create_app(test_config=None):
     app = Flask(__name__)
-    app.config.update(
-        SECRET_KEY=secrets.token_bytes(32),
-        MAX_CONTENT_LENGTH=4096,
-        SESSION_COOKIE_HTTPONLY=True,
-        SESSION_COOKIE_SAMESITE="Lax",
-    )
+    app.config.update(SECRET_KEY=secrets.token_bytes(32), MAX_CONTENT_LENGTH=4096,
+                      SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
     if test_config:
         app.config.update(test_config)
     app.jinja_env.filters["percent"] = percent
     app.jinja_env.filters["fraction"] = str
 
+    def replay(state):
+        rules = Rules(**state["rules"])
+        progress = Progress(initial_board(state["players"]))
+        if len(state["history"]) > 3:
+            raise ValueError("Too much history")
+        for step in state["history"]:
+            if set(step) != {"target", "policy"}:
+                raise ValueError("Invalid history")
+            progress = advance(progress, step["target"], rules, Strategy(**step["policy"]))
+        validate_strategy(rules, Strategy(**state["policy"]))
+        return rules, progress
+
     def game():
-        value = session.get("game")
-        if not isinstance(value, dict) or value.get("phase") not in ("day", "finished"):
+        state = session.get("game")
+        try:
+            if not isinstance(state, dict) or set(state) != {"players", "rules", "policy", "history", "selection", "revision"}:
+                return None
+            if type(state["revision"]) is not int or state["revision"] < 0 or not isinstance(state["history"], list):
+                return None
+            _, progress = replay(state)
+            target = state["selection"]
+            if target is not None and (type(target) is not int or not 1 <= target <= state["players"]):
+                return None
+            if not progress.finished and target is not None and target not in progress.board.alive:
+                return None
+        except (ValueError, TypeError, KeyError):
             return None
-        if type(value.get("revision")) is not int:
-            return None
-        target = value.get("target")
-        if target is not None and (type(target) is not int or target not in PLAYERS):
-            return None
-        if value["phase"] == "finished" and target is None:
-            return None
-        return value
+        return state
 
     def revision_matches(state):
         return request.form.getlist("revision") == [str(state["revision"])]
 
+    def parse_policy(rules):
+        def one(key):
+            values = request.form.getlist(key)
+            if len(values) != 1:
+                raise ValueError("戦略を昼・夜それぞれ1つ指定してください。")
+            return values[0]
+        inclusion = request.form.getlist("include_self_bite")
+        if inclusion not in ([], ["1"]):
+            raise ValueError("自噛みの設定が不正です。")
+        strategy = Strategy(one("day"), one("night"), bool(inclusion))
+        validate_strategy(rules, strategy)
+        return {"day": strategy.day, "night": strategy.night, "include_self_bite": strategy.include_self_bite}
+
+    def parse_target(progress, required):
+        values = request.form.getlist("target")
+        if not values and not required:
+            return None
+        if len(values) != 1 or values[0] not in {str(player) for player in progress.board.alive}:
+            raise ValueError("生存している対象を1人選んでください。")
+        return int(values[0])
+
     def render_main(state, error=None, status=200):
-        prior = initial_belief()
-        finished = state["phase"] == "finished"
-        actions = {player: evaluate_execution(prior, player) for player in PLAYERS}
-        chosen = actions[state["target"]] if state["target"] else None
-        common = len({(action.village_win, action.wolf_win, action.unresolved) for action in actions.values()}) == 1
-        rates = chosen or (actions[PLAYERS[0]] if common else None)
-        players = [{
-            "id": player,
-            "name": f"Player {player}",
-            "status": "処刑" if finished and player == state["target"] else "生存",
-            "village_probability": prior.role_probability(player, "village"),
-            "wolf_probability": prior.role_probability(player, "wolf"),
-            "action": actions[player],
-        } for player in PLAYERS]
-        return render_template("main.html", state=state, finished=finished, rates=rates,
-                               chosen=chosen, players=players, error=error), status
+        rules, progress = replay(state)
+        strategy = Strategy(**state["policy"])
+        finished = progress.finished
+        board = progress.last_board if finished else progress.board
+        if finished:
+            primary = Values(sum((outcome.probability * int(outcome.board.winner == "village") for outcome in progress.last_outcomes), Fraction(0)),
+                             sum((outcome.probability * int(outcome.board.winner == "wolf") for outcome in progress.last_outcomes), Fraction(0)))
+            cumulative = progress.total_values()
+            action_values = {}
+            event_history = progress.last_outcomes[0].board.history
+            alive = progress.last_outcomes[0].board.alive
+        else:
+            root = build_tree(board, rules, strategy)
+            evaluation = evaluate_tree(root, strategy)
+            primary = evaluation.board_value(root)
+            cumulative = progress.total_values(primary)
+            action_values = {action.target: evaluation.action_value(root, action.target) for action in root.actions}
+            event_history, alive = board.history, board.alive
+        deaths = {event.target: "処刑" if event.phase == "day" else "襲撃" for event in event_history}
+        players = []
+        for player in range(1, state["players"] + 1):
+            wolf = (sum((outcome.probability * outcome.board.wolf_probability(player) for outcome in progress.last_outcomes), Fraction(0))
+                    if finished else board.wolf_probability(player))
+            players.append({"id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
+                            "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
+                            "action": action_values.get(player)})
+        return render_template("main.html", state=state, rules=rules, progress=progress,
+                               board=board, finished=finished, rates=primary, cumulative=cumulative,
+                               players=players, error=error), status
 
     @app.after_request
     def no_stale_pages(response):
@@ -74,11 +121,20 @@ def create_app(test_config=None):
 
     @app.post("/start")
     def start():
-        expected = {"villagers": "2", "wolves": "1"}
-        if set(request.form) != set(expected) or any(request.form.getlist(key) != [value] for key, value in expected.items()):
-            return render_template("top.html", error="この確認画面の配役は村人2・狼1です。昼は対象ごとに評価します。"), 400
+        try:
+            allowed = {"players", "day", "night", "allow_self_bite", "include_self_bite"}
+            if not set(request.form) <= allowed or request.form.getlist("players") not in (["3"], ["4"], ["5"]):
+                raise ValueError("人数は3・4・5人から選んでください。")
+            permission = request.form.getlist("allow_self_bite")
+            if permission not in ([], ["1"]):
+                raise ValueError("自噛みのルールが不正です。")
+            rules = Rules(bool(permission))
+            policy = parse_policy(rules)
+        except ValueError as exc:
+            return render_template("top.html", error=str(exc)), 400
         previous = game()
-        session["game"] = {"phase": "day", "target": None,
+        session["game"] = {"players": int(request.form["players"]), "rules": {"allow_self_bite": rules.allow_self_bite},
+                           "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
         return redirect(url_for("main"), code=303)
 
@@ -87,37 +143,51 @@ def create_app(test_config=None):
         state = game()
         if state is None:
             return redirect(url_for("top"), code=303)
-        if state["phase"] == "finished":
+        if replay(state)[1].finished:
             return redirect(url_for("result"), code=303)
         return render_main(state)
 
-    @app.post("/execute")
-    def execute():
+    def change(advancing):
         state = game()
         if state is None:
             return redirect(url_for("top"), code=303)
-        if state["phase"] == "finished":
+        rules, progress = replay(state)
+        if progress.finished:
             return redirect(url_for("result"), code=303)
         if not revision_matches(state):
-            return render_main(state, "画面が更新されています。現在の画面からもう一度選んでください。", 409)
-        if set(request.form) != {"revision", "target"}:
-            return render_main(state, "処刑対象を1人指定してください。公開情報の追加入力はありません。", 400)
-        target_values = request.form.getlist("target")
-        if len(target_values) != 1 or target_values[0] not in {str(player) for player in PLAYERS}:
-            return render_main(state, "処刑対象を1人選んでください。", 400)
-        target = int(target_values[0])
-        evaluation = evaluate_execution(initial_belief(), target)
-        if not all(outcome.posterior.finished for outcome in evaluation.outcomes):
-            raise RuntimeError("Nonterminal progression is outside the agreed three-player implementation")
-        session["game"] = {**state, "target": target, "phase": "finished"}
-        return redirect(url_for("result"), code=303)
+            return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
+        try:
+            if not set(request.form) <= {"revision", "target", "day", "night", "include_self_bite"}:
+                raise ValueError("この画面では対象と戦略を指定してください。")
+            policy = parse_policy(rules)
+            target = parse_target(progress, advancing)
+            if not advancing and target is None:
+                target = state["selection"]
+        except ValueError as exc:
+            return render_main(state, str(exc), 400)
+        history = state["history"]
+        if advancing:
+            history = history + [{"target": target, "policy": policy.copy()}]
+            progress = advance(progress, target, rules, Strategy(**policy))
+        session["game"] = {**state, "policy": policy, "history": history,
+                           "selection": (target if progress.finished or not advancing else None),
+                           "revision": state["revision"] + 1}
+        return redirect(url_for("result" if progress.finished else "main"), code=303)
+
+    @app.post("/advance")
+    def advance_route():
+        return change(True)
+
+    @app.post("/strategy")
+    def strategy_route():
+        return change(False)
 
     @app.get("/result")
     def result():
         state = game()
         if state is None:
             return redirect(url_for("top"), code=303)
-        if state["phase"] != "finished":
+        if not replay(state)[1].finished:
             return redirect(url_for("main"), code=303)
         return render_main(state)
 
@@ -128,16 +198,19 @@ def create_app(test_config=None):
             return redirect(url_for("top"), code=303)
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面を確認してください。", 409)
-        if state["phase"] == "finished":
-            # Revisit the pre-execution analysis, without editing a real game history.
-            session["game"] = {**state, "phase": "day", "revision": state["revision"] + 1}
+        if set(request.form) != {"revision"}:
+            return render_main(state, "戻る操作の入力が不正です。", 400)
+        if state["history"]:
+            step = state["history"][-1]
+            session["game"] = {**state, "history": state["history"][:-1], "policy": step["policy"],
+                               "selection": step["target"], "revision": state["revision"] + 1}
         return redirect(url_for("main"), code=303)
 
     return app
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="ww_gg local three-player baseline")
+    parser = argparse.ArgumentParser(description="ww_gg local public Board v0.1")
     parser.add_argument("--port", type=int, default=8771)
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
