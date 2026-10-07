@@ -5,6 +5,8 @@ from decimal import Decimal
 from fractions import Fraction
 import secrets
 
+from werewolf.comparison import compare_initial
+
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from werewolf.exact import (ClaimPolicy, Progress, Rules, Strategy, Values, advance, build_tree,
@@ -152,6 +154,42 @@ def create_app(test_config=None):
         response.headers["Cache-Control"] = "no-store"
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
+
+    @app.route('/comparison', methods=['GET', 'POST'])
+    def comparison_route():
+        state = game()
+        inputs = {'citizens':5, 'mediums':2, 'wolves':2, 'claims':['latent']*9,
+                  'claim_policy':{'villager':'filled','medium':'filled'}, 'mode':'trial'}
+        if state:
+            inputs.update(citizens=state['players']-state.get('wolves',1)-state.get('mediums',0),
+                          mediums=state.get('mediums',0), wolves=state.get('wolves',1),
+                          claim_policy=state.get('claim_policy', inputs['claim_policy']))
+            if not state['history']:
+                inputs['claims']=state.get('claims',['latent']*state['players'])+['latent']*(9-state['players'])
+        try:
+            if request.method=='POST':
+                allowed={'mode','citizens','mediums','wolves','cco_villager','cco_medium'} | {'co_'+str(i) for i in range(1,10)}
+                if not set(request.form)<=allowed:
+                    raise ValueError('比較用の入力を確認してください。')
+                for key in ('citizens','mediums','wolves'):
+                    values=request.form.getlist(key)
+                    if len(values)!=1 or values[0] not in {str(n) for n in range(10)}:
+                        raise ValueError('配役人数を0〜9の整数で指定してください。')
+                    inputs[key]=int(values[0])
+                modes=request.form.getlist('mode')
+                if len(modes)!=1 or modes[0] not in ('current','trial'):
+                    raise ValueError('比較モードを確認してください。')
+                inputs['mode']=modes[0]
+                inputs['claims']=parse_claims({'players':9,'claims':['latent']*9})
+                inputs['claim_policy']=parse_claim_policy()
+            n=inputs['citizens']+inputs['mediums']+inputs['wolves']
+            result=compare_initial(inputs['citizens'],inputs['mediums'],inputs['wolves'],
+                                   tuple(inputs['claims'][:n]),ClaimPolicy(**inputs['claim_policy']),inputs['mode'])
+        except ValueError as exc:
+            result=dict(mode=inputs['mode'], issues=[str(exc)], rows=[],totals={},rates=None,valid=False)
+        if request.headers.get('X-Comparison')=='partial':
+            return render_template('comparison_results.html',result=result)
+        return render_template('comparison.html',inputs=inputs,result=result)
 
     @app.get("/")
     def top():

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}初期盤面の比較{% endblock %}
+{% block content %}
+<main data-screen="comparison">
+  <section class="panel"><div class="information-head"><div><p class="eyebrow">ローカル比較用・未採用の試案</p><h1>初期盤面の2段階比較</h1></div><a class="text-link" href="{{ url_for('main') }}">現行ゲームへ戻る</a></div>
+    <p>ゲームの進行とは独立した初日昼の比較です。死亡者・過去履歴は適用しません。入力を変えても現行ゲームは変わりません。</p>
+    <fieldset id="comparison-format"><legend>配分の表示</legend><label><input type="radio" name="comparison-format" value="fraction" checked> 分数</label><label><input type="radio" name="comparison-format" value="percent"> ％</label></fieldset>
+    <form id="comparison-form" method="post" action="{{ url_for('comparison_route') }}">
+      <label class="field-label" for="comparison-mode">比較する計算</label><select id="comparison-mode" name="mode"><option value="trial" {% if inputs.mode=='trial' %}selected{% endif %}>2段階の試案（霊能を後段にする）</option><option value="current" {% if inputs.mode=='current' %}selected{% endif %}>現行の厳密計算</option></select>
+      <div class="comparison-inputs">{% for key,label in [('citizens','市民'),('mediums','霊能'),('wolves','狼')] %}<label>{{ label }}<input type="number" min="0" max="9" name="{{ key }}" value="{{ inputs[key] }}" required></label>{% endfor %}</div>
+      <div class="comparison-inputs">{% for key,label in [('villager','市民'),('medium','霊能')] %}<label>{{ label }}のCO必須<select name="cco_{{ key }}">{% for value,text in [('filled','対抗が埋まったらCCO'),('counter','対抗が出たらCCO'),('none','なし')] %}<option value="{{ value }}" {% if inputs.claim_policy[key]==value %}selected{% endif %}>{{ text }}</option>{% endfor %}</select></label>{% endfor %}</div>
+      <p class="hint">騙れる役職は現行設定：市民・霊能はなし、狼は配役にある全役職。</p>
+      <div class="comparison-inputs">{% for i in range(1,10) %}<label data-comparison-player="{{ i }}">Player {{ i }} のCO<select name="co_{{ i }}">{% for key,label in [('latent','潜伏'),('villager','市民'),('medium','霊能'),('wolf','狼')] %}<option value="{{ key }}" {% if inputs.claims[i-1]==key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>{% endfor %}</div>
+      <button class="secondary" type="submit">比較を再計算</button><p id="comparison-status" role="status"></p>
+    </form>
+  </section>
+  {% include 'comparison_results.html' %}
+</main>
+<script src="{{ url_for('static', filename='comparison.js') }}" defer></script>
+{% endblock %}

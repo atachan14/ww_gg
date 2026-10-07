@@ -124,3 +124,9 @@ tr:has(input:checked):not(.executed) { background: #f5faf7; }
 .role-count-row input { width:85px; padding:10px; border:1px solid var(--line, #dce3e3); border-radius:9px; font:inherit; background:white; }
 .calculation-group { border-top:1px solid #e7ebeb; padding-top:16px; margin-top:16px; }
 .co-select { min-width:78px; padding:7px; }
+
+.comparison-inputs { display:flex; flex-wrap:wrap; gap:16px; margin:18px 0; }
+.comparison-inputs label { display:flex; flex-direction:column; gap:7px; }
+.comparison-inputs input { width:85px; padding:9px; font:inherit; }
+.comparison-inputs [hidden] { display:none; }
+#comparison-results { margin-top:24px; }
