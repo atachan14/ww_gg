@@ -1,0 +1,184 @@
+{
+  "source": "G:\\source\\repos\\動的web\\wwExpected",
+  "intended_destination": "G:\\source\\repos\\Python\\ww_gg\\archive\\wwExpected-java",
+  "captured_at_utc": "2026-10-06T23:16:28+00:00",
+  "capture_method": "Current working-directory files, not Git checkout or export",
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "path": ".classpath",
+      "bytes": 738,
+      "sha256": "b2041a3f181ed512a068e461870da12965f4ae3e18dc134b55d753425420a10d"
+    },
+    {
+      "path": ".project",
+      "bytes": 910,
+      "sha256": "97b6655130c06a1d62907238d33b70d7268c861d2bd13f66af32cbc31420dee4"
+    },
+    {
+      "path": ".settings/.jsdtscope",
+      "bytes": 572,
+      "sha256": "2a4f5d171b6a4c592ca845855366edb09d68adf05fd905e5cfbca2ea11b93f3f"
+    },
+    {
+      "path": ".settings/org.eclipse.core.resources.prefs",
+      "bytes": 57,
+      "sha256": "1a5b17d8a429f89e30d0d5fc6e12e81d37ea8f6f3f4a206383f4af8564292ac0"
+    },
+    {
+      "path": ".settings/org.eclipse.jdt.core.prefs",
+      "bytes": 547,
+      "sha256": "236a1993b91dca557ed3a668891e136586912a72307ca31d9f59267d1f3537ae"
+    },
+    {
+      "path": ".settings/org.eclipse.wst.common.component",
+      "bytes": 581,
+      "sha256": "4e13ce61b97b055b0f02f122b1ecf42d673a1bb207ed06742d2090766ce02fc2"
+    },
+    {
+      "path": ".settings/org.eclipse.wst.common.project.facet.core.xml",
+      "bytes": 343,
+      "sha256": "ab7c3d1aa75b599e34e5121dc3e2e1b8219f263770faea1cb5b66ccb64d9310e"
+    },
+    {
+      "path": ".settings/org.eclipse.wst.jsdt.ui.superType.container",
+      "bytes": 49,
+      "sha256": "46c87f902091fa8a81c02359cbc132eebc31753a70b3130de5a7d760d2f00ffe"
+    },
+    {
+      "path": ".settings/org.eclipse.wst.jsdt.ui.superType.name",
+      "bytes": 6,
+      "sha256": "19734a1b58cabc22cae1f88493289ee94f40ff2b350f7f1b9f7011ea84096916"
+    },
+    {
+      "path": "src/main/java/debug/Memo.java",
+      "bytes": 457,
+      "sha256": "0c07bae00d098a7d1574b8fda0a8236ba6a8036bd32c80a8c8bf798f360ca9b8"
+    },
+    {
+      "path": "src/main/java/listener/SetupApllication.java",
+      "bytes": 1093,
+      "sha256": "eeeb9136a2da9cc4a70a4d03ed7b4d13c9db53c38deea23bd21c3cb2e895d7b1"
+    },
+    {
+      "path": "src/main/java/model/Cog.java",
+      "bytes": 4151,
+      "sha256": "42804d60a6b91fc27a109587d828c7cce4614438912cd8e1c5c25c65ee39165c"
+    },
+    {
+      "path": "src/main/java/model/Fase.java",
+      "bytes": 523,
+      "sha256": "6316d1ed74b3763401919d4ddd418cb1df1790f604bb457d030b095927c62fbb"
+    },
+    {
+      "path": "src/main/java/model/FaseBoard.java",
+      "bytes": 6189,
+      "sha256": "e00d40a1b0342a7ccfca86b418caa93ba7eed5d0ca8944395a5d97b3bf431601"
+    },
+    {
+      "path": "src/main/java/model/Latentg.java",
+      "bytes": 1446,
+      "sha256": "4b9dc02b241759d5ec1f0eea4e48795d51bd75bfaeef58d45efecf173f3a7e3c"
+    },
+    {
+      "path": "src/main/java/model/Player.java",
+      "bytes": 3756,
+      "sha256": "3434cd95ab8553317de7f5df05762524a93a4aa1369860916a65ab15d18f6c86"
+    },
+    {
+      "path": "src/main/java/model/RoleFactory.java",
+      "bytes": 1174,
+      "sha256": "84b6bf2cc82332931960846bf435a3c5a1bbd56e2ab8d06563bb5406faf77e91"
+    },
+    {
+      "path": "src/main/java/model/SessionRegulation.java",
+      "bytes": 3831,
+      "sha256": "a23051e832922720b8b2589f0cd081f1c6bc422a6706304c57b84820d27ca15c"
+    },
+    {
+      "path": "src/main/java/model/logic/ToJSP.java",
+      "bytes": 246,
+      "sha256": "d8932746d9528e7a449dc40dfb36a2221812a6108cfb9705e60b1cb9996e155c"
+    },
+    {
+      "path": "src/main/java/model/role/child/Hunter.java",
+      "bytes": 169,
+      "sha256": "33b11d498d1f86d5b838aecd10cf8c1c5b21130cd84998b39754df952e2ea691"
+    },
+    {
+      "path": "src/main/java/model/role/child/Latent.java",
+      "bytes": 171,
+      "sha256": "04509f0cd748d028965a2f37f1c18ddb3bfb460a7384740ae8c75ed23c771a47"
+    },
+    {
+      "path": "src/main/java/model/role/child/Madman.java",
+      "bytes": 165,
+      "sha256": "72275ac20fe38275f3cd2ead91409e9db39dc140ce33170be7ae4b89401dc084"
+    },
+    {
+      "path": "src/main/java/model/role/child/Medium.java",
+      "bytes": 169,
+      "sha256": "a6a65b9f3bc9c77a930e62602373579792cdfb6100ad107073c3c8e189769ee8"
+    },
+    {
+      "path": "src/main/java/model/role/child/Prophet.java",
+      "bytes": 171,
+      "sha256": "326748f760230b234e63c2948748c8ceef7c0e9ca5b3269581e20f45af8008e4"
+    },
+    {
+      "path": "src/main/java/model/role/child/Villager.java",
+      "bytes": 171,
+      "sha256": "40c90d73c640e6af84e3b1cae62841eb109719acb8bc83d4d7f87a263476575d"
+    },
+    {
+      "path": "src/main/java/model/role/child/Wolf.java",
+      "bytes": 156,
+      "sha256": "0a2a9eb7cf79071ff366d09b3b9e752e734f9ae422f87dcca54b7c43b4eb53ed"
+    },
+    {
+      "path": "src/main/java/model/role/person/Role.java",
+      "bytes": 442,
+      "sha256": "c11e5133afefdf9f0d3eb0beeeab31a6213e0dc9406834390b495c21a30aa7bd"
+    },
+    {
+      "path": "src/main/java/model/role/person/Vills.java",
+      "bytes": 141,
+      "sha256": "8b2c472ddb435359ed839a38263cabfd582a820913aa5488e06298b83e899be8"
+    },
+    {
+      "path": "src/main/java/model/role/person/WWs.java",
+      "bytes": 135,
+      "sha256": "4838b293aa8b96ae40300910b2d7c84683df5a2259f9c0e1a7eaed13a79f73ae"
+    },
+    {
+      "path": "src/main/java/servlet/MainServlet.java",
+      "bytes": 1497,
+      "sha256": "d117d864a40d7593859378fe2b02546ae89d7078d4e0bc7936101d6b12d34937"
+    },
+    {
+      "path": "src/main/java/servlet/TopServlet.java",
+      "bytes": 1703,
+      "sha256": "8163a301a7aee92dcc2c160bafedb60cd0dd7cf6019597596c6bb80ee9de0463"
+    },
+    {
+      "path": "src/main/webapp/css/styles.css",
+      "bytes": 458,
+      "sha256": "e2bd56355fcbe27952912a5fe2ba446b85e9a232ff0ca49e08382b8fbb9f4581"
+    },
+    {
+      "path": "src/main/webapp/META-INF/MANIFEST.MF",
+      "bytes": 39,
+      "sha256": "4acc9fa0930443bfb74044ff6a6ea7da767c0cf64c8d50e61105b97835733a2a"
+    },
+    {
+      "path": "src/main/webapp/WEB-INF/jsp/main.jsp",
+      "bytes": 2653,
+      "sha256": "6e75b346f1d78f33fe2dc5269f0820f476fa2d6007d5e117ed1fc69ddb9264d1"
+    },
+    {
+      "path": "src/main/webapp/WEB-INF/jsp/top.jsp",
+      "bytes": 509,
+      "sha256": "40ffad078857578f39a99dddf6dbbc4d5ee635a78b4d71009912180a4a9d016e"
+    }
+  ]
+}
