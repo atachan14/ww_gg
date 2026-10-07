@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from typing import Literal
 
-from app.modes.parallel.tree_state import TreeNode
+from app.modes.manual_tree.tree_state import TreeNode
 
 
 HeaderTone = Literal["day", "night"]

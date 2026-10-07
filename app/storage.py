@@ -123,7 +123,7 @@ class SupabaseTreeStorage:
         self.db_url = db_url
 
     def load_tree(self, tree_id: str) -> StoredTreeRecord | None:
-        with psycopg.connect(self.db_url, row_factory=dict_row) as conn:
+        with psycopg.connect(self.db_url, row_factory=dict_row, prepare_threshold=None) as conn:
             tree_row = conn.execute(
                 "select id, role_counts, rules, ui_state, current_node_id from game_trees where id = %s",
                 (tree_id,),
@@ -189,7 +189,7 @@ class SupabaseTreeStorage:
         db_node_ids = {node_id: str(uuid4()) for node_id in tree.nodes_by_id}
         current_db_node_id = db_node_ids.get(tree.current_node_id)
 
-        with psycopg.connect(self.db_url) as conn:
+        with psycopg.connect(self.db_url, prepare_threshold=None) as conn:
             with conn.transaction():
                 conn.execute(
                     """

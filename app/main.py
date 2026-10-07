@@ -22,7 +22,7 @@ from app.settings import (
     pick_session_values,
 )
 from app.web.tree_display import build_tree_layout
-from app.modes.parallel.tree_state import (
+from app.modes.manual_tree.tree_state import (
     advance_current_path,
     build_tree,
     create_tree_session,
@@ -74,6 +74,63 @@ def _ensure_tree_session(request: Request, values: dict[str, str]):
     return tree_session
 
 
+def _is_partial_request(request: Request) -> bool:
+    return request.headers.get("X-Partial-Update") == "1"
+
+
+def _build_main_template_context(
+    request: Request,
+    white_details: int | None = None,
+    black_details: int | None = None,
+) -> dict[str, object]:
+    values = request.session.get(SESSION_KEY, {})
+    config = parse_game_config(values)
+    effective_white_details = bool(int(config.view_values.get("main_white_details", "0"))) if white_details is None else bool(white_details)
+    effective_black_details = bool(int(config.view_values.get("main_black_details", "0"))) if black_details is None else bool(black_details)
+    tree_session = _ensure_tree_session(request, values)
+    tree_root = build_tree(tree_session)
+    current_node = get_current_node(tree_session)
+    current_state = current_node.node_state if current_node is not None else tree_session.root_state
+    selected_target = current_node.selected_target if current_node is not None and current_node.kind == "choice" else None
+    tree_layout = build_tree_layout(
+        tree_root,
+        current_node_id=tree_session.current_node_id,
+        start_day=tree_session.root_state.day,
+        start_phase_key=tree_session.root_state.phase_key,
+    )
+    return {
+        "page_title": "ww_gg | Main",
+        "main": build_main_page_view_model(
+            values=values,
+            node_state=current_state,
+            selected_target=selected_target,
+            selected_tree_layout=tree_layout,
+            show_white_details=effective_white_details,
+            show_black_details=effective_black_details,
+            query_prefix="",
+            can_go_back=(tree_session.current_node_id != tree_session.root_node_id),
+            white_alive_count_override=current_node.white_alive_count if current_node is not None else None,
+            wolf_alive_count_override=current_node.wolf_alive_count if current_node is not None else None,
+            terminal_winner_override=current_node.terminal_winner if current_node is not None else None,
+        ),
+    }
+
+
+def _render_main_response(
+    request: Request,
+    *,
+    partial: bool = False,
+    white_details: int | None = None,
+    black_details: int | None = None,
+) -> HTMLResponse:
+    template_name = "_main_page_content.html" if partial else "main.html"
+    return templates.TemplateResponse(
+        request,
+        template_name,
+        _build_main_template_context(request, white_details=white_details, black_details=black_details),
+    )
+
+
 @app.get("/", response_class=HTMLResponse)
 def top_page(request: Request) -> HTMLResponse:
     request.session.pop(TREE_SESSION_KEY, None)
@@ -97,6 +154,8 @@ async def save_top_config(request: Request) -> RedirectResponse:
     tree_session = create_tree_session(build_initial_node_state(parse_role_counts(session_values)))
     request.session[TREE_SESSION_KEY] = serialize_tree_session(tree_session)
     _save_tree_record(request, tree_session)
+    if _is_partial_request(request):
+        return _render_main_response(request, partial=True)
     return RedirectResponse(url="/main", status_code=303)
 
 
@@ -130,6 +189,8 @@ async def advance_main_node(request: Request) -> RedirectResponse:
 
     request.session[TREE_SESSION_KEY] = serialize_tree_session(tree_session)
     _save_tree_record(request, tree_session)
+    if _is_partial_request(request):
+        return _render_main_response(request, partial=True)
     return RedirectResponse(url="/main", status_code=303)
 
 
@@ -144,6 +205,8 @@ async def jump_main_node(request: Request) -> RedirectResponse:
         tree_session.current_node_id = node_id
         request.session[TREE_SESSION_KEY] = serialize_tree_session(tree_session)
         _save_tree_record(request, tree_session)
+    if _is_partial_request(request):
+        return _render_main_response(request, partial=True)
     return RedirectResponse(url="/main", status_code=303)
 
 
@@ -205,38 +268,4 @@ def main_page(
     white_details: int | None = None,
     black_details: int | None = None,
 ) -> HTMLResponse:
-    values = request.session.get(SESSION_KEY, {})
-    config = parse_game_config(values)
-    effective_white_details = bool(int(config.view_values.get("main_white_details", "0"))) if white_details is None else bool(white_details)
-    effective_black_details = bool(int(config.view_values.get("main_black_details", "0"))) if black_details is None else bool(black_details)
-    tree_session = _ensure_tree_session(request, values)
-    tree_root = build_tree(tree_session)
-    current_node = get_current_node(tree_session)
-    current_state = current_node.node_state if current_node is not None else tree_session.root_state
-    selected_target = current_node.selected_target if current_node is not None and current_node.kind == "choice" else None
-    tree_layout = build_tree_layout(
-        tree_root,
-        current_node_id=tree_session.current_node_id,
-        start_day=tree_session.root_state.day,
-        start_phase_key=tree_session.root_state.phase_key,
-    )
-    return templates.TemplateResponse(
-        request,
-        "main.html",
-        {
-            "page_title": "ww_gg | Main",
-            "main": build_main_page_view_model(
-                values=values,
-                node_state=current_state,
-                selected_target=selected_target,
-                selected_tree_layout=tree_layout,
-                show_white_details=effective_white_details,
-                show_black_details=effective_black_details,
-                query_prefix="",
-                can_go_back=(tree_session.current_node_id != tree_session.root_node_id),
-                white_alive_count_override=current_node.white_alive_count if current_node is not None else None,
-                wolf_alive_count_override=current_node.wolf_alive_count if current_node is not None else None,
-                terminal_winner_override=current_node.terminal_winner if current_node is not None else None,
-            ),
-        },
-    )
+    return _render_main_response(request, white_details=white_details, black_details=black_details)

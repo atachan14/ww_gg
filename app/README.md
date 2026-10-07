@@ -1,4 +1,4 @@
-﻿# app
+# app
 
 FastAPI + Jinja2 ベースの現行実装をこのフォルダで進める。
 
@@ -13,7 +13,7 @@ uvicorn app.main:app --reload
 
 ## 構成
 - `core/`: Shared Core。計算、データ構造、共通ロジック
-- `modes/parallel/`: Parallel Mode 用の tree/state ロジック
+- `modes/manual_tree/`: manual_tree 用の tree/state ロジック
 - `modes/full_tree/`: Full-Tree Mode 用の受け皿
 - `web/`: view model や tree 表示など Web 表示寄りの補助ロジック
 - `main.py`: FastAPI のルーティング

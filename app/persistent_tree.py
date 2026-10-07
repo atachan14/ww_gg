@@ -1,7 +1,7 @@
 ﻿from __future__ import annotations
 
 from app.storage import StoredNodeRecord, StoredTreeRecord
-from app.modes.parallel.tree_state import TreeNode, TreeSessionState, build_tree
+from app.modes.manual_tree.tree_state import TreeNode, TreeSessionState, build_tree
 
 
 def build_stored_tree_record(

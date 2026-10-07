@@ -48,11 +48,11 @@
 
 ## 2. State / Tree
 対象ファイル:
-- `app/modes/parallel/tree_state.py`
+- `app/modes/manual_tree/tree_state.py`
 - `app/core/game_tree.py`
 - `app/persistent_tree.py`
 
-### `app/modes/parallel/tree_state.py`
+### `app/modes/manual_tree/tree_state.py`
 責務:
 - 現在の Tree 走査ロジックを持つ
 - `current_node_id` の更新規則を持つ
