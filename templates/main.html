@@ -45,7 +45,7 @@
       </section>
       <aside class="panel strategy-panel" id="strategy-panel">
         {% include 'calculation.html' %}
-        {% if not finished %}<button class="secondary strategy-apply" type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">CO・計算条件を反映</button><p class="hint">COを編集して反映すると、現在の公開情報に適合する確率と勝率を再計算します。過去の対象と条件は履歴に保持します。</p>{% endif %}
+        {% if not finished %}<button class="secondary strategy-apply" type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button><p class="hint">CO・計算条件を変更すると、その場で現在の確率と勝率を再計算します。Phaseは進みません。過去の対象と条件は履歴に保持します。</p>{% endif %}
         <div class="selection-preview"><span class="field-label">指定対象</span><strong data-target-preview>{{ 'Player ' ~ state.selection if state.selection else '未選択' }}</strong></div>
       </aside>
     </div>
