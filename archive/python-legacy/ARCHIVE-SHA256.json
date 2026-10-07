@@ -1,0 +1,386 @@
+{
+  "captured_at_utc": "2026-10-07T00:17:30+00:00",
+  "original_root": "G:\\source\\repos\\Python\\ww_gg",
+  "base_head": "87dcad1c176fc154f2edfcf311fe792dd670dfd4",
+  "legacy_checkpoint": "9735ac2b62031ac6cb9f0eacb433fdbced14314d",
+  "algorithm": "SHA-256",
+  "files": [
+    {
+      "path": "api/index.py",
+      "bytes": 29,
+      "sha256": "7c80eba4d59885c13cb40926a259d8768b3d713c16bfec58caac09a724be2294"
+    },
+    {
+      "path": "app/main.py",
+      "bytes": 11144,
+      "sha256": "ac0dac87308f021c2fea9acb1f6d4d20d34c96bca261dae967f5ebf33865eeb0"
+    },
+    {
+      "path": "app/persistent_tree.py",
+      "bytes": 2656,
+      "sha256": "9267fd34df4776726ee1667037cdfe16f8f7a370c36f5c306226d21974ef8998"
+    },
+    {
+      "path": "app/README.md",
+      "bytes": 785,
+      "sha256": "bd03723343bfa4fe42802c8daf616acd1eb8d7e43f94d023effc6a81fb4c81a2"
+    },
+    {
+      "path": "app/runtime_config.py",
+      "bytes": 1693,
+      "sha256": "e6fb0e9d1e774b26cc2e5d328b53dbaed55fcfb623de7cc71ac10e0e40e9f5b0"
+    },
+    {
+      "path": "app/settings.py",
+      "bytes": 4829,
+      "sha256": "92a57b16a3313b90683361778adb88beba7c8774a52d806770dd7d70b0c917b4"
+    },
+    {
+      "path": "app/storage.py",
+      "bytes": 12303,
+      "sha256": "ee4fcef84b8ba6c0584ea67301e5fc16ebb85ec1ccce43d3a60fdb102cf9d3c6"
+    },
+    {
+      "path": "app/__init__.py",
+      "bytes": 43,
+      "sha256": "baff3448440b7741c6b100f111b96da7da373cdc4b8bef6d9f4869aed48711e5"
+    },
+    {
+      "path": "app/core/calculation.py",
+      "bytes": 1321,
+      "sha256": "afd3b9ad21922e5959c534dc26d183a45c6a4b0f26f9a9ac7d384d893d8ccdb1"
+    },
+    {
+      "path": "app/core/game_tree.py",
+      "bytes": 6973,
+      "sha256": "8bb5bda597c007e08b9e5ae3888b145416536dfc696deda09096be91a174b37c"
+    },
+    {
+      "path": "app/core/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "app/modes/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "app/static/styles.css",
+      "bytes": 11996,
+      "sha256": "14f20d0c76c24e3c619efb8c6c0fb6c8b397741f9e452a632515c13ba88f7c77"
+    },
+    {
+      "path": "app/templates/base.html",
+      "bytes": 2749,
+      "sha256": "d5093fab976501a0904a56566c00dcf075a635baf40de96b15dc92c1e0c84873"
+    },
+    {
+      "path": "app/templates/main.html",
+      "bytes": 5253,
+      "sha256": "9f2993f89a67ed76e8f44de45af2c2247644f6cadee8c538317b2eb83137045f"
+    },
+    {
+      "path": "app/templates/top.html",
+      "bytes": 4819,
+      "sha256": "9d2d115c9f60f0e90a592f6038113d179622610f2807bf805a1918e3a5c97eda"
+    },
+    {
+      "path": "app/templates/_main_page_content.html",
+      "bytes": 9191,
+      "sha256": "60d07d82b25df2687f422fa9f185e600075526b0a63073c049a0334ae8c415cf"
+    },
+    {
+      "path": "app/templates/_option_groups.html",
+      "bytes": 1159,
+      "sha256": "4169a56264a56169ebc12f9d73eb58f8351210c1952f87465dfae76521d97df6"
+    },
+    {
+      "path": "app/templates/_tactics_options.html",
+      "bytes": 682,
+      "sha256": "0b2fff84d2d4313afbb5eb24b9ea435e2c2db3f4e2ba1dd410c3f9771cb7e2d1"
+    },
+    {
+      "path": "app/templates/_tree_node.html",
+      "bytes": 694,
+      "sha256": "cd608aaeb960fb3d9022e8166ba1cfb3920b6b9ea4fa3ba83b67d22cc3d8636e"
+    },
+    {
+      "path": "app/web/tree_display.py",
+      "bytes": 3263,
+      "sha256": "cace229c2ce765e859dd5ed1e3a54aa372028051732529b8ca6b35d808ed6b39"
+    },
+    {
+      "path": "app/web/view_models.py",
+      "bytes": 15100,
+      "sha256": "1906ee4fce7d17ad65b320c4efefee3beb279e6d53c070a86abdc46eb43dbd6a"
+    },
+    {
+      "path": "app/web/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "app/modes/full_tree/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "app/modes/manual_tree/tree_state.py",
+      "bytes": 23589,
+      "sha256": "02f4103fd6366bb47823a9742b894ec6f3ce9fd4b7139cc21a786cfd56d5e6aa"
+    },
+    {
+      "path": "app/modes/manual_tree/__init__.py",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/next.md",
+      "bytes": 758,
+      "sha256": "d8658a3c19b10eb322dff947b3a98e5e6aa3dacbb15fa97aba18c00087c004ed"
+    },
+    {
+      "path": "docs/spec_v1.md",
+      "bytes": 2555,
+      "sha256": "1bace8d54788d88e36bcb2e8e77d67ba025d1b78a6b6583d33f4bce213179f2f"
+    },
+    {
+      "path": "docs/task.md",
+      "bytes": 389,
+      "sha256": "d2f2b62a2d5647ffb07a310f427223208e484b502699f50611fb3e76a6d66fbb"
+    },
+    {
+      "path": "docs/archive/v0.1/architecture.md",
+      "bytes": 6661,
+      "sha256": "781ddc43416c39ed68fe9ae931bfaf06da2505db0797b55c6de083c850c5f23a"
+    },
+    {
+      "path": "docs/archive/v0.1/deploy-vercel-supabase.md",
+      "bytes": 2281,
+      "sha256": "7778386738dcb5cb50af8284791905f74d7ec3f9abfc4abce799f729f306789d"
+    },
+    {
+      "path": "docs/archive/v0.1/next.md",
+      "bytes": 3409,
+      "sha256": "5633936d464c4a96ca47c710803de9760d3fef326992e749d849941cb8ed07cb"
+    },
+    {
+      "path": "docs/archive/v0.1/requirements.md",
+      "bytes": 6671,
+      "sha256": "c6adf68074d45c0efe0a9544f6fcedc09e70d00b27dffd5c998ce13651d4a298"
+    },
+    {
+      "path": "docs/archive/v0.1/spec_v1.md",
+      "bytes": 2365,
+      "sha256": "06df574c9b9b03851fe54b6a1e719bd34d1805a10286656dee7700512e8133ea"
+    },
+    {
+      "path": "docs/archive/v0.1/spec_v2.md",
+      "bytes": 1954,
+      "sha256": "d84749f328cb3f1f97f1fd5ff0e66b840a34cb44ffc12106aab5b4e5f10f3b9e"
+    },
+    {
+      "path": "docs/archive/v0.1/state-model.md",
+      "bytes": 6082,
+      "sha256": "fec18b37b9f215d857df85a427ec1254d58a4b7020714648bae154a5b7b42fc9"
+    },
+    {
+      "path": "docs/archive/v0.1/structure.md",
+      "bytes": 676,
+      "sha256": "262d5f4bc8ce176df9077602f79d1cc922cbdec84216a6e58f6c319c15ae1a54"
+    },
+    {
+      "path": "docs/archive/v0.1/testing.md",
+      "bytes": 2024,
+      "sha256": "0814f904cc24b3640c0c99c7a7f07c0031bdfb0355dd273506c91b08cf19cb9f"
+    },
+    {
+      "path": "docs/archive/v0.1/_utf8_test.txt",
+      "bytes": 23,
+      "sha256": "4ae9c79689688b369314ad8d83f620523bb9669c9e4c2720d766306ad6da025c"
+    },
+    {
+      "path": "supabase/schema.sql",
+      "bytes": 1386,
+      "sha256": "68d6629b17bfb0524f562db99ebcb7deb432f0f62781575ea7a698b84ded62ff"
+    },
+    {
+      "path": "tests/test_calculation.py",
+      "bytes": 875,
+      "sha256": "c65113b05e2a212fcec55ab24197264b5fa5b883b49b5e375d31198b9665c284"
+    },
+    {
+      "path": "tests/test_persistent_tree.py",
+      "bytes": 2020,
+      "sha256": "716c8f7bc19f7e2ce1bda8e9e8c3e31755318f1e12f43665fbdaf317a79eaeba"
+    },
+    {
+      "path": "tests/test_tree_state.py",
+      "bytes": 3640,
+      "sha256": "815db50cda8747af45d837980911a913c46d311b0b4f7e7c8f7f9f92d5209f2f"
+    },
+    {
+      "path": ".vscode/settings.json",
+      "bytes": 240,
+      "sha256": "aeb9e7c729b88daec82f05bf3c31b6d09c7a470f6ff694376645b739c6c2cd52"
+    },
+    {
+      "path": ".env.example",
+      "bytes": 337,
+      "sha256": "4caec283dc4cbf11d1794e2541ad2d6783d428128c131fb5c1dac7ac6209db12"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 226,
+      "sha256": "2fcebecd2b9d7e3c4fb421143fc3d592abee9451880b54dd24604c399d16631d"
+    },
+    {
+      "path": "index.py",
+      "bytes": 29,
+      "sha256": "7c80eba4d59885c13cb40926a259d8768b3d713c16bfec58caac09a724be2294"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1372,
+      "sha256": "16c04ce25db368bb6a26222417580e38234eb3df95d80cbfee6ea2708ff9da08"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 69,
+      "sha256": "fe069f9425e7854e46a238c4a77ce01bde6a55e2787ed7efe3bb60a13871dee3"
+    },
+    {
+      "path": "vercel.json",
+      "bytes": 154,
+      "sha256": "b8489ba5239c4ee36aab605cc2a150467a65cf0aeba545b44202e47d6152b6b2"
+    }
+  ],
+  "generated_files_preserved_without_content_read": [
+    {
+      "path": "api/__pycache__/index.cpython-312.pyc",
+      "bytes": 148,
+      "mtime_ns": 1774870794141754500
+    },
+    {
+      "path": "app/__pycache__/calculation.cpython-312.pyc",
+      "bytes": 1548,
+      "mtime_ns": 1774695751530425000
+    },
+    {
+      "path": "app/__pycache__/game_tree.cpython-312.pyc",
+      "bytes": 9656,
+      "mtime_ns": 1774750211996854900
+    },
+    {
+      "path": "app/__pycache__/main.cpython-312.pyc",
+      "bytes": 15152,
+      "mtime_ns": 1775033307327920400
+    },
+    {
+      "path": "app/__pycache__/persistent_tree.cpython-312.pyc",
+      "bytes": 3219,
+      "mtime_ns": 1775032518452527400
+    },
+    {
+      "path": "app/__pycache__/runtime_config.cpython-312.pyc",
+      "bytes": 2991,
+      "mtime_ns": 1774776303016730600
+    },
+    {
+      "path": "app/__pycache__/settings.cpython-312.pyc",
+      "bytes": 6227,
+      "mtime_ns": 1774770149051174800
+    },
+    {
+      "path": "app/__pycache__/storage.cpython-312.pyc",
+      "bytes": 16394,
+      "mtime_ns": 1775034488792648500
+    },
+    {
+      "path": "app/__pycache__/tree_display.cpython-312.pyc",
+      "bytes": 4720,
+      "mtime_ns": 1774863054939866900
+    },
+    {
+      "path": "app/__pycache__/tree_state.cpython-312.pyc",
+      "bytes": 29020,
+      "mtime_ns": 1774773966746356600
+    },
+    {
+      "path": "app/__pycache__/view_models.cpython-312.pyc",
+      "bytes": 18762,
+      "mtime_ns": 1774870737273914000
+    },
+    {
+      "path": "app/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 186,
+      "mtime_ns": 1774791802861558800
+    },
+    {
+      "path": "app/core/__pycache__/calculation.cpython-312.pyc",
+      "bytes": 1553,
+      "mtime_ns": 1774870736852152700
+    },
+    {
+      "path": "app/core/__pycache__/game_tree.cpython-312.pyc",
+      "bytes": 9666,
+      "mtime_ns": 1774870736850998700
+    },
+    {
+      "path": "app/core/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 146,
+      "mtime_ns": 1774870736847997900
+    },
+    {
+      "path": "app/modes/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 147,
+      "mtime_ns": 1774870737223902400
+    },
+    {
+      "path": "app/modes/full_tree/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 128,
+      "mtime_ns": 1774870794123561100
+    },
+    {
+      "path": "app/modes/manual_tree/__pycache__/tree_state.cpython-312.pyc",
+      "bytes": 29074,
+      "mtime_ns": 1774870737231905000
+    },
+    {
+      "path": "app/modes/manual_tree/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 156,
+      "mtime_ns": 1774870737224902900
+    },
+    {
+      "path": "app/web/__pycache__/tree_display.cpython-312.pyc",
+      "bytes": 4713,
+      "mtime_ns": 1775033269013880400
+    },
+    {
+      "path": "app/web/__pycache__/view_models.cpython-312.pyc",
+      "bytes": 18766,
+      "mtime_ns": 1774870890548054900
+    },
+    {
+      "path": "app/web/__pycache__/__init__.cpython-312.pyc",
+      "bytes": 145,
+      "mtime_ns": 1774870737235905300
+    },
+    {
+      "path": "tests/__pycache__/test_calculation.cpython-312.pyc",
+      "bytes": 1894,
+      "mtime_ns": 1774870794135539900
+    },
+    {
+      "path": "tests/__pycache__/test_persistent_tree.cpython-312.pyc",
+      "bytes": 3042,
+      "mtime_ns": 1775032518434499700
+    },
+    {
+      "path": "tests/__pycache__/test_tree_state.cpython-312.pyc",
+      "bytes": 5075,
+      "mtime_ns": 1775032519325508700
+    }
+  ]
+}
