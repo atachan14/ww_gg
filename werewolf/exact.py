@@ -43,12 +43,12 @@ ROLES = ('villager', 'medium', 'wolf')
 
 @dataclass(frozen=True)
 class ClaimPolicy:
-    villager: str = 'counter'
-    medium: str = 'counter'
+    villager: str = 'filled'
+    medium: str = 'filled'
     wolf: str = 'none'
 
     def __post_init__(self):
-        if self.villager not in ('none', 'counter') or self.medium not in ('none', 'counter') or self.wolf != 'none':
+        if self.villager not in ('none', 'counter', 'filled') or self.medium not in ('none', 'counter', 'filled') or self.wolf != 'none':
             raise ValueError("Invalid CO calculation condition")
 
 
@@ -73,7 +73,11 @@ def condition_claims(board, claims, policy=ClaimPolicy()):
             continue
         allowed = True
         for role in ('villager', 'medium'):
-            if getattr(policy, role) == 'counter' and role in claims:
+            mode = getattr(policy, role)
+            capacity = medium.bit_count() if role == 'medium' else board.player_count - wolf.bit_count() - medium.bit_count()
+            claim_count = claims.count(role)
+            trigger = (mode == 'counter' and claim_count > 0) or (mode == 'filled' and capacity > 0 and claim_count >= capacity)
+            if trigger:
                 for i, claim in enumerate(claims, 1):
                     actual = 'wolf' if wolf & (1 << (i - 1)) else 'medium' if medium & (1 << (i - 1)) else 'villager'
                     # A living true role must have counterclaimed when the

@@ -5,11 +5,11 @@
 </section>
 <section class="calculation-group"><h3>市民</h3>
   <label class="field-label">騙れる役職</label><select aria-label="市民が騙れる役職" disabled><option>なし</option></select>
-  <label class="field-label spaced" for="cco-villager">CO必須</label><select id="cco-villager" name="cco_villager" {% if finished %}disabled{% endif %}><option value="counter" {% if not claim_policy or claim_policy.villager == 'counter' %}selected{% endif %}>対抗が出たらCCO</option><option value="none" {% if claim_policy and claim_policy.villager == 'none' %}selected{% endif %}>なし</option></select>
+  <label class="field-label spaced" for="cco-villager">CO必須</label><select id="cco-villager" name="cco_villager" {% if finished %}disabled{% endif %}><option value="filled" {% if not claim_policy or claim_policy.villager == 'filled' %}selected{% endif %}>対抗が埋まったらCCO</option><option value="counter" {% if claim_policy and claim_policy.villager == 'counter' %}selected{% endif %}>対抗が出たらCCO</option><option value="none" {% if claim_policy and claim_policy.villager == 'none' %}selected{% endif %}>なし</option></select>
 </section>
 <section class="calculation-group" data-medium-calculation {% if state and state.get('mediums', 0) == 0 %}hidden{% endif %}><h3>霊能</h3>
   <label class="field-label">騙れる役職</label><select aria-label="霊能が騙れる役職" disabled><option>なし</option></select>
-  <label class="field-label spaced" for="cco-medium">CO必須</label><select id="cco-medium" name="cco_medium" {% if finished %}disabled{% endif %}><option value="counter" {% if not claim_policy or claim_policy.medium == 'counter' %}selected{% endif %}>対抗が出たらCCO</option><option value="none" {% if claim_policy and claim_policy.medium == 'none' %}selected{% endif %}>なし</option></select>
+  <label class="field-label spaced" for="cco-medium">CO必須</label><select id="cco-medium" name="cco_medium" {% if finished %}disabled{% endif %}><option value="filled" {% if not claim_policy or claim_policy.medium == 'filled' %}selected{% endif %}>対抗が埋まったらCCO</option><option value="counter" {% if claim_policy and claim_policy.medium == 'counter' %}selected{% endif %}>対抗が出たらCCO</option><option value="none" {% if claim_policy and claim_policy.medium == 'none' %}selected{% endif %}>なし</option></select>
   <p class="hint">人数・COの制約だけを計算します。能力結果はv0.4で対応します。</p>
 </section>
 <section class="calculation-group"><h3>狼陣営</h3>

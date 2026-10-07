@@ -89,7 +89,7 @@ def create_app(test_config=None):
             values = request.form.getlist('cco_' + role)
             if len(values) > 1:
                 raise ValueError("CO必須条件を1つ選んでください。")
-            result[role] = values[0] if values else defaults.get(role, 'counter')
+            result[role] = values[0] if values else defaults.get(role, 'filled')
         result['wolf'] = 'none'
         ClaimPolicy(**result)
         return result

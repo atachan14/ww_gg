@@ -59,9 +59,32 @@ class ClaimTests(unittest.TestCase):
             rules=Rules(True);root=build_tree(b,rules,strategy)
             self.assertEqual(evaluate_tree(root,strategy).board_value(root).village_win, explicit_value(root,strategy))
 
+    def test_filled_default_capacity_and_immediate_counter(self):
+        self.assertEqual(ClaimPolicy().medium, 'filled')
+        b = initial_board(6, 1, 2)
+        one = ('medium',) + ('latent',) * 5
+        c = condition_claims(b, one)
+        self.assertEqual(c.role_probability(1, 'medium'), F(2, 3))
+        self.assertEqual(c.role_probability(2, 'medium'), F(4, 15))
+        self.assertEqual(c.role_probability(2, 'wolf'), F(2, 15))
+        self.assertEqual(sum(q for _, _, q in c.role_belief), 1)
+        self.assertEqual(c.role_belief, condition_claims(b, one, ClaimPolicy(medium='none')).role_belief)
+        with self.assertRaises(ValueError): condition_claims(b, one, ClaimPolicy(medium='counter'))
+        for count in (2, 3):
+            claims = ('medium',) * count + ('latent',) * (6-count)
+            filled = condition_claims(b, claims)
+            immediate = condition_claims(b, claims, ClaimPolicy(medium='counter'))
+            self.assertEqual(filled.role_belief, immediate.role_belief)
+            self.assertEqual(filled.role_probability(count+1, 'medium'), 0)
+        with self.assertRaises(ValueError): condition_claims(b, ('medium',)*4+('latent',)*2)
+        for count in (1,2):
+            claims = ('medium',)*count + ('latent',)*(5-count)
+            self.assertEqual(condition_claims(initial_board(5,1,1),claims).role_belief,
+                             condition_claims(initial_board(5,1,1),claims,ClaimPolicy(medium='counter')).role_belief)
+
     def test_multiple_mediums_unrestricted_counts_and_ccos(self):
         b=initial_board(6,1,2)
-        with self.assertRaises(ValueError): condition_claims(b,('medium',)+('latent',)*5)
+        with self.assertRaises(ValueError): condition_claims(b,('medium',)+('latent',)*5,ClaimPolicy(medium='counter'))
         c=condition_claims(b,('medium','medium')+('latent',)*4)
         self.assertEqual(c.role_probability(1,'medium'),1)
         self.assertEqual(c.role_probability(3,'wolf'),F(1,4))
@@ -124,6 +147,22 @@ class ClaimWebTests(unittest.TestCase):
         self.assertEqual(self.state()['players'],9)
         for c,m,w in [(0,1,1),(4,4,2),(3,-1,1),(3,1,0),(1,1,2)]:
             self.assertEqual(self.start(c,m,w).status_code,400)
+    def test_filled_top_default_and_current_phase_condition_changes(self):
+        self.start(citizens=3,mediums=2)
+        self.assertEqual(self.state()['claim_policy'], {'villager':'filled','medium':'filled','wolf':'none'})
+        top = self.c.get('/').get_data(as_text=True)
+        self.assertEqual(top.count('<option value="filled" selected>対抗が埋まったらCCO</option>'),2)
+        self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium',target='4')).status_code,303)
+        self.assertEqual(self.state()['history'],[])
+        self.assertEqual(self.state()['selection'],4)
+        before=self.state()
+        self.assertEqual(self.c.post('/strategy',data=self.form(cco_medium='counter')).status_code,400)
+        self.assertEqual(self.state(),before)
+        self.assertEqual(self.c.post('/strategy',data=self.form(co_2='medium')).status_code,303)
+        self.assertEqual(self.c.post('/strategy',data=self.form(cco_medium='counter')).status_code,303)
+        self.assertEqual(self.c.post('/strategy',data=self.form(cco_medium='filled')).status_code,303)
+        self.assertEqual(self.state()['history'],[])
+
     def test_co_changes_probability_and_comparing_ccos(self):
         self.start(); self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium')).status_code,303)
         html=self.c.get('/main').get_data(as_text=True)
