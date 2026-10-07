@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}TOP{% endblock %}
+{% block content %}
+<main data-screen="top">
+  <div class="page-heading">
+    <p class="eyebrow">TOP</p>
+    <h1>最初の3人村</h1>
+    <p>村人2人と狼1人。誰の役職もわからない初日昼から始めます。</p>
+  </div>
+  {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
+  <form method="post" action="{{ url_for('start') }}" data-submit-once>
+    <div class="top-grid">
+      <section class="panel cast-panel">
+        <div class="panel-heading"><h2>配役</h2><span class="muted">基準例に固定</span></div>
+        <div class="cast-grid">
+          <label class="cast-card village"><span>村人</span><input type="number" name="villagers" value="2" readonly aria-label="村人の人数"></label>
+          <label class="cast-card wolf"><span>狼</span><input type="number" name="wolves" value="1" readonly aria-label="狼の人数"></label>
+          <div class="cast-card total"><span>合計</span><strong>3<small>人</small></strong></div>
+        </div>
+        <p class="hint">3人全員が生存。誰が狼かを1つに決めず、3通りの可能性を保ちます。</p>
+      </section>
+      <section class="panel strategy-panel">
+        <h2>戦略の初期値</h2>
+        <label class="field-label" for="top-strategy">昼の処刑対象</label>
+        <select name="strategy" id="top-strategy"><option value="uniform">全生存者から等確率</option></select>
+        <p class="hint">この基準例では、3人をそれぞれ1/3の確率で選ぶ戦略です。</p>
+      </section>
+    </div>
+    <section class="panel rules-panel">
+      <h2>ゲームルール</h2>
+      <div class="rules-grid">
+        <div><span class="rule-label">開始</span><strong>Day 1 · 昼</strong></div>
+        <div><span class="rule-label">村の勝利</span><strong>生存する狼が0人</strong></div>
+        <div><span class="rule-label">狼の勝利</span><strong>生存狼数 ≥ 生存村人数</strong></div>
+      </div>
+      <p class="hint">処刑直後に決着を判定。未決着のときだけ夜へ進み、狼が村人を1人襲撃します。</p>
+    </section>
+    <div class="page-actions"><button class="primary" type="submit">初日昼へ進む <span aria-hidden="true">→</span></button></div>
+  </form>
+</main>
+{% endblock %}

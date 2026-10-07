@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{% endblock %} | ww_gg</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-head">
+      <a class="brand" href="{{ url_for('top') }}">ww_gg<span>人狼の期待勝率</span></a>
+      <span class="badge">3人村 · 最小版</span>
+    </header>
+    {% block content %}{% endblock %}
+    <footer class="site-foot">村人2・狼1から、確率と行動の結果を確認する。</footer>
+  </div>
+</body>
+</html>
