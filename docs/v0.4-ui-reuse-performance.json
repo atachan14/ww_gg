@@ -1,0 +1,52 @@
+{
+  "scope": "Identical 9-player initial Flask page GET; single cProfile sample per version with cold solver caches; not a full-history benchmark",
+  "source_before": "f110748",
+  "change": "app.render_main enumerates legal_targets instead of materializing root.actions solely to obtain IDs",
+  "before": {
+    "variant": "before",
+    "method": "single identical Flask GET /main, cold solver caches, cProfile enabled; not full-history benchmark",
+    "roles": "C3/M2/S1/H1/W2",
+    "claims": "A medium, others latent; CCO none",
+    "profiled_seconds": 6.455360899912193,
+    "action_outcomes_calls": 18,
+    "root_value": "27/70",
+    "all_action_values": {
+      "1": "27/70",
+      "2": "23/80",
+      "3": "23/80",
+      "4": "23/80",
+      "5": "23/80",
+      "6": "23/80",
+      "7": "23/80",
+      "8": "23/80",
+      "9": "23/80"
+    },
+    "html_sha256": "1b53f68591b1fb2a3a1d19f0123c463877f314f0b07a1cd596b11016068a247f",
+    "state_unchanged": true
+  },
+  "after": {
+    "variant": "after",
+    "method": "single identical Flask GET /main, cold solver caches, cProfile enabled; not full-history benchmark",
+    "roles": "C3/M2/S1/H1/W2",
+    "claims": "A medium, others latent; CCO none",
+    "profiled_seconds": 4.634665499906987,
+    "action_outcomes_calls": 9,
+    "root_value": "27/70",
+    "all_action_values": {
+      "1": "27/70",
+      "2": "23/80",
+      "3": "23/80",
+      "4": "23/80",
+      "5": "23/80",
+      "6": "23/80",
+      "7": "23/80",
+      "8": "23/80",
+      "9": "23/80"
+    },
+    "html_sha256": "1b53f68591b1fb2a3a1d19f0123c463877f314f0b07a1cd596b11016068a247f",
+    "state_unchanged": true
+  },
+  "same_html": true,
+  "same_values": true,
+  "saved_profiled_seconds": 1.8206954000052065
+}

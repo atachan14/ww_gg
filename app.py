@@ -167,7 +167,7 @@ def create_app(test_config=None):
             evaluation = evaluate_tree(root, strategy)
             primary = evaluation.board_value(root)
             cumulative = progress.total_values(primary)
-            action_values = {action.target: evaluation.action_value(root, action.target) for action in root.actions}
+            action_values = {target: evaluation.action_value(root, target) for target in legal_targets(board, rules, strategy)}
             event_history, alive = board.history, board.alive
         deaths = {event.target: "処刑" if event.phase == "day" else "襲撃" for event in event_history}
         players = []
