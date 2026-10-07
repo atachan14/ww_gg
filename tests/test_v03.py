@@ -13,6 +13,9 @@ def value(board, strategy=Strategy(), rules=Rules()):
 
 def explicit_value(node, strategy):
     if node.board.winner: return F(node.board.winner=='village')
+    if node.disclosures:
+        candidates=[sum((chance.probability*explicit_value(chance.child,strategy) for chance in a.outcomes),F(0)) for a in node.disclosures]
+        return sum(candidates,F(0))/len(candidates) if strategy.fake_reports=='random' else min(candidates)
     candidates=[sum((chance.probability*explicit_value(chance.child,strategy) for chance in a.outcomes),F(0)) for a in node.actions]
     mode=strategy.day if node.board.phase=='day' else strategy.night
     return sum(candidates,F(0))/len(candidates) if mode=='random' else max(candidates) if node.board.phase=='day' else min(candidates)
@@ -151,7 +154,7 @@ class ClaimWebTests(unittest.TestCase):
         self.start(citizens=3,mediums=2)
         self.assertEqual(self.state()['claim_policy'], {'villager':'filled','medium':'filled','wolf':'none'})
         top = self.c.get('/').get_data(as_text=True)
-        self.assertEqual(top.count('value="filled" checked'),2)
+        self.assertEqual(top.count('value="filled" checked'),4)
         self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium',target='4')).status_code,303)
         self.assertEqual(self.state()['history'],[])
         self.assertEqual(self.state()['selection'],4)

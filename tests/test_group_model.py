@@ -10,6 +10,9 @@ NONE=ClaimPolicy(villager='none',medium='none')
 def joint(board):return {(w,m):q for w,m,q in board.role_belief}
 def explicit(node,strategy):
     if node.board.winner:return F(node.board.winner=='village')
+    if node.disclosures:
+        values=[sum((c.probability*explicit(c.child,strategy) for c in a.outcomes),F()) for a in node.disclosures]
+        return sum(values,F())/len(values) if strategy.fake_reports=='random' else min(values)
     values=[sum((c.probability*explicit(c.child,strategy) for c in a.outcomes),F()) for a in node.actions]
     mode=strategy.day if node.board.phase=='day' else strategy.night
     return sum(values,F())/len(values) if mode=='random' else max(values) if node.board.phase=='day' else min(values)

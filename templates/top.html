@@ -7,11 +7,13 @@
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
       <section class="panel cast-panel">
-        <div class="panel-heading"><h2>配役</h2><span class="muted">3〜9人・市民／霊能／狼</span></div>
+        <div class="panel-heading"><h2>配役</h2><span class="muted">3〜9人・市民／霊能／占い師／狩人／狼</span></div>
         <div class="role-columns">
           <section class="role-column"><h3>村陣営</h3>
             <label class="role-count-row" for="citizen-count"><span>市民</span><input type="number" id="citizen-count" name="citizens" value="4" min="0" max="8" required></label>
             <label class="role-count-row" for="medium-count"><span>霊能</span><input type="number" id="medium-count" name="mediums" value="0" min="0" max="8" required></label>
+            <label class="role-count-row" for="seer-count"><span>占い師（能力なし）</span><input type="number" id="seer-count" name="seers" value="0" min="0" max="8" required></label>
+            <label class="role-count-row" for="hunter-count"><span>狩人（能力なし）</span><input type="number" id="hunter-count" name="hunters" value="0" min="0" max="8" required></label>
           </section>
           <section class="role-column"><h3>狼陣営</h3>
             <label class="role-count-row" for="wolf-count"><span>狼</span><input type="number" id="wolf-count" name="wolves" value="1" min="1" max="4" required></label>

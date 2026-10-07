@@ -10,7 +10,7 @@ let comparisonPending = false;
 let comparisonVersion = 0;
 const comparisonStatus = document.querySelector('#comparison-status');
 function showComparisonPlayers() {
-  const total=['citizens','mediums','wolves'].reduce((n,key)=>n+Number(comparisonForm.elements[key].value),0);
+  const total=['citizens','mediums','seers','hunters','wolves'].reduce((n,key)=>n+Number(comparisonForm.elements[key].value),0);
   document.querySelectorAll('[data-comparison-player]').forEach(label=>{
     label.hidden=Number(label.dataset.comparisonPlayer)>total;
     label.querySelector('select').disabled=label.hidden;

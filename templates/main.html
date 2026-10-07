@@ -9,7 +9,7 @@
         <div><p class="eyebrow">MAIN · DAY {{ board.day }} / {{ '昼' if board.phase == 'day' else '夜' }}</p><h1 id="phase-title">{{ '決着画面' if finished else ('処刑対象を確認' if board.phase == 'day' else '襲撃対象を確認') }}</h1></div>
         <a class="text-link" href="{{ url_for('top') }}">TOPへ戻る</a>
       </div>
-      <div class="information-meta"><span>計算モデル：{{ 'COグループ方式（比較候補）' if state.get('model')=='group' else '現行・全配役一様' }} ／ 開始配役：市民 {{ state.players - state.get("wolves", 1) - state.get("mediums", 0) }} / 霊能 {{ state.get("mediums", 0) }} / 狼 {{ state.get("wolves", 1) }}</span><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>自噛みルール：{{ '許可' if rules.allow_self_bite else '禁止' }}</span></div>
+      <div class="information-meta"><span>計算モデル：{{ 'COグループ方式（比較候補）' if state.get('model')=='group' else '現行・全配役一様' }} ／ 開始配役：市民 {{ state.players - state.get("wolves", 1) - state.get("mediums", 0) - state.get("seers",0) - state.get("hunters",0) }} / 霊能 {{ state.get("mediums", 0) }} / 占い師（能力なし） {{ state.get("seers",0) }} / 狩人（能力なし） {{ state.get("hunters",0) }} / 狼 {{ state.get("wolves", 1) }}</span><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>自噛みルール：{{ '許可' if rules.allow_self_bite else '禁止' }}</span></div>
       {% if not finished %}<p class="count-distribution">生存狼の可能性（現在Board条件付き）：{% for count, weight in counts.items() %}<span>{{ count }}w {{ probability(weight) }}</span>{% if not loop.last %} / {% endif %}{% endfor %}</p>{% endif %}
       <p class="rate-caption">{{ '最終行動の勝率' if finished else '現在勝率' }}</p><details class="tip" data-disclosure id="current-rate-tip"><summary>勝率の見方</summary><p>現在Boardの未決着条件から終局まで計算した勝率です。全枝終局の場合は最終行動の結果確率です。隠れた実配役を1つ決めていません。</p></details>
       <div class="win-grid">
@@ -28,21 +28,22 @@
   {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
   <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
     <input type="hidden" name="revision" value="{{ state.revision }}">
+    {% include 'medium_reports.html' %}
     <div class="main-grid">
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
         <div class="panel-heading"><h2 id="players-title">プレイヤー</h2><span class="muted">{{ '直前の行動の結果全体' if finished else '現在Boardの公開情報' }}</span></div>
         <div class="table-scroll"><table class="player-table">
-          <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>村陣営の確率<small>市民＋霊能</small></th>{% if state.get("mediums", 0) %}<th>市民の確率</th><th>霊能の確率</th>{% endif %}<th>狼の確率<small>狼陣営</small></th><th>村の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
+          <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>村陣営の確率<small>市民＋霊能＋占い師＋狩人</small></th>{% if state.get("mediums", 0) %}<th>市民の確率</th><th>霊能の確率</th>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<th>{{ role_labels[r] }}の確率</th>{% endif %}{% endfor %}<th>狼の確率<small>狼陣営</small></th><th>村の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼の期待勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
           <tbody>{% for player in players %}
             <tr class="{{ 'executed' if not player.alive else '' }}" data-player="{{ player.id }}">
               <td class="index">{{ player.id }}</td><td class="player-name">{{ player.name }}</td><td><span class="status {{ 'alive' if player.alive else 'dead' }}">{{ player.status }}</span></td><td><select class="co-select" name="co_{{ player.id }}" aria-label="Player {{ player.id }}のCO" {% if finished or not player.alive %}disabled{% endif %}>
-                {% for key, label in [('latent', '潜伏'), ('villager', '市民'), ('medium', '霊能'), ('wolf', '狼')] %}{% if (key != 'medium' or state.get('mediums', 0)) and (key != 'villager' or state.players - state.get('wolves', 1) - state.get('mediums', 0)) %}<option value="{{ key }}" {% if player.claim == key %}selected{% endif %}>{{ label }}</option>{% endif %}{% endfor %}</select></td>
-              <td class="village-text">{{ probability(player.village_probability) }}</td>{% if state.get("mediums", 0) %}<td>{{ probability(player.citizen_probability) }}</td><td>{{ probability(player.medium_probability) }}</td>{% endif %}<td class="wolf-text">{{ probability(player.wolf_probability) }}</td>
+                {% for key, label in [('latent','潜伏'),('villager','市民'),('medium','霊能'),('seer','占い師'),('hunter','狩人'),('wolf','狼')] %}{% if (key != 'medium' or state.get('mediums', 0)) and (key!='seer' or state.get('seers',0)) and (key!='hunter' or state.get('hunters',0)) and (key != 'villager' or state.players - state.get('wolves', 1) - state.get('mediums', 0) - state.get('seers',0) - state.get('hunters',0)) %}<option value="{{ key }}" {% if player.claim == key %}selected{% endif %}>{{ label }}</option>{% endif %}{% endfor %}</select></td>
+              <td class="village-text">{{ probability(player.village_probability) }}</td>{% if state.get("mediums", 0) %}<td>{{ probability(player.citizen_probability) }}</td><td>{{ probability(player.medium_probability) }}</td>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<td>{{ probability(player.extra_probabilities[r]) }}</td>{% endif %}{% endfor %}<td class="wolf-text">{{ probability(player.wolf_probability) }}</td>
               <td>{{ probability(player.action.village_win) if player.action else '—' }}</td><td>{{ probability(player.action.wolf_win) if player.action else '—' }}</td>
               <td><label class="target-label"><input type="radio" name="target" value="{{ player.id }}" aria-label="Player {{ player.id }}を対象にする" required {% if display_selection == player.id %}checked{% endif %} {% if finished or not player.alive or not player.legal %}disabled{% endif %}></label></td>
             </tr>{% endfor %}</tbody>
         </table></div>
-        <p class="hint">COは本人の申告です。霊能の能力結果はまだ使用しません。各役職の確率には人数制約と相関があります。</p>
+        <p class="hint">CO・霊能結果は本人の申告です。各役職の確率には人数制約と相関があります。</p>
       </section>
       <aside class="panel strategy-panel" id="strategy-panel">
         {% include 'calculation.html' %}

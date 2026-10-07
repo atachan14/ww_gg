@@ -7,10 +7,10 @@
     <fieldset id="comparison-format"><legend>配分の表示</legend><label><input type="radio" name="comparison-format" value="fraction" checked> 分数</label><label><input type="radio" name="comparison-format" value="percent"> ％</label></fieldset>
     <form id="comparison-form" method="post" action="{{ url_for('comparison_route') }}">
       <label class="field-label" for="comparison-mode">比較する計算</label><select id="comparison-mode" name="mode"><option value="trial" {% if inputs.mode=='trial' %}selected{% endif %}>2段階の試案（霊能を後段にする）</option><option value="current" {% if inputs.mode=='current' %}selected{% endif %}>現行の厳密計算</option><option value="group" {% if inputs.mode=='group' %}selected{% endif %}>COグループ方式（共同分布・勝率あり）</option></select>
-      <div class="comparison-inputs">{% for key,label in [('citizens','市民'),('mediums','霊能'),('wolves','狼')] %}<label>{{ label }}<input type="number" min="0" max="9" name="{{ key }}" value="{{ inputs[key] }}" required></label>{% endfor %}</div>
-      <div class="comparison-inputs">{% for co_role in ['villager','medium'] %}<section><h3>{{ '市民' if co_role=='villager' else '霊能' }}</h3>{% include 'co_conditions.html' %}</section>{% endfor %}</div>
+      <div class="comparison-inputs">{% for key,label in [('citizens','市民'),('mediums','霊能'),('seers','占い師（能力なし）'),('hunters','狩人（能力なし）'),('wolves','狼')] %}<label>{{ label }}<input type="number" min="0" max="9" name="{{ key }}" value="{{ inputs[key] }}" required></label>{% endfor %}</div>
+      <div class="comparison-inputs">{% for co_role in ['villager','medium','seer','hunter'] %}<section><h3>{{ role_labels[co_role] }}</h3>{% include 'co_conditions.html' %}</section>{% endfor %}</div>
       <p class="hint">騙れる役職は現行設定：市民・霊能はなし、狼は配役にある全役職。</p>
-      <div class="comparison-inputs">{% for i in range(1,10) %}<label data-comparison-player="{{ i }}">Player {{ i }} のCO<select name="co_{{ i }}">{% for key,label in [('latent','潜伏'),('villager','市民'),('medium','霊能'),('wolf','狼')] %}<option value="{{ key }}" {% if inputs.claims[i-1]==key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>{% endfor %}</div>
+      <div class="comparison-inputs">{% for i in range(1,10) %}<label data-comparison-player="{{ i }}">Player {{ i }} のCO<select name="co_{{ i }}">{% for key,label in [('latent','潜伏'),('villager','市民'),('medium','霊能'),('seer','占い師'),('hunter','狩人'),('wolf','狼')] %}<option value="{{ key }}" {% if inputs.claims[i-1]==key %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>{% endfor %}</div>
       <button class="secondary" type="submit">比較を再計算</button><p id="comparison-status" role="status"></p>
     </form>
   </section>

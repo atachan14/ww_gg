@@ -1,9 +1,9 @@
-"""Public Board calculations for 3–9 players, wolves and ability-free mediums, using exact fractions."""
+"""Public Board calculations for 3–9 players, wolves, medium disclosures and ability-free seers/hunters, using exact fractions."""
 
 from dataclasses import dataclass, replace
 from fractions import Fraction
 from functools import lru_cache
-from itertools import combinations
+from itertools import combinations, product
 from math import comb
 from typing import Literal
 
@@ -25,10 +25,13 @@ class Strategy:
     day: str = "max"
     night: str = "max"
     include_self_bite: bool = False
+    fake_reports: str = "max"
 
     def __post_init__(self):
         if self.day not in ("max", "random") or self.night not in ("max", "random"):
             raise ValueError("Choose max or random")
+        if self.fake_reports not in ("max","random"):
+            raise ValueError("Choose max or random for fake reports")
         if type(self.include_self_bite) is not bool:
             raise ValueError("Self-bite inclusion must be a boolean")
 
@@ -38,7 +41,9 @@ def validate_strategy(rules: Rules, strategy: Strategy):
         raise ValueError("The game rule does not permit self-bite")
 
 
-ROLES = ('villager', 'medium', 'wolf')
+ROLES = ('villager', 'medium', 'seer', 'hunter', 'wolf')
+VILLAGE_ROLES = ROLES[:-1]
+ROLE_LABELS = {'villager':'市民','medium':'霊能','seer':'占い師（能力なし）','hunter':'狩人（能力なし）','wolf':'狼','latent':'潜伏'}
 
 
 @dataclass(frozen=True)
@@ -46,11 +51,13 @@ class ClaimPolicy:
     villager: str | tuple[str, ...] | list[str] = 'filled'
     medium: str | tuple[str, ...] | list[str] = 'filled'
     wolf: str = 'none'
+    seer: str | tuple[str, ...] | list[str] = 'filled'
+    hunter: str | tuple[str, ...] | list[str] = 'filled'
 
     def __post_init__(self):
-        if any(not self.valid_conditions(getattr(self, role)) for role in ('villager', 'medium')) or self.wolf != 'none':
+        if any(not self.valid_conditions(getattr(self, role)) for role in VILLAGE_ROLES) or self.wolf != 'none':
             raise ValueError("Invalid CO calculation condition")
-        for role in ('villager', 'medium'):
+        for role in VILLAGE_ROLES:
             if isinstance(getattr(self, role), list):
                 object.__setattr__(self, role, tuple(getattr(self, role)))
 
@@ -66,7 +73,7 @@ class ClaimPolicy:
 
 def default_bluff_roles(present):
     # Role settings, shared by both models; not a special case in inference.
-    return {'villager': (), 'medium': (), 'wolf': tuple(r for r in ROLES if r in present)}
+    return {r: tuple(c for c in ROLES if c in present) if r=='wolf' else () for r in ROLES}
 
 
 def compatible_claim(mask_w, mask_m, player, claim, bluff_roles=None):
@@ -75,41 +82,70 @@ def compatible_claim(mask_w, mask_m, player, claim, bluff_roles=None):
     return claim == 'latent' or role == claim or claim in settings.get(role, ())
 
 
+def world_masks(board, world):
+    w,m,seer,hunter,_=world
+    return {'wolf':w,'medium':m,'seer':seer,'hunter':hunter,
+            'villager':((1<<board.player_count)-1) ^ (w|m|seer|hunter)}
+
+
+def actual_role(board, world, player):
+    bit=1<<(player-1)
+    return next(role for role,mask in world_masks(board,world).items() if mask&bit)
+
+
+def replace_worlds(board, worlds, **changes):
+    projection={}
+    for w,m,seer,hunter,q in worlds:
+        projection[w,m]=projection.get((w,m),Fraction(0))+q
+    return replace(board, belief=(), role_belief=tuple((w,m,q) for (w,m),q in sorted(projection.items())),
+                   world_belief=tuple(worlds) if board.initial_seer_count or board.initial_hunter_count else (), **changes)
+
+
 def condition_claims(board, claims, policy=ClaimPolicy(), bluff_roles=None):
-    if not isinstance(claims, tuple) or len(claims) != board.player_count or any(c not in (*ROLES, 'latent') for c in claims):
-        raise ValueError("CO must identify one allowed role per player")
-    present = {'latent'}
-    for wolf, medium, _ in board.role_belief:
-        if wolf: present.add('wolf')
-        if medium: present.add('medium')
-        if (wolf | medium).bit_count() < board.player_count: present.add('villager')
+    if not isinstance(claims, tuple) or len(claims)!=board.player_count or any(c not in (*ROLES,'latent') for c in claims):
+        raise ValueError('CO must identify one allowed role per player')
+    counts=board.initial_role_counts
+    present={r for world in board.worlds for r,mask in world_masks(board,world).items() if mask}|{'latent'}
     if any(c not in present for c in claims):
-        raise ValueError("配役にない役職へのCOは指定できません。")
-    entries = []
-    for wolf, medium, q in board.role_belief:
-        if not all(compatible_claim(wolf, medium, i, claim, bluff_roles) for i, claim in enumerate(claims, 1)):
+        raise ValueError('配役にない役職へのCOは指定できません。')
+    settings=default_bluff_roles(present) if bluff_roles is None else bluff_roles
+    entries=[]
+    for world in board.worlds:
+        masks=world_masks(board,world)
+        if any(c!='latent' and c!=actual_role(board,world,i) and c not in settings.get(actual_role(board,world,i),())
+               for i,c in enumerate(claims,1)):
             continue
-        allowed = True
-        for role in ('villager', 'medium'):
-            modes = policy.conditions(role)
-            capacity = medium.bit_count() if role == 'medium' else board.player_count - wolf.bit_count() - medium.bit_count()
-            claim_count = claims.count(role)
-            trigger = ('counter' in modes and claim_count > 0) or ('filled' in modes and capacity > 0 and claim_count >= capacity)
-            if trigger:
-                for i, claim in enumerate(claims, 1):
-                    actual = 'wolf' if wolf & (1 << (i - 1)) else 'medium' if medium & (1 << (i - 1)) else 'villager'
-                    # A living true role must have counterclaimed when the
-                    # public trigger occurs. Dead players cannot issue a new CO.
-                    if i in board.alive and actual == role and claim != role:
-                        allowed = False
-                        break
-        if allowed:
-            entries.append((wolf, medium, q))
-    mass = sum((q for _, _, q in entries), Fraction(0))
-    if not mass:
-        raise ValueError("COと配役・騙り・CCO条件が両立しません。CO人数と計算条件を確認してください。")
-    return replace(board, wolf_count=None, claims=claims, belief=(),
-                   role_belief=tuple((w, m, q / mass) for w, m, q in entries))
+        allowed=True
+        for role in VILLAGE_ROLES:
+            modes=policy.conditions(role);capacity=masks[role].bit_count();claim_count=claims.count(role)
+            trigger=('counter' in modes and claim_count>0) or ('filled' in modes and capacity>0 and claim_count>=capacity)
+            if trigger and any(masks[role]&(1<<(i-1)) and claims[i-1]!=role for i in board.alive):
+                allowed=False;break
+        if allowed:entries.append(world)
+    mass=sum((world[-1] for world in entries),Fraction(0))
+    if not mass:raise ValueError('COと配役・騙り・CCO条件が両立せず矛盾しています。CO人数と計算条件を確認してください。')
+    return replace_worlds(board,tuple((*world[:-1],world[-1]/mass) for world in entries),wolf_count=None,claims=claims)
+
+
+def available_medium_opportunities(board):
+    # CO before execution; reporter must survive the intervening night.
+    return tuple(o for o in board.medium_opportunities if o[0]<=board.day and
+                 not any(e.target==o[1] and (e.day<o[0]) for e in board.history))
+
+
+def condition_reports(board, reports):
+    if not isinstance(reports,tuple) or any(not isinstance(report,MediumReport) for report in reports):raise ValueError('Invalid report collection')
+    keys=[(r.day,r.reporter,r.target) for r in reports]
+    if len(set(keys))!=len(keys) or not set(keys)<=set(available_medium_opportunities(board)):
+        raise ValueError('申告者・処刑対象・公開日が報告機会と一致しません。CO前や翌朝死亡した人の結果は入力できません。')
+    entries=[]
+    for world in board.worlds:
+        w,m,_,_,q=world
+        if all(not m&(1<<(r.reporter-1)) or (bool(w&(1<<(r.target-1)))==(r.color=='black')) for r in reports):
+            entries.append(world)
+    mass=sum((world[-1] for world in entries),Fraction(0))
+    if not mass:raise ValueError('霊能申告と公開盤面が矛盾し、合法な候補がありません。')
+    return replace_worlds(board,tuple((*world[:-1],world[-1]/mass) for world in entries),reports=reports)
 
 
 def group_initial_board(board, claims, policy=ClaimPolicy(), bluff_roles=None):
@@ -119,33 +155,32 @@ def group_initial_board(board, claims, policy=ClaimPolicy(), bluff_roles=None):
     """
     if board.history or board.alive != tuple(range(1, board.player_count+1)) or board.phase != 'day' or board.day != 1:
         raise ValueError('COグループの初期配分は初日昼だけで定義します。')
-    present = {r for r in ROLES if any(board.role_probability(i,r)>0 for i in board.alive)}
+    present = {r for r,n in board.initial_role_counts.items() if n}
     settings=default_bluff_roles(present) if bluff_roles is None else bluff_roles
     if set(settings)-set(ROLES) or any(set(options)-present for options in settings.values()):
         raise ValueError('Unknown bluff-role setting')
     filtered=condition_claims(board,claims,policy,settings)
     faker_roles=tuple(r for r in ROLES if any(c!=r and c in present for c in settings.get(r,())))
-    full=(1<<board.player_count)-1
     groups={}
-    for w,m,_ in filtered.role_belief:
-        masks={'wolf':w,'medium':m,'villager':full^(w|m)}
+    for world in filtered.worlds:
+        masks=world_masks(filtered,world)
         key=tuple(masks[r] for r in faker_roles)
-        groups.setdefault(key,[]).append((w,m))
-    entries=tuple((w,m,Fraction(1,len(groups)*len(configs))) for configs in groups.values() for w,m in configs)
-    return replace(filtered,belief=(),role_belief=entries)
+        groups.setdefault(key,[]).append(world[:-1])
+    entries=tuple((*world,Fraction(1,len(groups)*len(configs))) for configs in groups.values() for world in configs)
+    return replace_worlds(filtered,entries)
 
 
 def co_group_compositions(board):
     groups=[]
-    for claim in ('villager','medium','wolf','latent'):
+    roles=('villager','medium')+tuple(r for r in ('seer','hunter') if board.initial_role_counts[r])+('wolf',)
+    for claim in (*ROLES,'latent'):
         ids=tuple(i for i in board.alive if board.claims[i-1]==claim)
-        if not ids: continue
-        bit=sum(1<<(i-1) for i in ids)
-        counts={}
-        for w,m,q in board.role_belief:
-            key=(len(ids)-(w&bit).bit_count()-(m&bit).bit_count(),(m&bit).bit_count(),(w&bit).bit_count())
-            counts[key]=counts.get(key,Fraction(0))+q
-        groups.append(dict(claim=claim,ids=ids,compositions=tuple((*key,q) for key,q in sorted(counts.items()))))
+        if not ids:continue
+        bit=sum(1<<(i-1) for i in ids);counts={}
+        for world in board.worlds:
+            masks=world_masks(board,world);key=tuple((masks[r]&bit).bit_count() for r in roles)
+            counts[key]=counts.get(key,Fraction(0))+world[-1]
+        groups.append(dict(claim=claim,ids=ids,roles=roles,compositions=tuple((*key,q) for key,q in sorted(counts.items()))))
     return groups
 
 
@@ -154,6 +189,18 @@ class PublicEvent:
     day: int
     phase: Phase
     target: int
+
+
+@dataclass(frozen=True)
+class MediumReport:
+    day: int
+    reporter: int
+    target: int
+    color: str
+
+    def __post_init__(self):
+        if type(self.day) is not int or self.day<2 or type(self.reporter) is not int or type(self.target) is not int or self.color not in ('white','black'):
+            raise ValueError('Invalid medium report')
 
 
 @dataclass(frozen=True)
@@ -171,6 +218,12 @@ class Board:
     initial_medium_count: int = 0
     claims: tuple[str, ...] = ()
     role_belief: tuple[tuple[int, int, Fraction], ...] = ()
+    initial_seer_count: int = 0
+    initial_hunter_count: int = 0
+    world_belief: tuple[tuple[int, int, int, int, Fraction], ...] = ()
+    medium_opportunities: tuple[tuple[int, int, int], ...] = ()
+    reports: tuple[MediumReport, ...] = ()
+    report_resolved: tuple[tuple[int,int,int], ...] = ()
 
     def __post_init__(self):
         if type(self.player_count) is not int or not 3 <= self.player_count <= 9:
@@ -195,6 +248,23 @@ class Board:
             object.__setattr__(self, 'claims', ('latent',) * self.player_count)
         if len(self.claims) != self.player_count or any(c not in (*ROLES, 'latent') for c in self.claims):
             raise ValueError("Invalid public CO")
+        for count in (self.initial_seer_count,self.initial_hunter_count):
+            if type(count) is not int or not 0<=count<=self.player_count:
+                raise ValueError('Invalid ability-free role count')
+        if self.world_belief:
+            seen=set();projection={}
+            for world in self.world_belief:
+                if not isinstance(world,tuple) or len(world)!=5:raise ValueError('Invalid complete role distribution')
+                w,m,seer,hunter,q=world
+                if any(type(mask) is not int or not 0<=mask<1<<self.player_count for mask in world[:-1]):raise ValueError('Invalid role masks')
+                if any(x&y for j,x in enumerate(world[:-1]) for y in world[j+1:-1]):raise ValueError('Role masks must not overlap')
+                if (m.bit_count(),seer.bit_count(),hunter.bit_count())!=(self.initial_medium_count,self.initial_seer_count,self.initial_hunter_count):raise ValueError('Role counts disagree')
+                if world[:-1] in seen or not isinstance(q,Fraction) or q<=0:raise ValueError('Invalid complete role mass')
+                seen.add(world[:-1]);projection[w,m]=projection.get((w,m),Fraction(0))+q
+            if sum((x[-1] for x in self.world_belief),Fraction(0))!=1:raise ValueError('Complete role mass must conserve one')
+            object.__setattr__(self,'role_belief',tuple((w,m,q) for (w,m),q in sorted(projection.items())))
+        elif self.initial_seer_count or self.initial_hunter_count:
+            raise ValueError('Extra roles require complete role distribution')
         if self.role_belief:
             if (len({(w, m) for w, m, _ in self.role_belief}) != len(self.role_belief)
                     or any(type(w) is not int or type(m) is not int or w < 0 or m < 0
@@ -261,13 +331,27 @@ class Board:
             raise ValueError("Unknown player")
         return sum((q for mask, q in self.belief if mask & (1 << (player - 1))), Fraction(0))
 
+    @property
+    def worlds(self):
+        return self.world_belief or tuple((w,m,0,0,q) for w,m,q in self.role_belief)
+
+    @property
+    def initial_role_counts(self):
+        # Wolf count includes dead positions and is fixed across complete worlds.
+        wolves=self.worlds[0][0].bit_count()
+        return {'wolf':wolves,'medium':self.initial_medium_count,'seer':self.initial_seer_count,
+                'hunter':self.initial_hunter_count,
+                'villager':self.player_count-wolves-self.initial_medium_count-self.initial_seer_count-self.initial_hunter_count}
+
     def role_probability(self, player: int, role: str) -> Fraction:
-        if type(player) is not int or not 1 <= player <= self.player_count or role not in ROLES:
-            raise ValueError("Unknown player or role")
-        bit = 1 << (player - 1)
-        return sum((q for wolf, medium, q in self.role_belief
-                    if (bool(wolf & bit) if role == 'wolf' else bool(medium & bit) if role == 'medium'
-                        else not (wolf | medium) & bit)), Fraction(0))
+        if type(player) is not int or not 1<=player<=self.player_count or role not in ROLES:raise ValueError('Unknown player or role')
+        bit=1<<(player-1)
+        if role=='wolf':return self.wolf_probability(player)
+        if role=='medium':return sum((q for w,m,q in self.role_belief if m&bit),Fraction(0))
+        if role in ('seer','hunter'):
+            index=2 if role=='seer' else 3
+            return sum((world[-1] for world in self.worlds if world[index]&bit),Fraction(0))
+        return sum((q for w,m,seer,hunter,q in self.worlds if not (w|m|seer|hunter)&bit),Fraction(0))
 
     def joint_wolf_probability(self, players: tuple[int, ...]) -> Fraction:
         if any(type(i) is not int or not 1 <= i <= self.player_count for i in players):
@@ -280,14 +364,29 @@ def winner_for(n: int, wolves: int) -> Winner | None:
     return "village" if wolves == 0 else "wolf" if wolves >= n - wolves else None
 
 
-def initial_board(player_count: int = 5, wolf_count: int = 1, medium_count: int = 0) -> Board:
+def initial_board(player_count: int = 5, wolf_count: int = 1, medium_count: int = 0, seer_count: int = 0, hunter_count: int = 0) -> Board:
     if type(player_count) is not int or not 3 <= player_count <= 9:
         raise ValueError("Choose 3–9 players")
     if type(wolf_count) is not int or not 1 <= wolf_count <= (player_count - 1) // 2:
         raise ValueError("Choose wolves fewer than villagers")
     if type(medium_count) is not int or not 0 <= medium_count <= player_count - wolf_count:
         raise ValueError("Choose medium count within the village camp")
-    return Board(player_count, tuple(range(1, player_count + 1)), wolf_count, initial_medium_count=medium_count)
+    if any(type(c) is not int or c<0 for c in (seer_count,hunter_count)) or medium_count+seer_count+hunter_count>player_count-wolf_count:
+        raise ValueError('Choose role counts within the village camp')
+    worlds=[]
+    if seer_count or hunter_count:
+        ids=tuple(range(player_count))
+        def mask(positions):return sum(1<<i for i in positions)
+        for ws in combinations(ids,wolf_count):
+            rest=tuple(i for i in ids if i not in ws)
+            for ms in combinations(rest,medium_count):
+                rest_s=tuple(i for i in rest if i not in ms)
+                for ss in combinations(rest_s,seer_count):
+                    rest_h=tuple(i for i in rest_s if i not in ss)
+                    for hs in combinations(rest_h,hunter_count):worlds.append((mask(ws),mask(ms),mask(ss),mask(hs)))
+        worlds=tuple((*world,Fraction(1,len(worlds))) for world in worlds)
+    return Board(player_count,tuple(range(1,player_count+1)),wolf_count,initial_medium_count=medium_count,
+                 initial_seer_count=seer_count,initial_hunter_count=hunter_count,world_belief=tuple(worlds))
 
 
 @dataclass(frozen=True)
@@ -329,7 +428,7 @@ def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy)
                 normalizers[w] = normalizers.get(w, Fraction(0)) + q
         if set(normalizers) != set(count_weights):
             raise ValueError("Target cannot be legally bitten in every count hypothesis")
-    for mask, medium, q in board.role_belief:
+    for mask, medium, seer, hunter, q in board.worlds:
         if board.phase == "night" and not strategy.include_self_bite:
             if mask & bit:
                 continue
@@ -337,19 +436,23 @@ def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy)
             q *= count_weights[w] / normalizers[w]
         w = (mask & (alive_mask ^ bit)).bit_count()
         winner = winner_for(len(alive), w)
-        groups.setdefault(winner, []).append((mask, medium, q))
+        groups.setdefault(winner, []).append((mask, medium, seer, hunter, q))
     event = PublicEvent(board.day, board.phase, target)
     outcomes = []
     for winner in ('village', 'wolf', None):
         entries = groups.get(winner)
         if not entries:
             continue
-        mass = sum((q for _, _, q in entries), Fraction(0))
+        mass = sum((world[-1] for world in entries), Fraction(0))
         phase = board.phase if winner else ('night' if board.phase == 'day' else 'day')
         day = board.day + int(not winner and board.phase == 'night')
         child = Board(board.player_count, alive, None, day, phase, board.history + (event,),
                       initial_medium_count=board.initial_medium_count, claims=board.claims,
-                      role_belief=tuple((w, m, q / mass) for w, m, q in entries))
+                      medium_opportunities=board.medium_opportunities+tuple((board.day+1,i,target) for i in alive if board.phase=='day' and board.claims[i-1]=='medium'),
+                      reports=board.reports,report_resolved=board.report_resolved,
+                      initial_seer_count=board.initial_seer_count,initial_hunter_count=board.initial_hunter_count,
+                      world_belief=tuple((w,m,seer,hunter,q/mass) for w,m,seer,hunter,q in entries) if board.world_belief else (),
+                      role_belief=tuple((w,m,q/mass) for w,m,_,_,q in entries) if not board.world_belief else ())
         outcomes.append(BoardOutcome(mass, child))
     return tuple(outcomes)
 
@@ -367,17 +470,32 @@ class Chance:
 
 
 @dataclass(frozen=True)
+class ReportTreeAction:
+    fake_colors: tuple[tuple[int,str], ...]
+    outcomes: tuple[Chance, ...]
+
+
+@dataclass(frozen=True)
 class TreeNode:
     """Lazy view of every exact action/chance branch; histories are never pruned."""
     board: Board
     rules: Rules = Rules()
     strategy: Strategy = Strategy()
+    pending_disclosure: bool = False
+
+    @property
+    def disclosures(self):
+        if not self.pending_disclosure:return ()
+        if self.strategy.fake_reports=='random':
+            outcomes=random_report_outcomes(self.board)
+            return (ReportTreeAction((),tuple(Chance(o.probability,TreeNode(o.board,self.rules,self.strategy)) for o in outcomes)),) if outcomes else ()
+        return tuple(ReportTreeAction(a.fake_colors,tuple(Chance(o.probability,TreeNode(o.board,self.rules,self.strategy)) for o in a.outcomes)) for a in report_actions(self.board))
 
     @property
     def actions(self) -> tuple[Action, ...]:
-        if self.board.winner:
+        if self.board.winner or self.disclosures:
             return ()
-        return tuple(Action(target, tuple(Chance(o.probability, TreeNode(o.board, self.rules, self.strategy))
+        return tuple(Action(target, tuple(Chance(o.probability, TreeNode(o.board,self.rules,self.strategy,pending_disclosure=self.board.phase=='night'))
                      for o in action_outcomes(self.board, target, self.rules, self.strategy)))
                      for target in legal_targets(self.board, self.rules, self.strategy))
 
@@ -470,10 +588,74 @@ def symmetric_action(n, phase, counts, strategy):
     return Values(village, 1 - village)
 
 
+@dataclass(frozen=True)
+class ReportAction:
+    # One public contingent instruction per possibly fake CO position.
+    fake_colors: tuple[tuple[int, str], ...]
+    outcomes: tuple[BoardOutcome, ...]
+
+
+def report_actions(board):
+    if board.winner:return ()
+    supplied={(r.day,r.reporter,r.target) for r in board.reports}
+    opportunities=tuple(o for o in available_medium_opportunities(board)
+                        if o[0]==board.day and o not in board.report_resolved and o not in supplied)
+    if not opportunities:return ()
+    possible_fakes=tuple(sorted({o[1] for o in opportunities if board.wolf_probability(o[1])>0}))
+    actions=[]
+    for colors in product(('white','black'),repeat=len(possible_fakes)):
+        instructions=dict(zip(possible_fakes,colors));groups={}
+        for world in board.worlds:
+            w,m,_,_,q=world
+            reports=tuple(MediumReport(day,reporter,target,
+                         ('black' if w&(1<<(target-1)) else 'white') if m&(1<<(reporter-1)) else instructions[reporter])
+                         for day,reporter,target in opportunities)
+            groups.setdefault(reports,[]).append(world)
+        outcomes=[]
+        for reports,entries in sorted(groups.items(),key=lambda item:tuple(r.color for r in item[0])):
+            mass=sum((world[-1] for world in entries),Fraction(0))
+            child=replace_worlds(board,tuple((*world[:-1],world[-1]/mass) for world in entries),
+                                 reports=board.reports+reports,report_resolved=board.report_resolved+opportunities)
+            outcomes.append(BoardOutcome(mass,child))
+        actions.append(ReportAction(tuple(zip(possible_fakes,colors)),tuple(outcomes)))
+    return tuple(actions)
+
+
+def joint_value(board, rules, strategy, reveal_now=False):
+    from .reports import public_value
+    village=public_value(board,strategy,reveal_now)
+    return Values(village,1-village)
+
+
+def random_report_outcomes(board):
+    actions=report_actions(board)
+    if not actions:return ()
+    groups={}
+    for action in actions:
+        for outcome in action.outcomes:
+            key=outcome.board.reports
+            child,entries=groups.setdefault(key,(outcome.board,{}))
+            for world in outcome.board.worlds:
+                entries[world[:-1]]=entries.get(world[:-1],Fraction(0))+outcome.probability*world[-1]/len(actions)
+    results=[]
+    for child,entries in groups.values():
+        mass=sum(entries.values(),Fraction(0))
+        results.append(BoardOutcome(mass,replace_worlds(child,tuple((*world,q/mass) for world,q in sorted(entries.items())))))
+    return tuple(results)
+
+
+def has_future_medium(board, reveal_now=False):
+    return bool(board.initial_medium_count and (any(board.claims[i-1]=='medium' for i in board.alive) or
+                any(o[1] in board.alive and o[0]==board.day+(0 if reveal_now else 1 if board.phase=='night' else -1)
+                    for o in board.medium_opportunities)))
+
+
 def value_for_action(board, target, rules, strategy):
-    village = sum((o.probability * solve(len(o.board.alive), o.board.phase, marginal_state(o.board), strategy).village_win
-                   for o in action_outcomes(board, target, rules, strategy)), Fraction(0))
-    return Values(village, 1 - village)
+    village=sum((o.probability*(joint_value(o.board,rules,strategy,reveal_now=board.phase=='night').village_win
+                 if has_future_medium(o.board,reveal_now=board.phase=='night') else
+                 solve(len(o.board.alive),o.board.phase,marginal_state(o.board),strategy).village_win)
+                 for o in action_outcomes(board,target,rules,strategy)),Fraction(0))
+    return Values(village,1-village)
 
 
 @dataclass
@@ -481,7 +663,7 @@ class Evaluation:
     strategy: Strategy
 
     def board_value(self, node: TreeNode) -> Values:
-        return solve(len(node.board.alive), node.board.phase, marginal_state(node.board), self.strategy)
+        return joint_value(node.board,node.rules,self.strategy,reveal_now=node.pending_disclosure) if has_future_medium(node.board,node.pending_disclosure) else solve(len(node.board.alive),node.board.phase,marginal_state(node.board),self.strategy)
 
     def action_value(self, node: TreeNode, target: int) -> Values:
         return value_for_action(node.board, target, node.rules, self.strategy)

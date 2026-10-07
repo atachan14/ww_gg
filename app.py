@@ -10,7 +10,7 @@ from werewolf.comparison import compare_initial
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from werewolf.exact import (ClaimPolicy, Progress, Rules, Strategy, Values, advance, build_tree,
-                            condition_claims, group_initial_board, co_group_compositions, legal_targets,
+                            condition_claims, group_initial_board, co_group_compositions, legal_targets, ROLES, VILLAGE_ROLES, ROLE_LABELS, MediumReport, condition_reports, available_medium_opportunities,
                             evaluate_tree, initial_board, validate_strategy)
 
 
@@ -27,34 +27,43 @@ def create_app(test_config=None):
         app.config.update(test_config)
     app.jinja_env.filters["percent"] = percent
     app.jinja_env.filters["fraction"] = str
+    app.jinja_env.globals.update(role_labels=ROLE_LABELS, role_order=ROLES)
 
     def with_claims(progress, claims, policy, initial_group=False):
         board = (group_initial_board(progress.board, claims, policy) if initial_group else condition_claims(progress.board, claims, policy))
         return Progress(board, progress.settled_village, progress.settled_wolf,
                         progress.last_board, progress.last_outcomes)
 
+    def with_reports(progress, reports):
+        board=condition_reports(progress.board,tuple(MediumReport(**r) for r in reports))
+        return Progress(board,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
+
     def replay(state):
         rules = Rules(**state["rules"])
-        progress = Progress(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0)))
+        progress = Progress(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
         if len(state["history"]) > state["players"] - 2:
             raise ValueError("Too much history")
         for index, step in enumerate(state["history"]):
-            if set(step) not in ({"target", "policy"}, {"target", "policy", "claims", "claim_policy"}):
+            if set(step) not in ({"target", "policy"}, {"target", "policy", "claims", "claim_policy"}, {"target","policy","claims","claim_policy","reports"}):
                 raise ValueError("Invalid history")
             if "claims" in step:
                 progress = with_claims(progress, tuple(step["claims"]), ClaimPolicy(**step["claim_policy"]), initial_group=index==0 and state.get("model","equal")=="group")
+            if not progress.finished and step.get('reports'):
+                progress = with_reports(progress, step['reports'])
             progress = advance(progress, step["target"], rules, Strategy(**step["policy"]))
         validate_strategy(rules, Strategy(**state["policy"]))
         if not progress.finished:
             progress = with_claims(progress, tuple(state.get("claims", ['latent'] * state["players"])),
                                    ClaimPolicy(**state.get("claim_policy", {})), initial_group=not state["history"] and state.get("model","equal")=="group")
+            if state.get('reports'):
+                progress = with_reports(progress, state['reports'])
         return rules, progress
 
     def game():
         state = session.get("game")
         try:
             required = {"players", "rules", "policy", "history", "selection", "revision"}
-            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model"}:
+            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports"}:
                 return None
             if type(state["revision"]) is not int or state["revision"] < 0 or not isinstance(state["history"], list):
                 return None
@@ -73,7 +82,7 @@ def create_app(test_config=None):
     def revision_matches(state):
         return request.form.getlist("revision") == [str(state["revision"])]
 
-    def parse_policy(rules):
+    def parse_policy(rules, state=None):
         def one(key):
             values = request.form.getlist(key)
             if len(values) != 1:
@@ -82,14 +91,19 @@ def create_app(test_config=None):
         inclusion = request.form.getlist("include_self_bite")
         if inclusion not in ([], ["0"], ["1"]):
             raise ValueError("自噛みの設定が不正です。")
-        strategy = Strategy(one("day"), one("night"), inclusion == ["1"])
+        reports=request.form.getlist('fake_reports')
+        if reports not in ([],['max'],['random']):raise ValueError('偽霊能の報告方針を確認してください。')
+        report_mode=reports[0] if reports else (state or {}).get('policy',{}).get('fake_reports','max')
+        strategy = Strategy(one("day"), one("night"), inclusion == ["1"],report_mode)
         validate_strategy(rules, strategy)
-        return {"day": strategy.day, "night": strategy.night, "include_self_bite": strategy.include_self_bite}
+        return {"day":strategy.day,"night":strategy.night,"include_self_bite":strategy.include_self_bite,**({"fake_reports":strategy.fake_reports} if reports or state and "fake_reports" in state["policy"] else {})}
 
     def parse_claim_policy(state=None):
         defaults = state.get('claim_policy', {}) if state else {}
         result = {}
-        for role in ('villager', 'medium'):
+        for role in VILLAGE_ROLES:
+            if role in ('seer','hunter') and not any(request.form.getlist(key+role) for key in ('cco_present_','cco_conditions_','cco_')) and role not in defaults:
+                continue
             marker = request.form.getlist('cco_present_' + role)
             if marker:
                 values = request.form.getlist('cco_conditions_' + role)
@@ -111,11 +125,22 @@ def create_app(test_config=None):
         claims = list(state.get('claims', ['latent'] * state['players']))
         for i in range(1, state['players'] + 1):
             values = request.form.getlist('co_' + str(i))
-            if len(values) > 1 or values and values[0] not in ('latent', 'villager', 'medium', 'wolf'):
+            if len(values) > 1 or values and values[0] not in ('latent', *ROLES):
                 raise ValueError("COの入力が不正です。")
             if values:
                 claims[i - 1] = values[0]
         return claims
+
+    def parse_reports(state, board):
+        previous={(r['day'],r['reporter'],r['target']):r for r in state.get('reports',[])}
+        for day,reporter,target in available_medium_opportunities(board):
+            name=f'report_{day}_{reporter}_{target}';values=request.form.getlist(name)
+            if not values:continue
+            if len(values)!=1 or values[0] not in ('','white','black'):raise ValueError('霊能結果は未入力・白・黒から選んでください。')
+            key=(day,reporter,target)
+            if values[0]:previous[key]={'day':day,'reporter':reporter,'target':target,'color':values[0]}
+            else:previous.pop(key,None)
+        return [previous[key] for key in sorted(previous)]
 
     def parse_target(progress, required):
         values = request.form.getlist("target")
@@ -151,7 +176,8 @@ def create_app(test_config=None):
                     if finished else board.wolf_probability(player))
             medium = (sum((outcome.probability * outcome.board.role_probability(player, 'medium') for outcome in progress.last_outcomes), Fraction(0))
                       if finished else board.role_probability(player, 'medium'))
-            players.append({"medium_probability": medium, "citizen_probability": 1 - wolf - medium,
+            players.append({"medium_probability": medium, "citizen_probability": (sum((o.probability*o.board.role_probability(player,"villager") for o in progress.last_outcomes),Fraction(0)) if finished else board.role_probability(player,"villager")),
+                            "extra_probabilities": {r:(sum((o.probability*o.board.role_probability(player,r) for o in progress.last_outcomes),Fraction(0)) if finished else board.role_probability(player,r)) for r in ("seer","hunter")},
                             "claim": board.claims[player - 1], "legal": player in action_values,
                             "id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
@@ -161,7 +187,7 @@ def create_app(test_config=None):
             score = 'village_win' if board.phase == 'day' else 'wolf_win'
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
-        return render_template("main.html", state=state, display_selection=display_selection, rules=rules, progress=progress,
+        return render_template("main.html", state=state, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, co_groups=co_group_compositions(board) if not finished and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
@@ -175,21 +201,24 @@ def create_app(test_config=None):
     def comparison_route():
         state = game()
         inputs = {'citizens':5, 'mediums':2, 'wolves':2, 'claims':['latent']*9,
-                  'claim_policy':{'villager':'filled','medium':'filled'}, 'mode':'trial'}
+                  'claim_policy':{'villager':'filled','medium':'filled'}, 'mode':'trial','seers':0,'hunters':0}
         if state:
-            inputs.update(citizens=state['players']-state.get('wolves',1)-state.get('mediums',0),
-                          mediums=state.get('mediums',0), wolves=state.get('wolves',1),
+            inputs.update(citizens=state['players']-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0),
+                          mediums=state.get('mediums',0), wolves=state.get('wolves',1),seers=state.get('seers',0),hunters=state.get('hunters',0),
                           claim_policy=state.get('claim_policy', inputs['claim_policy']))
             if not state['history']:
                 inputs['claims']=state.get('claims',['latent']*state['players'])+['latent']*(9-state['players'])
         try:
             if request.method=='POST':
-                allowed={'mode','citizens','mediums','wolves','cco_villager','cco_medium'} | {'co_'+str(i) for i in range(1,10)}
-                allowed |= {'cco_present_' + role for role in ('villager', 'medium')} | {'cco_conditions_' + role for role in ('villager', 'medium')}
+                allowed={'mode','citizens','mediums','seers','hunters','wolves','cco_villager','cco_medium'} | {'co_'+str(i) for i in range(1,10)}
+                allowed |= {'cco_'+role for role in VILLAGE_ROLES}
+                allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
                 if not set(request.form)<=allowed:
                     raise ValueError('比較用の入力を確認してください。')
-                for key in ('citizens','mediums','wolves'):
+                for key in ('citizens','mediums','seers','hunters','wolves'):
                     values=request.form.getlist(key)
+                    if key in ('seers','hunters') and not values:
+                        inputs[key]=0;continue
                     if len(values)!=1 or values[0] not in {str(n) for n in range(10)}:
                         raise ValueError('配役人数を0〜9の整数で指定してください。')
                     inputs[key]=int(values[0])
@@ -199,9 +228,9 @@ def create_app(test_config=None):
                 inputs['mode']=modes[0]
                 inputs['claims']=parse_claims({'players':9,'claims':['latent']*9})
                 inputs['claim_policy']=parse_claim_policy()
-            n=inputs['citizens']+inputs['mediums']+inputs['wolves']
+            n=inputs['citizens']+inputs['mediums']+inputs['seers']+inputs['hunters']+inputs['wolves']
             result=compare_initial(inputs['citizens'],inputs['mediums'],inputs['wolves'],
-                                   tuple(inputs['claims'][:n]),ClaimPolicy(**inputs['claim_policy']),inputs['mode'])
+                                   tuple(inputs['claims'][:n]),ClaimPolicy(**inputs['claim_policy']),inputs['mode'],inputs['seers'],inputs['hunters'])
         except ValueError as exc:
             result=dict(mode=inputs['mode'], issues=[str(exc)], rows=[],totals={},rates=None,valid=False)
         if request.headers.get('X-Comparison')=='partial':
@@ -215,8 +244,9 @@ def create_app(test_config=None):
     @app.post("/start")
     def start():
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "day", "night", "allow_self_bite", "include_self_bite", "cco_villager", "cco_medium", "model"}
-            allowed |= {'cco_present_' + role for role in ('villager', 'medium')} | {'cco_conditions_' + role for role in ('villager', 'medium')}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model"}
+            allowed |= {'cco_'+role for role in VILLAGE_ROLES}
+            allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
                 raise ValueError("配役と計算条件を確認してください。")
             def count(key, default=None):
@@ -228,14 +258,16 @@ def create_app(test_config=None):
                 return int(values[0])
             wolves = count('wolves', 1)
             mediums = count('mediums', 0)
+            seers = count('seers',0)
+            hunters = count('hunters',0)
             if 'citizens' in request.form:
                 citizens = count('citizens')
-                players = citizens + mediums + wolves
+                players = citizens + mediums + seers + hunters + wolves
                 if 'players' in request.form and count('players') != players:
                     raise ValueError("合計人数が配役と一致しません。")
             else:
                 players = count('players')
-            initial_board(players, wolves, mediums)
+            initial_board(players, wolves, mediums, seers, hunters)
             claim_policy = parse_claim_policy()
             models=request.form.getlist("model")
             if models not in ([],["equal"],["group"]):
@@ -249,7 +281,7 @@ def create_app(test_config=None):
         except ValueError as exc:
             return render_template("top.html", error=str(exc)), 400
         previous = game()
-        session["game"] = {"players": players, "wolves": wolves, "mediums": mediums,
+        session["game"] = {**({"seers":seers,"hunters":hunters} if seers or hunters else {}), "players": players, "wolves": wolves, "mediums": mediums,
                            "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite},
                            "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
@@ -274,8 +306,10 @@ def create_app(test_config=None):
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
         try:
-            allowed = {"revision", "target", "day", "night", "include_self_bite", "cco_villager", "cco_medium", "model"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
-            allowed |= {'cco_present_' + role for role in ('villager', 'medium')} | {'cco_conditions_' + role for role in ('villager', 'medium')}
+            allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
+            allowed |= {'cco_'+role for role in VILLAGE_ROLES}
+            allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
+            allowed |= {f'report_{day}_{reporter}_{target}' for day,reporter,target in available_medium_opportunities(progress.board)}
             if not set(request.form) <= allowed:
                 raise ValueError("この画面では対象と戦略を指定してください。")
             models=request.form.getlist('model')
@@ -284,10 +318,13 @@ def create_app(test_config=None):
             model=models[0] if models else state.get('model','equal')
             if state['history'] and model!=state.get('model','equal'):
                 raise ValueError('進行後のモデル変更はTOPから開始し直してください。')
-            policy = parse_policy(rules)
+            policy = parse_policy(rules,state)
             claims = parse_claims(state)
             claim_policy = parse_claim_policy(state)
-            _, progress = replay({**state, 'model': model, 'policy': policy, 'claims': claims, 'claim_policy': claim_policy})
+            reports=parse_reports(state,progress.board)
+            proposed={**state,'model':model,'policy':policy,'claims':claims,'claim_policy':claim_policy}
+            if reports or 'reports' in state:proposed['reports']=reports
+            _, progress = replay(proposed)
             target = parse_target(progress, advancing)
             if advancing and target not in legal_targets(progress.board, rules, Strategy(**policy)):
                 raise ValueError("この計算条件では、その対象への襲撃は実行できません。")
@@ -297,9 +334,9 @@ def create_app(test_config=None):
             return render_main(state, str(exc), 400)
         history = state["history"]
         if advancing:
-            history = history + [{"target": target, "policy": policy.copy(), "claims": claims.copy(), "claim_policy": claim_policy.copy()}]
+            history = history + [{"target": target, "policy": policy.copy(), "claims": claims.copy(), "claim_policy": claim_policy.copy(), **({"reports":reports} if reports or "reports" in state else {})}]
             progress = advance(progress, target, rules, Strategy(**policy))
-        session["game"] = {**state, "model": model, "policy": policy, "claims": claims, "claim_policy": claim_policy, "history": history,
+        session["game"] = {**state, **({"reports":reports} if reports or "reports" in state else {}), "model": model, "policy": policy, "claims": claims, "claim_policy": claim_policy, "history": history,
                            "selection": (target if progress.finished or not advancing else None),
                            "revision": state["revision"] + 1}
         return redirect(url_for("result" if progress.finished else "main"), code=303)
@@ -335,14 +372,14 @@ def create_app(test_config=None):
             session["game"] = {**state, "history": state["history"][:-1], "policy": step["policy"],
                                "claims": step.get('claims', ['latent'] * state['players']),
                                "claim_policy": step.get('claim_policy', {}),
-                               "selection": step["target"], "revision": state["revision"] + 1}
+                               **({"reports":step.get("reports",[])} if "reports" in state else {}), "selection": step["target"], "revision": state["revision"] + 1}
         return redirect(url_for("main"), code=303)
 
     return app
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="ww_gg local public Board v0.3")
+    parser = argparse.ArgumentParser(description="ww_gg local public Board v0.4")
     parser.add_argument("--port", type=int, default=8771)
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:

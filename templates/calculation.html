@@ -13,8 +13,16 @@
 <details class="calculation-group" data-disclosure data-medium-calculation {% if state and state.get('mediums', 0) == 0 %}hidden{% endif %}><summary>霊能</summary>
   <label class="field-label">騙れる役職</label><select aria-label="霊能が騙れる役職" disabled><option>なし</option></select>
   {% with co_role='medium' %}{% include 'co_conditions.html' %}{% endwith %}
-  <p class="hint">人数・COの制約だけを計算します。能力結果はv0.4で対応します。</p>
+  <label class="field-label">結果騙り</label><select aria-label="真霊能の結果騙り" disabled><option>認めない</option></select>
+<label class="field-label">結果の開示</label><select aria-label="霊能結果の開示" disabled><option>全て開示（将来の報告機会）</option></select>
+<label class="field-label" for="fake-reports">狼の霊能騙り報告</label><select id="fake-reports" name="fake_reports" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.get('fake_reports','max')=='max' %}selected{% endif %}>狼の最大勝率</option><option value="random" {% if state and state.policy.get('fake_reports')=='random' %}selected{% endif %}>ランダム（報告Action等重み）</option></select>
+<p class="hint">現在の空欄は申告なし。将来の翌朝に生存するCO者の白黒を共同で分岐します。</p>
 </details>
+{% for role,count_key in [('seer','seers'),('hunter','hunters')] %}
+<details class="calculation-group" data-disclosure data-role-calculation="{{ count_key }}" {% if state and not state.get(count_key,0) %}hidden{% endif %}><summary>{{ role_labels[role] }}</summary>
+<label class="field-label">騙れる役職</label><select aria-label="{{ role_labels[role] }}が騙れる役職" disabled><option>なし</option></select>
+{% with co_role=role %}{% include 'co_conditions.html' %}{% endwith %}<p class="hint">人数・COだけを扱います。占い・護衛効果はありません。</p></details>
+{% endfor %}
 <details class="calculation-group" data-disclosure><summary>狼陣営</summary>
   <label class="field-label" for="night-strategy">自動噛み先（値の集約）</label><select id="night-strategy" name="night" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.night == 'max' %}selected{% endif %}>狼の最大勝率</option><option value="random" {% if state and state.policy.night == 'random' %}selected{% endif %}>ランダム（候補等重み）</option></select>
   <label class="field-label spaced" for="include-self-bite">自噛み</label><select name="include_self_bite" id="include-self-bite" {% if finished or not rules or not rules.allow_self_bite %}disabled{% endif %}><option value="0" {% if not state or not state.policy.include_self_bite %}selected{% endif %}>行わない</option><option value="1" {% if state and state.policy.include_self_bite %}selected{% endif %}>行う</option></select>

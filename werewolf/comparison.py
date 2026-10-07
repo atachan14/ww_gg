@@ -1,15 +1,20 @@
 """Marginal-only experiment on an independent initial board."""
 from fractions import Fraction as F
-from .exact import ClaimPolicy, condition_claims, initial_board, build_tree, evaluate_tree, Rules, Strategy, group_initial_board, co_group_compositions
+from .exact import ClaimPolicy, condition_claims, initial_board, build_tree, evaluate_tree, Rules, Strategy, group_initial_board, co_group_compositions, ROLES, ROLE_LABELS, default_bluff_roles
 
 
-def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mode='trial'):
-    board = initial_board(citizens + mediums + wolves, wolves, mediums)
-    if len(claims) != board.player_count or any(c not in ('latent','villager','medium','wolf') for c in claims):
+def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mode='trial', seers=0, hunters=0):
+    board = initial_board(citizens + mediums + seers + hunters + wolves, wolves, mediums, seers, hunters)
+    if len(claims) != board.player_count or any(c not in ('latent',*ROLES) for c in claims):
         raise ValueError('CO入力を確認してください。')
     if mode not in ('current','trial','group'):
         raise ValueError('比較モードを確認してください。')
     counts = {'villager': citizens, 'medium': mediums, 'wolf': wolves}
+    if seers:counts['seer']=seers
+    if hunters:counts['hunter']=hunters
+    if mode=='trial' and (seers or hunters):
+        return dict(mode=mode,issues=['2段階試作は市民・霊能・狼の定義を維持します。占い師・狩人を含む残差配分は未定義です。'],rows=[],totals={},rates=None,valid=False)
+    roles=('villager','wolf','medium')+tuple(r for r in ('seer','hunter') if r in counts)
     def compatible(role, claim):
         return claim == 'latent' or role == claim or role == 'wolf'
     issues = []
@@ -39,7 +44,7 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
         for i, (claim, row) in enumerate(zip(claims, values),1):
             row['medium'] = 1-row['villager']-row['wolf']
             for role,q in row.items():
-                label={'villager':'市民','medium':'霊能','wolf':'狼'}[role]
+                label=ROLE_LABELS[role]
                 if q < 0 or q > 1:
                     issues.append(f'Player {i}：{label}の配分 {q} は0〜1の範囲外です。')
                 if q and not compatible(role,claim):
@@ -55,4 +60,4 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
     for role,expected in counts.items():
         if totals.get(role,F(0)) != expected:
             issues.append(f'{role}の人数合計が配役人数と一致しません。')
-    return dict(mode=mode,issues=issues,rows=rows,totals=totals,rates=rates,valid=not issues, co_groups=co_group_compositions(filtered) if mode=='group' and filtered else [])
+    return dict(mode=mode,roles=roles,issues=issues,rows=rows,totals=totals,rates=rates,valid=not issues, co_groups=co_group_compositions(filtered) if mode=='group' and filtered else [])

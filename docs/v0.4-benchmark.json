@@ -1,0 +1,985 @@
+{
+  "method": "Cold caches, tracemalloc Python allocation peak, all target values at each Board, full continuing manual history to terminal; future report subtrees exhaustively evaluated by exact memoized recursion",
+  "cases": [
+    {
+      "roles": {
+        "villager": 3,
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 1
+      },
+      "claims": [
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "equal",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max"
+      },
+      "initial_worlds": 15120,
+      "seconds": 18.75247969990596,
+      "python_peak_bytes": 5555500,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 6720,
+          "value": "27/70",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 6720,
+          "value": "27/70",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 5460,
+          "value": "27/70",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 5040,
+          "value": "22/65",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 3900,
+          "value": "22/65",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 2640,
+          "value": "1/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 1980,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "27/70",
+      "solve_cache": "CacheInfo(hits=31, misses=62, maxsize=32768, currsize=62)",
+      "disclosure_cache": "CacheInfo(hits=0, misses=11, maxsize=32768, currsize=11)"
+    },
+    {
+      "roles": {
+        "villager": 3,
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 1
+      },
+      "claims": [
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max"
+      },
+      "initial_worlds": 15120,
+      "seconds": 6.8768449001945555,
+      "python_peak_bytes": 4623544,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 2520,
+          "value": "298/945",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 2520,
+          "value": "94/315",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 1260,
+          "value": "94/315",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 1140,
+          "value": "84/305",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 900,
+          "value": "84/305",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 640,
+          "value": "1/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 480,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "94/315",
+      "solve_cache": "CacheInfo(hits=292, misses=190, maxsize=32768, currsize=190)",
+      "disclosure_cache": "CacheInfo(hits=49, misses=75, maxsize=32768, currsize=75)"
+    },
+    {
+      "roles": {
+        "villager": 3,
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 1
+      },
+      "claims": [
+        "medium",
+        "medium",
+        "seer",
+        "hunter",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random"
+      },
+      "initial_worlds": 15120,
+      "seconds": 2.075796499848366,
+      "python_peak_bytes": 4437880,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 200,
+          "value": "1819/5670",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 200,
+          "value": "94/315",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 130,
+          "value": "94/315",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 110,
+          "value": "84/305",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 50,
+          "value": "84/305",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 36,
+          "value": "1/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 27,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "94/315",
+      "solve_cache": "CacheInfo(hits=116, misses=137, maxsize=32768, currsize=137)",
+      "disclosure_cache": "CacheInfo(hits=26, misses=49, maxsize=32768, currsize=49)"
+    },
+    {
+      "roles": {
+        "villager": 1,
+        "wolf": 2,
+        "medium": 2,
+        "seer": 2,
+        "hunter": 2
+      },
+      "claims": [
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "equal",
+      "strategy": {
+        "day": "random",
+        "night": "random",
+        "include_self_bite": false,
+        "fake_reports": "random"
+      },
+      "initial_worlds": 22680,
+      "seconds": 9.710612100083381,
+      "python_peak_bytes": 8328632,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 3780,
+          "value": "94/315",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 3780,
+          "value": "27/70",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 1890,
+          "value": "27/70",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 1710,
+          "value": "22/65",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 1350,
+          "value": "22/65",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 960,
+          "value": "1/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 720,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "27/70",
+      "solve_cache": "CacheInfo(hits=129, misses=162, maxsize=32768, currsize=162)",
+      "disclosure_cache": "CacheInfo(hits=24, misses=57, maxsize=32768, currsize=57)"
+    },
+    {
+      "roles": {
+        "villager": 1,
+        "wolf": 2,
+        "medium": 2,
+        "seer": 2,
+        "hunter": 2
+      },
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": true,
+        "fake_reports": "max"
+      },
+      "initial_worlds": 22680,
+      "seconds": 5.121935700066388,
+      "python_peak_bytes": 8361848,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 1080,
+          "value": "5/7",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 1080,
+          "value": "5/7",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 900,
+          "value": "7/10",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 540,
+          "value": "2/3",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 450,
+          "value": "3/5",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 360,
+          "value": "1/2",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 270,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "5/7",
+      "solve_cache": "CacheInfo(hits=1159, misses=311, maxsize=32768, currsize=311)",
+      "disclosure_cache": "CacheInfo(hits=172, misses=164, maxsize=32768, currsize=164)"
+    },
+    {
+      "roles": {
+        "villager": 2,
+        "wolf": 3,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 1
+      },
+      "claims": [
+        "medium",
+        "seer",
+        "hunter",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random"
+      },
+      "initial_worlds": 15120,
+      "seconds": 4.443309899885207,
+      "python_peak_bytes": 4974784,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 1410,
+          "value": "4/35",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 1410,
+          "value": "4/35",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 510,
+          "value": "4/35",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 450,
+          "value": "12/65",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 330,
+          "value": "12/65",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 192,
+          "value": "1/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 144,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "4/35",
+      "solve_cache": "CacheInfo(hits=18, misses=40, maxsize=32768, currsize=40)",
+      "disclosure_cache": "CacheInfo(hits=0, misses=7, maxsize=32768, currsize=7)"
+    },
+    {
+      "roles": {
+        "villager": 5,
+        "wolf": 2,
+        "medium": 2,
+        "seer": 0,
+        "hunter": 0
+      },
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random"
+      },
+      "initial_worlds": 756,
+      "seconds": 0.15954839996993542,
+      "python_peak_bytes": 147510,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 6,
+          "value": "1",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 6,
+          "value": "1",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 3,
+          "value": "1",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 5,
+          "worlds": 2,
+          "value": "1",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 2,
+          "value": "1",
+          "target": 6
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 3,
+          "worlds": 2,
+          "value": "1",
+          "target": 7
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 2,
+          "value": "1",
+          "target": 4
+        }
+      ],
+      "final_cumulative": "1",
+      "solve_cache": "CacheInfo(hits=357, misses=156, maxsize=32768, currsize=156)",
+      "disclosure_cache": "CacheInfo(hits=73, misses=79, maxsize=32768, currsize=79)"
+    },
+    {
+      "roles": {
+        "villager": 3,
+        "wolf": 2,
+        "medium": 0,
+        "seer": 2,
+        "hunter": 2
+      },
+      "claims": [
+        "seer",
+        "hunter",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max"
+      },
+      "initial_worlds": 7560,
+      "seconds": 3.692645699949935,
+      "python_peak_bytes": 2337112,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 1470,
+          "value": "94/315",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 1470,
+          "value": "94/315",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 840,
+          "value": "94/315",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 780,
+          "value": "84/305",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 600,
+          "value": "84/305",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 400,
+          "value": "1/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 300,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "94/315",
+      "solve_cache": "CacheInfo(hits=0, misses=0, maxsize=32768, currsize=0)",
+      "disclosure_cache": "CacheInfo(hits=0, misses=0, maxsize=32768, currsize=0)"
+    },
+    {
+      "roles": {
+        "villager": 0,
+        "wolf": 1,
+        "medium": 8,
+        "seer": 0,
+        "hunter": 0
+      },
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium"
+      ],
+      "model": "equal",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max"
+      },
+      "initial_worlds": 9,
+      "seconds": 0.22676309989765286,
+      "python_peak_bytes": 249842,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 9,
+          "value": "187/315",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 8,
+          "value": "19/35",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 7,
+          "value": "19/35",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 6,
+          "value": "7/15",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 5,
+          "value": "7/15",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 4,
+          "value": "1/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 3,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "187/315",
+      "solve_cache": "CacheInfo(hits=1352, misses=250, maxsize=32768, currsize=250)",
+      "disclosure_cache": "CacheInfo(hits=124, misses=39, maxsize=32768, currsize=39)"
+    },
+    {
+      "roles": {
+        "villager": 0,
+        "wolf": 2,
+        "medium": 7,
+        "seer": 0,
+        "hunter": 0
+      },
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random"
+      },
+      "initial_worlds": 36,
+      "seconds": 0.33183469995856285,
+      "python_peak_bytes": 610980,
+      "phases": [
+        {
+          "day": 1,
+          "phase": "day",
+          "alive": 9,
+          "legal_targets": 9,
+          "worlds": 36,
+          "value": "13297/15120",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "alive": 8,
+          "legal_targets": 8,
+          "worlds": 36,
+          "value": "13297/15120",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 7,
+          "legal_targets": 7,
+          "worlds": 28,
+          "value": "2837/3780",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 6,
+          "legal_targets": 6,
+          "worlds": 27,
+          "value": "2717/3660",
+          "target": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 5,
+          "legal_targets": 5,
+          "worlds": 20,
+          "value": "142/305",
+          "target": 5
+        },
+        {
+          "day": 3,
+          "phase": "night",
+          "alive": 4,
+          "legal_targets": 4,
+          "worlds": 12,
+          "value": "2/3",
+          "target": 6
+        },
+        {
+          "day": 4,
+          "phase": "day",
+          "alive": 3,
+          "legal_targets": 3,
+          "worlds": 9,
+          "value": "1/3",
+          "target": 7
+        }
+      ],
+      "final_cumulative": "94/315",
+      "solve_cache": "CacheInfo(hits=294, misses=131, maxsize=32768, currsize=131)",
+      "disclosure_cache": "CacheInfo(hits=29, misses=43, maxsize=32768, currsize=43)"
+    }
+  ]
+}
