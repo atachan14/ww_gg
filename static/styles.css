@@ -141,3 +141,37 @@ summary:focus-visible { outline:2px solid var(--village); outline-offset:3px; bo
 .tip summary { padding:4px 0; font-weight:400; }
 .tip p { line-height:1.7; margin:6px 0; }
 .display-panel summary { font-size:14px; }
+
+/* MAIN: shared game bar, two Board rows and a spanning strategy column. */
+.game-information { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:12px 20px; margin-bottom:18px; }
+.game-information-items { display:flex; flex-wrap:wrap; gap:12px 28px; min-width:0; }
+.game-information details { max-width:650px; }
+.game-information summary { padding:5px 0; font-size:13px; }
+.game-information p { margin:8px 0 0; font-size:12px; color:var(--muted); }
+.format-switch { display:flex; align-items:center; gap:6px; flex-shrink:0; }
+.format-switch legend { float:left; margin:0 8px 0 0; font-size:12px; padding:7px 0; }
+.format-switch label { display:flex; margin:0; gap:6px; padding:6px 10px; border:1px solid var(--line); border-radius:7px; font-size:12px; }
+.format-switch label:has(input:checked) { background:#eef7f2; border-color:#81bda8; }
+.board-layout { display:grid; grid-template-columns:minmax(0,1fr) 260px; grid-template-rows:auto 1fr; gap:18px; align-items:start; }
+.board-layout > .information-panel { grid-column:1; grid-row:1; padding:18px 20px; }
+.board-layout > .player-panel { grid-column:1; grid-row:2; }
+.board-layout > .strategy-panel { grid-column:2; grid-row:1 / span 2; padding:18px; }
+.board-layout .information-meta { margin-bottom:8px; }
+.board-layout .count-distribution { margin:8px 0; }
+.board-layout .win-grid { max-width:none; }
+.board-layout .win-card strong { font-size:26px; }
+.board-layout .tip { display:inline-block; margin:4px 18px 4px 0; vertical-align:top; }
+.board-layout .tip[open] { display:block; }
+.role-breakdown-toggle { background:transparent; color:var(--village); border:0; padding:3px 0; font:inherit; font-weight:600; white-space:nowrap; }
+[data-role-detail][hidden] { display:none; }
+#action-form > .panel { margin-top:18px; }
+.tree-placeholder { margin-top:22px; padding:16px 20px; }
+.tree-placeholder h2 { margin-bottom:0; }
+@media (max-width:900px) {
+ .board-layout { grid-template-columns:minmax(0,1fr); grid-template-rows:auto; }
+ .board-layout > .information-panel { grid-column:1; grid-row:1; }
+ .board-layout > .player-panel { grid-column:1; grid-row:2; }
+ .board-layout > .strategy-panel { grid-column:1; grid-row:3; }
+ .game-information { flex-wrap:wrap; }
+ .board-layout .tip { display:block; }
+}

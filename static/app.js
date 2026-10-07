@@ -78,6 +78,25 @@ function initializeUI() {
     if (!permission.checked) inclusion.value = "0";
   });
 
+  const breakdown = document.querySelector('.role-breakdown-toggle');
+  if (breakdown) {
+    const main = document.querySelector('main');
+    const cells = Array.from(document.querySelectorAll('[data-role-detail]'));
+    cells.forEach((cell,index) => cell.id = `role-detail-${index}`);
+    breakdown.setAttribute('aria-controls', cells.map(cell => cell.id).join(' '));
+    const apply = () => {
+      const expanded = main.dataset.roleDetails !== 'false';
+      breakdown.setAttribute('aria-expanded', String(expanded));
+      breakdown.querySelector('[data-breakdown-arrow]').textContent = expanded ? '▾' : '▸';
+      document.querySelectorAll('[data-role-detail]').forEach(cell => cell.hidden = !expanded);
+    };
+    breakdown.addEventListener('click', () => {
+      main.dataset.roleDetails = breakdown.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
+      apply();
+    });
+    apply();
+  }
+
   initializeLiveClaims();
 }
 
@@ -146,6 +165,7 @@ function initializeLiveClaims() {
           const replacement = main.querySelectorAll('details[data-disclosure]')[index];
           if (replacement) replacement.open = details.open;
         });
+        main.dataset.roleDetails = document.querySelector('main').dataset.roleDetails || 'true';
         document.querySelector('main').replaceWith(main);
         initializeUI();
       } catch (error) {
