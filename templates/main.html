@@ -11,22 +11,22 @@
       </div>
       <div class="information-meta"><span>計算モデル：{{ 'COグループ方式（比較候補）' if state.get('model')=='group' else '現行・全配役一様' }} ／ 開始配役：市民 {{ state.players - state.get("wolves", 1) - state.get("mediums", 0) }} / 霊能 {{ state.get("mediums", 0) }} / 狼 {{ state.get("wolves", 1) }}</span><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>自噛みルール：{{ '許可' if rules.allow_self_bite else '禁止' }}</span></div>
       {% if not finished %}<p class="count-distribution">生存狼の可能性（現在Board条件付き）：{% for count, weight in counts.items() %}<span>{{ count }}w {{ probability(weight) }}</span>{% if not loop.last %} / {% endif %}{% endfor %}</p>{% endif %}
-      <p class="rate-caption">{{ '直前のBoardで指定した行動の決着確率' if finished else '現在のBoardから、最後まで続けた場合の勝率' }}</p>
+      <p class="rate-caption">{{ '最終行動の勝率' if finished else '現在勝率' }}</p><details class="tip" data-disclosure id="current-rate-tip"><summary>勝率の見方</summary><p>現在Boardの未決着条件から終局まで計算した勝率です。全枝終局の場合は最終行動の結果確率です。隠れた実配役を1つ決めていません。</p></details>
       <div class="win-grid">
         <div class="win-card village"><span>村の勝率</span><div>{{ probability(rates.village_win, 'village-rate') }}</div></div>
         <div class="win-card wolf"><span>狼の勝率</span><div>{{ probability(rates.wolf_win, 'wolf-rate') }}</div></div>
       </div>
-      <p class="cumulative">開始時点からの累積：村 {{ probability(cumulative.village_win, 'cumulative-village-rate') }} / 狼 {{ probability(cumulative.wolf_win, 'cumulative-wolf-rate') }}</p>
+      <p class="cumulative">累積勝率：村 {{ probability(cumulative.village_win, 'cumulative-village-rate') }} / 狼 {{ probability(cumulative.wolf_win, 'cumulative-wolf-rate') }}</p>
       {% if finished %}<p class="result-note">すべての可能性で決着しました。</p><p class="hint">直前の指定対象：Player {{ state.selection }}。役職や勝者を1つに決めず、決着の確率を表示しています。</p>
-      {% else %}<p class="hint">{{ '前の行動で未決着だった場合のBoardです。先に決着した確率は累積値に保持しています。' if state.history else 'COと計算条件から、各位置の役職確率と対象別の勝率を評価します。' }}</p>{% endif %}
+      {% else %}<details class="tip" data-disclosure id="history-tip"><summary>Boardと履歴</summary><p>既に決着した確率は累積勝率に保持します。CO・計算条件は現在のBoardを再評価し、過去の行動時の設定は履歴に残します。</p></details>{% endif %}
       {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     </section>
     <aside class="panel display-panel" id="display-panel" aria-labelledby="display-title">
-      <h2 id="display-title">表示オプション</h2><fieldset class="display-options"><legend>確率・勝率</legend><label><input type="radio" name="probability-format" value="percent" checked> ％</label><label><input type="radio" name="probability-format" value="fraction"> 分数</label></fieldset>
+      <details data-disclosure id="display-options"><summary id="display-title">表示オプション</summary><fieldset class="display-options"><legend>確率・勝率</legend><label><input type="radio" name="probability-format" value="percent" checked> ％</label><label><input type="radio" name="probability-format" value="fraction"> 分数</label></fieldset></details>
     </aside>
   </div>
   {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
-  <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once>
+  <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
     <input type="hidden" name="revision" value="{{ state.revision }}">
     <div class="main-grid">
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
@@ -39,15 +39,15 @@
                 {% for key, label in [('latent', '潜伏'), ('villager', '市民'), ('medium', '霊能'), ('wolf', '狼')] %}{% if (key != 'medium' or state.get('mediums', 0)) and (key != 'villager' or state.players - state.get('wolves', 1) - state.get('mediums', 0)) %}<option value="{{ key }}" {% if player.claim == key %}selected{% endif %}>{{ label }}</option>{% endif %}{% endfor %}</select></td>
               <td class="village-text">{{ probability(player.village_probability) }}</td>{% if state.get("mediums", 0) %}<td>{{ probability(player.citizen_probability) }}</td><td>{{ probability(player.medium_probability) }}</td>{% endif %}<td class="wolf-text">{{ probability(player.wolf_probability) }}</td>
               <td>{{ probability(player.action.village_win) if player.action else '—' }}</td><td>{{ probability(player.action.wolf_win) if player.action else '—' }}</td>
-              <td><label class="target-label"><input type="radio" name="target" value="{{ player.id }}" aria-label="Player {{ player.id }}を対象にする" required {% if state.selection == player.id %}checked{% endif %} {% if finished or not player.alive or not player.legal %}disabled{% endif %}></label></td>
+              <td><label class="target-label"><input type="radio" name="target" value="{{ player.id }}" aria-label="Player {{ player.id }}を対象にする" required {% if display_selection == player.id %}checked{% endif %} {% if finished or not player.alive or not player.legal %}disabled{% endif %}></label></td>
             </tr>{% endfor %}</tbody>
         </table></div>
         <p class="hint">COは本人の申告です。霊能の能力結果はまだ使用しません。各役職の確率には人数制約と相関があります。</p>
       </section>
       <aside class="panel strategy-panel" id="strategy-panel">
         {% include 'calculation.html' %}
-        {% if not finished %}<button class="secondary strategy-apply" type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button><p class="hint">CO・計算条件を変更すると、その場で現在の確率と勝率を再計算します。Phaseは進みません。過去の対象と条件は履歴に保持します。</p>{% endif %}
-        <div class="selection-preview"><span class="field-label">指定対象</span><strong data-target-preview>{{ 'Player ' ~ state.selection if state.selection else '未選択' }}</strong></div>
+        {% if not finished %}<button class="secondary strategy-apply" type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button><p class="hint">変更するとこのBoardを再計算します。</p>{% endif %}
+        <div class="selection-preview"><span class="field-label">指定対象</span><strong data-target-preview>{{ 'Player ' ~ display_selection if display_selection else '未選択' }}</strong></div>
       </aside>
     </div>
     {% if not finished %}<div class="page-actions main-actions"><p class="hint">決着する可能性を保持し、未決着の場合の次のBoardへ進みます。</p><button class="primary" type="submit" id="advance-button">{{ '夜に進む' if board.phase == 'day' else '翌日の昼に進む' }} <span aria-hidden="true">→</span></button></div>{% endif %}

@@ -130,3 +130,14 @@ tr:has(input:checked):not(.executed) { background: #f5faf7; }
 .comparison-inputs input { width:85px; padding:9px; font:inherit; }
 .comparison-inputs [hidden] { display:none; }
 #comparison-results { margin-top:24px; }
+
+summary { cursor:pointer; padding:10px 0; font-weight:600; }
+summary:focus-visible { outline:2px solid var(--village); outline-offset:3px; border-radius:3px; }
+.calculation-group > summary { font-size:14px; }
+.co-conditions { border:0; margin:16px 0 0; padding:0; min-width:0; }
+.co-conditions legend { font-size:12px; font-weight:600; margin-bottom:8px; }
+.co-conditions .checkbox-label { margin:10px 0; font-size:12px; align-items:flex-start; }
+.tip { color:var(--muted); font-size:12px; margin:8px 0; }
+.tip summary { padding:4px 0; font-weight:400; }
+.tip p { line-height:1.7; margin:6px 0; }
+.display-panel summary { font-size:14px; }

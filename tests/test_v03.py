@@ -151,7 +151,7 @@ class ClaimWebTests(unittest.TestCase):
         self.start(citizens=3,mediums=2)
         self.assertEqual(self.state()['claim_policy'], {'villager':'filled','medium':'filled','wolf':'none'})
         top = self.c.get('/').get_data(as_text=True)
-        self.assertEqual(top.count('<option value="filled" selected>対抗が埋まったらCCO</option>'),2)
+        self.assertEqual(top.count('value="filled" checked'),2)
         self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium',target='4')).status_code,303)
         self.assertEqual(self.state()['history'],[])
         self.assertEqual(self.state()['selection'],4)

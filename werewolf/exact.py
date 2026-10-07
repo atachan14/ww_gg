@@ -43,13 +43,25 @@ ROLES = ('villager', 'medium', 'wolf')
 
 @dataclass(frozen=True)
 class ClaimPolicy:
-    villager: str = 'filled'
-    medium: str = 'filled'
+    villager: str | tuple[str, ...] | list[str] = 'filled'
+    medium: str | tuple[str, ...] | list[str] = 'filled'
     wolf: str = 'none'
 
     def __post_init__(self):
-        if self.villager not in ('none', 'counter', 'filled') or self.medium not in ('none', 'counter', 'filled') or self.wolf != 'none':
+        if any(not self.valid_conditions(getattr(self, role)) for role in ('villager', 'medium')) or self.wolf != 'none':
             raise ValueError("Invalid CO calculation condition")
+        for role in ('villager', 'medium'):
+            if isinstance(getattr(self, role), list):
+                object.__setattr__(self, role, tuple(getattr(self, role)))
+
+    @staticmethod
+    def valid_conditions(value):
+        return (value in ('none', 'counter', 'filled') if isinstance(value, str) else
+                isinstance(value, (tuple, list)) and all(v in ('counter', 'filled') for v in value) and len(set(value)) == len(value))
+
+    def conditions(self, role):
+        value = getattr(self, role)
+        return (() if value == 'none' else (value,)) if isinstance(value, str) else tuple(value)
 
 
 def default_bluff_roles(present):
@@ -79,10 +91,10 @@ def condition_claims(board, claims, policy=ClaimPolicy(), bluff_roles=None):
             continue
         allowed = True
         for role in ('villager', 'medium'):
-            mode = getattr(policy, role)
+            modes = policy.conditions(role)
             capacity = medium.bit_count() if role == 'medium' else board.player_count - wolf.bit_count() - medium.bit_count()
             claim_count = claims.count(role)
-            trigger = (mode == 'counter' and claim_count > 0) or (mode == 'filled' and capacity > 0 and claim_count >= capacity)
+            trigger = ('counter' in modes and claim_count > 0) or ('filled' in modes and capacity > 0 and claim_count >= capacity)
             if trigger:
                 for i, claim in enumerate(claims, 1):
                     actual = 'wolf' if wolf & (1 << (i - 1)) else 'medium' if medium & (1 << (i - 1)) else 'villager'

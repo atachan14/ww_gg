@@ -1,0 +1,7 @@
+<fieldset class="co-conditions"><legend>CO必須</legend>
+<input type="hidden" name="cco_present_{{ co_role }}" value="1">
+{% for value,label in [('filled','定員到達でCCO'),('counter','対抗が出たらCCO')] %}
+<label class="checkbox-label"><input type="checkbox" name="cco_conditions_{{ co_role }}" value="{{ value }}" {% if (claim_policy and value in claim_policy.conditions(co_role)) or (not claim_policy and value=='filled') %}checked{% endif %} {% if finished %}disabled{% endif %}>{{ label }}</label>
+{% endfor %}
+<p class="hint">いずれか成立で必須。未選択は制約なし。両方選ぶと「対抗が出たら」が優先する強さになります。</p>
+</fieldset>

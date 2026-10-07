@@ -43,7 +43,9 @@ function initializeUI() {
   });
 
   document.querySelectorAll('input[name="target"]').forEach((radio) => {
+    radio.addEventListener("click", () => { radio.form.dataset.manualSelection = "true"; });
     radio.addEventListener("change", () => {
+      radio.form.dataset.manualSelection = "true";
       const preview = document.querySelector("[data-target-preview]");
       if (preview) preview.textContent = `Player ${radio.value}`;
     });
@@ -114,7 +116,7 @@ function initializeLiveClaims() {
       const sentVersion = version;
       try {
         const response = await fetch(document.querySelector('#strategy-button').formAction, {
-          method: 'POST', body: new FormData(form), credentials: 'same-origin',
+          method: 'POST', body: (() => { const data = new FormData(form); if (form.dataset.manualSelection !== 'true') data.delete('target'); return data; })(), credentials: 'same-origin',
           headers: {'Accept': 'text/html'}
         });
         const html = new DOMParser().parseFromString(await response.text(), 'text/html');
@@ -131,11 +133,16 @@ function initializeLiveClaims() {
         }
         const main = html.querySelector('main');
         if (!main || main.dataset.screen !== 'main') throw new Error('画面を再読込してから入力してください。');
-        const selected = form.querySelector('input[name="target"]:checked')?.value;
+        const selected = form.dataset.manualSelection === 'true' ? form.querySelector('input[name="target"]:checked')?.value : null;
         if (selected) {
+          main.querySelector("#action-form").dataset.manualSelection = "true";
           main.querySelectorAll('input[name="target"]').forEach(input => input.checked = input.value === selected);
           main.querySelector('[data-target-preview]').textContent = `Player ${selected}`;
         }
+        document.querySelectorAll('details[data-disclosure]').forEach((details, index) => {
+          const replacement = main.querySelectorAll('details[data-disclosure]')[index];
+          if (replacement) replacement.open = details.open;
+        });
         document.querySelector('main').replaceWith(main);
         initializeUI();
       } catch (error) {
@@ -149,7 +156,7 @@ function initializeLiveClaims() {
     running = false;
     if (form.isConnected) document.querySelector('#strategy-button').disabled = false;
   };
-  form.querySelectorAll('select:not(:disabled)').forEach(input => {
+  form.querySelectorAll('select:not(:disabled), .co-conditions input[type=checkbox]:not(:disabled)').forEach(input => {
     input.addEventListener('change', update);
   });
   document.querySelector('#strategy-button').addEventListener('click', event => {

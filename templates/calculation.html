@@ -1,26 +1,26 @@
 <h2>計算</h2>
 <label class="field-label" for="calculation-model">計算モデル</label>
 <select id="calculation-model" name="model" {% if finished or (state and state.history) %}disabled{% endif %}><option value="equal" {% if not state or state.get('model','equal')=='equal' %}selected{% endif %}>現行：全配役一様</option><option value="group" {% if state and state.get('model')=='group' %}selected{% endif %}>COグループ方式（比較候補）</option></select>
-<p class="hint">初日昼で切り替えて比較できます。進行後は初期の共同分布と履歴を保ち、モデルを固定します。</p>
-<section class="calculation-group"><h3>村陣営</h3>
+<p class="hint">モデルは初日昼に選択し、進行後は固定します。</p>
+<details class="calculation-group" data-disclosure><summary>村陣営</summary>
   <label class="field-label" for="day-strategy">自動吊り先（値の集約）</label>
   <select id="day-strategy" name="day" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.day == 'max' %}selected{% endif %}>村の最大勝率</option><option value="random" {% if state and state.policy.day == 'random' %}selected{% endif %}>ランダム（候補等重み）</option></select>
-</section>
-<section class="calculation-group"><h3>市民</h3>
+</details>
+<details class="calculation-group" data-disclosure><summary>市民</summary>
   <label class="field-label">騙れる役職</label><select aria-label="市民が騙れる役職" disabled><option>なし</option></select>
-  <label class="field-label spaced" for="cco-villager">CO必須</label><select id="cco-villager" name="cco_villager" {% if finished %}disabled{% endif %}><option value="filled" {% if not claim_policy or claim_policy.villager == 'filled' %}selected{% endif %}>対抗が埋まったらCCO</option><option value="counter" {% if claim_policy and claim_policy.villager == 'counter' %}selected{% endif %}>対抗が出たらCCO</option><option value="none" {% if claim_policy and claim_policy.villager == 'none' %}selected{% endif %}>なし</option></select>
-</section>
-<section class="calculation-group" data-medium-calculation {% if state and state.get('mediums', 0) == 0 %}hidden{% endif %}><h3>霊能</h3>
+  {% with co_role='villager' %}{% include 'co_conditions.html' %}{% endwith %}
+</details>
+<details class="calculation-group" data-disclosure data-medium-calculation {% if state and state.get('mediums', 0) == 0 %}hidden{% endif %}><summary>霊能</summary>
   <label class="field-label">騙れる役職</label><select aria-label="霊能が騙れる役職" disabled><option>なし</option></select>
-  <label class="field-label spaced" for="cco-medium">CO必須</label><select id="cco-medium" name="cco_medium" {% if finished %}disabled{% endif %}><option value="filled" {% if not claim_policy or claim_policy.medium == 'filled' %}selected{% endif %}>対抗が埋まったらCCO</option><option value="counter" {% if claim_policy and claim_policy.medium == 'counter' %}selected{% endif %}>対抗が出たらCCO</option><option value="none" {% if claim_policy and claim_policy.medium == 'none' %}selected{% endif %}>なし</option></select>
+  {% with co_role='medium' %}{% include 'co_conditions.html' %}{% endwith %}
   <p class="hint">人数・COの制約だけを計算します。能力結果はv0.4で対応します。</p>
-</section>
-<section class="calculation-group"><h3>狼陣営</h3>
+</details>
+<details class="calculation-group" data-disclosure><summary>狼陣営</summary>
   <label class="field-label" for="night-strategy">自動噛み先（値の集約）</label><select id="night-strategy" name="night" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.night == 'max' %}selected{% endif %}>狼の最大勝率</option><option value="random" {% if state and state.policy.night == 'random' %}selected{% endif %}>ランダム（候補等重み）</option></select>
   <label class="field-label spaced" for="include-self-bite">自噛み</label><select name="include_self_bite" id="include-self-bite" {% if finished or not rules or not rules.allow_self_bite %}disabled{% endif %}><option value="0" {% if not state or not state.policy.include_self_bite %}selected{% endif %}>行わない</option><option value="1" {% if state and state.policy.include_self_bite %}selected{% endif %}>行う</option></select>
-</section>
-<section class="calculation-group"><h3>狼</h3>
+</details>
+<details class="calculation-group" data-disclosure><summary>狼</summary>
   <label class="field-label">騙れる役職</label><select aria-label="狼が騙れる役職" disabled><option>全て（配役にある役職）</option></select>
   <label class="field-label spaced">CO必須</label><select aria-label="狼のCO必須" disabled><option>なし</option></select>
-</section>
+</details>
 <p class="hint">最大値やランダムは計算の集約条件です。進行する対象は手動で指定します。騙り制約はCO操作を禁止せず、適合する候補を計算します。</p>

@@ -90,6 +90,15 @@ def create_app(test_config=None):
         defaults = state.get('claim_policy', {}) if state else {}
         result = {}
         for role in ('villager', 'medium'):
+            marker = request.form.getlist('cco_present_' + role)
+            if marker:
+                values = request.form.getlist('cco_conditions_' + role)
+                if marker != ['1'] or request.form.getlist('cco_' + role) or not ClaimPolicy.valid_conditions(values):
+                    raise ValueError('CO必須条件を確認してください。')
+                result[role] = sorted(values)
+                continue
+            if request.form.getlist('cco_conditions_' + role):
+                raise ValueError('CO必須条件の入力形式を確認してください。')
             values = request.form.getlist('cco_' + role)
             if len(values) > 1:
                 raise ValueError("CO必須条件を1つ選んでください。")
@@ -147,7 +156,12 @@ def create_app(test_config=None):
                             "id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
                             "action": action_values.get(player)})
-        return render_template("main.html", state=state, rules=rules, progress=progress,
+        display_selection = state['selection']
+        if not finished and display_selection is None and getattr(strategy, board.phase) == 'max':
+            score = 'village_win' if board.phase == 'day' else 'wolf_win'
+            best = max(getattr(value, score) for value in action_values.values())
+            display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
+        return render_template("main.html", state=state, display_selection=display_selection, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, co_groups=co_group_compositions(board) if not finished and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
@@ -171,6 +185,7 @@ def create_app(test_config=None):
         try:
             if request.method=='POST':
                 allowed={'mode','citizens','mediums','wolves','cco_villager','cco_medium'} | {'co_'+str(i) for i in range(1,10)}
+                allowed |= {'cco_present_' + role for role in ('villager', 'medium')} | {'cco_conditions_' + role for role in ('villager', 'medium')}
                 if not set(request.form)<=allowed:
                     raise ValueError('比較用の入力を確認してください。')
                 for key in ('citizens','mediums','wolves'):
@@ -191,7 +206,7 @@ def create_app(test_config=None):
             result=dict(mode=inputs['mode'], issues=[str(exc)], rows=[],totals={},rates=None,valid=False)
         if request.headers.get('X-Comparison')=='partial':
             return render_template('comparison_results.html',result=result)
-        return render_template('comparison.html',inputs=inputs,result=result)
+        return render_template('comparison.html',inputs=inputs,result=result,claim_policy=ClaimPolicy(**inputs['claim_policy']),finished=False)
 
     @app.get("/")
     def top():
@@ -201,6 +216,7 @@ def create_app(test_config=None):
     def start():
         try:
             allowed = {"players", "wolves", "citizens", "mediums", "day", "night", "allow_self_bite", "include_self_bite", "cco_villager", "cco_medium", "model"}
+            allowed |= {'cco_present_' + role for role in ('villager', 'medium')} | {'cco_conditions_' + role for role in ('villager', 'medium')}
             if not set(request.form) <= allowed:
                 raise ValueError("配役と計算条件を確認してください。")
             def count(key, default=None):
@@ -259,6 +275,7 @@ def create_app(test_config=None):
             return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
         try:
             allowed = {"revision", "target", "day", "night", "include_self_bite", "cco_villager", "cco_medium", "model"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
+            allowed |= {'cco_present_' + role for role in ('villager', 'medium')} | {'cco_conditions_' + role for role in ('villager', 'medium')}
             if not set(request.form) <= allowed:
                 raise ValueError("この画面では対象と戦略を指定してください。")
             models=request.form.getlist('model')

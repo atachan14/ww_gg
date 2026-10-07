@@ -46,8 +46,8 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
                     issues.append(f'Player {i}：COと両立しない{label}へ {q} が入っています。')
                 if q > 0 and filtered is not None and filtered.role_probability(i,role) == 0:
                     issues.append(f'Player {i}：人数・CO・CCO制約で候補がない{label}へ {q} が入っています。')
-                cco=getattr(policy,role)
-                trigger=cco=='counter' and role in claims or cco=='filled' and counts[role]>0 and claims.count(role)>=counts[role]
+                cco=policy.conditions(role)
+                trigger='counter' in cco and role in claims or 'filled' in cco and counts[role]>0 and claims.count(role)>=counts[role]
                 if q and trigger and claim!=role:
                     issues.append(f'Player {i}：CCO条件で禁止される非COの{label}へ {q} が入っています。')
             rows.append(dict(id=i,values=row,total=sum(row.values(),F(0))))
