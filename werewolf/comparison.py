@@ -1,13 +1,13 @@
 """Marginal-only experiment on an independent initial board."""
 from fractions import Fraction as F
-from .exact import ClaimPolicy, condition_claims, initial_board, build_tree, evaluate_tree, Rules, Strategy
+from .exact import ClaimPolicy, condition_claims, initial_board, build_tree, evaluate_tree, Rules, Strategy, group_initial_board, co_group_compositions
 
 
 def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mode='trial'):
     board = initial_board(citizens + mediums + wolves, wolves, mediums)
     if len(claims) != board.player_count or any(c not in ('latent','villager','medium','wolf') for c in claims):
         raise ValueError('CO入力を確認してください。')
-    if mode not in ('current','trial'):
+    if mode not in ('current','trial','group'):
         raise ValueError('比較モードを確認してください。')
     counts = {'villager': citizens, 'medium': mediums, 'wolf': wolves}
     def compatible(role, claim):
@@ -15,10 +15,10 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
     issues = []
     filtered = None
     try:
-        filtered = condition_claims(board, tuple(claims), policy)
+        filtered = (group_initial_board(board,tuple(claims),policy) if mode=='group' else condition_claims(board,tuple(claims),policy))
     except ValueError as exc:
         issues.append(str(exc))
-    if mode == 'current':
+    if mode in ('current','group'):
         if filtered is None:
             return dict(mode=mode, issues=issues, rows=[], totals={}, rates=None, valid=False)
         root = build_tree(filtered, Rules(), Strategy())
@@ -55,4 +55,4 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
     for role,expected in counts.items():
         if totals.get(role,F(0)) != expected:
             issues.append(f'{role}の人数合計が配役人数と一致しません。')
-    return dict(mode=mode,issues=issues,rows=rows,totals=totals,rates=rates,valid=not issues)
+    return dict(mode=mode,issues=issues,rows=rows,totals=totals,rates=rates,valid=not issues, co_groups=co_group_compositions(filtered) if mode=='group' and filtered else [])

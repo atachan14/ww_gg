@@ -176,7 +176,7 @@ class WebTests(unittest.TestCase):
     def test_no_role_state_and_malformed_session_returns_top(self):
         self.start()
         state = self.state()
-        self.assertEqual(set(state), {'players','wolves','mediums','claims','claim_policy','rules','policy','history','selection','revision'})
+        self.assertEqual(set(state), {'players','wolves','mediums','claims','claim_policy','rules','policy','history','selection','revision','model'})
         with self.client.session_transaction() as session:
             session['game'] = {**state, 'actual_roles': {1:'wolf'}}
         self.assertTrue(self.client.get('/main').location.endswith('/'))

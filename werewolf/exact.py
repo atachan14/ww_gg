@@ -52,12 +52,18 @@ class ClaimPolicy:
             raise ValueError("Invalid CO calculation condition")
 
 
-def compatible_claim(mask_w, mask_m, player, claim):
+def default_bluff_roles(present):
+    # Role settings, shared by both models; not a special case in inference.
+    return {'villager': (), 'medium': (), 'wolf': tuple(r for r in ROLES if r in present)}
+
+
+def compatible_claim(mask_w, mask_m, player, claim, bluff_roles=None):
     role = 'wolf' if mask_w & (1 << (player - 1)) else 'medium' if mask_m & (1 << (player - 1)) else 'villager'
-    return claim == 'latent' or role == claim or role == 'wolf'
+    settings = default_bluff_roles(ROLES) if bluff_roles is None else bluff_roles
+    return claim == 'latent' or role == claim or claim in settings.get(role, ())
 
 
-def condition_claims(board, claims, policy=ClaimPolicy()):
+def condition_claims(board, claims, policy=ClaimPolicy(), bluff_roles=None):
     if not isinstance(claims, tuple) or len(claims) != board.player_count or any(c not in (*ROLES, 'latent') for c in claims):
         raise ValueError("CO must identify one allowed role per player")
     present = {'latent'}
@@ -69,7 +75,7 @@ def condition_claims(board, claims, policy=ClaimPolicy()):
         raise ValueError("配役にない役職へのCOは指定できません。")
     entries = []
     for wolf, medium, q in board.role_belief:
-        if not all(compatible_claim(wolf, medium, i, claim) for i, claim in enumerate(claims, 1)):
+        if not all(compatible_claim(wolf, medium, i, claim, bluff_roles) for i, claim in enumerate(claims, 1)):
             continue
         allowed = True
         for role in ('villager', 'medium'):
@@ -92,6 +98,43 @@ def condition_claims(board, claims, policy=ClaimPolicy()):
         raise ValueError("COと配役・騙り・CCO条件が両立しません。CO人数と計算条件を確認してください。")
     return replace(board, wolf_count=None, claims=claims, belief=(),
                    role_belief=tuple((w, m, q / mass) for w, m, q in entries))
+
+
+def group_initial_board(board, claims, policy=ClaimPolicy(), bluff_roles=None):
+    """Equal legal joint bluff-role placements, then equal legal completions.
+
+    This is an initial snapshot interpretation, never a transition updater.
+    """
+    if board.history or board.alive != tuple(range(1, board.player_count+1)) or board.phase != 'day' or board.day != 1:
+        raise ValueError('COグループの初期配分は初日昼だけで定義します。')
+    present = {r for r in ROLES if any(board.role_probability(i,r)>0 for i in board.alive)}
+    settings=default_bluff_roles(present) if bluff_roles is None else bluff_roles
+    if set(settings)-set(ROLES) or any(set(options)-present for options in settings.values()):
+        raise ValueError('Unknown bluff-role setting')
+    filtered=condition_claims(board,claims,policy,settings)
+    faker_roles=tuple(r for r in ROLES if any(c!=r and c in present for c in settings.get(r,())))
+    full=(1<<board.player_count)-1
+    groups={}
+    for w,m,_ in filtered.role_belief:
+        masks={'wolf':w,'medium':m,'villager':full^(w|m)}
+        key=tuple(masks[r] for r in faker_roles)
+        groups.setdefault(key,[]).append((w,m))
+    entries=tuple((w,m,Fraction(1,len(groups)*len(configs))) for configs in groups.values() for w,m in configs)
+    return replace(filtered,belief=(),role_belief=entries)
+
+
+def co_group_compositions(board):
+    groups=[]
+    for claim in ('villager','medium','wolf','latent'):
+        ids=tuple(i for i in board.alive if board.claims[i-1]==claim)
+        if not ids: continue
+        bit=sum(1<<(i-1) for i in ids)
+        counts={}
+        for w,m,q in board.role_belief:
+            key=(len(ids)-(w&bit).bit_count()-(m&bit).bit_count(),(m&bit).bit_count(),(w&bit).bit_count())
+            counts[key]=counts.get(key,Fraction(0))+q
+        groups.append(dict(claim=claim,ids=ids,compositions=tuple((*key,q) for key,q in sorted(counts.items()))))
+    return groups
 
 
 @dataclass(frozen=True)

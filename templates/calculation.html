@@ -1,4 +1,7 @@
 <h2>計算</h2>
+<label class="field-label" for="calculation-model">計算モデル</label>
+<select id="calculation-model" name="model" {% if finished or (state and state.history) %}disabled{% endif %}><option value="equal" {% if not state or state.get('model','equal')=='equal' %}selected{% endif %}>現行：全配役一様</option><option value="group" {% if state and state.get('model')=='group' %}selected{% endif %}>COグループ方式（比較候補）</option></select>
+<p class="hint">初日昼で切り替えて比較できます。進行後は初期の共同分布と履歴を保ち、モデルを固定します。</p>
 <section class="calculation-group"><h3>村陣営</h3>
   <label class="field-label" for="day-strategy">自動吊り先（値の集約）</label>
   <select id="day-strategy" name="day" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.day == 'max' %}selected{% endif %}>村の最大勝率</option><option value="random" {% if state and state.policy.day == 'random' %}selected{% endif %}>ランダム（候補等重み）</option></select>

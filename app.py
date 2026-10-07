@@ -10,7 +10,7 @@ from werewolf.comparison import compare_initial
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from werewolf.exact import (ClaimPolicy, Progress, Rules, Strategy, Values, advance, build_tree,
-                            condition_claims, legal_targets,
+                            condition_claims, group_initial_board, co_group_compositions, legal_targets,
                             evaluate_tree, initial_board, validate_strategy)
 
 
@@ -28,8 +28,8 @@ def create_app(test_config=None):
     app.jinja_env.filters["percent"] = percent
     app.jinja_env.filters["fraction"] = str
 
-    def with_claims(progress, claims, policy):
-        board = condition_claims(progress.board, claims, policy)
+    def with_claims(progress, claims, policy, initial_group=False):
+        board = (group_initial_board(progress.board, claims, policy) if initial_group else condition_claims(progress.board, claims, policy))
         return Progress(board, progress.settled_village, progress.settled_wolf,
                         progress.last_board, progress.last_outcomes)
 
@@ -38,25 +38,27 @@ def create_app(test_config=None):
         progress = Progress(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0)))
         if len(state["history"]) > state["players"] - 2:
             raise ValueError("Too much history")
-        for step in state["history"]:
+        for index, step in enumerate(state["history"]):
             if set(step) not in ({"target", "policy"}, {"target", "policy", "claims", "claim_policy"}):
                 raise ValueError("Invalid history")
             if "claims" in step:
-                progress = with_claims(progress, tuple(step["claims"]), ClaimPolicy(**step["claim_policy"]))
+                progress = with_claims(progress, tuple(step["claims"]), ClaimPolicy(**step["claim_policy"]), initial_group=index==0 and state.get("model","equal")=="group")
             progress = advance(progress, step["target"], rules, Strategy(**step["policy"]))
         validate_strategy(rules, Strategy(**state["policy"]))
         if not progress.finished:
             progress = with_claims(progress, tuple(state.get("claims", ['latent'] * state["players"])),
-                                   ClaimPolicy(**state.get("claim_policy", {})))
+                                   ClaimPolicy(**state.get("claim_policy", {})), initial_group=not state["history"] and state.get("model","equal")=="group")
         return rules, progress
 
     def game():
         state = session.get("game")
         try:
             required = {"players", "rules", "policy", "history", "selection", "revision"}
-            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy"}:
+            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model"}:
                 return None
             if type(state["revision"]) is not int or state["revision"] < 0 or not isinstance(state["history"], list):
+                return None
+            if state.get("model","equal") not in ("equal","group"):
                 return None
             _, progress = replay(state)
             target = state["selection"]
@@ -147,7 +149,7 @@ def create_app(test_config=None):
                             "action": action_values.get(player)})
         return render_template("main.html", state=state, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, error=error, claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
+                               players=players, error=error, co_groups=co_group_compositions(board) if not finished and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
     @app.after_request
     def no_stale_pages(response):
@@ -177,7 +179,7 @@ def create_app(test_config=None):
                         raise ValueError('配役人数を0〜9の整数で指定してください。')
                     inputs[key]=int(values[0])
                 modes=request.form.getlist('mode')
-                if len(modes)!=1 or modes[0] not in ('current','trial'):
+                if len(modes)!=1 or modes[0] not in ('current','trial','group'):
                     raise ValueError('比較モードを確認してください。')
                 inputs['mode']=modes[0]
                 inputs['claims']=parse_claims({'players':9,'claims':['latent']*9})
@@ -198,7 +200,7 @@ def create_app(test_config=None):
     @app.post("/start")
     def start():
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "day", "night", "allow_self_bite", "include_self_bite", "cco_villager", "cco_medium"}
+            allowed = {"players", "wolves", "citizens", "mediums", "day", "night", "allow_self_bite", "include_self_bite", "cco_villager", "cco_medium", "model"}
             if not set(request.form) <= allowed:
                 raise ValueError("配役と計算条件を確認してください。")
             def count(key, default=None):
@@ -219,6 +221,10 @@ def create_app(test_config=None):
                 players = count('players')
             initial_board(players, wolves, mediums)
             claim_policy = parse_claim_policy()
+            models=request.form.getlist("model")
+            if models not in ([],["equal"],["group"]):
+                raise ValueError("計算モデルを確認してください。")
+            model=models[0] if models else "equal"
             permission = request.form.getlist("allow_self_bite")
             if permission not in ([], ["1"]):
                 raise ValueError("自噛みのルールが不正です。")
@@ -228,7 +234,7 @@ def create_app(test_config=None):
             return render_template("top.html", error=str(exc)), 400
         previous = game()
         session["game"] = {"players": players, "wolves": wolves, "mediums": mediums,
-                           "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite},
+                           "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite},
                            "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
         return redirect(url_for("main"), code=303)
@@ -252,13 +258,19 @@ def create_app(test_config=None):
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
         try:
-            allowed = {"revision", "target", "day", "night", "include_self_bite", "cco_villager", "cco_medium"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
+            allowed = {"revision", "target", "day", "night", "include_self_bite", "cco_villager", "cco_medium", "model"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
             if not set(request.form) <= allowed:
                 raise ValueError("この画面では対象と戦略を指定してください。")
+            models=request.form.getlist('model')
+            if models not in ([],['equal'],['group']):
+                raise ValueError('計算モデルを確認してください。')
+            model=models[0] if models else state.get('model','equal')
+            if state['history'] and model!=state.get('model','equal'):
+                raise ValueError('進行後のモデル変更はTOPから開始し直してください。')
             policy = parse_policy(rules)
             claims = parse_claims(state)
             claim_policy = parse_claim_policy(state)
-            _, progress = replay({**state, 'policy': policy, 'claims': claims, 'claim_policy': claim_policy})
+            _, progress = replay({**state, 'model': model, 'policy': policy, 'claims': claims, 'claim_policy': claim_policy})
             target = parse_target(progress, advancing)
             if advancing and target not in legal_targets(progress.board, rules, Strategy(**policy)):
                 raise ValueError("この計算条件では、その対象への襲撃は実行できません。")
@@ -270,7 +282,7 @@ def create_app(test_config=None):
         if advancing:
             history = history + [{"target": target, "policy": policy.copy(), "claims": claims.copy(), "claim_policy": claim_policy.copy()}]
             progress = advance(progress, target, rules, Strategy(**policy))
-        session["game"] = {**state, "policy": policy, "claims": claims, "claim_policy": claim_policy, "history": history,
+        session["game"] = {**state, "model": model, "policy": policy, "claims": claims, "claim_policy": claim_policy, "history": history,
                            "selection": (target if progress.finished or not advancing else None),
                            "revision": state["revision"] + 1}
         return redirect(url_for("result" if progress.finished else "main"), code=303)
