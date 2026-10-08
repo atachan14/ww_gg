@@ -80,3 +80,7 @@ git worktree add ..\ww_gg-legacy 9735ac2b62031ac6cb9f0eacb433fdbced14314d
 `.env`、`.venv/`、`.tmp/` は旧リポジトリ直下の現位置に残してあり、今回その内容は読んでいない。Gitの保存対象には含めていないため、別worktreeでの実行環境や秘密設定は別途必要になる。旧コードは作業ディレクトリの `.env` を読むため、archive内をそのまま実行した場合に現在の直下設定を自動で使うとは限らない。
 
 既存のVercel公開連携は別途扱う。旧 `vercel.json` とAPI入口はarchive内に保存し、この整理でデプロイや連携変更は行わない。
+
+## Game / Board 設定画面
+
+TOP で配役とゲームルールを指定し、MAIN 右側の Game で表示・ルール確認、Board で戦略を操作します。設定を閉じるとテーブルが全幅になります。未対応の4ルールは灰色・操作無効、自噛みは既存計算へ接続しています。[UI と検証記録](docs/right-parallel-checks.md)。

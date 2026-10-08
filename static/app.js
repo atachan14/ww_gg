@@ -12,6 +12,7 @@ function initializeUI() {
       element.textContent = probabilityFormat === "fraction" ? element.dataset.fraction : element.dataset.percent;
     });
     formatInputs.forEach((input) => { input.checked = input.value === probabilityFormat; });
+    window.refreshParallelLayout?.();
   }
 
   formatInputs.forEach((input) => {
@@ -36,7 +37,7 @@ function initializeUI() {
         return;
       }
       form.dataset.submitting = "true";
-      form.querySelectorAll('button[type="submit"]').forEach((button) => {
+      Array.from(form.elements).filter(e=>e.matches('button[type="submit"]')).forEach((button) => {
         button.disabled = true;
       });
     });
@@ -64,7 +65,8 @@ function initializeUI() {
     document.querySelector('#total-count').innerHTML = `${total}<small>人</small>`;
     const valid = Number.isInteger(total) && total >= 3 && total <= 9 && Number(wolves.value) >= 1 && Number(wolves.value) < village;
     document.querySelector('#cast-validation').textContent = valid ? '役職ごとの人数から合計を算出します。' : '合計3〜9人、狼より村陣営が多い配役にしてください。';
-    document.querySelector('[data-medium-calculation]').hidden = Number(mediums.value) === 0;
+    const mediumSettings=document.querySelector('[data-medium-calculation]');
+    if (mediumSettings) mediumSettings.hidden = Number(mediums.value) === 0;
     document.querySelectorAll('[data-role-calculation]').forEach(e=>e.hidden=Number(e.dataset.roleCalculation==='seers'?seers.value:hunters.value)===0);
   }
   if (citizens && mediums && wolves) {
@@ -89,15 +91,20 @@ function initializeUI() {
       breakdown.setAttribute('aria-expanded', String(expanded));
       breakdown.querySelector('[data-breakdown-arrow]').textContent = expanded ? '▾' : '▸';
       document.querySelectorAll('[data-role-detail]').forEach(cell => cell.hidden = !expanded);
+      const option=document.querySelector('#display-role-details');if(option) option.checked=expanded;
+      window.refreshParallelLayout?.();
     };
     breakdown.addEventListener('click', () => {
       main.dataset.roleDetails = breakdown.getAttribute('aria-expanded') === 'true' ? 'false' : 'true';
       apply();
     });
+    const option=document.querySelector('#display-role-details');
+    option?.addEventListener('change',()=>{main.dataset.roleDetails=String(option.checked);apply();});
     apply();
   }
 
   window.initializeStrategyEditor?.();
+  window.initializeParallelLayout?.();
   initializeLiveClaims();
 }
 
@@ -162,6 +169,9 @@ function initializeLiveClaims() {
           main.querySelectorAll('input[name="target"]').forEach(input => input.checked = input.value === selected);
           main.querySelector('[data-target-preview]').textContent = `Player ${selected}`;
         }
+        main.dataset.strategyDisclosures=JSON.stringify(Array.from(document.querySelectorAll('#strategy-editor details[open]')).map(e=>e.dataset.scope));
+        document.querySelectorAll('[data-settings-pane]').forEach(e=>{main.querySelector(`[data-settings-pane="${e.dataset.settingsPane}"]`).open=e.open;});
+        const scroll=document.querySelector('#player-panel .table-scroll');main.dataset.tableScroll=String(scroll.scrollLeft);
         document.querySelectorAll('details[data-disclosure]').forEach((details, index) => {
           const replacement = main.querySelectorAll('details[data-disclosure]')[index];
           if (replacement) replacement.open = details.open;

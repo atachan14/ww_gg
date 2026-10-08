@@ -1,0 +1,8 @@
+<section class="rule-team"><h3>全体共通</h3>
+  {% for key,label in [('self-vote','自投票'),('abstention','無投票')] %}<div class="rule-option inactive-item"><label for="{{ key }}">{{ label }}</label><select id="{{ key }}" disabled><option value="">—</option><option>あり</option><option>なし</option></select></div>{% endfor %}
+</section>
+<section class="rule-team"><h3>村陣営</h3>
+  <details class="rule-role" open><summary>占い師（能力なし）</summary><div class="rule-option inactive-item"><label for="first-seer">初日占い</label><select id="first-seer" disabled><option value="">—</option><option>あり</option><option>ランダム白</option><option>なし</option></select></div></details>
+  <details class="rule-role" open><summary>狩人（能力なし）</summary><div class="rule-option inactive-item"><label for="repeat-guard">連続ガード</label><select id="repeat-guard" disabled><option value="">—</option><option>あり</option><option>なし</option></select></div></details>
+</section>
+<section class="rule-team"><h3>狼陣営</h3><div class="rule-option">{% if editable %}<label class="checkbox-label"><input type="checkbox" name="allow_self_bite" value="1" id="allow-self-bite">自噛みを許可する</label>{% else %}<span>自噛み</span><strong>{{ 'あり' if rules.allow_self_bite else 'なし' }}</strong>{% endif %}</div></section>

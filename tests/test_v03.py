@@ -144,7 +144,7 @@ class ClaimWebTests(unittest.TestCase):
         return self.c.post('/start',data={'citizens':str(citizens),'mediums':str(mediums),'wolves':str(wolves),'day':'max','night':'max'})
     def test_top_role_counts_and_fixed_calculation_options(self):
         html=self.c.get('/').get_data(as_text=True)
-        for text in ('村陣営','狼陣営','市民','霊能','騙れる役職','CO必須','対抗が出たらCCO','自動吊り先','自動噛み先'):
+        for text in ('村陣営','狼陣営','市民','霊能','ゲームルール'):
             self.assertIn(text,html)
         self.assertEqual(self.start(0,8,1).status_code,303)
         self.assertEqual(self.state()['players'],9)
@@ -154,7 +154,7 @@ class ClaimWebTests(unittest.TestCase):
         self.start(citizens=3,mediums=2)
         self.assertEqual(self.state()['claim_policy'], {'villager':'filled','medium':'filled','wolf':'none'})
         top = self.c.get('/').get_data(as_text=True)
-        self.assertEqual(top.count('value="filled" checked'),4)
+        self.assertNotIn('cco_conditions_',top)
         self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium',target='4')).status_code,303)
         self.assertEqual(self.state()['history'],[])
         self.assertEqual(self.state()['selection'],4)

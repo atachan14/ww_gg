@@ -41,7 +41,8 @@ class WebTests(unittest.TestCase):
     def test_top_default_five_rule_and_strategy_defaults(self):
         html = self.page('/')
         self.assertIn('id="citizen-count" name="citizens" value="4"', html)
-        self.assertIn('id="include-self-bite" disabled', html)
+        self.assertNotIn('id="include-self-bite"', html)
+        self.assertIn('id="allow-self-bite"', html)
         self.start()
         self.assertEqual(self.state()['rules'], {'allow_self_bite': False})
         self.assertEqual(self.state()['policy'], {'day': 'max', 'night': 'max', 'include_self_bite': False})

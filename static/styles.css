@@ -229,3 +229,81 @@ summary:focus-visible { outline:2px solid var(--village); outline-offset:3px; bo
 /* The outer MAIN panel owns the strategy gutter; preserve role indentation. */
 #strategy-editor > .evaluation { padding:0 0 13px; }
 #strategy-editor > .team-section { margin:10px 0; }
+
+/* Adopted right-parallel layout; live calculation and item dialogs are shared. */
+.page-shell { max-width:1600px; padding-bottom:125px; }
+main[data-screen="top"] .top-grid { grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:start; }
+main[data-screen="top"] .rules-panel { margin:0; border:2px solid #c8d6df; }
+.cast-line { font-size:12px; margin-bottom:12px; overflow-wrap:anywhere; }
+.cast-line > span { color:var(--muted); margin-left:12px; white-space:nowrap; }
+.board-layout { grid-template-columns:420px minmax(0,1fr); grid-template-rows:auto auto; gap:14px 18px; }
+.board-layout > .information-panel { grid-column:1; grid-row:1; padding:15px 16px; }
+.board-layout > .player-panel { grid-column:1/-1; grid-row:2; padding:14px; }
+.board-layout > .settings-column { grid-column:2; grid-row:1 / span 2; width:360px; justify-self:end; min-width:0; overflow:hidden; }
+.board-layout.settings-open { grid-template-columns:minmax(0,1fr) 360px; }
+.board-layout.settings-open > .information-panel { width:420px; max-width:100%; }
+.board-layout.settings-open > .player-panel { grid-column:1; }
+.settings-group { padding:7px; background:#edf1f5; border:1px solid #c8d6df; border-radius:8px; margin-bottom:16px; }
+.settings-group:last-child { margin-bottom:0; }
+.settings-group > header { display:flex; justify-content:space-between; gap:12px; font-size:11px; color:#617480; padding:3px 5px 8px; }
+.settings-group > details { background:white; border:1px solid #cfdae0; border-radius:6px; overflow:hidden; }
+.settings-group > details + details { margin-top:6px; }
+.settings-group > details > summary { padding:10px 12px; font-size:13px; min-height:40px; cursor:pointer; }
+.settings-group > details[open] > summary { background:#e3edf3; border-bottom:1px solid #d9e2e7; }
+.settings-body { padding:11px 12px; overflow:auto; }
+.settings-body p { font-size:12px; margin-bottom:8px; }
+#strategy-panel .team-section > summary { color:var(--ink); background:#f5f8fa; }
+#strategy-panel .team-section { margin:10px 0; }
+#strategy-panel .evaluation { padding:0 0 13px; }
+#information-panel h1 { font-size:22px; }
+#information-panel .rate-card > strong { font-size:27px; }
+#player-panel { container-type:inline-size; container-name:player-width; }
+#player-panel .player-table { --id-width:36px; --name-width:64px; --status-width:55px; --co-width:78px; --target-width:46px; --numeric-columns:8; --numeric-width:41px; table-layout:fixed; width:100%; min-width:calc(var(--id-width) + var(--name-width) + var(--status-width) + var(--co-width) + var(--target-width) + var(--numeric-total,328px)); }
+#player-panel .player-table th:first-child { width:var(--id-width); }
+#player-panel .player-table th:nth-child(2) { width:var(--name-width); }
+#player-panel .player-table th:nth-child(3) { width:var(--status-width); }
+#player-panel .player-table th:nth-child(4) { width:var(--co-width); }
+#player-panel .player-table th:last-child { width:var(--target-width); }
+#player-panel .player-table th { font-size:10px; padding:5px 2px; line-height:1.25; overflow-wrap:anywhere; }
+#player-panel .player-table td { padding:5px 2px; height:38px; line-height:1.25; }
+#player-panel .player-table td strong { font-size:12px; white-space:nowrap; overflow-wrap:normal; }
+#player-panel .co-select { font-size:11px; padding:5px 2px; min-height:28px; }
+#player-panel .status { font-size:10px; padding:3px 2px; }
+#player-panel .player-name { font-size:10px; overflow-wrap:normal; }
+#player-panel .target-label { min-height:28px; min-width:0; }
+#player-panel .panel-heading { margin-bottom:10px; }
+@container player-width (width < 900px) { #player-panel .player-table { --id-width:30px; --name-width:44px; --status-width:40px; --co-width:68px; --target-width:34px; } }
+@container player-width (width < 720px) { #player-panel .player-table { --id-width:24px; --name-width:36px; --status-width:32px; --co-width:58px; --target-width:28px; } #player-panel .player-table td { padding-left:1px; padding-right:1px; } }
+.phase-footer { position:fixed; z-index:40; bottom:0; left:0; right:0; background:white; border-top:1px solid #cddce1; box-shadow:0 -4px 16px #23383b09; }
+.footer-inner { max-width:1600px; margin:auto; min-height:64px; padding:9px 24px; display:flex; justify-content:space-between; align-items:center; gap:14px; }
+main[data-screen="top"] .footer-inner { justify-content:flex-end; }
+.footer-inner nav,.phase-buttons { display:flex; gap:7px; align-items:center; }
+.footer-inner button { font-size:12px; min-height:40px; padding:7px 12px; }
+.phase-buttons > span { font-size:11px; }
+.phase-buttons form { margin:0; }
+#information-panel,#player-panel,#tree-reserved { scroll-margin-top:12px; scroll-margin-bottom:125px; }
+@media(max-width:1039px) {
+ .board-layout,.board-layout.settings-open { display:flex; flex-direction:column; }
+ .board-layout > .information-panel,.board-layout.settings-open > .information-panel { width:100%; }
+ .board-layout > .settings-column { width:100%; order:2; }
+ .board-layout > .player-panel { width:100%; order:3; }
+ .settings-body { max-height:320px; }
+ #player-panel .player-table { min-width:max(506px,calc(178px + var(--numeric-total,328px))); }
+}
+@media(max-width:700px) {
+ main[data-screen="top"] .top-grid { grid-template-columns:1fr; }
+ .footer-inner { padding:8px 12px; flex-wrap:wrap; gap:7px; }
+ .footer-inner nav { width:100%; justify-content:space-between; }
+ .phase-buttons { width:100%; justify-content:flex-end; }
+ .phase-buttons button { min-height:44px; }
+ .cast-line { font-size:11px; }
+}
+
+.settings-body fieldset { border:0; margin:0; padding:0; }
+
+.rule-team { border:1px solid var(--line); border-radius:7px; padding:10px; margin-top:10px; }
+.rule-team h3 { font-size:13px; margin:0 0 8px; }
+.rule-option { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:8px; border-radius:5px; margin-top:7px; font-size:12px; }
+.rule-option select { width:130px; font-size:12px; }
+.rule-option .checkbox-label { margin:0; }
+.rule-role summary { font-size:12px; padding:5px 0; cursor:pointer; }

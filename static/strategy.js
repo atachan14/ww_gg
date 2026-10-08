@@ -37,8 +37,9 @@ window.initializeStrategyEditor = function () {
     return `<details class="scope-section" data-disclosure data-scope="${s}"><summary>${labels[s]}${s==='seer'||s==='hunter'?'（能力なし）':''}</summary><div class="scope-body">${common?exclusive(s==='village'?'吊り先':'噛み先',s==='village'?'day':'night',[['max','max'],['random','random']]):''}${s==='wolfCommon'?exclusive('自噛み','include_self_bite',[['false','行わない'],['true','行う']],!seed.allow_self_bite):''}${opts.map(o=>`<section class="option-block"><div class="option-head"><h4>${options[o]}</h4>${button(`data-open="${s}|${o}"`,'追加 / 編集',seed.finished)}</div>${rows(s,o).map(r=>chip(s,o,r)).join('')||'<p class="empty-option">未選択</p>'}</section>`).join('')}</div></details>`;
   }
   function renderOuter() {
-    const opened = new Set([...root.querySelectorAll('details[open]')].map(e=>e.dataset.scope||e.dataset.team));
-    const first = !root.children.length;
+    const remembered=root.closest('main').dataset.strategyDisclosures;
+    const opened = new Set(root.children.length?[...root.querySelectorAll('details[open]')].map(e=>e.dataset.scope||e.dataset.team):JSON.parse(remembered||'[]'));
+    const first = !root.children.length && !remembered;
     root.innerHTML=`<div class="evaluation">${exclusive('盤面評価','model',[['group','COグループ方式'],['equal','全配役一様方式']],seed.model_locked)}</div><details class="team-section" data-disclosure data-team="village" ${first||opened.has('village-team')?'open':''}><summary class="village-text">村陣営</summary>${['village',...seed.roles.filter(r=>r!=='wolf')].map(scope).join('')}</details><details class="team-section" data-disclosure data-team="wolf" ${first||opened.has('wolf-team')?'open':''}><summary class="wolf-text">狼陣営</summary>${['wolfCommon','wolf'].map(scope).join('')}</details>`;
     root.querySelectorAll('[data-scope]').forEach(e=>e.open=opened.has(e.dataset.scope));
     // Keep the team keys distinct from the wolf role.

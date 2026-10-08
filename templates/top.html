@@ -2,7 +2,7 @@
 {% block title %}TOP{% endblock %}
 {% block content %}
 <main data-screen="top">
-  <div class="page-heading"><p class="eyebrow">TOP</p><h1>村の条件を決める</h1><p>誰の役職もわからない初日昼から、最後の決着までの勝率を確認します。</p></div>
+  <div class="page-heading"><p class="eyebrow">TOP</p><h1>村の条件を決める</h1></div>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
@@ -25,24 +25,14 @@
           <div class="cast-card total"><span>合計</span><strong id="total-count">5<small>人</small></strong></div>
         </div>
         <p class="hint" id="cast-validation">合計3〜9人、狼より村陣営が多い配役にしてください。</p>
-        <p class="hint">全員潜伏から開始します。霊能は人数・COの計算に参加し、能力結果はまだ使用しません。</p>
       </section>
-      <section class="panel strategy-panel">
-        {% set finished = false %}{% set claim_policy = none %}
-        {% include 'calculation.html' %}
-      </section>
-    </div>
     <section class="panel rules-panel">
       <h2>ゲームルール</h2>
-      <label class="checkbox-label"><input type="checkbox" name="allow_self_bite" value="1" id="allow-self-bite">自噛みを許可する</label>
-      <div class="rules-grid">
-        <div><span class="rule-label">開始</span><strong>Day 1 · 昼</strong></div>
-        <div><span class="rule-label">村の勝利</span><strong>生存する狼が0人</strong></div>
-        <div><span class="rule-label">狼の勝利</span><strong>生存狼数 ≥ 生存村人数</strong></div>
-      </div>
-      <p class="hint">処刑・襲撃の直後に決着を判定。未決着の可能性が残る場合だけ、次の昼夜へ進みます。</p>
+      {% with editable=true %}{% include 'rules.html' %}{% endwith %}
     </section>
-    <div class="page-actions"><button class="primary" type="submit">初日昼へ進む <span aria-hidden="true">→</span></button></div>
+    </div>
+    <input type="hidden" name="day" value="max"><input type="hidden" name="night" value="max">
+    <div class="phase-footer"><div class="footer-inner"><button class="primary" type="submit">初日昼へ進む <span aria-hidden="true">→</span></button></div></div>
   </form>
 <p><a class="text-link" href="{{ url_for('comparison_route') }}">初期盤面の2段階比較（試案）</a></p>
 </main>
