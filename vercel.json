@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "flask",
+  "functions": {
+    "wsgi.py": {
+      "maxDuration": 60,
+      "excludeFiles": "{archive/**,.artifacts/**,docs/**,tests/**,.venv/**,.tmp/**,.git/**,**/__pycache__/**,**/*.pyc,.env,.env.*,static/**,public/**}"
+    }
+  }
+}

@@ -21,3 +21,6 @@ Thumbs.db
 
 # Local debug / scratch files
 *.log
+
+# Generated Vercel CDN assets
+/public/

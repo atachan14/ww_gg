@@ -1,0 +1,12 @@
+archive/
+.artifacts/
+docs/
+tests/
+.git/
+.venv/
+.tmp/
+**/__pycache__/
+**/*.pyc
+.env
+.env.*
+*.log

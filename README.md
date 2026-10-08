@@ -84,3 +84,7 @@ git worktree add ..\ww_gg-legacy 9735ac2b62031ac6cb9f0eacb433fdbced14314d
 ## Game / Board 設定画面
 
 TOP で配役とゲームルールを指定し、MAIN 右側の Game で表示・ルール確認、Board で戦略を操作します。設定を閉じるとテーブルが全幅になります。未対応の4ルールは灰色・操作無効、自噛みは既存計算へ接続しています。[UI と検証記録](docs/right-parallel-checks.md)。
+
+## Vercel 試験公開の準備
+
+公開用入口・Python指定・静的配信ビルドと署名キー契約を追加しています。[準備・手動手順・検証](docs/vercel-preparation.md)を参照してください。現時点ではpush・Vercelプロジェクト作成・デプロイを行っていません。公開用署名キーはユーザーの環境変数設定が必要です。

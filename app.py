@@ -4,12 +4,14 @@ import argparse
 from decimal import Decimal
 from fractions import Fraction
 import secrets
+import os
 import json
 from werewolf.strategy_ui import co_editor, resolve_co_editor
 
 from werewolf.comparison import compare_initial
 
-from flask import Flask, redirect, render_template, request, session, url_for
+from flask import Flask, redirect, render_template, request, session, url_for, make_response
+from werkzeug.http import dump_cookie
 
 from werewolf.exact import (ClaimPolicy, Progress, Rules, Strategy, Values, advance, build_tree,
                             condition_claims, group_initial_board, co_group_compositions, legal_targets, ROLES, VILLAGE_ROLES, ROLE_LABELS, MediumReport, condition_reports, available_medium_opportunities,
@@ -21,12 +23,25 @@ def percent(value: Fraction) -> str:
     return format(displayed, "f").rstrip("0").rstrip(".")
 
 
-def create_app(test_config=None):
+def create_app(test_config=None, *, deployment=False):
     app = Flask(__name__)
-    app.config.update(SECRET_KEY=secrets.token_bytes(32), MAX_CONTENT_LENGTH=4096,
-                      SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax")
+    hosted = deployment or os.environ.get("VERCEL") == "1"
+    if hosted:
+        # User supplies this through the project's sensitive environment settings.
+        # Never fall back to a per-worker random key on a hosted deployment.
+        key = os.environ.get("WW_GG_SECRET_KEY", "")
+        if len(key) != 64 or any(c not in "0123456789abcdefABCDEF" for c in key):
+            raise RuntimeError("WW_GG_SECRET_KEY must be a 64-character hexadecimal key")
+    else:
+        key = (test_config or {}).get("SECRET_KEY") or secrets.token_bytes(32)
+    app.config.update(SECRET_KEY=key, MAX_CONTENT_LENGTH=4096,
+                      MAX_FORM_PARTS=100, MAX_FORM_MEMORY_SIZE=4096,
+                      SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
+                      SESSION_COOKIE_SECURE=hosted, MAX_COOKIE_SIZE=4093)
     if test_config:
         app.config.update(test_config)
+    if hosted:
+        app.config.update(SECRET_KEY=key, SESSION_COOKIE_SECURE=True)
     app.jinja_env.filters["percent"] = percent
     app.jinja_env.filters["fraction"] = str
     app.jinja_env.globals.update(role_labels=ROLE_LABELS, role_order=ROLES)
@@ -197,8 +212,28 @@ def create_app(test_config=None):
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
+    @app.before_request
+    def same_origin_posts():
+        if request.method == "POST":
+            origin = request.headers.get("Origin")
+            if request.headers.get("Sec-Fetch-Site") == "cross-site" or (origin and origin != request.host_url.rstrip("/")):
+                return "Cross-site form submission is not allowed", 403
+
     @app.after_request
     def no_stale_pages(response):
+        # Reject an oversized update before Flask emits Set-Cookie. Preserve the
+        # previously accepted browser cookie rather than silently losing a Board.
+        if session.modified and session:
+            serializer = app.session_interface.get_signing_serializer(app)
+            value = serializer.dumps(dict(session))
+            header = dump_cookie(app.config["SESSION_COOKIE_NAME"], value,
+                                 path=app.config["SESSION_COOKIE_PATH"] or "/",
+                                 domain=app.config["SESSION_COOKIE_DOMAIN"],
+                                 secure=app.config["SESSION_COOKIE_SECURE"],
+                                 httponly=True, samesite="Lax", max_size=0)
+            if len(header.encode("ascii")) > app.config["MAX_COOKIE_SIZE"]:
+                session.modified = False
+                response = make_response("Board settings exceed the browser cookie limit; reduce settings and retry.", 400)
         response.headers["Cache-Control"] = "no-store"
         response.headers["X-Content-Type-Options"] = "nosniff"
         return response
