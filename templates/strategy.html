@@ -1,0 +1,14 @@
+<h2>戦略</h2>
+<div id="strategy-editor" data-seed='{{ strategy_seed|tojson }}'></div>
+<input type="hidden" name="model" value="{{ state.get('model','equal') }}">
+<input type="hidden" name="day" value="{{ state.policy.day }}">
+<input type="hidden" name="night" value="{{ state.policy.night }}">
+<input type="hidden" name="include_self_bite" value="{{ '1' if state.policy.include_self_bite else '0' }}">
+<input type="hidden" name="fake_reports" value="{{ state.policy.get('fake_reports','max') }}">
+<input type="hidden" name="strategy_ui" value='{{ strategy_seed.co|tojson }}'>
+<noscript><p class="error">戦略の編集にはJavaScriptが必要です。</p></noscript>
+<dialog class="strategy-dialog" aria-labelledby="strategy-dialog-title" closedby="none">
+  <div class="overlay-shell"><header class="overlay-head"><div><h2 id="strategy-dialog-title" tabindex="-1"></h2><p data-editor-context></p></div></header>
+  <div class="overlay-body"></div>
+  <footer class="overlay-foot"><p class="overlay-error" role="alert"></p><div class="buttons"><button type="button" data-editor-cancel>キャンセル</button><button type="button" class="primary" data-editor-apply>適用</button></div></footer></div>
+</dialog>

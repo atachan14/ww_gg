@@ -44,7 +44,7 @@
         <p class="hint">CO・霊能結果は本人の申告です。各役職の確率には人数制約と相関があります。</p>
       </section>
       <aside class="panel strategy-panel" id="strategy-panel">
-        {% include 'calculation.html' %}
+        {% include 'strategy.html' %}
         {% if not finished %}<button class="secondary strategy-apply" type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button><p class="hint">変更するとこのBoardを再計算します。</p>{% endif %}
         <div class="selection-preview"><span class="field-label">指定対象</span><strong data-target-preview>{{ 'Player ' ~ display_selection if display_selection else '未選択' }}</strong></div>
       </aside>

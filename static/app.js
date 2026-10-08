@@ -97,6 +97,7 @@ function initializeUI() {
     apply();
   }
 
+  window.initializeStrategyEditor?.();
   initializeLiveClaims();
 }
 
@@ -179,9 +180,10 @@ function initializeLiveClaims() {
     running = false;
     if (form.isConnected) document.querySelector('#strategy-button').disabled = false;
   };
-  form.querySelectorAll('select:not(:disabled), .co-conditions input[type=checkbox]:not(:disabled)').forEach(input => {
+  form.querySelectorAll('.co-select:not(:disabled), #day-strategy:not(:disabled), #night-strategy:not(:disabled), #include-self-bite:not(:disabled), #fake-reports:not(:disabled), .co-conditions input[type=checkbox]:not(:disabled)').forEach(input => {
     input.addEventListener('change', update);
   });
+  form.addEventListener('strategychange', update);
   document.querySelector('#strategy-button').addEventListener('click', event => {
     event.preventDefault();
     update();
