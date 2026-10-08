@@ -53,7 +53,8 @@ class FollowupUITests(unittest.TestCase):
         before=self.state()
         self.assertEqual(self.client.post('/strategy',data=self.form(cco_conditions_medium=['counter'])).status_code,400)
         self.assertEqual(before,self.state())
-        self.assertIn('current-rate-tip',self.client.get('/main').get_data(as_text=True))
+        self.assertNotIn('current-rate-tip',self.client.get('/main').get_data(as_text=True))
+        self.assertNotIn('history-tip',self.client.get('/main').get_data(as_text=True))
         self.assertIn('data-disclosure',self.client.get('/main').get_data(as_text=True))
 
 if __name__=='__main__':unittest.main()

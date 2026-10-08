@@ -16,19 +16,16 @@
     <div class="board-layout">
     <section class="panel information-panel" id="information-panel" aria-labelledby="phase-title">
       <div class="information-head">
-        <div><p class="eyebrow">MAIN · DAY {{ board.day }} / {{ '昼' if board.phase == 'day' else '夜' }}</p><h1 id="phase-title">{{ '決着画面' if finished else ('処刑対象を確認' if board.phase == 'day' else '襲撃対象を確認') }}</h1></div>
+        <div><p class="eyebrow">BOARD OVERVIEW</p><h1 id="phase-title">{{ '決着結果' if finished else 'Day ' ~ board.day ~ ' · ' ~ ('昼' if board.phase == 'day' else '夜') }}</h1></div>
         <a class="text-link" href="{{ url_for('top') }}">TOPへ戻る</a>
       </div>
-      <div class="information-meta"><span>生存 {{ players|selectattr('alive')|list|length }}人</span><span>{{ 'COグループ方式' if state.get('model')=='group' else '全配役一様（既存Board）' }}</span></div>
-      {% if not finished %}<p class="count-distribution">生存狼の可能性（現在Board条件付き）：{% for count, weight in counts.items() %}<span>{{ count }}w {{ probability(weight) }}</span>{% if not loop.last %} / {% endif %}{% endfor %}</p>{% endif %}
-      <p class="rate-caption">{{ '最終行動の勝率' if finished else '現在勝率' }}</p><details class="tip" data-disclosure id="current-rate-tip"><summary>勝率の見方</summary><p>現在Boardの未決着条件から終局まで計算した勝率です。全枝終局の場合は最終行動の結果確率です。隠れた実配役を1つ決めていません。</p></details>
-      <div class="win-grid">
-        <div class="win-card village"><span>村の勝率</span><div>{{ probability(rates.village_win, 'village-rate') }}</div></div>
-        <div class="win-card wolf"><span>狼の勝率</span><div>{{ probability(rates.wolf_win, 'wolf-rate') }}</div></div>
+      <div class="overview-facts"><span>生存 <strong>{{ players|selectattr('alive')|list|length }}人</strong></span>{% if not finished %}<span>生存狼 {% for count, weight in counts.items() %}<strong>{{ count }}w {{ probability(weight) }}</strong>{% if not loop.last %} / {% endif %}{% endfor %}</span>{% endif %}</div>
+      <div class="rate-cards">
+        <div class="rate-card village"><small>{{ '最終勝率' if finished else '現在勝率' }} · 村陣営</small>{{ probability(rates.village_win, 'village-rate') }}</div>
+        <div class="rate-card wolf"><small>{{ '最終勝率' if finished else '現在勝率' }} · 狼陣営</small>{{ probability(rates.wolf_win, 'wolf-rate') }}</div>
       </div>
-      <p class="cumulative">累積勝率：村 {{ probability(cumulative.village_win, 'cumulative-village-rate') }} / 狼 {{ probability(cumulative.wolf_win, 'cumulative-wolf-rate') }}</p>
-      {% if finished %}<p class="result-note">すべての可能性で決着しました。</p><p class="hint">直前の指定対象：Player {{ state.selection }}。役職や勝者を1つに決めず、決着の確率を表示しています。</p>
-      {% else %}<details class="tip" data-disclosure id="history-tip"><summary>Boardと履歴</summary><p>既に決着した確率は累積勝率に保持します。CO・計算条件は現在のBoardを再評価し、過去の行動時の設定は履歴に残します。</p></details>{% endif %}
+      <div class="cumulative-line"><span>累積勝率</span><span>村 {{ probability(cumulative.village_win, 'cumulative-village-rate') }} ／ 狼 {{ probability(cumulative.wolf_win, 'cumulative-wolf-rate') }}</span></div>
+      {% if finished %}<p class="result-note">すべての可能性で決着しました。</p>{% endif %}
       {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     </section>
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
