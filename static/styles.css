@@ -225,3 +225,7 @@ summary:focus-visible { outline:2px solid var(--village); outline-offset:3px; bo
 .strategy-dialog button,.strategy-dialog input,.strategy-dialog select {min-height:44px}
 .overlay-foot .buttons {flex-shrink:0}
 }
+
+/* The outer MAIN panel owns the strategy gutter; preserve role indentation. */
+#strategy-editor > .evaluation { padding:0 0 13px; }
+#strategy-editor > .team-section { margin:10px 0; }

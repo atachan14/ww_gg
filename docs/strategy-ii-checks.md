@@ -32,3 +32,9 @@
 実Edge PC1280×1100／mobile390×1000で初期開閉、継承toggle／local追加削除、CancelとX値復元、灰色Xの計算送信隔離、真COと固定all／灰色候補、報告max/random、モデル・％分数、進行／戻るのFraction一致、mobile横はみ出しとfooter操作を確認。画像は作業workspaceの `strategy-ii-pc.png`、`strategy-ii-overlay-pc.png`、`strategy-ii-mobile.png`、`strategy-ii-overlay-mobile.png`。
 
 8771へ反映しローカルコミットのみ。push・公開なし。archive・gg_ww2・Niixy・独立artifactは変更・コミットしない。
+
+## 戦略の二重余白修正
+
+基準HEAD `a38413c`。PC1280／mobile390の実DOMで、外側パネルpadding18pxに盤面評価padding13px・陣営枠margin10pxが重なり、左端からの距離が評価32px／陣営29pxになっていた（境界1px含む）。MAIN限定の2規則で評価paddingを `0 0 13px`、陣営marginを `10px 0` にし、両方19pxの一段へ統一。役職枠margin8px（境界込み9px）の階層字下げは維持。計算・状態・Overlayは変更しない。
+
+実Edgeの同幅で修正後DOM値とPC／mobile画像を確認し、横はみ出しなし。画像は作業workspaceの `strategy-spacing-pc.png`、`strategy-spacing-mobile.png`。CSS限定のため数学テスト再実行は行わない。8771のCSS応答に反映済み。push・公開なし。
