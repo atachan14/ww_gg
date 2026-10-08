@@ -180,7 +180,7 @@ function initializeLiveClaims() {
     running = false;
     if (form.isConnected) document.querySelector('#strategy-button').disabled = false;
   };
-  form.querySelectorAll('.co-select:not(:disabled), #day-strategy:not(:disabled), #night-strategy:not(:disabled), #include-self-bite:not(:disabled), #fake-reports:not(:disabled), .co-conditions input[type=checkbox]:not(:disabled)').forEach(input => {
+  form.querySelectorAll('.co-select:not(:disabled), .report-select:not(:disabled), #day-strategy:not(:disabled), #night-strategy:not(:disabled), #include-self-bite:not(:disabled), #fake-reports:not(:disabled), .co-conditions input[type=checkbox]:not(:disabled)').forEach(input => {
     input.addEventListener('change', update);
   });
   form.addEventListener('strategychange', update);
