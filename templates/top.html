@@ -8,8 +8,8 @@
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
-      <section class="panel cast-panel">
-        <div class="panel-heading setup-heading"><h2>配役</h2>
+      <section class="panel cast-panel" aria-labelledby="game-cast-title">
+        <div class="panel-heading setup-heading"><h2 id="game-cast-title">GameCast</h2>
         <label class="setup-preset" for="cast-preset"><span>プリセット：</span><select id="cast-preset">{% for key,preset in setup_presets.cast.items() %}<option value="{{ key }}" {% if draft.cast_preset == key %}selected{% endif %}>{{ preset.label }}</option>{% endfor %}<option value="custom" {% if draft.cast_preset == 'custom' %}selected{% endif %}>カスタム</option></select></label></div>
         <div class="role-columns">
           <section class="role-column"><h3>村陣営</h3>
@@ -29,8 +29,8 @@
         </div>
         <p class="hint" id="cast-validation">合計1〜9人。3人以上では狼より村陣営が多い配役にしてください。</p>
       </section>
-    <section class="panel rules-panel">
-      <div class="panel-heading setup-heading"><h2>ゲームルール</h2>
+    <section class="panel rules-panel" aria-labelledby="game-rule-title">
+      <div class="panel-heading setup-heading"><h2 id="game-rule-title">GameRule</h2>
       <label class="setup-preset" for="rule-preset"><span>プリセット：</span><select id="rule-preset">{% for key,preset in setup_presets.rules.items() %}<option value="{{ key }}" {% if draft.rule_preset == key %}selected{% endif %}>{{ preset.label }}</option>{% endfor %}<option value="custom" {% if draft.rule_preset == 'custom' %}selected{% endif %}>カスタム</option></select></label></div>
       {% with editable=true %}{% include 'rules.html' %}{% endwith %}
     </section>

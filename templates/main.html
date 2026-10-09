@@ -5,14 +5,14 @@
 {% block content %}
 {% set has_role_details = state.get('mediums',0) or state.get('seers',0) or state.get('hunters',0) %}
 <main data-screen="{{ 'result' if finished else 'main' }}">
-  <p class="cast-line" id="game-cast">{{ state.players }}人村:市民{{ state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0) }} · 霊能{{ state.get('mediums',0) }} · 占い師{{ state.get('seers',0) }}（能力なし） · 狩人{{ state.get('hunters',0) }}（能力なし） · 狼{{ state.get('wolves',1) }}</p>
+  <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">GameCast</span> {{ state.players }}人村:市民{{ state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0) }} · 霊能{{ state.get('mediums',0) }} · 占い師{{ state.get('seers',0) }}（能力なし） · 狩人{{ state.get('hunters',0) }}（能力なし） · 狼{{ state.get('wolves',1) }}</p>
   <form id="display-options-form"></form>
   <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
     <input type="hidden" name="revision" value="{{ state.revision }}">
     <div class="board-layout">
-    <section class="panel information-panel" id="information-panel" aria-labelledby="phase-title">
+    <section class="panel information-panel" id="information-panel" aria-labelledby="board-overview-title phase-title">
       <div class="information-head">
-        <div><p class="eyebrow">BOARD OVERVIEW</p><h1 id="phase-title">{{ '決着結果' if finished else 'Day ' ~ board.day ~ ' · ' ~ ('昼' if board.phase == 'day' else '夜') }}</h1></div>
+        <div><p class="eyebrow" id="board-overview-title">BoardOverview</p><h1 id="phase-title">{{ '決着結果' if finished else 'Day ' ~ board.day ~ ' · ' ~ ('昼' if board.phase == 'day' else '夜') }}</h1></div>
       </div>
       <div class="overview-facts"><span>生存 <strong>{{ players|selectattr('alive')|list|length }}人</strong></span>{% if not finished %}<span>生存狼 {% for count, weight in counts.items() %}<strong>{{ count }}w {{ probability(weight) }}</strong>{% if not loop.last %} / {% endif %}{% endfor %}</span>{% endif %}</div>
       <div class="rate-cards">
@@ -24,7 +24,7 @@
       {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     </section>
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
-        <div class="panel-heading"><h2 id="players-title">プレイヤー</h2><span class="muted">{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
+        <div class="panel-heading"><h2 id="players-title">BoardPlayerTable</h2><span class="muted">{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
         <div class="table-scroll"><table class="player-table">
           <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>{% if has_role_details %}<button type="button" class="role-breakdown-toggle" aria-expanded="true" aria-label="村陣営の役職内訳を開閉">村陣営 <span aria-hidden="true" data-breakdown-arrow>▾</span></button>{% else %}村陣営{% endif %}</th>{% if has_role_details %}<th data-role-detail>市民</th>{% endif %}{% if state.get("mediums",0) %}<th data-role-detail>霊能</th>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<th data-role-detail>{{ '占い師' if r=='seer' else '狩人' }}</th>{% endif %}{% endfor %}<th>狼<small>狼陣営</small></th><th>村勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
           <tbody>{% for player in players %}
@@ -41,17 +41,17 @@
       <aside class="settings-column" aria-label="設定">
         <section class="settings-group" aria-label="Game設定"><header>Game</header>
           <details data-settings-pane="display" data-disclosure><summary>表示</summary><div class="settings-body" id="display-panel"><fieldset class="format-switch"><legend>表示形式</legend><label><input type="radio" name="probability-format" form="display-options-form" value="percent" checked> ％</label><label><input type="radio" name="probability-format" form="display-options-form" value="fraction"> 分数</label></fieldset><label class="checkbox-label"><input type="checkbox" id="display-role-details" checked> 役職内訳</label></div></details>
-          <details data-settings-pane="rules" data-disclosure><summary>ルール</summary><div class="settings-body" id="game-rules">{% with editable=false %}{% include 'rules.html' %}{% endwith %}</div></details>
+          <details data-settings-pane="rules" data-disclosure><summary id="main-rule-title">GameRule</summary><div class="settings-body" id="game-rules" role="group" aria-labelledby="main-rule-title">{% with editable=false %}{% include 'rules.html' %}{% endwith %}</div></details>
         </section>
         <section class="settings-group" aria-label="Board設定"><header>Board <span>Day {{ board.day }} · {{ '昼' if board.phase == 'day' else '夜' }}</span></header>
-          <details data-settings-pane="strategy" data-disclosure><summary>戦略</summary><div class="settings-body strategy-panel" id="strategy-panel">{% include 'strategy.html' %}<button hidden type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button></div></details>
+          <details data-settings-pane="strategy" data-disclosure><summary id="board-strategy-title">BoardStrategy</summary><div class="settings-body strategy-panel" id="strategy-panel" role="group" aria-labelledby="board-strategy-title">{% include 'strategy.html' %}<button hidden type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button></div></details>
         </section>
       </aside>
     </div>
     {% include 'medium_reports.html' %}
     {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
   </form>
-  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">概要</button><button type="button" data-scroll-to="player-panel">テーブル</button><button type="button" data-scroll-to="tree-reserved">Tree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview data-action-label="{{ '処刑' if board.phase == 'day' else '襲撃' }}">{{ '処刑' if board.phase == 'day' else '襲撃' }}：{{ 'Player' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
+  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">BoardOverview</button><button type="button" data-scroll-to="player-panel">BoardPlayerTable</button><button type="button" data-scroll-to="tree-reserved">Tree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview data-action-label="{{ '処刑' if board.phase == 'day' else '襲撃' }}">{{ '処刑' if board.phase == 'day' else '襲撃' }}：{{ 'Player' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
   {% if not state.history and board.day == 1 and board.phase == 'day' %}<a class="secondary settings-return" id="settings-return" href="{{ url_for('top') }}"><span aria-hidden="true">←</span> ゲーム設定に戻る</a>{% endif %}
   {% if state.history %}<form method="post" action="{{ url_for('back') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}">{{ phase_button(board.day if finished or board.phase == 'night' else board.day-1, (board.phase if finished else ('day' if board.phase == 'night' else 'night')), previous=true, id='back-button') }}</form>{% endif %}
   {% if not finished %}{{ phase_button(board.day if board.phase == 'day' else board.day+1, 'night' if board.phase == 'day' else 'day', id='advance-button', form='action-form') }}{% endif %}</div></div></footer>

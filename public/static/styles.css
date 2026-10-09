@@ -317,3 +317,5 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 .setup-preset { display: flex; align-items: center; gap: 6px; margin-left: auto; max-width: 100%; font-size: 12px; color: var(--muted); }
 .setup-preset > span { white-space: nowrap; }
 .setup-preset select { width: auto; min-width: 0; max-width: 100%; min-height: 34px; padding: 4px 8px; font-size: 12px; }
+
+#game-cast-label { font-weight: 650; margin-right: 8px; }

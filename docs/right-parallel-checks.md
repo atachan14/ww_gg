@@ -97,3 +97,12 @@ TOPフォーム編集中はGameを変更しない。不正POST400は送信draft�
 配役/ゲームルールの両プリセットを見出し行の右側に移動し、「プリセット：［選択欄］」の1行へ縮小。選択欄34px、文字12pxで従来の大きな独立行を削減。見出し行は必要に応じて折返し可能。selector ID/選択肢/値/JS判定は変更なし、名称相談に伴うリネームもなし。
 
 設定9テスト＋配信assets8テストの計17件成功、git diff --check成功。独立Edge PC1100px/mobile390px/narrow320pxで見出し内配置・左右はみ出しなし・選択欄幅200px未満と高さ36px以下、配役とルールの独立選択/custom/再一致復帰を確認。ブラウザ例外なし。画像は作業フォルダ compact-presets-1100.png / compact-presets-390.png / compact-presets-320.png、スクリプト compact_presets_qa.mjs。8771反映、専用ブラウザ終了、README/archive未変更、push/公開なし。
+
+
+## Game / Boardの5名称への統一
+
+承認されたGameCast / GameRule / BoardOverview / BoardStrategy / BoardPlayerTableをTOPとMAINの見出し、GameCastの配役表示ラベル、ルール/戦略開閉見出し、Footerの参照導線へ反映。領域は見出しIDでアクセシブル名を参照し、MAINの配役/設定本文にはgroupを明示。接続用の既存DOM ID、CSSクラス、保存形式、URL、計算ロジックは維持し、見出し用の意味に合うIDのみ追加。役職ルール・戦略項目の一般名詞は変更なし。
+
+直前の未コミットdocs/backlog.mdとdocs/requirements.mdの将来構想を保全して名称追加承認を反映。BoardInformationは不採用へ訂正し、将来のシステムログ表はBoardPlayerTable内のプレイヤー表の上に置く補足情報と記録。時点・未入力と不在確認・システム確定情報と申告の区別、パン屋の一般例は維持。システムログ機能の実装・特定プラットフォーム仕様の採用はなし。
+
+全107テスト成功（19.7秒）。最後のアクセシブルgroup明示後はWeb18件成功、git diff --check成功。実Edge PC1100px/mobile390px/narrow320pxでTOP/MAINの5名称、ラベル参照、Footerアンカー、設定展開/収納、昼夜進行/戻る、既知7/15の維持、横はみ出しなし・例外なしを確認。画像は作業フォルダ names-top-pc.png / names-main-1100.png / names-main-390.png / names-main-320.png、スクリプト names_qa.mjs。8771で確認可能、専用ブラウザ終了。README/archive・別gg_ww2・既存.artifactsは変更せず、push/公開なし。
