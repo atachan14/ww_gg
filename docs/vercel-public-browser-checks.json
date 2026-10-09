@@ -1,0 +1,281 @@
+{
+  "domain": "https://ww-gg.vercel.app/",
+  "source": "48d294f257e3cc8ec6022e27fcf0fae77e7ce411",
+  "coValue": "1/2",
+  "errors": [],
+  "responses": [
+    {
+      "path": "/",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 200,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 200,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 200,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 200,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 200,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 200,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 200,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    },
+    {
+      "path": "/static/styles.css",
+      "status": 304,
+      "mime": "text/css"
+    },
+    {
+      "path": "/static/strategy.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/parallel.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/static/app.js",
+      "status": 304,
+      "mime": "application/javascript"
+    },
+    {
+      "path": "/main",
+      "status": 200,
+      "mime": "text/html"
+    }
+  ],
+  "checks": [
+    "five-player 7/15",
+    "format toggle",
+    "day random/max persisted",
+    "medium CO",
+    "item Cancel",
+    "doubleclick one advance",
+    "medium report live/reload",
+    "back target",
+    "nine-player 94/315",
+    "PC1100 layout",
+    "mobile390 fallback"
+  ]
+}

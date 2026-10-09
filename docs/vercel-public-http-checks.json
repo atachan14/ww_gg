@@ -1,0 +1,130 @@
+{
+  "domain": "https://ww-gg.vercel.app",
+  "source": "48d294f257e3cc8ec6022e27fcf0fae77e7ce411",
+  "cookie_secure": true,
+  "cookie_httponly": true,
+  "requests": [
+    {
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "seconds": 0.8155429000034928,
+      "bytes": 4671
+    },
+    {
+      "path": "/static/styles.css",
+      "method": "GET",
+      "status": 200,
+      "seconds": 0.43350369995459914,
+      "bytes": 28907,
+      "sha256": "369048807082fa41655d18f40a351a74755e99ae30327bdd19cda959335e40ba",
+      "matches_git_blob": true
+    },
+    {
+      "path": "/static/app.js",
+      "method": "GET",
+      "status": 200,
+      "seconds": 0.42980629997327924,
+      "bytes": 10300,
+      "sha256": "c449bb3e21081fb108259c416b8bda0962ef08d0be8bce7d7ae691fc5d40ef8f",
+      "matches_git_blob": true
+    },
+    {
+      "path": "/static/strategy.js",
+      "method": "GET",
+      "status": 200,
+      "seconds": 0.4153118000831455,
+      "bytes": 12283,
+      "sha256": "f5be7b431a8896f72494ece2f1404bb86c477b255d999d4e2941290b827b3111",
+      "matches_git_blob": true
+    },
+    {
+      "path": "/static/parallel.js",
+      "method": "GET",
+      "status": 200,
+      "seconds": 0.24136290000751615,
+      "bytes": 3257,
+      "sha256": "55320650bda8e8d36d8822ba03d643c90771414393bf32676b39a6a09e42218d",
+      "matches_git_blob": true
+    },
+    {
+      "path": "/start",
+      "method": "POST with redirect",
+      "status": 200,
+      "seconds": 0.6809706001076847,
+      "bytes": 11682,
+      "players": 3,
+      "wolves": 1,
+      "fraction": "1/3"
+    },
+    {
+      "path": "/start",
+      "method": "POST with redirect",
+      "status": 200,
+      "seconds": 0.4606417000759393,
+      "bytes": 12577,
+      "players": 4,
+      "wolves": 1,
+      "fraction": "1/4"
+    },
+    {
+      "path": "/start",
+      "method": "POST with redirect",
+      "status": 200,
+      "seconds": 0.6292411000467837,
+      "bytes": 13673,
+      "players": 5,
+      "wolves": 2,
+      "fraction": "2/15"
+    },
+    {
+      "path": "/start",
+      "method": "POST with redirect",
+      "status": 200,
+      "seconds": 0.43999189999885857,
+      "bytes": 14735,
+      "players": 6,
+      "wolves": 2,
+      "fraction": "1/12"
+    },
+    {
+      "path": "/start",
+      "method": "POST with redirect",
+      "status": 200,
+      "seconds": 0.4409191000740975,
+      "bytes": 15769,
+      "players": 7,
+      "wolves": 2,
+      "fraction": "8/35"
+    },
+    {
+      "path": "/start",
+      "method": "POST with redirect",
+      "status": 200,
+      "seconds": 0.43047189991921186,
+      "bytes": 16691,
+      "players": 8,
+      "wolves": 2,
+      "fraction": "5/32"
+    },
+    {
+      "path": "/start",
+      "method": "POST with redirect",
+      "status": 200,
+      "seconds": 0.43903600005432963,
+      "bytes": 17849,
+      "players": 9,
+      "wolves": 2,
+      "fraction": "94/315"
+    },
+    {
+      "path": "/static/comparison.js",
+      "method": "GET",
+      "status": 200,
+      "seconds": 0.3003650999162346,
+      "bytes": 2400,
+      "sha256": "110a71d6b9df36c359bd449a8630159cbd2f112b4b0db697fada377a2f6ef75a",
+      "matches_git_blob": true
+    }
+  ]
+}

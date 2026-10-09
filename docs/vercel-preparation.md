@@ -84,3 +84,8 @@ Vercel は Ready、Source は b436c2c。GitHub master の完全SHAは `b436c2c17
 共有Chromeはユーザーの通常プロファイルをWindows UI Automationと必要時の前面mouse/keyで操作。公開HTTP確認は背景で実施。管理画面の認証cookieは抽出・複製していません。今後の公開ページQAは、認証不要の独立Edgeプロファイルで分離可能です。認証を伴う管理操作を完全に分離するには、ユーザー自身がログインする専用VM等の別デスクトップが候補ですが、今回は新環境を構築していません。
 
 静的ファイルを編集した後は `python build_vercel.py` で `public/static/` を同期し、テストで編集元との一致を確認してからコミットしてください。
+
+
+## 静的配信修正後の公開確認
+
+48d294fの手動push後、ProductionのReady/Source完全SHA、5資産の200とGit blob完全一致、限定3〜9人HTTP、隔離EdgeのCO・戦略・霊結果・進行／戻る・PC/mobile代表QAを確認。結果は [公開確認記録](vercel-public-checks.md) を参照。秘密値の取得・再保存、自動pushは行っていません。
