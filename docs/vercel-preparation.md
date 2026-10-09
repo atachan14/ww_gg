@@ -19,7 +19,7 @@
 - `wsgi.py`: Flask インスタンス `app` を公開用設定で作成。
 - `pyproject.toml`: `wsgi:app` と静的ビルドコマンドを明示。
 - `.python-version`: Python 3.12。依存は既存 `requirements.txt` の Flask 3.1.2。
-- `build_vercel.py`: first-party CSS/JS をビルド時に `public/static/` へコピー。既存 `/static/...` URL を維持して CDN 配信。生成物は git 管理外。
+- `build_vercel.py`: first-party CSS/JS をビルド時に `public/static/` へコピー。既存 `/static/...` URL を維持して CDN 配信。初回公開確認後の修正で、配信する5ファイルのミラーをgitにも含めています（下記参照）。
 - `.vercelignore` と function の `excludeFiles`: archive、UIサンプル、docs、tests、ローカル環境、`.env` 等を配信・関数bundleから除外。templates と werewolf は維持。
 - `vercel.json`: Flask と `wsgi.py`、単一関数の上限60秒を明示。DB・近似・計算エンジンの変更はなし。
 
@@ -69,3 +69,18 @@ Vercel自身での build・CDN配信・実際の cold start・同時アクセス
 `pyproject.toml` に `[project]`、名前 `ww-gg`、version、Python `>=3.12,<3.13`、依存 `Flask==3.1.2` を追加。Vercelのuv依存解決が扱えるproject構成に合わせました。依存定義と従来requirementsの一致、entrypointと静的ビルド契約を回帰テストに追加。
 
 ローカルにuvはなく追加導入は行っていないため、Vercel自身のuv lock・build成功は修正コミット送信後に確認する必要があります。秘密値の再入力・保存確定は行っていません。
+
+
+## b436c2c の公開確認と静的配信修正
+
+Vercel は Ready、Source は b436c2c。GitHub master の完全SHAは `b436c2c17565da67d58d0d87e246ef67482e44d4` と一致。公開先 https://ww-gg.vercel.app/ 。TOP は200、CSS/JS4ファイルはすべて404だったため、Readyを画面完成とは扱っていません。
+
+実ログ: Vercel CLI62.1.0、Python3.12、uv0.10.11、`Executing: python build_vercel.py`、Build Completed。コピーコマンド未実行ではありません。[現行公開builderソース](https://raw.githubusercontent.com/vercel/vercel/main/packages/python/src/index.ts)はPython関数からpublicを除き、通常Flaskのpublic CDN収集は別処理です。ビルドhookで後から作ったpublicファイルが初期静的出力に入らなかったと推定しています。
+
+対処は、first-party CSS/JS5ファイル（主画面4＋比較画面1）だけを `public/static/` にミラーしgitに含め、ビルド開始時から配信資産を存在させること。元の `static/` はローカル配信と編集元として維持。既存build hookもミラーを更新します。回帰テストで5ファイルの完全一致と余計なファイルがないことを検査します。publicへの秘密値、archive、UIサンプルのコピーはありません。Vercel本体上での404解消は新しいコミットの手動push後に再確認が必要です。
+
+公開側の限定HTTP確認: 自分専用の新規cookieセッションで3〜9人の素村＋狼代表初期盤面がすべて200。startからMAINへのリダイレクトを含む実時間は0.413〜0.479秒。Secure/HttpOnlyの署名cookieが継続しました。静的404のため、公開ブラウザでのCO・戦略・霊能更新・進行・戻るとmobile QAは未完了。公開負荷試験や全履歴性能保証ではありません。
+
+共有Chromeはユーザーの通常プロファイルをWindows UI Automationと必要時の前面mouse/keyで操作。公開HTTP確認は背景で実施。管理画面の認証cookieは抽出・複製していません。今後の公開ページQAは、認証不要の独立Edgeプロファイルで分離可能です。認証を伴う管理操作を完全に分離するには、ユーザー自身がログインする専用VM等の別デスクトップが候補ですが、今回は新環境を構築していません。
+
+静的ファイルを編集した後は `python build_vercel.py` で `public/static/` を同期し、テストで編集元との一致を確認してからコミットしてください。
