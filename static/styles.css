@@ -334,3 +334,15 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 
 .co-timeline { height:32px; scrollbar-width:none; }
 .co-timeline::-webkit-scrollbar { display:none; }
+
+/* CO controls stay semantic buttons, with quiet visual styling. */
+.co-summary { min-height:28px; padding:2px; border:0; background:transparent; border-radius:3px; color:var(--muted); box-shadow:none; }
+.co-summary:hover,.co-line button:hover:not(:disabled) { background:#edf3f5; }
+.co-summary:focus-visible,.co-line button:focus-visible { outline:2px solid var(--village); outline-offset:1px; }
+.co-arrow { margin-left:3px; font-size:10px; }
+#player-panel .player-table .co-detail-row td,#player-panel .player-table .co-add-row td { height:28px; padding:0 8px; }
+.co-line { min-height:28px; gap:8px; }
+.co-line select,.co-line button { min-height:24px; height:24px; padding:1px 4px; }
+.co-line button { border:0; background:transparent; color:var(--muted); box-shadow:none; font-weight:400; }
+.co-role-label { flex:0 0 44px; }
+.co-timeline { height:28px; }

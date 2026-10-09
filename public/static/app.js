@@ -11,16 +11,26 @@ function updateTargetPreview(root = document, target = null) {
 function initializeCOEditor() {
   const main = document.querySelector('main[data-screen="main"], main[data-screen="result"]');
   if (!main) return;
-  const opened = new Set(JSON.parse(main.dataset.coExpanded || '[]'));
+  const storageKey = 'ww-gg-co-display';
+  let saved = {};
+  try { saved = JSON.parse(sessionStorage.getItem(storageKey) || '{}'); } catch (_) {}
+  const opened = new Set(JSON.parse(main.dataset.coExpanded || JSON.stringify(saved.game === main.dataset.coGame && Array.isArray(saved.players) ? saved.players : [])));
+  const save = () => {
+    const players = Array.from(main.querySelectorAll('[data-co-toggle][aria-expanded="true"]')).map(button => button.dataset.coToggle);
+    try { sessionStorage.setItem(storageKey, JSON.stringify({game:main.dataset.coGame, players})); } catch (_) {}
+  };
   const show = (button, expanded) => {
     button.setAttribute('aria-expanded', String(expanded));
     main.querySelectorAll(`[data-co-details="${button.dataset.coToggle}"]`).forEach(row => row.hidden = !expanded);
+    const arrow = button.querySelector('.co-arrow');
+    if (arrow) arrow.textContent = expanded ? '▾' : '▸';
     window.refreshParallelLayout?.();
   };
   main.querySelectorAll('[data-co-toggle]').forEach(button => {
     show(button, opened.has(button.dataset.coToggle));
-    button.addEventListener('click', () => show(button, button.getAttribute('aria-expanded') !== 'true'));
+    button.addEventListener('click', () => { show(button, button.getAttribute('aria-expanded') !== 'true'); save(); });
   });
+  save();
   main.querySelectorAll('[data-co-add]:not(:disabled)').forEach(button => button.addEventListener('click', () => {
     const picker = main.querySelector(`[data-co-picker="${button.dataset.coAdd}"]`);
     picker.hidden = !picker.hidden;

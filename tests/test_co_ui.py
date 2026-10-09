@@ -38,6 +38,33 @@ class COUITests(unittest.TestCase):
             self.assertIn('id="co-add-'+str(player)+'"',html)
         self.assertNotIn('霊能申告</h2>',html)
 
+    def test_claimed_role_is_text_with_one_hidden_submission_field(self):
+        self.post('/strategy',co_1='medium')
+        row=re.search(r'<tr[^>]*id="co-role-1"[^>]*>(.*?)</tr>',self.html(),re.S).group(1)
+        self.assertIn('class="co-role-label">霊能</span>',row)
+        self.assertNotIn('<select',row)
+        self.assertIn('type="hidden" class="co-select" name="co_1" value="medium"',row)
+        base=re.search(r'<tr[^>]*data-player="2"[^>]*>(.*?)</tr>',self.html(),re.S).group(1)
+        button=re.search(r'<button[^>]*class="co-summary"[^>]*>(.*?)</button>',base,re.S).group(1)
+        self.assertNotIn('潜伏',button)
+        self.assertIn('co-arrow',button)
+
+    def test_display_game_identity_stays_across_boards_and_resets_only_on_successful_start(self):
+        def key():
+            return re.search(r'data-co-game="([^"]+)"',self.html()).group(1)
+        initial=key()
+        self.post('/strategy',co_1='medium')
+        self.assertEqual(key(),initial)
+        self.post('/advance',target='2')
+        self.assertEqual(key(),initial)
+        self.c.post('/back',data={'revision':str(self.state()['revision'])})
+        self.assertEqual(key(),initial)
+        self.assertNotIn("co_display_game",self.state())
+        self.assertEqual(self.c.post('/start',data={'citizens':'invalid'}).status_code,400)
+        self.assertEqual(key(),initial)
+        self.c.post('/start',data={'citizens':'3','mediums':'1','wolves':'1','day':'max','night':'max'})
+        self.assertNotEqual(key(),initial)
+
     def test_day1_none_and_night_next_day_do_not_create_report_input(self):
         self.post('/strategy',co_1='medium')
         html=self.html()
