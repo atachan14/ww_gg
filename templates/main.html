@@ -4,7 +4,7 @@
 {% block content %}
 {% set has_role_details = state.get('mediums',0) or state.get('seers',0) or state.get('hunters',0) %}
 <main data-screen="{{ 'result' if finished else 'main' }}">
-  <p class="cast-line" id="game-cast">市民 {{ state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0) }} · 霊能 {{ state.get('mediums',0) }} · 占い師 {{ state.get('seers',0) }}（能力なし） · 狩人 {{ state.get('hunters',0) }}（能力なし） · 狼 {{ state.get('wolves',1) }} <span>{{ state.players }}人</span></p>
+  <p class="cast-line" id="game-cast">{{ state.players }}人村:市民{{ state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0) }} · 霊能{{ state.get('mediums',0) }} · 占い師{{ state.get('seers',0) }}（能力なし） · 狩人{{ state.get('hunters',0) }}（能力なし） · 狼{{ state.get('wolves',1) }}</p>
   <form id="display-options-form"></form>
   <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
     <input type="hidden" name="revision" value="{{ state.revision }}">

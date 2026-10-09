@@ -54,3 +54,8 @@ MAINのTOPへ戻る、全幅へ、比較リンク、共通補足footerを削除�
 画像・ブラウザ検証スクリプトは作業フォルダの rules-accordion-top.png / rules-accordion-main.png / small-cast-1100.png / small-cast-390.png / small_cast_qa.mjs。ローカル8771へ反映。README・archive・別gg_ww2・.artifactsを変更せず、push/公開は行っていません。
 
 最終Edge確認で設定の展開→収納→全幅復帰、3アンカー、通常5人の昼→夜→戻るで7/15復元、ロゴTOP遷移、comparison GET200、補足12px/nowrapを確認。専用ブラウザを閉じ、実行中8771は最新状態を維持。
+
+
+## MAIN配役サマリーの最小修正
+
+実際の合計を先頭にして「9人村:市民4 · 霊能1 · 占い師1（能力なし） · 狩人1（能力なし） · 狼2」と表示。役職名と人数の空白・末尾の重複合計を削除し、能力なし注記と配役値を維持。TOP入力・TOP最大人数補足・計算は変更なし。通常9人と2人初期決着の表示を直接検証し、全97テスト成功（9.7秒）。専用Edge PC1100pxで実9人のサマリー・横はみ出しなしを確認し、cast-summary-pc.pngを作業フォルダへ保存。8771反映、README/archive未変更、push/公開なし。
