@@ -20,7 +20,7 @@ window.initializeParallelLayout=function(){
  }
  const schedule=()=>requestAnimationFrame(refresh);window.refreshParallelLayout=schedule;
  panes.forEach(p=>p.addEventListener('toggle',()=>{if(p.open)panes.forEach(other=>{if(other!==p)other.open=false;});schedule();}));
- main.querySelector('[data-collapse-settings]').addEventListener('click',()=>{panes.forEach(p=>p.open=false);schedule();});
+ main.querySelector('[data-collapse-settings]')?.addEventListener('click',()=>{panes.forEach(p=>p.open=false);schedule();});
  main.querySelectorAll('[data-scroll-to]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.scrollTo)?.scrollIntoView({block:'start',behavior:'smooth'})));
  const observer=new ResizeObserver(schedule);observer.observe(info);observer.observe(player);
  const mutations=new MutationObserver(schedule);mutations.observe(main.querySelector('#strategy-editor'),{childList:true,subtree:true});

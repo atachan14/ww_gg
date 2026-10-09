@@ -301,9 +301,8 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 
 .settings-body fieldset { border:0; margin:0; padding:0; }
 
-.rule-team { border:1px solid var(--line); border-radius:7px; padding:10px; margin-top:10px; }
-.rule-team h3 { font-size:13px; margin:0 0 8px; }
-.rule-option { display:flex; justify-content:space-between; gap:12px; align-items:center; padding:8px; border-radius:5px; margin-top:7px; font-size:12px; }
-.rule-option select { width:130px; font-size:12px; }
-.rule-option .checkbox-label { margin:0; }
+.rule-editor > .team-section { margin:10px 0; }
+.rule-editor .exclusive-field.inactive-item { padding:8px; border-radius:5px; }
 .rule-role summary { font-size:12px; padding:5px 0; cursor:pointer; }
+
+.cast-card.total small { display: block; margin-left: 0; font-size: 12px; line-height: 1.5; white-space: nowrap; }

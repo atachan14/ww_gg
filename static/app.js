@@ -62,9 +62,10 @@ function initializeUI() {
     const total = village + Number(wolves.value);
     document.querySelector('#villager-count').innerHTML = `${village}<small>人</small>`;
     document.querySelector('#wolf-summary').innerHTML = `${wolves.value}<small>人</small>`;
-    document.querySelector('#total-count').innerHTML = `${total}<small>人</small>`;
-    const valid = Number.isInteger(total) && total >= 3 && total <= 9 && Number(wolves.value) >= 1 && Number(wolves.value) < village;
-    document.querySelector('#cast-validation').textContent = valid ? '役職ごとの人数から合計を算出します。' : '合計3〜9人、狼より村陣営が多い配役にしてください。';
+    document.querySelector('#total-count').innerHTML = `${total}人<small>（最大9人）</small>`;
+    const valid = [citizens, mediums, wolves, seers, hunters].every(input => input.value !== "" && Number.isInteger(Number(input.value)) && Number(input.value) >= 0 && input.checkValidity()) && total >= 1 && total <= 9 && (total <= 2 || Number(wolves.value) >= 1 && Number(wolves.value) < village);
+    document.querySelector('#cast-validation').textContent = valid ? '役職ごとの人数から合計を算出します。' : '合計1〜9人。3人以上では狼より村陣営が多い配役にしてください。';
+    document.querySelector('form[action$="/start"] button[type="submit"]').disabled = !valid;
     const mediumSettings=document.querySelector('[data-medium-calculation]');
     if (mediumSettings) mediumSettings.hidden = Number(mediums.value) === 0;
     document.querySelectorAll('[data-role-calculation]').forEach(e=>e.hidden=Number(e.dataset.roleCalculation==='seers'?seers.value:hunters.value)===0);
@@ -76,8 +77,9 @@ function initializeUI() {
   const permission = document.querySelector('#allow-self-bite');
   const inclusion = document.querySelector('#include-self-bite');
   if (permission && inclusion) permission.addEventListener('change', () => {
-    inclusion.disabled = !permission.checked;
-    if (!permission.checked) inclusion.value = "0";
+    const permitted = permission.type === "checkbox" ? permission.checked : permission.value === "1";
+    inclusion.disabled = !permitted;
+    if (!permitted) inclusion.value = "0";
   });
 
   const breakdown = document.querySelector('.role-breakdown-toggle');

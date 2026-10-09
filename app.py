@@ -57,8 +57,8 @@ def create_app(test_config=None, *, deployment=False):
 
     def replay(state):
         rules = Rules(**state["rules"])
-        progress = Progress(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
-        if len(state["history"]) > state["players"] - 2:
+        progress = Progress.initial(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
+        if len(state["history"]) > max(0, state["players"] - 2):
             raise ValueError("Too much history")
         for index, step in enumerate(state["history"]):
             if set(step) not in ({"target", "policy"}, {"target", "policy", "claims", "claim_policy"}, {"target","policy","claims","claim_policy","reports"}, {"target","policy","claims","claim_policy","strategy_ui"}, {"target","policy","claims","claim_policy","reports","strategy_ui"}):
@@ -315,9 +315,9 @@ def create_app(test_config=None, *, deployment=False):
                 raise ValueError("計算モデルを確認してください。")
             model="group"
             permission = request.form.getlist("allow_self_bite")
-            if permission not in ([], ["1"]):
+            if permission not in ([], ["0"], ["1"]):
                 raise ValueError("自噛みのルールが不正です。")
-            rules = Rules(bool(permission))
+            rules = Rules(permission == ["1"])
             policy = parse_policy(rules)
         except ValueError as exc:
             return render_template("top.html", error=str(exc)), 400

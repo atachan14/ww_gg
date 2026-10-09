@@ -48,6 +48,21 @@ class WebTests(unittest.TestCase):
         self.assertEqual(self.state()['policy'], {'day': 'max', 'night': 'max', 'include_self_bite': False})
         self.assertIn('data-fraction="7/15" data-percent="46.67%"', self.page())
 
+    def test_self_bite_select_retains_boolean_and_legacy_form_contract(self):
+        valid = {'players':'5', 'day':'max', 'night':'max'}
+        for permission, expected in ((None,False), ('0',False), ('1',True)):
+            data = {**valid, **({'allow_self_bite':permission} if permission is not None else {})}
+            self.assertEqual(self.client.post('/start', data=data).status_code, 303)
+            self.assertEqual(self.state()['rules']['allow_self_bite'], expected)
+            self.assertFalse(self.state()['policy']['include_self_bite'])
+            html = self.page()
+            self.assertIn('id="view-self-bite" disabled', html)
+            self.assertNotIn('name="allow_self_bite"', html)
+        for permission in ('true','false','2',''):
+            self.assertEqual(self.client.post('/start', data={**valid,'allow_self_bite':permission}).status_code, 400)
+        duplicate = MultiDict([*valid.items(), ('allow_self_bite','0'), ('allow_self_bite','1')])
+        self.assertEqual(self.client.post('/start', data=duplicate).status_code, 400)
+
     def test_three_player_terminal_both_chances_retained(self):
         self.start(3)
         response = self.advance(1)
@@ -186,6 +201,44 @@ class WebTests(unittest.TestCase):
         self.assertEqual(percent(Fraction(1,3)), '33.33')
         self.assertEqual(percent(Fraction(0)), '0')
         self.assertEqual(percent(Fraction(1)), '100')
+
+    def test_one_two_player_initial_results_all_role_compositions(self):
+        from itertools import combinations_with_replacement
+        from werewolf.exact import initial_board, Progress, Rules, Strategy, legal_targets, advance
+        roles = ('citizens', 'mediums', 'seers', 'hunters', 'wolves')
+        for n in (1, 2):
+            for cast in combinations_with_replacement(roles, n):
+                data = {role:str(cast.count(role)) for role in roles}
+                data.update(day='max', night='max')
+                with self.subTest(cast=cast):
+                    b = initial_board(n, cast.count('wolves'), cast.count('mediums'), cast.count('seers'), cast.count('hunters'))
+                    expected = 'wolf' if 'wolves' in cast else 'village'
+                    self.assertEqual(b.winner, expected)
+                    progress = Progress.initial(b)
+                    self.assertTrue(progress.finished)
+                    self.assertEqual(progress.active_mass, 0)
+                    self.assertEqual(progress.total_values().village_win, int(expected == 'village'))
+                    self.assertEqual(sum(o.probability for o in progress.last_outcomes), 1)
+                    self.assertEqual(legal_targets(b, Rules(), Strategy()), ())
+                    with self.assertRaises(ValueError): advance(progress, 1, Rules(), Strategy())
+                    response = self.client.post('/start', data=data, follow_redirects=True)
+                    self.assertEqual(response.status_code, 200)
+                    self.assertEqual(response.request.path, '/result')
+                    html = response.get_data(as_text=True)
+                    self.assertIn('Day 1', html)
+                    self.assertIn('data-fraction="0" data-percent="0%"', html)
+                    self.assertIn('data-fraction="1" data-percent="100%"', html)
+                    self.assertNotIn('id="advance-button"', html)
+                    self.assertNotIn('id="back-button"', html)
+                    state = self.state()
+                    self.assertEqual(state['history'], [])
+                    self.assertEqual(state['claims'], ['latent'] * n)
+                    self.assertEqual(self.page('/result'), html)
+                    self.assertEqual(self.client.post('/advance', data=self.form(1)).status_code, 303)
+                    self.assertEqual(self.client.post('/strategy', data=self.form(co_1='wolf')).status_code, 303)
+                    self.assertEqual(self.state(), state)
+        for data in ({'citizens':'0','wolves':'0'}, {'citizens':'9','wolves':'1'}, {'players':'0'}, {'players':'10'}, {'players':'2','wolves':'2','mediums':'1'}, {'players':'2','wolves':'3'}):
+            self.assertEqual(self.client.post('/start', data={**data,'day':'max','night':'max'}).status_code, 400)
 
 
 if __name__ == '__main__':

@@ -12,7 +12,6 @@
     <section class="panel information-panel" id="information-panel" aria-labelledby="phase-title">
       <div class="information-head">
         <div><p class="eyebrow">BOARD OVERVIEW</p><h1 id="phase-title">{{ '決着結果' if finished else 'Day ' ~ board.day ~ ' · ' ~ ('昼' if board.phase == 'day' else '夜') }}</h1></div>
-        <a class="text-link" href="{{ url_for('top') }}">TOPへ戻る</a>
       </div>
       <div class="overview-facts"><span>生存 <strong>{{ players|selectattr('alive')|list|length }}人</strong></span>{% if not finished %}<span>生存狼 {% for count, weight in counts.items() %}<strong>{{ count }}w {{ probability(weight) }}</strong>{% if not loop.last %} / {% endif %}{% endfor %}</span>{% endif %}</div>
       <div class="rate-cards">
@@ -24,7 +23,7 @@
       {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     </section>
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
-        <div class="panel-heading"><h2 id="players-title">プレイヤー</h2><span class="muted">{{ '直前の行動の結果全体' if finished else '現在Boardの公開情報' }}</span></div>
+        <div class="panel-heading"><h2 id="players-title">プレイヤー</h2><span class="muted">{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
         <div class="table-scroll"><table class="player-table">
           <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>{% if has_role_details %}<button type="button" class="role-breakdown-toggle" aria-expanded="true" aria-label="村陣営の役職内訳を開閉">村陣営 <span aria-hidden="true" data-breakdown-arrow>▾</span></button>{% else %}村陣営{% endif %}</th>{% if has_role_details %}<th data-role-detail>市民</th>{% endif %}{% if state.get("mediums",0) %}<th data-role-detail>霊能</th>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<th data-role-detail>{{ '占い師' if r=='seer' else '狩人' }}</th>{% endif %}{% endfor %}<th>狼<small>狼陣営</small></th><th>村勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
           <tbody>{% for player in players %}
@@ -51,10 +50,11 @@
     {% include 'medium_reports.html' %}
     {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
   </form>
-  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">概要</button><button type="button" data-scroll-to="player-panel">テーブル</button><button type="button" data-scroll-to="tree-reserved">Tree</button><button type="button" data-collapse-settings>全幅へ</button></nav><div class="phase-buttons"><span data-target-preview>{{ 'Player ' ~ display_selection if display_selection else '未選択' }}</span>
+  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">概要</button><button type="button" data-scroll-to="player-panel">テーブル</button><button type="button" data-scroll-to="tree-reserved">Tree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview>{{ 'Player ' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
   {% if state.history %}<form method="post" action="{{ url_for('back') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}"><button class="secondary" type="submit" id="back-button">{{ 'Day ' ~ (board.day if finished or board.phase == 'night' else board.day-1) ~ ' · ' ~ (('昼' if board.phase == 'day' else '夜') if finished else ('昼' if board.phase == 'night' else '夜')) ~ 'へ戻る' }}</button></form>{% endif %}
   {% if not finished %}<button class="primary" type="submit" form="action-form" id="advance-button">{{ 'Day ' ~ board.day ~ ' · 夜へ' if board.phase == 'day' else 'Day ' ~ (board.day+1) ~ ' · 昼へ' }}</button>{% endif %}</div></div></footer>
 <section class="panel tree-placeholder" id="tree-reserved" aria-label="Tree"><h2>Tree</h2><p class="hint">Tree表示は今後対応します。</p></section>
-<p><a class="text-link" href="{{ url_for('comparison_route') }}">初期盤面の2段階比較（試案）</a></p>
 </main>
 {% endblock %}
+
+{% block site_footer %}{% endblock %}

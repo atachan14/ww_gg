@@ -1,4 +1,4 @@
-"""Public Board calculations for 3–9 players, wolves, medium disclosures and ability-free seers/hunters, using exact fractions."""
+"""Public Board calculations for 1–9 players, wolves, medium disclosures and ability-free seers/hunters, using exact fractions."""
 
 from dataclasses import dataclass, replace
 from fractions import Fraction
@@ -226,8 +226,8 @@ class Board:
     report_resolved: tuple[tuple[int,int,int], ...] = ()
 
     def __post_init__(self):
-        if type(self.player_count) is not int or not 3 <= self.player_count <= 9:
-            raise ValueError("v0.2 supports 3–9 players")
+        if type(self.player_count) is not int or not 1 <= self.player_count <= 9:
+            raise ValueError("Supports 1–9 players")
         if not isinstance(self.alive, tuple) or len(set(self.alive)) != len(self.alive):
             raise ValueError("Alive IDs must be a distinct tuple")
         if any(type(player) is not int or not 1 <= player <= self.player_count for player in self.alive):
@@ -365,9 +365,9 @@ def winner_for(n: int, wolves: int) -> Winner | None:
 
 
 def initial_board(player_count: int = 5, wolf_count: int = 1, medium_count: int = 0, seer_count: int = 0, hunter_count: int = 0) -> Board:
-    if type(player_count) is not int or not 3 <= player_count <= 9:
-        raise ValueError("Choose 3–9 players")
-    if type(wolf_count) is not int or not 1 <= wolf_count <= (player_count - 1) // 2:
+    if type(player_count) is not int or not 1 <= player_count <= 9:
+        raise ValueError("Choose 1–9 players")
+    if type(wolf_count) is not int or not (0 <= wolf_count <= player_count if player_count <= 2 else 1 <= wolf_count <= (player_count - 1) // 2):
         raise ValueError("Choose wolves fewer than villagers")
     if type(medium_count) is not int or not 0 <= medium_count <= player_count - wolf_count:
         raise ValueError("Choose medium count within the village camp")
@@ -692,6 +692,14 @@ class Progress:
             raise ValueError("Resolved and ongoing probabilities must conserve one")
         if self.board is not None and self.board.winner is not None:
             raise ValueError("Only a continuing Board can be active")
+
+    @classmethod
+    def initial(cls, board: Board) -> "Progress":
+        """Apply the ordinary winner rule before any public action."""
+        if board.winner is None:
+            return cls(board)
+        village = Fraction(int(board.winner == "village"))
+        return cls(None, village, 1 - village, board, (BoardOutcome(Fraction(1), board),))
 
     @property
     def active_mass(self) -> Fraction:

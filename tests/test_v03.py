@@ -148,7 +148,7 @@ class ClaimWebTests(unittest.TestCase):
             self.assertIn(text,html)
         self.assertEqual(self.start(0,8,1).status_code,303)
         self.assertEqual(self.state()['players'],9)
-        for c,m,w in [(0,1,1),(4,4,2),(3,-1,1),(3,1,0),(1,1,2)]:
+        for c,m,w in [(0,0,0),(4,4,2),(3,-1,1),(3,1,0),(1,1,2)]:
             self.assertEqual(self.start(c,m,w).status_code,400)
     def test_filled_top_default_and_current_phase_condition_changes(self):
         self.start(citizens=3,mediums=2)
