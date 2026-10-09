@@ -313,4 +313,7 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 .phase-buttons .settings-return { white-space: nowrap; }
 @media (max-width: 700px) { .phase-buttons { flex-wrap: wrap; } .phase-buttons > [data-target-preview] { flex-basis: 100%; text-align: right; white-space: nowrap; } }
 
-.setup-preset { margin-bottom: 18px; }
+.setup-heading { align-items: center; flex-wrap: wrap; gap: 8px; }
+.setup-preset { display: flex; align-items: center; gap: 6px; margin-left: auto; max-width: 100%; font-size: 12px; color: var(--muted); }
+.setup-preset > span { white-space: nowrap; }
+.setup-preset select { width: auto; min-width: 0; max-width: 100%; min-height: 34px; padding: 4px 8px; font-size: 12px; }

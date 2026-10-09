@@ -90,3 +90,10 @@ TOPフォーム編集中はGameを変更しない。不正POST400は送信draft�
 検証: 既存98件＋setup9件、全107テスト成功（18.3秒）。通常サンドボックスで既存tempfileテストの一時領域作成が失敗した回は、承認された検証権限で再実行して成功。JS構文/git diff --checkも成功。追加テストは両戻り経路/初回/無効セッション/独立preset判定/正規化/入力エラーdraftとGame保全/成功置換/配役・ルールpreset改定後の実値保全/欠落ルール補完/不正値拒否/1～2人初期終局を確認。
 
 専用Edgeではpreset選択が互いに影響しない、実値変更→custom→再一致、accordion開閉で変化なし、ロゴ/設定戻りで9人＋自噛み可能を復元、未開始draftのreload、入力エラーdraft保持＋既存Game保全、正常開始時の置換、1/2人の決着→TOP復元、5人7/15・9人94/315の維持、専用ブラウザのcookie失効後サンプル初期化を確認。PC1100px/mobile390pxで横はみ出しなし、ブラウザ例外なし。画像は作業フォルダ setup-restored-pc.png / setup-restored-mobile.png、スクリプト setup_qa.mjs。8771は最新実装で起動、専用ブラウザは終了。README/archive・別gg_ww2・.artifacts未変更、push/公開なし。
+
+
+## TOPプリセットのコンパクト配置
+
+配役/ゲームルールの両プリセットを見出し行の右側に移動し、「プリセット：［選択欄］」の1行へ縮小。選択欄34px、文字12pxで従来の大きな独立行を削減。見出し行は必要に応じて折返し可能。selector ID/選択肢/値/JS判定は変更なし、名称相談に伴うリネームもなし。
+
+設定9テスト＋配信assets8テストの計17件成功、git diff --check成功。独立Edge PC1100px/mobile390px/narrow320pxで見出し内配置・左右はみ出しなし・選択欄幅200px未満と高さ36px以下、配役とルールの独立選択/custom/再一致復帰を確認。ブラウザ例外なし。画像は作業フォルダ compact-presets-1100.png / compact-presets-390.png / compact-presets-320.png、スクリプト compact_presets_qa.mjs。8771反映、専用ブラウザ終了、README/archive未変更、push/公開なし。
