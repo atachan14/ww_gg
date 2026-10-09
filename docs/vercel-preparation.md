@@ -61,3 +61,11 @@ Vercel自身での build・CDN配信・実際の cold start・同時アクセス
 ### 今回のローカル計測結果
 
 3〜9人の素村＋狼代表例は1〜7 Phaseを終局まで進行。最大単一リクエスト0.349秒、最大 cookie ヘッダー483バイト。9人 C3/M2/S1/H1/W2・霊能CO2名・CCOなし代表例も7 Phaseを終局まで進行し、最大単一リクエスト11.510秒、Python割当ピーク10.844MiB、最大 cookie ヘッダー499バイト。全例の最大応答本文25,109バイト。公開用のSecure属性ではcookieに7バイト追加されます。いずれも代表例の実測であり、全配役・全入力の最悪上限ではありません。
+
+## 初回Vercelビルド失敗と修正
+
+ユーザー本人がキーを貼付してDeployを実行した後、Vercelの依存解決で失敗。可視Build Logsの原因は `error: No project table found in: /vercel/path0/pyproject.toml`。署名キーの検証前の失敗であり、キー内容は取得していません。
+
+`pyproject.toml` に `[project]`、名前 `ww-gg`、version、Python `>=3.12,<3.13`、依存 `Flask==3.1.2` を追加。Vercelのuv依存解決が扱えるproject構成に合わせました。依存定義と従来requirementsの一致、entrypointと静的ビルド契約を回帰テストに追加。
+
+ローカルにuvはなく追加導入は行っていないため、Vercel自身のuv lock・build成功は修正コミット送信後に確認する必要があります。秘密値の再入力・保存確定は行っていません。

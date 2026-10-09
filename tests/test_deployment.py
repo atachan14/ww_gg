@@ -98,3 +98,13 @@ class DeploymentTests(unittest.TestCase):
             build(root)
             for name in ("styles.css", "app.js", "strategy.js", "parallel.js"):
                 self.assertEqual((root/"public/static"/name).read_bytes(), (Path("static")/name).read_bytes())
+
+    def test_vercel_uv_project_metadata_and_dependency_contract(self):
+        import tomllib
+        config = tomllib.loads(Path('pyproject.toml').read_text(encoding='utf-8'))
+        project = config['project']
+        self.assertEqual(project['name'], 'ww-gg')
+        self.assertEqual(project['requires-python'], '>=3.12,<3.13')
+        self.assertEqual(project['dependencies'], Path('requirements.txt').read_text().splitlines())
+        self.assertEqual(config['tool']['vercel']['entrypoint'], 'wsgi:app')
+        self.assertEqual(config['tool']['vercel']['scripts']['build'], 'python build_vercel.py')
