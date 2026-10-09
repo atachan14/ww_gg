@@ -2,7 +2,7 @@
 {% block title %}TOP{% endblock %}
 {% block content %}
 <main data-screen="top">
-  <div class="page-heading"><p class="eyebrow">TOP</p><h1>村の条件を決める</h1></div>
+  <p class="eyebrow">TOP</p>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
@@ -34,6 +34,6 @@
     <input type="hidden" name="day" value="max"><input type="hidden" name="night" value="max">
     <div class="phase-footer"><div class="footer-inner"><button class="primary" type="submit">初日昼へ進む <span aria-hidden="true">→</span></button></div></div>
   </form>
-<p><a class="text-link" href="{{ url_for('comparison_route') }}">初期盤面の2段階比較（試案）</a></p>
 </main>
 {% endblock %}
+{% block site_footer %}{% endblock %}
