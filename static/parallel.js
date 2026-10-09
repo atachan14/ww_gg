@@ -2,11 +2,13 @@
 window.initializeParallelLayout=function(){
  const main=document.querySelector('main[data-screen="main"],main[data-screen="result"]');if(!main)return;
  const grid=main.querySelector('.board-layout'),column=main.querySelector('.settings-column'),player=main.querySelector('#player-panel'),info=main.querySelector('#information-panel');
+ const footer=main.querySelector('.phase-footer');
  const panes=Array.from(main.querySelectorAll('[data-settings-pane]'));
  const table=player.querySelector('.player-table'),scroll=player.querySelector('.table-scroll');
  scroll.scrollLeft=Number(main.dataset.tableScroll||0);
  function refresh(){
   if(!main.isConnected)return;
+  document.querySelector('.page-shell').style.paddingBottom=(footer.offsetHeight+16)+'px';
   const active=panes.find(p=>p.open);grid.classList.toggle('settings-open',!!active);
   if(innerWidth>=1040){const height=info.offsetHeight+14+player.offsetHeight;column.style.maxHeight='none';if(active){const body=active.querySelector('.settings-body');body.style.maxHeight='none';const chrome=column.offsetHeight-body.offsetHeight;body.style.maxHeight=Math.max(80,height-chrome)+'px';}column.style.maxHeight=height+'px';}
   else {column.style.maxHeight='none';panes.forEach(p=>p.querySelector('.settings-body').style.maxHeight='320px');}
@@ -22,7 +24,7 @@ window.initializeParallelLayout=function(){
  panes.forEach(p=>p.addEventListener('toggle',()=>{if(p.open)panes.forEach(other=>{if(other!==p)other.open=false;});schedule();}));
  main.querySelector('[data-collapse-settings]')?.addEventListener('click',()=>{panes.forEach(p=>p.open=false);schedule();});
  main.querySelectorAll('[data-scroll-to]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.scrollTo)?.scrollIntoView({block:'start',behavior:'smooth'})));
- const observer=new ResizeObserver(schedule);observer.observe(info);observer.observe(player);
+ const observer=new ResizeObserver(schedule);observer.observe(info);observer.observe(player);observer.observe(footer);
  const mutations=new MutationObserver(schedule);mutations.observe(main.querySelector('#strategy-editor'),{childList:true,subtree:true});
  window.addEventListener('resize',schedule);
  // Removed Boards must not keep observers or window listeners alive.

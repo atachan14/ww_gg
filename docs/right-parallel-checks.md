@@ -106,3 +106,14 @@ TOPフォーム編集中はGameを変更しない。不正POST400は送信draft�
 直前の未コミットdocs/backlog.mdとdocs/requirements.mdの将来構想を保全して名称追加承認を反映。BoardInformationは不採用へ訂正し、将来のシステムログ表はBoardPlayerTable内のプレイヤー表の上に置く補足情報と記録。時点・未入力と不在確認・システム確定情報と申告の区別、パン屋の一般例は維持。システムログ機能の実装・特定プラットフォーム仕様の採用はなし。
 
 全107テスト成功（19.7秒）。最後のアクセシブルgroup明示後はWeb18件成功、git diff --check成功。実Edge PC1100px/mobile390px/narrow320pxでTOP/MAINの5名称、ラベル参照、Footerアンカー、設定展開/収納、昼夜進行/戻る、既知7/15の維持、横はみ出しなし・例外なしを確認。画像は作業フォルダ names-top-pc.png / names-main-1100.png / names-main-390.png / names-main-320.png、スクリプト names_qa.mjs。8771で確認可能、専用ブラウザ終了。README/archive・別gg_ww2・既存.artifactsは変更せず、push/公開なし。
+
+
+## 日本語の子ラベル・見出し統一・GameTree
+
+追加訂正に従い、TOP/MAINのGameCast / GameRule / BoardStrategyの画面ラベルを「配役」「ルール」「戦略」へ戻した。見出し参照によるアクセシブル名も同じ表記。Game / Boardの親名称は維持で確定。内部DOM IDは変更せず、BoardOverview / BoardPlayerTableの表示名を維持。Treeは追加確定によりGameTreeへ変更し、見出し・Footer導線・aria-label・未実装の短い補足を整合。
+
+BoardPlayerTable / GameTree見出しはBoardOverviewと同じ共通スタイルを適用し、文字11px・色var(--muted)・太さ/字間も一致。狭幅Footerは名称の長さに応じて折返し、既存ResizeObserverで実Footer高さを観測して下余白を追従させる。最下部のGameTreeが固定Footerに隠れないことをアンカー操作で確認。
+
+関連40テスト（Web18/v0.3 14/deployment8）成功、追加GameTree後Web/deployment26件と最終余白調整後deployment8件を再確認。JS構文/git diff --check成功。独立Edge PC1100px/mobile390px/narrow320pxでTOP/MAIN日本語表記、維持した親名称、GameTree見出し/導線/アクセシブル名、3見出しの計算済み文字サイズ・色・太さ・字間の一致、Footer/設定収納/昼夜進行と戻る/7/15/横はみ出しなし・例外なしを確認。GameTreeアンカーでパネル全体がFooterの上へ表示されることも確認。画像は作業フォルダ labels-top-pc.png / labels-main-1100.png / labels-main-390.png / labels-main-320.png、スクリプト labels_qa.mjs。
+
+要件基準・backlogへ最新の名称訂正と、固定配役人数・ルールのゲーム全体の分岐を整理するGameTreeの将来意図を追記。Game→Session案は不採用、Game維持を確定として記録。GameTree本体・システムログ機能は未実装。8771反映、専用ブラウザ終了。README/archive・別gg_ww2・.artifacts未変更、push/公開なし。

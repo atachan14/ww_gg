@@ -70,3 +70,15 @@ UI調整の詳細・検証は [UI確認記録](ui-followup-checks.md)。
 ## 5領域の名称追加確定（2026-10-09）
 
 ユーザー承認（Slack message `1791520934.114619`）により GameCast（配役）、GameRule（ゲームルール）、BoardOverview（盤面概要）、BoardStrategy（共有戦略）、BoardPlayerTable（プレイヤー表）を採用。画面の見出し・参照導線・アクセシブル名へ反映する。保存形式・URL・計算上の意味は変更せず、既存のDOM IDは接続互換のため維持する。上記の名称未確定記述をこの追加確定で更新する。BoardInformationは不採用。将来のシステムログ表はBoardPlayerTable内のプレイヤー表上部に補足する案で、機能は未実装。
+
+
+## 画面子ラベルの訂正とTreeの将来意図（2026-10-09）
+
+[要件基準](requirements.md)の追加訂正に従い、領域名GameCast / GameRule / BoardStrategyは維持し、画面は「配役」「ルール」「戦略」。BoardOverview / BoardPlayerTableの表示名は維持し、BoardPlayerTable/Treeの見出しをBoardOverviewと同じ文字サイズ・色にする。親Game / Boardは変更なし。Game→Sessionは未確定案で、今の名称へ適用しない。
+
+将来Treeは、固定された配役人数・ゲームルールのゲーム全体の全分岐を整理して表示する意図。可視化の着手時期・具体的範囲は後続で決める。今回Tree機能、システムログ機能、保存形式や計算の変更はなし。
+
+
+## Game維持・GameTreeの名称確定（2026-10-09）
+
+ユーザーの追加確定（Slack message `1791522070.204059`）により、親名称Gameを維持し、Sessionへの変更案は採用しない。Tree領域の表示名はGameTreeとし、見出し・参照導線・アクセシブル名も整合する。直前のTree名称維持・Game→Session未確定という記述をこの確定で更新する。GameTreeの見出しはBoardOverview / BoardPlayerTableと同じ文字サイズ・色に揃える。固定した配役人数・ルールに基づくゲーム全体の分岐を整理する将来意図を維持し、分岐可視化の本体機能は今回追加しない。

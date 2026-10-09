@@ -144,7 +144,7 @@ class ClaimWebTests(unittest.TestCase):
         return self.c.post('/start',data={'citizens':str(citizens),'mediums':str(mediums),'wolves':str(wolves),'day':'max','night':'max'})
     def test_top_role_counts_and_fixed_calculation_options(self):
         html=self.c.get('/').get_data(as_text=True)
-        for text in ('村陣営','狼陣営','市民','霊能','GameRule'):
+        for text in ('村陣営','狼陣営','市民','霊能','ルール'):
             self.assertIn(text,html)
         self.assertEqual(self.start(0,8,1).status_code,303)
         self.assertEqual(self.state()['players'],9)
