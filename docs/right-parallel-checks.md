@@ -64,3 +64,14 @@ MAINのTOPへ戻る、全幅へ、比較リンク、共通補足footerを削除�
 ## TOP補足2件の削除
 
 「役職ごとの人数から合計を算出します。」と配役見出し右の役職列挙を削除。正常時のvalidation要素は空/hiddenとして余白をなくし、不正配役時の案内と開始無効は維持。全97テスト成功（9.8秒）、JS構文/git diff --check成功。実Edge PCで補足不在、合計入力追従、不正10人の案内/無効と正常5人への復帰、TOP→MAIN 7/15を確認、top-supplements-pc.png保存。検証assertions全成功後、Browser.close応答前に接続が閉じたためNodeはunsettled-await警告でexit1になりましたが、検証途中の失敗はありません。8771更新、README/archive未変更、push/公開なし。
+
+
+## Footer遷移・実対象表示の統一
+
+TOPの初日開始とMAINの前後ボタンを templates/navigation.html の小さな phase_button マクロに共通化。「Day1・昼へ →」「← Day1・昼へ」「Day2・昼へ →」形式。MAINの遷移先・履歴計算は従来式のままで変更なし。クリック時とライブ再計算後に別々の文字列を作っていた対象表示は updateTargetPreview に集約し、現在Phaseの「処刑：Player2」「襲撃：Player2」を表示。合法で選択済みの対象だけ表示し、random未選択は「処刑：未選択」、終局では対象欄なし。
+
+Day1昼で履歴なしの場合「← ゲーム設定に戻る」を追加。1/2人の初期終局にも表示し、通常の過去Boardがある場合は従来back POST。新導線はHeaderロゴと同じGET /でありゲームをリセットしない。既存TOPは現在配役・ルールを再入力表示する実装ではなく、既定値（市民4/狼1、自噛み不可）を表示する。GETだけでセッションの盤面は消えず /main や /result で再表示できる。この既存仕様は変えていません。
+
+狭い画面では対象をボタン上段に置き、戻る文言の途中改行を抑止。390pxで左右はみ出しなし、前後ボタン44pxを確認。
+
+全98テスト成功（約10秒）、JS構文/git diff --check成功。最後のCSS調整後は配信assets整合を含むdeployment8件成功。実EdgeでTOP開始・連続submit、昼の手動Player2、エラー400で既存選択/Phase、戦略randomライブ再計算後の手動対象保持、夜の前後文言/襲撃表示、Day2昼の未選択、戻る、1/2人の初期決着、設定戻り→TOP既定値→保存決着画面への再表示を確認。ブラウザ例外なし。画像は作業フォルダ footer-night-pc.png / footer-day-mobile.png、スクリプト footer_qa.mjs / footer_mobile_qa.mjs。専用ブラウザを終了、8771へ反映済み。README/archive・別gg_ww2未変更、push/公開なし。

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from 'navigation.html' import phase_button %}
 {% block title %}TOP{% endblock %}
 {% block content %}
 <main data-screen="top">
@@ -32,7 +33,7 @@
     </section>
     </div>
     <input type="hidden" name="day" value="max"><input type="hidden" name="night" value="max">
-    <div class="phase-footer"><div class="footer-inner"><button class="primary" type="submit">初日昼へ進む <span aria-hidden="true">→</span></button></div></div>
+    <div class="phase-footer"><div class="footer-inner">{{ phase_button(1, 'day') }}</div></div>
   </form>
 </main>
 {% endblock %}

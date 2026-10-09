@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from 'navigation.html' import phase_button %}
 {% block title %}{{ '決着画面' if finished else 'Day ' ~ board.day ~ (' 昼' if board.phase == 'day' else ' 夜') }}{% endblock %}
 {% macro probability(value, id='') %}<strong {% if id %}id="{{ id }}"{% endif %} class="probability" data-fraction="{{ value|fraction }}" data-percent="{{ value|percent }}%">{{ value|percent }}%</strong>{% endmacro %}
 {% block content %}
@@ -50,9 +51,10 @@
     {% include 'medium_reports.html' %}
     {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
   </form>
-  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">概要</button><button type="button" data-scroll-to="player-panel">テーブル</button><button type="button" data-scroll-to="tree-reserved">Tree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview>{{ 'Player ' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
-  {% if state.history %}<form method="post" action="{{ url_for('back') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}"><button class="secondary" type="submit" id="back-button">{{ 'Day ' ~ (board.day if finished or board.phase == 'night' else board.day-1) ~ ' · ' ~ (('昼' if board.phase == 'day' else '夜') if finished else ('昼' if board.phase == 'night' else '夜')) ~ 'へ戻る' }}</button></form>{% endif %}
-  {% if not finished %}<button class="primary" type="submit" form="action-form" id="advance-button">{{ 'Day ' ~ board.day ~ ' · 夜へ' if board.phase == 'day' else 'Day ' ~ (board.day+1) ~ ' · 昼へ' }}</button>{% endif %}</div></div></footer>
+  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">概要</button><button type="button" data-scroll-to="player-panel">テーブル</button><button type="button" data-scroll-to="tree-reserved">Tree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview data-action-label="{{ '処刑' if board.phase == 'day' else '襲撃' }}">{{ '処刑' if board.phase == 'day' else '襲撃' }}：{{ 'Player' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
+  {% if not state.history and board.day == 1 and board.phase == 'day' %}<a class="secondary settings-return" id="settings-return" href="{{ url_for('top') }}"><span aria-hidden="true">←</span> ゲーム設定に戻る</a>{% endif %}
+  {% if state.history %}<form method="post" action="{{ url_for('back') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}">{{ phase_button(board.day if finished or board.phase == 'night' else board.day-1, (board.phase if finished else ('day' if board.phase == 'night' else 'night')), previous=true, id='back-button') }}</form>{% endif %}
+  {% if not finished %}{{ phase_button(board.day if board.phase == 'day' else board.day+1, 'night' if board.phase == 'day' else 'day', id='advance-button', form='action-form') }}{% endif %}</div></div></footer>
 <section class="panel tree-placeholder" id="tree-reserved" aria-label="Tree"><h2>Tree</h2><p class="hint">Tree表示は今後対応します。</p></section>
 </main>
 {% endblock %}

@@ -306,3 +306,9 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 .rule-role summary { font-size:12px; padding:5px 0; cursor:pointer; }
 
 .cast-card.total small { display: block; margin-left: 0; font-size: 12px; line-height: 1.5; white-space: nowrap; }
+
+.phase-buttons .settings-return { display: inline-flex; align-items: center; gap: 4px; min-height: 40px; padding: 7px 12px; border-radius: 8px; font-size: 12px; font-weight: 650; text-decoration: none; }
+@media (max-width: 720px) { .phase-buttons .settings-return { min-height: 44px; } }
+
+.phase-buttons .settings-return { white-space: nowrap; }
+@media (max-width: 700px) { .phase-buttons { flex-wrap: wrap; } .phase-buttons > [data-target-preview] { flex-basis: 100%; text-align: right; white-space: nowrap; } }

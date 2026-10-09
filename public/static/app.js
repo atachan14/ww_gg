@@ -1,5 +1,13 @@
 "use strict";
 
+function updateTargetPreview(root = document, target = null) {
+  const preview = root.querySelector('[data-target-preview]');
+  if (!preview) return;
+  const selected = Array.from(root.querySelectorAll('input[name="target"]')).find(input =>
+    !input.disabled && (target === null ? input.checked : input.value === target));
+  preview.textContent = `${preview.dataset.actionLabel}：${selected ? `Player${selected.value}` : '未選択'}`;
+}
+
 function initializeUI() {
   const formatInputs = document.querySelectorAll('input[name="probability-format"]');
   let probabilityFormat = "percent";
@@ -47,10 +55,11 @@ function initializeUI() {
     radio.addEventListener("click", () => { radio.form.dataset.manualSelection = "true"; });
     radio.addEventListener("change", () => {
       radio.form.dataset.manualSelection = "true";
-      const preview = document.querySelector("[data-target-preview]");
-      if (preview) preview.textContent = `Player ${radio.value}`;
+      updateTargetPreview(document, radio.value);
     });
   });
+
+  updateTargetPreview();
 
   const citizens = document.querySelector('#citizen-count');
   const mediums = document.querySelector('#medium-count');
@@ -171,7 +180,7 @@ function initializeLiveClaims() {
         if (selected) {
           main.querySelector("#action-form").dataset.manualSelection = "true";
           main.querySelectorAll('input[name="target"]').forEach(input => input.checked = input.value === selected);
-          main.querySelector('[data-target-preview]').textContent = `Player ${selected}`;
+          updateTargetPreview(main, selected);
         }
         main.dataset.strategyDisclosures=JSON.stringify(Array.from(document.querySelectorAll('#strategy-editor details[open]')).map(e=>e.dataset.scope));
         document.querySelectorAll('[data-settings-pane]').forEach(e=>{main.querySelector(`[data-settings-pane="${e.dataset.settingsPane}"]`).open=e.open;});
