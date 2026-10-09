@@ -8,6 +8,7 @@ import os
 import json
 from werewolf.strategy_ui import co_editor, resolve_co_editor
 
+from werewolf.co_ui import CO_LABELS, CO_RENDERERS, medium_timeline
 from werewolf.setup import GameConfig, SetupDraft, setup_count, complete_rules, preset_data
 from werewolf.comparison import compare_initial
 
@@ -204,12 +205,15 @@ def create_app(test_config=None, *, deployment=False):
                             "id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
                             "action": action_values.get(player)})
+        for player in players:
+            player['medium_timeline'] = medium_timeline(board, player['id'], finished)
+            player['co_pending'] = player['claim'] == 'medium' and any(entry['editable'] and not entry['color'] for entry in player['medium_timeline'])
         display_selection = state['selection']
         if not finished and display_selection is None and getattr(strategy, board.phase) == 'max':
             score = 'village_win' if board.phase == 'day' else 'wolf_win'
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
-        return render_template("main.html", state=state, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", state=state, co_labels=CO_LABELS, co_renderers=CO_RENDERERS, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 

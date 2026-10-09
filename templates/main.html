@@ -29,12 +29,11 @@
           <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>{% if has_role_details %}<button type="button" class="role-breakdown-toggle" aria-expanded="true" aria-label="村陣営の役職内訳を開閉">村陣営 <span aria-hidden="true" data-breakdown-arrow>▾</span></button>{% else %}村陣営{% endif %}</th>{% if has_role_details %}<th data-role-detail>市民</th>{% endif %}{% if state.get("mediums",0) %}<th data-role-detail>霊能</th>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<th data-role-detail>{{ '占い師' if r=='seer' else '狩人' }}</th>{% endif %}{% endfor %}<th>狼<small>狼陣営</small></th><th>村勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
           <tbody>{% for player in players %}
             <tr class="{{ 'executed' if not player.alive else '' }}" data-player="{{ player.id }}">
-              <td class="index">{{ player.id }}</td><td class="player-name">{{ player.name }}</td><td><span class="status {{ 'alive' if player.alive else 'dead' }}">{{ player.status }}</span></td><td><select class="co-select" name="co_{{ player.id }}" aria-label="Player {{ player.id }}のCO" {% if finished or not player.alive %}disabled{% endif %}>
-                {% for key, label in [('latent','潜伏'),('villager','市民'),('medium','霊能'),('seer','占い師'),('hunter','狩人'),('wolf','狼')] %}{% if (key != 'medium' or state.get('mediums', 0)) and (key!='seer' or state.get('seers',0)) and (key!='hunter' or state.get('hunters',0)) and (key != 'villager' or state.players - state.get('wolves', 1) - state.get('mediums', 0) - state.get('seers',0) - state.get('hunters',0)) %}<option value="{{ key }}" {% if player.claim == key %}selected{% endif %}>{{ label }}</option>{% endif %}{% endfor %}</select></td>
+              <td class="index">{{ player.id }}</td><td class="player-name">{{ player.name }}</td><td><span class="status {{ 'alive' if player.alive else 'dead' }}">{{ player.status }}</span></td><td><button type="button" class="co-summary" data-co-toggle="{{ player.id }}" aria-expanded="false" aria-controls="{{ ('co-role-' ~ player.id ~ ' ') if player.claim != 'latent' else '' }}co-add-{{ player.id }}" aria-label="Player {{ player.id }}のCO詳細：{{ co_labels[player.claim] }}{{ '、未入力の霊能結果あり' if player.co_pending else '' }}">{{ co_labels[player.claim] }}{% if player.co_pending %}<span class="co-report-marker" aria-hidden="true" title="未入力の霊能結果あり">●</span>{% endif %}</button></td>
               <td class="village-text">{{ probability(player.village_probability) }}</td>{% if has_role_details %}<td data-role-detail>{{ probability(player.citizen_probability) }}</td>{% endif %}{% if state.get("mediums",0) %}<td data-role-detail>{{ probability(player.medium_probability) }}</td>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<td data-role-detail>{{ probability(player.extra_probabilities[r]) }}</td>{% endif %}{% endfor %}<td class="wolf-text">{{ probability(player.wolf_probability) }}</td>
               <td>{{ probability(player.action.village_win) if player.action else '—' }}</td><td>{{ probability(player.action.wolf_win) if player.action else '—' }}</td>
               <td><label class="target-label"><input type="radio" name="target" value="{{ player.id }}" aria-label="Player {{ player.id }}を対象にする" required {% if display_selection == player.id %}checked{% endif %} {% if finished or not player.alive or not player.legal %}disabled{% endif %}></label></td>
-            </tr>{% endfor %}</tbody>
+            </tr>{% include 'co_details.html' %}{% endfor %}</tbody>
         </table></div>
 
       </section>
@@ -48,7 +47,6 @@
         </section>
       </aside>
     </div>
-    {% include 'medium_reports.html' %}
     {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
   </form>
   <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">BoardOverview</button><button type="button" data-scroll-to="player-panel">BoardPlayerTable</button><button type="button" data-scroll-to="tree-reserved">GameTree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview data-action-label="{{ '処刑' if board.phase == 'day' else '襲撃' }}">{{ '処刑' if board.phase == 'day' else '襲撃' }}：{{ 'Player' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}

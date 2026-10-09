@@ -321,3 +321,16 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 #game-cast-label { font-weight: 650; margin-right: 8px; }
 
 @media (max-width: 700px) { .footer-inner nav { flex-wrap: wrap; } }
+
+.co-summary { width:100%; min-height:30px; padding:3px 2px; border:1px solid var(--line); background:white; font-size:11px; font-weight:500; }
+.co-report-marker { margin-left:3px; color:var(--village); font-size:8px; }
+#player-panel .player-table .co-detail-row td,#player-panel .player-table .co-add-row td { height:36px; padding:2px 8px; background:#f7fafb; border-bottom:1px solid var(--line); }
+.co-line { display:flex; gap:10px; align-items:center; min-height:32px; font-size:11px; }
+.co-line select,.co-line button { width:auto; min-height:28px; height:28px; padding:2px 6px; font-size:11px; }
+.co-line .co-select { flex:0 0 88px; }
+.co-timeline { display:flex; gap:14px; align-items:center; overflow-x:auto; flex:1; min-width:0; white-space:nowrap; }
+.co-day { display:inline-flex; gap:4px; align-items:center; }
+.co-ability-note { flex:1; color:var(--muted); }
+
+.co-timeline { height:32px; scrollbar-width:none; }
+.co-timeline::-webkit-scrollbar { display:none; }

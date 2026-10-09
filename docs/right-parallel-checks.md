@@ -117,3 +117,12 @@ BoardPlayerTable / GameTree見出しはBoardOverviewと同じ共通スタイル�
 関連40テスト（Web18/v0.3 14/deployment8）成功、追加GameTree後Web/deployment26件と最終余白調整後deployment8件を再確認。JS構文/git diff --check成功。独立Edge PC1100px/mobile390px/narrow320pxでTOP/MAIN日本語表記、維持した親名称、GameTree見出し/導線/アクセシブル名、3見出しの計算済み文字サイズ・色・太さ・字間の一致、Footer/設定収納/昼夜進行と戻る/7/15/横はみ出しなし・例外なしを確認。GameTreeアンカーでパネル全体がFooterの上へ表示されることも確認。画像は作業フォルダ labels-top-pc.png / labels-main-1100.png / labels-main-390.png / labels-main-320.png、スクリプト labels_qa.mjs。
 
 要件基準・backlogへ最新の名称訂正と、固定配役人数・ルールのゲーム全体の分岐を整理するGameTreeの将来意図を追記。Game→Session案は不採用、Game維持を確定として記録。GameTree本体・システムログ機能は未実装。8771反映、専用ブラウザ終了。README/archive・別gg_ww2・.artifacts未変更、push/公開なし。
+
+
+## 単独CO詳細行と霊能入力（2026-10-09）
+
+従来の霊能結果欄は表の下にあり、処刑前CO・翌日昼までの生存・報告機会という条件を満たす場合だけ表示された。Day1や夜には入力欄がなく、基本行のCO表示から結果欄を開く導線もなかった。今回、基本行を表示用COボタンに置き換え、展開した役職行に日付順の結果を置いた。旧独立パネルは削除した。入力名・公開報告条件・厳密計算・保存形式は変更しない。
+
+全116テスト合格（19.626秒）。追加9件では一人一CO、Day1なし、夜の予告、Day2白黒・未入力、黒入力後の狼確率1、途中COの遡及禁止、CO削除後の報告と履歴の保持、再設定、終局時の読み取り専用表示、未実装役職を検証した。JS構文・git diff --checkも合格。計算モデルは変更していないため、9人全履歴の性能再測定は今回行っていない。
+
+独立EdgeのPC1100px/mobile390pxで開閉・追加・削除・一人一CO・連打・結果変更の最新値反映・白黒と厳密計算・Day1〜3の日付順・戻る・役職確率表示切替とcolspan・途中CO・占い師/狩人の能力未対応・横方向の結果閲覧を確認した。基本行40px、宣言行と追加行36px。ページ全体の横はみ出しと実行時例外なし。作業フォルダの co_details_qa.mjs、co-details-pc.png、co-details-mobile.png に確認資料を残した。8771は更新済み、専用ブラウザは終了。README/archive・別gg_ww2・既存.artifactsは未変更、push/公開なし。

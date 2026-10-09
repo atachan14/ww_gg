@@ -8,6 +8,32 @@ function updateTargetPreview(root = document, target = null) {
   preview.textContent = `${preview.dataset.actionLabel}：${selected ? `Player${selected.value}` : '未選択'}`;
 }
 
+function initializeCOEditor() {
+  const main = document.querySelector('main[data-screen="main"], main[data-screen="result"]');
+  if (!main) return;
+  const opened = new Set(JSON.parse(main.dataset.coExpanded || '[]'));
+  const show = (button, expanded) => {
+    button.setAttribute('aria-expanded', String(expanded));
+    main.querySelectorAll(`[data-co-details="${button.dataset.coToggle}"]`).forEach(row => row.hidden = !expanded);
+    window.refreshParallelLayout?.();
+  };
+  main.querySelectorAll('[data-co-toggle]').forEach(button => {
+    show(button, opened.has(button.dataset.coToggle));
+    button.addEventListener('click', () => show(button, button.getAttribute('aria-expanded') !== 'true'));
+  });
+  main.querySelectorAll('[data-co-add]:not(:disabled)').forEach(button => button.addEventListener('click', () => {
+    const picker = main.querySelector(`[data-co-picker="${button.dataset.coAdd}"]`);
+    picker.hidden = !picker.hidden;
+    if (!picker.hidden) picker.focus();
+    window.refreshParallelLayout?.();
+  }));
+  main.querySelectorAll('[data-co-remove]:not(:disabled)').forEach(button => button.addEventListener('click', () => {
+    const select = main.querySelector(`[name="co_${button.dataset.coRemove}"]`);
+    select.value = 'latent';
+    select.dispatchEvent(new Event('change', {bubbles:true}));
+  }));
+}
+
 function initializeUI() {
   const formatInputs = document.querySelectorAll('input[name="probability-format"]');
   let probabilityFormat = "percent";
@@ -145,6 +171,7 @@ function initializeUI() {
     apply();
   }
 
+  initializeCOEditor();
   window.initializeStrategyEditor?.();
   window.initializeParallelLayout?.();
   initializeLiveClaims();
@@ -211,6 +238,7 @@ function initializeLiveClaims() {
           main.querySelectorAll('input[name="target"]').forEach(input => input.checked = input.value === selected);
           updateTargetPreview(main, selected);
         }
+        main.dataset.coExpanded=JSON.stringify(Array.from(document.querySelectorAll('[data-co-toggle][aria-expanded="true"]')).map(button=>button.dataset.coToggle));
         main.dataset.strategyDisclosures=JSON.stringify(Array.from(document.querySelectorAll('#strategy-editor details[open]')).map(e=>e.dataset.scope));
         document.querySelectorAll('[data-settings-pane]').forEach(e=>{main.querySelector(`[data-settings-pane="${e.dataset.settingsPane}"]`).open=e.open;});
         const scroll=document.querySelector('#player-panel .table-scroll');main.dataset.tableScroll=String(scroll.scrollLeft);
