@@ -312,3 +312,5 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 
 .phase-buttons .settings-return { white-space: nowrap; }
 @media (max-width: 700px) { .phase-buttons { flex-wrap: wrap; } .phase-buttons > [data-target-preview] { flex-basis: 100%; text-align: right; white-space: nowrap; } }
+
+.setup-preset { margin-bottom: 18px; }

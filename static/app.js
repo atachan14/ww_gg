@@ -61,12 +61,41 @@ function initializeUI() {
 
   updateTargetPreview();
 
+  const presetSeed = document.querySelector('#setup-presets');
+  const setupPresets = presetSeed ? JSON.parse(presetSeed.textContent) : null;
+  const castPreset = document.querySelector('#cast-preset');
+  const rulePreset = document.querySelector('#rule-preset');
+  const castInputs = Object.fromEntries(['citizens', 'mediums', 'seers', 'hunters', 'wolves'].map(key => [key, document.querySelector(`input[name="${key}"]`)]));
+  const ruleInput = document.querySelector('#allow-self-bite');
+  function refreshSetupPresets() {
+    if (!setupPresets) return;
+    const matches = (presets, values) => Object.entries(presets).find(([, preset]) =>
+      Object.entries(preset.values).every(([key, value]) => values[key] === value))?.[0] || 'custom';
+    const counts = Object.fromEntries(Object.entries(castInputs).map(([key, input]) => [key, input.value === '' ? null : Number(input.value)]));
+    castPreset.value = matches(setupPresets.cast, counts);
+    rulePreset.value = matches(setupPresets.rules, {allow_self_bite: ruleInput.value === '1' ? true : ruleInput.value === '0' ? false : null});
+  }
+  if (setupPresets) {
+    castPreset.addEventListener('change', () => {
+      const preset = setupPresets.cast[castPreset.value];
+      if (preset) Object.entries(preset.values).forEach(([key, value]) => { castInputs[key].value = value; });
+      updateCast();
+    });
+    rulePreset.addEventListener('change', () => {
+      const preset = setupPresets.rules[rulePreset.value];
+      if (preset) ruleInput.value = preset.values.allow_self_bite ? '1' : '0';
+      refreshSetupPresets();
+    });
+    ruleInput.addEventListener('change', refreshSetupPresets);
+  }
+
   const citizens = document.querySelector('#citizen-count');
   const mediums = document.querySelector('#medium-count');
   const wolves = document.querySelector('#wolf-count');
   const seers = document.querySelector('#seer-count');
   const hunters = document.querySelector('#hunter-count');
   function updateCast() {
+    refreshSetupPresets();
     const village = Number(citizens.value) + Number(mediums.value) + Number(seers.value) + Number(hunters.value);
     const total = village + Number(wolves.value);
     document.querySelector('#villager-count').innerHTML = `${village}<small>人</small>`;

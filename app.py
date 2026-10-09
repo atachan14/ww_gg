@@ -8,6 +8,7 @@ import os
 import json
 from werewolf.strategy_ui import co_editor, resolve_co_editor
 
+from werewolf.setup import GameConfig, SetupDraft, setup_count, complete_rules, preset_data
 from werewolf.comparison import compare_initial
 
 from flask import Flask, redirect, render_template, request, session, url_for, make_response
@@ -56,7 +57,7 @@ def create_app(test_config=None, *, deployment=False):
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
 
     def replay(state):
-        rules = Rules(**state["rules"])
+        rules = complete_rules(state["rules"])
         progress = Progress.initial(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
         if len(state["history"]) > max(0, state["players"] - 2):
             raise ValueError("Too much history")
@@ -278,12 +279,18 @@ def create_app(test_config=None, *, deployment=False):
             return render_template('comparison_results.html',result=result)
         return render_template('comparison.html',inputs=inputs,result=result,claim_policy=ClaimPolicy(**inputs['claim_policy']),finished=False)
 
+    def render_setup(draft, error=None):
+        return render_template("top.html", error=error, draft=draft, setup_presets=preset_data())
+
     @app.get("/")
     def top():
-        return render_template("top.html", error=None)
+        state = game()
+        config = GameConfig.from_game(state) if state else GameConfig.default()
+        return render_setup(config.draft())
 
     @app.post("/start")
     def start():
+        draft = SetupDraft.from_form(request.form)
         try:
             allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
@@ -294,9 +301,9 @@ def create_app(test_config=None, *, deployment=False):
                 values = request.form.getlist(key)
                 if not values and default is not None:
                     return default
-                if len(values) != 1 or values[0] not in {str(n) for n in range(10)}:
+                if len(values) != 1:
                     raise ValueError("配役の人数は0〜9の整数で指定してください。")
-                return int(values[0])
+                return setup_count(values[0])
             wolves = count('wolves', 1)
             mediums = count('mediums', 0)
             seers = count('seers',0)
@@ -320,7 +327,7 @@ def create_app(test_config=None, *, deployment=False):
             rules = Rules(permission == ["1"])
             policy = parse_policy(rules)
         except ValueError as exc:
-            return render_template("top.html", error=str(exc)), 400
+            return render_setup(draft, error=str(exc)), 400
         previous = game()
         session["game"] = {**({"seers":seers,"hunters":hunters} if seers or hunters else {}), "players": players, "wolves": wolves, "mediums": mediums,
                            "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite},

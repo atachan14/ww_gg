@@ -4,31 +4,34 @@
 {% block content %}
 <main data-screen="top">
   <p class="eyebrow">TOP</p>
+  <script type="application/json" id="setup-presets">{{ setup_presets|tojson }}</script>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
       <section class="panel cast-panel">
         <div class="panel-heading"><h2>配役</h2></div>
+        <label class="exclusive-field setup-preset" for="cast-preset">プリセット<select id="cast-preset">{% for key,preset in setup_presets.cast.items() %}<option value="{{ key }}" {% if draft.cast_preset == key %}selected{% endif %}>{{ preset.label }}</option>{% endfor %}<option value="custom" {% if draft.cast_preset == 'custom' %}selected{% endif %}>カスタム</option></select></label>
         <div class="role-columns">
           <section class="role-column"><h3>村陣営</h3>
-            <label class="role-count-row" for="citizen-count"><span>市民</span><input type="number" id="citizen-count" name="citizens" value="4" min="0" max="9" required></label>
-            <label class="role-count-row" for="medium-count"><span>霊能</span><input type="number" id="medium-count" name="mediums" value="0" min="0" max="9" required></label>
-            <label class="role-count-row" for="seer-count"><span>占い師（能力なし）</span><input type="number" id="seer-count" name="seers" value="0" min="0" max="9" required></label>
-            <label class="role-count-row" for="hunter-count"><span>狩人（能力なし）</span><input type="number" id="hunter-count" name="hunters" value="0" min="0" max="9" required></label>
+            <label class="role-count-row" for="citizen-count"><span>市民</span><input type="number" id="citizen-count" name="citizens" value="{{ draft.counts.citizens }}" min="0" max="9" required></label>
+            <label class="role-count-row" for="medium-count"><span>霊能</span><input type="number" id="medium-count" name="mediums" value="{{ draft.counts.mediums }}" min="0" max="9" required></label>
+            <label class="role-count-row" for="seer-count"><span>占い師（能力なし）</span><input type="number" id="seer-count" name="seers" value="{{ draft.counts.seers }}" min="0" max="9" required></label>
+            <label class="role-count-row" for="hunter-count"><span>狩人（能力なし）</span><input type="number" id="hunter-count" name="hunters" value="{{ draft.counts.hunters }}" min="0" max="9" required></label>
           </section>
           <section class="role-column"><h3>狼陣営</h3>
-            <label class="role-count-row" for="wolf-count"><span>狼</span><input type="number" id="wolf-count" name="wolves" value="1" min="0" max="4" required></label>
+            <label class="role-count-row" for="wolf-count"><span>狼</span><input type="number" id="wolf-count" name="wolves" value="{{ draft.counts.wolves }}" min="0" max="4" required></label>
           </section>
         </div>
         <div class="cast-grid cast-summary">
-          <div class="cast-card village"><span>村陣営</span><strong id="villager-count">4<small>人</small></strong></div>
-          <div class="cast-card wolf"><span>狼陣営</span><strong id="wolf-summary">1<small>人</small></strong></div>
-          <div class="cast-card total"><span>合計</span><strong id="total-count">5人<small>（最大9人）</small></strong></div>
+          <div class="cast-card village"><span>村陣営</span><strong id="villager-count">{{ draft.summary.village }}<small>人</small></strong></div>
+          <div class="cast-card wolf"><span>狼陣営</span><strong id="wolf-summary">{{ draft.summary.wolves }}<small>人</small></strong></div>
+          <div class="cast-card total"><span>合計</span><strong id="total-count">{{ draft.summary.total }}人<small>（最大9人）</small></strong></div>
         </div>
         <p class="hint" id="cast-validation">合計1〜9人。3人以上では狼より村陣営が多い配役にしてください。</p>
       </section>
     <section class="panel rules-panel">
       <h2>ゲームルール</h2>
+      <label class="exclusive-field setup-preset" for="rule-preset">プリセット<select id="rule-preset">{% for key,preset in setup_presets.rules.items() %}<option value="{{ key }}" {% if draft.rule_preset == key %}selected{% endif %}>{{ preset.label }}</option>{% endfor %}<option value="custom" {% if draft.rule_preset == 'custom' %}selected{% endif %}>カスタム</option></select></label>
       {% with editable=true %}{% include 'rules.html' %}{% endwith %}
     </section>
     </div>

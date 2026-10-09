@@ -11,7 +11,7 @@
   </details>
   <details class="team-section" data-rule-section="wolf">
     <summary>狼陣営</summary><div class="scope-body">
-      <label class="exclusive-field" for="{{ 'allow-self-bite' if editable else 'view-self-bite' }}">自噛み<select id="{{ 'allow-self-bite' if editable else 'view-self-bite' }}" {% if editable %}name="allow_self_bite"{% else %}disabled{% endif %}><option value="0" {% if editable or not rules.allow_self_bite %}selected{% endif %}>不可</option><option value="1" {% if not editable and rules.allow_self_bite %}selected{% endif %}>可能</option></select></label>
+      <label class="exclusive-field" for="{{ 'allow-self-bite' if editable else 'view-self-bite' }}">自噛み<select id="{{ 'allow-self-bite' if editable else 'view-self-bite' }}" {% if editable %}name="allow_self_bite"{% else %}disabled{% endif %}><option value="0" {% if (editable and draft.allow_self_bite == '0') or (not editable and not rules.allow_self_bite) %}selected{% endif %}>不可</option><option value="1" {% if (editable and draft.allow_self_bite == '1') or (not editable and rules.allow_self_bite) %}selected{% endif %}>可能</option>{% if editable and draft.allow_self_bite not in ('0','1') %}<option value="{{ draft.allow_self_bite }}" selected>不正な値：{{ draft.allow_self_bite }}</option>{% endif %}</select></label>
     </div>
   </details>
 </div>

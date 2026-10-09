@@ -246,7 +246,7 @@ class WebTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('id="game-cast">9人村:市民4 · 霊能1 · 占い師1（能力なし） · 狩人1（能力なし） · 狼2</p>', response.get_data(as_text=True))
         self.assertEqual(self.state()['players'], 9)
-        self.assertIn('id="total-count">5人<small>（最大9人）</small>', self.page('/'))
+        self.assertIn('id="total-count">9人<small>（最大9人）</small>', self.page('/'))
         self.client.post('/start', data={'citizens':'1','wolves':'1','day':'max','night':'max'})
         self.assertIn('id="game-cast">2人村:市民1 · 霊能0 · 占い師0（能力なし） · 狩人0（能力なし） · 狼1</p>', self.page())
 
