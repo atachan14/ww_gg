@@ -184,7 +184,7 @@ def co_group_compositions(board):
         for world in board.worlds:
             masks=world_masks(board,world);key=tuple((masks[r]&bit).bit_count() for r in roles)
             counts[key]=counts.get(key,Fraction(0))+world[-1]
-        groups.append(dict(claim=claim,ids=ids,roles=roles,compositions=tuple((*key,q) for key,q in sorted(counts.items()))))
+        groups.append(dict(claim=claim,ids=ids,roles=roles,visible_roles=tuple(r for r in roles if board.initial_role_counts[r]>0),compositions=tuple((*key,q) for key,q in sorted(counts.items()))))
     return groups
 
 

@@ -79,7 +79,8 @@ def condition(board,rows,opt,initial_alive):
                 if row['color']!='white':factor=F();break
                 legal=tuple(i for i in initial_alive if i!=row['reporter'] and not w&(1<<(i-1)))
                 if row['target'] not in legal:factor=F();break
-                factor/=len(legal)
+                # Observed hand reports are compatibility filters, not sampled targets.
+                # Generation Chance probabilities belong to the separate future kernel.
         if factor:entries.append((w,m,s,h,q*factor))
     mass=sum((x[-1] for x in entries),F())
     if not mass:raise ValueError('占い結果と公開履歴に整合する配役がありません。')

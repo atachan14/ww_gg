@@ -1,0 +1,148 @@
+{
+  "cases": [
+    {
+      "cast": {
+        "players": 5,
+        "wolves": 2,
+        "mediums": 0,
+        "seers": 1,
+        "hunters": 0
+      },
+      "visible_roles": [
+        "villager",
+        "seer",
+        "wolf"
+      ],
+      "headers": [
+        "CO",
+        "生存位置",
+        "市民",
+        "占い師（能力なし）",
+        "狼",
+        "確率"
+      ],
+      "all_rows_width_match_header": true,
+      "original_compositions_and_probabilities_unchanged": true
+    },
+    {
+      "cast": {
+        "players": 5,
+        "wolves": 1,
+        "mediums": 1,
+        "seers": 0,
+        "hunters": 0
+      },
+      "visible_roles": [
+        "villager",
+        "medium",
+        "wolf"
+      ],
+      "headers": [
+        "CO",
+        "生存位置",
+        "市民",
+        "霊能",
+        "狼",
+        "確率"
+      ],
+      "all_rows_width_match_header": true,
+      "original_compositions_and_probabilities_unchanged": true
+    },
+    {
+      "cast": {
+        "players": 5,
+        "wolves": 1,
+        "mediums": 0,
+        "seers": 0,
+        "hunters": 0
+      },
+      "visible_roles": [
+        "villager",
+        "wolf"
+      ],
+      "headers": [
+        "CO",
+        "生存位置",
+        "市民",
+        "狼",
+        "確率"
+      ],
+      "all_rows_width_match_header": true,
+      "original_compositions_and_probabilities_unchanged": true
+    },
+    {
+      "cast": {
+        "players": 3,
+        "wolves": 0,
+        "mediums": 0,
+        "seers": 1,
+        "hunters": 0
+      },
+      "visible_roles": [
+        "villager",
+        "seer"
+      ],
+      "headers": [
+        "CO",
+        "生存位置",
+        "市民",
+        "占い師（能力なし）",
+        "確率"
+      ],
+      "all_rows_width_match_header": true,
+      "original_compositions_and_probabilities_unchanged": true
+    },
+    {
+      "cast": {
+        "players": 5,
+        "wolves": 1,
+        "mediums": 0,
+        "seers": 1,
+        "hunters": 1
+      },
+      "visible_roles": [
+        "villager",
+        "seer",
+        "hunter",
+        "wolf"
+      ],
+      "headers": [
+        "CO",
+        "生存位置",
+        "市民",
+        "占い師（能力なし）",
+        "狩人（能力なし）",
+        "狼",
+        "確率"
+      ],
+      "all_rows_width_match_header": true,
+      "original_compositions_and_probabilities_unchanged": true
+    }
+  ],
+  "row_zero_retained": true,
+  "published": false,
+  "seer_label_checks": [
+    {
+      "source_label": "占い師（手動のみ）",
+      "header": "占い師",
+      "co_name": "占い師",
+      "zero_cast_medium_hidden": true,
+      "row_zero_retained": true
+    },
+    {
+      "source_label": "占い師（能力なし）",
+      "header": "占い師",
+      "co_name": "占い師",
+      "zero_cast_medium_hidden": true,
+      "row_zero_retained": true
+    },
+    {
+      "source_label": "占い師（手動入力＋未来均等）",
+      "header": "占い師",
+      "co_name": "占い師",
+      "zero_cast_medium_hidden": true,
+      "row_zero_retained": true
+    }
+  ],
+  "numeric_logic_changed": false
+}

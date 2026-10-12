@@ -1,0 +1,27 @@
+{
+  "base_commit": "3bfcd375cc27e403b7b598fe5074f1b1552ee4e8",
+  "published": false,
+  "committed": false,
+  "tests": 203,
+  "future_kernel_read_only_tests": 23,
+  "browser": {
+    "cast": "C2/S1/W2",
+    "path": "execute1/bite2/Day2 CO3",
+    "reports": "Day1 white4/Day2 black5",
+    "seer2_and3": "1/2",
+    "citizen2_and5": "1/2",
+    "execute3_or5": "1/2",
+    "execute4": "0",
+    "preview_and_commit_equal": true,
+    "confirmed_unchanged_during_preview": true,
+    "medium_zero_column_hidden": true,
+    "seer_header_and_co_name_plain": true,
+    "row_zero_retained": true,
+    "cold_restore_equal": true,
+    "future_not_included": true
+  },
+  "nonuniform_prior_preserved": "3/4 and 1/4 remain 3/4 and 1/4 for two compatible true/fake hypotheses",
+  "existing_test_adjustment": "literal_first_values no longer divides a true initial white observation weight by 2; independent reference must follow approved compatibility-only observation semantics",
+  "future_code_included": false,
+  "remaining_blockers": []
+}

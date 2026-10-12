@@ -21,7 +21,7 @@ def literal_first_values(g):
                     if (row['target'] in wolves)!=(row['color']=='black'):q=F();break
                     if g['seer_options']['initial_rule']=='random_white':
                         if row['color']!='white':q=F();break
-                        q/=2
+                        # Hand observations keep prior weights; no target-generation likelihood.
             if q:worlds.append((frozenset(wolves),seer,q))
     total=sum(q for w,s,q in worlds);worlds=[(w,s,q/total) for w,s,q in worlds]
     result={}
