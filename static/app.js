@@ -9,6 +9,7 @@ function updateTargetPreview(root = document, target = null) {
 }
 
 function initializeCOEditor() {
+  if(document.querySelector('main[data-hybrid-table]'))return;
   const main = document.querySelector('main[data-screen="main"], main[data-screen="result"]');
   if (!main) return;
   const storageKey = 'ww-gg-co-display';
@@ -52,7 +53,7 @@ function initializeUI() {
   } catch (_) { /* Display still works if browser storage is unavailable. */ }
 
   function applyProbabilityFormat() {
-    document.querySelectorAll(".probability").forEach((element) => {
+    document.querySelectorAll(".probability[data-fraction][data-percent]").forEach((element) => {
       element.textContent = probabilityFormat === "fraction" ? element.dataset.fraction : element.dataset.percent;
     });
     formatInputs.forEach((input) => { input.checked = input.value === probabilityFormat; });
@@ -195,6 +196,7 @@ function initializeUI() {
 }
 
 function initializeLiveClaims() {
+  if(document.querySelector('main[data-hybrid-table]'))return;
   const form = document.querySelector('#action-form');
   if (!form || !document.querySelector('.co-select:not(:disabled), .report-select:not(:disabled)')) return;
   let running = false;
@@ -301,6 +303,7 @@ function initializePublicLog() {
   let disabledStates=new Map();
   let saved=seed.draft?.revision===seed.revision?seed.draft.payload:null,editing=null,legacyKey=null,busy=false,navigating=false,contextDay=seed.day,contextPhase=seed.phase,returnFocus=null;
   document.querySelector('#public-log-draft-form').addEventListener('submit',event=>event.preventDefault());
+  document.addEventListener('board-table-dirty',()=>{saved=null;});
   function field(row,key,labelText,values,value='') {
     const label=document.createElement('label');label.textContent=labelText;
     const select=document.createElement('select');select.dataset.publicField=key;select.setAttribute('form','public-log-draft-form');

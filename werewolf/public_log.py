@@ -10,6 +10,9 @@ def migrate(g):
             'base_seer':deepcopy(g.get('seer_inputs',[])), 'base_medium':deepcopy(g.get('reports',[])), 'batches':[], 'next_id':1}
 
 def project(g,log):
+    if log.get("version")==2:
+        from .public_log_changes import project_changes
+        return project_changes(g,log)
     if log.get('version')!=VERSION:raise ValueError('SystemLogの保存形式が未対応です。')
     result=deepcopy(g)
     def claims_at(slot):
@@ -38,6 +41,9 @@ def project(g,log):
     return result
 
 def transaction(g,board,payload,finished=False):
+    if g.get("public_log",{}).get("version")==2:
+        from .public_log_changes import transaction_changes
+        return transaction_changes(g,board,payload,finished)
     log=migrate(g)
     if not isinstance(payload,dict) or set(payload)-{'mode','events','replace','delete','legacy','delete_legacy'}:raise ValueError('公開バッチの形式を確認してください。')
     if 'legacy' in payload or 'delete_legacy' in payload:

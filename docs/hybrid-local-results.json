@@ -1,0 +1,20 @@
+{
+  "base": "aaf01473aeb321a7d48937c855f572954479b77d",
+  "published": false,
+  "standalone_tests": 187,
+  "integration_tests": 236,
+  "original_future_tests": 226,
+  "original_future_preserved": {
+    "app.py": "3d7d9ac6e70573e4851d6791b445d9cfd212fa2913184aaa9c597324eae94f66",
+    "werewolf\\seer_acquisition.py": "fc7af61fabeea7eb5139fb5a086caf9322c43a3a8dcda7a8b662ff1eaee9eff5",
+    "werewolf\\seer_fake_uniform.py": "9b66e23ab0ee72c77e6b8221472e839e7db7b1c8c6dd66204a121e98ae781548",
+    "werewolf\\seer_future_bridge.py": "cdec8526634f2fbc6d1ce661d478d01be82f2e85efec17e2af0a12be692e2a94",
+    "werewolf\\seer_future_forecast.py": "601f7138239d324ded7a9f7393a1946638e698b734a81b3e42a007c740feb895",
+    "werewolf\\seer_future_uniform.py": "4d77dccf81f5c5c429e89584ace4b4201a0ef4d9f51231bcd11f037158f37e47",
+    "werewolf\\seer_manual.py": "3e28c867efdbfce73e7074ca46ed5e95baa18c19568388fa238a75d7ead2c699",
+    "tests\\test_seer_future_bridge.py": "c03ba1797d99fdfb69118676b2cb9cbbcf4f17a660413446d546011bcc063878"
+  },
+  "model": "current active input reports only; generated future true acquisitions retained",
+  "qa": "D:/CodexTemp/ww_gg-hybrid-qa-20261012",
+  "integration_qa": "D:/CodexTemp/ww_gg-hybrid-future-qa-20261012"
+}

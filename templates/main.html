@@ -4,7 +4,7 @@
 {% macro probability(value, id='') %}{% if value is number %}<strong {% if id %}id="{{ id }}"{% endif %} class="probability" data-fraction="{{ value|fraction }}" data-percent="{{ value|percent }}%">{{ value|percent }}%</strong>{% else %}<strong class="muted">Pending</strong>{% endif %}{% endmacro %}
 {% block content %}
 {% set has_role_details = state.get('mediums',0) or state.get('seers',0) or state.get('hunters',0) %}
-<main data-screen="{{ 'result' if finished else 'main' }}" data-co-game="{{ co_game }}">
+<main {% if config.get("HYBRID_TABLE_PREVIEW") %}data-hybrid-table{% endif %} data-screen="{{ 'result' if finished else 'main' }}" data-co-game="{{ co_game }}">
   <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:市民{{ state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0) }} · 霊能{{ state.get('mediums',0) }} · 占い師{{ state.get('seers',0) }}{{ '（手動のみ）' if state.get('seer_mode')=='information-fixed-v1' else '（能力なし）' }} · 狩人{{ state.get('hunters',0) }}（能力なし） · 狼{{ state.get('wolves',1) }}</p>
   {% if state.get('seer_mode')=='information-fixed-v1' %}<p class="hint" data-information-fixed-scope>開発中の占い情報固定モデル：占いは入力済み結果だけを使用し、未来の取得・利用・公開は計算しません。{% if state.get('mediums',0) %}霊能は従来の将来報告モデルを引き継ぎます。{% endif %}{% if state.get('hunters',0) %}狩人は人数・COのみ対応し、護衛・GJは未対応です。{% endif %}</p>{% endif %}
   <form id="display-options-form"></form>
@@ -29,7 +29,7 @@
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
         <div class="panel-heading"><h2 class="board-section-label" id="players-title">BoardInfo</h2><span class="muted">{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
         {% include 'public_log.html' %}
-        <h3 class="board-child-title" id="board-table-title">BoardTable</h3>
+        <div class="board-table-heading"><h3 class="board-child-title" id="board-table-title">BoardTable</h3>{% if config.get("HYBRID_TABLE_PREVIEW") and not finished %}<button type="button" data-table-update disabled>更新</button><button type="button" data-table-cancel hidden>キャンセル</button><small data-table-preview-status aria-live="polite"></small>{% endif %}</div>
         <div class="table-scroll"><table class="player-table">
           <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>{% if has_role_details %}<button type="button" class="role-breakdown-toggle" aria-expanded="true" aria-label="村陣営の役職内訳を開閉">村陣営 <span aria-hidden="true" data-breakdown-arrow>▾</span></button>{% else %}村陣営{% endif %}</th>{% if has_role_details %}<th data-role-detail>市民</th>{% endif %}{% if state.get("mediums",0) %}<th data-role-detail>霊能</th>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<th data-role-detail>{{ '占い師' if r=='seer' else '狩人' }}</th>{% endif %}{% endfor %}<th>狼<small>狼陣営</small></th><th>村勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
           <tbody>{% for player in players %}
@@ -38,7 +38,7 @@
               <td class="village-text">{{ probability(player.village_probability) }}</td>{% if has_role_details %}<td data-role-detail>{{ probability(player.citizen_probability) }}</td>{% endif %}{% if state.get("mediums",0) %}<td data-role-detail>{{ probability(player.medium_probability) }}</td>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<td data-role-detail>{{ probability(player.extra_probabilities[r]) }}</td>{% endif %}{% endfor %}<td class="wolf-text">{{ probability(player.wolf_probability) }}</td>
               <td>{{ probability(player.action.village_win) if player.action else '—' }}</td><td>{{ probability(player.action.wolf_win) if player.action else '—' }}</td>
               <td><label class="target-label"><input type="radio" name="target" value="{{ player.id }}" aria-label="Player {{ player.id }}を対象にする" required {% if display_selection == player.id %}checked{% endif %} {% if finished or not player.alive or not player.legal %}disabled{% endif %}></label></td>
-            </tr>{% with public_readonly=true %}{% include 'co_details.html' %}{% endwith %}{% endfor %}</tbody>
+            </tr>{% if not config.get("HYBRID_TABLE_PREVIEW") %}{% with public_readonly=true %}{% include 'co_details.html' %}{% endwith %}{% endif %}{% endfor %}</tbody>
         </table></div>
 
       </section>
@@ -52,7 +52,7 @@
         </section>
       </aside>
     </div>
-    {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
+    {% if co_groups %}<div data-hybrid-groups>{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}</div>{% endif %}
   </form>
   <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">BoardOverview</button><button type="button" data-scroll-to="player-panel">BoardInfo</button><button type="button" data-scroll-to="tree-reserved">GameTree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview data-action-label="{{ '処刑' if board.phase == 'day' else '襲撃' }}">{{ '処刑' if board.phase == 'day' else '襲撃' }}：{{ 'Player' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
   {% if not state.history and board.day == 1 and board.phase == 'day' %}<a class="secondary settings-return" id="settings-return" href="{{ url_for('top') }}"><span aria-hidden="true">←</span> ゲーム設定に戻る</a>{% endif %}

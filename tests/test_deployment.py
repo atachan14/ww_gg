@@ -113,7 +113,7 @@ class DeploymentTests(unittest.TestCase):
     def test_public_assets_exist_before_build_and_match_source(self):
         # Vercel must see real public files when planning static outputs, not
         # only files introduced later by the Python function's build hook.
-        expected = {"styles.css", "app.js", "strategy.js", "parallel.js", "comparison.js"}
+        expected = {"styles.css", "app.js", "strategy.js", "parallel.js", "comparison.js", "board_draft.js", "board_table.js"}
         self.assertEqual({p.name for p in Path("public/static").iterdir()}, expected)
         for name in expected:
             self.assertEqual((Path("public/static")/name).read_bytes(),

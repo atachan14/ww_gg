@@ -452,6 +452,73 @@ def create_app(test_config=None, *, deployment=False):
                            "revision": state["revision"] + 1}
         return redirect(url_for("result" if progress.finished else "main"), code=303)
 
+    def table_proposal(state, payload):
+        from werewolf.public_log_changes import transaction_changes,upgrade,declarations
+        from werewolf.public_log import migrate
+        active,_=declarations(upgrade(migrate(state)))
+        if not isinstance(payload,dict) or set(payload)!={'claims','seers','mediums'}:raise ValueError('下書きの形式を確認してください。')
+        claims=payload['claims']
+        if not isinstance(claims,list) or len(claims)!=state['players']:raise ValueError('COを確認してください。')
+        events=[]
+        for player,(old,new) in enumerate(zip(state['claims'],claims),1):
+            if old!=new:
+                old_event=active.get(('co',player))
+                if new=='latent':
+                    if old_event:events.append({**old_event[1],'action':'withdraw','ref':old_event[1]['id']})
+                else:events.append({'kind':'co','player':player,'role':new,**({'action':'change','ref':old_event[1]['id']} if old_event else {})})
+        for kind,name,source in (('seer','seers','seer_inputs'),('medium','mediums','reports')):
+            old={((r['day'],r['reporter']) if kind=='seer' else (r['day'],r['reporter'],r['target'])):r for r in state.get(source,[])}
+            proposed=payload[name]
+            if not isinstance(proposed,list) or any(not isinstance(r,dict) or type(r.get('reporter'))is not int or not 1<=r['reporter']<=state['players'] for r in proposed):raise ValueError('能力結果を確認してください。')
+            if kind=='seer':proposed=[r for r in proposed if not (state['claims'][r['reporter']-1]=='seer' and claims[r['reporter']-1]!='seer')]
+            if not isinstance(proposed,list):raise ValueError('能力結果を確認してください。')
+            new={}
+            for r in proposed:
+                if not isinstance(r,dict) or set(r)!={'day','reporter','target','color'}:raise ValueError('能力結果を確認してください。')
+                key=(r['day'],r['reporter']) if kind=='seer' else (r['day'],r['reporter'],r['target'])
+                if key in new:raise ValueError('能力結果が重複しています。')
+                new[key]=r
+            for k,r in old.items():
+                ref_key=(kind,*k);previous=active.get(ref_key)
+                if k not in new and previous:events.append({**previous[1],'action':'withdraw','ref':previous[1]['id']})
+                elif k in new and new[k]!=r and previous:events.append({'kind':kind,'player':new[k]['reporter'],'day':new[k]['day'],'target':new[k]['target'],'color':new[k]['color'],'action':'change','ref':previous[1]['id']})
+            for k,r in new.items():
+                if k not in old:
+                    if r['target'] is None or r['color'] is None:raise ValueError('対象と色を入力してください。')
+                    events.append({'kind':kind,'player':r['reporter'],'day':r['day'],'target':r['target'],'color':r['color']})
+        if not events:return state,None
+        _,p=replay(state)
+        batch={'mode':'simultaneous','events':events}
+        return transaction_changes(state,p.last_board if p.finished else p.board,batch,finished=p.finished),batch
+
+    @app.post('/table-preview')
+    def table_preview():
+        from flask import jsonify
+        if not app.config.get('HYBRID_TABLE_PREVIEW'):return jsonify(error='Not enabled'),404
+        state=game()
+        if state is None or not revision_matches(state):return jsonify(error='確定状態が変わりました。再読み込みしてください。'),409
+        try:
+            proposed,batch=table_proposal(state,json.loads(request.form.get('payload','')))
+            replay(proposed)
+            html,status=render_main(proposed)
+            return jsonify(html=html,batch=batch,request_id=request.form.get('request_id'),revision=state['revision']),status
+        except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc),request_id=request.form.get('request_id')),400
+
+    @app.post('/table-publish')
+    def table_publish():
+        from flask import jsonify
+        if not app.config.get('HYBRID_TABLE_PREVIEW'):return jsonify(error='Not enabled'),404
+        state=game()
+        if state is None or not revision_matches(state):return jsonify(error='確定状態が変わりました。再読み込みしてください。'),409
+        try:
+            proposed,batch=table_proposal(state,json.loads(request.form.get('payload','')))
+            replay(proposed)
+            if batch is None:return jsonify(error='変更がありません。'),400
+            proposed['revision']=state['revision']+1
+        except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc)),400
+        session['game']=proposed
+        return jsonify(ok=True,revision=proposed['revision'])
+
     @app.post("/public-log")
     def public_log_route():
         from werewolf.public_log import transaction, validate_draft
@@ -529,8 +596,9 @@ def create_app(test_config=None, *, deployment=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ww_gg local public Board v0.4")
     parser.add_argument("--port", type=int, default=8771)
+    parser.add_argument("--hybrid-table-preview", action="store_true", help="Enable unpublished table draft preview locally")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("Choose a port between 1024 and 65535")
-    create_app().run(host="127.0.0.1", port=args.port, debug=False,
+    create_app({"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview}).run(host="127.0.0.1", port=args.port, debug=False,
                      use_reloader=False, load_dotenv=False)
