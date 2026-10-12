@@ -68,7 +68,7 @@ class PublicLogTests(unittest.TestCase):
  def test_legacy_migration_preserves_progress_and_unknown_order(self):
   self.assertEqual(self.c.post('/strategy',data=self.form(co_1='seer',seer_target_1_1='3',seer_color_1_1='white')).status_code,303)
   old=self.g();new=project(old,migrate(old));self.assertTrue(new['public_log']['legacy']);self.assertEqual(replay(old),replay(new));self.assertEqual(new['public_log']['batches'],[])
-  self.publish([self.co(2)]);self.assertIn('公開順・同時性は不明',self.c.get('/main').get_data(as_text=True))
+  self.publish([self.co(2)]);self.assertIn('旧保存：順序不明',self.c.get('/main').get_data(as_text=True))
  def test_direct_inputs_cannot_bypass_log(self):
   self.publish([self.co(1)]);old=self.g();self.assertEqual(self.c.post('/strategy',data=self.form(co_2='seer')).status_code,400);self.assertEqual(self.g(),old)
  def test_medium_and_mixed_cast_existing_opportunity(self):

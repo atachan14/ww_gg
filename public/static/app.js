@@ -294,32 +294,91 @@ window.addEventListener("pageshow", (event) => {
 });
 
 function initializePublicLog() {
- const seedNode=document.querySelector('#public-log-seed');if(!seedNode)return;
- const seed=JSON.parse(seedNode.textContent),root=document.querySelector('#system-log');
- const rows=root.querySelector('[data-public-rows]'),mode=root.querySelector('[data-public-mode]'),status=root.querySelector('[data-public-status]');
- let replacing=null,legacyKey=null,busy=false;
- document.querySelector('#public-log-draft-form').addEventListener('submit',event=>event.preventDefault());
- const option=(value,label)=>{const o=document.createElement('option');o.value=value;o.textContent=label;return o;};
- function field(row,key,values,value){const label=document.createElement('label');label.textContent={kind:'種類',player:'発言者',role:'CO',day:'取得日',target:'対象',color:'結果'}[key];const select=document.createElement('select');select.dataset.publicField=key;select.setAttribute('form','public-log-draft-form');values.forEach(v=>select.append(option(v[0],v[1])));select.value=value??'';label.append(select);row.append(label);return select;}
- function add(e={}){const row=document.createElement('div');row.className='public-draft-row';row.dataset.publicRow='';
- const kind=field(row,'kind',[['co','CO'],['seer','占い結果'],['medium','霊能結果']],e.kind||'co');
- field(row,'player',[['','未選択'],...Array.from({length:seed.players},(_,i)=>[i+1,`Player ${i+1}`])],e.player);
- field(row,'role',[['','未選択'],...seed.roles.map(r=>[r,{villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'}[r]])],e.role);
- field(row,'day',Array.from({length:seed.day},(_,i)=>[i+1,`Day ${i+1}`]),e.day||seed.day);
- field(row,'target',[['','未選択'],...Array.from({length:seed.players},(_,i)=>[i+1,`Player ${i+1}`])],e.target);
- field(row,'color',[['','未選択'],['white','白'],['black','黒']],e.color);
- const refresh=()=>{row.querySelector('[data-public-field=role]').parentElement.hidden=kind.value!=='co';['day','target','color'].forEach(k=>row.querySelector(`[data-public-field=${k}]`).parentElement.hidden=kind.value==='co');};kind.addEventListener('change',refresh);refresh();
- const remove=document.createElement('button');remove.type='button';remove.textContent='行を削除';remove.addEventListener('click',()=>{row.remove();});row.append(remove);rows.append(row);}
- function payload(){const p={mode:mode.value,events:Array.from(rows.children).map(row=>{const get=k=>row.querySelector(`[data-public-field=${k}]`).value;const e={kind:get('kind'),player:Number(get('player'))};return e.kind==='co'?{...e,role:get('role')}:{...e,day:Number(get('day')),target:Number(get('target')),color:get('color')};}),...(replacing===null?{}:{replace:replacing})};return legacyKey?{legacy:{key:legacyKey,event:p.events[0]}}:p;}
- function load(p){legacyKey=p?.legacy?.key??null;if(legacyKey)p={mode:'single',events:[p.legacy.event]};rows.replaceChildren();mode.value=p?.mode||'single';replacing=p?.replace??null;(p?.events||[{}]).forEach(add);root.querySelector('[data-public-edit-label]').textContent=replacing===null?'新規公開':`バッチ #${replacing} の訂正（公開位置を維持）`;}
- async function send(operation,p){if(busy)return;busy=true;root.querySelectorAll('button').forEach(b=>b.disabled=true);try{const body=new URLSearchParams({revision:String(seed.revision),operation,payload:JSON.stringify(p)});const r=await fetch('/public-log',{method:'POST',body});const data=await r.json().catch(()=>({error:'保存容量を超えたか、応答が確認できません。'}));if(!r.ok)throw Error(data.error);if(operation==='publish'){location.reload();return;}status.textContent=operation==='draft'?'下書きを保存しました。計算は変わりません。':'下書きを取り消しました。';if(operation==='cancel')load(null);}catch(e){status.textContent=e.message;}finally{busy=false;root.querySelectorAll('button').forEach(b=>b.disabled=false);}}
- root.querySelector('[data-public-add]').addEventListener('click',()=>{if(legacyKey){status.textContent='旧結果の訂正は一件ずつ行います。';return;}mode.value='simultaneous';add();});
- root.querySelector('[data-public-save]').addEventListener('click',()=>send('draft',payload()));
- root.querySelector('[data-public-cancel]').addEventListener('click',()=>send('cancel',{}));
- root.querySelector('[data-public-confirm]').addEventListener('click',()=>send('publish',payload()));
- root.querySelectorAll('[data-public-edit]').forEach(b=>b.addEventListener('click',()=>{const batch=seed.log.batches.find(x=>x.id===Number(b.dataset.publicEdit));load({mode:batch.mode,events:batch.events,replace:batch.id});}));
- root.querySelectorAll('[data-public-delete]').forEach(b=>b.addEventListener('click',()=>{status.textContent='依存する結果が残る削除は拒否されます。';send('publish',{delete:Number(b.dataset.publicDelete)});}));
- root.querySelectorAll('[data-legacy-edit]').forEach(b=>b.addEventListener('click',()=>{const e=JSON.parse(b.dataset.legacyEdit);load({legacy:{key:{kind:e.kind,player:e.player,day:e.day,target:e.target},event:e}});status.textContent='旧結果の訂正です。新たな公開順は作りません。';}));
- root.querySelectorAll('[data-legacy-delete]').forEach(b=>b.addEventListener('click',()=>send('publish',{delete_legacy:{key:JSON.parse(b.dataset.legacyDelete)}})));
- load(seed.draft?.revision===seed.revision?seed.draft.payload:null);
+  const seedNode=document.querySelector('#public-log-seed');if(!seedNode)return;
+  const seed=JSON.parse(seedNode.textContent),root=document.querySelector('#system-log'),dialog=root.querySelector('#board-log-dialog');
+  const rows=root.querySelector('[data-public-rows]'),status=root.querySelector('[data-public-status]'),editor=root.querySelector('[data-public-editor]'),picker=root.querySelector('[data-legacy-picker]'),mode=root.querySelector('[data-public-mode]');
+  const labels={villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'};
+  let disabledStates=new Map();
+  let saved=seed.draft?.revision===seed.revision?seed.draft.payload:null,editing=null,legacyKey=null,busy=false,navigating=false,contextDay=seed.day,contextPhase=seed.phase,returnFocus=null;
+  document.querySelector('#public-log-draft-form').addEventListener('submit',event=>event.preventDefault());
+  function field(row,key,labelText,values,value='') {
+    const label=document.createElement('label');label.textContent=labelText;
+    const select=document.createElement('select');select.dataset.publicField=key;select.setAttribute('form','public-log-draft-form');
+    for(const [v,text] of values){const option=document.createElement('option');option.value=v;option.textContent=text;select.append(option);}
+    if(value!==''&&!values.some(v=>String(v[0])===String(value))){const option=document.createElement('option');option.value=value;option.textContent='不正な値';select.append(option);}
+    select.value=value??'';label.append(select);row.append(label);return select;
+  }
+  function playersAvailable(){return editing===null?seed.alive:Array.from({length:seed.players},(_,i)=>i+1).filter(p=>!seed.targets.slice(0,seed.log.batches.find(b=>b.id===editing)?.slot??0).includes(p));}
+  function refreshTargets(row,selected=null) {
+    const get=k=>row.querySelector(`[data-public-field=${k}]`),kind=get('result').value,player=Number(get('player').value),day=Number(get('day').value),target=get('target'),old=selected??target.value;
+    const scan=Array.from({length:seed.players},(_,i)=>i+1).filter(p=>!seed.targets.slice(0,Math.max(0,2*(day-1)-1)).includes(p)&&p!==player);
+    let eligible=kind==='medium'?seed.medium.filter(o=>o[0]===day&&o[1]===player).map(o=>o[2]):scan;
+    if(legacyKey)eligible=kind==='medium'?[legacyKey.target]:scan;
+    target.replaceChildren();for(const [value,text] of [['','未選択'],...Array.from(new Set(eligible)).map(p=>[p,`Player${p}`])]){const option=document.createElement('option');option.value=value;option.textContent=text;target.append(option);}
+    if(old!==''&&!eligible.includes(Number(old))){const option=document.createElement('option');option.value=old;option.textContent=`Player${old}（確認）`;target.append(option);}
+    target.value=old;
+    for(const key of ['day','target','color'])get(key).parentElement.hidden=kind==='';
+  }
+  function refreshPlayers(){root.querySelector('[data-public-add]').disabled=busy||!!legacyKey||rows.children.length>=27;}
+  function addRow(data={}) {
+    const row=document.createElement('div');row.className='board-log-draft-row';row.dataset.publicRow='';
+    const actor=field(row,'player','Player',[['','未選択'],...playersAvailable().map(p=>[p,`Player${p}`])],data.player||'');
+    field(row,'role','CO',[['','変更しない'],...seed.roles.map(r=>[r,labels[r]])],data.role??'').title='CO撤回は未対応';
+    const result=field(row,'result','結果',[['','追加しない'],...(seed.roles.includes('seer')?[['seer','占い結果']]:[]),...(seed.roles.includes('medium')?[['medium','霊能結果']]:[])],data.result??'');
+    const day=field(row,'day','取得日',[[contextDay,`Day${contextDay}`]],data.day??contextDay);day.disabled=true;day.title='取得日と公開日は同じ昼のみ';
+    field(row,'target','対象',[['','未選択']],data.target||'');field(row,'color','白黒',[['','未選択'],['white','白'],['black','黒']],data.color??'');
+    if(contextPhase!=='day'&&!legacyKey)result.disabled=true;result.title='結果公開は昼のみ';
+    const remove=document.createElement('button');remove.type='button';remove.className='board-log-row-remove';remove.textContent='×';remove.setAttribute('aria-label','この行を削除');remove.addEventListener('click',()=>{row.remove();refreshPlayers();});row.append(remove);
+    if(legacyKey){actor.disabled=true;result.disabled=true;row.querySelector('[data-public-field=role]').disabled=true;remove.disabled=true;}
+    actor.addEventListener('change',()=>{refreshTargets(row);refreshPlayers();});result.addEventListener('change',()=>refreshTargets(row));rows.append(row);refreshTargets(row,data.target||'');refreshPlayers();
+  }
+  function load(payload) {
+    editing=payload?.replace??null;legacyKey=payload?.legacy?.key??null;
+    const batch=seed.log.batches.find(b=>b.id===editing);contextDay=legacyKey?.day??batch?.day??seed.day;contextPhase=batch?.phase??seed.phase;mode.value=payload?.mode??batch?.mode??'single';
+    rows.replaceChildren();picker.hidden=true;editor.hidden=false;status.textContent='';
+    const events=legacyKey?[payload.legacy.event]:payload?.events??[];const grouped=[];
+    for(const e of events){let row=e.kind==='co'&&e.player<1?null:grouped.findLast(r=>r.player===e.player&&(e.kind==='co'?!r.coSeen:!r.result));if(!row){row={player:e.player};grouped.push(row);}if(e.kind==='co'){row.role=e.role;row.coSeen=true;}else Object.assign(row,{result:e.kind,day:e.day,target:e.target,color:e.color});}
+    (grouped.length?grouped:[{}]).forEach(addRow);
+    root.querySelector('#board-log-dialog-title').textContent=legacyKey?'旧結果を訂正':editing===null?'公開を追加':`Day${contextDay}の公開を訂正`;
+    root.querySelector('[data-public-confirm]').hidden=false;root.querySelector('[data-public-save]').hidden=false;
+  }
+  function payload(forDraft=false) {
+    const events=[],seen=new Set();
+    for(const row of rows.children){const get=k=>row.querySelector(`[data-public-field=${k}]`).value,player=Number(get('player')),role=get('role'),kind=get('result');
+      if(!forDraft&&player<1)throw Error('Playerを選んでください。');
+      if(role)events.push({kind:'co',player,role});
+      if(kind){if(forDraft&&!role&&player<1)events.push({kind:'co',player,role:''});events.push({kind,player,day:Number(get('day')),target:Number(get('target')),color:get('color')});}
+      if(!role&&!kind){if(!forDraft)throw Error('COまたは結果を追加してください。');events.push({kind:'co',player,role:''});}
+    }
+    for(const e of events){if(forDraft&&(e.player<1||e.kind==='co'&&!e.role))continue;const key=e.kind==='co'?`co-${e.player}`:`${e.kind}-${e.day}-${e.player}-${e.kind==='medium'?e.target:''}`;if(seen.has(key))throw Error('同じCO・結果が重複しています。');seen.add(key);}
+    if(!forDraft&&!events.length)throw Error('Playerの行を追加してください。');
+    if(events.length>27)throw Error('一度の公開は27件以内にしてください。');
+    if(!forDraft&&events.some(e=>e.kind!=='co'&&(!e.target||!e.color)))throw Error('結果の対象と白黒を揃えてください。');
+    if(legacyKey)return {legacy:{key:legacyKey,event:events.find(e=>e.kind!=='co')}};
+    const batchMode=events.length>1?'simultaneous':mode.value;return {mode:batchMode,events,...(editing===null?{}:{replace:editing})};
+  }
+  function open(payload=null){if(busy)return;returnFocus=document.activeElement;load(payload);dialog.showModal();rows.querySelector('select:not(:disabled)')?.focus();}
+  function close(){if(busy)return;dialog.close();status.textContent='';returnFocus?.focus();}
+  async function send(operation,p) {
+    if(busy)return;busy=true;disabledStates=new Map(Array.from(root.querySelectorAll('button,input,select')).map(e=>[e,e.disabled]));for(const e of disabledStates.keys())e.disabled=true;
+    try{const response=await fetch('/public-log',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),operation,payload:JSON.stringify(p)})});const data=await response.json().catch(()=>({error:'保存できませんでした。入力を確認してください。'}));if(!response.ok)throw Error(data.error);
+      if(operation==='publish'){navigating=true;location.reload();return;}
+      saved=p;busy=false;dialog.close();returnFocus?.focus();
+    }catch(error){if(!dialog.open){dialog.showModal();}status.textContent=error.message;}
+    finally{if(!navigating){busy=false;for(const [e,disabled] of disabledStates)e.disabled=disabled;refreshPlayers();if(seed.finished)root.querySelector('[data-public-open]').disabled=true;}}
+  }
+  root.querySelector('[data-public-open]').addEventListener('click',()=>open(saved));
+  root.querySelector('[data-public-add]').addEventListener('click',()=>addRow());
+  root.querySelectorAll('[data-public-close],[data-public-cancel]').forEach(b=>b.addEventListener('click',close));
+  root.querySelector('[data-public-save]').addEventListener('click',()=>{try{send('draft',payload(true));}catch(e){status.textContent=e.message;}});
+  root.querySelector('[data-public-confirm]').addEventListener('click',()=>{try{send('publish',payload());}catch(e){status.textContent=e.message;}});
+  root.querySelectorAll('[data-public-edit]').forEach(b=>b.addEventListener('click',()=>{const batch=seed.log.batches.find(x=>x.id===Number(b.dataset.publicEdit));open({mode:batch.mode,events:batch.events,replace:batch.id});}));
+  root.querySelectorAll('[data-public-delete]').forEach(b=>b.addEventListener('click',()=>{const batch=seed.log.batches.find(x=>x.id===Number(b.dataset.publicDelete));load({mode:batch.mode,events:batch.events,replace:batch.id});send('publish',{delete:batch.id});}));
+  root.querySelectorAll('[data-legacy-open]').forEach(button=>button.addEventListener('click',()=>{returnFocus=button;editing=null;legacyKey=null;status.textContent='';editor.hidden=true;picker.hidden=false;picker.replaceChildren();root.querySelector('#board-log-dialog-title').textContent='旧結果';
+    for(const kind of ['seer','medium'])for(const r of seed.log[kind==='seer'?'base_seer':'base_medium']){const line=document.createElement('div');line.className='board-log-legacy-choice';const text=document.createElement('span');text.textContent=`Player${r.reporter} / Day${r.day} / ${kind==='seer'?'占い':'霊能'}:Player${r.target??'?' }=${r.color==='white'?'白':r.color==='black'?'黒':'未完了'}`;line.append(text);const key={kind,player:r.reporter,day:r.day,target:r.target};const edit=document.createElement('button');edit.type='button';edit.textContent='訂正';edit.dataset.legacyEdit='';edit.addEventListener('click',()=>{load({legacy:{key,event:{...key,color:r.color}}});rows.querySelector('select:not(:disabled)')?.focus();});line.append(edit);const remove=document.createElement('button');remove.type='button';remove.textContent='削除';remove.dataset.legacyDelete='';remove.addEventListener('click',()=>send('publish',{delete_legacy:{key}}));line.append(remove);picker.append(line);}
+    const note=document.createElement('p');note.className='hint';note.textContent='旧COの削除・撤回は未対応です。';picker.append(note);root.querySelector('[data-public-confirm]').hidden=true;root.querySelector('[data-public-save]').hidden=true;dialog.showModal();
+  }));
+  dialog.addEventListener('cancel',event=>{event.preventDefault();close();});
+  let outside=false;dialog.addEventListener('pointerdown',event=>{const r=dialog.getBoundingClientRect();outside=event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom;});dialog.addEventListener('click',event=>{const r=dialog.getBoundingClientRect();if(outside&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))close();outside=false;});
+  // No editor controls are mounted in the permanent log. Restore drafts on open.
 }

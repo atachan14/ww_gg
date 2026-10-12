@@ -1,0 +1,46 @@
+{
+  "status": "local_complete_unpublished",
+  "base_commit": "62232a9574fd7eec29ee8d937b74d06a22806385",
+  "worktree": "D:\\CodexTemp\\ww_gg-boardlog-ui-20261012",
+  "tests": 179,
+  "browser": {
+    "compact_heading_and_empty_height": true,
+    "constant_area_only_log_list_and_add": true,
+    "overlay_two_players_co_and_result": true,
+    "draft_does_not_change_calculation_or_confirmed_log": true,
+    "cancel_escape_backdrop": true,
+    "saved_draft_reopen_and_reload": true,
+    "double_click_one_publish_request": true,
+    "one_simultaneous_item_each_player_one_line": true,
+    "separate_timing_items": true,
+    "correction_preserves_ids_order": true,
+    "deletion": true,
+    "back_trims_future_batch": true,
+    "opaque_cookie_restore": true,
+    "legacy_unknown_order_and_result_edit": true,
+    "old_flat_draft_two_player_rows": true,
+    "five_player_rate": "1/2",
+    "dependent_delete_rejected_without_state_change": true,
+    "duplicate_ui_submit_no_request": true,
+    "legacy_result_deletion": true
+  },
+  "incomplete_player_draft_restore": true,
+  "source_sha256": {
+    "templates/public_log.html": "da0a7402fad45057070fce2b1a8d4ea7a11dff3d9d1e63d6aa77905286740fee",
+    "static/app.js": "e741ab0b0db388a5ced117dc685d314c8e4d91af46ec5742e3da439a944755ec",
+    "public/static/app.js": "e741ab0b0db388a5ced117dc685d314c8e4d91af46ec5742e3da439a944755ec",
+    "static/styles.css": "7db745671a73adb6ce3ab064901addfb826af0e0b8e1bbc51e1825a107eedfaa",
+    "public/static/styles.css": "7db745671a73adb6ce3ab064901addfb826af0e0b8e1bbc51e1825a107eedfaa",
+    "tests/test_public_log.py": "d8b19b697f58cbd08bf7a9dc743d3a47d3e478a3b4140eee794d04bf3f38d212",
+    "tests/test_boardlog_ui.py": "1cdd274b5b38851f4321c2726e7ab2a11661913af60c77ca99d83ce0d138c24a"
+  },
+  "backend_numeric_or_publication_model_changed": false,
+  "new_commit": false,
+  "new_push": false,
+  "future_checkpoint_unchanged": true,
+  "screenshots": {
+    "permanent": "D:\\CodexTemp\\ww_gg-boardlog-qa-20261012\\browser-final\\boardlog-permanent-two-player-item.png",
+    "overlay": "D:\\CodexTemp\\ww_gg-boardlog-qa-20261012\\browser-final\\boardlog-overlay-two-players.png"
+  },
+  "publication": "requires next approval; current master remains 62232a9"
+}

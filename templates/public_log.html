@@ -1,20 +1,19 @@
-<section id="system-log" class="public-log" aria-labelledby="system-log-title">
-<h2 id="system-log-title">SystemLog</h2>
-<p class="hint">公開順を保存します。計算は公開済み情報の集約を使います。同時公開バッチの行順は推論に使いません。</p>
-<p class="hint">結果は取得日＝公開日の昼のみ対応。遅延公開・CO撤回は未対応です。死亡後の新規公開はできません。死亡前の公開結果は訂正できます。</p>
-{% if public_log.legacy %}<p data-legacy-order>旧保存データ：公開順・同時性は不明。既存の観測スナップショットを維持しています。</p>{% endif %}
-{% if public_log.legacy %}<details><summary>旧保存の結果を訂正・削除（公開順は不明のまま）</summary>{% for kind, entries in [('seer',public_log.base_seer),('medium',public_log.base_medium)] %}{% for e in entries %}<p>旧 {{ '占い' if kind=='seer' else '霊能' }} Player {{ e.reporter }} Day {{ e.day }} → Player {{ e.target }} {{ '白' if e.color=='white' else '黒' }} <button type="button" data-legacy-edit='{{ {'kind':kind,'player':e.reporter,'day':e.day,'target':e.target,'color':e.color}|tojson }}'>訂正</button><button type="button" data-legacy-delete='{{ {'kind':kind,'player':e.reporter,'day':e.day,'target':e.target}|tojson }}'>削除</button></p>{% endfor %}{% endfor %}<p>旧COは観測スナップショットを維持します。旧COの削除・撤回は未対応です。</p></details>{% endif %}
-<ol data-public-batches>{% for batch in public_log.batches %}<li data-public-batch="{{ batch.id }}">#{{ batch.id }} Day {{ batch.day }} {{ '昼' if batch.phase=='day' else '夜' }} / {{ '同時公開' if batch.mode=='simultaneous' else '一件公開' }}
-<ul>{% for event in batch.events %}<li>Player {{ event.player }} {% if event.kind=='co' %}CO：{{ co_labels[event.role] }}{% else %}{{ '占い' if event.kind=='seer' else '霊能' }} 取得Day {{ event.day }} / 公開Day {{ batch.day }} → Player {{ event.target }} {{ '白' if event.color=='white' else '黒' }}{% endif %}</li>{% endfor %}</ul>
-<button type="button" data-public-edit="{{ batch.id }}">訂正</button> <button type="button" data-public-delete="{{ batch.id }}">削除</button></li>{% endfor %}</ol>
-<div data-public-editor>
-<label>公開形式 <select data-public-mode form="public-log-draft-form"><option value="single">一件公開</option><option value="simultaneous">同時公開バッチ</option></select></label>
-<p data-public-edit-label></p><div data-public-rows></div>
-<button type="button" data-public-add>同時公開の行を追加</button>
-<button type="button" data-public-save>下書きを保存</button>
-<button type="button" data-public-cancel>下書きを取消</button>
-<button type="button" data-public-confirm>全行を検証して一括公開</button>
-<p data-public-status role="status" aria-live="polite">下書き中は計算を更新しません。</p>
-</div>
-<script type="application/json" id="public-log-seed">{{ {'log':public_log,'draft':state.get('public_draft'),'revision':state.revision,'players':state.players,'day':board.day,'finished':finished,'roles':strategy_seed.roles}|tojson }}</script>
+{% macro result_tag(kind,event) %}<span class="board-log-token" title="取得Day {{ event.day }}">{{ '占い結果' if kind=='seer' else '霊能結果' }}:{% if event.target is not none and event.color %}Player{{ event.target }}={{ '白' if event.color=='white' else '黒' }}{% else %}未完了{% endif %}</span>{% endmacro %}
+<section id="system-log" class="board-log" aria-labelledby="system-log-title">
+<header><h2 id="system-log-title">BoardLog</h2></header>
+<div data-public-batches class="board-log-list">
+{% if public_log.legacy %}<div class="board-log-item board-log-legacy"><small data-legacy-order>旧保存：順序不明</small>
+{% for p in range(1,state.players+1) %}{% set claim=public_log.base_claims[-1][p-1] %}{% set sr=public_log.base_seer|selectattr('reporter','equalto',p)|list %}{% set mr=public_log.base_medium|selectattr('reporter','equalto',p)|list %}{% if claim!='latent' or sr or mr %}<div class="board-log-line"><span class="board-log-token board-log-player">Player{{ p }}</span><span>が</span>{% if claim!='latent' %}<span class="board-log-token">CO:{{ co_labels[claim] }}</span>{% endif %}{% for e in sr %}{{ result_tag('seer',e) }}{% endfor %}{% for e in mr %}{{ result_tag('medium',e) }}{% endfor %}<span>旧保存</span></div>{% endif %}{% endfor %}
+<details class="board-log-menu"><summary aria-label="旧保存の操作">⋯</summary><div><button type="button" data-legacy-open>旧結果を訂正</button></div></details></div>{% endif %}
+{% for batch in public_log.batches %}<div class="board-log-item" data-public-batch="{{ batch.id }}" aria-label="公開{{ batch.id }} Day{{ batch.day }} {{ '昼' if batch.phase=='day' else '夜' }} {{ '同時' if batch.mode=='simultaneous' else '単件' }}">
+{% for group in batch.events|groupby('player') %}<div class="board-log-line" data-log-player="{{ group.grouper }}"><span class="board-log-token board-log-player">Player{{ group.grouper }}</span><span>が</span>{% for event in group.list %}{% if event.kind=='co' %}<span class="board-log-token">CO:{{ co_labels[event.role] }}</span>{% else %}{{ result_tag(event.kind,event) }}{% endif %}{% endfor %}<span>を公開</span></div>{% endfor %}
+<details class="board-log-menu"><summary aria-label="公開{{ batch.id }}の操作">⋯</summary><div><button type="button" data-public-edit="{{ batch.id }}">訂正</button><button type="button" data-public-delete="{{ batch.id }}">削除</button></div></details>
+</div>{% endfor %}</div>
+<button type="button" class="board-log-add" data-public-open aria-label="公開を追加" {% if finished %}disabled{% endif %}>＋</button>
+<dialog class="board-log-dialog" id="board-log-dialog" aria-labelledby="board-log-dialog-title">
+<div class="overlay-shell"><header class="overlay-head"><h2 id="board-log-dialog-title">公開を追加</h2><button type="button" data-public-close aria-label="閉じる">×</button></header>
+<div class="overlay-body"><div data-legacy-picker hidden></div><div data-public-editor><input type="hidden" data-public-mode form="public-log-draft-form" value="single"><div data-public-rows></div><button type="button" data-public-add>＋ プレイヤー</button></div></div>
+<footer class="overlay-foot"><p data-public-status role="status" aria-live="polite"></p><div class="buttons"><button type="button" data-public-cancel>取消</button><button type="button" data-public-save>下書き保存</button><button type="button" class="primary" data-public-confirm>公開</button></div></footer></div>
+</dialog>
+<script type="application/json" id="public-log-seed">{{ {'log':public_log,'draft':state.get('public_draft'),'revision':state.revision,'players':state.players,'day':board.day,'phase':board.phase,'finished':finished,'roles':strategy_seed.roles,'alive':players|selectattr('alive')|map(attribute='id')|list,'targets':state.history|map(attribute='target')|list,'medium':report_opportunities}|tojson }}</script>
 </section>
