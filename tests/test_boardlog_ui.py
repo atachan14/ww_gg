@@ -11,7 +11,7 @@ class BoardLogUITests(unittest.TestCase):
  def events(self):return [{'kind':'co','player':1,'role':'seer'},{'kind':'seer','player':1,'day':1,'target':3,'color':'white'},{'kind':'co','player':2,'role':'seer'},{'kind':'seer','player':2,'day':1,'target':3,'color':'black'}]
  def test_permanent_boardlog_has_no_forms_or_instructions(self):
   html=self.c.get('/main').get_data(as_text=True);section=html.split('<section id="system-log"')[1].split('<dialog')[0]
-  self.assertIn('>BoardLog</h2>',section);self.assertNotIn('<select',section);self.assertNotIn('<input',section);self.assertNotIn('<p',section);self.assertIn('data-public-open',section)
+  self.assertIn('>BoardLog</h3>',section);self.assertNotIn('<select',section);self.assertNotIn('<input',section);self.assertNotIn('<p',section);self.assertIn('data-public-open',section)
  def test_one_simultaneous_item_two_player_lines_with_combined_tokens(self):
   self.assertEqual(self.publish(self.events()).status_code,200)
   html=self.c.get('/main').get_data(as_text=True);self.assertEqual(html.count('data-public-batch="1"'),1)

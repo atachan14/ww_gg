@@ -1,6 +1,6 @@
 {% macro result_tag(kind,event) %}<span class="board-log-token" title="取得Day {{ event.day }}">{{ '占い結果' if kind=='seer' else '霊能結果' }}:{% if event.target is not none and event.color %}Player{{ event.target }}={{ '白' if event.color=='white' else '黒' }}{% else %}未完了{% endif %}</span>{% endmacro %}
 <section id="system-log" class="board-log" aria-labelledby="system-log-title">
-<header><h2 id="system-log-title">BoardLog</h2></header>
+<header><h3 id="system-log-title">BoardLog</h3></header>
 <div data-public-batches class="board-log-list">
 {% if public_log.legacy %}<div class="board-log-item board-log-legacy"><small data-legacy-order>旧保存：順序不明</small>
 {% for p in range(1,state.players+1) %}{% set claim=public_log.base_claims[-1][p-1] %}{% set sr=public_log.base_seer|selectattr('reporter','equalto',p)|list %}{% set mr=public_log.base_medium|selectattr('reporter','equalto',p)|list %}{% if claim!='latent' or sr or mr %}<div class="board-log-line"><span class="board-log-token board-log-player">Player{{ p }}</span><span>が</span>{% if claim!='latent' %}<span class="board-log-token">CO:{{ co_labels[claim] }}</span>{% endif %}{% for e in sr %}{{ result_tag('seer',e) }}{% endfor %}{% for e in mr %}{{ result_tag('medium',e) }}{% endfor %}<span>旧保存</span></div>{% endif %}{% endfor %}
@@ -9,7 +9,7 @@
 {% for group in batch.events|groupby('player') %}<div class="board-log-line" data-log-player="{{ group.grouper }}"><span class="board-log-token board-log-player">Player{{ group.grouper }}</span><span>が</span>{% for event in group.list %}{% if event.kind=='co' %}<span class="board-log-token">CO:{{ co_labels[event.role] }}</span>{% else %}{{ result_tag(event.kind,event) }}{% endif %}{% endfor %}<span>を公開</span></div>{% endfor %}
 <details class="board-log-menu"><summary aria-label="公開{{ batch.id }}の操作">⋯</summary><div><button type="button" data-public-edit="{{ batch.id }}">訂正</button><button type="button" data-public-delete="{{ batch.id }}">削除</button></div></details>
 </div>{% endfor %}</div>
-<button type="button" class="board-log-add" data-public-open aria-label="公開を追加" {% if finished %}disabled{% endif %}>＋</button>
+<button type="button" class="board-log-add" data-public-open aria-label="公開情報を追加" {% if finished %}disabled{% endif %}>公開情報を追加</button>
 <dialog class="board-log-dialog" id="board-log-dialog" aria-labelledby="board-log-dialog-title">
 <div class="overlay-shell"><header class="overlay-head"><h2 id="board-log-dialog-title">公開を追加</h2><button type="button" data-public-close aria-label="閉じる">×</button></header>
 <div class="overlay-body"><div data-legacy-picker hidden></div><div data-public-editor><input type="hidden" data-public-mode form="public-log-draft-form" value="single"><div data-public-rows></div><button type="button" data-public-add>＋ プレイヤー</button></div></div>

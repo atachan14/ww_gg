@@ -27,8 +27,9 @@
       {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     </section>
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
-        <div class="panel-heading"><h2 class="board-section-label" id="players-title">BoardPlayerTable</h2><span class="muted">{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
+        <div class="panel-heading"><h2 class="board-section-label" id="players-title">BoardInfo</h2><span class="muted">{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
         {% include 'public_log.html' %}
+        <h3 class="board-child-title" id="board-table-title">BoardTable</h3>
         <div class="table-scroll"><table class="player-table">
           <thead><tr><th>#</th><th>名前</th><th>状態</th><th>CO</th><th>{% if has_role_details %}<button type="button" class="role-breakdown-toggle" aria-expanded="true" aria-label="村陣営の役職内訳を開閉">村陣営 <span aria-hidden="true" data-breakdown-arrow>▾</span></button>{% else %}村陣営{% endif %}</th>{% if has_role_details %}<th data-role-detail>市民</th>{% endif %}{% if state.get("mediums",0) %}<th data-role-detail>霊能</th>{% endif %}{% for r,k in [('seer','seers'),('hunter','hunters')] %}{% if state.get(k,0) %}<th data-role-detail>{{ '占い師' if r=='seer' else '狩人' }}</th>{% endif %}{% endfor %}<th>狼<small>狼陣営</small></th><th>村勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>狼勝率<small>この人を{{ '処刑' if board.phase == 'day' else '襲撃' }}</small></th><th>{{ '処刑' if board.phase == 'day' else '襲撃' }}対象</th></tr></thead>
           <tbody>{% for player in players %}
@@ -53,7 +54,7 @@
     </div>
     {% if co_groups %}{% with co_display_main=true %}{% include 'co_groups.html' %}{% endwith %}{% endif %}
   </form>
-  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">BoardOverview</button><button type="button" data-scroll-to="player-panel">BoardPlayerTable</button><button type="button" data-scroll-to="tree-reserved">GameTree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview data-action-label="{{ '処刑' if board.phase == 'day' else '襲撃' }}">{{ '処刑' if board.phase == 'day' else '襲撃' }}：{{ 'Player' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
+  <footer class="phase-footer"><div class="footer-inner"><nav aria-label="画面内の移動"><button type="button" data-scroll-to="information-panel">BoardOverview</button><button type="button" data-scroll-to="player-panel">BoardInfo</button><button type="button" data-scroll-to="tree-reserved">GameTree</button></nav><div class="phase-buttons">{% if not finished %}<span data-target-preview data-action-label="{{ '処刑' if board.phase == 'day' else '襲撃' }}">{{ '処刑' if board.phase == 'day' else '襲撃' }}：{{ 'Player' ~ display_selection if display_selection else '未選択' }}</span>{% endif %}
   {% if not state.history and board.day == 1 and board.phase == 'day' %}<a class="secondary settings-return" id="settings-return" href="{{ url_for('top') }}"><span aria-hidden="true">←</span> ゲーム設定に戻る</a>{% endif %}
   {% if state.history %}<form method="post" action="{{ url_for('back') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}">{{ phase_button(board.day if finished or board.phase == 'night' else board.day-1, (board.phase if finished else ('day' if board.phase == 'night' else 'night')), previous=true, id='back-button') }}</form>{% endif %}
   {% if not finished %}{{ phase_button(board.day if board.phase == 'day' else board.day+1, 'night' if board.phase == 'day' else 'day', id='advance-button', form='action-form', disabled=seer_pending) }}{% endif %}</div></div></footer>
