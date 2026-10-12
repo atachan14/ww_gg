@@ -1,0 +1,15 @@
+# SystemLog local verification (unpublished)
+
+Base: 631496ee437e817ab1fd30e1579ec391e3ba788b. Dedicated worktree: D:/CodexTemp/ww_gg-system-log-20261012. No push, commit, staging, or original research-tree edits.
+
+SystemLog stays immediately above BoardPlayerTable. Single and explicit simultaneous batches record a monotonic ID, public Board slot/day/phase, events and mode. Within-batch order is presentation only. The existing solver receives the aggregate claims/reports; publication order is never a likelihood input. Initial random-white and explicit compatibility selection remain unchanged.
+
+Draft typing and draft save/cancel do not call probability evaluation. Saved drafts are associated with the current revision; stale drafts are not restored after Board changes. Publication validates every row and replays the complete action history before one revision update. Invalid batches and stale duplicate submissions preserve accepted state. Existing cookie size checks reject oversized updates without replacing the accepted browser cookie.
+
+Corrections retain their batch ID and Board position. Deleting a batch removes its events atomically and replays dependent history; invalid remaining reports or impossible past actions reject the entire operation. The initial version deletes batches as a whole: to delete one event, use correction and remove its row. Historical dead-reporter evidence remains correctable at its original live publication slot; new disclosures after death and new terminal disclosures are rejected. Back drops future-slot batches and drafts, retaining evidence at the restored slot.
+
+Acquisition day and publication day are separately recorded but constrained to the same daytime slot in this version. Acquired targets may die in the immediately following night before daytime publication. Delayed disclosure and CO retraction remain explicitly unsupported. Correcting/deleting an observation is not modeled as in-game retraction. Hunter guard/GJ and automatic future seer information are not added; medium retains its existing future-report model.
+
+Legacy claims/action snapshots and reports are migrated without invented order or simultaneous batches. Legacy order is labeled unknown. Legacy result correction/deletion updates the unknown-order baseline and replays the existing history. Deleting/retracting legacy CO snapshots is unsupported; a new future CO change can still be published subject to the existing adapter's validation.
+
+Validation: all 163 tests pass, including the original 146 plus 17 SystemLog tests. Trusted native Edge CDP input verified draft state invariance, draft save/reload, simultaneous CO+result publication, exact five-player 1/2 value, invalid-batch atomic rejection, correction/cancel/deletion, dead-reporter evidence, Day2 publication, back/reload, 1-9 player casts, mixed roles, terminal rejection and mobile form visibility. Details and source hashes: system-log-results.json. External evidence: D:/CodexTemp/ww_gg-system-log-qa-20261012.

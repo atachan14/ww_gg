@@ -346,3 +346,7 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 .co-line button { border:0; background:transparent; color:var(--muted); box-shadow:none; font-weight:400; }
 .co-role-label { flex:0 0 44px; }
 .co-timeline { height:28px; }
+
+.public-log {margin: 1rem 0;padding:1rem;border:1px solid #c8d9df;border-radius:10px}.public-draft-row {display:flex;flex-wrap:wrap;gap:.5rem;padding:.6rem 0}.public-draft-row label {display:grid;gap:.2rem}.public-log button {margin:.3rem}.public-log [data-public-status] {white-space:pre-wrap}
+
+.public-log [hidden] {display:none!important}

@@ -188,6 +188,7 @@ function initializeUI() {
   window.initializeStrategyEditor?.();
   window.initializeParallelLayout?.();
   initializeLiveClaims();
+  initializePublicLog();
 }
 
 function initializeLiveClaims() {
@@ -288,3 +289,33 @@ initializeUI();
 window.addEventListener("pageshow", (event) => {
   if (event.persisted) window.location.reload();
 });
+
+function initializePublicLog() {
+ const seedNode=document.querySelector('#public-log-seed');if(!seedNode)return;
+ const seed=JSON.parse(seedNode.textContent),root=document.querySelector('#system-log');
+ const rows=root.querySelector('[data-public-rows]'),mode=root.querySelector('[data-public-mode]'),status=root.querySelector('[data-public-status]');
+ let replacing=null,legacyKey=null,busy=false;
+ const option=(value,label)=>{const o=document.createElement('option');o.value=value;o.textContent=label;return o;};
+ function field(row,key,values,value){const label=document.createElement('label');label.textContent={kind:'種類',player:'発言者',role:'CO',day:'取得日',target:'対象',color:'結果'}[key];const select=document.createElement('select');select.dataset.publicField=key;values.forEach(v=>select.append(option(v[0],v[1])));select.value=value??'';label.append(select);row.append(label);return select;}
+ function add(e={}){const row=document.createElement('div');row.className='public-draft-row';row.dataset.publicRow='';
+ const kind=field(row,'kind',[['co','CO'],['seer','占い結果'],['medium','霊能結果']],e.kind||'co');
+ field(row,'player',[['','未選択'],...Array.from({length:seed.players},(_,i)=>[i+1,`Player ${i+1}`])],e.player);
+ field(row,'role',[['','未選択'],...seed.roles.map(r=>[r,{villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'}[r]])],e.role);
+ field(row,'day',Array.from({length:seed.day},(_,i)=>[i+1,`Day ${i+1}`]),e.day||seed.day);
+ field(row,'target',[['','未選択'],...Array.from({length:seed.players},(_,i)=>[i+1,`Player ${i+1}`])],e.target);
+ field(row,'color',[['','未選択'],['white','白'],['black','黒']],e.color);
+ const refresh=()=>{row.querySelector('[data-public-field=role]').parentElement.hidden=kind.value!=='co';['day','target','color'].forEach(k=>row.querySelector(`[data-public-field=${k}]`).parentElement.hidden=kind.value==='co');};kind.addEventListener('change',refresh);refresh();
+ const remove=document.createElement('button');remove.type='button';remove.textContent='行を削除';remove.addEventListener('click',()=>{row.remove();});row.append(remove);rows.append(row);}
+ function payload(){const p={mode:mode.value,events:Array.from(rows.children).map(row=>{const get=k=>row.querySelector(`[data-public-field=${k}]`).value;const e={kind:get('kind'),player:Number(get('player'))};return e.kind==='co'?{...e,role:get('role')}:{...e,day:Number(get('day')),target:Number(get('target')),color:get('color')};}),...(replacing===null?{}:{replace:replacing})};return legacyKey?{legacy:{key:legacyKey,event:p.events[0]}}:p;}
+ function load(p){legacyKey=p?.legacy?.key??null;if(legacyKey)p={mode:'single',events:[p.legacy.event]};rows.replaceChildren();mode.value=p?.mode||'single';replacing=p?.replace??null;(p?.events||[{}]).forEach(add);root.querySelector('[data-public-edit-label]').textContent=replacing===null?'新規公開':`バッチ #${replacing} の訂正（公開位置を維持）`;}
+ async function send(operation,p){if(busy)return;busy=true;root.querySelectorAll('button').forEach(b=>b.disabled=true);try{const body=new URLSearchParams({revision:String(seed.revision),operation,payload:JSON.stringify(p)});const r=await fetch('/public-log',{method:'POST',body});const data=await r.json().catch(()=>({error:'保存容量を超えたか、応答が確認できません。'}));if(!r.ok)throw Error(data.error);if(operation==='publish'){location.reload();return;}status.textContent=operation==='draft'?'下書きを保存しました。計算は変わりません。':'下書きを取り消しました。';if(operation==='cancel')load(null);}catch(e){status.textContent=e.message;}finally{busy=false;root.querySelectorAll('button').forEach(b=>b.disabled=false);}}
+ root.querySelector('[data-public-add]').addEventListener('click',()=>{if(legacyKey){status.textContent='旧結果の訂正は一件ずつ行います。';return;}mode.value='simultaneous';add();});
+ root.querySelector('[data-public-save]').addEventListener('click',()=>send('draft',payload()));
+ root.querySelector('[data-public-cancel]').addEventListener('click',()=>send('cancel',{}));
+ root.querySelector('[data-public-confirm]').addEventListener('click',()=>send('publish',payload()));
+ root.querySelectorAll('[data-public-edit]').forEach(b=>b.addEventListener('click',()=>{const batch=seed.log.batches.find(x=>x.id===Number(b.dataset.publicEdit));load({mode:batch.mode,events:batch.events,replace:batch.id});}));
+ root.querySelectorAll('[data-public-delete]').forEach(b=>b.addEventListener('click',()=>{status.textContent='依存する結果が残る削除は拒否されます。';send('publish',{delete:Number(b.dataset.publicDelete)});}));
+ root.querySelectorAll('[data-legacy-edit]').forEach(b=>b.addEventListener('click',()=>{const e=JSON.parse(b.dataset.legacyEdit);load({legacy:{key:{kind:e.kind,player:e.player,day:e.day,target:e.target},event:e}});status.textContent='旧結果の訂正です。新たな公開順は作りません。';}));
+ root.querySelectorAll('[data-legacy-delete]').forEach(b=>b.addEventListener('click',()=>send('publish',{delete_legacy:{key:JSON.parse(b.dataset.legacyDelete)}})));
+ load(seed.draft?.revision===seed.revision?seed.draft.payload:null);
+}

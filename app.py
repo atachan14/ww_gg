@@ -85,7 +85,7 @@ def create_app(test_config=None, *, deployment=False):
         state = session.get("game")
         try:
             required = {"players", "rules", "policy", "history", "selection", "revision"}
-            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports", "strategy_ui", "seer_mode", "seer_options", "seer_inputs"}:
+            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports", "strategy_ui", "seer_mode", "seer_options", "seer_inputs", "public_log", "public_draft"}:
                 return None
             if type(state["revision"]) is not int or state["revision"] < 0 or not isinstance(state["history"], list):
                 return None
@@ -239,7 +239,8 @@ def create_app(test_config=None, *, deployment=False):
             score = 'village_win' if board.phase == 'day' else 'wolf_win'
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
-        return render_template("main.html", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":"占い師（手動のみ）"} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        from werewolf.public_log import migrate
+        return render_template("main.html", public_log=migrate(state), state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":"占い師（手動のみ）"} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
@@ -399,6 +400,8 @@ def create_app(test_config=None, *, deployment=False):
             allowed |= {f'report_{day}_{reporter}_{target}' for day,reporter,target in available_medium_opportunities(progress.board)}
             if not set(request.form) <= allowed:
                 raise ValueError("この画面では対象と戦略を指定してください。")
+            if "public_log" in state and any(k.startswith(("co_", "seer_target_", "seer_color_", "report_")) for k in request.form):
+                raise ValueError("CO・結果の変更はSystemLogから公開してください。")
             models=request.form.getlist('model')
             if models not in ([],['equal'],['group']):
                 raise ValueError('計算モデルを確認してください。')
@@ -442,6 +445,34 @@ def create_app(test_config=None, *, deployment=False):
                            "revision": state["revision"] + 1}
         return redirect(url_for("result" if progress.finished else "main"), code=303)
 
+    @app.post("/public-log")
+    def public_log_route():
+        from werewolf.public_log import transaction, validate_draft
+        from flask import jsonify
+        state=game()
+        if state is None:return jsonify(error="保存されたゲームがありません。"),400
+        if not revision_matches(state):return jsonify(error="画面が更新されています。再読み込みして確認してください。"),409
+        if set(request.form)!={'revision','operation','payload'}:return jsonify(error="公開操作の形式が不正です。"),400
+        operation=request.form.get('operation')
+        try:
+            payload=json.loads(request.form['payload'])
+            if operation=='cancel':
+                proposed={**state};proposed.pop('public_draft',None)
+            elif operation=='draft':
+                validate_draft(payload)
+                if len(json.dumps(payload))>3000:raise ValueError('下書きが大きすぎます。')
+                proposed={**state,'public_draft':{'revision':state['revision'],'payload':payload}}
+            elif operation=='publish':
+                _,progress=replay(state)
+                board=progress.last_board if progress.finished else progress.board
+                proposed=transaction(state,board,payload,finished=progress.finished)
+                replay(proposed) # Validate the entire batch before committing any part.
+                proposed['revision']=state['revision']+1
+            else:raise ValueError('未対応の公開操作です。')
+        except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc)),400
+        session['game']=proposed
+        return jsonify(ok=True,revision=proposed['revision'])
+
     @app.post("/advance")
     def advance_route():
         return change(True)
@@ -478,6 +509,11 @@ def create_app(test_config=None, *, deployment=False):
         if state.get("seer_mode")=="information-fixed-v1":
             from werewolf.seer_manual import trim_back
             session["game"]=trim_back({**session["game"],**({"reports":state["reports"]} if "reports" in state else {})})
+        if "public_log" in session["game"]:
+            from werewolf.public_log import trim
+            session["game"]=trim(session["game"])
+        session["game"].pop("public_draft",None)
+        session.modified=True
         return redirect(url_for("main"), code=303)
 
     return app

@@ -92,7 +92,7 @@ class GroupWebTests(unittest.TestCase):
         self.c.post('/strategy',data=self.form(co_1='latent',co_2='latent'))
         self.c.post('/strategy',data=self.form(co_2='medium'))
         self.c.post('/strategy',data=self.form(co_1='medium'))
-        normalize=lambda html: re.sub(r'name="revision" value="[0-9]+"', 'name="revision" value="X"',html)
+        normalize=lambda html: re.sub(r'"revision": [0-9]+', '"revision": 0', re.sub(r'name="revision" value="[0-9]+"', 'name="revision" value="X"',html))
         self.assertEqual(normalize(first),normalize(self.c.get('/main').get_data(as_text=True)))
         self.assertEqual(self.state()['history'],[])
         before=self.state()

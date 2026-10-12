@@ -34,7 +34,8 @@ class COUITests(unittest.TestCase):
             base=re.search(r'<tr[^>]*data-player="'+str(player)+r'"[^>]*>(.*?)</tr>',html,re.S).group(1)
             self.assertIn('class="co-summary"',base)
             self.assertNotIn('co-select',base)
-            self.assertEqual(html.count('name="co_'+str(player)+'"'),1)
+            self.assertEqual(html.count('name="co_'+str(player)+'"'),0)
+            self.assertIn('id="system-log"',html)
             self.assertIn('id="co-add-'+str(player)+'"',html)
         self.assertNotIn('霊能申告</h2>',html)
 
