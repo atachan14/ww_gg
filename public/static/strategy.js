@@ -34,7 +34,7 @@ window.initializeStrategyEditor = function () {
   function scope(s) {
     const common=s==='village'||s==='wolfCommon';
     const opts=common||['medium','wolf'].includes(s)?Object.keys(options):['fakeable','co'];
-    return `<details class="scope-section" data-disclosure data-scope="${s}"><summary>${labels[s]}${s==='seer'||s==='hunter'?'（能力なし）':''}</summary><div class="scope-body">${common?exclusive(s==='village'?'吊り先':'噛み先',s==='village'?'day':'night',[['max','max'],['random','random']]):''}${s==='wolfCommon'?exclusive('自噛み','include_self_bite',[['false','行わない'],['true','行う']],!seed.allow_self_bite):''}${opts.map(o=>`<section class="option-block"><div class="option-head"><h4>${options[o]}</h4>${button(`data-open="${s}|${o}"`,'追加 / 編集',seed.finished)}</div>${rows(s,o).map(r=>chip(s,o,r)).join('')||'<p class="empty-option">未選択</p>'}</section>`).join('')}</div></details>`;
+    return `<details class="scope-section" data-disclosure data-scope="${s}"><summary>${labels[s]}${s==='seer'&&document.querySelector('[data-seer-manual-settings]')?'（手動のみ）':s==='seer'||s==='hunter'?'（能力なし）':''}</summary><div class="scope-body">${common?exclusive(s==='village'?'吊り先':'噛み先',s==='village'?'day':'night',[['max','max'],['random','random']]):''}${s==='wolfCommon'?exclusive('自噛み','include_self_bite',[['false','行わない'],['true','行う']],!seed.allow_self_bite):''}${opts.map(o=>`<section class="option-block"><div class="option-head"><h4>${options[o]}</h4>${button(`data-open="${s}|${o}"`,'追加 / 編集',seed.finished)}</div>${rows(s,o).map(r=>chip(s,o,r)).join('')||'<p class="empty-option">未選択</p>'}</section>`).join('')}</div></details>`;
   }
   function renderOuter() {
     const remembered=root.closest('main').dataset.strategyDisclosures;
