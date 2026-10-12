@@ -4,6 +4,7 @@
 {% block content %}
 <main data-screen="top">
   <p class="eyebrow">TOP</p>
+  {% if future_preview %}<p class="hint" data-future-preview-top>開発中の未来占い：現在の公開結果をBoardTableで入力し、その先の均等取得・全開示を評価します。COは固定です。</p>{% endif %}
   <script type="application/json" id="setup-presets">{{ setup_presets|tojson }}</script>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" action="{{ url_for('start') }}" data-submit-once>
@@ -15,7 +16,7 @@
           <section class="role-column"><h3>村陣営</h3>
             <label class="role-count-row" for="citizen-count"><span>市民</span><input type="number" id="citizen-count" name="citizens" value="{{ draft.counts.citizens }}" min="0" max="9" required></label>
             <label class="role-count-row" for="medium-count"><span>霊能</span><input type="number" id="medium-count" name="mediums" value="{{ draft.counts.mediums }}" min="0" max="9" required></label>
-            <label class="role-count-row" for="seer-count"><span>占い師（手動のみ）</span><input type="number" id="seer-count" name="seers" value="{{ draft.counts.seers }}" min="0" max="9" required></label>
+            <label class="role-count-row" for="seer-count"><span>{{ '占い師（手動入力＋未来均等）' if future_preview else '占い師（手動のみ）' }}</span><input type="number" id="seer-count" name="seers" value="{{ draft.counts.seers }}" min="0" max="9" required></label>
             <label class="role-count-row" for="hunter-count"><span>狩人（能力なし）</span><input type="number" id="hunter-count" name="hunters" value="{{ draft.counts.hunters }}" min="0" max="9" required></label>
           </section>
           <section class="role-column"><h3>狼陣営</h3>

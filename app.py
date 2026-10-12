@@ -219,12 +219,28 @@ def create_app(test_config=None, *, deployment=False):
         else:
             from werewolf.calculation_budget import calculation_budget, CalculationBudgetExceeded
             try:
-                with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',250000) if manual else None):
-                    root = build_tree(board, rules, strategy)
-                    evaluation = evaluate_tree(root, strategy)
-                    primary = evaluation.board_value(root)
-                    cumulative = progress.total_values(primary)
-                    action_values = {target: evaluation.action_value(root, target) for target in legal_targets(board, rules, strategy)}
+                with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',250000) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20) if manual else None):
+                    if manual and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False):
+                        from werewolf.seer_future_bridge import evaluate_game
+                        from werewolf.seer_future_uniform import FuturePending
+                        forecast=evaluate_game(state,board,rules,strategy,max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000))
+                        if isinstance(forecast,FuturePending):
+                            from werewolf.seer_manual import Pending
+                            reasons={'initial_public_results_incomplete':'初日のCO者の公開結果をBoardTableで揃えてください（初日なしは不要）。','multiple_fake_report_correlation_unselected':'複数偽占いが生存する朝の共同報告は未対応のためPendingです。', 'current_morning_seer_reports_incomplete':'生存CO者の今朝の結果をBoardTableで揃えてください。','past_private_scan_history_missing':'過去の本人取得履歴が不足しているため未来評価できません。'}
+                            reasons.update({'future_public_continuation_budget_exceeded':'未来の分岐が計算予算を超えました。公開情報を揃えるか、配役を絞ってください。','true_scan_generation_budget_exceeded':'未来占いの結果候補が計算予算を超えました。','observed_prior_private_ledger_budget_exceeded':'過去情報の再構成が計算予算を超えました。','future_fake_law_does_not_specify_initial_declarations':'初日の公開結果を入力してください。初日の偽報告自動生成は未設定です。'})
+                            seer_pending=Pending(reasons.get(forecast.reason,'この情報・配役の未来評価はまだ計算できません。'))
+                            primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
+                            action_values={}
+                        else:
+                            primary=Values(forecast.village_win,1-forecast.village_win)
+                            cumulative=progress.total_values(primary)
+                            action_values={p:Values(v,1-v) for p,v in forecast.action_values}
+                    else:
+                        root = build_tree(board, rules, strategy)
+                        evaluation = evaluate_tree(root, strategy)
+                        primary = evaluation.board_value(root)
+                        cumulative = progress.total_values(primary)
+                        action_values = {target: evaluation.action_value(root, target) for target in legal_targets(board, rules, strategy)}
                     event_history, alive = board.history, board.alive
             except CalculationBudgetExceeded:
                 from werewolf.seer_manual import Pending
@@ -260,7 +276,7 @@ def create_app(test_config=None, *, deployment=False):
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
         from werewolf.public_log import migrate
-        return render_template("main.html", public_log=migrate(state), state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":"占い師（手動のみ）"} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", public_log=migrate(state), future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
@@ -331,7 +347,7 @@ def create_app(test_config=None, *, deployment=False):
         return render_template('comparison.html',inputs=inputs,result=result,claim_policy=ClaimPolicy(**inputs['claim_policy']),finished=False)
 
     def render_setup(draft, error=None):
-        return render_template("top.html", error=error, draft=draft, setup_presets=preset_data(), seer_mode=request.form.get("seer_mode",session.get("game",{}).get("seer_mode","")))
+        return render_template("top.html", future_preview=app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), error=error, draft=draft, setup_presets=preset_data(), seer_mode=request.form.get("seer_mode",session.get("game",{}).get("seer_mode","")))
 
     @app.get("/")
     def top():
@@ -455,6 +471,10 @@ def create_app(test_config=None, *, deployment=False):
                 proposed=parse_form(request.form,proposed,progress.board)
             _, progress = replay(proposed)
             if advancing and proposed.get('seer_mode')=='information-fixed-v1' and manual_pending(proposed):raise ValueError('Pending: '+manual_pending(proposed).reason)
+            if advancing and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False) and proposed.get('seer_mode')=='information-fixed-v1' and progress.board.phase=='day':
+                seen={(r['day'],r['reporter']) for r in proposed['seer_inputs'] if r['target'] is not None and r['color'] is not None}
+                if (progress.board.day>1 or proposed['seer_options']['initial_rule']!='none') and any((progress.board.day,p) not in seen for p in progress.board.alive if progress.board.claims[p-1]=='seer'):
+                    raise ValueError('Pending: 生存CO者の公開結果をBoardTableで揃えてください。')
             target = parse_target(progress, advancing)
             if advancing and target not in legal_targets(progress.board, rules, Strategy(**policy)):
                 raise ValueError("この計算条件では、その対象への襲撃は実行できません。")
@@ -631,8 +651,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ww_gg local public Board v0.4")
     parser.add_argument("--port", type=int, default=8771)
     parser.add_argument("--hybrid-table-preview", action="store_true", help="Enable unpublished table draft preview locally")
+    parser.add_argument("--seer-future-uniform", action="store_true", help="Enable unpublished fixed-policy seer forecast locally")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("Choose a port between 1024 and 65535")
-    create_app({"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview}).run(host="127.0.0.1", port=args.port, debug=False,
+    create_app({"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview,"SEER_UNIFORM_FUTURE_PREVIEW":args.seer_future_uniform}).run(host="127.0.0.1", port=args.port, debug=False,
                      use_reloader=False, load_dotenv=False)
