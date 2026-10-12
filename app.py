@@ -58,6 +58,9 @@ def create_app(test_config=None, *, deployment=False):
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
 
     def replay(state):
+        if state.get("seer_mode") == "information-fixed-v1":
+            from werewolf.seer_manual import replay as manual_replay
+            return manual_replay(state)
         rules = complete_rules(state["rules"])
         progress = Progress.initial(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
         if len(state["history"]) > max(0, state["players"] - 2):
@@ -82,7 +85,7 @@ def create_app(test_config=None, *, deployment=False):
         state = session.get("game")
         try:
             required = {"players", "rules", "policy", "history", "selection", "revision"}
-            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports", "strategy_ui"}:
+            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports", "strategy_ui", "seer_mode", "seer_options", "seer_inputs"}:
                 return None
             if type(state["revision"]) is not int or state["revision"] < 0 or not isinstance(state["history"], list):
                 return None
@@ -92,6 +95,7 @@ def create_app(test_config=None, *, deployment=False):
                 _, resolved = resolve_co_editor(state['strategy_ui'])
                 if any(set(ClaimPolicy(**resolved).conditions(r)) != set(ClaimPolicy(**state['claim_policy']).conditions(r)) for r in VILLAGE_ROLES):
                     return None
+            if "seer_mode" in state and state["seer_mode"] != "information-fixed-v1":return None
             _, progress = replay(state)
             target = state["selection"]
             if target is not None and (type(target) is not int or not 1 <= target <= state["players"]):
@@ -176,6 +180,9 @@ def create_app(test_config=None, *, deployment=False):
     def render_main(state, error=None, status=200):
         rules, progress = replay(state)
         strategy = Strategy(**state["policy"])
+        manual = state.get("seer_mode") == "information-fixed-v1"
+        from werewolf.seer_manual import pending as manual_pending, timeline as seer_timeline
+        seer_pending = manual_pending(state) if manual else None
         finished = progress.finished
         board = progress.last_board if finished else progress.board
         if finished:
@@ -185,6 +192,10 @@ def create_app(test_config=None, *, deployment=False):
             action_values = {}
             event_history = progress.last_outcomes[0].board.history
             alive = progress.last_outcomes[0].board.alive
+        elif seer_pending:
+            primary = cumulative = {"village_win":seer_pending,"wolf_win":seer_pending}
+            action_values = {}
+            event_history, alive = board.history, board.alive
         else:
             root = build_tree(board, rules, strategy)
             evaluation = evaluate_tree(root, strategy)
@@ -206,16 +217,20 @@ def create_app(test_config=None, *, deployment=False):
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
                             "action": action_values.get(player)})
         for player in players:
+            if manual:player['seer_timeline']=seer_timeline(state,board,player['id'],finished)
+            if seer_pending:
+                for key in ('medium_probability','citizen_probability','wolf_probability','village_probability'):player[key]=seer_pending
+                player['extra_probabilities']={k:seer_pending for k in player['extra_probabilities']}
             player['medium_timeline'] = medium_timeline(board, player['id'], finished)
             player['co_pending'] = player['claim'] == 'medium' and any(entry['editable'] and not entry['color'] for entry in player['medium_timeline'])
         display_selection = state['selection']
-        if not finished and display_selection is None and getattr(strategy, board.phase) == 'max':
+        if not finished and not seer_pending and display_selection is None and getattr(strategy, board.phase) == 'max':
             score = 'village_win' if board.phase == 'day' else 'wolf_win'
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
-        return render_template("main.html", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, co_renderers=CO_RENDERERS, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":"占い師（手動のみ）"} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
+                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=(progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
     @app.before_request
     def same_origin_posts():
@@ -284,7 +299,7 @@ def create_app(test_config=None, *, deployment=False):
         return render_template('comparison.html',inputs=inputs,result=result,claim_policy=ClaimPolicy(**inputs['claim_policy']),finished=False)
 
     def render_setup(draft, error=None):
-        return render_template("top.html", error=error, draft=draft, setup_presets=preset_data())
+        return render_template("top.html", error=error, draft=draft, setup_presets=preset_data(), seer_mode=request.form.get("seer_mode",session.get("game",{}).get("seer_mode","")))
 
     @app.get("/")
     def top():
@@ -296,7 +311,7 @@ def create_app(test_config=None, *, deployment=False):
     def start():
         draft = SetupDraft.from_form(request.form)
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model"}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
@@ -320,6 +335,10 @@ def create_app(test_config=None, *, deployment=False):
             else:
                 players = count('players')
             initial_board(players, wolves, mediums, seers, hunters)
+            modes=request.form.getlist("seer_mode")
+            if modes not in ([],[""],["information-fixed-v1"]):raise ValueError("占い計算モデルを確認してください。")
+            seer_mode=modes[0] if modes else ""
+            if seer_mode and (players,wolves,seers,mediums,hunters)!=(5,2,1,0,0):raise ValueError("手動占いは5人・占い1・市民2・狼2に限定しています。")
             claim_policy = parse_claim_policy()
             models=request.form.getlist("model")
             if models not in ([],["group"]):
@@ -338,6 +357,9 @@ def create_app(test_config=None, *, deployment=False):
                            "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite},
                            "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
+        if seer_mode:
+            session["game"].update(seer_mode=seer_mode,seer_options={"initial_rule":"random_white","likelihood":None},seer_inputs=[])
+            session.modified=True
         return redirect(url_for("main"), code=303)
 
     @app.get("/main")
@@ -362,6 +384,8 @@ def create_app(test_config=None, *, deployment=False):
             allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "strategy_ui"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
+            if state.get("seer_mode") == "information-fixed-v1":
+                allowed |= {"seer_initial_rule","seer_likelihood"} | {f"seer_{kind}_{d}_{p}" for kind in ("target","color") for d in range(1,progress.board.day+1) for p in range(1,6)}
             allowed |= {f'report_{day}_{reporter}_{target}' for day,reporter,target in available_medium_opportunities(progress.board)}
             if not set(request.form) <= allowed:
                 raise ValueError("この画面では対象と戦略を指定してください。")
@@ -387,7 +411,12 @@ def create_app(test_config=None, *, deployment=False):
             reports=parse_reports(state,progress.board)
             proposed={**state,'model':model,'policy':policy,'claims':claims,'claim_policy':claim_policy,'strategy_ui':editor}
             if reports or 'reports' in state:proposed['reports']=reports
+            if state.get('seer_mode')=='information-fixed-v1':
+                from werewolf.seer_manual import parse_form, pending as manual_pending
+                if state['history'] and claims!=state['history'][0]['claims']:raise ValueError('この版では進行後のCO変更は扱いません。初日へ戻ってください。')
+                proposed=parse_form(request.form,proposed,progress.board)
             _, progress = replay(proposed)
+            if advancing and proposed.get('seer_mode')=='information-fixed-v1' and manual_pending(proposed):raise ValueError('Pending: '+manual_pending(proposed).reason)
             target = parse_target(progress, advancing)
             if advancing and target not in legal_targets(progress.board, rules, Strategy(**policy)):
                 raise ValueError("この計算条件では、その対象への襲撃は実行できません。")
@@ -397,9 +426,9 @@ def create_app(test_config=None, *, deployment=False):
             return render_main(state, str(exc), 400)
         history = state["history"]
         if advancing:
-            history = history + [{"target": target, "policy": policy.copy(), "claims": claims.copy(), "claim_policy": claim_policy.copy(), "strategy_ui":editor, **({"reports":reports} if reports or "reports" in state else {})}]
+            history = history + [{**({"seer_options":proposed["seer_options"].copy()} if proposed.get("seer_mode")=="information-fixed-v1" else {}), "target": target, "policy": policy.copy(), "claims": claims.copy(), "claim_policy": claim_policy.copy(), "strategy_ui":editor, **({"reports":reports} if reports or "reports" in state else {})}]
             progress = advance(progress, target, rules, Strategy(**policy))
-        session["game"] = {**state, **({"reports":reports} if reports or "reports" in state else {}), "model": model, "policy": policy, "claims": claims, "claim_policy": claim_policy, "strategy_ui":editor, "history": history,
+        session["game"] = {**proposed, **({"reports":reports} if reports or "reports" in state else {}), "model": model, "policy": policy, "claims": claims, "claim_policy": claim_policy, "strategy_ui":editor, "history": history,
                            "selection": (target if progress.finished or not advancing else None),
                            "revision": state["revision"] + 1}
         return redirect(url_for("result" if progress.finished else "main"), code=303)
@@ -437,6 +466,9 @@ def create_app(test_config=None, *, deployment=False):
                                "claim_policy": step.get('claim_policy', {}),
                                "strategy_ui":step.get("strategy_ui",co_editor(step.get("claim_policy",{}))),
                                **({"reports":step.get("reports",[])} if "reports" in state else {}), "selection": step["target"], "revision": state["revision"] + 1}
+        if state.get("seer_mode")=="information-fixed-v1":
+            from werewolf.seer_manual import trim_back
+            session["game"]=trim_back(session["game"])
         return redirect(url_for("main"), code=303)
 
     return app

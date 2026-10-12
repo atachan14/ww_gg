@@ -189,7 +189,7 @@ function initializeUI() {
 
 function initializeLiveClaims() {
   const form = document.querySelector('#action-form');
-  if (!form || !document.querySelector('.co-select:not(:disabled)')) return;
+  if (!form || !document.querySelector('.co-select:not(:disabled), .report-select:not(:disabled)')) return;
   let running = false;
   let pending = false;
   let version = 0;

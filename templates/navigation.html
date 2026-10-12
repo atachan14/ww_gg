@@ -1,3 +1,3 @@
-{% macro phase_button(day, phase, previous=false, id='', form='') -%}
-<button class="{{ 'secondary' if previous else 'primary' }}" type="submit"{% if id %} id="{{ id }}"{% endif %}{% if form %} form="{{ form }}"{% endif %}>{% if previous %}<span aria-hidden="true">←</span> {% endif %}Day{{ day }}・{{ '昼' if phase == 'day' else '夜' }}へ{% if not previous %} <span aria-hidden="true">→</span>{% endif %}</button>
+{% macro phase_button(day, phase, previous=false, id='', form='', disabled=false) -%}
+<button{% if disabled %} disabled{% endif %} class="{{ 'secondary' if previous else 'primary' }}" type="submit"{% if id %} id="{{ id }}"{% endif %}{% if form %} form="{{ form }}"{% endif %}>{% if previous %}<span aria-hidden="true">←</span> {% endif %}Day{{ day }}・{{ '昼' if phase == 'day' else '夜' }}へ{% if not previous %} <span aria-hidden="true">→</span>{% endif %}</button>
 {%- endmacro %}
