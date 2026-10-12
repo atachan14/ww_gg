@@ -6,6 +6,7 @@
 {% set has_role_details = state.get('mediums',0) or state.get('seers',0) or state.get('hunters',0) %}
 <main data-screen="{{ 'result' if finished else 'main' }}" data-co-game="{{ co_game }}">
   <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:市民{{ state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0) }} · 霊能{{ state.get('mediums',0) }} · 占い師{{ state.get('seers',0) }}{{ '（手動のみ）' if state.get('seer_mode')=='information-fixed-v1' else '（能力なし）' }} · 狩人{{ state.get('hunters',0) }}（能力なし） · 狼{{ state.get('wolves',1) }}</p>
+  {% if state.get('seer_mode')=='information-fixed-v1' %}<p class="hint" data-information-fixed-scope>開発中の占い情報固定モデル：占いは入力済み結果だけを使用し、未来の取得・利用・公開は計算しません。{% if state.get('mediums',0) %}霊能は従来の将来報告モデルを引き継ぎます。{% endif %}{% if state.get('hunters',0) %}狩人は人数・COのみ対応し、護衛・GJは未対応です。{% endif %}</p>{% endif %}
   <form id="display-options-form"></form>
   <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
     <input type="hidden" name="revision" value="{{ state.revision }}">
@@ -44,7 +45,7 @@
           <details data-settings-pane="rules" data-disclosure><summary id="main-rule-title">ルール</summary><div class="settings-body" id="game-rules" role="group" aria-labelledby="main-rule-title">{% with editable=false %}{% include 'rules.html' %}{% endwith %}</div></details>
         </section>
         <section class="settings-group" aria-label="Board設定"><header>Board <span>Day {{ board.day }} · {{ '昼' if board.phase == 'day' else '夜' }}</span></header>
-          <details data-settings-pane="strategy" data-disclosure><summary id="board-strategy-title">戦略</summary><div class="settings-body strategy-panel" id="strategy-panel" role="group" aria-labelledby="board-strategy-title">{% include 'strategy.html' %}{% if state.get('seer_mode')=='information-fixed-v1' %}{% include 'seer_manual_settings.html' %}{% endif %}<button hidden type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button></div></details>
+          <details data-settings-pane="strategy" data-disclosure><summary id="board-strategy-title">戦略</summary><div class="settings-body strategy-panel" id="strategy-panel" role="group" aria-labelledby="board-strategy-title">{% if state.get('seer_mode')=='information-fixed-v1' %}{% include 'seer_manual_settings.html' %}{% endif %}{% include 'strategy.html' %}<button hidden type="submit" formaction="{{ url_for('strategy_route') }}" formnovalidate id="strategy-button">再計算</button></div></details>
         </section>
       </aside>
     </div>

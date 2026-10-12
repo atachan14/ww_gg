@@ -182,7 +182,7 @@ def create_app(test_config=None, *, deployment=False):
         strategy = Strategy(**state["policy"])
         manual = state.get("seer_mode") == "information-fixed-v1"
         from werewolf.seer_manual import pending as manual_pending, timeline as seer_timeline
-        seer_pending = manual_pending(state) if manual else None
+        seer_pending = manual_pending(state) if manual and not progress.finished else None
         finished = progress.finished
         board = progress.last_board if finished else progress.board
         if finished:
@@ -197,12 +197,21 @@ def create_app(test_config=None, *, deployment=False):
             action_values = {}
             event_history, alive = board.history, board.alive
         else:
-            root = build_tree(board, rules, strategy)
-            evaluation = evaluate_tree(root, strategy)
-            primary = evaluation.board_value(root)
-            cumulative = progress.total_values(primary)
-            action_values = {target: evaluation.action_value(root, target) for target in legal_targets(board, rules, strategy)}
-            event_history, alive = board.history, board.alive
+            from werewolf.calculation_budget import calculation_budget, CalculationBudgetExceeded
+            try:
+                with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',250000) if manual else None):
+                    root = build_tree(board, rules, strategy)
+                    evaluation = evaluate_tree(root, strategy)
+                    primary = evaluation.board_value(root)
+                    cumulative = progress.total_values(primary)
+                    action_values = {target: evaluation.action_value(root, target) for target in legal_targets(board, rules, strategy)}
+                    event_history, alive = board.history, board.alive
+            except CalculationBudgetExceeded:
+                from werewolf.seer_manual import Pending
+                seer_pending=Pending('計算予算に到達したため勝率は未計算です。配役やCO、入力結果を絞ると計算できる場合があります。')
+                primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
+                action_values={}
+                event_history,alive=board.history,board.alive
         deaths = {event.target: "処刑" if event.phase == "day" else "襲撃" for event in event_history}
         players = []
         for player in range(1, state["players"] + 1):
@@ -217,7 +226,9 @@ def create_app(test_config=None, *, deployment=False):
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
                             "action": action_values.get(player)})
         for player in players:
-            if manual:player['seer_timeline']=seer_timeline(state,board,player['id'],finished)
+            if manual:
+                player['seer_timeline']=seer_timeline(state,board,player['id'],finished)
+                player['has_seer_evidence']=any(row['target'] is not None or row['color'] is not None for row in player['seer_timeline'])
             if seer_pending:
                 for key in ('medium_probability','citizen_probability','wolf_probability','village_probability'):player[key]=seer_pending
                 player['extra_probabilities']={k:seer_pending for k in player['extra_probabilities']}
@@ -334,11 +345,10 @@ def create_app(test_config=None, *, deployment=False):
                     raise ValueError("合計人数が配役と一致しません。")
             else:
                 players = count('players')
-            initial_board(players, wolves, mediums, seers, hunters)
             modes=request.form.getlist("seer_mode")
             if modes not in ([],[""],["information-fixed-v1"]):raise ValueError("占い計算モデルを確認してください。")
             seer_mode=modes[0] if modes else ""
-            if seer_mode and (players,wolves,seers,mediums,hunters)!=(5,2,1,0,0):raise ValueError("手動占いは5人・占い1・市民2・狼2に限定しています。")
+            initial_board(players, wolves, mediums, seers, hunters, experimental_cast=bool(seer_mode))
             claim_policy = parse_claim_policy()
             models=request.form.getlist("model")
             if models not in ([],["group"]):
@@ -385,7 +395,7 @@ def create_app(test_config=None, *, deployment=False):
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if state.get("seer_mode") == "information-fixed-v1":
-                allowed |= {"seer_initial_rule","seer_likelihood"} | {f"seer_{kind}_{d}_{p}" for kind in ("target","color") for d in range(1,progress.board.day+1) for p in range(1,6)}
+                allowed |= {"seer_initial_rule","seer_likelihood"} | {f"seer_{kind}_{d}_{p}" for kind in ("target","color") for d in range(1,progress.board.day+1) for p in range(1,state['players']+1)}
             allowed |= {f'report_{day}_{reporter}_{target}' for day,reporter,target in available_medium_opportunities(progress.board)}
             if not set(request.form) <= allowed:
                 raise ValueError("この画面では対象と戦略を指定してください。")
@@ -413,7 +423,6 @@ def create_app(test_config=None, *, deployment=False):
             if reports or 'reports' in state:proposed['reports']=reports
             if state.get('seer_mode')=='information-fixed-v1':
                 from werewolf.seer_manual import parse_form, pending as manual_pending
-                if state['history'] and claims!=state['history'][0]['claims']:raise ValueError('この版では進行後のCO変更は扱いません。初日へ戻ってください。')
                 proposed=parse_form(request.form,proposed,progress.board)
             _, progress = replay(proposed)
             if advancing and proposed.get('seer_mode')=='information-fixed-v1' and manual_pending(proposed):raise ValueError('Pending: '+manual_pending(proposed).reason)
@@ -468,7 +477,7 @@ def create_app(test_config=None, *, deployment=False):
                                **({"reports":step.get("reports",[])} if "reports" in state else {}), "selection": step["target"], "revision": state["revision"] + 1}
         if state.get("seer_mode")=="information-fixed-v1":
             from werewolf.seer_manual import trim_back
-            session["game"]=trim_back(session["game"])
+            session["game"]=trim_back({**session["game"],**({"reports":state["reports"]} if "reports" in state else {})})
         return redirect(url_for("main"), code=303)
 
     return app

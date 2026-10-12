@@ -1,5 +1,6 @@
 """Public Board calculations for 1–9 players, wolves, medium disclosures and ability-free seers/hunters, using exact fractions."""
 
+from .calculation_budget import tick
 from dataclasses import dataclass, replace
 from fractions import Fraction
 from functools import lru_cache
@@ -364,10 +365,11 @@ def winner_for(n: int, wolves: int) -> Winner | None:
     return "village" if wolves == 0 else "wolf" if wolves >= n - wolves else None
 
 
-def initial_board(player_count: int = 5, wolf_count: int = 1, medium_count: int = 0, seer_count: int = 0, hunter_count: int = 0) -> Board:
+def initial_board(player_count: int = 5, wolf_count: int = 1, medium_count: int = 0, seer_count: int = 0, hunter_count: int = 0, *, experimental_cast: bool = False) -> Board:
     if type(player_count) is not int or not 1 <= player_count <= 9:
         raise ValueError("Choose 1–9 players")
-    if type(wolf_count) is not int or not (0 <= wolf_count <= player_count if player_count <= 2 else 1 <= wolf_count <= (player_count - 1) // 2):
+    if type(experimental_cast)is not bool:raise ValueError("Explicit experimental cast flag required")
+    if type(wolf_count) is not int or not (0 <= wolf_count <= player_count if experimental_cast or player_count <= 2 else 1 <= wolf_count <= (player_count - 1) // 2):
         raise ValueError("Choose wolves fewer than villagers")
     if type(medium_count) is not int or not 0 <= medium_count <= player_count - wolf_count:
         raise ValueError("Choose medium count within the village camp")
@@ -547,6 +549,7 @@ def solve(n, phase, belief, strategy):
     Their count distribution is a sufficient statistic for future values,
     but full correlated location beliefs remain on displayed Boards.
     """
+    tick(len(belief))
     counts = {}
     for mask, q in belief:
         w = mask.bit_count()
@@ -568,6 +571,7 @@ def solve(n, phase, belief, strategy):
 
 @lru_cache(maxsize=4096)
 def symmetric_action(n, phase, counts, strategy):
+    tick(len(counts))
     village, continuing = Fraction(0), {}
     for w, mass in counts:
         hits = ((w - 1, Fraction(w, n)), (w, Fraction(n - w, n))) if phase == 'day' or strategy.include_self_bite else ((w, Fraction(1)),)
@@ -651,6 +655,7 @@ def has_future_medium(board, reveal_now=False):
 
 
 def value_for_action(board, target, rules, strategy):
+    tick(len(board.worlds))
     village=sum((o.probability*(joint_value(o.board,rules,strategy,reveal_now=board.phase=='night').village_win
                  if has_future_medium(o.board,reveal_now=board.phase=='night') else
                  solve(len(o.board.alive),o.board.phase,marginal_state(o.board),strategy).village_win)
@@ -663,6 +668,7 @@ class Evaluation:
     strategy: Strategy
 
     def board_value(self, node: TreeNode) -> Values:
+        tick(len(node.board.worlds))
         return joint_value(node.board,node.rules,self.strategy,reveal_now=node.pending_disclosure) if has_future_medium(node.board,node.pending_disclosure) else solve(len(node.board.alive),node.board.phase,marginal_state(node.board),self.strategy)
 
     def action_value(self, node: TreeNode, target: int) -> Values:

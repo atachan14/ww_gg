@@ -134,12 +134,14 @@ function initializeUI() {
     refreshSetupPresets();
     const village = Number(citizens.value) + Number(mediums.value) + Number(seers.value) + Number(hunters.value);
     const total = village + Number(wolves.value);
+    const experimental = document.querySelector('#seer-mode')?.value === 'information-fixed-v1';
+    wolves.max = experimental ? '9' : '4';
     document.querySelector('#villager-count').innerHTML = `${village}<small>人</small>`;
     document.querySelector('#wolf-summary').innerHTML = `${wolves.value}<small>人</small>`;
     document.querySelector('#total-count').innerHTML = `${total}人<small>（最大9人）</small>`;
-    const valid = [citizens, mediums, wolves, seers, hunters].every(input => input.value !== "" && Number.isInteger(Number(input.value)) && Number(input.value) >= 0 && input.checkValidity()) && total >= 1 && total <= 9 && (total <= 2 || Number(wolves.value) >= 1 && Number(wolves.value) < village);
+    const valid = [citizens, mediums, wolves, seers, hunters].every(input => input.value !== "" && Number.isInteger(Number(input.value)) && Number(input.value) >= 0 && input.checkValidity()) && total >= 1 && total <= 9 && (experimental || total <= 2 || Number(wolves.value) >= 1 && Number(wolves.value) < village);
     const validation = document.querySelector('#cast-validation');
-    validation.textContent = valid ? '' : '合計1〜9人。3人以上では狼より村陣営が多い配役にしてください。';
+    validation.textContent = valid ? '' : experimental ? '合計1～9人、各役職0～9人の配役にしてください。' : '合計1～9人。3人以上では狼より村陣営が多い配役にしてください。';
     validation.hidden = valid;
     document.querySelector('form[action$="/start"] button[type="submit"]').disabled = !valid;
     const mediumSettings=document.querySelector('[data-medium-calculation]');
@@ -148,6 +150,7 @@ function initializeUI() {
   }
   if (citizens && mediums && wolves) {
     for (const input of [citizens, mediums, wolves, seers, hunters]) input.addEventListener('input', updateCast);
+    document.querySelector('#seer-mode')?.addEventListener('change', updateCast);
     updateCast();
   }
   const permission = document.querySelector('#allow-self-bite');

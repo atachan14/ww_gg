@@ -6,6 +6,7 @@ true-medium masks for CO/reporters, and the executed target's correlated color.
 from fractions import Fraction as F
 from functools import lru_cache
 from itertools import product
+from .calculation_budget import tick
 
 
 def delete_bit(mask,index):
@@ -34,6 +35,7 @@ def winning(n,w):
 
 
 def transition(n,phase,co,eligible,entries,target,strategy):
+    tick(len(entries))
     counts={}
     for w,m,t,q in entries:counts[w.bit_count()]=counts.get(w.bit_count(),F())+q
     normalizers={}
@@ -65,6 +67,7 @@ def transition(n,phase,co,eligible,entries,target,strategy):
 
 @lru_cache(maxsize=32768)
 def disclosure(n,co,eligible,entries,strategy):
+    tick(len(entries))
     reporters=tuple(i for i in range(n) if eligible&(1<<i))
     fake_positions=tuple(i for i in reporters if any(w&(1<<i) for w,m,t,q in entries))
     if strategy.fake_reports=='random':
@@ -72,6 +75,7 @@ def disclosure(n,co,eligible,entries,strategy):
         # report vector BEFORE optimizing any subsequent public action.
         groups={};normalizer=1<<len(fake_positions)
         for colors in product((0,1),repeat=len(fake_positions)):
+            tick(len(entries))
             instructions=dict(zip(fake_positions,colors))
             for w,m,t,q in entries:
                 pattern=sum(1<<i for i in reporters if (t if m&(1<<i) else instructions[i]))
@@ -79,6 +83,7 @@ def disclosure(n,co,eligible,entries,strategy):
         return sum((sum(x[-1] for x in group)*solve_reports(n,'day',co,0,normalize(group),strategy) for group in groups.values()),F())
     values=[]
     for colors in product((0,1),repeat=len(fake_positions)):
+        tick(len(entries))
         instructions=dict(zip(fake_positions,colors));groups={}
         for w,m,t,q in entries:
             pattern=sum(1<<i for i in reporters if (t if m&(1<<i) else instructions[i]))
@@ -93,6 +98,7 @@ def disclosure(n,co,eligible,entries,strategy):
 
 @lru_cache(maxsize=32768)
 def solve_reports(n,phase,co,eligible,entries,strategy):
+    tick(len(entries))
     winners={winning(n,w.bit_count()) for w,m,t,q in entries}
     if len(winners)==1 and None not in winners:return F(next(iter(winners)))
     representatives=[];values=[]
@@ -130,5 +136,6 @@ def compact(board,reveal_now=False):
 
 def public_value(board,strategy,reveal_now=False):
     n,co,eligible,entries=compact(board,reveal_now)
+    tick(len(entries))
     if reveal_now and eligible:return disclosure(n,co,eligible,entries,strategy)
     return solve_reports(n,board.phase,co,eligible,entries,strategy)

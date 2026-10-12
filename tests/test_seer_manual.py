@@ -54,6 +54,14 @@ class SeerManualTests(unittest.TestCase):
         self.assertEqual(self.client.post('/strategy',data=self.form(**fields)).status_code,303)
     def advance(self,target):self.assertEqual(self.client.post('/advance',data=self.form(target=str(target))).status_code,303)
 
+    def test_pending_settings_visible_before_strategy_and_reason_matches_label(self):
+        html=self.client.get('/main').data
+        self.assertLess(html.index(b'data-seer-manual-settings'),html.index(b'id="strategy-editor"'))
+        self.assertIn('入力報告の扱い'.encode(),html)
+        self.assertIn('Boardの「戦略」を開き'.encode(),html)
+        self.configured(reports=False)
+        self.assertIsNone(pending(self.game()))
+
     def test_pending_defaults_no_zero_or_fake_win_and_no_advance(self):
         g=self.game();self.assertEqual(g['seer_options']['initial_rule'],'random_white');self.assertIsNone(g['seer_options']['likelihood'])
         html=self.client.get('/main').data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html)
@@ -135,8 +143,9 @@ class SeerManualTests(unittest.TestCase):
             self.advance(4);self.assertEqual(self.client.get('/result').status_code,200)
             self.assertEqual(len(self.game()['history']),3)
 
-    def test_unsupported_cast_rejected_legacy_seer_and_hunter_unchanged(self):
+    def test_general_cast_allowed_invalid_cast_and_legacy_unchanged(self):
         data={'players':'4','wolves':'1','seers':'1','mediums':'0','hunters':'0','seer_mode':MODE,'day':'max','night':'max'}
-        self.assertEqual(self.client.post('/start',data=data).status_code,400)
+        self.assertEqual(self.client.post('/start',data=data).status_code,303)
+        self.assertEqual(self.client.post('/start',data={**data,'players':'10'}).status_code,400)
         data.pop('seer_mode');self.assertEqual(self.client.post('/start',data=data).status_code,303)
         self.assertNotIn('seer_mode',self.game());self.assertEqual(self.client.get('/main').status_code,200)
