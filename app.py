@@ -87,6 +87,9 @@ def create_app(test_config=None, *, deployment=False):
             required = {"players", "rules", "policy", "history", "selection", "revision"}
             if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports", "strategy_ui", "seer_mode", "seer_options", "seer_inputs", "public_log", "public_draft"}:
                 return None
+            from werewolf.seer_manual import migrate_game
+            original_state=state
+            state=migrate_game(state)
             if type(state["revision"]) is not int or state["revision"] < 0 or not isinstance(state["history"], list):
                 return None
             if state.get("model","equal") not in ("equal","group"):
@@ -104,6 +107,8 @@ def create_app(test_config=None, *, deployment=False):
                 return None
         except (ValueError, TypeError, KeyError):
             return None
+        if state!=original_state:
+            session["game"]=state
         return state
 
     def revision_matches(state):
@@ -323,7 +328,7 @@ def create_app(test_config=None, *, deployment=False):
     def start():
         draft = SetupDraft.from_form(request.form)
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode"}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
@@ -348,7 +353,7 @@ def create_app(test_config=None, *, deployment=False):
                 players = count('players')
             modes=request.form.getlist("seer_mode")
             if modes not in ([],[""],["information-fixed-v1"]):raise ValueError("占い計算モデルを確認してください。")
-            seer_mode=modes[0] if modes else ""
+            seer_mode="information-fixed-v1" if seers else (modes[0] if modes else "")
             initial_board(players, wolves, mediums, seers, hunters, experimental_cast=bool(seer_mode))
             claim_policy = parse_claim_policy()
             models=request.form.getlist("model")
@@ -358,18 +363,20 @@ def create_app(test_config=None, *, deployment=False):
             permission = request.form.getlist("allow_self_bite")
             if permission not in ([], ["0"], ["1"]):
                 raise ValueError("自噛みのルールが不正です。")
-            rules = Rules(permission == ["1"])
+            first=request.form.getlist("initial_seer")
+            if len(first)>1:raise ValueError("初日占いは一つ選んでください。")
+            rules = Rules(permission == ["1"],first[0] if first else "random_white")
             policy = parse_policy(rules)
         except ValueError as exc:
             return render_setup(draft, error=str(exc)), 400
         previous = game()
         session["co_display_game"] = secrets.token_hex(8)
         session["game"] = {**({"seers":seers,"hunters":hunters} if seers or hunters else {}), "players": players, "wolves": wolves, "mediums": mediums,
-                           "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite},
+                           "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite,"initial_seer":rules.initial_seer},
                            "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
         if seer_mode:
-            session["game"].update(seer_mode=seer_mode,seer_options={"initial_rule":"random_white","likelihood":None},seer_inputs=[])
+            session["game"].update(seer_mode=seer_mode,seer_options={"initial_rule":rules.initial_seer,"likelihood":"compatibility"},seer_inputs=[])
             session.modified=True
         return redirect(url_for("main"), code=303)
 

@@ -15,7 +15,7 @@
           <section class="role-column"><h3>村陣営</h3>
             <label class="role-count-row" for="citizen-count"><span>市民</span><input type="number" id="citizen-count" name="citizens" value="{{ draft.counts.citizens }}" min="0" max="9" required></label>
             <label class="role-count-row" for="medium-count"><span>霊能</span><input type="number" id="medium-count" name="mediums" value="{{ draft.counts.mediums }}" min="0" max="9" required></label>
-            <label class="role-count-row" for="seer-count"><span>占い師</span><input type="number" id="seer-count" name="seers" value="{{ draft.counts.seers }}" min="0" max="9" required></label>
+            <label class="role-count-row" for="seer-count"><span>占い師（手動のみ）</span><input type="number" id="seer-count" name="seers" value="{{ draft.counts.seers }}" min="0" max="9" required></label>
             <label class="role-count-row" for="hunter-count"><span>狩人（能力なし）</span><input type="number" id="hunter-count" name="hunters" value="{{ draft.counts.hunters }}" min="0" max="9" required></label>
           </section>
           <section class="role-column"><h3>狼陣営</h3>
@@ -35,7 +35,7 @@
       {% with editable=true %}{% include 'rules.html' %}{% endwith %}
     </section>
     </div>
-    <label class="field-label" for="seer-mode">占い師の計算</label><select id="seer-mode" name="seer_mode"><option value="" {% if not seer_mode %}selected{% endif %}>従来（能力なし）</option><option value="information-fixed-v1" {% if seer_mode=="information-fixed-v1" %}selected{% endif %}>占い師（手動のみ）</option></select>
+
     <p class="hint">手動占いは開発中の情報固定モデルです。1～9人・任意の役職数とCO数を試せます。狼なし・初期の狼多数はその時点の終局として表示します。狩人の護衛は計算しません。</p>
     <input type="hidden" name="day" value="max"><input type="hidden" name="night" value="max">
     <div class="phase-footer"><div class="footer-inner">{{ phase_button(1, 'day') }}</div></div>

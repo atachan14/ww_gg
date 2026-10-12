@@ -56,13 +56,14 @@ class GameConfig:
         return cls(citizens=state["players"]-sum(counts.values()), **counts, rules=complete_rules(state["rules"]))
 
     def draft(self):
-        return SetupDraft({key: str(getattr(self, key)) for key in COUNT_KEYS}, "1" if self.rules.allow_self_bite else "0")
+        return SetupDraft({key: str(getattr(self, key)) for key in COUNT_KEYS}, "1" if self.rules.allow_self_bite else "0",self.rules.initial_seer)
 
 
 @dataclass(frozen=True)
 class SetupDraft:
     counts: dict[str, str]
     allow_self_bite: str
+    initial_seer: str = "random_white"
 
     @classmethod
     def from_form(cls, form):
@@ -75,7 +76,7 @@ class SetupDraft:
                 counts["citizens"] = str(setup_count(raw("players", ""))-sum(setup_count(counts[key]) for key in COUNT_KEYS if key != "citizens"))
             except ValueError:
                 counts["citizens"] = ""
-        return cls(counts, raw("allow_self_bite", "0"))
+        return cls(counts, raw("allow_self_bite", "0"),raw("initial_seer","random_white"))
 
     @property
     def cast_preset(self):
@@ -87,9 +88,9 @@ class SetupDraft:
 
     @property
     def rule_preset(self):
-        if self.allow_self_bite not in ("0", "1"):
+        if self.allow_self_bite not in ("0", "1") or self.initial_seer not in ("normal","random_white","none"):
             return "custom"
-        values = asdict(complete_rules({"allow_self_bite": self.allow_self_bite == "1"}))
+        values = asdict(complete_rules({"allow_self_bite": self.allow_self_bite == "1","initial_seer":self.initial_seer}))
         return next((key for key, p in preset_data()["rules"].items() if values == p["values"]), "custom")
 
     @property

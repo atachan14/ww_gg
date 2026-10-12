@@ -11,8 +11,8 @@ class SeerManualGeneralTests(unittest.TestCase):
         self.app=create_app({'TESTING':True,'SECRET_KEY':'general-test'});self.client=self.app.test_client()
     def game(self):
         with self.client.session_transaction() as s:return copy.deepcopy(s['game'])
-    def start(self,n,w=1,s=1,m=0,h=0):
-        data={'citizens':str(n-w-s-m-h),'wolves':str(w),'seers':str(s),'mediums':str(m),'hunters':str(h),'seer_mode':MODE,'day':'max','night':'max'}
+    def start(self,n,w=1,s=1,m=0,h=0,initial="random_white"):
+        data={'citizens':str(n-w-s-m-h),'wolves':str(w),'seers':str(s),'mediums':str(m),'hunters':str(h),'seer_mode':MODE,'day':'max','night':'max','initial_seer':initial}
         self.assertEqual(self.client.post('/start',data=data).status_code,303)
     def form(self,**extra):
         g=self.game();data={'revision':str(g['revision']),'day':g['policy']['day'],'night':g['policy']['night'],'include_self_bite':'0'};data.update(extra);return data
@@ -53,7 +53,7 @@ class SeerManualGeneralTests(unittest.TestCase):
         self.assertTrue(all(not s&1 for w,m,s,h,q in board.worlds))
 
     def test_multiple_true_seers_coupled_reports_and_contradiction_atomic(self):
-        self.start(5,s=2);self.configure(co_1='seer',co_2='seer',seer_initial_rule='normal',seer_target_1_1='3',seer_color_1_1='white',seer_target_1_2='4',seer_color_1_2='black')
+        self.start(5,s=2,initial='normal');self.configure(co_1='seer',co_2='seer',seer_target_1_1='3',seer_color_1_1='white',seer_target_1_2='4',seer_color_1_2='black')
         board=replay(self.game())[1].board;self.assertTrue(all(w==8 and s==3 for w,m,s,h,q in board.worlds))
         old=self.game();response=self.client.post('/strategy',data=self.form(seer_target_1_2='3',seer_color_1_2='black'))
         self.assertEqual(response.status_code,400);self.assertEqual(self.game(),old)
@@ -81,12 +81,12 @@ class SeerManualGeneralTests(unittest.TestCase):
     def test_mixed_roles_abilityless_hunter_explicit_and_unmodified_prior(self):
         self.start(7,w=2,s=1,m=1,h=1);self.configure()
         board=replay(self.game())[1].board;self.assertEqual(board.worlds,initial_board(7,2,1,1,1).worlds)
-        html=self.client.get('/main',follow_redirects=True).data;self.assertIn('狩人は護衛なし'.encode(),html)
+        html=self.client.get('/main',follow_redirects=True).data;self.assertIn('狩人護衛・GJは未対応'.encode(),html)
         self.assertEqual(board.initial_hunter_count,1)
 
     def mixed_progress(self):
-        self.start(7,w=2,s=1,m=2)
-        self.configure(co_1='seer',co_2='medium',co_3='medium',seer_initial_rule='normal')
+        self.start(7,w=2,s=1,m=2,initial='normal')
+        self.configure(co_1='seer',co_2='medium',co_3='medium')
         self.advance(4);self.advance(5)
 
     def test_medium_and_seer_reports_condition_same_joint_history(self):
@@ -119,7 +119,7 @@ class SeerManualGeneralTests(unittest.TestCase):
         self.assertEqual(self.game()['reports'],[]);self.assertEqual(self.game()['seer_inputs'],[])
 
     def test_budget_pending_and_recovery_with_cache(self):
-        self.start(7,w=2,s=1,m=2);self.configure(co_1='seer',co_2='medium',co_3='medium')
+        self.start(7,w=2,s=1,m=2,initial='normal');self.configure(co_1='seer',co_2='medium',co_3='medium')
         self.assertIn(b'id="village-rate"',self.client.get('/main',follow_redirects=True).data)
         self.app.config['MANUAL_CALC_MAX_WORK']=1
         html=self.client.get('/main',follow_redirects=True).data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html);self.assertIn('計算予算'.encode(),html)
@@ -127,7 +127,7 @@ class SeerManualGeneralTests(unittest.TestCase):
         self.assertIn(b'id="village-rate"',self.client.get('/main',follow_redirects=True).data)
 
     def test_later_co_uses_current_day_and_old_co_reports_survive_removal(self):
-        self.start(7,w=2);self.configure(seer_initial_rule='normal')
+        self.start(7,w=2,initial='normal');self.configure()
         self.advance(2);self.advance(4)
         history=copy.deepcopy(self.game()['history'])
         self.configure(co_1='seer',seer_target_2_1='3',seer_color_2_1='white')

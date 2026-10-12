@@ -8,7 +8,7 @@
 <ul>{% for event in batch.events %}<li>Player {{ event.player }} {% if event.kind=='co' %}CO：{{ co_labels[event.role] }}{% else %}{{ '占い' if event.kind=='seer' else '霊能' }} 取得Day {{ event.day }} / 公開Day {{ batch.day }} → Player {{ event.target }} {{ '白' if event.color=='white' else '黒' }}{% endif %}</li>{% endfor %}</ul>
 <button type="button" data-public-edit="{{ batch.id }}">訂正</button> <button type="button" data-public-delete="{{ batch.id }}">削除</button></li>{% endfor %}</ol>
 <div data-public-editor>
-<label>公開形式 <select data-public-mode><option value="single">一件公開</option><option value="simultaneous">同時公開バッチ</option></select></label>
+<label>公開形式 <select data-public-mode form="public-log-draft-form"><option value="single">一件公開</option><option value="simultaneous">同時公開バッチ</option></select></label>
 <p data-public-edit-label></p><div data-public-rows></div>
 <button type="button" data-public-add>同時公開の行を追加</button>
 <button type="button" data-public-save>下書きを保存</button>

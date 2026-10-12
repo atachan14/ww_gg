@@ -49,30 +49,29 @@ class SeerManualTests(unittest.TestCase):
         g=self.game();f={'revision':str(g['revision']),'day':g['policy']['day'],'night':g['policy']['night'],'include_self_bite':'0'}
         f.update({f'co_{i}':c for i,c in enumerate(g['claims'],1)});f.update(extra);return f
     def configured(self,initial='normal',reports=True):
-        fields={'co_1':'seer','co_2':'seer','seer_initial_rule':initial,'seer_likelihood':'compatibility'}
+        self.assertEqual(self.client.post('/start',data={'citizens':'2','seers':'1','wolves':'2','initial_seer':initial,'day':'max','night':'max'}).status_code,303)
+        fields={'co_1':'seer','co_2':'seer'}
         if reports:fields.update(seer_target_1_1='3',seer_color_1_1='white',seer_target_1_2='3',seer_color_1_2='black')
         self.assertEqual(self.client.post('/strategy',data=self.form(**fields)).status_code,303)
     def advance(self,target):self.assertEqual(self.client.post('/advance',data=self.form(target=str(target))).status_code,303)
 
-    def test_pending_settings_visible_before_strategy_and_reason_matches_label(self):
+    def test_fixed_handling_and_game_rule_readonly_in_main(self):
         html=self.client.get('/main').data
-        self.assertLess(html.index(b'data-seer-manual-settings'),html.index(b'id="strategy-editor"'))
-        self.assertIn('入力報告の扱い'.encode(),html)
-        self.assertIn('Boardの「戦略」を開き'.encode(),html)
-        self.configured(reports=False)
+        self.assertIn(b'id="view-first-seer" disabled',html)
+        self.assertNotIn(b'name="seer_likelihood"',html)
+        self.assertNotIn(b'name="seer_initial_rule"',html)
         self.assertIsNone(pending(self.game()))
 
-    def test_pending_defaults_no_zero_or_fake_win_and_no_advance(self):
-        g=self.game();self.assertEqual(g['seer_options']['initial_rule'],'random_white');self.assertIsNone(g['seer_options']['likelihood'])
-        html=self.client.get('/main').data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html)
-        self.assertEqual(self.client.post('/advance',data=self.form(target='1')).status_code,400);self.assertEqual(self.game()['history'],[])
+    def test_fixed_defaults_calculate_without_unselected_gate(self):
+        g=self.game();self.assertEqual(g['seer_options'],{'initial_rule':'random_white','likelihood':'compatibility'})
+        html=self.client.get('/main').data;self.assertNotIn(b'data-seer-pending',html);self.assertIn(b'id="village-rate"',html)
 
     def test_independent_enumeration_all_targets_colors_and_future_modes(self):
         self.configured(reports=False);base=self.game()
         for initial in ('normal','random_white'):
             for a,b in (('white','white'),('white','black'),('black','white')):
                 for day,night in (('max','max'),('random','random')):
-                    g=copy.deepcopy(base);g['seer_options']['initial_rule']=initial;g['policy'].update(day=day,night=night)
+                    g=copy.deepcopy(base);g['seer_options']['initial_rule']=initial;g['rules']['initial_seer']=initial;g['policy'].update(day=day,night=night)
                     g['seer_inputs']=[{'day':1,'reporter':1,'target':3,'color':a},{'day':1,'reporter':2,'target':3,'color':b}]
                     rules,p=replay(g);expected=literal_first_values(g)
                     self.assertEqual({t:value_for_action(p.board,t,rules,Strategy(**g['policy'])).village_win for t in p.board.alive},expected)
@@ -148,4 +147,4 @@ class SeerManualTests(unittest.TestCase):
         self.assertEqual(self.client.post('/start',data=data).status_code,303)
         self.assertEqual(self.client.post('/start',data={**data,'players':'10'}).status_code,400)
         data.pop('seer_mode');self.assertEqual(self.client.post('/start',data=data).status_code,303)
-        self.assertNotIn('seer_mode',self.game());self.assertEqual(self.client.get('/main').status_code,200)
+        self.assertEqual(self.game()['seer_mode'],MODE);self.assertEqual(self.client.get('/main').status_code,200)

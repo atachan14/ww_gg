@@ -103,13 +103,14 @@ function initializeUI() {
   const rulePreset = document.querySelector('#rule-preset');
   const castInputs = Object.fromEntries(['citizens', 'mediums', 'seers', 'hunters', 'wolves'].map(key => [key, document.querySelector(`input[name="${key}"]`)]));
   const ruleInput = document.querySelector('#allow-self-bite');
+  const initialSeerInput=document.querySelector('#first-seer');
   function refreshSetupPresets() {
     if (!setupPresets) return;
     const matches = (presets, values) => Object.entries(presets).find(([, preset]) =>
       Object.entries(preset.values).every(([key, value]) => values[key] === value))?.[0] || 'custom';
     const counts = Object.fromEntries(Object.entries(castInputs).map(([key, input]) => [key, input.value === '' ? null : Number(input.value)]));
     castPreset.value = matches(setupPresets.cast, counts);
-    rulePreset.value = matches(setupPresets.rules, {allow_self_bite: ruleInput.value === '1' ? true : ruleInput.value === '0' ? false : null});
+    if (document.activeElement !== rulePreset) rulePreset.value = matches(setupPresets.rules, {allow_self_bite: ruleInput.value === '1' ? true : ruleInput.value === '0' ? false : null,initial_seer:initialSeerInput.value});
   }
   if (setupPresets) {
     castPreset.addEventListener('change', () => {
@@ -119,10 +120,12 @@ function initializeUI() {
     });
     rulePreset.addEventListener('change', () => {
       const preset = setupPresets.rules[rulePreset.value];
-      if (preset) ruleInput.value = preset.values.allow_self_bite ? '1' : '0';
+      if (preset) {ruleInput.value = preset.values.allow_self_bite ? '1' : '0';initialSeerInput.value=preset.values.initial_seer;}
       refreshSetupPresets();
     });
+    rulePreset.addEventListener('blur',refreshSetupPresets);
     ruleInput.addEventListener('change', refreshSetupPresets);
+    initialSeerInput.addEventListener('change',refreshSetupPresets);
   }
 
   const citizens = document.querySelector('#citizen-count');
@@ -134,7 +137,7 @@ function initializeUI() {
     refreshSetupPresets();
     const village = Number(citizens.value) + Number(mediums.value) + Number(seers.value) + Number(hunters.value);
     const total = village + Number(wolves.value);
-    const experimental = document.querySelector('#seer-mode')?.value === 'information-fixed-v1';
+    const experimental = Number(seers.value)>0;
     wolves.max = experimental ? '9' : '4';
     document.querySelector('#villager-count').innerHTML = `${village}<small>人</small>`;
     document.querySelector('#wolf-summary').innerHTML = `${wolves.value}<small>人</small>`;
@@ -295,8 +298,9 @@ function initializePublicLog() {
  const seed=JSON.parse(seedNode.textContent),root=document.querySelector('#system-log');
  const rows=root.querySelector('[data-public-rows]'),mode=root.querySelector('[data-public-mode]'),status=root.querySelector('[data-public-status]');
  let replacing=null,legacyKey=null,busy=false;
+ document.querySelector('#public-log-draft-form').addEventListener('submit',event=>event.preventDefault());
  const option=(value,label)=>{const o=document.createElement('option');o.value=value;o.textContent=label;return o;};
- function field(row,key,values,value){const label=document.createElement('label');label.textContent={kind:'種類',player:'発言者',role:'CO',day:'取得日',target:'対象',color:'結果'}[key];const select=document.createElement('select');select.dataset.publicField=key;values.forEach(v=>select.append(option(v[0],v[1])));select.value=value??'';label.append(select);row.append(label);return select;}
+ function field(row,key,values,value){const label=document.createElement('label');label.textContent={kind:'種類',player:'発言者',role:'CO',day:'取得日',target:'対象',color:'結果'}[key];const select=document.createElement('select');select.dataset.publicField=key;select.setAttribute('form','public-log-draft-form');values.forEach(v=>select.append(option(v[0],v[1])));select.value=value??'';label.append(select);row.append(label);return select;}
  function add(e={}){const row=document.createElement('div');row.className='public-draft-row';row.dataset.publicRow='';
  const kind=field(row,'kind',[['co','CO'],['seer','占い結果'],['medium','霊能結果']],e.kind||'co');
  field(row,'player',[['','未選択'],...Array.from({length:seed.players},(_,i)=>[i+1,`Player ${i+1}`])],e.player);

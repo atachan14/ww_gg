@@ -1,5 +1,1 @@
-<div data-seer-manual-settings>
-<label class="field-label">初日ルール<select class="report-select" name="seer_initial_rule" {% if state.history %}disabled{% endif %}><option value="" {% if state.seer_options.initial_rule is none %}selected{% endif %}>未選択</option>{% for value,label in [('normal','初日あり（指定対象の結果）'),('random_white','初日ランダム白'),('none','初日なし')] %}<option value="{{ value }}" {% if state.seer_options.initial_rule==value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
-<label class="field-label">入力報告の扱い<select class="report-select" name="seer_likelihood" {% if state.history %}disabled{% endif %}><option value="" {% if state.seer_options.likelihood is none %}selected{% endif %}>未選択</option><option value="compatibility" {% if state.seer_options.likelihood=='compatibility' %}selected{% endif %}>真結果との整合条件付け（偽報告の尤度は一定）</option></select></label>
-<p class="hint">開発中の情報固定モデルです。配役・CO数を固定せず各日の占い結果を手入力できます。未来の占い取得・利用・公開は予測しません。狩人は護衛なし、霊能は既存の将来報告モデルを引き継ぎます。CO変更は現在以降の報告機会へ反映し、過去のCOは書き換えません。結果の遅延開示はこの版では扱いません。</p>
-</div>
+<div data-seer-manual-settings><p class="hint">入力済み結果を真結果との整合性で条件付けます（偽報告の尤度は一定）。初日占いはGameルールで設定します。未来の占い取得・利用・公開、狩人護衛・GJは未対応です。</p></div>

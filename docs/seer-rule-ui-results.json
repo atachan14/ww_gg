@@ -1,0 +1,51 @@
+{
+  "status": "local_complete_unpublished",
+  "base_commit": "7a81348f3490389544feeaf619f008a144d06963",
+  "worktree": "D:\\CodexTemp\\ww_gg-seer-rule-ui-20261012",
+  "tests": 174,
+  "browser": {
+    "normal": true,
+    "random_white": true,
+    "none": true,
+    "draft_enter_cannot_advance_board": true,
+    "top_only_rule_editing": true,
+    "preset_reset": true,
+    "fixed_handling_no_pending_selector": true,
+    "black_report_not_blanket_prohibited": true,
+    "legacy_unset_mode_migration": true,
+    "non_seer_unchanged": true
+  },
+  "source_sha256": {
+    "app.py": "b55fa1e270926dfc69ff11c0c2b5de9a67a44cd5904e7273a153978cd89f4fec",
+    "public/static/app.js": "626af5b1806628b52f5e137bb140b9ad26baa0019243ed63e0e2a728d4eeac2e",
+    "static/app.js": "626af5b1806628b52f5e137bb140b9ad26baa0019243ed63e0e2a728d4eeac2e",
+    "templates/main.html": "7abb2de374e0e4c27b8e91fb164cb5aae041d853d38a0d390df25a97ac57e74c",
+    "templates/public_log.html": "5f5a2b31bd7ae8a852abfba9d1d62478741448fdac7c30e60a33b6bdfe56e7f4",
+    "templates/rules.html": "091210070167f2713d3c75277621873ebd60ac1275460d4047e388ac19247bb8",
+    "templates/seer_manual_settings.html": "fe687ae7d6690ab5207af9c1ef1defa8fb1966373a8a18f485179e3cdc8d32ee",
+    "templates/top.html": "23f97456dddfb9c497f5f3c9db32e47a5ff17c049b7d91dddbb8fd9d61ca2be3",
+    "tests/test_co_ui.py": "866f5553ce61f968feab1469f6161988d915e89ad0fffba16523f610df9a54cc",
+    "tests/test_seer_manual.py": "f29462d841c2d340934deb41494aceead61eef545b41925091e20c81f1ab7574",
+    "tests/test_seer_manual_general.py": "221a7bede0a9697d8f56d512213d1cd9440b922b8f73822c95a179a5ee2300e4",
+    "tests/test_setup.py": "246f7b57a3ec6315947d8cc94062fa1516352f00b6138c73cd63fb62f923d3d6",
+    "tests/test_v04_input.py": "b78d47b15e532d89f2036e6ab0abf0bc5dc79d995f2041d3ee3d23f20cc03523",
+    "tests/test_web.py": "183c4726525a99ed0e7625a3ba444cdfcb5b71e0f833c3a21703af0b555d9d66",
+    "werewolf/exact.py": "27e724d08191478e7028b5b6d717e605dc24004d28e4e58d1fbc779719f2c8fa",
+    "werewolf/seer_manual.py": "3e28c867efdbfce73e7074ca46ed5e95baa18c19568388fa238a75d7ead2c699",
+    "werewolf/setup.py": "f071fe6564bd4983a6d3c47d096c6dd148f328b456b894d92577c45452ed8e22",
+    "tests/test_seer_game_rule.py": "e03eb0a4000bfaded23ee9eddf563c55eb08c6207663d98edaacf1adb82b3929"
+  },
+  "mode": "manual auto-applied when seers are present; existing explicit manual sessions preserved",
+  "handling": "compatibility fixed; fake report likelihood constant",
+  "initial_rule_choices": [
+    "normal",
+    "random_white",
+    "none"
+  ],
+  "rule_editing": "TOP only; MAIN readonly",
+  "legacy_migration": "missing rule defaults random_white; valid selected legacy rule preserved; missing likelihood defaults compatibility; missing mode for seer casts upgraded; history rule snapshots normalized; unknown modes rejected",
+  "draft_form": "SystemLog draft controls associated with a separate submit-prevented form",
+  "new_publish": false,
+  "future_generation_included": false,
+  "original_research_tree_changed": false
+}

@@ -118,7 +118,8 @@ class COUITests(unittest.TestCase):
         self.c.post('/start',data={'citizens':'2','mediums':'1','seers':'1','hunters':'1','wolves':'1','day':'max','night':'max'})
         self.post('/strategy',co_1='seer',co_2='hunter')
         html=self.html()
-        self.assertEqual(html.count('能力未対応'),2)
+        self.assertEqual(html.count('能力未対応'),1)
+        self.assertIn('name="seer_target_1_1"',html)
         self.assertNotIn('name="report_',html)
         self.assertNotEqual(CO_RENDERERS['medium'],CO_RENDERERS['seer'])
 

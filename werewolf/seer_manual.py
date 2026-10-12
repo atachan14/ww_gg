@@ -20,6 +20,28 @@ MODE='information-fixed-v1'
 INITIAL=(None,'normal','random_white','none')
 LIKELIHOOD=(None,'compatibility')
 
+def migrate_game(game):
+    """Approved deterministic migration; no changes to non-seer games."""
+    if game.get('seer_mode') not in (None,'',MODE):raise ValueError('保存された占いモデルが未対応です。')
+    if game.get('seer_mode')!=MODE and not game.get('seers',0):return game
+    from copy import deepcopy
+    g=deepcopy(game)
+    old=g.get('seer_options',{})
+    selected=g.get('rules',{}).get('initial_seer',old.get('initial_rule') or 'random_white')
+    if selected not in ('normal','random_white','none') or old.get('likelihood') not in (None,'compatibility'):raise ValueError('保存された占いルールを確認してください。')
+    if 'initial_seer' in g['rules'] and old.get('initial_rule') not in (None,selected):raise ValueError('Gameルールと保存された初日占いが一致しません。')
+    g['rules']={**g['rules'],'initial_seer':selected}
+    g['seer_mode']=MODE;g['seer_options']={'initial_rule':selected,'likelihood':'compatibility'}
+    g.setdefault('seer_inputs',[])
+    for step in g.get('history',[]):
+        previous=step.get('seer_options',{})
+        if previous.get('initial_rule') not in (None,selected) or previous.get('likelihood') not in (None,'compatibility'):raise ValueError('過去の初日占いスナップショットが一致しません。')
+        step['seer_options']=dict(g['seer_options'])
+        step.setdefault('claims',['latent']*g['players'])
+        step.setdefault('claim_policy',{})
+    return g
+
+
 def options(value):
     if not isinstance(value,dict) or set(value)!={'initial_rule','likelihood'} or value['initial_rule'] not in INITIAL or value['likelihood'] not in LIKELIHOOD:
         raise ValueError('占いの初日ルール・報告尤度の設定を確認してください。')
@@ -52,6 +74,7 @@ def condition(board,rows,opt,initial_alive):
         for row in rows:
             if not s&(1<<(row['reporter']-1)):continue # Fake report is not truth.
             if (row['color']=='black') != bool(w&(1<<(row['target']-1))):factor=F();break
+            if row['day']==1 and opt['initial_rule']=='none':factor=F();break
             if row['day']==1 and opt['initial_rule']=='random_white':
                 if row['color']!='white':factor=F();break
                 legal=tuple(i for i in initial_alive if i!=row['reporter'] and not w&(1<<(i-1)))
@@ -62,7 +85,7 @@ def condition(board,rows,opt,initial_alive):
     if not mass:raise ValueError('占い結果と公開履歴に整合する配役がありません。')
     return replace_worlds(board,tuple((*x[:-1],x[-1]/mass) for x in entries))
 
-def replay(game):return _replay(json.dumps(game,sort_keys=True,separators=(',',':'),allow_nan=False))
+def replay(game):return _replay(json.dumps(migrate_game(game),sort_keys=True,separators=(',',':'),allow_nan=False))
 
 @lru_cache(maxsize=32)
 def _replay(text):
@@ -91,7 +114,6 @@ def _replay(text):
             for row in selected:
                 if row['reporter'] not in board.alive or claims[row['reporter']-1]!='seer':raise ValueError('結果の公開時点に生存・占いCOしている報告者を指定してください。')
                 if row['target'] is not None and row['target'] not in scan[board.day]:raise ValueError('取得時点に生存していた対象を指定してください。')
-                if row['day']==1 and opt['initial_rule']=='none' and (row['target'] is not None or row['color'] is not None):raise ValueError('初日なしでは初日結果を入力できません。')
             complete=tuple(r for r in selected if r['target'] is not None and r['color'] is not None)
             if opt['initial_rule'] is not None and opt['likelihood'] is not None:board=condition(board,complete,opt,initial)
             applied.update((r['day'],r['reporter']) for r in selected)
@@ -109,6 +131,7 @@ def _replay(text):
     return rules,p
 
 def pending(g):
+    g=migrate_game(g)
     opt=options(g['seer_options'])
     if opt['initial_rule'] is None:return Pending('Boardの「戦略」を開き、「初日ルール」を選択してください。')
     if opt['likelihood'] is None:return Pending('Boardの「戦略」を開き、「入力報告の扱い」を選択してください。選択するまで勝率は未計算です。')
@@ -121,7 +144,8 @@ def parse_form(form,g,board):
         key='seer_'+field;values=form.getlist(key)
         if values:
             if len(values)!=1:raise ValueError('占い設定が重複しています。')
-            opt[field]=values[0] or None
+            chosen=values[0] or None
+            if chosen != opt[field]:raise ValueError('初日占いはTOPのGameルールで設定してください。入力報告の扱いは固定です。')
     options(opt)
     if g['history'] and opt!=g['seer_options']:raise ValueError('初日ルール・尤度を変える場合は初日へ戻ってください。')
     rows={(r['day'],r['reporter']):dict(r) for r in g['seer_inputs']}
@@ -152,5 +176,5 @@ def timeline(g,board,player,finished=False):
         claims=g['history'][claim_index]['claims'] if claim_index<len(g['history']) else g['claims']
         if player not in alive or claims[player-1]!='seer':continue
         row=data.get((day,player),{'target':None,'color':None})
-        rows.append({'day':day,'target':row['target'],'color':row['color'],'targets':tuple(i for i in sorted(scan) if i!=player),'editable':not finished,'initial_none':day==1 and g['seer_options']['initial_rule']=='none'})
+        rows.append({'day':day,'target':row['target'],'color':row['color'],'targets':tuple(i for i in sorted(scan) if i!=player),'editable':not finished,'initial_none':day==1 and g['seer_options']['initial_rule']=='none' and row['target'] is None and row['color'] is None})
     return rows
