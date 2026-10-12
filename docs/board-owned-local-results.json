@@ -1,0 +1,51 @@
+{
+  "base": "f737dd12091fac85744de32a1931b1f005a25b1c",
+  "published": false,
+  "tests": 200,
+  "regression": "OK",
+  "browser": {
+    "local_log_and_inherited_state": true,
+    "day_night_distinct_ids": true,
+    "same_day_sibling_branch_isolation": true,
+    "same_transition_revisit_restores_owned_events": true,
+    "day2_late_co_day1_and_day2_results": true,
+    "preview_commit_equal": true,
+    "citizen_no_empty_result_row": true,
+    "co_none_label": "--",
+    "zero_roles_hidden_on_main": true,
+    "quiet_selector_border_and_background": {
+      "border": "0px",
+      "bg": "rgba(0, 0, 0, 0)",
+      "height": 28,
+      "option": "rgb(255, 255, 255)",
+      "footerShadow": "none"
+    },
+    "keyboard_focus_visible": true,
+    "small_viewport": true,
+    "update_red_no_shadow": true,
+    "saved_board_id_and_owner_restore": true
+  },
+  "browser_day3": {
+    "day3_late_co_three_acquisition_days": true,
+    "preview_commit_equal": "20/21",
+    "edit_old_day_without_rewriting_past_owner": true,
+    "cancel_restores_confirmed_target": true,
+    "cold_cookie_restores_board_graph_and_current_owner": true,
+    "disabled_and_selected_selector_distinct": true,
+    "native_popup_choices_readable": true
+  },
+  "future_code_included": false,
+  "remaining_blockers": [],
+  "descendant_policy": "commit-only retirement with recoverable generation snapshots; forward regenerates fresh Board IDs, no automatic old hand-input replay",
+  "browser_generation": {
+    "preview_and_cancel_preserve_confirmed_descendants": true,
+    "commit_only_retires_affected_subtree": true,
+    "old_snapshot_archived": true,
+    "unrelated_sibling_node_and_inputs_unchanged": true,
+    "same_transition_generates_new_board_id": true,
+    "old_descendant_input_not_reapplied": true,
+    "preview_commit_values_equal": "2/3",
+    "cold_cookie_restores_active_tree_and_archives": true,
+    "terminal_inherited_details_readonly": true
+  }
+}

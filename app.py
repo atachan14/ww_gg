@@ -53,8 +53,9 @@ def create_app(test_config=None, *, deployment=False):
         return Progress(board, progress.settled_village, progress.settled_wolf,
                         progress.last_board, progress.last_outcomes)
 
-    def with_reports(progress, reports):
-        board=condition_reports(progress.board,tuple(MediumReport(**r) for r in reports))
+    def with_reports(progress, reports, history=None):
+        from werewolf.report_publication import condition_published_medium
+        board=(condition_published_medium(progress.board,tuple(MediumReport(**r) for r in reports),history) if history is not None else condition_reports(progress.board,tuple(MediumReport(**r) for r in reports)))
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
 
     def replay(state):
@@ -71,14 +72,14 @@ def create_app(test_config=None, *, deployment=False):
             if "claims" in step:
                 progress = with_claims(progress, tuple(step["claims"]), ClaimPolicy(**step["claim_policy"]), initial_group=index==0 and state.get("model","equal")=="group")
             if not progress.finished and step.get('reports'):
-                progress = with_reports(progress, step['reports'])
+                progress = with_reports(progress, step['reports'],state['history'])
             progress = advance(progress, step["target"], rules, Strategy(**step["policy"]))
         validate_strategy(rules, Strategy(**state["policy"]))
         if not progress.finished:
             progress = with_claims(progress, tuple(state.get("claims", ['latent'] * state["players"])),
                                    ClaimPolicy(**state.get("claim_policy", {})), initial_group=not state["history"] and state.get("model","equal")=="group")
             if state.get('reports'):
-                progress = with_reports(progress, state['reports'])
+                progress = with_reports(progress, state['reports'],state['history'])
         return rules, progress
 
     def game():
@@ -99,6 +100,15 @@ def create_app(test_config=None, *, deployment=False):
                 if any(set(ClaimPolicy(**resolved).conditions(r)) != set(ClaimPolicy(**state['claim_policy']).conditions(r)) for r in VILLAGE_ROLES):
                     return None
             if "seer_mode" in state and state["seer_mode"] != "information-fixed-v1":return None
+            if "public_log" in state or app.config.get("HYBRID_TABLE_PREVIEW"):
+                from werewolf.public_log import migrate,project
+                draft=state.get("public_draft")
+                log=migrate({**state,"_owner_game_id":session.setdefault("co_display_game",secrets.token_hex(8))})
+                if app.config.get("HYBRID_TABLE_PREVIEW"):
+                    from werewolf.public_log_changes import upgrade
+                    log=upgrade(log)
+                state=project(state,log)
+                if draft is not None:state["public_draft"]=draft
             _, progress = replay(state)
             target = state["selection"]
             if target is not None and (type(target) is not int or not 1 <= target <= state["players"]):
@@ -107,12 +117,17 @@ def create_app(test_config=None, *, deployment=False):
                 return None
         except (ValueError, TypeError, KeyError):
             return None
+        if state.get("public_draft"):
+            draft=state["public_draft"]
+            if draft.get("board_id",state["public_log"]["board_id"])!=state["public_log"]["board_id"]:state.pop("public_draft",None)
+            else:draft["board_id"]=state["public_log"]["board_id"]
         if state!=original_state:
             session["game"]=state
         return state
 
     def revision_matches(state):
-        return request.form.getlist("revision") == [str(state["revision"])]
+        bid=state.get("public_log",{}).get("board_id")
+        return request.form.getlist("revision") == [str(state["revision"])] and (bid is None or request.form.getlist("board_id") in ([],[bid]))
 
     def parse_policy(rules, state=None):
         def one(key):
@@ -378,6 +393,10 @@ def create_app(test_config=None, *, deployment=False):
         if seer_mode:
             session["game"].update(seer_mode=seer_mode,seer_options={"initial_rule":rules.initial_seer,"likelihood":"compatibility"},seer_inputs=[])
             session.modified=True
+        if app.config.get('HYBRID_TABLE_PREVIEW'):
+            from werewolf.public_log import migrate,project
+            from werewolf.public_log_changes import upgrade
+            created=session['game'];session['game']=project(created,upgrade(migrate({**created,'_owner_game_id':secrets.token_hex(8)})))
         return redirect(url_for("main"), code=303)
 
     @app.get("/main")
@@ -447,9 +466,15 @@ def create_app(test_config=None, *, deployment=False):
         if advancing:
             history = history + [{**({"seer_options":proposed["seer_options"].copy()} if proposed.get("seer_mode")=="information-fixed-v1" else {}), "target": target, "policy": policy.copy(), "claims": claims.copy(), "claim_policy": claim_policy.copy(), "strategy_ui":editor, **({"reports":reports} if reports or "reports" in state else {})}]
             progress = advance(progress, target, rules, Strategy(**policy))
-        session["game"] = {**proposed, **({"reports":reports} if reports or "reports" in state else {}), "model": model, "policy": policy, "claims": claims, "claim_policy": claim_policy, "strategy_ui":editor, "history": history,
+        next_state = {**proposed, **({"reports":reports} if reports or "reports" in state else {}), "model": model, "policy": policy, "claims": claims, "claim_policy": claim_policy, "strategy_ui":editor, "history": history,
                            "selection": (target if progress.finished or not advancing else None),
                            "revision": state["revision"] + 1}
+        from werewolf.public_log import migrate,project
+        try:
+            if "public_log" in next_state:next_state=project(next_state,migrate(next_state))
+            _,progress=replay(next_state)
+        except ValueError as exc:return render_main(state,str(exc),400)
+        session["game"]=next_state
         return redirect(url_for("result" if progress.finished else "main"), code=303)
 
     def table_proposal(state, payload):
@@ -470,7 +495,7 @@ def create_app(test_config=None, *, deployment=False):
             old={((r['day'],r['reporter']) if kind=='seer' else (r['day'],r['reporter'],r['target'])):r for r in state.get(source,[])}
             proposed=payload[name]
             if not isinstance(proposed,list) or any(not isinstance(r,dict) or type(r.get('reporter'))is not int or not 1<=r['reporter']<=state['players'] for r in proposed):raise ValueError('能力結果を確認してください。')
-            if kind=='seer':proposed=[r for r in proposed if not (state['claims'][r['reporter']-1]=='seer' and claims[r['reporter']-1]!='seer')]
+            proposed=[r for r in proposed if not (state['claims'][r['reporter']-1]==kind and claims[r['reporter']-1]!=kind)]
             if not isinstance(proposed,list):raise ValueError('能力結果を確認してください。')
             new={}
             for r in proposed:
@@ -501,7 +526,7 @@ def create_app(test_config=None, *, deployment=False):
             proposed,batch=table_proposal(state,json.loads(request.form.get('payload','')))
             replay(proposed)
             html,status=render_main(proposed)
-            return jsonify(html=html,batch=batch,request_id=request.form.get('request_id'),revision=state['revision']),status
+            return jsonify(html=html,batch=batch,request_id=request.form.get('request_id'),revision=state['revision'],board_id=state['public_log']['board_id']),status
         except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc),request_id=request.form.get('request_id')),400
 
     @app.post('/table-publish')
@@ -514,6 +539,8 @@ def create_app(test_config=None, *, deployment=False):
             proposed,batch=table_proposal(state,json.loads(request.form.get('payload','')))
             replay(proposed)
             if batch is None:return jsonify(error='変更がありません。'),400
+            from werewolf.board_owned_log import commit_owned_change
+            proposed=commit_owned_change(state,proposed)
             proposed['revision']=state['revision']+1
         except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc)),400
         session['game']=proposed
@@ -526,8 +553,11 @@ def create_app(test_config=None, *, deployment=False):
         state=game()
         if state is None:return jsonify(error="保存されたゲームがありません。"),400
         if not revision_matches(state):return jsonify(error="画面が更新されています。再読み込みして確認してください。"),409
-        if set(request.form)!={'revision','operation','payload'}:return jsonify(error="公開操作の形式が不正です。"),400
+        if set(request.form)-{'revision','operation','payload','board_id'} or not {'revision','operation','payload'}<=set(request.form):return jsonify(error="公開操作の形式が不正です。"),400
         operation=request.form.get('operation')
+        if "public_log" not in state:
+            from werewolf.public_log import migrate,project
+            state=project(state,migrate(state))
         try:
             payload=json.loads(request.form['payload'])
             if operation=='cancel':
@@ -535,12 +565,16 @@ def create_app(test_config=None, *, deployment=False):
             elif operation=='draft':
                 validate_draft(payload)
                 if len(json.dumps(payload))>3000:raise ValueError('下書きが大きすぎます。')
-                proposed={**state,'public_draft':{'revision':state['revision'],'payload':payload}}
+                proposed={**state,'public_draft':{'revision':state['revision'],'board_id':state['public_log']['board_id'],'payload':payload}}
             elif operation=='publish':
                 _,progress=replay(state)
                 board=progress.last_board if progress.finished else progress.board
+                from werewolf.board_owned_log import check_item_owner
+                check_item_owner(state,payload)
                 proposed=transaction(state,board,payload,finished=progress.finished)
                 replay(proposed) # Validate the entire batch before committing any part.
+                from werewolf.board_owned_log import commit_owned_change
+                proposed=commit_owned_change(state,proposed)
                 proposed['revision']=state['revision']+1
             else:raise ValueError('未対応の公開操作です。')
         except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc)),400

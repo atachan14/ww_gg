@@ -35,6 +35,8 @@ def declarations(log):
     return active,known
 
 def project_changes(g,log):
+    from .board_owned_log import prepare
+    log=prepare(g,log)
     out=deepcopy(g);active,known=declarations(log)
     def claims_at(slot):
         result=['latent']*g['players']
@@ -50,13 +52,17 @@ def project_changes(g,log):
             (seers if key[0]=='seer' else mediums).append(row)
     out['seer_inputs']=sorted(seers,key=lambda r:(r['day'],r['reporter']))
     out['reports']=sorted(mediums,key=lambda r:(r['day'],r['reporter'],r['target']))
-    # Replay checks the original public CO context for still-active past reports.
+    from .board_owned_log import path
+    board_path=path(log['board_graph'])
+    publications={}
     for key,(origin,e) in active.items():
         if key[0] not in ('seer','medium'):continue
-        slot=2*(e['day']-1);role=key[0]
-        if slot<len(out['history']):out['history'][slot]['claims'][e['player']-1]=role
+        token=f"{key[0]}:{e['day']}:{e['player']}"+(f":{e['target']}" if key[0]=='medium' else '')
+        publications[token]={'slot':origin,'board_id':board_path[origin],'published_day':1+origin//2,'published_phase':'day' if origin%2==0 else 'night'}
+        if origin<len(out['history']):out['history'][origin]['claims'][e['player']-1]=key[0]
+    log['report_publications']=publications
     for i,step in enumerate(out['history']):
-        if 'reports' in step:step['reports']=[r for r in out['reports'] if r['day']<=1+i//2]
+        if 'reports' in step:step['reports']=[r for r in out['reports'] if publications[f"medium:{r['day']}:{r['reporter']}:{r['target']}"]['slot']<=i]
     # This ledger records declaration provenance, NEVER asserts that fake claims
     # were actual private acquisitions. Withdrawal does not erase provenance.
     ledger=[{'source':eid,'day':e['day'],'player':e['player'],'target':e['target'],'color':e['color'],'action':e.get('action','assert')} for eid,(_,e) in known.items() if e['kind']=='seer']
@@ -112,8 +118,11 @@ def transaction_changes(g,board,payload,finished=False):
             if e.get('role') not in ('villager','seer','medium','hunter','wolf'):raise ValueError('COを確認してください。')
         else:
             if type(e.get('day'))is not int or not 1<=e['day']<=day or e.get('target') not in range(1,g['players']+1) or e.get('color') not in ('white','black'):raise ValueError('対象と色を入力してください。')
-            if action=='assert' and (e['day']!=day or slot%2):raise ValueError('新規結果は当日の昼に公開してください。')
-            if action=='assert' and kind=='seer' and (e['target']==player or e['target'] not in scan):raise ValueError('取得時点の対象を確認してください。')
+            acquired_alive=set(range(1,g['players']+1))
+            if e['day']>1:
+                for step in g['history'][:2*e['day']-3]:acquired_alive.discard(step['target'])
+            if kind=='seer' and (e['target']==player or e['target'] not in acquired_alive or player not in acquired_alive):raise ValueError('取得時点の対象を確認してください。')
+            if kind=='medium' and (e['day']<2 or len(g['history'])<2*e['day']-3 or e['target']!=g['history'][2*e['day']-4]['target']):raise ValueError('霊能の取得日と処刑対象を確認してください。')
         key=identity(e)
         if key in seen:raise ValueError('同じ宣言が重複しています。')
         seen.add(key)

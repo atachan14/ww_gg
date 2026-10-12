@@ -4,12 +4,15 @@ from copy import deepcopy
 VERSION=1
 
 def migrate(g):
-    if 'public_log' in g:return deepcopy(g['public_log'])
-    return {'version':VERSION,'legacy':bool(g['history'] or any(x!='latent' for x in g.get('claims',['latent']*g['players'])) or g.get('seer_inputs') or g.get('reports')),
+    from .board_owned_log import prepare
+    if 'public_log' in g:return prepare(g,g['public_log'])
+    return prepare(g,{'version':VERSION,'legacy':bool(g['history'] or any(x!='latent' for x in g.get('claims',['latent']*g['players'])) or g.get('seer_inputs') or g.get('reports')),
             'base_claims':[deepcopy(s.get('claims',['latent']*g['players'])) for s in g['history']]+[deepcopy(g.get('claims',['latent']*g['players']))],
-            'base_seer':deepcopy(g.get('seer_inputs',[])), 'base_medium':deepcopy(g.get('reports',[])), 'batches':[], 'next_id':1}
+            'base_seer':deepcopy(g.get('seer_inputs',[])), 'base_medium':deepcopy(g.get('reports',[])), 'batches':[], 'next_id':1})
 
 def project(g,log):
+    from .board_owned_log import prepare
+    log=prepare(g,log)
     if log.get("version")==2:
         from .public_log_changes import project_changes
         return project_changes(g,log)
@@ -110,13 +113,7 @@ def transaction(g,board,payload,finished=False):
 
 def trim(g):
     if 'public_log' not in g:return g
-    log=deepcopy(g['public_log']);slot=len(g['history'])
-    log['batches']=[b for b in log['batches'] if b['slot']<=slot]
-    log['base_claims']=log['base_claims'][:slot+1]
-    day=1+slot//2
-    log['base_seer']=[r for r in log['base_seer'] if r['day']<=day]
-    log['base_medium']=[r for r in log['base_medium'] if r['day']<=day]
-    return project(g,log)
+    return project(g,migrate(g))
 
 def validate_draft(payload):
     if not isinstance(payload,dict):raise ValueError('下書きの形式を確認してください。')

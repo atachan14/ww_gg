@@ -17,7 +17,7 @@ class BoardLogUITests(unittest.TestCase):
   html=self.c.get('/main').get_data(as_text=True);self.assertEqual(html.count('data-public-batch="1"'),1)
   for p in (1,2):
    line=re.search(r'<div class="board-log-line" data-log-player="'+str(p)+r'">(.*?)</div>',html,re.S).group(1)
-   self.assertIn('CO:占い師',line);self.assertIn('占い結果:Player3=',line);self.assertIn('を公開',line)
+   self.assertIn('CO:占い師',line);self.assertIn('占い Day1：Player3＝',line);self.assertIn('を公開',line)
   self.assertNotIn('LogItem',html)
  def test_distinct_timing_items_and_edit_keep_id_order(self):
   self.publish(self.events());self.publish([{'kind':'co','player':1,'role':'seer'}])

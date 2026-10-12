@@ -5,7 +5,7 @@
 {% block content %}
 {% set has_role_details = state.get('mediums',0) or state.get('seers',0) or state.get('hunters',0) %}
 <main {% if config.get("HYBRID_TABLE_PREVIEW") %}data-hybrid-table{% endif %} data-screen="{{ 'result' if finished else 'main' }}" data-co-game="{{ co_game }}">
-  <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:市民{{ state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0) }} · 霊能{{ state.get('mediums',0) }} · 占い師{{ state.get('seers',0) }}{{ '（手動のみ）' if state.get('seer_mode')=='information-fixed-v1' else '（能力なし）' }} · 狩人{{ state.get('hunters',0) }}（能力なし） · 狼{{ state.get('wolves',1) }}</p>
+  <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:{% for label,count,note in [('市民',state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0),''),('霊能',state.get('mediums',0),''),('占い師',state.get('seers',0),'（手動のみ）' if state.get('seer_mode')=='information-fixed-v1' else '（能力なし）'),('狩人',state.get('hunters',0),'（能力なし）'),('狼',state.get('wolves',1),'')] if count>0 %}{{ label }}{{ count }}{{ note }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
   {% if state.get('seer_mode')=='information-fixed-v1' %}<p class="hint" data-information-fixed-scope>開発中の占い情報固定モデル：占いは入力済み結果だけを使用し、未来の取得・利用・公開は計算しません。{% if state.get('mediums',0) %}霊能は従来の将来報告モデルを引き継ぎます。{% endif %}{% if state.get('hunters',0) %}狩人は人数・COのみ対応し、護衛・GJは未対応です。{% endif %}</p>{% endif %}
   <form id="display-options-form"></form>
   <form id="public-log-draft-form"></form>

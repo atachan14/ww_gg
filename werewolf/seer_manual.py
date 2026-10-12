@@ -95,28 +95,27 @@ def _replay(text):
     rules=Rules(**g['rules']);seed=initial_board(g['players'],g.get('wolves',1),g.get('mediums',0),g.get('seers',0),g.get('hunters',0),experimental_cast=True);p=Progress.initial(seed);initial=seed.alive
     medium_rows=tuple(MediumReport(**r) for r in g.get('reports',()))
     medium_applied=set()
+    from .report_publication import publication_slot,condition_published_medium
     history=g['history']
     if type(history) is not list or len(history)>max(0,g['players']-2):raise ValueError('保存された進行を確認してください。')
     if history and history[0].get('seer_options')!=opt:raise ValueError('初日ルール・報告尤度の変更は初日へ戻って行ってください。')
-    applied=set();contexts={};scan={1:initial}
+    applied=set();scan={1:initial}
     def apply(p,claims,cp,group=False):
         if p.finished:return p
         board=group_initial_board(p.board,claims,cp) if group else condition_claims(p.board,claims,cp)
-        available=set(available_medium_opportunities(board))
-        selected_medium=tuple(r for r in medium_rows if (r.day,r.reporter,r.target) in available)
+        slot=2*(board.day-1)+(board.phase=='night')
+        selected_medium=tuple(r for r in medium_rows if publication_slot(g,'medium',{'day':r.day,'reporter':r.reporter,'target':r.target})<=slot and (r.day,r.reporter,r.target) not in medium_applied)
         if selected_medium:
-            board=condition_reports(board,selected_medium)
+            board=condition_published_medium(board,selected_medium,history)
             medium_applied.update((r.day,r.reporter,r.target) for r in selected_medium)
         if board.phase=='night':scan[board.day+1]=board.alive
-        if board.phase=='day':
-            contexts.setdefault(board.day,(board.alive,claims))
-            selected=tuple(r for r in rows if r['day']==board.day and (r['day'],r['reporter']) not in applied)
-            for row in selected:
-                if row['reporter'] not in board.alive or claims[row['reporter']-1]!='seer':raise ValueError('結果の公開時点に生存・占いCOしている報告者を指定してください。')
-                if row['target'] is not None and row['target'] not in scan[board.day]:raise ValueError('取得時点に生存していた対象を指定してください。')
-            complete=tuple(r for r in selected if r['target'] is not None and r['color'] is not None)
-            if opt['initial_rule'] is not None and opt['likelihood'] is not None:board=condition(board,complete,opt,initial)
-            applied.update((r['day'],r['reporter']) for r in selected)
+        selected=tuple(r for r in rows if publication_slot(g,'seer',r)<=slot and (r['day'],r['reporter']) not in applied)
+        for row in selected:
+            if row['reporter'] not in board.alive or claims[row['reporter']-1]!='seer':raise ValueError('結果の公開時点に生存・占いCOしている報告者を指定してください。')
+            if row['target'] is not None and row['target'] not in scan[row['day']]:raise ValueError('取得時点に生存していた対象を指定してください。')
+        complete=tuple(r for r in selected if r['target'] is not None and r['color'] is not None)
+        if opt['initial_rule'] is not None and opt['likelihood'] is not None:board=condition(board,complete,opt,initial)
+        applied.update((r['day'],r['reporter']) for r in selected)
         return Progress(board,p.settled_village,p.settled_wolf,p.last_board,p.last_outcomes)
     for i,step in enumerate(history):
         if p.finished:raise ValueError('入力結果と保存済みの進行が不整合です。戻って確認してください。')
@@ -174,7 +173,7 @@ def timeline(g,board,player,finished=False):
             if day>1 and (event.day<day-1 or event.day==day-1 and event.phase=='day'):scan.discard(event.target)
         claim_index=2*(day-1)
         claims=g['history'][claim_index]['claims'] if claim_index<len(g['history']) else g['claims']
-        if player not in alive or claims[player-1]!='seer':continue
+        if player not in alive or (claims[player-1]!='seer' and not (g.get('public_log',{}).get('version')==2 and (g['claims'][player-1]=='seer' or (day,player) in data))):continue
         row=data.get((day,player),{'target':None,'color':None})
         rows.append({'day':day,'target':row['target'],'color':row['color'],'targets':tuple(i for i in sorted(scan) if i!=player),'editable':not finished,'initial_none':day==1 and g['seer_options']['initial_rule']=='none' and row['target'] is None and row['color'] is None})
     return rows

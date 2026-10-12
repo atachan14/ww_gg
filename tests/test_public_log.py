@@ -59,6 +59,8 @@ class PublicLogTests(unittest.TestCase):
  def test_dead_reporter_past_correction_new_disclosure_rejected(self):
   self.publish([self.co(1),self.co(2),self.report(1),self.report(2,color='black')]);self.advance(2)
   old=self.g();self.assertEqual(self.send(self.batch([self.co(2,'wolf')])).status_code,400);self.assertEqual(self.g(),old)
+  self.assertEqual(self.send(self.batch([self.co(1),self.co(2),self.report(1,target=4),self.report(2,target=4,color='black')],replace=1)).status_code,400);self.assertEqual(self.g(),old)
+  self.c.post('/back',data={'revision':str(old['revision'])})
   self.publish([self.co(1),self.co(2),self.report(1,target=4),self.report(2,target=4,color='black')],replace=1)
   self.assertEqual(len(self.g()['seer_inputs']),2)
  def test_delayed_and_retraction_rejected_explicitly(self):
@@ -96,6 +98,8 @@ class PublicLogTests(unittest.TestCase):
   self.publish([self.report(1,target=4,color='black',day=2)]);self.advance(4)
   old=self.g();self.assertTrue(replay(old)[1].finished)
   self.assertEqual(self.send(self.batch([self.co(5)])).status_code,400);self.assertEqual(self.g(),old)
+  self.assertEqual(self.send(self.batch([self.report(1,target=4,color='black',day=2)],replace=2)).status_code,400);self.assertEqual(self.g(),old)
+  self.c.post('/back',data={'revision':str(old['revision'])})
   self.publish([self.report(1,target=4,color='black',day=2)],replace=2)
 
  def test_invalid_draft_structure_not_saved(self):

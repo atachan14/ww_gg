@@ -301,7 +301,7 @@ function initializePublicLog() {
   const rows=root.querySelector('[data-public-rows]'),status=root.querySelector('[data-public-status]'),editor=root.querySelector('[data-public-editor]'),picker=root.querySelector('[data-legacy-picker]'),mode=root.querySelector('[data-public-mode]');
   const labels={villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'};
   let disabledStates=new Map();
-  let saved=seed.draft?.revision===seed.revision?seed.draft.payload:null,editing=null,legacyKey=null,busy=false,navigating=false,contextDay=seed.day,contextPhase=seed.phase,returnFocus=null;
+  let saved=seed.draft?.revision===seed.revision&&seed.draft.board_id===seed.board_id?seed.draft.payload:null,editing=null,legacyKey=null,busy=false,navigating=false,contextDay=seed.day,contextPhase=seed.phase,returnFocus=null;
   document.querySelector('#public-log-draft-form').addEventListener('submit',event=>event.preventDefault());
   document.addEventListener('board-table-dirty',()=>{saved=null;});
   function field(row,key,labelText,values,value='') {
@@ -315,7 +315,7 @@ function initializePublicLog() {
   function refreshTargets(row,selected=null) {
     const get=k=>row.querySelector(`[data-public-field=${k}]`),kind=get('result').value,player=Number(get('player').value),day=Number(get('day').value),target=get('target'),old=selected??target.value;
     const scan=Array.from({length:seed.players},(_,i)=>i+1).filter(p=>!seed.targets.slice(0,Math.max(0,2*(day-1)-1)).includes(p)&&p!==player);
-    let eligible=kind==='medium'?seed.medium.filter(o=>o[0]===day&&o[1]===player).map(o=>o[2]):scan;
+    let eligible=kind==='medium'?(day>1&&seed.targets[2*day-4]?[seed.targets[2*day-4]]:[]):scan;
     if(legacyKey)eligible=kind==='medium'?[legacyKey.target]:scan;
     target.replaceChildren();for(const [value,text] of [['','未選択'],...Array.from(new Set(eligible)).map(p=>[p,`Player${p}`])]){const option=document.createElement('option');option.value=value;option.textContent=text;target.append(option);}
     if(old!==''&&!eligible.includes(Number(old))){const option=document.createElement('option');option.value=old;option.textContent=`Player${old}（確認）`;target.append(option);}
@@ -330,10 +330,10 @@ function initializePublicLog() {
     const result=field(row,'result','結果',[['','追加しない'],...(seed.roles.includes('seer')?[['seer','占い結果']]:[]),...(seed.roles.includes('medium')?[['medium','霊能結果']]:[])],data.result??'');
     const day=field(row,'day','取得日',[[contextDay,`Day${contextDay}`]],data.day??contextDay);day.disabled=true;day.title='取得日と公開日は同じ昼のみ';
     field(row,'target','対象',[['','未選択']],data.target||'');field(row,'color','白黒',[['','未選択'],['white','白'],['black','黒']],data.color??'');
-    if(contextPhase!=='day'&&!legacyKey)result.disabled=true;result.title='結果公開は昼のみ';
+    if(legacyKey)result.disabled=true;
     const remove=document.createElement('button');remove.type='button';remove.className='board-log-row-remove';remove.textContent='×';remove.setAttribute('aria-label','この行を削除');remove.addEventListener('click',()=>{row.remove();refreshPlayers();});row.append(remove);
     if(legacyKey){actor.disabled=true;result.disabled=true;row.querySelector('[data-public-field=role]').disabled=true;remove.disabled=true;}
-    actor.addEventListener('change',()=>{refreshTargets(row);refreshPlayers();});result.addEventListener('change',()=>refreshTargets(row));rows.append(row);refreshTargets(row,data.target||'');refreshPlayers();
+    day.addEventListener('change',()=>refreshTargets(row));actor.addEventListener('change',()=>{refreshTargets(row);refreshPlayers();});result.addEventListener('change',()=>refreshTargets(row));rows.append(row);refreshTargets(row,data.target||'');refreshPlayers();
   }
   function load(payload) {
     editing=payload?.replace??null;legacyKey=payload?.legacy?.key??null;
@@ -364,7 +364,7 @@ function initializePublicLog() {
   function close(){if(busy)return;dialog.close();status.textContent='';returnFocus?.focus();}
   async function send(operation,p) {
     if(busy)return;busy=true;disabledStates=new Map(Array.from(root.querySelectorAll('button,input,select')).map(e=>[e,e.disabled]));for(const e of disabledStates.keys())e.disabled=true;
-    try{const response=await fetch('/public-log',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),operation,payload:JSON.stringify(p)})});const data=await response.json().catch(()=>({error:'保存できませんでした。入力を確認してください。'}));if(!response.ok)throw Error(data.error);
+    try{const response=await fetch('/public-log',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,operation,payload:JSON.stringify(p)})});const data=await response.json().catch(()=>({error:'保存できませんでした。入力を確認してください。'}));if(!response.ok)throw Error(data.error);
       if(operation==='publish'){navigating=true;location.reload();return;}
       saved=p;busy=false;dialog.close();returnFocus?.focus();
     }catch(error){if(!dialog.open){dialog.showModal();}status.textContent=error.message;}
