@@ -8,7 +8,9 @@ from .seer_acquisition import Hypothesis, normalize
 
 
 def observer_report_weights(source, private, branches, *, incomplete):
-    public={(h.roles,h.acquisitions):h.mass for h in source.hypotheses}
+    public={}
+    for h in source.hypotheses:
+        key=(h.roles,h.acquisitions);public[key]=public.get(key,F())+h.mass
     own={}
     for h in private.hypotheses:own.setdefault((h.roles,h.acquisitions),[]).append(h)
     result=[]

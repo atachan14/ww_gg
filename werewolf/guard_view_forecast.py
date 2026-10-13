@@ -12,24 +12,27 @@ from .calculation_budget import calculation_budget,CalculationBudgetExceeded,tic
 
 
 def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20):
-    reason=scope_reason(board,rules,strategy)
+    from .guard_history_prior import seed_history
+    try:state=seed_history(board,state) if strategy.night=='max' else state
+    except ValueError:return FuturePending('guard_public_history_zero_support')
+    reason=scope_reason(board,rules,strategy,any(h.attacks for h in state.hypotheses))
     if reason:return FuturePending(reason)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work)
             allowed=tuple(w[:-1] for w in private_board.worlds)
-            own=replace(state,hypotheses=normalize(tuple(replace(h,guards=guards) for h in state.hypotheses if h.roles in allowed)))
+            own=replace(state,hypotheses=normalize(tuple(replace(h,guards=guards or h.guards) for h in state.hypotheses if h.roles in allowed and all(not h.guards or any(old==g for old in h.guards) for g in guards))))
             values={};dawn={}
             for target,_ in guard_choices(board,actor,rules,strategy.guard_position):
                 observer=GuardObserver(board,actor,target,allowed)
                 values[target]=engine.solve(board,state,past,own,observer)
                 v=w=F();groups={}
-                for h in own.hypotheses:groups.setdefault(h.roles[0],[]).append(h)
-                for mask,hs in groups.items():
+                for h in own.hypotheses:groups.setdefault((h.roles[0],h.attacks),[]).append(h)
+                for (mask,history),hs in groups.items():
                     mass=sum((h.mass for h in hs),F())
                     group=replace(own,hypotheses=normalize(hs))
                     physical=replace_worlds(board,group.public_roles)
-                    for attack,q in engine.wolf_policy(board,state,past,mask):
+                    for attack,q in engine.wolf_policy(board,state,past,mask,history):
                         tick()
                         _,outcomes=resolve_action(board,(state,past,group,observer,physical),attack,engine.action_policy)
                         for o in outcomes:

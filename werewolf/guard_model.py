@@ -22,7 +22,7 @@ def known_guardian(board):
     return next((p for p in board.alive if board.role_probability(p,'hunter')==1),None)
 
 
-def scope_reason(board,rules,strategy=None):
+def scope_reason(board,rules,strategy=None,latent_ready=False):
     if not board.initial_hunter_count:return None
     if board.initial_hunter_count!=1:return 'guard_multiple_hunters_unimplemented'
     if not rules.allow_repeat_guard:return 'guard_no_repeat_unimplemented'
@@ -34,7 +34,12 @@ def scope_reason(board,rules,strategy=None):
                              (len(board.alive)<=3 and board.phase=='day' or
                               not hidden_past_bite and (len(board.alive)<=3 or
                               len(board.alive)==4 and board.phase=='day')))
-    if hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and (strategy is None or strategy.night!='random'):
+    from .guard_history_prior import role_exchangeable
+    closed_cast=not rules.allow_self_bite and board.player_count<=5 and not board.initial_medium_count and not board.initial_seer_count
+    closed_history_case=closed_cast and (role_exchangeable(board) and not hidden_past_bite and
+                        (len(board.alive)==5 and board.phase=='day' or len(board.alive)==4) or
+                        latent_ready and len(board.alive)<=4)
+    if hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and not closed_history_case and (strategy is None or strategy.night!='random'):
         return 'guard_hidden_attack_max_unimplemented'
     return None
 
@@ -60,6 +65,7 @@ class GuardObserver:
 class GuardContext:
     public: object
     private: object
+    public_state: object = None
 
 
 def condition_guard_observation(board,deaths,rules):
@@ -89,7 +95,7 @@ def public_context(context):
 def guarded_outcomes(frame,outcomes,engine):
     b=frame.board
     if not b.initial_hunter_count:return outcomes
-    reason=scope_reason(b,engine.rules,engine.strategy)
+    reason=scope_reason(b,engine.rules,engine.strategy,any(h.attacks for h in frame.after[0].hypotheses))
     if reason:raise engine.pending(reason)
     s,past,private,observer,physical=frame.after
     groups={};public={o.board.winner:o.context for o in outcomes};templates={o.board.winner:o.board for o in outcomes}
@@ -113,9 +119,17 @@ def guarded_outcomes(frame,outcomes,engine):
         mass=sum((h.mass for h in entries),F());hs=normalize(entries)
         if blocked:
             if success is None:success=replace(condition_guard_observation(b,(),engine.rules),day=b.day+1,phase='day')
+            if engine.strategy.night=='max' and len(b.alive)==4 and known_guardian(b) is None:
+                success=replace(success,guard_prior_roster=(b.day,b.alive))
             child=success;template=success
         else:child=public[winner];template=templates[winner]
         own=replace(private,hypotheses=hs)
         physical_child=replace_worlds(template,public_worlds(hs),wolf_count=None)
-        result.append(FlowOutcome(mass,physical_child,GuardContext(child,own)))
+        st=engine.project(s,child)
+        if blocked and len(child.alive)<=3 and not b.initial_medium_count and not b.initial_seer_count:
+            st=replace(st,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in st.hypotheses)))
+        if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None:
+            from .guard_history_prior import extend_success
+            st=extend_success(st,b.day,b.alive)
+        result.append(FlowOutcome(mass,physical_child,GuardContext(child,own,st)))
     return tuple(result)

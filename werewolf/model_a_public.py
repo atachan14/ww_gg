@@ -39,12 +39,12 @@ def horizon_for_action(engine,board,state,past,target,private=None):
             from .guard_model import public_context
             child=public_context(o.context);public=engine.project(state,child);own=engine.project(private,o.board)
             groups={};v=w=F()
-            for h in own.hypotheses:groups.setdefault(h.roles[0],[]).append(h)
-            for mask,hs in groups.items():
+            for h in own.hypotheses:groups.setdefault((h.roles[0],h.attacks),[]).append(h)
+            for (mask,history),hs in groups.items():
                 mass=sum((h.mass for h in hs),F())
                 group=replace(own,hypotheses=normalize(tuple(hs)))
                 physical_next=replace_worlds(child,group.public_roles)
-                for bite,q in engine.wolf_policy(child,public,past,mask):
+                for bite,q in engine.wolf_policy(child,public,past,mask,history):
                     _,night_outcomes=resolve_action(child,(public,past,group,None,physical_next),bite,engine.action_policy)
                     for final in night_outcomes:
                         v+=mass*q*final.probability*F(final.board.winner=='village')
@@ -57,6 +57,9 @@ def public_forecast(board,state,past,rules,strategy,*,max_work=250000,max_second
     """Public overview, target rows and horizon under the approved intervention."""
     if state.public_roles!=tuple(sorted(board.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
+    from .guard_history_prior import seed_history
+    try:state=seed_history(board,state) if strategy.night=='max' and board.initial_hunter_count else state
+    except ValueError:return FuturePending('guard_public_history_zero_support')
     board,state=project_evaluation(board,state,strategy)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
@@ -96,7 +99,8 @@ def evaluate_public_game(game,board,rules,strategy,*,max_work=250000,max_seconds
 def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
     if board.winner:return Forecast(F(board.winner=='village'),())
     from .guard_model import scope_reason
-    reason=scope_reason(board,rules,strategy)
+    from .guard_history_prior import role_exchangeable
+    reason=scope_reason(board,rules,strategy,board.guard_prior_roster is not None)
     if reason:return FuturePending(reason)
     if InformationSetForecast(rules,strategy).exchangeable(board):
         from .exchangeable_public import exchangeable_forecast

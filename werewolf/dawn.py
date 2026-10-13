@@ -71,6 +71,11 @@ def observe(progress, observation, rules, strategy):
         from fractions import Fraction
         from .guard_model import condition_guard_observation
         board=replace(condition_guard_observation(progress.board,(),rules),day=progress.board.day+1,phase='day')
+        from .guard_history_prior import role_exchangeable
+        before=progress.board
+        first=not any(not any(e.phase=='night' and e.day==night for e in before.history) for night in range(1,before.day))
+        if first and not rules.allow_self_bite and len(before.alive)==4 and before.initial_hunter_count==1 and set(before.wolf_count_distribution)=={1} and before.player_count<=5 and not before.initial_medium_count and not before.initial_seer_count and (strategy.night=='random' or role_exchangeable(before)):
+            board=replace(board,guard_prior_roster=(before.day,before.alive))
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.board,
                         (BoardOutcome(Fraction(1),board),))
     target = observation['deaths'][0]

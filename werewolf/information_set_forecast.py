@@ -58,7 +58,7 @@ class InformationSetForecast:
         # Uniform guards/repeat permission and the supported wolf policies do
         # not depend on these histories. Preserve records in flow payloads;
         # scalar memoization may marginalize them after role conditioning.
-        if any(h.guards or h.attacks for h in state.hypotheses):
+        if self.strategy.night=='random' and any(h.guards or h.attacks for h in state.hypotheses):
             from .seer_acquisition import Hypothesis
             return replace(state,hypotheses=normalize(tuple(Hypothesis(h.roles,h.acquisitions,h.mass) for h in state.hypotheses)))
         return state
@@ -246,11 +246,12 @@ class InformationSetForecast:
         if action_key is not None:self.action_values[action_key]=value
         return value
 
-    def wolf_policy(self,b,s,past,mask):
-        key=(b,s,past,mask)
+    def wolf_policy(self,b,s,past,mask,history=()):
+        key=(b,s,past,mask,history)
         if key in self.policies:return self.policies[key]
         # This conditional law starts from the PUBLIC joint prior, never the viewer.
-        hs=tuple(h for h in s.hypotheses if h.roles[0]==mask)
+        from .guard_history_prior import matches
+        hs=tuple(h for h in s.hypotheses if h.roles[0]==mask and matches(h.attacks,history))
         if not hs:raise Pending('information_set_roster_missing')
         group=replace(s,hypotheses=normalize(hs))
         targets=tuple(p for p in b.alive if self.strategy.include_self_bite or not mask&(1<<(p-1)))
@@ -310,7 +311,7 @@ class InformationSetForecast:
     def solve(self,b,s,past,private,observer):
         if b.winner is not None:return F(b.winner=='village')
         from .guard_model import scope_reason
-        reason=scope_reason(b,self.rules,self.strategy)
+        reason=scope_reason(b,self.rules,self.strategy,any(h.attacks for h in s.hypotheses))
         if reason:raise Pending(reason)
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
         key=(b,s,past,self.value_law(private),observer)
@@ -330,7 +331,7 @@ class InformationSetForecast:
                        for h in private.hypotheses),F())
             self.values[key]=value;return value
         if b.phase=='day':
-            if (self.strategy.day=='max' and observer is None and self.memoize_flows and
+            if (not b.initial_hunter_count and self.strategy.day=='max' and observer is None and self.memoize_flows and
                     self.public_day_max(b,s,past)==1 and
                     {(h.roles,h.acquisitions) for h in private.hypotheses}<=
                     {(h.roles,h.acquisitions) for h in s.hypotheses}):
@@ -345,12 +346,12 @@ class InformationSetForecast:
             value=sum((self.act(b,s,past,p,private,observer) for p in targets),F())/len(targets)
         else:
             groups={}
-            for h in private.hypotheses:groups.setdefault(h.roles[0],[]).append(h)
+            for h in private.hypotheses:groups.setdefault((h.roles[0],h.attacks),[]).append(h)
             value=F()
-            for mask,hs in groups.items():
+            for (mask,history),hs in groups.items():
                 mass=sum((h.mass for h in hs),F());group=replace(private,hypotheses=normalize(tuple(hs)))
                 value+=mass*sum((q*self.act(b,s,past,p,group,observer)
-                                for p,q in self.wolf_policy(b,s,past,mask)),F())
+                                for p,q in self.wolf_policy(b,s,past,mask,history)),F())
         self.values[key]=value
         return value
 
@@ -358,7 +359,8 @@ class InformationSetForecast:
     def evaluate(self,b,s,past,*,observer=None,mask=None,private_board=None,private_attacks=()):
         if s.public_roles!=tuple(sorted(b.worlds)):
             raise ValueError('Public acquisition prior must match public Board')
-        hs=tuple(h for h in s.hypotheses if (observer(h,s) if observer is not None else h.roles[0]==mask) and (private_board is None or h.roles in {w[:-1] for w in private_board.worlds}))
+        from .guard_history_prior import matches
+        hs=tuple(h for h in s.hypotheses if matches(h.attacks,private_attacks) and (observer(h,s) if observer is not None else h.roles[0]==mask) and (private_board is None or h.roles in {w[:-1] for w in private_board.worlds}))
         if not hs:raise ValueError('Inconsistent observer')
         private=replace(s,hypotheses=normalize(tuple(replace(h,attacks=private_attacks) for h in hs)))
         if observer is not None:return self.solve(b,s,past,private,observer)
@@ -391,7 +393,7 @@ class InformationSetActionPolicy:
     def project(self,b,payload,outcome,target):
         from .guard_model import public_context,GuardContext
         s,past,private,observer,physical=payload;e=self.engine;child=public_context(outcome.context)
-        st=e.project(s,child);own=outcome.context.private if isinstance(outcome.context,GuardContext) else e.project(private,outcome.board)
+        st=outcome.context.public_state if isinstance(outcome.context,GuardContext) and outcome.context.public_state is not None else e.project(s,child);own=outcome.context.private if isinstance(outcome.context,GuardContext) else e.project(private,outcome.board)
         if e.trace is not None and b.phase=='night':
             e.trace.setdefault('public_updates',[]).append({'history':b.history,'target':target,
                 'prior_counts':b.wolf_count_distribution,'child_counts':child.wolf_count_distribution})
@@ -409,6 +411,11 @@ class InformationSetActionPolicy:
 def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,private_board=None,private_attacks=(),max_work=250000,max_seconds=20,trace=None):
     if s.public_roles!=tuple(sorted(b.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
+    from .guard_history_prior import seed_history
+    try:s=seed_history(b,s) if strategy.night=='max' and b.initial_hunter_count else s
+    except ValueError:return FuturePending('guard_public_history_zero_support')
+    required={a.night for h in s.hypotheses for a in h.attacks}
+    if mask is not None and not required<={a.night for a in private_attacks}:return FuturePending('wolf_guard_attack_history_missing')
     if observer is None:
         from .evaluation_projection import project_evaluation
         before=len(s.hypotheses);b,s=project_evaluation(b,s,strategy)

@@ -109,7 +109,7 @@ class GuardForecastTests(unittest.TestCase):
             condition_private(replace(b,history=(PublicEvent(1,'night',4),)),'hunter',[1],record,rules=self.rules)
 
     def test_uncertain_and_multiple_hunters_remain_explicit(self):
-        for b,reason in ((initial_board(5,1,0,0,1),'guard_hidden_attack_max_unimplemented'),
+        for b,reason in ((initial_board(6,1,0,0,1),'guard_hidden_attack_max_unimplemented'),
                          (initial_board(5,1,0,0,2),'guard_multiple_hunters_unimplemented')):
             result=public_forecast(b,prior(b),(),self.rules,Strategy())
             self.assertIsInstance(result,FuturePending);self.assertEqual(result.reason,reason)

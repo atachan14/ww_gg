@@ -249,6 +249,7 @@ class Board:
     medium_opportunities: tuple[tuple[int, int, int], ...] = ()
     reports: tuple[MediumReport, ...] = ()
     report_resolved: tuple[tuple[int,int,int], ...] = ()
+    guard_prior_roster: tuple | None = None
 
     def __post_init__(self):
         if type(self.player_count) is not int or not 1 <= self.player_count <= 9:
@@ -261,6 +262,12 @@ class Board:
             raise ValueError("Invalid public wolf-count constraint")
         if type(self.day) is not int or self.day < 1 or self.phase not in ("day", "night"):
             raise ValueError("Invalid Day/Phase")
+        if self.guard_prior_roster is not None:
+            seed=self.guard_prior_roster
+            if (self.initial_hunter_count!=1 or type(seed)is not tuple or len(seed)!=2 or type(seed[0])is not int or not 1<=seed[0]<self.day
+                    or type(seed[1])is not tuple or len(seed[1])!=4
+                    or any(type(p)is not int or not 1<=p<=self.player_count for p in seed[1]) or len(set(seed[1]))!=len(seed[1])):
+                raise ValueError('Invalid public guard-history provenance')
         if not isinstance(self.history, tuple) or any(not isinstance(event, PublicEvent) for event in self.history):
             raise ValueError("Invalid public history")
         dead = tuple(event.target for event in self.history)
@@ -287,6 +294,12 @@ class Board:
                 if world[:-1] in seen or not isinstance(q,Fraction) or q<=0:raise ValueError('Invalid complete role mass')
                 seen.add(world[:-1]);projection[w,m]=projection.get((w,m),Fraction(0))+q
             if sum((x[-1] for x in self.world_belief),Fraction(0))!=1:raise ValueError('Complete role mass must conserve one')
+            if self.guard_prior_roster is not None:
+                night,roster=self.guard_prior_roster
+                before=set(range(1,self.player_count+1))-{e.target for e in self.history if e.day<night or e.day==night and e.phase=='day'}
+                mask=sum(1<<(p-1) for p in roster)
+                if set(roster)!=before or self.initial_hunter_count!=1 or any((w[0]&mask).bit_count()!=1 or not w[3]&mask for w in self.world_belief):
+                    raise ValueError('Public guard-history provenance conflicts with role/history facts')
             object.__setattr__(self,'role_belief',tuple((w,m,q) for (w,m),q in sorted(projection.items())))
         elif self.initial_seer_count or self.initial_hunter_count:
             raise ValueError('Extra roles require complete role distribution')
@@ -481,6 +494,7 @@ def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy)
                       medium_opportunities=board.medium_opportunities+tuple((board.day+1,i,target) for i in alive if board.phase=='day' and board.claims[i-1]=='medium'),
                       reports=board.reports,report_resolved=board.report_resolved,
                       initial_seer_count=board.initial_seer_count,initial_hunter_count=board.initial_hunter_count,
+                      guard_prior_roster=board.guard_prior_roster,
                       world_belief=tuple((w,m,seer,hunter,q/mass) for w,m,seer,hunter,q in entries) if board.world_belief else (),
                       role_belief=tuple((w,m,q/mass) for w,m,_,_,q in entries) if not board.world_belief else ())
         outcomes.append(BoardOutcome(mass, child))

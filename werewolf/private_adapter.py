@@ -75,6 +75,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
             if isinstance(prepared, FuturePending): result = prepared
             else:
                 state, past = prepared
+                from .guard_history_prior import seed_history
+                if strategy.night=='max' and public.initial_hunter_count:state=seed_history(public,state)
                 result = seer_forecast(public, players[0], view.acquisitions, rules, strategy,
                                        scan_state=state, past=past, max_work=max_work, max_seconds=max_seconds)
         reasons = {'seer_view_unpublished_own_action_unimplemented': 'なし開示：未公開結果を本人の後続行動へ使う評価は未対応です。',
@@ -95,10 +97,14 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 result = prepared
             else:
                 state, past = prepared
+                from .guard_history_prior import seed_history
+                if strategy.night=='max' and public.initial_hunter_count:state=seed_history(public,state)
                 result = information_forecast(public, state, past, rules, strategy,
                                               mask=sum(1 << (p-1) for p in players), private_board=private if public.initial_hunter_count else None, private_attacks=view.attacks, max_work=max_work, max_seconds=max_seconds)
         else:
             state,past=prepare_public_prior(game_state or {},public,rules,track_live_seers=False,max_work=max_work)
+            from .guard_history_prior import seed_history
+            if strategy.night=='max' and public.initial_hunter_count:state=seed_history(public,state)
             result = information_forecast(public, state, past, rules, strategy,
                                           mask=sum(1 << (p-1) for p in players), private_board=private if public.initial_hunter_count else None, private_attacks=view.attacks, max_work=max_work, max_seconds=max_seconds)
         missing_attacks={night for night in range(1,public.day) if not any(e.day==night and e.phase=='night' for e in public.history)}-{a.night for a in view.attacks}
@@ -124,7 +130,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 try:
                     with calculation_budget(max_work,max_seconds=max_seconds):
                         engine=InformationSetForecast(rules,strategy,max_work=max_work)
-                        own=replace(state,hypotheses=normalize(tuple(replace(h,attacks=view.attacks) for h in state.hypotheses if h.roles[0]==mask and h.roles in {w[:-1] for w in private.worlds})))
+                        from .guard_history_prior import matches
+                        own=replace(state,hypotheses=normalize(tuple(replace(h,attacks=view.attacks) for h in state.hypotheses if h.roles[0]==mask and h.roles in {w[:-1] for w in private.worlds} and matches(h.attacks,view.attacks))))
                         guard_dawn={p:horizon_for_action(engine,public,state,past,p,own) for p in final_values}
                 except CalculationBudgetExceeded:guard_dawn={}
             reason += ' 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'
