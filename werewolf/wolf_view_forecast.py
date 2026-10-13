@@ -20,7 +20,7 @@ class Unresolved(Exception):
 
 
 def wolf_forecast(public, mask, rules, strategy, *, scan_state=None, past=(),
-                  max_work=250000, max_seconds=20, trace=None):
+                  max_work=250000, max_seconds=20, trace=None, observer=None):
     """Return forced-bite village values; exact Fractions, or a complete Pending.
 
 scan_state is the PUBLIC role/acquisition prior. Conditioning applies only to
@@ -37,6 +37,8 @@ branch weights and payoffs; each child public Board keeps all public worlds.
         return result
 
     def mass(b, s):
+        if observer is not None:
+            return sum((h.mass for h in s.hypotheses if observer(h, s)), F())
         return (sum((h.mass for h in s.hypotheses if h.roles[0] == mask), F()) if s is not None
                 else sum((w[-1] for w in b.worlds if w[0] == mask), F()))
 
@@ -63,7 +65,7 @@ branch weights and payoffs; each child public Board keeps all public worlds.
         return public_memo[key]
 
     def project(s, child):
-        return project_private(s, child, marginalize_private=True) if s is not None else None
+        return project_private(s, child, marginalize_private=observer is None) if s is not None else None
 
     def weighted(parent, state, branches):
         # Chosen bites normalize within counts in the existing public engine.
@@ -163,7 +165,7 @@ branch weights and payoffs; each child public Board keeps all public worlds.
         if key in conditional_memo: return conditional_memo[key]
         _, scores = public_values(b, s, published)
         available = tuple((p, v) for p, v in scores if b.phase == 'day' or strategy.include_self_bite
-                          or not mask & (1 << (p - 1)))
+                          or observer is not None or not mask & (1 << (p - 1)))
         if not available: raise Unresolved('wolf_view_no_legal_continuation')
         if getattr(strategy, b.phase) == 'random':
             chosen = tuple(p for p, _ in available)
@@ -180,6 +182,8 @@ branch weights and payoffs; each child public Board keeps all public worlds.
     try:
         with calculation_budget(max_work, max_seconds=max_seconds):
             if not mass(public, scan_state): raise ValueError('Inconsistent wolf roster')
+            if observer is not None:
+                return solve(public, scan_state, past)
             targets = tuple(p for p in legal_targets(public, rules, strategy)
                             if strategy.include_self_bite or not mask & (1 << (p - 1)))
             return tuple((p, action(public, scan_state, past, p)) for p in targets)

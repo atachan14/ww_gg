@@ -1,7 +1,8 @@
 """Private table projection. Public policy evaluation never receives private worlds.
 
-Wolf final values use a separate public-policy continuation. Seer information
-value and hunter mechanics remain unsupported.
+Wolf finals and supported CO/all/single-live-wolf seer scan comparisons use a
+separate public-policy continuation. Other seer scopes and hunter mechanics
+remain explicit unsupported values.
 """
 from .exact import actual_role, legal_targets
 from .private_view import condition_private
@@ -50,6 +51,30 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
               'wolf': '公開戦略に従う狼条件付き最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。'}[role]
     targets = legal_targets(private, rules, strategy) if role == 'wolf' else ()
     final_values = {}
+    if role == 'seer':
+        targets = tuple(p for p in public.alive if p != players[0])
+        from .seer_future_bridge import prepare_game
+        from .seer_view_forecast import seer_forecast
+        if strategy.disclosure_for('seer') != 'all':
+            result = FuturePending('seer_view_unpublished_own_action_unimplemented')
+        elif public.claims[players[0]-1] != 'seer':
+            result = FuturePending('seer_view_latent_future_co_unimplemented')
+        else:
+            prepared = prepare_game(game_state, public, max_work=max_work) if game_state else FuturePending('seer_view_public_prior_missing')
+            if isinstance(prepared, FuturePending): result = prepared
+            else:
+                state, past = prepared
+                result = seer_forecast(public, players[0], view.acquisitions, rules, strategy,
+                                       scan_state=state, past=past, max_work=max_work, max_seconds=max_seconds)
+        reasons = {'seer_view_unpublished_own_action_unimplemented': 'なし開示：未公開結果を本人の後続行動へ使う評価は未対応です。',
+                   'seer_view_multiple_live_wolves_unimplemented': '占い先比較は公開側の生存狼数が1匹のBoardに対応します。複数狼・狼数不確定の継続評価は未対応です。',
+                   'seer_view_latent_future_co_unimplemented': '潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。'}
+        if isinstance(result, FuturePending):
+            reason = reasons.get(result.reason, '占いの公開取得履歴・未来報告モデルまたは計算予算が未対応のため未計算です。')
+        else:
+            final_values = dict(result); targets = tuple(final_values)
+            reason = '占い先別の最終勝率です。すべて開示・CO固定・未訪問先優先の既存モデルで比較します。次の朝までの勝率は未対応です。'
+        if public.initial_hunter_count: reason += ' 狩人の護衛能力はこの計算に含まれません。'
     if role == 'wolf':
         state = None; past = ()
         if strategy.disclosure_for('seer') == 'all' and any(public.claims[p-1] == 'seer' for p in public.alive):
@@ -81,7 +106,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         probabilities = {r: str(private.role_probability(p, r)) for r in ('villager', 'medium', 'seer', 'hunter', 'wolf')}
         probabilities['citizen'] = probabilities.pop('villager')
         probabilities['village'] = str(1 - private.wolf_probability(p))
-        dawn = immediate(private, p, rules, strategy) if p in targets else None
+        dawn = immediate(private, p, rules, strategy) if role == 'wolf' and p in targets else None
         rows.append({'id': p, 'probabilities': probabilities,
                      'dawn': {'village': str(dawn.village_win), 'wolf': str(dawn.wolf_win)} if dawn else None,
                      'final': {'village': str(final_values[p]), 'wolf': str(1-final_values[p])} if p in final_values else None,
