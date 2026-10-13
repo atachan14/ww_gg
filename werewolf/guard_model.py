@@ -34,12 +34,12 @@ def scope_reason(board,rules,strategy=None,latent_ready=False):
                              (len(board.alive)<=3 and board.phase=='day' or
                               not hidden_past_bite and (len(board.alive)<=3 or
                               len(board.alive)==4 and board.phase=='day')))
-    from .guard_history_prior import role_exchangeable
+    from .guard_history_prior import role_exchangeable,hero_deducible
     closed_cast=not rules.allow_self_bite and not board.initial_medium_count and not board.initial_seer_count
     closed_history_case=closed_cast and (role_exchangeable(board) and not hidden_past_bite and
                         (len(board.alive)==5 and board.phase=='day' or len(board.alive)==4) or
                         latent_ready and (len(board.alive)<=3 or len(board.alive)==4 and board.phase=='day'))
-    if hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and not closed_history_case and (strategy is None or strategy.night!='random'):
+    if hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and not closed_history_case and not hero_deducible(board) and (strategy is None or strategy.night!='random'):
         return 'guard_hidden_attack_max_unimplemented'
     return None
 
@@ -128,7 +128,10 @@ def guarded_outcomes(frame,outcomes,engine):
         st=engine.project(s,child)
         if blocked and len(child.alive)<=3 and not b.initial_medium_count and not b.initial_seer_count:
             st=replace(st,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in st.hypotheses)))
-        if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None:
+        from .guard_history_prior import hero_deducible
+        if hero_deducible(child):
+            st=replace(st,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in st.hypotheses)))
+        if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):
             from .guard_history_prior import extend_success
             st=extend_success(st,b.day,b.alive)
         result.append(FlowOutcome(mass,physical_child,GuardContext(child,own,st)))

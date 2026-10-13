@@ -108,7 +108,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
             result = information_forecast(public, state, past, rules, strategy,
                                           mask=sum(1 << (p-1) for p in players), private_board=private if public.initial_hunter_count else None, private_attacks=view.attacks, max_work=max_work, max_seconds=max_seconds)
         missing_attacks={night for night in range(1,public.day) if not any(e.day==night and e.phase=='night' for e in public.history)}-{a.night for a in view.attacks}
-        if public.initial_hunter_count and missing_attacks and not any(public.role_probability(p,'hunter')==1 for p in range(1,public.player_count+1)):result=FuturePending('wolf_guard_attack_history_missing')
+        from .guard_history_prior import hero_deducible
+        if public.initial_hunter_count and missing_attacks and not hero_deducible(public):result=FuturePending('wolf_guard_attack_history_missing')
         if isinstance(result, FuturePending):
             reasons = {'information_set_budget_exceeded': '最終勝率が計算予算を超えたため未計算です。',
                        'future_public_continuation_budget_exceeded': '公開側の未来計算が計算予算を超えたため未計算です。',

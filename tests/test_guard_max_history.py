@@ -103,3 +103,24 @@ class GuardMaxHistoryTests(unittest.TestCase):
         view=evaluate_private_table(p.board,'hunter',[6],[{'day':1,'target':7,'color':None},
                   {'day':2,'target':7,'color':None},{'day':3,'target':7,'color':None}],self.rules,self.strategy)
         self.assertTrue(any(row['final'] is not None for row in view['players']))
+
+    def test_guardian_can_be_deduced_by_wolves_without_public_identity(self):
+        from werewolf.exact import condition_claims,ClaimPolicy
+        from werewolf.guard_history_prior import hero_deducible
+        b=condition_claims(initial_board(5,2,0,0,1),('latent','latent','latent','villager','villager'),ClaimPolicy())
+        self.assertTrue(hero_deducible(b))
+        self.assertEqual(b.role_probability(1,'hunter'),F(1,3))
+        result=public_forecast(b,prior(b),(),self.rules,self.strategy)
+        self.assertEqual(result.village_win,F(1,3))
+
+    def test_private_guardian_deduction_keeps_scan_law_and_public_secrecy(self):
+        from werewolf.exact import condition_claims,ClaimPolicy
+        b=condition_claims(initial_board(5,1,1,1,1),('latent','latent','seer','medium','villager'),ClaimPolicy())
+        p=advance(Progress.initial(b),5,self.rules,self.strategy);b=p.board
+        game={'players':5,'rules':{'initial_seer':'none'},'seer_options':{'initial_rule':'none'},'seer_inputs':[],'public_log':{'version':2}}
+        s,past=prepare_public_prior(game,b,self.rules)
+        result=public_forecast(b,s,past,self.rules,self.strategy)
+        self.assertEqual(result.village_win,F(11,18))
+        engine=InformationSetForecast(self.rules,self.strategy)
+        self.assertEqual(engine.wolf_policy(b,s,past,1),((3,F(1)),))
+        self.assertEqual(b.role_probability(2,'hunter'),F(1,2))

@@ -12,6 +12,13 @@ from .night_knowledge import WolfAttack
 from .phase_updates import acquisition_roster
 
 
+def hero_deducible(board):
+    """Every possible initial wolf roster entails one guardian placement."""
+    groups={}
+    for world in board.worlds:groups.setdefault(world[0],set()).add(world[3])
+    return bool(groups) and all(len(heroes)==1 for heroes in groups.values())
+
+
 def role_exchangeable(board):
     if board.initial_medium_count or board.initial_seer_count:return False
     counts={w[0].bit_count() for w in board.worlds}
@@ -26,6 +33,8 @@ def role_exchangeable(board):
 
 
 def seed_history(board,state):
+    if hero_deducible(board):
+        return replace(state,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in state.hypotheses)))
     if board.initial_medium_count or board.initial_seer_count:return state
     if len({w[3] for w in board.worlds})==1:return state
     nights=[night for night in range(1,board.day) if not any(e.phase=='night' and e.day==night for e in board.history)]
