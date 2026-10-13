@@ -64,7 +64,9 @@ class SeerForecastTests(unittest.TestCase):
         self.assertTrue(roots)
         for mask in (2,4,8):
             policies=[x['policy'] for x in roots if x['mask']==mask]
-            self.assertEqual(len(policies),3);self.assertTrue(all(p==policies[0] for p in policies))
+            # Three private targets now reuse one public roster policy. Existing
+            # black-holder/permutation tests independently check its invariance.
+            self.assertEqual(len(policies),1)
 
 
 

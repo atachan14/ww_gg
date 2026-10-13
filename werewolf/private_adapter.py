@@ -10,6 +10,7 @@ from .by_dawn import immediate
 from .phase_updates import acquisition_roster
 from .information_set_forecast import information_forecast
 from .seer_future_uniform import FuturePending
+from .public_prior import prepare_public_prior
 
 
 LABELS = {'seer': '占い視点', 'hunter': '狩人視点', 'wolf': '狼視点'}
@@ -52,14 +53,13 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     final_values = {}
     if role == 'seer':
         targets = tuple(p for p in public.alive if p != players[0])
-        from .seer_future_bridge import prepare_game
         from .seer_view_forecast import seer_forecast
         if strategy.disclosure_for('seer') != 'all':
             result = FuturePending('seer_view_unpublished_own_action_unimplemented')
         elif public.claims[players[0]-1] != 'seer':
             result = FuturePending('seer_view_latent_future_co_unimplemented')
         else:
-            prepared = prepare_game(game_state, public, max_work=max_work) if game_state else FuturePending('seer_view_public_prior_missing')
+            prepared = prepare_public_prior(game_state, public, rules, max_work=max_work) if game_state else FuturePending('seer_view_public_prior_missing')
             if isinstance(prepared, FuturePending): result = prepared
             else:
                 state, past = prepared
@@ -78,8 +78,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     if role == 'wolf':
         state = None; past = ()
         if strategy.disclosure_for('seer') == 'all' and any(public.claims[p-1] == 'seer' for p in public.alive):
-            from .seer_future_bridge import prepare_game
-            prepared = prepare_game(game_state, public, max_work=max_work) if game_state else FuturePending('wolf_view_public_acquisition_prior_missing')
+            prepared = prepare_public_prior(game_state, public, rules, max_work=max_work) if game_state else FuturePending('wolf_view_public_acquisition_prior_missing')
             if isinstance(prepared, FuturePending):
                 result = prepared
             else:
@@ -87,11 +86,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 result = information_forecast(public, state, past, rules, strategy,
                                               mask=sum(1 << (p-1) for p in players), max_work=max_work, max_seconds=max_seconds)
         else:
-            from .seer_acquisition import from_board
-            from .seer_future_uniform import TrueScanState
-            from .phase_updates import acquisition_rosters
-            rosters=acquisition_rosters(public)
-            state=TrueScanState(from_board(public),rosters,rules.initial_seer,tracked=(),observed_prefix=public.day)
+            state,past=prepare_public_prior(game_state or {},public,rules,track_live_seers=False,max_work=max_work)
             result = information_forecast(public, state, past, rules, strategy,
                                           mask=sum(1 << (p-1) for p in players), max_work=max_work, max_seconds=max_seconds)
         if isinstance(result, FuturePending):

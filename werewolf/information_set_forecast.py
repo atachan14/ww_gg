@@ -145,7 +145,7 @@ class InformationSetForecast:
         return self.scores[key]
 
     def solve(self,b,s,past,private,observer):
-        key=(b,s,past,private,observer is not None)
+        key=(b,s,past,private,observer)
         if key in self.values:return self.values[key]
         tick(len(private.hypotheses))
         if b.winner is not None:return F(b.winner=='village')
@@ -169,6 +169,17 @@ class InformationSetForecast:
                                 for p,q in self.wolf_policy(b,s,past,mask)),F())
         self.values[key]=value
         return value
+
+
+    def evaluate(self,b,s,past,*,observer=None,mask=None):
+        if s.public_roles!=tuple(sorted(b.worlds)):
+            raise ValueError('Public acquisition prior must match public Board')
+        hs=tuple(h for h in s.hypotheses if (observer(h,s) if observer is not None else h.roles[0]==mask))
+        if not hs:raise ValueError('Inconsistent observer')
+        private=replace(s,hypotheses=normalize(hs))
+        if observer is not None:return self.solve(b,s,past,private,observer)
+        targets=tuple(p for p in b.alive if self.strategy.include_self_bite or not mask&(1<<(p-1)))
+        return tuple((p,self.act(b,s,past,p,private,None)) for p in targets)
 
 
 class InformationSetActionPolicy:
@@ -214,11 +225,6 @@ def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,max_w
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work,trace=trace)
-            hs=tuple(h for h in s.hypotheses if (observer(h,s) if observer is not None else h.roles[0]==mask))
-            if not hs:raise ValueError('Inconsistent observer')
-            private=replace(s,hypotheses=normalize(hs))
-            if observer is not None:return engine.solve(b,s,past,private,observer)
-            targets=tuple(p for p in b.alive if strategy.include_self_bite or not mask&(1<<(p-1)))
-            return tuple((p,engine.act(b,s,past,p,private,None)) for p in targets)
+            return engine.evaluate(b,s,past,observer=observer,mask=mask)
     except CalculationBudgetExceeded:return FuturePending('information_set_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)

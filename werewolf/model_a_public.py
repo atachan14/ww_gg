@@ -6,10 +6,9 @@ reviewed separately; absent that contract, no target comparison is fabricated.
 from fractions import Fraction as F
 from .exact import replace_worlds
 from .action_flow import resolve_action
-from .seer_acquisition import from_board, normalize
-from .seer_future_uniform import TrueScanState, FuturePending
-from .seer_future_bridge import prepare_game
-from .phase_updates import acquisition_rosters
+from .seer_acquisition import normalize
+from .seer_future_uniform import FuturePending
+from .public_prior import public_history_key, prepare_public_prior
 from .information_set_forecast import InformationSetForecast, Pending
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 from .forecast_result import Forecast
@@ -71,22 +70,6 @@ def public_forecast(board,state,past,rules,strategy,*,max_work=250000,max_second
     except Pending as error:return FuturePending(error.reason)
 
 
-def public_history_key(game):
-    """Only fields read by the public acquisition bridge; never viewer drafts."""
-    log=game.get('public_log',{})
-    public={
-        'players':game.get('players'),
-        'rules':{k:v for k,v in game.get('rules',{}).items() if k=='initial_seer'},
-        'seer_options':{'initial_rule':game.get('seer_options',{}).get('initial_rule')},
-        'seer_inputs':[{k:r[k] for k in ('day','reporter','target','color')}
-                       for r in game.get('seer_inputs',())],
-        'public_log':{'version':log.get('version'), 'report_publications':
-            {k:{field:value for field,value in v.items() if field=='published_day'}
-             for k,v in log.get('report_publications',{}).items()}}
-    }
-    return json.dumps(public,sort_keys=True,separators=(',',':'),allow_nan=False)
-
-
 @lru_cache(maxsize=16)
 def _complete_public_snapshot(history_key,board,rules,strategy,max_work,max_seconds):
     result=_evaluate_public_game(json.loads(history_key),board,rules,strategy,
@@ -113,11 +96,8 @@ def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
             with calculation_budget(max_work,max_seconds=max_seconds):
                 return exchangeable_forecast(board,strategy)
         except CalculationBudgetExceeded:return FuturePending('information_set_budget_exceeded')
-    if strategy.disclosure_for('seer')=='none':
-        state=TrueScanState(from_board(board),acquisition_rosters(board),rules.initial_seer,
-                            tracked=(),observed_prefix=board.day)
-        prepared=(state,())
-    else:prepared=prepare_game(game,board,max_work=max_work)
+    prepared=prepare_public_prior(game,board,rules,
+        track_live_seers=strategy.disclosure_for('seer')=='all',max_work=max_work)
     if isinstance(prepared,FuturePending):return prepared
     state,past=prepared
     return public_forecast(board,state,past,rules,strategy,max_work=max_work,max_seconds=max_seconds)
