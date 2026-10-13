@@ -394,3 +394,25 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 #player-panel [data-table-details] select { height:24px; min-height:24px; min-width:0; max-width:100%; padding:1px 2px; font-size:11px; }
 #player-panel [data-table-target] { width:var(--name-width); }
 #player-panel [data-table-color], #player-panel [data-table-medium] { width:calc(3em + 20px); }
+
+/* Compact setup and group summaries; shared quiet footer Help entry. */
+.footer-help { display:inline-flex; align-items:center; min-height:32px; padding:4px 8px; color:var(--ink); font-size:12px; text-decoration:none; border:0; background:transparent; box-shadow:none; }
+.footer-help:hover { background:#f2f6f7; }
+main[data-screen="top"] .footer-help { margin-right:auto; }
+main[data-screen="top"] .cast-panel { padding:12px 14px; }
+.cast-panel .setup-heading { margin-bottom:8px; }
+.cast-panel .role-columns { gap:8px; margin:8px 0; }
+.cast-panel .role-column { padding:8px; }
+.cast-panel .role-column h3 { margin:0 0 5px; font-size:12px; }
+.cast-panel .role-count-row { min-height:28px; margin:3px 0; gap:6px; font-size:12px; }
+.cast-panel .role-count-row input { padding:2px 5px; height:28px; min-height:28px; font-size:12px; }
+.cast-panel .cast-summary { margin-top:8px; gap:6px; }
+.cast-panel .cast-card { padding:7px 9px; gap:2px; }
+.cast-panel .cast-card > strong { font-size:24px; line-height:1.25; }
+.cast-panel .cast-card > span,.cast-panel .cast-card small { font-size:11px; }
+.co-groups-panel { padding:10px 12px; }
+.co-groups-panel h2 { margin-bottom:6px; }
+.co-groups-panel .player-table { min-width:0; }
+.co-groups-panel .player-table th,.co-groups-panel .player-table td { padding:5px 6px; height:auto; font-size:12px; line-height:1.3; }
+.co-groups-panel .player-table .probability { font-size:12px; }
+.co-composition { overflow-wrap:anywhere; }

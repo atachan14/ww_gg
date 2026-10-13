@@ -28,7 +28,6 @@
           <div class="cast-card total"><span>合計</span><strong id="total-count">{{ draft.summary.total }}人<small>（最大9人）</small></strong></div>
         </div>
         <p class="hint" id="cast-validation">合計1〜9人。3人以上では狼より村陣営が多い配役にしてください。</p>
-      <a class="secondary help-button" id="help-button" href="{{ url_for('help_route') }}">Help</a>
       </section>
     <section class="panel rules-panel" aria-labelledby="game-rule-title">
       <div class="panel-heading setup-heading"><h2 id="game-rule-title">ルール</h2>
@@ -38,7 +37,7 @@
     </div>
 
     <input type="hidden" name="day" value="max"><input type="hidden" name="night" value="max">
-    <div class="phase-footer"><div class="footer-inner">{{ phase_button(1, 'day') }}</div></div>
+    <div class="phase-footer"><div class="footer-inner">{% include 'footer_help.html' %}{{ phase_button(1, 'day') }}</div></div>
   </form>
 </main>
 {% endblock %}

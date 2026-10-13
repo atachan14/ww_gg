@@ -16,7 +16,7 @@ class HandCompatibilityTests(unittest.TestCase):
   for player in (2,3):self.assertEqual(b.role_probability(player,'seer'),F(1,2))
   for player in (2,5):self.assertEqual(b.role_probability(player,'villager'),F(1,2))
   self.assertEqual(b.wolf_probability(1),1);self.assertEqual(b.role_probability(4,'villager'),1);self.assertEqual({w[-1] for w in b.worlds},{F(1,2)});self.assertEqual(len(b.worlds),2)
-  html=c.get('/main').get_data(as_text=True);self.assertIn('id="village-rate" class="probability" data-fraction="1/2"',html);self.assertNotIn('<th>霊能</th>',html);self.assertIn('<th>占い師</th>',html);self.assertIn('<td>占い師</td>',html)
+  html=c.get('/main').get_data(as_text=True);self.assertIn('id="village-rate" class="probability" data-fraction="1/2"',html);self.assertNotIn('<th>霊能</th>',html);self.assertIn('<th>内訳</th>',html);self.assertIn('class="co-composition">占い師1</td>',html);self.assertIn('<td>占い師</td>',html)
  def test_nonuniform_prior_is_preserved_without_true_fake_asymmetry(self):
   b=replace_worlds(initial_board(5,2,0,1,experimental_cast=True),((5,0,2,0,F(3,4)),(17,0,4,0,F(1,4))))
   rows=({'day':1,'reporter':3,'target':4,'color':'white'},)

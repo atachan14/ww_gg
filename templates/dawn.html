@@ -44,7 +44,7 @@
       </tr>{% endfor %}</tbody>
     </table></div>
   </section>
-  <footer class="phase-footer"><div class="footer-inner"><a href="{{ url_for('help_specs') }}#dawn">Help</a><div class="phase-buttons">
+  <footer class="phase-footer"><div class="footer-inner">{% include 'footer_help.html' %}<div class="phase-buttons">
     <form method="post" action="{{ url_for('back') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}"><button type="submit" class="secondary">← Day{{ day-1 }}・昼へ</button></form>
     <form method="post" action="{{ url_for('dawn_advance') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}"><input type="hidden" name="board_id" value="{{ state.public_log.board_id }}"><button type="submit" class="primary" id="advance-button" {% if pending %}disabled{% endif %}>{{ '決着結果へ' if finished else 'Day' ~ day ~ '・昼へ' }} →</button></form>
   </div></div></footer>
