@@ -92,7 +92,7 @@ def future_publications(state,past,morning_alive,claims,*,fake_policy=('noncontr
         for fake_reports,q in choices:
             tick()
             reports=tuple(sorted(truth+fake_reports))
-            groups.setdefault(reports,[]).append(Hypothesis(h.roles,h.acquisitions,h.mass*q))
+            groups.setdefault(reports,[]).append(Hypothesis(h.roles,h.acquisitions,h.mass*q,h.guards,h.attacks))
     result=[]
     for reports,entries in groups.items():
         tick(len(entries));mass=sum((h.mass for h in entries),F())

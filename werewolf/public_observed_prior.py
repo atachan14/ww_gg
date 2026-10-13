@@ -36,7 +36,7 @@ def prepare_game(g,board,*,max_work=250000):
                             for _,probability in selected:q*=probability
                             next_variants.append((records+tuple(a for a,_ in selected),q))
                     variants=next_variants
-                for records,q in variants:entries.append(Hypothesis(h.roles,tuple(sorted(records)),h.mass*q))
+                for records,q in variants:entries.append(Hypothesis(h.roles,tuple(sorted(records)),h.mass*q,h.guards,h.attacks))
             state=TrueScanState(normalize(entries),tuple(rosters),initial,tracked,board.day if active_only else 0)
     except CalculationBudgetExceeded:return FuturePending('observed_prior_private_ledger_budget_exceeded')
     publications=g.get('public_log',{}).get('report_publications',{})

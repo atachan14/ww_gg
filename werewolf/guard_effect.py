@@ -8,7 +8,7 @@ from .exact import ROLES
 from .action_flow import NightFrame
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, order=True)
 class GuardIntent:
     night: int
     actor: int

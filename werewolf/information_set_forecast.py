@@ -54,6 +54,15 @@ class InformationSetForecast:
         self.joint_keys={}
         self.action_policy=InformationSetActionPolicy(self)
 
+    def value_law(self,state):
+        # Uniform guards/repeat permission and the supported wolf policies do
+        # not depend on these histories. Preserve records in flow payloads;
+        # scalar memoization may marginalize them after role conditioning.
+        if any(h.guards or h.attacks for h in state.hypotheses):
+            from .seer_acquisition import Hypothesis
+            return replace(state,hypotheses=normalize(tuple(Hypothesis(h.roles,h.acquisitions,h.mass) for h in state.hypotheses)))
+        return state
+
     def cached_flow(self,cache,key,compute,kind):
         if self.trace is not None:
             stats=self.trace.setdefault('flow_memo',{})
@@ -210,7 +219,7 @@ class InformationSetForecast:
         if self.memoize_flows:
             # Public rankings call this with their own public/actor law. Viewer
             # payoffs include BOTH the private law and observer identity.
-            key=('joint-action',b,s,past,target,private,observer)
+            key=('joint-action',b,s,past,target,self.value_law(private),observer)
             return self.cached_flow(self.action_values,key,
                                     lambda:self.uncached_act(b,s,past,target,private,observer),'action')
         return self.uncached_act(b,s,past,target,private,observer)
@@ -301,10 +310,10 @@ class InformationSetForecast:
     def solve(self,b,s,past,private,observer):
         if b.winner is not None:return F(b.winner=='village')
         from .guard_model import scope_reason
-        reason=scope_reason(b,self.rules)
+        reason=scope_reason(b,self.rules,self.strategy)
         if reason:raise Pending(reason)
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
-        key=(b,s,past,private,observer)
+        key=(b,s,past,self.value_law(private),observer)
         if observer is None:
             from .medium_value_key import public_descriptor,private_value_key
             source=(b,s)
@@ -346,12 +355,12 @@ class InformationSetForecast:
         return value
 
 
-    def evaluate(self,b,s,past,*,observer=None,mask=None):
+    def evaluate(self,b,s,past,*,observer=None,mask=None,private_board=None,private_attacks=()):
         if s.public_roles!=tuple(sorted(b.worlds)):
             raise ValueError('Public acquisition prior must match public Board')
-        hs=tuple(h for h in s.hypotheses if (observer(h,s) if observer is not None else h.roles[0]==mask))
+        hs=tuple(h for h in s.hypotheses if (observer(h,s) if observer is not None else h.roles[0]==mask) and (private_board is None or h.roles in {w[:-1] for w in private_board.worlds}))
         if not hs:raise ValueError('Inconsistent observer')
-        private=replace(s,hypotheses=normalize(hs))
+        private=replace(s,hypotheses=normalize(tuple(replace(h,attacks=private_attacks) for h in hs)))
         if observer is not None:return self.solve(b,s,past,private,observer)
         targets=tuple(p for p in b.alive if self.strategy.include_self_bite or not mask&(1<<(p-1)))
         return tuple((p,self.act(b,s,past,p,private,None)) for p in targets)
@@ -380,8 +389,9 @@ class InformationSetActionPolicy:
                      for o in action_outcomes(physical,target,e.rules,e.strategy))
 
     def project(self,b,payload,outcome,target):
-        s,past,private,observer,physical=payload;e=self.engine;child=outcome.context
-        st=e.project(s,child);own=e.project(private,outcome.board)
+        from .guard_model import public_context,GuardContext
+        s,past,private,observer,physical=payload;e=self.engine;child=public_context(outcome.context)
+        st=e.project(s,child);own=outcome.context.private if isinstance(outcome.context,GuardContext) else e.project(private,outcome.board)
         if e.trace is not None and b.phase=='night':
             e.trace.setdefault('public_updates',[]).append({'history':b.history,'target':target,
                 'prior_counts':b.wolf_count_distribution,'child_counts':child.wolf_count_distribution})
@@ -396,7 +406,7 @@ class InformationSetActionPolicy:
     def day_value(self,payload):return self.engine.solve(*payload)
 
 
-def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,max_work=250000,max_seconds=20,trace=None):
+def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,private_board=None,private_attacks=(),max_work=250000,max_seconds=20,trace=None):
     if s.public_roles!=tuple(sorted(b.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
     if observer is None:
@@ -406,6 +416,6 @@ def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,max_w
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work,trace=trace)
-            return engine.evaluate(b,s,past,observer=observer,mask=mask)
+            return engine.evaluate(b,s,past,observer=observer,mask=mask,private_board=private_board,private_attacks=private_attacks)
     except CalculationBudgetExceeded:return FuturePending('information_set_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)

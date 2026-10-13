@@ -4,7 +4,7 @@
  window.createBoardPrivateDraftStore=({boardId,revision,storage=null,scopeRevision=true})=>{
   if(typeof boardId!=='string'||!Number.isInteger(revision))throw Error('Board identity required');
   const drafts=new Map();
-  const key=(player,role)=>`${boardId}:${scopeRevision?revision:'board'}:${player}:${role}`;
+  const key=(player,role,team=[])=>`${boardId}:${scopeRevision?revision:'board'}:${player}:${role}${team.length?':'+[...team].sort((a,b)=>a-b).join('-'):''}`;
   const validate=(results)=>{
    if(!Array.isArray(results))throw Error('Private result list required');
    const days=new Set();
@@ -18,9 +18,9 @@
   };
   const save=(id,value)=>{drafts.set(id,copy(value));try{storage?.setItem(`wwgg-private:${id}`,JSON.stringify(value));}catch(_){}return copy(value);};
   return {
-   open:({player,role,claims=[],publicResults=[]})=>{
-    if(!Number.isInteger(player)||player<1||!['seer','medium','hunter'].includes(role))throw Error('Invalid private viewer');
-    const id=key(player,role);
+   open:({player,role,team=[],claims=[],publicResults=[]})=>{
+    if(!Number.isInteger(player)||player<1||!['seer','medium','hunter','wolf'].includes(role))throw Error('Invalid private viewer');
+    const id=key(player,role,team);
     if(drafts.has(id))return copy(drafts.get(id));
     try{
      const saved=JSON.parse(storage?.getItem(`wwgg-private:${id}`)||'null');
@@ -29,16 +29,16 @@
     // Copy only when constructing this private row for the first time. An
     // intentionally cleared row remains empty on reopen; do not refill it.
     const results=claims.includes(role)?publicResults.filter(r=>(r.player??r.reporter)===player&&(r.role??role)===role).map(r=>({day:r.day,target:r.target??null,color:r.color??null})):[];
-    return save(id,{boardId,revision,player,role,results:validate(results)});
+    return save(id,{boardId,revision,player,role,team,results:validate(results)});
    },
-   edit:({player,role,results})=>{
-    const id=key(player,role),current=drafts.get(id);
+   edit:({player,role,team=[],results})=>{
+    const id=key(player,role,team),current=drafts.get(id);
     if(!current)throw Error('Open private row before editing');
     return save(id,{...current,results:validate(results)});
    },
    // Only a private-view calculation adapter consumes this payload. It has no
    // CO event, public-log batch or publication operation.
-   snapshot:({player,role})=>{const value=drafts.get(key(player,role));return value?copy(value):null;}
+   snapshot:({player,role,team=[]})=>{const value=drafts.get(key(player,role,team));return value?copy(value):null;}
   };
  };
 })();

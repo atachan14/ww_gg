@@ -23,4 +23,9 @@ const nextRevision=w.createBoardPrivateDraftStore({...setup,revision:8,scopeRevi
 assert.equal(nextRevision.open({player:2,role:'seer',claims:['seer'],publicResults:original}).results[0].target,4);
 const otherBoard=w.createBoardPrivateDraftStore({...setup,boardId:'other-board',scopeRevision:false});
 assert.equal(otherBoard.open({player:2,role:'seer',claims:[],publicResults:original}).results.length,0);
-dom.window.close();console.log('Private draft: first-copy, independent edit, clear/reopen, per-view scope, revision isolation: PASS');
+scoped.open({player:1,role:'wolf',team:[1,2]});
+scoped.edit({player:1,role:'wolf',team:[1,2],results:[{day:1,target:4,color:null}]});
+assert.equal(scoped.open({player:1,role:'wolf',team:[2,1]}).results[0].target,4);
+assert.equal(scoped.open({player:1,role:'wolf',team:[1,3]}).results.length,0);
+assert.equal(scoped.open({player:1,role:'hunter'}).results.length,0);
+dom.window.close();console.log('Private draft: first-copy, independent edit, clear/reopen, role/team scopes, canonical team order, revision isolation: PASS');

@@ -1,13 +1,16 @@
 """Approved uniform guard law and its current information-set scope.
 
-A public-known guardian needs no hidden attack ledger for future uniform guards.
-An uncertain guardian does: keep that case explicit until the ledger is modeled.
+Owner records stay outside the public prior. Uniform bites and exact terminal
+base cases are supported for hidden guardians; larger max policies stay explicit.
 """
 from dataclasses import dataclass, replace
 from fractions import Fraction as F
 from .action_flow import FlowOutcome
 from .guard_night import guard_targets
 from .guard_effect import GuardIntent,guard_blocks_attack
+from .exact import replace_worlds,winner_for
+from .seer_acquisition import Hypothesis,normalize,public_worlds
+from .night_knowledge import WolfAttack
 
 
 def live_guard_mass(board):
@@ -19,12 +22,20 @@ def known_guardian(board):
     return next((p for p in board.alive if board.role_probability(p,'hunter')==1),None)
 
 
-def scope_reason(board,rules):
+def scope_reason(board,rules,strategy=None):
     if not board.initial_hunter_count:return None
     if board.initial_hunter_count!=1:return 'guard_multiple_hunters_unimplemented'
     if not rules.allow_repeat_guard:return 'guard_no_repeat_unimplemented'
-    if live_guard_mass(board) and known_guardian(board) is None:
-        return 'guard_hidden_attack_history_unimplemented'
+    hidden_hunter=len({w[3] for w in board.worlds})>1
+    hidden_past_bite=any(not any(e.phase=='night' and e.day==night for e in board.history) for night in range(1,board.day))
+    # Exact base cases: any successful night is followed by a terminal public
+    # execution, so hidden bite knowledge cannot change a later wolf action.
+    terminal_next_execution=(not board.initial_medium_count and not board.initial_seer_count and
+                             (len(board.alive)<=3 and board.phase=='day' or
+                              not hidden_past_bite and (len(board.alive)<=3 or
+                              len(board.alive)==4 and board.phase=='day')))
+    if hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and (strategy is None or strategy.night!='random'):
+        return 'guard_hidden_attack_max_unimplemented'
     return None
 
 
@@ -45,27 +56,66 @@ class GuardObserver:
         return h.roles in self.allowed_roles
 
 
-def guarded_outcomes(frame,outcomes,engine):
-    """Physical guard law after acquisition; public success hides the bite target.
+@dataclass(frozen=True)
+class GuardContext:
+    public: object
+    private: object
 
-    Public corpse updates keep Model A compatibility semantics. With a known
-    guardian, the uniform failure probability is constant over compatible worlds.
-    The private branch retains the action's conditional roles and acquisitions.
+
+def condition_guard_observation(board,deaths,rules):
+    """Ability likelihood only; never multiply by the wolf selection policy.
+
+    A corpse identifies the bite, so its uniform guard-failure chance is known.
+    No corpse identifies no bite target: retain Model A compatible role priors,
+    requiring a guardian alive on that night, without inventing an attack prior.
     """
+    if len(deaths)>1:raise ValueError('Multiple deaths unsupported')
+    target=deaths[0] if deaths else None;entries=[]
+    for world in board.worlds:
+        actor=next((p for p in board.alive if world[3]&(1<<(p-1))),None)
+        if target is None:weight=F(actor is not None)
+        elif not rules.allow_self_bite and world[0]&(1<<(target-1)):weight=F()
+        else:weight=F(1) if actor is None or actor==target else F(len(board.alive)-2,len(board.alive)-1)
+        if weight:entries.append((*world[:-1],world[-1]*weight))
+    total=sum((w[-1] for w in entries),F())
+    if not total:raise ValueError('Night observation has no compatible guard world')
+    return replace_worlds(board,tuple((*w[:-1],w[-1]/total) for w in entries),wolf_count=None)
+
+
+def public_context(context):
+    return context.public if isinstance(context,GuardContext) else context
+
+
+def guarded_outcomes(frame,outcomes,engine):
     b=frame.board
-    reason=scope_reason(b,engine.rules)
+    if not b.initial_hunter_count:return outcomes
+    reason=scope_reason(b,engine.rules,engine.strategy)
     if reason:raise engine.pending(reason)
-    actor=known_guardian(b)
-    if actor is None:return outcomes
-    observer=frame.after[3]
-    if isinstance(observer,GuardObserver) and observer.board==b:
-        chance=F(guard_blocks_attack(GuardIntent(b.day,actor,observer.target),frame.target))
-    else:
-        chance=sum((q for target,q in guard_choices(b,actor,engine.rules,engine.strategy.guard_position) if guard_blocks_attack(GuardIntent(b.day,actor,target),frame.target)),F())
-    result=[FlowOutcome(o.probability*(1-chance),o.board,o.context) for o in outcomes if chance<1]
-    if chance:
-        physical=frame.after[4]
-        public=replace(b,day=b.day+1,phase='day')
-        own=replace(physical,day=b.day+1,phase='day')
-        result.append(FlowOutcome(chance,own,public))
+    s,past,private,observer,physical=frame.after
+    groups={};public={o.board.winner:o.context for o in outcomes};templates={o.board.winner:o.board for o in outcomes}
+    success=None
+    for h in private.hypotheses:
+        actor=next((p for p in b.alive if h.roles[3]&(1<<(p-1))),None)
+        choices=((None,F(1)),) if actor is None else guard_choices(b,actor,engine.rules,engine.strategy.guard_position)
+        if actor is not None and isinstance(observer,GuardObserver) and observer.board==b:
+            choices=((observer.target,F(1)),)
+        for target,q in choices:
+            intent=GuardIntent(b.day,actor,target) if actor is not None else None
+            blocked=intent is not None and guard_blocks_attack(intent,frame.target)
+            alive=b.alive if blocked else tuple(p for p in b.alive if p!=frame.target)
+            wolf=(h.roles[0]&sum(1<<(p-1) for p in alive)).bit_count()
+            winner=winner_for(len(alive),wolf)
+            guards=h.guards+((intent,) if intent else ())
+            recorded=Hypothesis(h.roles,h.acquisitions,h.mass*q,guards,h.attacks+(WolfAttack(b.day,frame.target),))
+            groups.setdefault((blocked,winner),[]).append(recorded)
+    result=[]
+    for (blocked,winner),entries in groups.items():
+        mass=sum((h.mass for h in entries),F());hs=normalize(entries)
+        if blocked:
+            if success is None:success=replace(condition_guard_observation(b,(),engine.rules),day=b.day+1,phase='day')
+            child=success;template=success
+        else:child=public[winner];template=templates[winner]
+        own=replace(private,hypotheses=hs)
+        physical_child=replace_worlds(template,public_worlds(hs),wolf_count=None)
+        result.append(FlowOutcome(mass,physical_child,GuardContext(child,own)))
     return tuple(result)

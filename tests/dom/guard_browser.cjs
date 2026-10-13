@@ -11,7 +11,7 @@ const {chromium}=require('playwright'),assert=require('assert');
  };
  await context.request.post('/start',{form:{citizens:'3',hunters:'1',wolves:'1',day:'max',night:'random'}});
  await page.goto('/main');
- assert((await page.locator('main').textContent()).includes('秘密襲撃履歴'));
+ assert(await page.locator('[data-value-cell="final"] .probability').count());
  await post('/public-log',{operation:'publish',payload:JSON.stringify({mode:'simultaneous',events:[{kind:'co',player:1,role:'hunter'}]})});
  await page.reload();
  await page.locator('#strategy-editor').evaluate(el=>el.closest('details').open=true);

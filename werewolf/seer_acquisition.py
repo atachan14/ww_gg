@@ -43,6 +43,8 @@ class Hypothesis:
     roles: tuple[int,int,int,int]
     acquisitions: tuple[Acquisition,...]
     mass: Fraction
+    guards: tuple = ()
+    attacks: tuple = ()
 
     def __post_init__(self):
         if len(self.roles)!=4 or any(type(m) is not int or m<0 for m in self.roles) or any(a&b for i,a in enumerate(self.roles) for b in self.roles[i+1:]):
@@ -54,16 +56,27 @@ class Hypothesis:
         for a in self.acquisitions:
             if not self.roles[2] & (1<<(a.player-1)) or (a.color=='black') != bool(self.roles[0] & (1<<(a.target-1))):
                 raise ValueError('Acquisition must agree with joint roles')
+        from .guard_effect import GuardIntent
+        from .night_knowledge import WolfAttack
+        if type(self.guards)is not tuple or type(self.attacks)is not tuple:
+            raise ValueError('Immutable private night records required')
+        for g in self.guards:
+            if (not isinstance(g,GuardIntent) or any(type(x)is not int or x<1 for x in (g.night,g.actor,g.target))
+                    or g.actor==g.target or not self.roles[3]&(1<<(g.actor-1))):
+                raise ValueError('Guard history must belong to the true guardian')
+        if any(not isinstance(a,WolfAttack) for a in self.attacks):raise ValueError('Invalid attack records')
+        if len({g.night for g in self.guards})!=len(self.guards) or len({a.night for a in self.attacks})!=len(self.attacks):
+            raise ValueError('One personal action per night')
 
 
 def normalize(entries):
     grouped={}
     for h in entries:
-        key=(h.roles,h.acquisitions)
+        key=(h.roles,h.acquisitions,h.guards,h.attacks)
         grouped[key]=grouped.get(key,Fraction())+h.mass
     total=sum(grouped.values(),Fraction())
     if not total:raise ValueError('No compatible acquisition/report hypothesis')
-    return tuple(Hypothesis(roles,records,q/total) for (roles,records),q in sorted(grouped.items()))
+    return tuple(Hypothesis(roles,records,q/total,guards,attacks) for (roles,records,guards,attacks),q in sorted(grouped.items()))
 
 
 def from_board(board):
@@ -92,7 +105,7 @@ def acquire(entries, day, alive, targets):
         players=tuple(p for p in alive if h.roles[2] & (1<<(p-1)))
         if any(a.day==day and a.player in players for a in h.acquisitions):raise ValueError('Acquisition already recorded')
         records=tuple(Acquisition(day,p,targets[p],'black' if h.roles[0] & (1<<(targets[p]-1)) else 'white') for p in players)
-        result.append(Hypothesis(h.roles,tuple(sorted(h.acquisitions+records)),h.mass))
+        result.append(Hypothesis(h.roles,tuple(sorted(h.acquisitions+records)),h.mass,h.guards,h.attacks))
     return normalize(result)
 
 
@@ -112,7 +125,7 @@ def initial_random_white(entries, alive):
         for options in choices:count*=len(options)
         for targets in product(*choices):
             records=tuple(Acquisition(1,p,t,'white') for p,t in zip(players,targets))
-            result.append(Hypothesis(h.roles,tuple(sorted(h.acquisitions+records)),h.mass/count))
+            result.append(Hypothesis(h.roles,tuple(sorted(h.acquisitions+records)),h.mass/count,h.guards,h.attacks))
     return normalize(result)
 
 

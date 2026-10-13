@@ -11,14 +11,14 @@ from .by_dawn import HorizonValues
 from .calculation_budget import calculation_budget,CalculationBudgetExceeded,tick
 
 
-def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,max_work=250000,max_seconds=20):
-    reason=scope_reason(board,rules)
+def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20):
+    reason=scope_reason(board,rules,strategy)
     if reason:return FuturePending(reason)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work)
             allowed=tuple(w[:-1] for w in private_board.worlds)
-            own=replace(state,hypotheses=normalize(tuple(h for h in state.hypotheses if h.roles in allowed)))
+            own=replace(state,hypotheses=normalize(tuple(replace(h,guards=guards) for h in state.hypotheses if h.roles in allowed)))
             values={};dawn={}
             for target,_ in guard_choices(board,actor,rules,strategy.guard_position):
                 observer=GuardObserver(board,actor,target,allowed)

@@ -66,14 +66,14 @@ const {chromium}=require('playwright'),assert=require('assert');
  await color.selectOption('white');await viewing();
  assert.equal(await page.locator('tr[data-player="2"] [data-value-cell="wolf"]').textContent(),'0%');
  await all.click();
- // Hunter identity has probabilities, but no invented guard history or values.
- await start({citizens:'5',wolves:'1',hunters:'1',day:'random',night:'random'});
- await page.locator('[data-status-target="7"]').click();await page.locator('#advance-button').click();await page.waitForSelector('#board-viewpoint-seed',{state:'attached'});
+ // Uncertain hunter now has uniform-bite guard values, and no invented past guard.
+ await start({citizens:'3',wolves:'1',hunters:'1',day:'random',night:'random'});
+ await page.locator('[data-status-target="5"]').click();await page.locator('#advance-button').click();await page.waitForSelector('#board-viewpoint-seed',{state:'attached'});
  assert.equal(await page.locator('[data-viewpoint-role="seer"]').count(),0);
  await page.locator('[data-viewpoint-role="hunter"]').click();await page.locator('tr[data-player="1"]').click();await viewing();
  assert.equal(await page.locator('tr[data-player="1"] [data-value-cell="hunter"]').textContent(),'100%');
  assert.equal(await page.locator('[data-private-details] select').count(),0);
- assert.equal(await page.locator('tr[data-player="2"] [data-value-cell="dawn"]').textContent(),'未対応');
+ assert(await page.locator('tr[data-player="2"] [data-value-cell="dawn"] .probability').count());
  await all.click();
  // A dead initial wolf remains selectable when there are two wolves.
  await start({citizens:'5',wolves:'2',day:'random',night:'random'});

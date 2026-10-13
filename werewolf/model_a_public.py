@@ -36,7 +36,8 @@ def horizon_for_action(engine,board,state,past,target,private=None):
             v=F(o.board.winner=='village');w=F(o.board.winner=='wolf')
         elif board.phase=='night':v=w=F()
         else:
-            child=o.context;public=engine.project(state,child);own=engine.project(private,o.board)
+            from .guard_model import public_context
+            child=public_context(o.context);public=engine.project(state,child);own=engine.project(private,o.board)
             groups={};v=w=F()
             for h in own.hypotheses:groups.setdefault(h.roles[0],[]).append(h)
             for mask,hs in groups.items():
@@ -95,7 +96,7 @@ def evaluate_public_game(game,board,rules,strategy,*,max_work=250000,max_seconds
 def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
     if board.winner:return Forecast(F(board.winner=='village'),())
     from .guard_model import scope_reason
-    reason=scope_reason(board,rules)
+    reason=scope_reason(board,rules,strategy)
     if reason:return FuturePending(reason)
     if InformationSetForecast(rules,strategy).exchangeable(board):
         from .exchangeable_public import exchangeable_forecast

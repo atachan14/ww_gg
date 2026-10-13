@@ -9,12 +9,14 @@ from .seer_acquisition import Hypothesis, normalize
 
 def observer_report_weights(source, private, branches, *, incomplete):
     public={(h.roles,h.acquisitions):h.mass for h in source.hypotheses}
-    own={(h.roles,h.acquisitions):h.mass for h in private.hypotheses}
+    own={}
+    for h in private.hypotheses:own.setdefault((h.roles,h.acquisitions),[]).append(h)
     result=[]
     for q,b,state,past in branches:
         entries=tuple(Hypothesis(h.roles,h.acquisitions,
-                      q*h.mass*own[(h.roles,h.acquisitions)]/public[(h.roles,h.acquisitions)])
-                      for h in state.hypotheses if (h.roles,h.acquisitions) in own)
+                      q*h.mass*personal.mass/public[(h.roles,h.acquisitions)],personal.guards,personal.attacks)
+                      for h in state.hypotheses if (h.roles,h.acquisitions) in own
+                      for personal in own[h.roles,h.acquisitions])
         mass=sum((h.mass for h in entries),F())
         if mass:
             result.append((mass,b,state,past,replace(state,hypotheses=normalize(entries))))

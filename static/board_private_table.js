@@ -35,11 +35,12 @@
    }
   };
   let controller;
-  const mountSecret=(role,player)=>{
-   const draft=store.open({player,role,claims:[seed.claims[player-1]],publicResults:role==='hunter'?[]:seed.public_results});
+  const mountSecret=(role,player,players=[])=>{
+   const team=role==='wolf'?players:[];
+   const draft=store.open({player,role,team,claims:role==='wolf'?['wolf']:[seed.claims[player-1]],publicResults:role==='hunter'?[]:role==='wolf'?(seed.public_attacks||[]).map(r=>({...r,player,role:'wolf'})):seed.public_results});
    if(!table.querySelector(`[data-private-details="${player}:${role}"]`)){
-    const row=window.renderBoardPrivateRow({table,player,role,label:role==='seer'?'占い師':'狩人',
-     slots:role==='seer'?seed.slots[String(player)]:(seed.guard_slots?.[String(player)]||[]),draft,onChange:edit=>{store.edit(edit);controller.refresh();}});
+    const row=window.renderBoardPrivateRow({table,player,role,label:role==='seer'?'占い師':role==='wolf'?'狼':'狩人',
+     slots:role==='seer'?seed.slots[String(player)]:role==='wolf'?(seed.attack_slots||[]).map(slot=>({...slot,targets:slot.targets.filter(p=>seed.allow_self_bite||!team.includes(p))})):(seed.guard_slots?.[String(player)]||[]),draft,onChange:edit=>{store.edit({...edit,team});controller.refresh();}});
 
    }
    return draft.results;
@@ -57,7 +58,7 @@
   });
   controller=window.createBoardViewpointController({root,roles:seed.roles,restore,
    load:async({role,players,signal})=>{
-    const results=role==='wolf'?[]:mountSecret(role,players[0]);
+    const results=mountSecret(role,role==='wolf'?Math.min(...players):players[0],players);
     const response=await fetch('/private-view',{method:'POST',signal,body:new URLSearchParams({
      revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify({role,players,results})})});
     const result=await response.json();if(!response.ok)throw Error(result.error);

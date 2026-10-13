@@ -30,8 +30,8 @@ def validate_observation(value, alive):
 def unsupported_reason(observation,board=None,rules=None):
     if observation is None:
         return '夜明けの死体が未入力です。'
-    from .guard_model import known_guardian
-    if not observation['deaths'] and not (board is not None and rules is not None and board.initial_hunter_count==1 and known_guardian(board) is not None and rules.allow_repeat_guard):
+    from .guard_model import live_guard_mass
+    if not observation['deaths'] and not (board is not None and rules is not None and board.initial_hunter_count==1 and live_guard_mass(board) and rules.allow_repeat_guard):
         return '死体なしの進行は未対応です。'
     if len(observation['deaths']) > 1:
         return '複数死体の進行は未対応です。'
@@ -69,7 +69,8 @@ def observe(progress, observation, rules, strategy):
         from dataclasses import replace
         from .exact import BoardOutcome
         from fractions import Fraction
-        board=replace(progress.board,day=progress.board.day+1,phase='day')
+        from .guard_model import condition_guard_observation
+        board=replace(condition_guard_observation(progress.board,(),rules),day=progress.board.day+1,phase='day')
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.board,
                         (BoardOutcome(Fraction(1),board),))
     target = observation['deaths'][0]

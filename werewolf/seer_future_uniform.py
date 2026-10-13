@@ -30,6 +30,11 @@ class TrueScanState:
             validate_roster(alive)
             if i and not set(alive)<=set(self.rosters[i-1]):raise ValueError('Acquisition roster cannot resurrect players')
         for h in self.hypotheses:
+            for record in (*h.guards,*h.attacks):
+                if record.night>=len(self.rosters) or record.target not in self.rosters[record.night]:
+                    raise ValueError('Private night record lacks its acquisition roster')
+                if hasattr(record,'actor') and record.actor not in self.rosters[record.night]:
+                    raise ValueError('Guardian was not alive on the recorded night')
             for a in h.acquisitions:
                 if self.tracked is not None and a.player not in self.tracked:raise ValueError('Acquisition owner is marginalized, not tracked')
                 if a.day==1 and (self.initial_rule=='none' or self.initial_rule=='random_white' and a.color!='white'):raise ValueError('Initial acquisition violates GameRule')
@@ -73,7 +78,7 @@ def acquire_uniform(state,alive,*,max_work=250000,position=('unvisited','uniform
                 for targets in product(*choices):
                     tick()
                     records=tuple(Acquisition(day,p,t,'black' if h.roles[0]&(1<<(t-1)) else 'white') for p,t in zip(owners,targets))
-                    entries.append(Hypothesis(h.roles,tuple(sorted(h.acquisitions+records)),h.mass/count))
+                    entries.append(Hypothesis(h.roles,tuple(sorted(h.acquisitions+records)),h.mass/count,h.guards,h.attacks))
             tick(len(entries))
             return TrueScanState(normalize(entries),state.rosters+(alive,),state.initial_rule,state.tracked,state.observed_prefix)
     except CalculationBudgetExceeded:return FuturePending('true_scan_generation_budget_exceeded')

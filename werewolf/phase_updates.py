@@ -22,6 +22,9 @@ def acquisition_rosters(board):
 
 def condition_night_corpse(board, target, rules):
     """Compatibility only: never multiply by a wolf policy likelihood."""
+    if board.initial_hunter_count==1:
+        from .guard_model import condition_guard_observation
+        return condition_guard_observation(board,(target,),rules)
     worlds = tuple(w for w in board.worlds
                    if rules.allow_self_bite or not w[0] & (1 << (target-1)))
     mass = sum((w[-1] for w in worlds), Fraction())
