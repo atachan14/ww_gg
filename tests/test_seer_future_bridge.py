@@ -20,9 +20,9 @@ class FutureBridgeTests(unittest.TestCase):
   self.assertEqual(self.publish([{'kind':'seer','player':1,'day':2,'target':4,'color':'black'}]).status_code,200)
   self.assertIn(b'id="village-rate"',self.c.get('/main').data)
   g=self.g();self.c.post('/advance',data={'revision':str(g['revision']),'day':'max','night':'max','target':'4'});self.assertEqual(self.c.get('/result').status_code,200)
- def test_published_mode_default_unchanged(self):
+ def test_developer_preview_flag_does_not_switch_model_a_display(self):
   self.start();g=self.g();self.app.config['SEER_UNIFORM_FUTURE_PREVIEW']=False
-  self.assertNotIn(b'data-seer-future="all"',self.c.get('/main').data);self.assertEqual(self.g(),g)
+  self.assertIn(b'data-seer-future="all"',self.c.get('/main').data);self.assertEqual(self.g(),g)
  def test_current_morning_missing_excludes_truth_and_keeps_dead_truth(self):
   self.start(5,1,1)
   for t in (2,3):
@@ -70,4 +70,4 @@ class FutureBridgeTests(unittest.TestCase):
   html=self.c.get('/main').data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html)
   self.publish([{'kind':'seer','player':1,'day':2,'target':5,'color':'white'}]);self.assertIn(b'id="village-rate"',self.c.get('/main').data);self.assertEqual(replay(self.g())[1].board.role_probability(2,'seer'),0)
   self.publish([{'kind':'seer','player':2,'day':2,'target':5,'color':'black'}]);complete=self.g();rules,p=replay(complete);self.assertEqual({w[0] for w in p.board.worlds},{10});self.assertIn(b'id="village-rate"',self.c.get('/main').data)
-  self.app.config['SEER_UNIFORM_FUTURE_PREVIEW']=False;self.assertNotIn(b'data-seer-future="all"',self.c.get('/main').data);self.assertEqual(self.g(),complete)
+  self.app.config['SEER_UNIFORM_FUTURE_PREVIEW']=False;self.assertIn(b'data-seer-future="all"',self.c.get('/main').data);self.assertEqual(self.g(),complete)

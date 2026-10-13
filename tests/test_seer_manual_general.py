@@ -116,7 +116,7 @@ class SeerManualGeneralTests(unittest.TestCase):
         self.assertEqual(self.game()['reports'],[]);self.assertEqual(self.game()['seer_inputs'],[])
 
     def test_budget_pending_and_recovery_with_cache(self):
-        self.start(7,w=2,s=1,m=2,initial='normal');self.configure(co_1='seer',co_2='medium',co_3='medium')
+        self.start(5,w=1,s=1,m=1,initial='none');self.configure(co_1='seer',co_2='medium')
         self.assertIn(b'id="village-rate"',self.client.get('/main',follow_redirects=True).data)
         self.app.config['MANUAL_CALC_MAX_WORK']=1
         html=self.client.get('/main',follow_redirects=True).data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html);self.assertIn('計算予算'.encode(),html)

@@ -17,9 +17,9 @@ from werewolf.comparison import compare_initial
 from flask import Flask, redirect, render_template, request, session, url_for, make_response, send_from_directory, abort
 from werkzeug.http import dump_cookie
 
-from werewolf.exact import (ClaimPolicy, Progress, Rules, Strategy, Values, advance, build_tree,
+from werewolf.exact import (ClaimPolicy, Progress, Rules, Strategy, Values, advance,
                             condition_claims, group_initial_board, co_group_compositions, legal_targets, ROLES, VILLAGE_ROLES, ROLE_LABELS, MediumReport, condition_reports, available_medium_opportunities,
-                            evaluate_tree, initial_board, validate_strategy)
+                            initial_board, validate_strategy)
 
 
 def percent(value: Fraction) -> str:
@@ -249,33 +249,26 @@ def create_app(test_config=None, *, deployment=False):
             action_values = {}
             event_history, alive = board.history, board.alive
         else:
-            from werewolf.calculation_budget import calculation_budget, CalculationBudgetExceeded
+            from werewolf.calculation_budget import calculation_budget, CalculationBudgetExceeded, tick
             try:
                 with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',250000) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20) if manual else None):
-                    if manual and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False) and strategy.disclosure_for('seer')=='all':
-                        from werewolf.seer_future_bridge import evaluate_game
-                        from werewolf.seer_future_uniform import FuturePending
-                        forecast=evaluate_game(state,board,rules,strategy,max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000))
-                        if isinstance(forecast,FuturePending):
-                            from werewolf.seer_manual import Pending
-                            reasons={'initial_public_results_incomplete':'未公開結果を含む未来評価は現在Pendingです。','multiple_fake_report_correlation_unselected':'複数偽占いが生存する朝の共同報告は未対応のためPendingです。', 'current_morning_seer_reports_incomplete':'未公開結果を含む未来評価は現在Pendingです。','past_private_scan_history_missing':'過去の本人取得履歴が不足しているため未来評価できません。'}
-                            reasons.update({'future_public_continuation_budget_exceeded':'未来の分岐が計算予算を超えました。公開情報を揃えるか、配役を絞ってください。','true_scan_generation_budget_exceeded':'未来占いの結果候補が計算予算を超えました。','observed_prior_private_ledger_budget_exceeded':'過去情報の再構成が計算予算を超えました。','future_fake_law_does_not_specify_initial_declarations':'初日の公開結果を入力してください。初日の偽報告自動生成は未設定です。'})
-                            seer_pending=Pending(reasons.get(forecast.reason,'この情報・配役の未来評価はまだ計算できません。'))
-                            primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
-                            action_values={}
-                        else:
-                            primary=Values(forecast.village_win,1-forecast.village_win)
-                            cumulative=progress.total_values(primary)
-                            action_values={p:Values(v,1-v) for p,v in forecast.action_values}
-                            by_dawn_values=dict(forecast.by_dawn_values)
+                    from werewolf.model_a_public import evaluate_public_game
+                    from werewolf.seer_future_uniform import FuturePending
+                    tick()  # Enforce the request deadline even when a complete snapshot is cached.
+                    forecast=evaluate_public_game(state,board,rules,strategy,max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
+                    if isinstance(forecast,FuturePending):
+                        from werewolf.seer_manual import Pending
+                        reasons={'initial_public_results_incomplete':'未公開結果を含む未来評価は現在Pendingです。','multiple_fake_report_correlation_unselected':'複数偽占いが生存する朝の共同報告は未対応のためPendingです。', 'current_morning_seer_reports_incomplete':'未公開結果を含む未来評価は現在Pendingです。','past_private_scan_history_missing':'過去の本人取得履歴が不足しているため未来評価できません。'}
+                        reasons.update({'future_public_continuation_budget_exceeded':'未来の分岐が計算予算を超えました。公開情報を揃えるか、配役を絞ってください。','true_scan_generation_budget_exceeded':'未来占いの結果候補が計算予算を超えました。','observed_prior_private_ledger_budget_exceeded':'過去情報の再構成が計算予算を超えました。','future_fake_law_does_not_specify_initial_declarations':'初日の公開結果を入力してください。初日の偽報告自動生成は未設定です。'})
+                        reasons.update({'information_set_budget_exceeded':'計算予算に達したためモデルAの評価はPendingです。旧モデルの数値には切り替えません。'})
+                        seer_pending=Pending(reasons.get(forecast.reason,'この情報・配役の未来評価はまだ計算できません。'))
+                        primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
+                        action_values={}
                     else:
-                        root = build_tree(board, rules, strategy)
-                        evaluation = evaluate_tree(root, strategy)
-                        primary = evaluation.board_value(root)
-                        cumulative = progress.total_values(primary)
-                        action_values = {target: evaluation.action_value(root, target) for target in legal_targets(board, rules, strategy)}
-                        from werewolf.by_dawn import action_by_dawn
-                        by_dawn_values={target:action_by_dawn(board,target,rules,strategy) for target in action_values}
+                        primary=Values(forecast.village_win,1-forecast.village_win)
+                        cumulative=progress.total_values(primary)
+                        action_values={p:Values(v,1-v) for p,v in forecast.action_values}
+                        by_dawn_values=dict(forecast.by_dawn_values)
                     event_history, alive = board.history, board.alive
             except CalculationBudgetExceeded:
                 from werewolf.seer_manual import Pending
@@ -318,9 +311,9 @@ def create_app(test_config=None, *, deployment=False):
                               'board_id': state['public_log']['board_id'],
                               'claims': list(board.claims), 'public_results': state.get('seer_inputs', []),
                               'slots': {str(p): private_slots(board, p, rules) for p in board.alive}}
-        return render_template("main.html", viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), future_active=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
+                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
     @app.before_request
     def same_origin_posts():
