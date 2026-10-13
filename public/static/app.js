@@ -193,12 +193,12 @@ function initializeUI() {
   window.initializeParallelLayout?.();
   initializeLiveClaims();
   initializePublicLog();
+  window.initializeBoardTable?.();
 }
 
 function initializeLiveClaims() {
-  if(document.querySelector('main[data-hybrid-table]'))return;
   const form = document.querySelector('#action-form');
-  if (!form || !document.querySelector('.co-select:not(:disabled), .report-select:not(:disabled)')) return;
+  if (!form || (!document.querySelector('#strategy-editor') && !document.querySelector('.co-select:not(:disabled), .report-select:not(:disabled)'))) return;
   let running = false;
   let pending = false;
   let version = 0;
@@ -212,7 +212,7 @@ function initializeLiveClaims() {
   document.querySelector('#information-panel').append(status);
   const disableProgress = () => {
     blocked = true;
-    document.querySelectorAll('#advance-button, #strategy-button, #back-button').forEach(b => b.disabled = true);
+    document.querySelectorAll('#advance-button, #strategy-button, #back-button,[data-table-co],[data-table-details] select,[data-table-update],[data-table-cancel],[data-public-open],[data-public-edit],[data-public-delete]').forEach(b => b.disabled = true);
     document.querySelectorAll('.probability').forEach(p => {
       p.textContent = '—';
       delete p.dataset.fraction;

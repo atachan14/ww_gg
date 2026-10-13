@@ -1,0 +1,73 @@
+{
+  "base_commit": "d53dc374797098adff96a34534dbd6a8c902fc13",
+  "published": false,
+  "committed": false,
+  "tests": 304,
+  "regression": "OK",
+  "javascript_syntax": "OK",
+  "browser": {
+    "help_top_cast_button": true,
+    "help_specs_no_game_mutation": true,
+    "existing_five_tree_six_steps": true,
+    "five_tree_result": "7/15",
+    "five_tree_back_next": true,
+    "all_value": "3/8",
+    "none_value": "1/4",
+    "common_inheritance_and_override": true,
+    "all_none_all_no_stale_cache": true,
+    "hand_inputs_and_board_log_unchanged": true,
+    "ajax_reinitializes_board_table_draft": true,
+    "draft_disables_strategy_and_cancel_restores": true,
+    "ordered_scan_filters": [
+      "unvisited",
+      "uniform"
+    ],
+    "execution_bite_labels_and_options": true,
+    "none_mode_co_only_computable": true,
+    "empty_value_label": "未公開",
+    "cold_cookie_policy_restore": true,
+    "medium_override_shared_inheritance": true,
+    "unsupported_guard_disabled": true,
+    "density": {
+      "selectHeight": "28px",
+      "selectMinHeight": "28px",
+      "summaryPadding": "5px"
+    }
+  },
+  "original_five_assets_unchanged": {
+    "tree-prototype.html": true,
+    "tree-prototype.css": true,
+    "tree-prototype.js": true
+  },
+  "local_url": "http://127.0.0.1:8793/",
+  "http": 200,
+  "none_semantics": "No future acquisition, use or disclosure; current observed information and prior weights retained",
+  "additional_minimal_fixes": [
+    "Hybrid strategy AJAX was disabled; enabled safe update path and reinitialization of BoardTable after replacement",
+    "Role unsupported disclosure stays disabled",
+    "Wolf fake-result option is limited and labeled to the implemented medium model"
+  ],
+  "protected_original_and_other_trials": true,
+  "full_disclosure_browser": {
+    "default_filled_co_only_inconsistent_atomic": true,
+    "day2_co_only_fake_and_dead_true_value": "1",
+    "complete_hand_reports_restore_expected_half": true,
+    "unpublished_selection_withdraws_whole_result_and_excludes_truth": true,
+    "none_all_override_preserves_inputs": true,
+    "cold_save_restore": true,
+    "future_initial_value": "3/8",
+    "morning_zero_support_inconsistency_editable_without_numbers": true,
+    "one_morning_report_other_reporter_fake_value": "1",
+    "execute_known_fake_terminal_village": true,
+    "help_updated_no_investigation_claim": true,
+    "original_five_tree": "7/15"
+  },
+  "observed_model": "full-observed-v1",
+  "full_disclosure_semantics": "Missing required reports exclude true worlds; zero support is editable inconsistency; no secret truth initialization; legacy unmarked past history is not reinterpreted.",
+  "remaining_limits": [
+    "Multiple surviving fake joint future law: Pending",
+    "Guard/GJ unsupported",
+    "Future CO changes unsupported",
+    "Fake backlog independent per date: provisional"
+  ]
+}

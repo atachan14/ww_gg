@@ -70,18 +70,15 @@ class SeerManualGeneralTests(unittest.TestCase):
         self.start(3);self.configure();self.assertEqual(replay(self.game())[1].board.player_count,3)
         self.start(1,w=0,s=1);html=self.client.get('/main',follow_redirects=True).data;self.assertIn(b'data-fraction="1"',html)
 
-    def test_ability_scope_visible_without_opening_settings(self):
+    def test_ability_scope_is_in_help_not_permanent_main_prose(self):
         self.start(7,w=2,s=1,m=1,h=1)
-        html=self.client.get('/main').data
-        self.assertIn(b'data-information-fixed-scope',html)
-        self.assertIn('護衛・GJは未対応'.encode(),html)
-        self.assertIn('霊能は従来の将来報告モデル'.encode(),html)
-        self.assertLess(html.index(b'data-information-fixed-scope'),html.index(b'id="display-options-form"'))
+        html=self.client.get('/main').data;help=self.client.get('/help/specs').get_data(as_text=True)
+        self.assertNotIn(b'data-information-fixed-scope',html);self.assertIn('護衛・GJは未対応',help);self.assertIn('従来の未来報告モデル',help)
 
     def test_mixed_roles_abilityless_hunter_explicit_and_unmodified_prior(self):
         self.start(7,w=2,s=1,m=1,h=1);self.configure()
         board=replay(self.game())[1].board;self.assertEqual(board.worlds,initial_board(7,2,1,1,1).worlds)
-        html=self.client.get('/main',follow_redirects=True).data;self.assertIn('狩人護衛・GJは未対応'.encode(),html)
+        html=self.client.get('/main',follow_redirects=True).data;self.assertIn('狩人護衛・GJは未対応',self.client.get('/help/specs').get_data(as_text=True))
         self.assertEqual(board.initial_hunter_count,1)
 
     def mixed_progress(self):

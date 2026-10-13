@@ -28,4 +28,7 @@ class BoardOwnedFutureTests(_Base):
   def future_factory(config):return factory({**config,'SEER_UNIFORM_FUTURE_PREVIEW':True})
   with patch('test_seer_manual_compatibility.create_app',side_effect=future_factory):
    HandCompatibilityTests().test_day2_dead_and_live_seer_candidates_half_with_preview_and_co_table()
+ def test_parent_commit_retires_descendants_and_forward_regenerates_without_old_input(self):
+  g=self.g();self.c.post('/strategy',data={'revision':str(g['revision']),'day':'max','night':'max','disclosure_common':'none'})
+  super().test_parent_commit_retires_descendants_and_forward_regenerates_without_old_input()
 del _Base

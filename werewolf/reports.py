@@ -135,6 +135,9 @@ def compact(board,reveal_now=False):
 
 
 def public_value(board,strategy,reveal_now=False):
+    if strategy.disclosure_for('medium')=='none':
+        from .exact import solve,marginal_state
+        return solve(len(board.alive),board.phase,marginal_state(board),strategy).village_win
     n,co,eligible,entries=compact(board,reveal_now)
     tick(len(entries))
     if reveal_now and eligible:return disclosure(n,co,eligible,entries,strategy)

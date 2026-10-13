@@ -51,12 +51,13 @@ def candidates(h,player,alive):
     preferred=tuple(p for p in legal if p not in visited)
     return preferred or legal
 
-def acquire_uniform(state,alive,*,max_work=250000):
+def acquire_uniform(state,alive,*,max_work=250000,position=('unvisited','uniform')):
     """Slot1: uniform nonwolf white; later slots: own-unvisited uniform targets.
 
     Every live true seer, including latent true seers, independently scans.
     No world is sampled and no instruction uses teammate private information.
     """
+    if tuple(position)!=('unvisited','uniform'):raise ValueError('Unsupported ordered scan-position filters')
     validate_roster(alive)
     if state.rosters and not set(alive)<=set(state.rosters[-1]):raise ValueError('Acquisition roster cannot resurrect players')
     day=len(state.rosters)+1;entries=[]

@@ -1,7 +1,7 @@
 /* Unpublished table editor: one ephemeral batch, latest-response-only preview. */
 (() => {
  const initialize=()=>{
-  const main=document.querySelector('main[data-hybrid-table]'),update=document.querySelector('[data-table-update]');if(!main)return;
+  const main=document.querySelector('main[data-hybrid-table]'),update=document.querySelector('[data-table-update]');if(!main||main.dataset.tableInitialized)return;main.dataset.tableInitialized='true';
   const seed=JSON.parse(document.querySelector('#public-log-seed').textContent),status=document.querySelector('[data-table-preview-status]');
   const normalize=value=>{const next=JSON.parse(JSON.stringify(value));for(const key of ['seers','mediums'])next[key].sort((a,b)=>a.day-b.day||a.reporter-b.reporter||(a.target??0)-(b.target??0));return next;};
   const baseline=normalize({claims:seed.claims,seers:seed.seers,mediums:seed.mediums});
@@ -54,16 +54,16 @@
       const row=current.seers.find(r=>r.day===day&&r.reporter===player)||{day,reporter:player,target:null,color:null};
       const span=document.createElement('span');span.className='co-day';span.append(`Day${day}: `);
       const dead=seed.targets.slice(0,day===1?0:2*day-3);const targets=Array.from({length:seed.players},(_,i)=>i+1).filter(p=>p!==player&&!dead.includes(p));
-      const change=(key,value)=>mutate(next=>{let r=next.seers.find(x=>x.day===day&&x.reporter===player);if(!r){r={...row};next.seers.push(r);}r[key]=key==='target'?(value?Number(value):null):(value||null);if(r.target===null&&r.color===null)next.seers=next.seers.filter(x=>x!==r);});
+      const change=(key,value)=>mutate(next=>{if(key==='color'&&!value){next.seers=next.seers.filter(x=>!(x.day===day&&x.reporter===player));return;}let r=next.seers.find(x=>x.day===day&&x.reporter===player);if(!r){r={...row};next.seers.push(r);}r[key]=key==='target'?(value?Number(value):null):(value||null);if(r.target===null&&r.color===null)next.seers=next.seers.filter(x=>x!==r);});
       const target=select([['','対象'],...targets.map(p=>[String(p),`Player${p}`])],row.target,(v)=>change('target',v));target.dataset.tableTarget=`${day}:${player}`;
       target.disabled=seed.finished||!seed.alive.includes(player);
-      const color=select([['','結果'],['white','白'],['black','黒']],row.color,v=>change('color',v));color.disabled=seed.finished||!seed.alive.includes(player);color.dataset.tableColor=`${day}:${player}`;span.append(target,color);host.append(span);
+      const color=select([['','未公開'],['white','白'],['black','黒']],row.color,v=>{change('color',v);if(!v){render();document.querySelector(`[data-table-color="${day}:${player}"]`)?.focus();}});color.disabled=seed.finished||!seed.alive.includes(player);color.dataset.tableColor=`${day}:${player}`;span.append(target,color);host.append(span);
     }
     const mediumSlots=Array.from({length:Math.max(0,seed.day-1)},(_,i)=>[i+2,player,seed.targets[2*i]]);
     if(role==='medium'){const none=document.createElement('span');none.textContent='Day1: --';host.append(none);}
     if(role==='medium')for(const [day,p,target] of mediumSlots){if(p!==player||!target)continue;
       const row=current.mediums.find(r=>r.day===day&&r.reporter===player&&r.target===target);const span=document.createElement('span');span.append(`Day${day}: Player${target} `);
-      const color=select([['','未入力'],['white','白'],['black','黒']],row?.color,v=>mutate(next=>{next.mediums=next.mediums.filter(r=>!(r.day===day&&r.reporter===player&&r.target===target));if(v)next.mediums.push({day,reporter:player,target,color:v});}));color.dataset.tableMedium=`${day}:${player}:${target}`;color.disabled=seed.finished||!seed.alive.includes(player);span.append(color);host.append(span);
+      const color=select([['','未公開'],['white','白'],['black','黒']],row?.color,v=>mutate(next=>{next.mediums=next.mediums.filter(r=>!(r.day===day&&r.reporter===player&&r.target===target));if(v)next.mediums.push({day,reporter:player,target,color:v});}));color.dataset.tableMedium=`${day}:${player}:${target}`;color.disabled=seed.finished||!seed.alive.includes(player);span.append(color);host.append(span);
     }
   };
   const render=()=>{
@@ -88,7 +88,7 @@
       if(id!==version||!draft.isDirty())return;
       if(!response.ok)throw Error(data.error);if(String(data.request_id)!==String(id)||data.revision!==seed.revision||data.board_id!==seed.board_id)return;
       apply(new DOMParser().parseFromString(data.html,'text/html'));lastPreview=clone(draft.snapshot());status.textContent='プレビュー';
-    }catch(e){if(id===version&&e.name!=='AbortError'){showWaiting('入力待ち');status.textContent=`プレビュー・入力待ち: ${e.message}`;}}
+    }catch(e){if(id===version&&e.name!=='AbortError'){const inconsistent=e.message.includes('全開示')||e.message.includes('整合する配役');showWaiting(inconsistent?'不整合':'入力待ち');status.textContent=`${inconsistent?'不整合':'プレビュー・入力待ち'}: ${e.message}`;}}
   };
   if(seed.finished){render();window.boardTableDraft=draft;return;}
   draft.onChange(({dirty,busy})=>{
@@ -111,5 +111,6 @@
   document.querySelector('[data-table-cancel]').addEventListener('click',()=>{roleStash.clear();render();});
   render();if(recovered){draft.edit(normalize(recovered));render();}window.boardTableDraft=draft;
  };
+ window.initializeBoardTable=initialize;
  document.addEventListener('DOMContentLoaded',initialize);
 })();

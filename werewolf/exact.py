@@ -30,14 +30,26 @@ class Strategy:
     night: str = "max"
     include_self_bite: bool = False
     fake_reports: str = "max"
+    disclosure_common: str = "all"
+    seer_disclosure: str = "inherit"
+    medium_disclosure: str = "inherit"
+    seer_position: tuple[str,...] = ("unvisited","uniform")
 
     def __post_init__(self):
+        if self.disclosure_common not in ('none','all') or self.seer_disclosure not in ('inherit','none','all') or self.medium_disclosure not in ('inherit','none','all'):raise ValueError('Choose none/all disclosure or inherit')
+        if isinstance(self.seer_position,list):object.__setattr__(self,'seer_position',tuple(self.seer_position))
+        if self.seer_position!=('unvisited','uniform'):raise ValueError('Only unvisited then uniform scan position is supported')
         if self.day not in ("max", "random") or self.night not in ("max", "random"):
             raise ValueError("Choose max or random")
         if self.fake_reports not in ("max","random"):
             raise ValueError("Choose max or random for fake reports")
         if type(self.include_self_bite) is not bool:
             raise ValueError("Self-bite inclusion must be a boolean")
+
+    def disclosure_for(self, role):
+        if role not in ('seer','medium'):return 'none'
+        local=getattr(self,role+'_disclosure')
+        return self.disclosure_common if local=='inherit' else local
 
 
 def validate_strategy(rules: Rules, strategy: Strategy):
@@ -490,7 +502,7 @@ class TreeNode:
 
     @property
     def disclosures(self):
-        if not self.pending_disclosure:return ()
+        if not self.pending_disclosure or self.strategy.disclosure_for('medium')=='none':return ()
         if self.strategy.fake_reports=='random':
             outcomes=random_report_outcomes(self.board)
             return (ReportTreeAction((),tuple(Chance(o.probability,TreeNode(o.board,self.rules,self.strategy)) for o in outcomes)),) if outcomes else ()
@@ -660,7 +672,7 @@ def has_future_medium(board, reveal_now=False):
 def value_for_action(board, target, rules, strategy):
     tick(len(board.worlds))
     village=sum((o.probability*(joint_value(o.board,rules,strategy,reveal_now=board.phase=='night').village_win
-                 if has_future_medium(o.board,reveal_now=board.phase=='night') else
+                 if strategy.disclosure_for('medium')=='all' and has_future_medium(o.board,reveal_now=board.phase=='night') else
                  solve(len(o.board.alive),o.board.phase,marginal_state(o.board),strategy).village_win)
                  for o in action_outcomes(board,target,rules,strategy)),Fraction(0))
     return Values(village,1-village)
@@ -672,7 +684,7 @@ class Evaluation:
 
     def board_value(self, node: TreeNode) -> Values:
         tick(len(node.board.worlds))
-        return joint_value(node.board,node.rules,self.strategy,reveal_now=node.pending_disclosure) if has_future_medium(node.board,node.pending_disclosure) else solve(len(node.board.alive),node.board.phase,marginal_state(node.board),self.strategy)
+        return joint_value(node.board,node.rules,self.strategy,reveal_now=node.pending_disclosure) if self.strategy.disclosure_for('medium')=='all' and has_future_medium(node.board,node.pending_disclosure) else solve(len(node.board.alive),node.board.phase,marginal_state(node.board),self.strategy)
 
     def action_value(self, node: TreeNode, target: int) -> Values:
         return value_for_action(node.board, target, node.rules, self.strategy)

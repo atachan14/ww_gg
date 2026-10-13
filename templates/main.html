@@ -1,12 +1,11 @@
 {% extends 'base.html' %}
 {% from 'navigation.html' import phase_button %}
 {% block title %}{{ '決着画面' if finished else 'Day ' ~ board.day ~ (' 昼' if board.phase == 'day' else ' 夜') }}{% endblock %}
-{% macro probability(value, id='') %}{% if value is number %}<strong {% if id %}id="{{ id }}"{% endif %} class="probability" data-fraction="{{ value|fraction }}" data-percent="{{ value|percent }}%">{{ value|percent }}%</strong>{% else %}<strong class="muted">Pending</strong>{% endif %}{% endmacro %}
+{% macro probability(value, id='') %}{% if value is number %}<strong {% if id %}id="{{ id }}"{% endif %} class="probability" data-fraction="{{ value|fraction }}" data-percent="{{ value|percent }}%">{{ value|percent }}%</strong>{% else %}<strong class="muted">{{ '不整合' if disclosure_error else 'Pending' }}</strong>{% endif %}{% endmacro %}
 {% block content %}
 {% set has_role_details = state.get('mediums',0) or state.get('seers',0) or state.get('hunters',0) %}
-<main {% if config.get("HYBRID_TABLE_PREVIEW") %}data-hybrid-table{% endif %} data-screen="{{ 'result' if finished else 'main' }}" data-co-game="{{ co_game }}">
-  <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:{% for label,count,note in [('市民',state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0),''),('霊能',state.get('mediums',0),''),('占い師',state.get('seers',0),('（手動入力＋未来均等）' if future_preview else '（手動のみ）') if state.get('seer_mode')=='information-fixed-v1' else '（能力なし）'),('狩人',state.get('hunters',0),'（能力なし）'),('狼',state.get('wolves',1),'')] if count>0 %}{{ label }}{{ count }}{{ note }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
-  {% if future_preview %}<p class="hint" data-future-uniform-scope>開発中の未来占い：真は本人の未占い先優先・等確率、偽は本人の公開未報告先優先・対象と白黒を等確率。未来の生存CO者は全開示。COは固定、複数偽の共同報告は未対応でPending。狩人は人数・COのみで、護衛・GJは計算しません。未報告・予算超過もPendingです。</p>{% elif state.get('seer_mode')=='information-fixed-v1' %}<p class="hint" data-information-fixed-scope>開発中の占い情報固定モデル：占いは入力済み結果だけを使用し、未来の取得・利用・公開は計算しません。{% if state.get('mediums',0) %}霊能は従来の将来報告モデルを引き継ぎます。{% endif %}{% if state.get('hunters',0) %}狩人は人数・COのみ対応し、護衛・GJは未対応です。{% endif %}</p>{% endif %}
+<main data-seer-future="{{ 'all' if future_active else 'none' }}" {% if config.get("HYBRID_TABLE_PREVIEW") %}data-hybrid-table{% endif %} data-screen="{{ 'result' if finished else 'main' }}" data-co-game="{{ co_game }}">
+  <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:{% for label,count,note in [('市民',state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0),''),('霊能',state.get('mediums',0),''),('占い師',state.get('seers',0),''),('狩人',state.get('hunters',0),'（能力なし）'),('狼',state.get('wolves',1),'')] if count>0 %}{{ label }}{{ count }}{{ note }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
   <form id="display-options-form"></form>
   <form id="public-log-draft-form"></form>
   <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
@@ -22,8 +21,8 @@
         <div class="rate-card wolf"><small>{{ '最終勝率' if finished else '現在勝率' }} · 狼陣営</small>{{ probability(rates.wolf_win, 'wolf-rate') }}</div>
       </div>
       <div class="cumulative-line"><span>累積勝率</span><span>村 {{ probability(cumulative.village_win, 'cumulative-village-rate') }} ／ 狼 {{ probability(cumulative.wolf_win, 'cumulative-wolf-rate') }}</span></div>
-      {% if seer_pending %}<p class="hint" data-seer-pending>Pending: {{ seer_pending.reason }}</p>{% endif %}
-      {% if finished %}<p class="result-note">すべての可能性で決着しました。</p>{% endif %}
+      {% if seer_pending %}<p class="hint" data-seer-pending>{{ '不整合' if disclosure_error else 'Pending' }}: {{ seer_pending.reason }} <a href="{{ url_for('help_specs') }}#pending">Help</a></p>{% endif %}
+      {% if finished and not disclosure_error %}<p class="result-note">すべての可能性で決着しました。</p>{% endif %}
       {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
     </section>
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
@@ -58,7 +57,7 @@
   {% if not state.history and board.day == 1 and board.phase == 'day' %}<a class="secondary settings-return" id="settings-return" href="{{ url_for('top') }}"><span aria-hidden="true">←</span> ゲーム設定に戻る</a>{% endif %}
   {% if state.history %}<form method="post" action="{{ url_for('back') }}" data-submit-once><input type="hidden" name="revision" value="{{ state.revision }}">{{ phase_button(board.day if finished or board.phase == 'night' else board.day-1, (board.phase if finished else ('day' if board.phase == 'night' else 'night')), previous=true, id='back-button') }}</form>{% endif %}
   {% if not finished %}{{ phase_button(board.day if board.phase == 'day' else board.day+1, 'night' if board.phase == 'day' else 'day', id='advance-button', form='action-form', disabled=seer_pending) }}{% endif %}</div></div></footer>
-<section class="panel tree-placeholder" id="tree-reserved" aria-label="GameTree"><h2 class="board-section-label">GameTree</h2><p class="hint">GameTree表示は今後対応します。</p></section>
+<section class="panel tree-placeholder" id="tree-reserved" aria-label="GameTree"><h2 class="board-section-label">GameTree</h2><a href="{{ url_for('help_five') }}">5人村の例</a></section>
 </main>
 {% endblock %}
 

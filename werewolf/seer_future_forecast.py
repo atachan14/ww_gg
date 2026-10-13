@@ -4,12 +4,13 @@ Manual past evidence is a supplied prior. Future fake probabilities use the
 approved uniform marginal. Multiple-fake correlation remains unselected.
 """
 from dataclasses import dataclass
+from itertools import product
 from fractions import Fraction as F
 from .exact import (replace_worlds,action_outcomes,legal_targets,report_actions,
                     random_report_outcomes,build_tree,evaluate_tree)
 from .seer_acquisition import Hypothesis,SeerReport,normalize,public_worlds
 from .seer_future_uniform import TrueScanState,FuturePending,acquire_uniform,true_reports
-from .seer_fake_uniform import fake_joint_options
+from .seer_fake_uniform import fake_joint_options,fake_uniform_options
 from .calculation_budget import calculation_budget,tick,CalculationBudgetExceeded
 
 @dataclass(frozen=True)
@@ -19,6 +20,23 @@ class GeneratedPublication:
     state: TrueScanState
 
 
+def fake_backlog_options(state,reporters,past):
+    if len(reporters)>1:return FuturePending('multiple_fake_report_correlation_unselected')
+    if not reporters:return (((),F(1)),)
+    p=reporters[0];seen={(r.player,r.acquired_day) for r in past};plans=[]
+    for day,roster in enumerate(state.rosters,1):
+        if day==1 and state.initial_rule=='none' or p not in roster or (p,day) in seen:continue
+        options=fake_uniform_options(roster,p,past)
+        if isinstance(options,FuturePending):return options
+        plans.append(tuple((SeerReport(day,len(state.rosters),p,t,c),q) for (t,c),q in options))
+    result=[]
+    for selection in product(*plans):
+        tick();q=F(1)
+        for _,mass in selection:q*=mass
+        result.append((tuple(r for r,_ in selection),q))
+    return tuple(result)
+
+
 def future_publications(state,past,morning_alive,claims):
     """Merge complete true/fake public vectors before any public action."""
     groups={};day=len(state.rosters)
@@ -26,12 +44,12 @@ def future_publications(state,past,morning_alive,claims):
     for h in state.hypotheses:
         tick(1+len(h.acquisitions))
         fakes=tuple(p for p in morning_alive if claims[p-1]=='seer' and not h.roles[2]&(1<<(p-1)))
-        choices=fake_joint_options(state.rosters[-1],fakes,past)
+        choices=fake_backlog_options(state,fakes,past)
         if isinstance(choices,FuturePending):return choices
         truth=true_reports(h,past,morning_alive,claims,day)
-        for instructions,q in choices:
+        for fake_reports,q in choices:
             tick()
-            reports=tuple(sorted(truth+tuple(SeerReport(day,day,p,t,c) for p,t,c in instructions)))
+            reports=tuple(sorted(truth+fake_reports))
             groups.setdefault(reports,[]).append(Hypothesis(h.roles,h.acquisitions,h.mass*q))
     result=[]
     for reports,entries in groups.items():
@@ -71,7 +89,7 @@ def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,margin
         if isinstance(value,FuturePending):raise Unresolved(value)
         return value
     def morning(child,private,published):
-        actions=report_actions(child)
+        actions=report_actions(child) if strategy.disclosure_for('medium')=='all' else ()
         if not actions:
             groups=((F(1),child),)
             choices=(groups,)
@@ -115,7 +133,7 @@ def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,margin
                 if b.phase=='night':
                     key=(b,s)
                     if key not in acquired_memo:
-                        private=checked(acquire_uniform(s,b.alive,max_work=max_work));tick(len(private.hypotheses));acquired_memo[key]=private
+                        private=checked(acquire_uniform(s,b.alive,max_work=max_work,position=strategy.seer_position));tick(len(private.hypotheses));acquired_memo[key]=private
                         if trace is not None:trace['night_acquisition_calls']=trace.get('night_acquisition_calls',0)+1
                     private=acquired_memo[key]
                 next_private=project_private(private,o.board,marginalize_private=marginalize_private)

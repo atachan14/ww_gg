@@ -13,7 +13,7 @@ class FutureReleaseTests(unittest.TestCase):
   self.assertEqual(r.status_code,200);h=r.get_json()['html'];self.assertIn('data-seer-pending',h);self.assertIn('共同報告は未対応',h);self.assertNotIn('id="village-rate"',h)
   with c.session_transaction() as q:self.assertEqual(q['game'],before)
  def test_limits_fixed_co_and_abilityless_guard_are_visible(self):
-  a=create_app({'TESTING':True,'SECRET_KEY':'release-scope','HYBRID_TABLE_PREVIEW':True,'SEER_UNIFORM_FUTURE_PREVIEW':True});c=a.test_client();c.post('/start',data={'citizens':'3','seers':'1','mediums':'1','hunters':'1','wolves':'1','day':'max','night':'max'});h=c.get('/main').get_data(as_text=True);self.assertIn('COは固定',h);self.assertIn('狩人は人数・COのみ',h);self.assertIn('護衛・GJは計算しません',h);self.assertIn('予算超過もPending',h)
+  a=create_app({'TESTING':True,'SECRET_KEY':'release-scope','HYBRID_TABLE_PREVIEW':True,'SEER_UNIFORM_FUTURE_PREVIEW':True});c=a.test_client();c.post('/start',data={'citizens':'3','seers':'1','mediums':'1','hunters':'1','wolves':'1','day':'max','night':'max'});h=c.get('/help/specs').get_data(as_text=True);self.assertIn('COは現在の宣言に固定',h);self.assertIn('狩人は人数・COだけ',h);self.assertIn('護衛・GJは未対応',h);self.assertIn('計算予算・期限到達はPending',h)
 
  def test_nested_future_work_budgets_cannot_reset_parent_time_deadline(self):
   from werewolf.calculation_budget import calculation_budget,tick,CalculationBudgetExceeded

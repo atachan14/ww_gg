@@ -8,10 +8,20 @@ from .calculation_budget import calculation_budget,tick,CalculationBudgetExceede
 
 
 def evaluate_game(g,board,rules,strategy,*,max_work=250000):
+    if strategy.disclosure_for('seer')=='none':
+        # No future acquisition/use/publication: retain already observed evidence.
+        from .exact import build_tree,evaluate_tree,legal_targets
+        from .seer_future_forecast import Forecast
+        try:
+            with calculation_budget(max_work):
+                root=build_tree(board,rules,strategy);evaluation=evaluate_tree(root,strategy)
+                return Forecast(evaluation.board_value(root).village_win,tuple((t,evaluation.action_value(root,t).village_win) for t in legal_targets(board,rules,strategy)))
+        except CalculationBudgetExceeded:return FuturePending('future_public_continuation_budget_exceeded')
     tracked=tuple(p for p in board.alive if board.claims[p-1]=='seer')
     initial=g['rules'].get('initial_seer',g['seer_options']['initial_rule'])
     rows={(r['day'],r['reporter']):r for r in g['seer_inputs'] if r['target'] is not None and r['color'] is not None}
-    if any((board.day,p) not in rows for p in tracked) and (board.day>1 or initial!='none'):return FuturePending('initial_public_results_incomplete' if board.day==1 else 'current_morning_seer_reports_incomplete')
+    # Current full-disclosure omissions already exclude truth in replay.
+    # Never create private true acquisitions to rescue those violations.
     rosters=[]
     for day in range(1,board.day+1):
         dead={e.target for e in board.history if day>1 and (e.day<day-1 or e.day==day-1 and e.phase=='day')}
@@ -29,11 +39,7 @@ def evaluate_game(g,board,rules,strategy,*,max_work=250000):
                         row=rows.get((day,p))
                         if row is not None:
                             choices.append(((Acquisition(day,p,row['target'],row['color']),F(1)),))
-                        elif day==1 and board.day==1:
-                            legal=tuple(t for t in alive if t!=p and (initial!='random_white' or not h.roles[0]&(1<<(t-1))))
-                            if not legal:return FuturePending('no_legal_initial_true_scan')
-                            choices.append(tuple((Acquisition(day,p,t,'black' if h.roles[0]&(1<<(t-1)) else 'white'),F(1,len(legal))) for t in legal))
-                        elif not active_only:return FuturePending('past_private_scan_history_missing')
+                        else:return FuturePending('full_disclosure_truth_not_conditioned')
                     next_variants=[]
                     for records,mass in variants:
                         for selected in product(*choices):

@@ -6,6 +6,8 @@
 <input type="hidden" name="include_self_bite" value="{{ '1' if state.policy.include_self_bite else '0' }}">
 <input type="hidden" name="fake_reports" value="{{ state.policy.get('fake_reports','max') }}">
 <input type="hidden" name="strategy_ui" value='{{ strategy_seed.co|tojson }}'>
+{% for key,value in [('disclosure_common',state.policy.get('disclosure_common','all')),('seer_disclosure',state.policy.get('seer_disclosure','inherit')),('medium_disclosure',state.policy.get('medium_disclosure','inherit'))] %}<input type="hidden" name="{{ key }}" value="{{ value }}">{% endfor %}
+<input type="hidden" name="seer_position" value='{{ state.policy.get("seer_position",["unvisited","uniform"])|tojson }}'>
 <noscript><p class="error">戦略の編集にはJavaScriptが必要です。</p></noscript>
 <dialog class="strategy-dialog" aria-labelledby="strategy-dialog-title" closedby="none">
   <div class="overlay-shell"><header class="overlay-head"><div><h2 id="strategy-dialog-title" tabindex="-1"></h2><p data-editor-context></p></div></header>

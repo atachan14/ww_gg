@@ -101,7 +101,7 @@ def _replay(text):
     if type(history) is not list or len(history)>max(0,g['players']-2):raise ValueError('保存された進行を確認してください。')
     if history and history[0].get('seer_options')!=opt:raise ValueError('初日ルール・報告尤度の変更は初日へ戻って行ってください。')
     applied=set();scan={1:initial}
-    def apply(p,claims,cp,group=False):
+    def apply(p,claims,cp,policy,observed_model,group=False):
         if p.finished:return p
         board=group_initial_board(p.board,claims,cp) if group else condition_claims(p.board,claims,cp)
         slot=2*(board.day-1)+(board.phase=='night')
@@ -117,14 +117,17 @@ def _replay(text):
         complete=tuple(r for r in selected if r['target'] is not None and r['color'] is not None)
         if opt['initial_rule'] is not None and opt['likelihood'] is not None:board=condition(board,complete,opt,initial)
         applied.update((r['day'],r['reporter']) for r in selected)
+        from .result_disclosure import condition_observed
+        board=condition_observed({**g,'result_disclosure_model':observed_model},board,claims,cp,policy)
         return Progress(board,p.settled_village,p.settled_wolf,p.last_board,p.last_outcomes)
     for i,step in enumerate(history):
         if p.finished:raise ValueError('入力結果と保存済みの進行が不整合です。戻って確認してください。')
-        allowed={'target','policy','claims','claim_policy','strategy_ui','reports','seer_options'}
+        allowed={'target','policy','claims','claim_policy','strategy_ui','reports','seer_options','result_disclosure_model'}
         if not isinstance(step,dict) or set(step)-allowed or not {'target','policy','claims','claim_policy','seer_options'}<=set(step):raise ValueError('手動占いの保存履歴を確認してください。')
-        p=apply(p,tuple(step['claims']),ClaimPolicy(**step['claim_policy']),i==0 and g.get('model','equal')=='group')
+        if step.get('result_disclosure_model') not in (None,'full-observed-v1'):raise ValueError('Invalid disclosure observation model')
+        p=apply(p,tuple(step['claims']),ClaimPolicy(**step['claim_policy']),step['policy'],step.get('result_disclosure_model'),i==0 and g.get('model','equal')=='group')
         p=advance(p,step['target'],rules,Strategy(**step['policy']))
-    if not p.finished:p=apply(p,tuple(g['claims']),ClaimPolicy(**g['claim_policy']),not history and g.get('model','equal')=='group')
+    if not p.finished:p=apply(p,tuple(g['claims']),ClaimPolicy(**g['claim_policy']),g['policy'],g.get('result_disclosure_model'),not history and g.get('model','equal')=='group')
     if any((r['day'],r['reporter']) not in applied for r in rows):raise ValueError('まだ到達していない日の結果は入力できません。')
     if any((r.day,r.reporter,r.target) not in medium_applied for r in medium_rows):raise ValueError('霊能報告と保存された公開機会が一致しません。')
     validate_strategy(rules,Strategy(**g['policy']))

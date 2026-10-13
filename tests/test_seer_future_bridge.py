@@ -13,7 +13,7 @@ class FutureBridgeTests(unittest.TestCase):
  def publish(self,events):return self.c.post('/public-log',data={'revision':str(self.g()['revision']),'operation':'publish','payload':json.dumps({'mode':'simultaneous','events':events})})
  def test_local_preview_reaches_night_day2_and_terminal(self):
   self.start();self.assertEqual(self.publish([{'kind':'co','player':1,'role':'seer'},{'kind':'co','player':2,'role':'seer'},{'kind':'seer','player':1,'day':1,'target':3,'color':'white'},{'kind':'seer','player':2,'day':1,'target':3,'color':'black'}]).status_code,200)
-  html=self.c.get('/main').data;self.assertIn(b'data-future-uniform-scope',html);self.assertIn(b'id="village-rate"',html)
+  html=self.c.get('/main').data;self.assertIn(b'data-seer-future="all"',html);self.assertIn(b'id="village-rate"',html)
   for target in (2,3):
    g=self.g();self.assertEqual(self.c.post('/advance',data={'revision':str(g['revision']),'day':'max','night':'max','target':str(target)}).status_code,303)
   html=self.c.get('/main').data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html)
@@ -22,16 +22,14 @@ class FutureBridgeTests(unittest.TestCase):
   g=self.g();self.c.post('/advance',data={'revision':str(g['revision']),'day':'max','night':'max','target':'4'});self.assertEqual(self.c.get('/result').status_code,200)
  def test_published_mode_default_unchanged(self):
   self.start();g=self.g();self.app.config['SEER_UNIFORM_FUTURE_PREVIEW']=False
-  self.assertNotIn(b'data-future-uniform-scope',self.c.get('/main').data);self.assertEqual(self.g(),g)
- def test_current_morning_incomplete_is_pending_not_zero(self):
-  self.start(5,1,1);g=self.g();self.c.post('/advance',data={'revision':str(g['revision']),'day':'max','night':'max','target':'2'});g=self.g();self.c.post('/advance',data={'revision':str(g['revision']),'day':'max','night':'max','target':'3'})
-  self.publish([{'kind':'co','player':1,'role':'seer'}]);g=self.g();rules,p=replay(g);result=evaluate_game(g,p.board,rules,Strategy())
-  self.assertIsInstance(result,FuturePending);self.assertEqual(result.reason,'current_morning_seer_reports_incomplete')
-
- def test_incomplete_all_open_day1_cannot_advance_or_be_zero(self):
-  self.start();self.publish([{'kind':'co','player':1,'role':'seer'}]);old=self.g()
-  html=self.c.get('/main').data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html)
-  self.assertEqual(self.c.post('/advance',data={'revision':str(old['revision']),'day':'max','night':'max','target':'2'}).status_code,400);self.assertEqual(self.g(),old)
+  self.assertNotIn(b'data-seer-future="all"',self.c.get('/main').data);self.assertEqual(self.g(),g)
+ def test_current_morning_missing_excludes_truth_and_keeps_dead_truth(self):
+  self.start(5,1,1)
+  for t in (2,3):
+   g=self.g();self.c.post('/advance',data={'revision':str(g['revision']),'day':'max','night':'max','target':str(t)})
+  self.assertEqual(self.publish([{'kind':'co','player':1,'role':'seer'}]).status_code,200);g=self.g();rules,p=replay(g);self.assertEqual(p.board.role_probability(1,'seer'),0);self.assertEqual(p.board.wolf_probability(1),1);result=evaluate_game(g,p.board,rules,Strategy());self.assertNotIsInstance(result,FuturePending);self.assertEqual(result.village_win,1)
+ def test_incomplete_all_open_day1_is_inconsistent_not_pending(self):
+  self.start();old=self.g();r=self.publish([{'kind':'co','player':1,'role':'seer'}]);self.assertEqual(r.status_code,400);self.assertIn('整合',r.get_json()['error']);self.assertEqual(self.g(),old)
  def test_no_initial_rule_allows_no_true_initial_publication(self):
   self.c.post('/start',data={'citizens':'2','seers':'1','wolves':'2','initial_seer':'none','day':'max','night':'max'})
   self.publish([{'kind':'co','player':1,'role':'seer'}]);self.assertIn(b'id="village-rate"',self.c.get('/main').data)
@@ -57,7 +55,7 @@ class FutureBridgeTests(unittest.TestCase):
   self.start();events=[{'kind':'co','player':p,'role':'seer'} for p in (1,2)]+[{'kind':'seer','player':p,'day':1,'target':3,'color':'white'} for p in (1,2)];self.publish(events)
   for target in (4,3):
    g=self.g();self.assertEqual(self.c.post('/advance',data={'revision':str(g['revision']),'target':str(target),'day':'max','night':'max'}).status_code,303)
-  g=self.g();rules,progress=replay(g);morning=progress.board
+  g=self.g();rules,progress=replay({**g,'result_disclosure_model':None});morning=progress.board
   self.assertEqual(morning.alive,(1,2,5));self.assertEqual({w[0] for w in morning.worlds},{9,10});self.assertEqual({w[-1] for w in morning.worlds},{F(1,2)})
   prior=TrueScanState(tuple(Hypothesis(w[:-1],(Acquisition(1,1 if w[2]==1 else 2,3,'white'),),w[-1]) for w in morning.worlds),((1,2,3,4,5),))
   generated=acquire_uniform(prior,(1,2,3,5));past=tuple(SeerReport(1,1,p,3,'white') for p in (1,2));branches=future_publications(generated,past,morning.alive,morning.claims)
@@ -70,6 +68,6 @@ class FutureBridgeTests(unittest.TestCase):
   self.assertEqual(contradictory.probability,F(1,16));self.assertEqual(contradictory.state.public_roles[0][0],10)
   self.assertFalse(any(all(r.target==5 and r.color=='black' for r in v.reports) for v in branches))
   html=self.c.get('/main').data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html)
-  self.publish([{'kind':'seer','player':1,'day':2,'target':5,'color':'white'}]);self.assertNotIn(b'id="village-rate"',self.c.get('/main').data)
+  self.publish([{'kind':'seer','player':1,'day':2,'target':5,'color':'white'}]);self.assertIn(b'id="village-rate"',self.c.get('/main').data);self.assertEqual(replay(self.g())[1].board.role_probability(2,'seer'),0)
   self.publish([{'kind':'seer','player':2,'day':2,'target':5,'color':'black'}]);complete=self.g();rules,p=replay(complete);self.assertEqual({w[0] for w in p.board.worlds},{10});self.assertIn(b'id="village-rate"',self.c.get('/main').data)
-  self.app.config['SEER_UNIFORM_FUTURE_PREVIEW']=False;self.assertNotIn(b'data-future-uniform-scope',self.c.get('/main').data);self.assertEqual(self.g(),complete)
+  self.app.config['SEER_UNIFORM_FUTURE_PREVIEW']=False;self.assertNotIn(b'data-seer-future="all"',self.c.get('/main').data);self.assertEqual(self.g(),complete)

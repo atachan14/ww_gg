@@ -81,7 +81,7 @@ class COUITests(unittest.TestCase):
         html=self.html()
         row=re.search(r'<tr[^>]*id="co-role-1"[^>]*>(.*?)</tr>',html,re.S).group(1)
         self.assertIn('name="report_2_1_2"',row)
-        self.assertIn('value="" selected>未入力',row)
+        self.assertIn('value="" selected>未公開',row)
         self.assertEqual(html.count('name="report_2_1_2"'),1)
         before=self.state()['history'][:]
         self.assertEqual(self.post('/strategy',report_2_1_2='black').status_code,303)
@@ -91,7 +91,7 @@ class COUITests(unittest.TestCase):
         self.assertRegex(reported_row,r'<td class="wolf-text"><strong[^>]*data-fraction="1"')
         self.assertEqual(self.post('/strategy',report_2_1_2='').status_code,303)
         self.assertEqual(self.state()['reports'],[])
-        self.assertIn('value="" selected>未入力',self.html())
+        self.assertIn('value="" selected>未公開',self.html())
         self.c.post('/back',data={'revision':str(self.state()['revision'])})
         self.assertNotIn('name="report_2_1_2"',self.html())
 

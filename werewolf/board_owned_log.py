@@ -7,7 +7,7 @@ def signature(step):
     from .exact import Strategy,ClaimPolicy,VILLAGE_ROLES
     policy=asdict(Strategy(**step.get('policy',{})));cp=ClaimPolicy(**step.get('claim_policy',{}))
     claims={role:sorted(cp.conditions(role)) for role in VILLAGE_ROLES}
-    return json.dumps({'target':step['target'],'policy':policy,'claim_policy':claims,'seer_options':step.get('seer_options')},sort_keys=True,separators=(',',':'))
+    return json.dumps({'target':step['target'],'policy':policy,'claim_policy':claims,'seer_options':step.get('seer_options'),'result_disclosure_model':step.get('result_disclosure_model')},sort_keys=True,separators=(',',':'))
 
 def path(graph,board_id=None):
     result=[];seen=set();cursor=board_id or graph['current']

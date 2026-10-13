@@ -100,7 +100,7 @@ class MediumWebTests(unittest.TestCase):
         self.c.post('/advance',data=self.form(target='3'))
         html=self.c.get('/main').get_data(as_text=True)
         self.assertIn('name="report_2_1_2"',html)
-        self.assertIn('value="" selected>未入力',html)
+        self.assertIn('value="" selected>未公開',html)
         self.assertNotIn('reports',self.state())
         history=self.state()['history'][:]
         response=self.c.post('/strategy',data=self.form(report_2_1_2='black'))
@@ -115,6 +115,6 @@ class MediumWebTests(unittest.TestCase):
         self.assertEqual(self.c.post('/start',data={'citizens':'2','mediums':'1','seers':'1','hunters':'1','wolves':'1','day':'max','night':'max'}).status_code,303)
         self.assertEqual((self.state()['players'],self.state()['seers'],self.state()['hunters']),(6,1,1))
         html=self.c.get('/main').get_data(as_text=True)
-        self.assertIn('占い師（手動のみ）',html);self.assertIn('id="public-log-seed"',html);self.assertIn('"seer"',html);self.assertIn('"hunter"',html)
+        self.assertIn('占い師',html);self.assertIn('id="public-log-seed"',html);self.assertIn('"seer"',html);self.assertIn('"hunter"',html)
 
 if __name__=='__main__':unittest.main()
