@@ -34,6 +34,12 @@ click('[data-open="wolf|fakeSeer"]');assert(d.querySelector('[data-item-add="max
 click('[data-open="wolf|fakeSeer"]');click('[data-item-remove="noncontradictory"]');click('[data-editor-apply]');assert.equal(value('fake_seer_policy'),'["uniform"]');
 click('[data-open="wolf|fakeSeer"]');click('[data-item-add="noncontradictory"]');click('[data-editor-apply]');assert(d.querySelector('.strategy-dialog').open);assert.equal(value('fake_seer_policy'),'["uniform"]');click('[data-item-up="noncontradictory"]');click('[data-editor-apply]');assert.equal(value('fake_seer_policy'),'["noncontradictory","uniform"]');
 const model=d.querySelector('[data-exclusive="model"]');model.value='equal';model.dispatchEvent(new w.Event('change',{bubbles:true}));assert.equal(value('model'),'equal');
+if(seed.roles.includes('hunter')){
+ click('[data-open="hunter|position"]');assert.equal(d.querySelector('.overlay-body [data-item-mode]').dataset.itemMode,'ordered');
+ assert(d.querySelector('[data-item-add="max"]').disabled);click('[data-item-remove="uniform"]');click('[data-editor-apply]');
+ assert(d.querySelector('.strategy-dialog').open);assert.equal(value('guard_position'),'["uniform"]');click('[data-editor-cancel]');
+ click('[data-open="hunter|position"]');click('[data-editor-apply]');assert.equal(value('guard_position'),'["uniform"]');
+}
 console.log('All supported Item adapters, ordered/unordered shared panels, cancel, inheritance and model selector: PASS');w.close();
 
 // Finished boards lock edits; model locking and unavailable policies remain respected.

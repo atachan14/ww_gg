@@ -66,7 +66,11 @@ class InformationSetForecast:
         if self.memoize_flows:cache[key]=result
         return result
 
+    pending=Pending
+
     def exchangeable(self,b):
+        from .guard_model import live_guard_mass
+        if live_guard_mass(b):return False
         # Exact reduction: no future information, and all live locations are
         # exchangeable in the PUBLIC wolf marginal. Public max ties are uniform.
         if self.strategy.disclosure_for('medium')=='all' and has_future_medium(b):return False
@@ -157,7 +161,7 @@ class InformationSetForecast:
     def scalar(self,b,s,past):return self.solve(b,s,past,s,None)
 
     def continuation_context(self,b,s,past,private,observer):
-        if (self.retire_uninformative_scans and observer is None and b.initial_seer_count and
+        if (self.retire_uninformative_scans and observer is None and b.initial_seer_count and not b.initial_hunter_count and
                 self.can_retire_scans(b,s,past)):
             from .evaluation_projection import project_retired_seers
             b,s,private=project_retired_seers(b,s,private)
@@ -295,6 +299,10 @@ class InformationSetForecast:
         return self.day_bounds[key]
 
     def solve(self,b,s,past,private,observer):
+        if b.winner is not None:return F(b.winner=='village')
+        from .guard_model import scope_reason
+        reason=scope_reason(b,self.rules)
+        if reason:raise Pending(reason)
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
         key=(b,s,past,private,observer)
         if observer is None:
@@ -362,7 +370,8 @@ class InformationSetActionPolicy:
         return laws.public,past,laws.private,observer,physical
 
     def night_outcomes(self,frame,prepared):
-        return unchanged_death_outcomes(frame,self.outcomes,prepared)
+        from .guard_model import guarded_outcomes
+        return guarded_outcomes(frame,unchanged_death_outcomes(frame,self.outcomes,prepared),self.engine)
 
     def outcomes(self,b,payload,target):
         s,past,private,observer,physical=payload;e=self.engine

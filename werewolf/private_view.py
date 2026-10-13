@@ -16,6 +16,7 @@ class PrivateView:
     role: str
     players: tuple[int, ...]
     acquisitions: tuple[Acquisition, ...] = ()
+    guards: tuple = ()
 
 
 def condition_private(board, role, players, results=(), *, rules):
@@ -32,15 +33,30 @@ def condition_private(board, role, players, results=(), *, rules):
     candidates=tuple(w for w in board.worlds if
         (w[0]==mask if role=='wolf' else actual_role(board,w,players[0])==role))
     if not candidates:raise ValueError('Inconsistent private viewpoint')
-    if results and role not in ('seer','medium'):
+    if results and role not in ('seer','medium','hunter'):
         raise ValueError('Result evidence is unsupported for this role')
-    seen=set();acquisitions=[]
+    seen=set();acquisitions=[];guards=[]
     for result in results:
         if set(result)!={'day','target','color'}:raise ValueError('Invalid private evidence shape')
         day,target,color=result['day'],result['target'],result['color']
         if type(day) is not int or not 1<=day<=board.day or day in seen:
             raise ValueError('Invalid private evidence day')
         seen.add(day)
+        if role=='hunter':
+            from .guard_effect import GuardIntent
+            if color is not None or day>=board.day:
+                raise ValueError('Guard history has past-night targets only, without success notification')
+            if target is None:continue
+            roster=acquisition_roster(board.player_count,board.history,day+1)
+            if type(target) is not int or target not in roster or target==players[0] or players[0] not in roster:
+                raise ValueError('Guard target must be another living player on that night')
+            deaths={e.target for e in board.history if e.phase=='night' and e.day==day}
+            if target in deaths:raise ValueError('Guard history conflicts with the observed attack death')
+            if not deaths and not rules.allow_self_bite:
+                candidates=tuple(w for w in candidates if not w[0]&(1<<(target-1)))
+                if not candidates:raise ValueError('Guard history conflicts with the no-death observation')
+            guards.append(GuardIntent(day,players[0],target))
+            continue
         # Missing fields stay unknown. They are not fabricated as white results.
         if target is None or color is None:
             if target is not None and (type(target) is not int or not 1<=target<=board.player_count):raise ValueError('Invalid private target')
@@ -62,4 +78,4 @@ def condition_private(board, role, players, results=(), *, rules):
         if not candidates:raise ValueError('Inconsistent private evidence')
     total=sum((w[-1] for w in candidates),Fraction())
     private=replace_worlds(board,tuple((*w[:4],w[-1]/total) for w in candidates))
-    return PrivateView(private,role,players,tuple(sorted(acquisitions)))
+    return PrivateView(private,role,players,tuple(sorted(acquisitions)),tuple(guards))

@@ -245,7 +245,7 @@ class WebTests(unittest.TestCase):
     def test_cast_summary_uses_actual_total_and_compact_role_counts(self):
         response = self.client.post('/start', data={'citizens':'4','mediums':'1','seers':'1','hunters':'1','wolves':'2','day':'max','night':'max'}, follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn('id="game-cast"><span id="game-cast-label">配役</span> 9人村:市民4 · 霊能1 · 占い師1 · 狩人1（能力なし） · 狼2</p>', response.get_data(as_text=True))
+        self.assertIn('id="game-cast"><span id="game-cast-label">配役</span> 9人村:市民4 · 霊能1 · 占い師1 · 狩人1（護衛：均等化） · 狼2</p>', response.get_data(as_text=True))
         self.assertEqual(self.state()['players'], 9)
         self.assertIn('id="total-count">9人<small>（最大9人）</small>', self.page('/'))
         self.client.post('/start', data={'citizens':'1','wolves':'1','day':'max','night':'max'})

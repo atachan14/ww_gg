@@ -12,11 +12,11 @@ from werewolf.model_a_public import public_forecast,horizon_for_action
 
 class EvaluationProjectionTests(unittest.TestCase):
     def test_projection_and_medium_memo_match_general_model_a_values(self):
-        for cast,claims in (((5,1,1,1,1),('medium',)+('latent',)*4),
+        for cast,claims in (((5,1,1,1,1),('medium','hunter')+('latent',)*3),
                             ((5,2,2,0,0),('medium','medium')+('latent',)*3),
                             ((5,1,4,0,0),('medium',)*5),
                             ((5,2,3,0,0),('medium',)*5)):
-            b=condition_claims(initial_board(*cast),claims,ClaimPolicy(medium='none',seer='none',hunter='none'))
+            b=condition_claims(initial_board(*cast),claims,ClaimPolicy(medium='none',seer='none',hunter='filled'))
             s=TrueScanState(from_board(b),(b.alive,),initial_rule='none',tracked=())
             for fake in ('random','max'):
                 policy=Strategy('max','max',fake_reports=fake);rules=Rules(initial_seer='none')

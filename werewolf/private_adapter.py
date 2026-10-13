@@ -1,8 +1,8 @@
 """Private table projection. Public policy evaluation never receives private worlds.
 
 Wolf finals and supported CO/all seer scan comparisons use a
-separate public-policy continuation. Other seer scopes and hunter mechanics
-remain explicit unsupported values.
+separate public-policy continuation. Uniform guards with a public-known single
+hunter are supported; hidden hunter/attack histories remain explicit unsupported.
 """
 from .exact import actual_role, legal_targets
 from .private_view import condition_private
@@ -32,7 +32,9 @@ def viewpoint_roles(board):
     return result
 
 
-def private_slots(board, player, rules):
+def private_slots(board, player, rules,role="seer"):
+    if role=="hunter":
+        return [{"day":night,"targets":[p for p in acquisition_roster(board.player_count,board.history,night+1) if p!=player]} for night in range(1,board.day)]
     slots = []
     for day in range(1, board.day + 1):
         if day == 1 and rules.initial_seer == 'none':
@@ -50,7 +52,17 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
               'hunter': '護衛能力の計算と秘密の護衛履歴は未対応です。',
               'wolf': '仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。'}[role]
     targets = legal_targets(private, rules, strategy) if role == 'wolf' else ()
-    final_values = {}
+    final_values = {};guard_dawn={}
+    if role=="hunter":
+        from .guard_view_forecast import guard_forecast
+        targets=tuple(p for p in public.alive if p!=players[0])
+        prepared=prepare_public_prior(game_state or {},public,rules,track_live_seers=strategy.disclosure_for("seer")=="all" and bool(public.initial_seer_count),max_work=max_work)
+        result=prepared if isinstance(prepared,FuturePending) else guard_forecast(public,players[0],private,prepared[0],prepared[1],rules,strategy,max_work=max_work,max_seconds=max_seconds)
+        if isinstance(result,FuturePending):
+            reason={"guard_hidden_attack_history_unimplemented":"狩人の正体が公開情報で未確定の場合、無死亡後の秘密襲撃履歴の評価は未対応です。","guard_multiple_hunters_unimplemented":"複数狩人の能力計算は未対応です。","guard_no_repeat_unimplemented":"連続護衛なしは未対応です。"}.get(result.reason,"護衛の能力計算は未対応または計算予算に達しました。")
+        else:
+            final_values,guard_dawn=result
+            reason="各行を今夜の固定護衛先として比較します。後続の護衛は均等化です。公開情報だけで他者の方針を選び、秘密の護衛先や成功通知は公開しません。"
     if role == 'seer':
         targets = tuple(p for p in public.alive if p != players[0])
         from .seer_view_forecast import seer_forecast
@@ -74,7 +86,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         else:
             final_values = dict(result); targets = tuple(final_values)
             reason = '占い先別の最終勝率です。狼は仲間を知って行動し、公開推理は死体との矛盾除外を維持します。すべて開示・CO固定・未訪問先優先。次の朝までの勝率は未対応です。'
-        if public.initial_hunter_count: reason += ' 狩人の護衛能力はこの計算に含まれません。'
+        if public.initial_hunter_count: reason += ' 護衛位置は均等化です。狩人未確定の秘密襲撃履歴は未対応です。'
     if role == 'wolf':
         state = None; past = ()
         if strategy.disclosure_for('seer') == 'all' and any(public.claims[p-1] == 'seer' for p in public.alive):
@@ -98,15 +110,28 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
             reason = reasons.get(result.reason, '現在の公開継続モデルでは最終勝率を計算できません。')
         else:
             final_values = dict(result)
+            if public.initial_hunter_count and state is not None:
+                from .model_a_public import horizon_for_action
+                from .information_set_forecast import InformationSetForecast
+                from .calculation_budget import calculation_budget,CalculationBudgetExceeded
+                from .seer_acquisition import normalize
+                from dataclasses import replace
+                mask=sum(1<<(p-1) for p in players)
+                try:
+                    with calculation_budget(max_work,max_seconds=max_seconds):
+                        engine=InformationSetForecast(rules,strategy,max_work=max_work)
+                        own=replace(state,hypotheses=normalize(tuple(h for h in state.hypotheses if h.roles[0]==mask)))
+                        guard_dawn={p:horizon_for_action(engine,public,state,past,p,own) for p in final_values}
+                except CalculationBudgetExceeded:guard_dawn={}
             reason += ' 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'
             if set(targets) - set(final_values): reason += ' 公開側の全仮説で合法にならない襲撃先は未対応です。'
-        if public.initial_hunter_count: reason += ' 狩人の護衛能力はこの計算に含まれません。'
+        if public.initial_hunter_count: reason += ' 護衛位置は均等化です。狩人未確定の秘密襲撃履歴は未対応です。'
     rows = []
     for p in range(1, public.player_count + 1):
         probabilities = {r: str(private.role_probability(p, r)) for r in ('villager', 'medium', 'seer', 'hunter', 'wolf')}
         probabilities['citizen'] = probabilities.pop('villager')
         probabilities['village'] = str(1 - private.wolf_probability(p))
-        dawn = immediate(private, p, rules, strategy) if role == 'wolf' and p in targets else None
+        dawn = immediate(private, p, rules, strategy) if role == 'wolf' and p in targets and not public.initial_hunter_count else guard_dawn.get(p)
         rows.append({'id': p, 'probabilities': probabilities,
                      'dawn': {'village': str(dawn.village_win), 'wolf': str(dawn.wolf_win)} if dawn else None,
                      'final': {'village': str(final_values[p]), 'wolf': str(1-final_values[p])} if p in final_values else None,

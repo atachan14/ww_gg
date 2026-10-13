@@ -98,7 +98,7 @@ def _replay(text):
     medium_applied=set()
     from .report_publication import publication_slot,condition_published_medium
     history=g['history']
-    if type(history) is not list or len(history)>max(0,g['players']-2):raise ValueError('保存された進行を確認してください。')
+    if type(history) is not list or len(history)>max(0,2*g['players']-2):raise ValueError('保存された進行を確認してください。')
     if history and history[0].get('seer_options')!=opt:raise ValueError('初日ルール・報告尤度の変更は初日へ戻って行ってください。')
     applied=set();scan={1:initial}
     def apply(p,claims,cp,policy,observed_model,group=False):

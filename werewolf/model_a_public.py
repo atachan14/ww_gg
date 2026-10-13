@@ -94,6 +94,9 @@ def evaluate_public_game(game,board,rules,strategy,*,max_work=250000,max_seconds
 
 def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
     if board.winner:return Forecast(F(board.winner=='village'),())
+    from .guard_model import scope_reason
+    reason=scope_reason(board,rules)
+    if reason:return FuturePending(reason)
     if InformationSetForecast(rules,strategy).exchangeable(board):
         from .exchangeable_public import exchangeable_forecast
         try:

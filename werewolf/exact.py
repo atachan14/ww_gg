@@ -38,9 +38,12 @@ class Strategy:
     medium_disclosure: str = "inherit"
     seer_position: tuple[str,...] = ("unvisited","uniform")
     fake_seer_policy: tuple[str,...] = ("noncontradictory","uniform")
+    guard_position: tuple[str,...] = ("uniform",)
 
     def __post_init__(self):
         if self.disclosure_common not in ('none','all') or self.seer_disclosure not in ('inherit','none','all') or self.medium_disclosure not in ('inherit','none','all'):raise ValueError('Choose none/all disclosure or inherit')
+        if isinstance(self.guard_position,list):object.__setattr__(self,'guard_position',tuple(self.guard_position))
+        if self.guard_position!=('uniform',):raise ValueError('Only uniform ordered guard-position items are supported')
         if isinstance(self.seer_position,list):object.__setattr__(self,'seer_position',tuple(self.seer_position))
         if self.seer_position!=('unvisited','uniform'):raise ValueError('Only unvisited then uniform scan position is supported')
         if isinstance(self.fake_seer_policy,list):object.__setattr__(self,'fake_seer_policy',tuple(self.fake_seer_policy))
@@ -65,7 +68,7 @@ def validate_strategy(rules: Rules, strategy: Strategy):
 
 ROLES = ('villager', 'medium', 'seer', 'hunter', 'wolf')
 VILLAGE_ROLES = ROLES[:-1]
-ROLE_LABELS = {'villager':'市民','medium':'霊能','seer':'占い師（能力なし）','hunter':'狩人（能力なし）','wolf':'狼','latent':'潜伏'}
+ROLE_LABELS = {'villager':'市民','medium':'霊能','seer':'占い師（能力なし）','hunter':'狩人','wolf':'狼','latent':'潜伏'}
 
 
 @dataclass(frozen=True)

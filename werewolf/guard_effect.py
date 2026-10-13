@@ -62,7 +62,7 @@ def resolve_guard(roles,alive,intent,attack,other_deaths=()):
         if (not isinstance(death,DeathCause) or type(death.player) is not int or death.player not in alive or
                 type(death.cause) is not str or not death.cause.strip() or death.cause=='wolf_attack'):
             raise ValueError('Other deaths must identify a separate nonempty cause')
-    prevented=intent.target==attack
+    prevented=guard_blocks_attack(intent,attack)
     deaths=other_deaths if prevented else (DeathCause(attack,'wolf_attack'),)+other_deaths
     dead={death.player for death in deaths}
     return GuardResolution(deaths,tuple(p for p in alive if p not in dead),prevented)
@@ -79,3 +79,8 @@ def resolve_guard_frame(frame,roles,other_deaths=()):
     if type(roles) is not tuple or getattr(frame.board,'player_count',len(roles))!=len(roles):
         raise ValueError('Role world must cover every frame player')
     return resolve_first_guard(roles,getattr(frame.board,'alive',None),frame.after,frame.target,other_deaths)
+
+
+def guard_blocks_attack(intent,attack):
+    """Shared match effect; callers validate legal intents before using it."""
+    return intent.target==attack

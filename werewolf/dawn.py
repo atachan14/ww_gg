@@ -1,8 +1,8 @@
 """Board-owned public night observations, separate from choosing a wolf action.
 
-The first implementation supports a single observed night death. Missing, empty,
-and multiple-death observations stay distinct; unsupported observations may be
-recorded, but may not be advanced with a fabricated transition probability.
+A single corpse and an empty observation with a public-known single guardian
+are supported. Missing, empty and multiple-death observations stay distinct;
+unsupported observations never advance with a fabricated probability.
 """
 from copy import deepcopy
 
@@ -27,10 +27,11 @@ def validate_observation(value, alive):
     return {'deaths': sorted(value['deaths'])}
 
 
-def unsupported_reason(observation):
+def unsupported_reason(observation,board=None,rules=None):
     if observation is None:
         return '夜明けの死体が未入力です。'
-    if not observation['deaths']:
+    from .guard_model import known_guardian
+    if not observation['deaths'] and not (board is not None and rules is not None and board.initial_hunter_count==1 and known_guardian(board) is not None and rules.allow_repeat_guard):
         return '死体なしの進行は未対応です。'
     if len(observation['deaths']) > 1:
         return '複数死体の進行は未対応です。'
@@ -61,9 +62,16 @@ def observe(progress, observation, rules, strategy):
     if progress.finished or progress.board.phase != 'night':
         raise ValueError('夜明けに到達していません。')
     observation = validate_observation(observation, progress.board.alive)
-    reason = unsupported_reason(observation)
+    reason = unsupported_reason(observation,progress.board,rules)
     if reason:
         raise ValueError(reason)
+    if not observation['deaths']:
+        from dataclasses import replace
+        from .exact import BoardOutcome
+        from fractions import Fraction
+        board=replace(progress.board,day=progress.board.day+1,phase='day')
+        return Progress(board,progress.settled_village,progress.settled_wolf,progress.board,
+                        (BoardOutcome(Fraction(1),board),))
     target = observation['deaths'][0]
     from .phase_updates import condition_night_corpse, observed_night_strategy
     try:
@@ -81,6 +89,6 @@ def advance_step(progress, step, rules):
         if 'deaths' in step:
             raise ValueError('死体履歴の種別がありません。')
         return advance(progress, step['target'], rules, Strategy(**step['policy']))
-    if step['observation'] != OBSERVATION or step.get('deaths') != [step['target']]:
+    if step['observation'] != OBSERVATION or step.get('deaths') != ([] if step['target'] is None else [step['target']]):
         raise ValueError('夜明けの保存履歴が不正です。')
     return observe(progress, {'deaths': step['deaths']}, rules, Strategy(**step['policy']))

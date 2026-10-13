@@ -66,7 +66,7 @@ def create_app(test_config=None, *, deployment=False):
             return manual_replay(state)
         rules = complete_rules(state["rules"])
         progress = Progress.initial(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
-        if len(state["history"]) > max(0, state["players"] - 2):
+        if len(state["history"]) > max(0, 2*state["players"] - 2):
             raise ValueError("Too much history")
         for index, step in enumerate(state["history"]):
             if step.get('result_disclosure_model') not in (None,DISCLOSURE_MODEL):raise ValueError('Invalid disclosure model')
@@ -156,11 +156,11 @@ def create_app(test_config=None, *, deployment=False):
         if reports not in ([],['max'],['random']):raise ValueError('偽霊能の報告方針を確認してください。')
         report_mode=reports[0] if reports else (state or {}).get('policy',{}).get('fake_reports','max')
         extra={}
-        for key in ('disclosure_common','seer_disclosure','medium_disclosure','seer_position','fake_seer_policy'):
+        for key in ('disclosure_common','seer_disclosure','medium_disclosure','seer_position','guard_position','fake_seer_policy'):
             values=request.form.getlist(key)
             if len(values)>1:raise ValueError('結果開示・占い位置は一つ選択してください。')
             if values:
-                try:extra[key]=json.loads(values[0]) if key in ('seer_position','fake_seer_policy') else values[0]
+                try:extra[key]=json.loads(values[0]) if key in ('seer_position','guard_position','fake_seer_policy') else values[0]
                 except json.JSONDecodeError as exc:raise ValueError('占い位置を確認してください。') from exc
             elif state and key in state['policy']:extra[key]=state['policy'][key]
         strategy = Strategy(one("day"), one("night"), inclusion == ["1"],report_mode,**extra)
@@ -221,6 +221,7 @@ def create_app(test_config=None, *, deployment=False):
 
     def render_main(state, error=None, status=200, night_context=None):
         disclosure_error=None
+        guard_scope_pending=False
         by_dawn_values={}
         try:rules,progress=replay(state)
         except DisclosureInconsistent as exc:
@@ -257,10 +258,12 @@ def create_app(test_config=None, *, deployment=False):
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
                     forecast=evaluate_public_game(state,board,rules,strategy,max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
                     if isinstance(forecast,FuturePending):
+                        guard_scope_pending=forecast.reason.startswith('guard_')
                         from werewolf.seer_manual import Pending
                         reasons={'initial_public_results_incomplete':'未公開結果を含む未来評価は現在Pendingです。','multiple_fake_report_correlation_unselected':'複数偽占いが生存する朝の共同報告は未対応のためPendingです。', 'current_morning_seer_reports_incomplete':'未公開結果を含む未来評価は現在Pendingです。','past_private_scan_history_missing':'過去の本人取得履歴が不足しているため未来評価できません。'}
                         reasons.update({'future_public_continuation_budget_exceeded':'未来の分岐が計算予算を超えました。公開情報を揃えるか、配役を絞ってください。','true_scan_generation_budget_exceeded':'未来占いの結果候補が計算予算を超えました。','observed_prior_private_ledger_budget_exceeded':'過去情報の再構成が計算予算を超えました。','future_fake_law_does_not_specify_initial_declarations':'初日の公開結果を入力してください。初日の偽報告自動生成は未設定です。'})
                         reasons.update({'information_set_budget_exceeded':'計算予算に達したためモデルAの評価はPendingです。旧モデルの数値には切り替えません。'})
+                        reasons.update({'guard_hidden_attack_history_unimplemented':'狩人の正体が公開情報で未確定の場合、無死亡後の秘密襲撃履歴の評価は未対応です。','guard_multiple_hunters_unimplemented':'複数狩人の能力計算は未対応です。','guard_no_repeat_unimplemented':'連続護衛なしの合法手制約は未対応です。'})
                         seer_pending=Pending(reasons.get(forecast.reason,'この情報・配役の未来評価はまだ計算できません。'))
                         primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                         action_values={}
@@ -285,7 +288,7 @@ def create_app(test_config=None, *, deployment=False):
                       if finished else board.role_probability(player, 'medium'))
             players.append({"medium_probability": medium, "citizen_probability": (sum((o.probability*o.board.role_probability(player,"villager") for o in progress.last_outcomes),Fraction(0)) if finished else board.role_probability(player,"villager")),
                             "extra_probabilities": {r:(sum((o.probability*o.board.role_probability(player,r) for o in progress.last_outcomes),Fraction(0)) if finished else board.role_probability(player,r)) for r in ("seer","hunter")},
-                            "claim": board.claims[player - 1], "legal": player in action_values,
+                            "claim": board.claims[player - 1], "legal": player in action_values or (guard_scope_pending and not finished and board.phase=='day' and player in board.alive),
                             "id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
                             "action": action_values.get(player), "by_dawn": by_dawn_values.get(player) if player in action_values else None})
@@ -310,8 +313,9 @@ def create_app(test_config=None, *, deployment=False):
             viewpoint_seed = {'roles': viewpoint_roles(board), 'revision': state['revision'],
                               'board_id': state['public_log']['board_id'],
                               'claims': list(board.claims), 'public_results': state.get('seer_inputs', []),
-                              'slots': {str(p): private_slots(board, p, rules) for p in board.alive}}
-        return render_template("main.html", viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+                              'slots': {str(p): private_slots(board, p, rules) for p in board.alive},
+                              'guard_slots': {str(p): private_slots(board,p,rules,role='hunter') for p in board.alive}}
+        return render_template("main.html", guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
@@ -408,7 +412,7 @@ def create_app(test_config=None, *, deployment=False):
     def start():
         draft = SetupDraft.from_form(request.form)
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "fake_seer_policy"}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
@@ -481,7 +485,7 @@ def create_app(test_config=None, *, deployment=False):
         from werewolf.dawn import current_observation, validate_observation, unsupported_reason, observe
         rules, before = structural_replay(state)
         observation = validate_observation(current_observation(state), before.board.alive)
-        pending = unsupported_reason(observation)
+        pending = unsupported_reason(observation, before.board, rules)
         after = None
         if not pending:
             try:
@@ -545,7 +549,7 @@ def create_app(test_config=None, *, deployment=False):
             observe(progress, observation, rules, Strategy(**state['policy']))
             step = {k: deepcopy(state[k]) for k in ('policy', 'claims', 'claim_policy',
                     'strategy_ui', 'reports', 'seer_options', 'result_disclosure_model') if k in state}
-            step.update(target=observation['deaths'][0], deaths=observation['deaths'], observation=OBSERVATION)
+            step.update(target=observation['deaths'][0] if observation['deaths'] else None, deaths=observation['deaths'], observation=OBSERVATION)
             proposed = {**state, 'history': state['history'] + [step],
                         'selection': None, 'revision': state['revision'] + 1}
             from werewolf.public_log import migrate, project
@@ -568,7 +572,7 @@ def create_app(test_config=None, *, deployment=False):
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
         try:
-            allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "strategy_ui", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "fake_seer_policy"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
+            allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "strategy_ui", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if state.get("seer_mode") == "information-fixed-v1":

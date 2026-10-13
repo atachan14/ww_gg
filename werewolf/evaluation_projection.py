@@ -2,7 +2,8 @@
 
 Only solver inputs are projected; rendered/replayed Boards stay unchanged.
 Wolf identities and living medium-CO truth bits retain their joint weights.
-Latent medium locations, ability-free hunters and nonpublishing seers cannot
+Registered hunters remain in the original joint law. In ability-free calls,
+latent medium locations and nonpublishing seers cannot
 affect future actions/reports. A representative valid medium mask preserves
 Board count invariants without treating its latent positions as new evidence.
 """
@@ -13,6 +14,7 @@ from .seer_future_uniform import TrueScanState
 
 
 def project_evaluation(board,state,strategy):
+    if board.initial_hunter_count:return board,state
     if strategy.disclosure_for('seer')=='all' and any(board.claims[p-1]=='seer' for p in board.alive):
         return project_fixed_co_roles(board,state)
     return project_without_future_seers(board,state)
@@ -36,8 +38,7 @@ def project_fixed_co_roles(board,state):
     """Fixed CO: retain wolves, publishing role truth and their acquisitions.
 
     Medium/seer locations outside living COs and ability-free hunter locations
-    have no future public effect. Registered guard effects must disable this
-    reduction; the current model has no hunter actions or private guard ledger.
+    have no future public effect. The guarded facade bypasses this reduction.
     Keep a valid original joint placement, not independently invented masks.
     Public probabilities and observer ledgers stay on their original Boards.
     """

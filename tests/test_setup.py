@@ -62,7 +62,7 @@ class SetupWebTests(unittest.TestCase):
         html = self.client.get('/').get_data(as_text=True)
         self.assertIn('サンプル②', html)
         self.assertIn('>サンプル</option>', html)
-        self.assertEqual(html.count('class="exclusive-field inactive-item"'), 3)
+        self.assertEqual(html.count('class="exclusive-field inactive-item"'), 2)
         for invalid in ({}, {'players':9}, {'players':5,'wolves':1,'rules':{'allow_self_bite':'false'},'policy':{'day':'max','night':'max'},'history':[],'selection':None,'revision':0}):
             with self.client.session_transaction() as session:
                 session['game'] = invalid

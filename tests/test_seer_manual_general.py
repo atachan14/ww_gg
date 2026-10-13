@@ -73,12 +73,12 @@ class SeerManualGeneralTests(unittest.TestCase):
     def test_ability_scope_is_in_help_not_permanent_main_prose(self):
         self.start(7,w=2,s=1,m=1,h=1)
         html=self.client.get('/main').data;help=self.client.get('/help/specs').get_data(as_text=True)
-        self.assertNotIn(b'data-information-fixed-scope',html);self.assertIn('護衛・GJは未対応',help);self.assertIn('従来の未来報告モデル',help)
+        self.assertNotIn(b'data-information-fixed-scope',html);self.assertIn('秘密襲撃履歴の評価は未対応',help);self.assertIn('従来の未来報告モデル',help)
 
-    def test_mixed_roles_abilityless_hunter_explicit_and_unmodified_prior(self):
+    def test_mixed_roles_uncertain_hunter_explicit_and_unmodified_prior(self):
         self.start(7,w=2,s=1,m=1,h=1);self.configure()
         board=replay(self.game())[1].board;self.assertEqual(board.worlds,initial_board(7,2,1,1,1).worlds)
-        html=self.client.get('/main',follow_redirects=True).data;self.assertIn('狩人護衛・GJは未対応',self.client.get('/help/specs').get_data(as_text=True))
+        html=self.client.get('/main',follow_redirects=True).data;self.assertIn('狩人1人が公開情報で確定',self.client.get('/help/specs').get_data(as_text=True))
         self.assertEqual(board.initial_hunter_count,1)
 
     def mixed_progress(self):

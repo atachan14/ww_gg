@@ -36,11 +36,11 @@
   };
   let controller;
   const mountSecret=(role,player)=>{
-   const draft=store.open({player,role,claims:[seed.claims[player-1]],publicResults:seed.public_results});
+   const draft=store.open({player,role,claims:[seed.claims[player-1]],publicResults:role==='hunter'?[]:seed.public_results});
    if(!table.querySelector(`[data-private-details="${player}:${role}"]`)){
     const row=window.renderBoardPrivateRow({table,player,role,label:role==='seer'?'占い師':'狩人',
-     slots:role==='seer'?seed.slots[String(player)]:[],draft,onChange:edit=>{store.edit(edit);controller.refresh();}});
-    if(role==='hunter')row.querySelector('[data-private-results]').textContent='護衛履歴の入力・能力計算は未対応です。';
+     slots:role==='seer'?seed.slots[String(player)]:(seed.guard_slots?.[String(player)]||[]),draft,onChange:edit=>{store.edit(edit);controller.refresh();}});
+
    }
    return draft.results;
   };
@@ -71,7 +71,7 @@
       const key=cell.dataset.valueCell;cell.replaceChildren();
       if(key in player.probabilities)cell.append(probability(player.probabilities[key]));
       else if(player[key])cell.append(probability(player[key].village),' / ',probability(player[key].wolf));
-      else{cell.textContent=['wolf','seer'].includes(controller.getState().role)&&!player.legal?'—':'未対応';cell.title=result.reason;}
+      else{cell.textContent=['wolf','seer','hunter'].includes(controller.getState().role)&&!player.legal?'—':'未対応';cell.title=result.reason;}
      }
     }
     status.textContent=`${result.reason} ${controller.getState().role==='wolf'?'能力先の比較用です。':'秘密欄だけ編集できます。'} 公開CO・公開ログは変更しません。BoardOverviewは公開情報の計算です。`;

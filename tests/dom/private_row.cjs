@@ -7,4 +7,10 @@ assert.equal(row.previousElementSibling.dataset.nightReports,'2');assert.equal(r
 assert.equal(row.querySelector('[data-private-target="1"]').value,'3');assert.equal(row.querySelector('[data-private-color="1"]').value,'white');
 const target=row.querySelector('[data-private-target="2"]');target.value='4';target.dispatchEvent(new w.Event('change'));assert.equal(changed.results[1].target,4);assert.equal(changed.results[1].color,null);
 const color=row.querySelector('[data-private-color="2"]');color.value='black';color.dispatchEvent(new w.Event('change'));assert.equal(changed.results[1].color,'black');assert.equal(d.querySelector('[data-night-reports]').outerHTML,publicHtml);
-assert.equal([...new w.FormData(d.querySelector('form'))].length,0);assert.equal(row.querySelector('select').form,null);dom.window.close();console.log('Private detail row: separate published row, day slots, edit callback, excluded from public form: PASS');
+assert.equal([...new w.FormData(d.querySelector('form'))].length,0);assert.equal(row.querySelector('select').form,null);
+const guard=w.renderBoardPrivateRow({table:d.querySelector('table'),player:2,role:'hunter',label:'狩人',slots:[{day:1,targets:[1,3,4]}],draft:{results:[]},onChange:value=>changed=value});
+assert.equal(guard.querySelectorAll('[data-private-color]').length,0);
+const guardTarget=guard.querySelector('[data-private-target="1"]');guardTarget.value='4';guardTarget.dispatchEvent(new w.Event('change'));
+assert.deepEqual(changed.results.map(r=>[r.day,r.target,r.color]),[[1,4,null]]);assert.equal([...new w.FormData(d.querySelector('form'))].length,0);
+assert.equal(d.querySelector('[data-night-reports]').outerHTML,publicHtml);
+dom.window.close();console.log('Private detail row: separate published row, day/night slots, seer colors, guard targets without success, edit callback, excluded from public form: PASS');

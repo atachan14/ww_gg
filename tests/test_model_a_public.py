@@ -53,8 +53,8 @@ class PublicModelATests(unittest.TestCase):
         self.assertEqual(dict(result.by_dawn_values),{p:HorizonValues(F(0),F(0)) for p in b.alive})
         self.assertEqual(result.pending_metrics,())
 
-    def test_count_fast_path_matches_uncompressed_model_a_with_ability_free_roles(self):
-        b=initial_board(5,1,1,1,1);s=joint(b)
+    def test_count_fast_path_matches_uncompressed_model_a_with_nonpublishing_seers(self):
+        b=initial_board(5,1,1,1,0);s=joint(b)
         for included in (False,True):
             for mode in ('random','max'):
                 strategy=Strategy('max',mode,include_self_bite=included,disclosure_common='none')
