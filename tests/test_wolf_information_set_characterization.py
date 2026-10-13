@@ -1,4 +1,4 @@
-"""Investigation oracles only: production policies remain unchanged."""
+"""Information-set reference oracles and model-A regression."""
 import unittest
 from collections import defaultdict
 from fractions import Fraction as F
@@ -20,15 +20,14 @@ def roster_random_kernel(board):
 
 
 class WolfInformationSetCharacterizationTests(unittest.TestCase):
-    def test_minimal_three_alive_counterexample_reproduces_current_pending(self):
+    def test_minimal_three_alive_counterexample_is_resolved(self):
         seed=replace_worlds(initial_board(4,1,0,1),((2,0,1,0,F(1,2)),(1,0,4,0,F(1,2))))
         seed=condition_claims(seed,('seer','latent','latent','latent'),ClaimPolicy(seer='none'))
         b=next(o.board for o in action_outcomes(seed,4,Rules(initial_seer='none'),Strategy()) if o.board.winner is None)
         s=project_private(TrueScanState(from_board(seed),((1,2,3,4),),initial_rule='none',tracked=(1,)),b)
         self.assertEqual(legal_targets(b,Rules(),Strategy()),(1,2,3))
         result=seer_forecast(b,1,(),Rules(initial_seer='none'),Strategy('max','random'),scan_state=s)
-        self.assertIsInstance(result,FuturePending)
-        self.assertEqual(result.reason,'seer_view_public_instruction_private_illegal')
+        self.assertEqual(dict(result),{2:F(0),3:F(0)})
         masses,policies=roster_random_kernel(b);actual=defaultdict(F)
         for mask,policy in policies.items():
             for p,q in policy.items():actual[p]+=masses[mask]*q

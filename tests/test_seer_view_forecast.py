@@ -10,7 +10,7 @@ from werewolf.seer_future_forecast import project_private
 from werewolf.seer_view_forecast import seer_forecast
 
 
-def fixture(weights=(F(1,2),F(1,4),F(1,4))):
+def fixture(weights=(F(3,5),F(3,10),F(1,10))):
     seed=replace(replace_worlds(initial_board(5,1,0,1),tuple((mask,0,1,0,q) for mask,q in zip((2,4,8),weights))),
                  claims=('seer','latent','latent','latent','latent'))
     b=next(o.board for o in action_outcomes(seed,5,Rules(initial_seer='none'),Strategy()) if o.board.winner is None)
@@ -22,7 +22,7 @@ class SeerForecastTests(unittest.TestCase):
     def test_target_information_values_are_computed_not_constant(self):
         b,s=fixture();before=copy.deepcopy((b,s))
         result=seer_forecast(b,1,(),Rules(initial_seer='none'),Strategy('max','random'),scan_state=s)
-        self.assertEqual(dict(result),{2:F(3,4),3:F(19,24),4:F(19,24)})
+        self.assertEqual(dict(result),{2:F(5,6),3:F(5,6),4:F(23,30)})
         self.assertEqual((b,s),before)
 
     def test_symmetric_targets_and_max_ties_are_equal(self):
@@ -60,8 +60,12 @@ class SeerForecastTests(unittest.TestCase):
     def test_private_scan_choice_never_changes_public_scores(self):
         b,s=fixture();trace={}
         seer_forecast(b,1,(),Rules(initial_seer='none'),Strategy('max','random'),scan_state=s,trace=trace)
-        roots=[x['values'] for x in trace['public_rankings'] if x['history']==((1,'day',5),)]
-        self.assertEqual(len(roots),3);self.assertTrue(all(x==roots[0] for x in roots))
+        roots=[x for x in trace['wolf_policies'] if tuple((e.day,e.phase,e.target) for e in x['history'])==((1,'day',5),)]
+        self.assertTrue(roots)
+        for mask in (2,4,8):
+            policies=[x['policy'] for x in roots if x['mask']==mask]
+            self.assertEqual(len(policies),3);self.assertTrue(all(p==policies[0] for p in policies))
+
 
 
 class SeerRouteTests(unittest.TestCase):

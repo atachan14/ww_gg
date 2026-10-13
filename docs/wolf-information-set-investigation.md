@@ -1,6 +1,7 @@
 # 狼情報集合による襲撃方針の調査（2026-10-13）
 
 調査基準: `be2cc0064632893bde4ba620eb7f6e5a365bc23f`。
+この調査は `1189a8b` 時点の記録。ユーザー承認のAの実装結果は [wolf-information-set-model-a-checks.md](wolf-information-set-model-a-checks.md) を参照。
 本変更は調査記録と再現テストのみ。`werewolf/`、UI、実行中サーバーの計算は変更しない。
 
 ## 結論

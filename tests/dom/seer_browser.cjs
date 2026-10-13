@@ -34,10 +34,18 @@ const {chromium}=require('playwright'),assert=require('assert');
  await multi();if(await page.locator('[data-status-target="1"]').getAttribute('aria-pressed')!=='true')await page.locator('[data-status-target="1"]').click();
  await page.locator('#advance-button').click();await page.waitForSelector('#board-viewpoint-seed',{state:'attached'});
  await page.locator('[data-viewpoint-role="seer"]').click();await page.locator('tr[data-player="2"]').click();await viewing();
- for(const id of [4,5])assert.equal(await page.locator(`tr[data-player="${id}"] [data-value-cell="final"]`).textContent(),'87.5% / 12.5%');
+ for(const id of [4,5])assert.equal(await page.locator(`tr[data-player="${id}"] [data-value-cell="final"]`).textContent(),'83.33% / 16.67%');
  if(process.env.WW_GG_MULTI_SCREENSHOT)await page.screenshot({path:process.env.WW_GG_MULTI_SCREENSHOT,fullPage:true});
  await multi();await page.locator('[data-status-target="3"]').click();await page.locator('#advance-button').click();await page.waitForSelector('main[data-screen="result"]');
  assert.equal(await page.locator('#board-viewpoint-seed').count(),0);
+ // Previously impossible common bite: true CO1 privately identifies wolf2,
+ // while the public still supports fake CO1/wolf1. Model A chooses legal bites.
+ await context.request.post('/start',{form:{citizens:'2',wolves:'1',seers:'1',day:'max',night:'random',initial_seer:'normal',cco_seer:'none'}});
+ await page.goto('/main');const minimumRevision=await page.locator('#action-form input[name="revision"]').inputValue();
+ const minimum=await context.request.post('/table-publish',{form:{revision:minimumRevision,payload:JSON.stringify({claims:['seer','latent','latent','latent'],seers:[{day:1,reporter:1,target:3,color:'white'}],mediums:[]})}});
+ assert(minimum.ok(),await minimum.text());await page.reload();await page.locator('[data-status-target="4"]').click();await page.locator('#advance-button').click();
+ await page.waitForSelector('#board-viewpoint-seed',{state:'attached'});await view();
+ assert.equal(await page.locator('tr[data-player="2"] [data-value-cell="final"]').textContent(),'0% / 100%');
  // Real mixed-count Board: known wolf CO2, initial white3, execute7.
  const seven=async(target)=>{
   await context.request.post('/start',{form:{citizens:'4',wolves:'2',seers:'1',day:'max',night:'max',initial_seer:'normal'}});
@@ -50,5 +58,5 @@ const {chromium}=require('playwright'),assert=require('assert');
  for(const id of [2,4,5,6])assert.equal(await page.locator(`tr[data-player="${id}"] [data-value-cell="final"]`).textContent(),'50% / 50%');
  await seven(3);
  for(const id of [2,4,5,6,7])assert.equal(await page.locator(`tr[data-player="${id}"] [data-value-cell="final"]`).textContent(),'33.33% / 66.67%');
- assert.deepEqual(errors,[]);await browser.close();console.log('Edge seer: prior scopes, double-CO same-white 7/8, terminal branch, actual 7-player mixed-count 1/2 and two-live-wolf 1/3 comparisons: PASS');
+ assert.deepEqual(errors,[]);await browser.close();console.log('Edge model A: prior scopes, same-white 5/6, terminal branch, resolved illegal-bite 0/1, mixed-count 1/2, two-live-wolf 1/3: PASS');
 })().catch(e=>{console.error(e);process.exit(1);});

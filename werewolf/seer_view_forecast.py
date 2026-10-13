@@ -7,7 +7,7 @@ Public decisions see the full prior, including every possible target and fake CO
 """
 from fractions import Fraction as F
 from .seer_future_uniform import FuturePending, candidates
-from .wolf_view_forecast import wolf_forecast
+from .information_set_forecast import information_forecast
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 
 
@@ -36,8 +36,8 @@ def seer_forecast(public, player, acquisitions, rules, strategy, *, scan_state, 
                 def observer(h, state):
                     return compatible(h) and (len(state.rosters) < day or
                         any(a.player == player and a.day == day and a.target == target for a in h.acquisitions))
-                value = wolf_forecast(public, None, rules, strategy, scan_state=scan_state, past=past,
-                                      max_work=max_work, max_seconds=max_seconds, trace=trace, observer=observer)
+                value = information_forecast(public, scan_state, past, rules, strategy,
+                                             max_work=max_work, max_seconds=max_seconds, trace=trace, observer=observer)
                 if isinstance(value, FuturePending): return value
                 values.append((target, value))
     except CalculationBudgetExceeded:

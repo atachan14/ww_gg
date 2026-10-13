@@ -64,8 +64,8 @@ class MultipleWolfSeerTests(unittest.TestCase):
         before=game();cookie=c.get_cookie('session').value
         r=c.post('/private-view',data={'revision':str(before['revision']),'board_id':before['public_log']['board_id'],'payload':json.dumps({'role':'seer','players':[2],'results':[{'day':1,'target':3,'color':'white'}]})})
         self.assertEqual(r.status_code,200,r.get_data(as_text=True))
-        self.assertEqual(r.get_json()['players'][3]['final'],{'village':'7/8','wolf':'1/8'})
-        self.assertEqual(r.get_json()['players'][4]['final'],{'village':'7/8','wolf':'1/8'})
+        self.assertEqual(r.get_json()['players'][3]['final'],{'village':'5/6','wolf':'1/6'})
+        self.assertEqual(r.get_json()['players'][4]['final'],{'village':'5/6','wolf':'1/6'})
         self.assertEqual(game(),before);self.assertEqual(c.get_cookie('session').value,cookie)
         # Executing the publicly nonwolf target leaves two wolves among four:
         # every branch ends immediately; there is no continuing night to scan.

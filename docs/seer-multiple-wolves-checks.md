@@ -1,6 +1,7 @@
 # 占い比較の複数狼・公開狼数不確定への拡張（2026-10-13）
 
 基準: `b12df1dbe529f06f927545e5e27f684e4e98fbc2`。ローカル開発のみ。
+これは `be2cc006` 時点の記録。後続のAモデルで不合法な共通指示を解消した結果と数値差は [wolf-information-set-model-a-checks.md](wolf-information-set-model-a-checks.md) を参照。
 
 ## 変更
 

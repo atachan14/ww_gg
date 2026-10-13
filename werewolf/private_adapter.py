@@ -7,7 +7,7 @@ remain explicit unsupported values.
 from .exact import actual_role, legal_targets
 from .private_view import condition_private
 from .by_dawn import immediate
-from .wolf_view_forecast import wolf_forecast
+from .information_set_forecast import information_forecast
 from .seer_future_uniform import FuturePending
 
 
@@ -48,7 +48,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     private = view.board
     reason = {'seer': '占い先の取得履歴と将来の公開判断を分離した勝率評価は未対応です。',
               'hunter': '護衛能力の計算と秘密の護衛履歴は未対応です。',
-              'wolf': '公開戦略に従う狼条件付き最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。'}[role]
+              'wolf': '仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。'}[role]
     targets = legal_targets(private, rules, strategy) if role == 'wolf' else ()
     final_values = {}
     if role == 'seer':
@@ -67,13 +67,14 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 result = seer_forecast(public, players[0], view.acquisitions, rules, strategy,
                                        scan_state=state, past=past, max_work=max_work, max_seconds=max_seconds)
         reasons = {'seer_view_unpublished_own_action_unimplemented': 'なし開示：未公開結果を本人の後続行動へ使う評価は未対応です。',
-                   'seer_view_public_instruction_private_illegal': '公開方針の襲撃先が本人の条件付き分布の一部狼数仮説で不合法です。この場合の秘密戦略は未対応のため未計算です。',
+                   'information_set_budget_exceeded': '狼情報集合の評価が計算予算を超えたため最終勝率は未計算です。',
+                   'multiple_fake_report_correlation_unselected': '複数偽占いの共同報告モデルが未対応のため最終勝率は未計算です。',
                    'seer_view_latent_future_co_unimplemented': '潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。'}
         if isinstance(result, FuturePending):
             reason = reasons.get(result.reason, '占いの公開取得履歴・未来報告モデルまたは計算予算が未対応のため未計算です。')
         else:
             final_values = dict(result); targets = tuple(final_values)
-            reason = '占い先別の最終勝率です。すべて開示・CO固定・未訪問先優先の既存モデルで比較します。次の朝までの勝率は未対応です。'
+            reason = '占い先別の最終勝率です。狼は仲間を知って行動し、公開推理は死体との矛盾除外を維持します。すべて開示・CO固定・未訪問先優先。次の朝までの勝率は未対応です。'
         if public.initial_hunter_count: reason += ' 狩人の護衛能力はこの計算に含まれません。'
     if role == 'wolf':
         state = None; past = ()
@@ -84,13 +85,19 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 result = prepared
             else:
                 state, past = prepared
-                result = wolf_forecast(public, sum(1 << (p-1) for p in players), rules, strategy,
-                                       scan_state=state, past=past, max_work=max_work, max_seconds=max_seconds)
+                result = information_forecast(public, state, past, rules, strategy,
+                                              mask=sum(1 << (p-1) for p in players), max_work=max_work, max_seconds=max_seconds)
         else:
-            result = wolf_forecast(public, sum(1 << (p-1) for p in players), rules, strategy,
-                                   max_work=max_work, max_seconds=max_seconds)
+            from .seer_acquisition import from_board
+            from .seer_future_uniform import TrueScanState
+            rosters=tuple(tuple(p for p in range(1,public.player_count+1)
+                                if not any(e.target==p and (e.day<day-1 or e.day==day-1 and e.phase=='day') for e in public.history))
+                          for day in range(1,public.day+1))
+            state=TrueScanState(from_board(public),rosters,rules.initial_seer,tracked=(),observed_prefix=public.day)
+            result = information_forecast(public, state, past, rules, strategy,
+                                          mask=sum(1 << (p-1) for p in players), max_work=max_work, max_seconds=max_seconds)
         if isinstance(result, FuturePending):
-            reasons = {'wolf_view_continuation_budget_exceeded': '最終勝率が計算予算を超えたため未計算です。',
+            reasons = {'information_set_budget_exceeded': '最終勝率が計算予算を超えたため未計算です。',
                        'future_public_continuation_budget_exceeded': '公開側の未来計算が計算予算を超えたため未計算です。',
                        'multiple_fake_report_correlation_unselected': '複数偽占いの共同報告モデルが未対応のため最終勝率は未計算です。',
                        'full_disclosure_truth_not_conditioned': '公開側の占い取得履歴が不足するため最終勝率は未計算です。',
@@ -98,7 +105,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
             reason = reasons.get(result.reason, '現在の公開継続モデルでは最終勝率を計算できません。')
         else:
             final_values = dict(result)
-            if state is not None: reason += ' 未来占いは既存の未訪問先優先・均等報告モデルを使用します。'
+            reason += ' 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'
             if set(targets) - set(final_values): reason += ' 公開側の全仮説で合法にならない襲撃先は未対応です。'
         if public.initial_hunter_count: reason += ' 狩人の護衛能力はこの計算に含まれません。'
     rows = []

@@ -74,7 +74,7 @@
       else{cell.textContent=['wolf','seer'].includes(controller.getState().role)&&!player.legal?'—':'未対応';cell.title=result.reason;}
      }
     }
-    status.textContent=`${result.reason} ${controller.getState().role==='wolf'?'能力先の比較用です。':'秘密欄だけ編集できます。'} 公開CO・公開ログは変更しません。BoardOverviewは公開情報の勝率です。`;
+    status.textContent=`${result.reason} ${controller.getState().role==='wolf'?'能力先の比較用です。':'秘密欄だけ編集できます。'} 公開CO・公開ログは変更しません。BoardOverviewは従来の公開計算です。`;
     window.refreshParallelLayout?.();
    },
    onError:error=>{pending('不整合');status.textContent=`不整合：${error.message} 秘密欄を修正するか「全体」で戻ってください。`;}
