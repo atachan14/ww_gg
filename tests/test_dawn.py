@@ -76,13 +76,13 @@ class DawnBoardTests(unittest.TestCase):
 
     def test_day_dawn_day_loop_and_log_ownership(self):
         root = self.g()['public_log']['board_id']
-        self.assertIn('Day2・夜明けへ', self.c.get('/main').get_data(as_text=True))
+        self.assertIn('Day1・夜へ', self.c.get('/main').get_data(as_text=True))
         self.execute()
         dawn = self.g()['public_log']['board_id']
         node = self.g()['public_log']['board_graph']['nodes'][dawn]
         self.assertEqual((node['phase'], node['day']), ('dawn', 2))
         html = self.c.get('/main').get_data(as_text=True)
-        self.assertIn('Day 2 · 夜明け', html)
+        self.assertIn('Day 1 · 夜', html)
         self.assertNotIn('name="target"', html)
         self.assertNotIn('data-table-update', html)
         self.assertEqual(self.post('/dawn-advance').status_code, 400)
@@ -95,12 +95,40 @@ class DawnBoardTests(unittest.TestCase):
         html = self.c.get('/main').get_data(as_text=True)
         self.assertIn('Day 2 · 昼', html)
         self.assertNotIn('data-system-log', html)
-        self.assertIn('Day2・夜明けへ', html)
+        self.assertIn('Day1・夜へ', html)
         self.back()
         self.assertEqual(self.g()['public_log']['board_id'], dawn)
         self.assertIn('Player2が死亡', self.c.get('/main').get_data(as_text=True))
         self.back()
         self.assertEqual(self.g()['public_log']['board_id'], root)
+
+    def test_shared_table_and_death_dates(self):
+        import re
+        day = self.c.get('/main').get_data(as_text=True)
+        self.execute()
+        night = self.c.get('/main').get_data(as_text=True)
+        self.assertEqual(re.search(r'<thead>.*?</thead>', day, re.S).group(),
+                         re.search(r'<thead>.*?</thead>', night, re.S).group())
+        self.assertIn('data-night-board', night)
+        self.assertIn('data-value-cell="final"', night)
+        self.assertIn('D1 処刑', night)
+        self.assertNotIn('data-status-target="1"', night)
+        self.assertNotIn('data-co-toggle', night)
+        self.report()
+        night = self.c.get('/main').get_data(as_text=True)
+        self.assertIn('D1 襲撃', night)
+        self.assertEqual(self.post('/dawn-advance').status_code, 303)
+        day2 = self.c.get('/main').get_data(as_text=True)
+        self.assertIn('D1 処刑', day2)
+        self.assertIn('D1 襲撃', day2)
+        self.assertNotIn('data-status-target="2"', day2)
+
+    def test_result_back_uses_previous_action_day(self):
+        self.start(citizens='2')
+        self.execute()
+        html = self.c.get('/result').get_data(as_text=True)
+        self.assertIn('Day1・昼へ', html)
+        self.assertNotIn('Day0', html)
 
     def test_missing_no_death_and_multiple_are_distinct_and_saved(self):
         self.execute()

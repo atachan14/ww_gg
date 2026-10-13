@@ -38,7 +38,7 @@
     document.querySelector('#information-panel').innerHTML=doc.querySelector('#information-panel').innerHTML;
     for(const row of document.querySelectorAll('.player-table tr[data-player]')){
       const remote=doc.querySelector(`.player-table tr[data-player="${row.dataset.player}"]`);if(!remote)continue;
-      for(let i=4;i<row.cells.length-1;i++)row.cells[i].innerHTML=remote.cells[i].innerHTML;
+      for(const cell of row.querySelectorAll('[data-value-cell]')){const source=remote.querySelector(`[data-value-cell="${cell.dataset.valueCell}"]`);if(source)cell.innerHTML=source.innerHTML;}
     }
     const old=document.querySelector('[data-hybrid-groups]'),next=doc.querySelector('[data-hybrid-groups]');
     if(old)old.remove();if(next)document.querySelector('#action-form').append(next.cloneNode(true));
@@ -72,7 +72,7 @@
     rendering=false;window.refreshParallelLayout?.();
   };
   for(const row of document.querySelectorAll('.player-table tr[data-player]')){
-    const player=Number(row.dataset.player),cell=row.cells[3];cell.replaceChildren();
+    const player=Number(row.dataset.player),cell=row.querySelector('[data-col="co"]');cell.replaceChildren();
     const picker=select([['latent','--'],...seed.roles.map(r=>[r,labels[r]])],baseline.claims[player-1],value=>{
       mutate(next=>{const before=next.claims[player-1];
       if(before==='seer'||before==='medium')roleStash.set(`${player}:${before}`,clone(next[before==='seer'?'seers':'mediums'].filter(r=>r.reporter===player)));
@@ -80,7 +80,7 @@
       if(value==='seer'||value==='medium'){const key=value==='seer'?'seers':'mediums';const rows=roleStash.get(`${player}:${value}`)||(baseline.claims[player-1]===value?baseline[key].filter(r=>r.reporter===player):[]);if(!next[key].some(r=>r.reporter===player))next[key].push(...clone(rows));}
       });render();
     });picker.dataset.tableCo=String(player);picker.disabled=seed.finished||!seed.alive.includes(player);cell.append(picker);
-    const detail=document.createElement('tr');detail.className='co-detail-row';detail.dataset.tableDetails=String(player);const spacer=document.createElement('td'),roleCell=document.createElement('td'),statusSpacer=document.createElement('td'),td=document.createElement('td');roleCell.dataset.tableRoleLabel='';roleCell.className='co-role-label';td.dataset.tableResults='';td.colSpan=row.cells.length-3;const host=document.createElement('div');host.className='co-line';td.append(host);detail.append(spacer,roleCell,statusSpacer,td);row.after(detail);selectors.push({player,picker,host,row,detail});
+    const detail=document.createElement('tr');detail.className='co-detail-row';detail.dataset.tableDetails=String(player);const spacer=document.createElement('td'),roleCell=document.createElement('td'),td=document.createElement('td');roleCell.dataset.tableRoleLabel='';roleCell.className='co-role-label';td.dataset.tableResults='';td.colSpan=row.cells.length-2;const host=document.createElement('div');host.className='co-line';td.append(host);detail.append(spacer,roleCell,td);row.after(detail);selectors.push({player,picker,host,row,detail});
   }
   const preview=async id=>{
     controller=new AbortController();try{

@@ -3,6 +3,12 @@
 function updateTargetPreview(root = document, target = null) {
   const preview = root.querySelector('[data-target-preview]');
   if (!preview) return;
+  const night = root.querySelector('[data-night-board]') || (root.matches?.('[data-night-board]') ? root : null);
+  if (night) {
+    const button = night.querySelector('[data-status-target][aria-pressed="true"]');
+    preview.textContent = `${preview.dataset.actionLabel}：${button ? `Player${button.dataset.statusTarget}` : '未選択'}`;
+    return;
+  }
   const selected = Array.from(root.querySelectorAll('input[name="target"]')).find(input =>
     !input.disabled && (target === null ? input.checked : input.value === target));
   preview.textContent = `${preview.dataset.actionLabel}：${selected ? `Player${selected.value}` : '未選択'}`;
@@ -96,6 +102,7 @@ function initializeUI() {
     });
   });
 
+  initializeStatusChoices();
   updateTargetPreview();
 
   const presetSeed = document.querySelector('#setup-presets');
@@ -252,7 +259,7 @@ function initializeLiveClaims() {
         const main = html.querySelector('main');
         if (!main || main.dataset.screen !== 'main') throw new Error('画面を再読込してから入力してください。');
         const selected = form.dataset.manualSelection === 'true' ? form.querySelector('input[name="target"]:checked')?.value : null;
-        if (selected) {
+        if (form.dataset.manualSelection === 'true') {
           main.querySelector("#action-form").dataset.manualSelection = "true";
           main.querySelectorAll('input[name="target"]').forEach(input => input.checked = input.value === selected);
           updateTargetPreview(main, selected);
@@ -400,4 +407,29 @@ const dawnDialog = document.querySelector('#dawn-report-dialog');
 if (dawnDialog) {
   document.querySelector('[data-dawn-open]')?.addEventListener('click', () => dawnDialog.showModal());
   dawnDialog.querySelector('[data-dawn-close]')?.addEventListener('click', () => dawnDialog.close());
+}
+
+
+function initializeStatusChoices() {
+ const main=document.querySelector('main[data-screen="main"],main[data-screen="result"]');
+ if(!main||main.dataset.statusInitialized)return;main.dataset.statusInitialized='true';
+ const night=main.hasAttribute('data-night-board');
+ const refresh=()=>{if(night)return;const chosen=main.querySelector('input[name="target"]:checked');
+  main.querySelectorAll('[data-status-target]').forEach(b=>{const active=chosen?.value===b.dataset.statusTarget;b.setAttribute('aria-pressed',String(active));b.textContent=active?b.dataset.statusSelected:'生存';});
+  const next=document.querySelector('#advance-button');if(next){next.dataset.noTarget=String(!chosen);if(!chosen)next.disabled=true;}
+ };
+ main.querySelectorAll('[data-status-target]').forEach(button=>button.addEventListener('click',()=>{
+  if(night){if(main.dataset.statusSubmitting)return;main.dataset.statusSubmitting='true';
+   const form=document.createElement('form');form.method='post';form.action=main.dataset.nightReportUrl;
+   const values={revision:main.querySelector('input[name="revision"]').value,board_id:main.dataset.boardId,mode:button.getAttribute('aria-pressed')==='true'?'clear':'deaths'};
+   if(values.mode==='deaths')values.deaths=button.dataset.statusTarget;
+   for(const [name,value]of Object.entries(values)){const input=document.createElement('input');input.type='hidden';input.name=name;input.value=value;form.append(input);}
+   document.body.append(form);form.submit();return;
+  }
+  const radio=main.querySelector(`input[name="target"][value="${button.dataset.statusTarget}"]`);if(!radio||radio.disabled)return;
+  const was=radio.checked;main.querySelectorAll('input[name="target"]').forEach(r=>r.checked=false);radio.checked=!was;
+  const next=document.querySelector('#advance-button');if(next&&radio.checked&&next.dataset.noTarget==='true'&&next.dataset.draftBlocked!=='true')next.disabled=false;
+  radio.form.dataset.manualSelection='true';radio.dispatchEvent(new Event('change',{bubbles:true}));refresh();updateTargetPreview();
+ }));
+ refresh();
 }

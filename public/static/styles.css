@@ -451,3 +451,13 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
  .strategy-dialog .split-panels { grid-template-columns:1fr; }
  .strategy-dialog button { min-height:30px; }
 }
+
+/* Shared public day/night table: CO at left, dated life status at right. */
+#player-panel .player-table { --status-width:76px; min-width:calc(var(--id-width) + var(--name-width) + var(--co-width) + var(--status-width) + var(--numeric-total,328px)); }
+#player-panel .player-table th:nth-child(3) { width:var(--co-width); }
+#player-panel .player-table th:nth-child(4) { width:auto; }
+#player-panel .player-table th[data-col="status"] { width:var(--status-width); }
+.status-choice { min-height:26px; padding:2px 4px; border:0; background:transparent; box-shadow:none; font-size:11px; font-weight:400; white-space:nowrap; }
+.status-choice[aria-pressed="true"] { background:#f9e9e8; color:#a73232; border-radius:3px; }
+.status-choice:focus-visible { outline:2px solid var(--village); }
+#player-panel [data-col="status"] .status { white-space:nowrap; font-size:11px; }

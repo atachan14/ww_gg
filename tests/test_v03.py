@@ -173,7 +173,7 @@ class ClaimWebTests(unittest.TestCase):
             state = dict(session['game']); state['model'] = 'equal'; session['game'] = state
         self.assertEqual(self.c.post('/strategy',data=self.form(co_1='medium')).status_code,303)
         html=self.c.get('/main').get_data(as_text=True)
-        self.assertIn('<th>CO</th>',html);self.assertIn('id="village-rate" class="probability" data-fraction="1/2"',html)
+        self.assertIn('<th data-col="co">CO</th>',html);self.assertIn('id="village-rate" class="probability" data-fraction="1/2"',html)
         self.assertEqual(self.c.post('/strategy',data=self.form(cco_medium='none')).status_code,303)
         html=self.c.get('/main').get_data(as_text=True)
         self.assertIn('id="village-rate" class="probability" data-fraction="2/3"',html)

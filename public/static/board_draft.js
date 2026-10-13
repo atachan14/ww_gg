@@ -17,7 +17,7 @@
       const changed = dirty();
       if (controls.update) { controls.update.disabled = busy || !changed; controls.update.classList.toggle('primary', changed); }
       if (controls.cancel) { controls.cancel.hidden = !changed; controls.cancel.disabled = busy; }
-      blocked.forEach(button => { button.disabled = original.get(button) || changed || busy; });
+      blocked.forEach(button => { button.dataset.draftBlocked = String(changed || busy); button.disabled = original.get(button) || changed || busy || button.dataset.noTarget === 'true'; });
       listeners.forEach(listener => listener({ dirty: changed, busy }));
     };
     const api = {

@@ -13,7 +13,7 @@ class FollowupUITests(unittest.TestCase):
     def form(self,**changes):
         s=self.state(); data={'revision':str(s['revision']),'day':s['policy']['day'],'night':s['policy']['night']};data.update(changes);return data
     def selected(self,html):
-        return re.findall(r'<input type="radio" name="target" value="(\d+)"[^>]* checked',html)
+        return re.findall(r'<input hidden type="radio" name="target" value="(\d+)"[^>]* checked',html)
     def test_default_max_tie_and_manual_preservation(self):
         html=self.client.get('/main').get_data(as_text=True)
         self.assertEqual(self.selected(html),['1'])

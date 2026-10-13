@@ -219,7 +219,7 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200):
+    def render_main(state, error=None, status=200, night_context=None):
         disclosure_error=None
         by_dawn_values={}
         try:rules,progress=replay(state)
@@ -283,7 +283,7 @@ def create_app(test_config=None, *, deployment=False):
                 primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                 action_values={}
                 event_history,alive=board.history,board.alive
-        deaths = {event.target: "処刑" if event.phase == "day" else "襲撃" for event in event_history}
+        deaths = {event.target: f"D{event.day} " + ("処刑" if event.phase == "day" else "襲撃") for event in event_history}
         players = []
         for player in range(1, state["players"] + 1):
             wolf = (sum((outcome.probability * outcome.board.wolf_probability(player) for outcome in progress.last_outcomes), Fraction(0))
@@ -305,15 +305,15 @@ def create_app(test_config=None, *, deployment=False):
                 player['extra_probabilities']={k:seer_pending for k in player['extra_probabilities']}
             player['medium_timeline'] = medium_timeline(board, player['id'], finished)
             player['co_pending'] = player['claim'] == 'medium' and any(entry['editable'] and not entry['color'] for entry in player['medium_timeline'])
-        display_selection = state['selection']
-        if not finished and not seer_pending and display_selection is None and getattr(strategy, board.phase) == 'max':
+        display_selection = (night_context['observation']['deaths'][0] if night_context and night_context['observation'] and len(night_context['observation']['deaths'])==1 else None) if night_context else state['selection']
+        if not night_context and not finished and not seer_pending and display_selection is None and getattr(strategy, board.phase) == 'max':
             score = 'village_win' if board.phase == 'day' else 'wolf_win'
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
         from werewolf.public_log import migrate
-        return render_template("main.html", public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), future_active=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), future_active=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
+                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
     @app.before_request
     def same_origin_posts():
@@ -488,21 +488,9 @@ def create_app(test_config=None, *, deployment=False):
                 after = observe(before, observation, rules, Strategy(**state['policy']))
             except ValueError as exc:
                 pending = str(exc)
-        deaths = {} if observation is None else {p: '死体' for p in observation['deaths']}
-        deaths.update({e.target: '処刑' if e.phase == 'day' else '死体' for e in before.board.history})
-        rows = []
-        for p in range(1, state['players'] + 1):
-            probability = None
-            if after is not None:
-                probability = (sum((o.probability * o.board.wolf_probability(p)
-                                    for o in after.last_outcomes), Fraction())
-                               if after.finished else after.board.wolf_probability(p))
-            rows.append({'id': p, 'status': deaths.get(p, '生存'),
-                         'claim': before.board.claims[p-1], 'wolf_probability': probability})
-        return render_template('dawn.html', state=state, board=before.board,
-                               day=before.board.day+1, observation=observation,
-                               pending=pending, rows=rows, co_labels=CO_LABELS,
-                               error=error, finished=after is not None and after.finished), status
+        return render_main(state, error, status, night_context={
+            'observation': observation, 'pending': pending,
+            'finished': after is not None and after.finished})
 
     @app.post('/dawn-report')
     def dawn_report():

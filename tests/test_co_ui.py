@@ -88,7 +88,7 @@ class COUITests(unittest.TestCase):
         self.assertEqual(self.state()['reports'],[{'day':2,'reporter':1,'target':2,'color':'black'}])
         self.assertEqual(self.state()['history'],before)
         reported_row=re.search(r'<tr[^>]*data-player="1"[^>]*>(.*?)</tr>',self.html(),re.S).group(1)
-        self.assertRegex(reported_row,r'<td class="wolf-text"><strong[^>]*data-fraction="1"')
+        self.assertRegex(reported_row,r'<td data-value-cell="wolf" class="wolf-text"><strong[^>]*data-fraction="1"')
         self.assertEqual(self.post('/strategy',report_2_1_2='').status_code,303)
         self.assertEqual(self.state()['reports'],[])
         self.assertIn('value="" selected>未公開',self.html())
