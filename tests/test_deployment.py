@@ -29,6 +29,7 @@ class DeploymentTests(unittest.TestCase):
             exported = importlib.import_module("wsgi").app
             other = create_app(deployment=True)
         self.assertTrue(exported.config["SESSION_COOKIE_SECURE"])
+        self.assertTrue(exported.config["DAWN_BOARD_PREVIEW"])
         first = exported.test_client()
         response = first.post("/start", base_url="https://example.test", data={"players":"5", "day":"max", "night":"max"})
         cookie = first.get_cookie("session", domain="example.test")
