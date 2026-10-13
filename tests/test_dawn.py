@@ -87,7 +87,7 @@ class DawnBoardTests(unittest.TestCase):
         self.assertNotIn('data-table-update', html)
         self.assertEqual(self.post('/dawn-advance').status_code, 400)
         self.report()
-        self.assertIn('Player2が死亡', self.c.get('/main').get_data(as_text=True))
+        self.assertIn('D1 襲撃', self.c.get('/main').get_data(as_text=True))
         self.assertEqual(self.post('/dawn-advance').status_code, 303)
         g = self.g()
         self.assertEqual(g['history'][-1]['observation'], OBSERVATION)
@@ -98,7 +98,7 @@ class DawnBoardTests(unittest.TestCase):
         self.assertIn('Day1・夜へ', html)
         self.back()
         self.assertEqual(self.g()['public_log']['board_id'], dawn)
-        self.assertIn('Player2が死亡', self.c.get('/main').get_data(as_text=True))
+        self.assertIn('D1 襲撃', self.c.get('/main').get_data(as_text=True))
         self.back()
         self.assertEqual(self.g()['public_log']['board_id'], root)
 
@@ -110,6 +110,8 @@ class DawnBoardTests(unittest.TestCase):
         self.assertEqual(re.search(r'<thead>.*?</thead>', day, re.S).group(),
                          re.search(r'<thead>.*?</thead>', night, re.S).group())
         self.assertIn('data-night-board', night)
+        self.assertNotIn('BoardLog', night)
+        self.assertNotIn('data-system-log', night)
         self.assertIn('data-value-cell="final"', night)
         self.assertIn('D1 処刑', night)
         self.assertNotIn('data-status-target="1"', night)
@@ -135,14 +137,15 @@ class DawnBoardTests(unittest.TestCase):
         self.report(())
         g = self.g()
         self.assertEqual(g['public_log']['board_graph']['nodes'][g['public_log']['board_id']]['system_observation'], {'deaths': []})
-        self.assertIn('System：死体なし', self.c.get('/main').get_data(as_text=True))
+        self.assertNotIn('data-system-log', self.c.get('/main').get_data(as_text=True))
         self.assertEqual(self.post('/dawn-advance').status_code, 400)
         self.assertEqual(self.g(), g)
         self.report((2, 3))
-        self.assertIn('複数死体', self.c.get('/main').get_data(as_text=True))
+        self.assertEqual(self.g()['public_log']['board_graph']['nodes'][self.g()['public_log']['board_id']]['system_observation'], {'deaths': [2,3]})
         self.assertEqual(self.post('/dawn-advance').status_code, 400)
         self.assertEqual(self.post('/dawn-report', mode='clear').status_code, 303)
-        self.assertIn('未入力', self.c.get('/main').get_data(as_text=True))
+        self.assertNotIn('BoardLog', self.c.get('/main').get_data(as_text=True))
+        self.assertIsNone(self.g()['public_log']['board_graph']['nodes'][self.g()['public_log']['board_id']].get('system_observation'))
 
     def test_edit_retires_following_boards_and_noop_does_not(self):
         self.execute(); self.report()
@@ -167,7 +170,8 @@ class DawnBoardTests(unittest.TestCase):
         self.assertEqual(self.post('/table-publish', payload=json.dumps(payload)).status_code, 200)
         self.execute()
         self.assertNotEqual(self.g()['public_log']['board_id'], old)
-        self.assertIn('未入力', self.c.get('/main').get_data(as_text=True))
+        self.assertNotIn('BoardLog', self.c.get('/main').get_data(as_text=True))
+        self.assertIsNone(self.g()['public_log']['board_graph']['nodes'][self.g()['public_log']['board_id']].get('system_observation'))
 
     def test_stale_repeated_invalid_and_wrong_phase_writes(self):
         self.assertEqual(self.post('/dawn-report', mode='none').status_code, 409)
@@ -191,7 +195,7 @@ class DawnBoardTests(unittest.TestCase):
         self.execute(); self.report()
         cookie = self.c.get_cookie('session')
         cold = self.app.test_client(); cold.set_cookie('session', cookie.value)
-        self.assertIn('Player2が死亡', cold.get('/main').get_data(as_text=True))
+        self.assertIn('D1 襲撃', cold.get('/main').get_data(as_text=True))
         self.assertEqual(self.post('/dawn-advance').status_code, 303)
         from werewolf.seer_manual import replay
         _, p = replay(self.g())

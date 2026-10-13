@@ -27,7 +27,7 @@
     </section>
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
         <div class="panel-heading"><h2 class="board-section-label" id="players-title">BoardInfo</h2><span class="muted">{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
-        {% if night_context %}{% include 'night_log.html' %}{% else %}{% include 'public_log.html' %}{% endif %}
+        {% if not night_context %}{% include 'public_log.html' %}{% endif %}
         <div class="board-table-heading"><h3 class="board-child-title" id="board-table-title">BoardTable</h3>{% if config.get("HYBRID_TABLE_PREVIEW") and not finished and not night_context %}<button type="button" data-table-update disabled>更新</button><button type="button" data-table-cancel hidden>キャンセル</button><small data-table-preview-status aria-live="polite"></small>{% endif %}</div>
         {% include 'board_table.html' %}
 

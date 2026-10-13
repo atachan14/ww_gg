@@ -14,7 +14,7 @@ window.initializeParallelLayout=function(){
   else {column.style.maxHeight='none';panes.forEach(p=>p.querySelector('.settings-body').style.maxHeight='320px');}
   const headers=Array.from(table.tHead.rows[0].cells).filter(c=>!c.hidden);table.style.setProperty('--numeric-columns',headers.length-4);
   table.querySelectorAll('[data-co-details] td').forEach(cell=>cell.colSpan=headers.length);
-  table.querySelectorAll('[data-table-results], [data-night-reports] td:last-child').forEach(cell=>cell.colSpan=headers.length-2);
+  table.querySelectorAll('[data-table-results], [data-night-reports] td:last-child, [data-private-results]').forEach(cell=>cell.colSpan=headers.length-2);
   const font=getComputedStyle(table.querySelector('td strong')),canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');ctx.font=font.font;
   const numeric=headers.slice(3,-1),minima=numeric.map(h=>Math.ceil(Math.max(41,...Array.from(table.querySelectorAll('tbody tr[data-player]')).map(row=>{const cell=row.cells[h.cellIndex],strong=cell?.querySelector('.probability');const text=cell?.classList.contains('action-rates')?cell.textContent.trim():strong?.textContent;return text?ctx.measureText(text).width+8:0;}))));
   const total=minima.reduce((a,b)=>a+b,0);table.style.setProperty('--numeric-total',total+'px');

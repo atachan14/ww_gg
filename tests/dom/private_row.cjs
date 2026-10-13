@@ -1,0 +1,10 @@
+const {JSDOM}=require('jsdom'),fs=require('fs'),assert=require('assert');
+const dom=new JSDOM('<form id="action-form"><table><thead><tr><th>#</th><th>名前</th><th>CO</th><th>勝率</th><th>生死</th></tr></thead><tbody><tr data-player="2"><td>2</td><td>Player2</td><td>占い師</td><td>50%</td><td>生存</td></tr><tr data-night-reports="2"><td>公開結果 Player3白</td></tr></tbody></table></form>',{runScripts:'outside-only'}),w=dom.window,d=w.document;
+w.eval(fs.readFileSync('static/board_private_row.js','utf8'));let changed;
+const publicHtml=d.querySelector('[data-night-reports]').outerHTML;
+const row=w.renderBoardPrivateRow({table:d.querySelector('table'),player:2,role:'seer',label:'占い師',slots:[{day:1,targets:[1,3,4]},{day:2,targets:[3,4]}],draft:{results:[{day:1,target:3,color:'white'}]},onChange:value=>changed=value});
+assert.equal(row.previousElementSibling.dataset.nightReports,'2');assert.equal(row.lastChild.colSpan,3);
+assert.equal(row.querySelector('[data-private-target="1"]').value,'3');assert.equal(row.querySelector('[data-private-color="1"]').value,'white');
+const target=row.querySelector('[data-private-target="2"]');target.value='4';target.dispatchEvent(new w.Event('change'));assert.equal(changed.results[1].target,4);assert.equal(changed.results[1].color,null);
+const color=row.querySelector('[data-private-color="2"]');color.value='black';color.dispatchEvent(new w.Event('change'));assert.equal(changed.results[1].color,'black');assert.equal(d.querySelector('[data-night-reports]').outerHTML,publicHtml);
+assert.equal([...new w.FormData(d.querySelector('form'))].length,0);assert.equal(row.querySelector('select').form,null);dom.window.close();console.log('Private detail row: separate published row, day slots, edit callback, excluded from public form: PASS');
