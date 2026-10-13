@@ -1,7 +1,7 @@
 """Wolf-conditional payoffs of a separately evaluated public continuation.
 
-Public target/report rankings never receive the viewer's mask. Rank ties use
-the UI's smallest-player rule (report ties use their existing iteration order).
+Public target/report rankings never receive the viewer's mask. Equally optimal
+targets and report instructions are mixed uniformly, without player-ID priority.
 Future bites filter that common ranking only for actual legal non-teammates;
 this does not optimize public executions inside the known wolf assignment.
 Public updates retain the engine's chosen-action law, not an additional action
@@ -109,7 +109,21 @@ branch weights and payoffs; each child public Board keeps all public worlds.
                     value += o.probability * continuation
                 candidates.append((value, action))
             best = min(value for value, _ in candidates)
-            outcomes = next(action.outcomes for value, action in candidates if value == best)
+            tied = tuple(action for value, action in candidates if value == best)
+            # The randomly selected tie instruction is not public information.
+            # Merge equal public vectors before any subsequent public decision,
+            # as in the existing random-report law.
+            groups = {}
+            for instruction in tied:
+                for o in instruction.outcomes:
+                    child, entries = groups.setdefault(o.board.reports, (o.board, {}))
+                    for world in o.board.worlds:
+                        entries[world[:-1]] = entries.get(world[:-1], F()) + o.probability * world[-1] / len(tied)
+            from .exact import BoardOutcome
+            outcomes = tuple(BoardOutcome(sum(entries.values(), F()),
+                              replace_worlds(child, tuple((*world, q / sum(entries.values(), F()))
+                                                         for world, q in sorted(entries.items()))))
+                             for child, entries in groups.values())
         branches = []
         for o in outcomes:
             next_s = project(s, o.board)
@@ -155,7 +169,7 @@ branch weights and payoffs; each child public Board keeps all public worlds.
             chosen = tuple(p for p, _ in available)
         else:
             best = (max if b.phase == 'day' else min)(v for _, v in available)
-            chosen = (min(p for p, v in available if v == best),)
+            chosen = tuple(p for p, v in available if v == best)
         if trace is not None:
             trace.setdefault('choices', []).append({'day': b.day, 'phase': b.phase,
                 'history': tuple((e.day, e.phase, e.target) for e in b.history), 'targets': chosen})

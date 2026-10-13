@@ -47,7 +47,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     private = view.board
     reason = {'seer': '占い先の取得履歴と将来の公開判断を分離した勝率評価は未対応です。',
               'hunter': '護衛能力の計算と秘密の護衛履歴は未対応です。',
-              'wolf': '公開戦略の候補順に従う狼条件付き最終勝率です。同率は番号順、仲間への襲撃は除外します。'}[role]
+              'wolf': '公開戦略に従う狼条件付き最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。'}[role]
     targets = legal_targets(private, rules, strategy) if role == 'wolf' else ()
     final_values = {}
     if role == 'wolf':

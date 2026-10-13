@@ -104,7 +104,7 @@ class PrivateRouteTests(unittest.TestCase):
         self.assertEqual(response.status_code, 303)
         self.assertNotIn('id="board-viewpoint-seed"', self.c.get('/main').get_data(as_text=True))
 
-    def test_wolf_roster_changes_final_values_without_changing_public_cookie(self):
+    def test_wolf_roster_uniform_finals_without_changing_public_cookie(self):
         self.c.post('/start', data={'citizens': '4', 'wolves': '1', 'day': 'max', 'night': 'max'})
         g = self.game()
         self.assertEqual(self.c.post('/advance', data={'revision': str(g['revision']), 'target': '5',
@@ -112,8 +112,8 @@ class PrivateRouteTests(unittest.TestCase):
         before = self.game(); cookie = self.c.get_cookie('session').value
         first = self.view(role='wolf', players=[2]).get_json()
         other = self.view(role='wolf', players=[3]).get_json()
-        self.assertEqual(first['players'][0]['final'], {'village': '1', 'wolf': '0'})
-        self.assertEqual(first['players'][2]['final'], {'village': '0', 'wolf': '1'})
-        self.assertEqual(other['players'][1]['final'], {'village': '0', 'wolf': '1'})
+        self.assertEqual(first['players'][0]['final'], {'village': '1/3', 'wolf': '2/3'})
+        self.assertEqual(first['players'][2]['final'], {'village': '1/3', 'wolf': '2/3'})
+        self.assertEqual(other['players'][1]['final'], {'village': '1/3', 'wolf': '2/3'})
         self.assertEqual(self.game(), before)
         self.assertEqual(self.c.get_cookie('session').value, cookie)
