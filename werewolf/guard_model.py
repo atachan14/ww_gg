@@ -129,8 +129,6 @@ def guarded_outcomes(frame,outcomes,engine):
         if blocked and len(child.alive)<=3 and not b.initial_medium_count and not b.initial_seer_count:
             st=replace(st,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in st.hypotheses)))
         from .guard_history_prior import hero_deducible
-        if hero_deducible(child):
-            st=replace(st,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in st.hypotheses)))
         if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):
             from .guard_history_prior import extend_success
             st=extend_success(st,b.day,b.alive)

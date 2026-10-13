@@ -34,7 +34,10 @@ def role_exchangeable(board):
 
 def seed_history(board,state):
     if hero_deducible(board):
-        return replace(state,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in state.hypotheses)))
+        # Deduction makes these records redundant for choosing the next bite,
+        # not disposable. The same ledger belongs to the public mixture and
+        # both owner projections, including already supplied private records.
+        return state
     if board.initial_medium_count or board.initial_seer_count:return state
     if len({w[3] for w in board.worlds})==1:return state
     nights=[night for night in range(1,board.day) if not any(e.phase=='night' and e.day==night for e in board.history)]

@@ -124,3 +124,50 @@ class GuardMaxHistoryTests(unittest.TestCase):
         engine=InformationSetForecast(self.rules,self.strategy)
         self.assertEqual(engine.wolf_policy(b,s,past,1),((3,F(1)),))
         self.assertEqual(b.role_probability(2,'hunter'),F(1,2))
+
+    def test_six_player_asymmetric_deduction_uses_shared_max_engine(self):
+        from werewolf.exact import condition_claims,ClaimPolicy
+        b=condition_claims(initial_board(6,2,0,0,1),
+                           ('latent','latent','latent','villager','villager','villager'),ClaimPolicy())
+        state=prior(b);before=copy.deepcopy((b,state))
+        result=public_forecast(b,state,(),self.rules,self.strategy)
+        # Execute a latent: 2/3 kills a wolf. On the five-player night, biting
+        # a known villager is optimal: block 1/4 leads to a certain win,
+        # death 3/4 leads to a 1/2 win. Executing a villager loses instead.
+        self.assertEqual(result.village_win,F(2,3)*(F(1,4)+F(3,4)*F(1,2)))
+        self.assertEqual(dict(result.action_values),
+                         {1:F(5,12),2:F(5,12),3:F(5,12),4:F(),5:F(),6:F()})
+        self.assertEqual(b.role_probability(1,'hunter'),F(1,3))
+        self.assertEqual((b,state),before)
+
+    def test_deducible_six_alive_flow_preserves_both_owner_ledgers(self):
+        from werewolf.exact import condition_claims,ClaimPolicy,replace_worlds
+        from werewolf.guard_effect import GuardIntent
+        from werewolf.action_flow import resolve_action
+        from werewolf.seer_acquisition import normalize
+        b=condition_claims(initial_board(6,2,0,0,1),
+                           ('latent','latent','latent','villager','villager','villager'),ClaimPolicy())
+        b=replace(b,day=2,phase='night')
+        state=replace(prior(b),rosters=(b.alive,b.alive),observed_prefix=2)
+        entries=tuple(replace(h,guards=(GuardIntent(1,next(p for p in b.alive
+                        if h.roles[3]&(1<<(p-1))),4),),attacks=(WolfAttack(1,4),))
+                      for h in state.hypotheses)
+        state=replace(state,hypotheses=normalize(entries));before=copy.deepcopy((b,state))
+        self.assertEqual(seed_history(b,state),state)
+        engine=InformationSetForecast(self.rules,self.strategy)
+        self.assertEqual(engine.wolf_policy(b,state,(),3,(WolfAttack(1,4),)),
+                         ((4,F(1,3)),(5,F(1,3)),(6,F(1,3))))
+        own=replace(state,hypotheses=normalize(tuple(h for h in state.hypotheses if h.roles[0]==3)))
+        physical=replace_worlds(b,own.public_roles)
+        _,outcomes=resolve_action(b,(state,(),own,None,physical),4,engine.action_policy)
+        self.assertEqual(sum(o.probability for o in outcomes),1)
+        for outcome in outcomes:
+            for h in outcome.context.private.hypotheses:
+                self.assertEqual(h.guards[0],GuardIntent(1,3,4))
+                self.assertEqual(h.attacks,(WolfAttack(1,4),WolfAttack(2,4)))
+                self.assertEqual(h.guards[1].night,2)
+            self.assertTrue(all(h.guards and h.attacks==(WolfAttack(1,4),)
+                                for h in outcome.context.public_state.hypotheses))
+            self.assertEqual(outcome.context.public_state.public_roles,
+                             tuple(sorted(outcome.context.public.worlds)))
+        self.assertEqual((b,state),before)
