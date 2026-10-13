@@ -15,6 +15,7 @@ from .seer_future_uniform import TrueScanState, FuturePending, acquire_uniform
 from .seer_future_forecast import project_private
 from .morning_publications import future_publications, public_report_branches
 from .phase_updates import night_observation_outcomes
+from .action_flow import action_flow, FlowOutcome
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 
 
@@ -38,6 +39,7 @@ class InformationSetForecast:
     def __init__(self, rules, strategy, *, max_work=250000, trace=None):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
         self.values={};self.scores={};self.policies={};self.acquired={}
+        self.action_policy=InformationSetActionPolicy(self)
 
     def exchangeable(self,b):
         # Exact reduction: no future information, and all live locations are
@@ -124,28 +126,7 @@ class InformationSetForecast:
         private_board=replace_worlds(b,private.public_roles)
         if target not in legal_targets(private_board,self.rules,self.strategy):
             raise Pending('information_set_internal_illegal_action')
-        pub_acq,priv_acq=s,private
-        if b.phase=='night':
-            pub_acq=self.acquire(b,s);priv_acq=self.acquire(b,private)
-            if observer is not None:
-                kept=tuple(h for h in priv_acq.hypotheses if observer(h,priv_acq))
-                if not kept:raise Pending('seer_view_scan_outside_public_support')
-                priv_acq=replace(priv_acq,hypotheses=normalize(kept))
-        pub_children={o.board.winner:o.board for o in self.public_children(b,target)}
-        value=F()
-        for o in action_outcomes(private_board,target,self.rules,self.strategy):
-            if o.board.winner is not None:v=F(o.board.winner=='village')
-            else:
-                child=pub_children[None];st=self.project(pub_acq,child);own=self.project(priv_acq,o.board)
-                if self.trace is not None and b.phase=='night':
-                    self.trace.setdefault('public_updates',[]).append({'history':b.history,'target':target,
-                        'prior_counts':b.wolf_count_distribution,'child_counts':child.wolf_count_distribution})
-                if b.phase=='night':
-                    branches=self.push(st,own,self.morning(child,st,past))
-                    v=sum((q*self.solve(c,ns,p,priv,observer) for q,c,ns,p,priv in branches),F())
-                else:v=self.solve(child,st,past,own,observer)
-            value+=o.probability*v
-        return value
+        return action_flow(b,(s,past,private,observer,private_board),target,self.action_policy)
 
     def wolf_policy(self,b,s,past,mask):
         key=(b,s,past,mask)
@@ -199,6 +180,43 @@ class InformationSetForecast:
                                 for p,q in self.wolf_policy(b,s,past,mask)),F())
         self.values[key]=value
         return value
+
+
+class InformationSetActionPolicy:
+    """Public compatibility updates, separate physical weights and observer law."""
+    acquire_terminal = True
+
+    def __init__(self,engine):self.engine=engine
+
+    def acquire(self,b,payload):
+        s,past,private,observer,physical=payload;e=self.engine
+        public=e.acquire(b,s);own=e.acquire(b,private)
+        if observer is not None:
+            kept=tuple(h for h in own.hypotheses if observer(h,own))
+            if not kept:raise Pending('seer_view_scan_outside_public_support')
+            own=replace(own,hypotheses=normalize(kept))
+        return public,past,own,observer,physical
+
+    def outcomes(self,b,payload,target):
+        s,past,private,observer,physical=payload;e=self.engine
+        public={o.board.winner:o.board for o in e.public_children(b,target)}
+        return tuple(FlowOutcome(o.probability,o.board,public.get(o.board.winner))
+                     for o in action_outcomes(physical,target,e.rules,e.strategy))
+
+    def project(self,b,payload,outcome,target):
+        s,past,private,observer,physical=payload;e=self.engine;child=outcome.context
+        st=e.project(s,child);own=e.project(private,outcome.board)
+        if e.trace is not None and b.phase=='night':
+            e.trace.setdefault('public_updates',[]).append({'history':b.history,'target':target,
+                'prior_counts':b.wolf_count_distribution,'child_counts':child.wolf_count_distribution})
+        return child,st,past,own,observer
+
+    def morning_value(self,payload):
+        child,st,past,own,observer=payload;e=self.engine
+        branches=e.push(st,own,e.morning(child,st,past))
+        return sum((q*e.solve(c,ns,p,priv,observer) for q,c,ns,p,priv in branches),F())
+
+    def day_value(self,payload):return self.engine.solve(*payload)
 
 
 def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,max_work=250000,max_seconds=20,trace=None):

@@ -11,6 +11,7 @@ from .exact import (replace_worlds,action_outcomes,legal_targets,report_actions,
 from .seer_acquisition import Hypothesis,normalize
 from .seer_future_uniform import TrueScanState,FuturePending,acquire_uniform,true_reports
 from .calculation_budget import calculation_budget,tick,CalculationBudgetExceeded
+from .action_flow import action_flow
 
 # Compatibility exports retain existing callers and historical tests.
 from .morning_publications import (GeneratedPublication, fake_backlog_options,
@@ -83,22 +84,31 @@ def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,margin
                     total+=q*probability*solve(public,joint,reports)
             values.append(total)
         return sum(values,F())/len(values) if strategy.fake_reports=='random' else min(values)
+    class PublicActionPolicy:
+        acquire_terminal = False
+
+        def acquire(self,b,payload):
+            s,published=payload;key=(b,s)
+            if key not in acquired_memo:
+                private=checked(acquire_uniform(s,b.alive,max_work=max_work,position=strategy.seer_position))
+                tick(len(private.hypotheses));acquired_memo[key]=private
+                if trace is not None:trace['night_acquisition_calls']=trace.get('night_acquisition_calls',0)+1
+            return acquired_memo[key],published
+
+        def outcomes(self,b,payload,target):
+            return action_outcomes(b,target,rules,strategy)
+
+        def project(self,b,payload,outcome,target):
+            s,published=payload
+            return outcome.board,project_private(s,outcome.board,marginalize_private=marginalize_private),published
+
+        def morning_value(self,payload):return morning(*payload)
+        def day_value(self,payload):return solve(*payload)
+
+    action_policy=PublicActionPolicy()
     def action_value(b,s,published,target):
-        tick(len(s.hypotheses));total=F()
-        for o in action_outcomes(b,target,rules,strategy):
-            if o.board.winner is not None:value=F(int(o.board.winner=='village'))
-            else:
-                private=s
-                if b.phase=='night':
-                    key=(b,s)
-                    if key not in acquired_memo:
-                        private=checked(acquire_uniform(s,b.alive,max_work=max_work,position=strategy.seer_position));tick(len(private.hypotheses));acquired_memo[key]=private
-                        if trace is not None:trace['night_acquisition_calls']=trace.get('night_acquisition_calls',0)+1
-                    private=acquired_memo[key]
-                next_private=project_private(private,o.board,marginalize_private=marginalize_private)
-                value=morning(o.board,next_private,published) if b.phase=='night' else solve(o.board,next_private,published)
-            total+=o.probability*value
-        return total
+        tick(len(s.hypotheses))
+        return action_flow(b,(s,published),target,action_policy)
     def no_future_information(b,s):
         co=tuple(p for p in b.alive if b.claims[p-1]=='seer')
         return not co or marginalize_known_fake and len(co)==1 and not any(h.roles[2]&(1<<(co[0]-1)) for h in s.hypotheses)
