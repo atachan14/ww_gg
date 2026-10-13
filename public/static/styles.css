@@ -416,3 +416,38 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 .co-groups-panel .player-table th,.co-groups-panel .player-table td { padding:5px 6px; height:auto; font-size:12px; line-height:1.3; }
 .co-groups-panel .player-table .probability { font-size:12px; }
 .co-composition { overflow-wrap:anywhere; }
+
+.strategy-items .item-order,.candidate-head .item-order { color:var(--muted); font-size:11px; min-width:1.3em; font-variant-numeric:tabular-nums; }
+.strategy-items .item-chip { display:flex; align-items:center; gap:5px; }
+
+/* Strategy Item dialog follows the compact Board UI, not the old tall prototype. */
+.strategy-dialog { width:min(760px,calc(100vw - 24px)); max-width:calc(100vw - 24px); height:auto; max-height:calc(100dvh - 24px); margin:auto; border-radius:8px; font-size:12px; }
+.strategy-dialog .overlay-shell { height:auto; max-height:calc(100dvh - 26px); }
+.strategy-dialog .overlay-head { padding:8px 12px; gap:8px; }
+.strategy-dialog .overlay-head h2 { margin:0; font-size:14px; font-weight:600; }
+.strategy-dialog .overlay-head p { margin:2px 0 0; font-size:11px; }
+.strategy-dialog .overlay-body { padding:8px 10px; flex:0 1 auto; }
+.strategy-dialog .overlay-foot { padding:7px 10px; gap:8px; flex-wrap:wrap; }
+.strategy-dialog .overlay-foot .buttons { gap:6px; margin-left:auto; }
+.strategy-dialog .overlay-error { font-size:11px; }
+.strategy-dialog .overlay-error:empty { display:none; }
+.strategy-dialog .split-panels { gap:8px; align-items:start; }
+.strategy-dialog .split-panel { padding:6px; border-radius:5px; }
+.strategy-dialog .split-panel summary { min-height:24px; padding:2px 0; font-size:12px; font-weight:500; }
+.strategy-dialog .split-panel .panel-content { padding-top:4px; }
+.strategy-dialog .candidate-card { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:4px 8px; padding:5px 6px; margin-bottom:4px; border-radius:4px; }
+.strategy-dialog .candidate-head { min-height:24px; gap:5px; flex:1 1 auto; }
+.strategy-dialog .candidate-head .item-name { min-width:0; font-size:12px; font-weight:500; }
+.strategy-dialog .candidate-actions { margin:0; gap:4px; }
+.strategy-dialog .available-row { padding:5px 6px; margin-bottom:4px; gap:4px; border-radius:4px; }
+.strategy-dialog .available-name { font-size:12px; font-weight:500; }
+.strategy-dialog button,.strategy-dialog select,.strategy-dialog input { min-height:28px; font-size:12px; padding:3px 7px; border-radius:4px; box-shadow:none; }
+.strategy-dialog .inline-condition { gap:3px; }
+.strategy-dialog .inline-condition input { width:44px; padding:2px 4px; }
+.strategy-dialog .source { font-size:10px; padding:1px 4px; }
+.strategy-dialog .detail-empty { font-size:11px; padding:5px 2px; margin:0; }
+.strategy-dialog .inactive-item { box-shadow:none; }
+@media(max-width:600px) {
+ .strategy-dialog .split-panels { grid-template-columns:1fr; }
+ .strategy-dialog button { min-height:30px; }
+}
