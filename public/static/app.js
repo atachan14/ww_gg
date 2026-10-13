@@ -385,3 +385,19 @@ function initializePublicLog() {
   let outside=false;dialog.addEventListener('pointerdown',event=>{const r=dialog.getBoundingClientRect();outside=event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom;});dialog.addEventListener('click',event=>{const r=dialog.getBoundingClientRect();if(outside&&(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom))close();outside=false;});
   // No editor controls are mounted in the permanent log. Restore drafts on open.
 }
+
+// Public dawn observations are independent of the wolf target picker.
+document.querySelectorAll('.dawn-report-editor form').forEach(form => {
+  const update = () => {
+    const hasCorpses = form.querySelector('[name="mode"]:checked')?.value === 'deaths';
+    form.querySelectorAll('[name="deaths"]').forEach(input => { input.disabled = !hasCorpses; });
+  };
+  form.querySelectorAll('[name="mode"]').forEach(input => input.addEventListener('change', update));
+  update();
+});
+
+const dawnDialog = document.querySelector('#dawn-report-dialog');
+if (dawnDialog) {
+  document.querySelector('[data-dawn-open]')?.addEventListener('click', () => dawnDialog.showModal());
+  dawnDialog.querySelector('[data-dawn-close]')?.addEventListener('click', () => dawnDialog.close());
+}

@@ -7,7 +7,7 @@ def signature(step):
     from .exact import Strategy,ClaimPolicy,VILLAGE_ROLES
     policy=asdict(Strategy(**step.get('policy',{})));cp=ClaimPolicy(**step.get('claim_policy',{}))
     claims={role:sorted(cp.conditions(role)) for role in VILLAGE_ROLES}
-    return json.dumps({'target':step['target'],'policy':policy,'claim_policy':claims,'seer_options':step.get('seer_options'),'result_disclosure_model':step.get('result_disclosure_model')},sort_keys=True,separators=(',',':'))
+    return json.dumps({'target':step['target'],**({k:step[k] for k in ('observation','deaths') if k in step}),'policy':policy,'claim_policy':claims,'seer_options':step.get('seer_options'),'result_disclosure_model':step.get('result_disclosure_model')},sort_keys=True,separators=(',',':'))
 
 def path(graph,board_id=None):
     result=[];seen=set();cursor=board_id or graph['current']
@@ -25,11 +25,14 @@ def new_node(graph,parent,step,legacy_claims):
     if parent is not None and (graph['nodes'][parent]['children'] or graph['nodes'][parent].get('retired_children')):
         branch=graph['next_branch'];graph['next_branch']+=1
     graph['nodes'][bid]={'id':bid,'active':True,'generation':graph.get('generation',0),'parent':parent,'branch':branch,'slot':slot,'day':1+slot//2,'phase':'day' if slot%2==0 else 'night','edge':deepcopy(step),'children':[],'local_batches':[],'legacy_claims':list(legacy_claims),'legacy_seer':[],'legacy_medium':[],'revision':0,'input_revision':0 if parent is None else graph['nodes'][parent]['input_revision']}
+    if graph.get('board_flow') == 'public-dawn-v1' and slot % 2:
+        graph['nodes'][bid].update(day=2+slot//2, phase='dawn')
     if parent is not None:graph['nodes'][parent]['children'].append(bid)
     return bid
 
 def initialize(g,log):
     graph={'game_id':g.get('_owner_game_id') or hashlib.sha256(json.dumps({k:g.get(k) for k in ('players','wolves','seers','mediums','hunters','rules')},sort_keys=True,separators=(',',':')).encode()).hexdigest()[:16],'nodes':{},'next_board':1,'next_branch':2}
+    if g.get('board_flow'):graph['board_flow']=g['board_flow']
     base=log['base_claims'];root=new_node(graph,None,None,base[0]);graph['root']=root;cursor=root;ids=[root]
     for i,step in enumerate(g['history']):
         cursor=new_node(graph,cursor,step,base[min(i+1,len(base)-1)]);ids.append(cursor)
@@ -96,7 +99,7 @@ def local_fingerprint(node):
     for raw in node['local_batches']:
         b=deepcopy(raw);b['events']=sorted(b['events'],key=lambda e:e.get('id',''))
         batches.append(b)
-    return json.dumps({'batches':batches,'claims':node['legacy_claims'],'seer':sorted(node['legacy_seer'],key=lambda r:(r['day'],r['reporter'])),'medium':sorted(node['legacy_medium'],key=lambda r:(r['day'],r['reporter'],r['target']))},sort_keys=True,separators=(',',':'))
+    return json.dumps({'system_observation':node.get('system_observation'),'batches':batches,'claims':node['legacy_claims'],'seer':sorted(node['legacy_seer'],key=lambda r:(r['day'],r['reporter'])),'medium':sorted(node['legacy_medium'],key=lambda r:(r['day'],r['reporter'],r['target']))},sort_keys=True,separators=(',',':'))
 
 def commit_owned_change(before,after):
     """Commit-only retirement; snapshots remain recoverable, never inherited."""

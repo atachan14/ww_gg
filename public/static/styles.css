@@ -371,3 +371,13 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 .help-button{display:inline-block;margin-top:6px;padding:4px 12px;min-height:28px;text-decoration:none}.help-links{display:flex;gap:10px;margin:14px 0}.help-links a{padding:7px 10px;text-decoration:none}.help-specs h2{margin:18px 0 6px;font-size:16px}.help-specs p{margin:6px 0;line-height:1.6}
 
 .settings-column .option-head h4{margin:0}.settings-column .empty-option{margin:2px 0;padding:2px}.settings-column .settings-group>details>summary{min-height:28px;padding:5px 8px}.settings-column .format-switch label{min-height:28px;padding:3px}
+
+.dawn-report-editor { margin: auto; }
+.dawn-report-editor form { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding: .5rem 0; }
+.dawn-corpses { display: flex; flex-wrap: wrap; gap: .6rem; }
+[data-screen="dawn"] .player-panel { margin-top: 1rem; }
+
+[data-screen="dawn"] .player-table { min-width:0; width:100%; table-layout:auto; }
+[data-screen="dawn"] .player-table th,[data-screen="dawn"] .player-table td { padding:6px 3px; font-size:12px; }
+[data-screen="dawn"] .player-table strong { font-size:12px; white-space:nowrap; }
+[data-screen="dawn"] .footer-inner { flex-wrap:wrap; }

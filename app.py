@@ -6,6 +6,7 @@ from fractions import Fraction
 import secrets
 import os
 import json
+from werewolf.dawn import FLOW as DAWN_FLOW, enabled as dawn_enabled, advance_step
 from werewolf.strategy_ui import co_editor, resolve_co_editor
 from werewolf.result_disclosure import MODEL as DISCLOSURE_MODEL, DisclosureInconsistent, condition_observed
 
@@ -69,7 +70,7 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("Too much history")
         for index, step in enumerate(state["history"]):
             if step.get('result_disclosure_model') not in (None,DISCLOSURE_MODEL):raise ValueError('Invalid disclosure model')
-            if set(step)-{'result_disclosure_model'} not in ({"target", "policy"}, {"target", "policy", "claims", "claim_policy"}, {"target","policy","claims","claim_policy","reports"}, {"target","policy","claims","claim_policy","strategy_ui"}, {"target","policy","claims","claim_policy","reports","strategy_ui"}):
+            if set(step)-{'result_disclosure_model','observation','deaths'} not in ({"target", "policy"}, {"target", "policy", "claims", "claim_policy"}, {"target","policy","claims","claim_policy","reports"}, {"target","policy","claims","claim_policy","strategy_ui"}, {"target","policy","claims","claim_policy","reports","strategy_ui"}):
                 raise ValueError("Invalid history")
             if "claims" in step:
                 progress = with_claims(progress, tuple(step["claims"]), ClaimPolicy(**step["claim_policy"]), initial_group=index==0 and state.get("model","equal")=="group")
@@ -77,7 +78,7 @@ def create_app(test_config=None, *, deployment=False):
                 progress = with_reports(progress, step['reports'],state['history'])
             if not progress.finished:
                 b=condition_observed({**state,'result_disclosure_model':step.get('result_disclosure_model')},progress.board,tuple(step.get('claims',['latent']*state['players'])),ClaimPolicy(**step.get('claim_policy',{})),step['policy']);progress=Progress(b,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
-            progress = advance(progress, step["target"], rules, Strategy(**step["policy"]))
+            progress = advance_step(progress, step, rules)
         validate_strategy(rules, Strategy(**state["policy"]))
         if not progress.finished:
             progress = with_claims(progress, tuple(state.get("claims", ['latent'] * state["players"])),
@@ -96,10 +97,11 @@ def create_app(test_config=None, *, deployment=False):
         state = session.get("game")
         try:
             required = {"players", "rules", "policy", "history", "selection", "revision"}
-            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports", "strategy_ui", "seer_mode", "seer_options", "seer_inputs", "public_log", "public_draft", "result_disclosure_model"}:
+            if not isinstance(state, dict) or not required <= set(state) or not set(state) <= required | {"wolves", "mediums", "claims", "claim_policy", "model", "seers", "hunters", "reports", "strategy_ui", "seer_mode", "seer_options", "seer_inputs", "public_log", "public_draft", "result_disclosure_model", "board_flow"}:
                 return None
             from werewolf.seer_manual import migrate_game
             original_state=state
+            if state.get('board_flow') not in (None, DAWN_FLOW):return None
             if state.get('result_disclosure_model') not in (None,DISCLOSURE_MODEL):return None
             state=migrate_game(state)
             if app.config.get('SEER_UNIFORM_FUTURE_PREVIEW'):state={**state,'result_disclosure_model':DISCLOSURE_MODEL}
@@ -305,7 +307,7 @@ def create_app(test_config=None, *, deployment=False):
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
         from werewolf.public_log import migrate
-        return render_template("main.html", public_log=migrate(state), disclosure_error=disclosure_error, future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), future_active=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), future_active=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
@@ -453,7 +455,8 @@ def create_app(test_config=None, *, deployment=False):
             session["game"].update(seer_mode=seer_mode,seer_options={"initial_rule":rules.initial_seer,"likelihood":"compatibility"},seer_inputs=[])
             session.modified=True
         if app.config.get('SEER_UNIFORM_FUTURE_PREVIEW'):session['game']={**session['game'],'result_disclosure_model':DISCLOSURE_MODEL}
-        if app.config.get('HYBRID_TABLE_PREVIEW'):
+        if app.config.get('DAWN_BOARD_PREVIEW'):session['game']={**session['game'],'board_flow':DAWN_FLOW}
+        if app.config.get('HYBRID_TABLE_PREVIEW') or app.config.get('DAWN_BOARD_PREVIEW'):
             from werewolf.public_log import migrate,project
             from werewolf.public_log_changes import upgrade
             created=session['game'];session['game']=project(created,upgrade(migrate({**created,'_owner_game_id':secrets.token_hex(8)})))
@@ -466,7 +469,100 @@ def create_app(test_config=None, *, deployment=False):
             return redirect(url_for("top"), code=303)
         if structural_replay(state)[1].finished:
             return redirect(url_for("result"), code=303)
+        if dawn_enabled(state) and structural_replay(state)[1].board.phase == 'night':
+            return render_dawn(state)
         return render_main(state)
+
+    def render_dawn(state, error=None, status=200):
+        from werewolf.dawn import current_observation, validate_observation, unsupported_reason, observe
+        rules, before = structural_replay(state)
+        observation = validate_observation(current_observation(state), before.board.alive)
+        pending = unsupported_reason(observation)
+        after = None
+        if not pending:
+            try:
+                after = observe(before, observation, rules, Strategy(**state['policy']))
+            except ValueError as exc:
+                pending = str(exc)
+        deaths = {} if observation is None else {p: '死体' for p in observation['deaths']}
+        deaths.update({e.target: '処刑' if e.phase == 'day' else '死体' for e in before.board.history})
+        rows = []
+        for p in range(1, state['players'] + 1):
+            probability = None
+            if after is not None:
+                probability = (sum((o.probability * o.board.wolf_probability(p)
+                                    for o in after.last_outcomes), Fraction())
+                               if after.finished else after.board.wolf_probability(p))
+            rows.append({'id': p, 'status': deaths.get(p, '生存'),
+                         'claim': before.board.claims[p-1], 'wolf_probability': probability})
+        return render_template('dawn.html', state=state, board=before.board,
+                               day=before.board.day+1, observation=observation,
+                               pending=pending, rows=rows, co_labels=CO_LABELS,
+                               error=error, finished=after is not None and after.finished), status
+
+    @app.post('/dawn-report')
+    def dawn_report():
+        from werewolf.dawn import validate_observation, record_observation
+        state = game()
+        if state is None or not dawn_enabled(state):
+            abort(404)
+        _, progress = structural_replay(state)
+        if progress.finished or progress.board.phase != 'night':
+            abort(409)
+        if (not revision_matches(state) or request.form.getlist('board_id') != [state['public_log']['board_id']]):
+            return render_dawn(state, '画面が更新されています。再読み込みしてください。', 409)
+        try:
+            if set(request.form) - {'revision', 'board_id', 'mode', 'deaths'} or len(request.form.getlist('mode')) != 1:
+                raise ValueError('死体報告の入力形式を確認してください。')
+            mode = request.form['mode']
+            selected = request.form.getlist('deaths')
+            if mode == 'deaths':
+                if not selected or any(not p.isascii() or not p.isdecimal() for p in selected):
+                    raise ValueError('死体となったプレイヤーを選んでください。')
+                observation = {'deaths': [int(p) for p in selected]}
+            elif mode in ('none', 'clear'):
+                if selected:
+                    raise ValueError('死体の選択を解除してください。')
+                observation = {'deaths': []} if mode == 'none' else None
+            else:
+                raise ValueError('死体報告の種類を確認してください。')
+            observation = validate_observation(observation, progress.board.alive)
+            proposed = record_observation(state, observation)
+            proposed['revision'] += 1
+        except ValueError as exc:
+            return render_dawn(state, str(exc), 400)
+        session['game'] = proposed
+        return redirect(url_for('main'), code=303)
+
+    @app.post('/dawn-advance')
+    def dawn_advance():
+        from copy import deepcopy
+        from werewolf.dawn import current_observation, observe, OBSERVATION
+        state = game()
+        if state is None or not dawn_enabled(state):
+            abort(404)
+        rules, progress = structural_replay(state)
+        if progress.finished or progress.board.phase != 'night':
+            abort(409)
+        if (not revision_matches(state) or request.form.getlist('board_id') != [state['public_log']['board_id']]):
+            return render_dawn(state, '画面が更新されています。再読み込みしてください。', 409)
+        try:
+            if set(request.form) != {'revision', 'board_id'}:
+                raise ValueError('夜明けの進行操作を確認してください。')
+            observation = current_observation(state)
+            observe(progress, observation, rules, Strategy(**state['policy']))
+            step = {k: deepcopy(state[k]) for k in ('policy', 'claims', 'claim_policy',
+                    'strategy_ui', 'reports', 'seer_options', 'result_disclosure_model') if k in state}
+            step.update(target=observation['deaths'][0], deaths=observation['deaths'], observation=OBSERVATION)
+            proposed = {**state, 'history': state['history'] + [step],
+                        'selection': None, 'revision': state['revision'] + 1}
+            from werewolf.public_log import migrate, project
+            proposed = project(proposed, migrate(proposed))
+            _, after = structural_replay(proposed)
+        except ValueError as exc:
+            return render_dawn(state, str(exc), 400)
+        session['game'] = proposed
+        return redirect(url_for('result' if after.finished else 'main'), code=303)
 
     def change(advancing):
         state = game()
@@ -475,6 +571,8 @@ def create_app(test_config=None, *, deployment=False):
         rules, progress = structural_replay(state)
         if progress.finished:
             return redirect(url_for("result"), code=303)
+        if dawn_enabled(state) and progress.board.phase == 'night':
+            return render_dawn(state, '死体報告を確定して昼へ進んでください。', 400)
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
         try:
@@ -538,6 +636,8 @@ def create_app(test_config=None, *, deployment=False):
         return redirect(url_for("result" if progress.finished else "main"), code=303)
 
     def table_proposal(state, payload):
+        if dawn_enabled(state) and len(state['history']) % 2:
+            raise ValueError('夜明けBoardでは死体報告を入力してください。')
         from werewolf.public_log_changes import transaction_changes,upgrade,declarations
         from werewolf.public_log import migrate
         active,_=declarations(upgrade(migrate(state)))
@@ -615,6 +715,8 @@ def create_app(test_config=None, *, deployment=False):
         if not revision_matches(state):return jsonify(error="画面が更新されています。再読み込みして確認してください。"),409
         if set(request.form)-{'revision','operation','payload','board_id'} or not {'revision','operation','payload'}<=set(request.form):return jsonify(error="公開操作の形式が不正です。"),400
         operation=request.form.get('operation')
+        if dawn_enabled(state) and len(state['history']) % 2 and operation != 'cancel':
+            return jsonify(error='夜明けBoardでは死体報告を入力してください。'),400
         if "public_log" not in state:
             from werewolf.public_log import migrate,project
             state=project(state,migrate(state))
@@ -691,9 +793,10 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ww_gg local public Board v0.4")
     parser.add_argument("--port", type=int, default=8771)
     parser.add_argument("--hybrid-table-preview", action="store_true", help="Enable unpublished table draft preview locally")
+    parser.add_argument("--dawn-board", action="store_true", help="Preview public dawn Boards")
     parser.add_argument("--seer-future-uniform", action="store_true", help="Enable unpublished fixed-policy seer forecast locally")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("Choose a port between 1024 and 65535")
-    create_app({"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview,"SEER_UNIFORM_FUTURE_PREVIEW":args.seer_future_uniform}).run(host="127.0.0.1", port=args.port, debug=False,
+    create_app({"DAWN_BOARD_PREVIEW":args.dawn_board,"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview,"SEER_UNIFORM_FUTURE_PREVIEW":args.seer_future_uniform}).run(host="127.0.0.1", port=args.port, debug=False,
                      use_reloader=False, load_dotenv=False)

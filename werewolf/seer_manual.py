@@ -122,11 +122,12 @@ def _replay(text):
         return Progress(board,p.settled_village,p.settled_wolf,p.last_board,p.last_outcomes)
     for i,step in enumerate(history):
         if p.finished:raise ValueError('入力結果と保存済みの進行が不整合です。戻って確認してください。')
-        allowed={'target','policy','claims','claim_policy','strategy_ui','reports','seer_options','result_disclosure_model'}
+        allowed={'target','policy','claims','claim_policy','strategy_ui','reports','seer_options','result_disclosure_model','observation','deaths'}
         if not isinstance(step,dict) or set(step)-allowed or not {'target','policy','claims','claim_policy','seer_options'}<=set(step):raise ValueError('手動占いの保存履歴を確認してください。')
         if step.get('result_disclosure_model') not in (None,'full-observed-v1'):raise ValueError('Invalid disclosure observation model')
         p=apply(p,tuple(step['claims']),ClaimPolicy(**step['claim_policy']),step['policy'],step.get('result_disclosure_model'),i==0 and g.get('model','equal')=='group')
-        p=advance(p,step['target'],rules,Strategy(**step['policy']))
+        from .dawn import advance_step
+        p=advance_step(p,step,rules)
     if not p.finished:p=apply(p,tuple(g['claims']),ClaimPolicy(**g['claim_policy']),g['policy'],g.get('result_disclosure_model'),not history and g.get('model','equal')=='group')
     if any((r['day'],r['reporter']) not in applied for r in rows):raise ValueError('まだ到達していない日の結果は入力できません。')
     if any((r.day,r.reporter,r.target) not in medium_applied for r in medium_rows):raise ValueError('霊能報告と保存された公開機会が一致しません。')
