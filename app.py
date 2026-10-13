@@ -697,7 +697,9 @@ def create_app(test_config=None, *, deployment=False):
             if progress.finished or progress.board.phase != 'night':
                 raise ValueError('夜のBoardで視点を選択してください。')
             result = evaluate_private_table(progress.board, payload['role'], payload['players'], payload['results'],
-                                            rules, Strategy(**state['policy']))
+                                            rules, Strategy(**state['policy']), game_state=state,
+                                            max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),
+                                            max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
             return jsonify(**result, board_id=state['public_log']['board_id'], revision=state['revision'])
         except (ValueError, TypeError, KeyError, DisclosureInconsistent) as exc:
             return jsonify(error=str(exc)), 400

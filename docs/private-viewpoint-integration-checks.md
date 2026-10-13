@@ -1,5 +1,7 @@
 # 夜Boardの私的視点接続（2026-10-13）
 
+これは `af145c0` 時点のUI接続記録。後続の狼の最終勝率接続と検証は [wolf-viewpoint-final-checks.md](wolf-viewpoint-final-checks.md) を参照する。
+
 引継ぎ基準: `6f02accee1150ac39c8e0c71ea12b1946481c19b`。
 公開基準: `207519e351b84329b2fc6c48e12d271d694fe183`。
 元のGドライブ作業ツリーは変更せず、独立チェックアウトで実装した。

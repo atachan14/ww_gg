@@ -17,6 +17,14 @@ def evaluate_game(g,board,rules,strategy,*,max_work=250000):
                 root=build_tree(board,rules,strategy);evaluation=evaluate_tree(root,strategy)
                 return Forecast(evaluation.board_value(root).village_win,tuple((t,evaluation.action_value(root,t).village_win) for t in legal_targets(board,rules,strategy)))
         except CalculationBudgetExceeded:return FuturePending('future_public_continuation_budget_exceeded')
+    prepared=prepare_game(g,board,max_work=max_work)
+    if isinstance(prepared,FuturePending):return prepared
+    state,past=prepared
+    return forecast(board,state,past,rules,strategy,max_work=max_work)
+
+
+def prepare_game(g,board,*,max_work=250000):
+    """Build the public joint acquisition prior without any viewer conditioning."""
     tracked=tuple(p for p in board.alive if board.claims[p-1]=='seer')
     initial=g['rules'].get('initial_seer',g['seer_options']['initial_rule'])
     rows={(r['day'],r['reporter']):r for r in g['seer_inputs'] if r['target'] is not None and r['color'] is not None}
@@ -52,4 +60,4 @@ def evaluate_game(g,board,rules,strategy,*,max_work=250000):
     except CalculationBudgetExceeded:return FuturePending('observed_prior_private_ledger_budget_exceeded')
     publications=g.get('public_log',{}).get('report_publications',{})
     past=tuple(SeerReport(r['day'],publications.get(f"seer:{r['day']}:{r['reporter']}",{}).get('published_day',r['day']),r['reporter'],r['target'],r['color']) for r in rows.values())
-    return forecast(board,state,past,rules,strategy,max_work=max_work)
+    return state,past

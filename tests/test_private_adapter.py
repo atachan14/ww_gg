@@ -9,12 +9,13 @@ from werewolf.private_adapter import evaluate_private_table, viewpoint_roles, pr
 
 
 class PrivateAdapterTests(unittest.TestCase):
-    def test_wolf_horizon_is_exact_and_final_remains_unsupported(self):
+    def test_wolf_horizon_and_final_are_exact_without_public_mutation(self):
         public = next(o.board for o in action_outcomes(initial_board(5), 1, Rules(), Strategy()) if o.board.winner is None)
         before = copy.deepcopy(public)
         result = evaluate_private_table(public, 'wolf', [2], [], Rules(), Strategy())
         self.assertEqual(public, before)
-        self.assertTrue(all(row['final'] is None for row in result['players']))
+        self.assertTrue(all(row['final'] is not None for row in result['players'] if row['legal']))
+        self.assertTrue(all(row['final'] is None for row in result['players'] if not row['legal']))
         self.assertIsNone(result['players'][1]['dawn'])
         for row in result['players'][2:]:
             self.assertEqual(row['dawn'], {'village': '0', 'wolf': '0'})
@@ -34,6 +35,13 @@ class PrivateAdapterTests(unittest.TestCase):
         self.assertNotIn('hunter', roles)
         slots = private_slots(public, 2, Rules(initial_seer='none'))
         self.assertEqual(slots, [])
+
+    def test_wolf_budget_does_not_replace_missing_final_with_public_rate(self):
+        public = next(o.board for o in action_outcomes(initial_board(5), 1, Rules(), Strategy()) if o.board.winner is None)
+        result = evaluate_private_table(public, 'wolf', [2], [], Rules(), Strategy(), max_work=1)
+        self.assertTrue(all(row['final'] is None for row in result['players']))
+        self.assertIn('未計算', result['reason'])
+        self.assertIsNotNone(result['players'][2]['dawn'])
 
     def test_secrets_filter_roles_but_never_generate_ability_values(self):
         public = next(o.board for o in action_outcomes(initial_board(7, 1, 0, 1), 7, Rules(), Strategy()) if o.board.winner is None)
@@ -95,3 +103,17 @@ class PrivateRouteTests(unittest.TestCase):
         response = self.c.post('/back', data={'revision': str(before['revision'])})
         self.assertEqual(response.status_code, 303)
         self.assertNotIn('id="board-viewpoint-seed"', self.c.get('/main').get_data(as_text=True))
+
+    def test_wolf_roster_changes_final_values_without_changing_public_cookie(self):
+        self.c.post('/start', data={'citizens': '4', 'wolves': '1', 'day': 'max', 'night': 'max'})
+        g = self.game()
+        self.assertEqual(self.c.post('/advance', data={'revision': str(g['revision']), 'target': '5',
+                         'day': 'max', 'night': 'max'}).status_code, 303)
+        before = self.game(); cookie = self.c.get_cookie('session').value
+        first = self.view(role='wolf', players=[2]).get_json()
+        other = self.view(role='wolf', players=[3]).get_json()
+        self.assertEqual(first['players'][0]['final'], {'village': '1', 'wolf': '0'})
+        self.assertEqual(first['players'][2]['final'], {'village': '0', 'wolf': '1'})
+        self.assertEqual(other['players'][1]['final'], {'village': '0', 'wolf': '1'})
+        self.assertEqual(self.game(), before)
+        self.assertEqual(self.c.get_cookie('session').value, cookie)
