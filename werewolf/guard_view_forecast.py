@@ -12,7 +12,7 @@ from .calculation_budget import calculation_budget,CalculationBudgetExceeded,tic
 
 
 def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20):
-    from .guard_history_prior import seed_history
+    from .guard_history_prior import seed_history,guard_matches,merge_guards
     try:state=seed_history(board,state) if strategy.night=='max' else state
     except ValueError:return FuturePending('guard_public_history_zero_support')
     reason=scope_reason(board,rules,strategy,any(h.attacks for h in state.hypotheses))
@@ -21,7 +21,7 @@ def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work)
             allowed=tuple(w[:-1] for w in private_board.worlds)
-            own=replace(state,hypotheses=normalize(tuple(replace(h,guards=guards or h.guards) for h in state.hypotheses if h.roles in allowed and all(not h.guards or any(old==g for old in h.guards) for g in guards))))
+            own=replace(state,hypotheses=normalize(tuple(replace(h,guards=merge_guards(h.guards,guards)) for h in state.hypotheses if h.roles in allowed and guard_matches(h.guards,guards))))
             values={};dawn={}
             for target,_ in guard_choices(board,actor,rules,strategy.guard_position):
                 observer=GuardObserver(board,actor,target,allowed)

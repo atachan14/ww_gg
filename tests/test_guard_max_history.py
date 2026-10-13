@@ -85,3 +85,21 @@ class GuardMaxHistoryTests(unittest.TestCase):
         self.assertTrue(all(not h.attacks for h in s.hypotheses))
         result=public_forecast(no_proof,s,(),self.rules,self.strategy)
         self.assertEqual(result.reason,'guard_hidden_attack_max_unimplemented')
+
+    def test_late_five_alive_cut_from_nine_players_preserves_full_roster(self):
+        p=Progress.initial(initial_board(9,4,0,0,1));old=Strategy('random','random')
+        for day,night in ((1,2),(3,4)):
+            p=advance(p,day,self.rules,old)
+            p=observe(p,{'deaths':[night]},self.rules,old)
+        b=p.board
+        self.assertEqual(b.alive,(5,6,7,8,9))
+        self.assertEqual(sum(b.role_probability(i,'hunter') for i in b.alive),F(72,137))
+        result=public_forecast(b,self.state(b),(),self.rules,self.strategy)
+        self.assertEqual(result.village_win,F(268,2055))
+        p=advance(p,5,self.rules,self.strategy)
+        p=observe(p,{'deaths':[]},self.rules,self.strategy)
+        self.assertEqual(p.board.guard_prior_roster,(3,(6,7,8,9)))
+        p=advance(p,9,self.rules,self.strategy)
+        view=evaluate_private_table(p.board,'hunter',[6],[{'day':1,'target':7,'color':None},
+                  {'day':2,'target':7,'color':None},{'day':3,'target':7,'color':None}],self.rules,self.strategy)
+        self.assertTrue(any(row['final'] is not None for row in view['players']))

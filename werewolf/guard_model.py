@@ -35,10 +35,10 @@ def scope_reason(board,rules,strategy=None,latent_ready=False):
                               not hidden_past_bite and (len(board.alive)<=3 or
                               len(board.alive)==4 and board.phase=='day')))
     from .guard_history_prior import role_exchangeable
-    closed_cast=not rules.allow_self_bite and board.player_count<=5 and not board.initial_medium_count and not board.initial_seer_count
+    closed_cast=not rules.allow_self_bite and not board.initial_medium_count and not board.initial_seer_count
     closed_history_case=closed_cast and (role_exchangeable(board) and not hidden_past_bite and
                         (len(board.alive)==5 and board.phase=='day' or len(board.alive)==4) or
-                        latent_ready and len(board.alive)<=4)
+                        latent_ready and (len(board.alive)<=3 or len(board.alive)==4 and board.phase=='day'))
     if hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and not closed_history_case and (strategy is None or strategy.night!='random'):
         return 'guard_hidden_attack_max_unimplemented'
     return None

@@ -74,7 +74,7 @@ def observe(progress, observation, rules, strategy):
         from .guard_history_prior import role_exchangeable
         before=progress.board
         first=not any(not any(e.phase=='night' and e.day==night for e in before.history) for night in range(1,before.day))
-        if first and not rules.allow_self_bite and len(before.alive)==4 and before.initial_hunter_count==1 and set(before.wolf_count_distribution)=={1} and before.player_count<=5 and not before.initial_medium_count and not before.initial_seer_count and (strategy.night=='random' or role_exchangeable(before)):
+        if first and not rules.allow_self_bite and len(before.alive)==4 and before.initial_hunter_count==1 and set(before.wolf_count_distribution)=={1} and not before.initial_medium_count and not before.initial_seer_count and (strategy.night=='random' or role_exchangeable(before)):
             board=replace(board,guard_prior_roster=(before.day,before.alive))
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.board,
                         (BoardOutcome(Fraction(1),board),))
