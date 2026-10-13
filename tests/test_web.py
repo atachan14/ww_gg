@@ -44,7 +44,7 @@ class WebTests(unittest.TestCase):
         self.assertNotIn('id="include-self-bite"', html)
         self.assertIn('id="allow-self-bite"', html)
         self.start()
-        self.assertEqual(self.state()['rules'], {'allow_self_bite': False,'initial_seer':'random_white'})
+        self.assertEqual(self.state()['rules'], {'allow_self_bite': False,'initial_seer':'random_white','allow_repeat_guard':True})
         self.assertEqual(self.state()['policy'], {'day': 'max', 'night': 'max', 'include_self_bite': False})
         self.assertIn('data-fraction="7/15" data-percent="46.67%"', self.page())
 

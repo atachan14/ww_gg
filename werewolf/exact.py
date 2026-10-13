@@ -16,10 +16,13 @@ Winner = Literal["village", "wolf"]
 class Rules:
     allow_self_bite: bool = False
     initial_seer: str = "random_white"
+    allow_repeat_guard: bool = True
 
     def __post_init__(self):
         if self.initial_seer not in ("normal","random_white","none"):
             raise ValueError("初日占いはあり・ランダム白・なしから選んでください。")
+        if type(self.allow_repeat_guard) is not bool:
+            raise ValueError("Repeated guard permission must be a boolean")
         if type(self.allow_self_bite) is not bool:
             raise ValueError("Self-bite permission must be a boolean")
 

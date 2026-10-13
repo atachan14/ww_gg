@@ -1,7 +1,7 @@
-"""Internal first-night physical experiment; no policies, beliefs or UI.
+"""Single-hunter physical effect; no selection policies, beliefs or UI.
 
 Caller supplies one complete role world, a fixed attack and one nonself guard.
-This does not advance a public Board or define self/repeated/multiple guards.
+The original first-night wrapper remains available for stage1 callers.
 """
 from dataclasses import dataclass
 from .exact import ROLES
@@ -29,6 +29,12 @@ class GuardResolution:
 
 
 def resolve_first_guard(roles,alive,intent,attack,other_deaths=()):
+    if not isinstance(intent,GuardIntent) or type(intent.night) is not int or intent.night!=1:
+        raise ValueError("Only the first night is supported")
+    return resolve_guard(roles,alive,intent,attack,other_deaths)
+
+
+def resolve_guard(roles,alive,intent,attack,other_deaths=()):
     """Cancel only the explicitly supplied wolf-attack death on a guard match.
 
     Other causes survive even when they kill the guarded person or guardian.
@@ -41,8 +47,8 @@ def resolve_first_guard(roles,alive,intent,attack,other_deaths=()):
         raise ValueError('Valid immutable predeath roster required')
     if roles.count('hunter')!=1 or not isinstance(intent,GuardIntent):
         raise ValueError('Exactly one confirmed hunter required')
-    if type(intent.night) is not int or intent.night!=1:
-        raise ValueError('Only the first night is supported')
+    if type(intent.night) is not int or intent.night<1:
+        raise ValueError("Positive night required")
     if (type(intent.actor) is not int or intent.actor not in alive or
             roles[intent.actor-1]!='hunter'):
         raise ValueError('Guardian must be the living confirmed hunter')

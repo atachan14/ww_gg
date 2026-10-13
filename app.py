@@ -452,7 +452,7 @@ def create_app(test_config=None, *, deployment=False):
         previous = game()
         session["co_display_game"] = secrets.token_hex(8)
         session["game"] = {**({"seers":seers,"hunters":hunters} if seers or hunters else {}), "players": players, "wolves": wolves, "mediums": mediums,
-                           "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite,"initial_seer":rules.initial_seer},
+                           "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite,"initial_seer":rules.initial_seer,"allow_repeat_guard":rules.allow_repeat_guard},
                            "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
         if seer_mode:
