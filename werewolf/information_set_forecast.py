@@ -16,6 +16,7 @@ from .seer_future_forecast import project_private
 from .morning_publications import future_publications, public_report_branches
 from .phase_updates import night_observation_outcomes
 from .action_flow import action_flow, FlowOutcome
+from .morning_flow import report_flow, continuation_value
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 
 
@@ -87,11 +88,7 @@ class InformationSetForecast:
         else:
             scored=[]
             for action in actions:
-                value=F()
-                for o in action.outcomes:
-                    st=self.project(s,o.board)
-                    value+=o.probability*sum((q*self.scalar(child,ns,reports)
-                        for q,child,ns,reports in self.publications(o.board,st,past)),F())
+                value=continuation_value(report_flow(action.outcomes,s,past,self),self.scalar)
                 scored.append((value,action))
             best=min(v for v,_ in scored);tied=tuple(a for v,a in scored if v==best)
             grouped={}
@@ -104,11 +101,7 @@ class InformationSetForecast:
                 mass=sum(entries.values(),F())
                 merged.append(BoardOutcome(mass,replace_worlds(child,tuple((*w,q/mass) for w,q in sorted(entries.items())))))
             outcomes=tuple(merged)
-        result=[]
-        for o in outcomes:
-            st=self.project(s,o.board)
-            result.extend((o.probability*q,c,ns,reports) for q,c,ns,reports in self.publications(o.board,st,past))
-        return tuple(result)
+        return tuple(report_flow(outcomes,s,past,self))
 
     def push(self,source,private,branches):
         public={(h.roles,h.acquisitions):h.mass for h in source.hypotheses}
@@ -214,7 +207,7 @@ class InformationSetActionPolicy:
     def morning_value(self,payload):
         child,st,past,own,observer=payload;e=self.engine
         branches=e.push(st,own,e.morning(child,st,past))
-        return sum((q*e.solve(c,ns,p,priv,observer) for q,c,ns,p,priv in branches),F())
+        return continuation_value(branches,lambda c,ns,p,priv:e.solve(c,ns,p,priv,observer))
 
     def day_value(self,payload):return self.engine.solve(*payload)
 

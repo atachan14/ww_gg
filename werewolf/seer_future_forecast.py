@@ -7,11 +7,12 @@ Multiple-fake correlation remains unselected.
 from dataclasses import dataclass
 from fractions import Fraction as F
 from .exact import (replace_worlds,action_outcomes,legal_targets,report_actions,
-                    random_report_outcomes,build_tree,evaluate_tree)
+                    random_report_outcomes,build_tree,evaluate_tree,BoardOutcome)
 from .seer_acquisition import Hypothesis,normalize
 from .seer_future_uniform import TrueScanState,FuturePending,acquire_uniform,true_reports
 from .calculation_budget import calculation_budget,tick,CalculationBudgetExceeded
 from .action_flow import action_flow
+from .morning_flow import report_flow, continuation_value
 
 # Compatibility exports retain existing callers and historical tests.
 from .morning_publications import (GeneratedPublication, fake_backlog_options,
@@ -49,40 +50,43 @@ def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,margin
     def checked(value):
         if isinstance(value,FuturePending):raise Unresolved(value)
         return value
+    class PublicMorningPolicy:
+        def project(self,source,board):
+            return project_private(source,board,marginalize_private=marginalize_private)
+
+        def publications(self,b,p,published):
+            co=tuple(i for i in b.alive if b.claims[i-1]=='seer')
+            fake_sets=tuple(tuple(i for i in co if not h.roles[2]&(1<<(i-1))) for h in p.hypotheses)
+            if any(len(fakes)>1 for fakes in fake_sets):raise Unresolved(FuturePending('multiple_fake_report_correlation_unselected'))
+            known_fake=tuple(i for i in co if all(i in fakes for fakes in fake_sets))
+            if marginalize_known_fake and len(known_fake)==1:
+                # Its approved uniform law ignores roles. Marginalize this
+                # public noise: own fake history never affects truth scans,
+                # and CO/public action policies are fixed in this forecast.
+                groups={}
+                for h in p.hypotheses:
+                    tick(1+len(h.acquisitions));r=true_reports(h,published,b.alive,b.claims,len(p.rosters));groups.setdefault(r,[]).append(h)
+                branches=tuple(GeneratedPublication(r,sum((h.mass for h in hs),F()),TrueScanState(normalize(hs),p.rosters,p.initial_rule,p.tracked,p.observed_prefix)) for r,hs in groups.items())
+                if trace is not None:trace['known_single_fake_noise_marginalized']=trace.get('known_single_fake_noise_marginalized',0)+1
+            else:branches=checked(future_publications(p,published,b.alive,b.claims,fake_policy=strategy.fake_seer_policy))
+            if trace is not None:
+                trace['morning_public_vectors']=trace.get('morning_public_vectors',0)+len(branches)
+                trace['max_acquisition_day']=max(trace.get('max_acquisition_day',0),len(p.rosters))
+            if sum(branch.probability for branch in branches)!=1:raise ValueError('Incomplete generated public branch set')
+            return public_report_branches(b,published,branches)
+
+    morning_policy=PublicMorningPolicy()
+    def public_continuation(b,s,published):
+        tick(len(s.hypotheses))
+        return solve(b,s,published)
+
     def morning(child,private,published):
         actions=report_actions(child) if strategy.disclosure_for('medium')=='all' else ()
-        if not actions:
-            groups=((F(1),child),)
-            choices=(groups,)
-        elif strategy.fake_reports=='random':choices=(tuple((o.probability,o.board) for o in random_report_outcomes(child)),)
-        else:choices=tuple(tuple((o.probability,o.board) for o in a.outcomes) for a in actions)
-        values=[]
-        for outcomes in choices:
-            total=F()
-            for q,b in outcomes:
-                p=project_private(private,b,marginalize_private=marginalize_private)
-                co=tuple(i for i in b.alive if b.claims[i-1]=='seer')
-                fake_sets=tuple(tuple(i for i in co if not h.roles[2]&(1<<(i-1))) for h in p.hypotheses)
-                if any(len(fakes)>1 for fakes in fake_sets):raise Unresolved(FuturePending('multiple_fake_report_correlation_unselected'))
-                known_fake=tuple(i for i in co if all(i in fakes for fakes in fake_sets))
-                if marginalize_known_fake and len(known_fake)==1:
-                    # Its approved uniform law ignores roles. Marginalize this
-                    # public noise: own fake history never affects truth scans,
-                    # and CO/public action policies are fixed in this forecast.
-                    groups={}
-                    for h in p.hypotheses:
-                        tick(1+len(h.acquisitions));r=true_reports(h,published,b.alive,b.claims,len(p.rosters));groups.setdefault(r,[]).append(h)
-                    branches=tuple(GeneratedPublication(r,sum((h.mass for h in hs),F()),TrueScanState(normalize(hs),p.rosters,p.initial_rule,p.tracked,p.observed_prefix)) for r,hs in groups.items())
-                    if trace is not None:trace['known_single_fake_noise_marginalized']=trace.get('known_single_fake_noise_marginalized',0)+1
-                else:branches=checked(future_publications(p,published,b.alive,b.claims,fake_policy=strategy.fake_seer_policy))
-                if trace is not None:
-                    trace['morning_public_vectors']=trace.get('morning_public_vectors',0)+len(branches)
-                    trace['max_acquisition_day']=max(trace.get('max_acquisition_day',0),len(p.rosters))
-                if sum(branch.probability for branch in branches)!=1:raise ValueError('Incomplete generated public branch set')
-                for probability, public, joint, reports in public_report_branches(b,published,branches):
-                    tick(len(joint.hypotheses))
-                    total+=q*probability*solve(public,joint,reports)
-            values.append(total)
+        if not actions:choices=((BoardOutcome(F(1),child),),)
+        elif strategy.fake_reports=='random':choices=(random_report_outcomes(child),)
+        else:choices=tuple(a.outcomes for a in actions)
+        values=tuple(continuation_value(report_flow(outcomes,private,published,morning_policy),public_continuation)
+                     for outcomes in choices)
         return sum(values,F())/len(values) if strategy.fake_reports=='random' else min(values)
     class PublicActionPolicy:
         acquire_terminal = False
