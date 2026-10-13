@@ -5,7 +5,10 @@ import re
 from .exact import Rules
 
 COUNT_KEYS = ("citizens", "mediums", "seers", "hunters", "wolves")
-CAST_PRESETS = {"five_sample": {"label": "5人サンプル", "values": dict(citizens=4, mediums=0, seers=0, hunters=0, wolves=1)}}
+CAST_PRESETS = {
+    "five_sample": {"label": "サンプル②", "values": dict(citizens=4, mediums=0, seers=0, hunters=0, wolves=1)},
+    "seer_sample": {"label": "サンプル⓷", "values": dict(citizens=2, mediums=0, seers=1, hunters=0, wolves=2)},
+}
 RULE_PRESETS = {"sample": {"label": "サンプル", "values": {"allow_self_bite": False}}}
 
 

@@ -60,7 +60,7 @@ class SetupWebTests(unittest.TestCase):
         self.assertEqual(controls['citizens'], '4')
         self.assertIsNone(self.state())
         html = self.client.get('/').get_data(as_text=True)
-        self.assertIn('5人サンプル', html)
+        self.assertIn('サンプル②', html)
         self.assertIn('>サンプル</option>', html)
         self.assertEqual(html.count('class="exclusive-field inactive-item"'), 3)
         for invalid in ({}, {'players':9}, {'players':5,'wolves':1,'rules':{'allow_self_bite':'false'},'policy':{'day':'max','night':'max'},'history':[],'selection':None,'revision':0}):
@@ -69,6 +69,18 @@ class SetupWebTests(unittest.TestCase):
             self.assertEqual(self.top().values['cast-preset'], 'five_sample')
             self.assertEqual(self.top().values['rule-preset'], 'sample')
             self.assertEqual(self.state(), invalid)
+
+    def test_sample_three_cast_and_top_restore(self):
+        self.assertEqual(CAST_PRESETS['seer_sample']['label'], 'サンプル⓷')
+        self.assertEqual(CAST_PRESETS['seer_sample']['values'], dict(citizens=2,mediums=0,seers=1,hunters=0,wolves=2))
+        html=self.client.get('/').get_data(as_text=True)
+        self.assertIn('value="seer_sample"', html)
+        self.assertIn('サンプル⓷', html)
+        self.assertNotIn('5人サンプル', html)
+        self.assertEqual(self.start(citizens='2',seers='1',wolves='2').status_code,303)
+        self.assertEqual(self.top().values['cast-preset'],'seer_sample')
+        self.assertEqual(self.state()['claims'], ['latent']*5)
+        self.assertEqual(self.state()['rules']['initial_seer'], 'random_white')
 
     def test_logo_and_settings_return_restore_initial_config_not_current_board(self):
         self.assertEqual(self.start(citizens='4', mediums='1', seers='1', hunters='1', wolves='2', allow_self_bite='1').status_code, 303)
@@ -147,7 +159,7 @@ class SetupWebTests(unittest.TestCase):
     def test_saved_actual_values_survive_preset_definition_change(self):
         self.start()
         saved = self.state()
-        changed = {'five_sample':{'label':'5人サンプル','values':dict(citizens=5,mediums=0,seers=0,hunters=0,wolves=1)}}
+        changed = {'five_sample':{'label':'サンプル②','values':dict(citizens=5,mediums=0,seers=0,hunters=0,wolves=1)}}
         with patch.dict(CAST_PRESETS, changed, clear=True):
             values = self.top().values
             self.assertEqual(values['citizens'], '4')
