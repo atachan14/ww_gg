@@ -221,6 +221,7 @@ def create_app(test_config=None, *, deployment=False):
 
     def render_main(state, error=None, status=200):
         disclosure_error=None
+        by_dawn_values={}
         try:rules,progress=replay(state)
         except DisclosureInconsistent as exc:
             disclosure_error=str(exc);rules,progress=structural_replay(state)
@@ -266,12 +267,15 @@ def create_app(test_config=None, *, deployment=False):
                             primary=Values(forecast.village_win,1-forecast.village_win)
                             cumulative=progress.total_values(primary)
                             action_values={p:Values(v,1-v) for p,v in forecast.action_values}
+                            by_dawn_values=dict(forecast.by_dawn_values)
                     else:
                         root = build_tree(board, rules, strategy)
                         evaluation = evaluate_tree(root, strategy)
                         primary = evaluation.board_value(root)
                         cumulative = progress.total_values(primary)
                         action_values = {target: evaluation.action_value(root, target) for target in legal_targets(board, rules, strategy)}
+                        from werewolf.by_dawn import action_by_dawn
+                        by_dawn_values={target:action_by_dawn(board,target,rules,strategy) for target in action_values}
                     event_history, alive = board.history, board.alive
             except CalculationBudgetExceeded:
                 from werewolf.seer_manual import Pending
@@ -291,7 +295,7 @@ def create_app(test_config=None, *, deployment=False):
                             "claim": board.claims[player - 1], "legal": player in action_values,
                             "id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
-                            "action": action_values.get(player)})
+                            "action": action_values.get(player), "by_dawn": by_dawn_values.get(player) if player in action_values else None})
         for player in players:
             if manual:
                 player['seer_timeline']=seer_timeline(state,board,player['id'],finished)

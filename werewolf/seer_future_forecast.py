@@ -69,6 +69,7 @@ def project_private(state,board,*,marginalize_private=False):
 class Forecast:
     village_win: F
     action_values: tuple
+    by_dawn_values: tuple = ()
 
 class Unresolved(Exception):
     def __init__(self,pending):self.pending=pending
@@ -179,6 +180,9 @@ def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,margin
         with calculation_budget(max_work):
             value=solve(board,state,past)
             actions=() if board.winner is not None else values_for(board,state,past)
-            return Forecast(value,actions)
+            from .by_dawn import action_by_dawn
+            horizon=tuple((target,action_by_dawn(board,target,rules,strategy,
+                lambda b: values_for(b,project_private(state,b,marginalize_private=marginalize_private),past))) for target,_ in actions)
+            return Forecast(value,actions,horizon)
     except CalculationBudgetExceeded:return FuturePending('future_public_continuation_budget_exceeded')
     except Unresolved as exc:return exc.pending

@@ -381,3 +381,16 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 [data-screen="dawn"] .player-table th,[data-screen="dawn"] .player-table td { padding:6px 3px; font-size:12px; }
 [data-screen="dawn"] .player-table strong { font-size:12px; white-space:nowrap; }
 [data-screen="dawn"] .footer-inner { flex-wrap:wrap; }
+
+/* Paired village/wolf figures retain the existing two action columns. */
+.player-table .action-rates { white-space: nowrap; }
+
+/* CO stays inside its fixed column; result rows share the actual table grid. */
+#player-panel [data-table-co] { display:block; width:100%; max-width:100%; min-width:0; padding:1px 2px; height:24px; min-height:24px; font-size:11px; }
+#player-panel .player-table [data-table-details] td { padding:1px 2px; vertical-align:middle; }
+#player-panel [data-table-role-label] { font-size:11px; font-weight:500; overflow-wrap:anywhere; }
+#player-panel [data-table-details] .co-line { min-width:0; gap:4px 10px; }
+#player-panel [data-table-details] .co-day { gap:3px; flex-wrap:wrap; }
+#player-panel [data-table-details] select { height:24px; min-height:24px; min-width:0; max-width:100%; padding:1px 2px; font-size:11px; }
+#player-panel [data-table-target] { width:var(--name-width); }
+#player-panel [data-table-color], #player-panel [data-table-medium] { width:calc(3em + 20px); }

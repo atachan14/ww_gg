@@ -16,3 +16,8 @@ class HelpTests(unittest.TestCase):
   self.assertEqual(self.c.get('/help/five/hunter-example.html').status_code,404);self.assertEqual(self.g(),before)
  def test_board_does_not_regrow_permanent_scope_text(self):
   h=self.c.get('/main').get_data(as_text=True);self.assertNotIn('入力済み結果を真結果との整合性で条件付けます',h);self.assertNotIn('data-future-uniform-scope',h);self.assertNotIn('data-information-fixed-scope',h);self.assertIn('data-seer-future="all"',h)
+ def test_game_tree_reserved_for_actual_branches_not_sample_link(self):
+  h=self.c.get('/main').get_data(as_text=True)
+  tree=h.split('id="tree-reserved"',1)[1].split('</section>',1)[0]
+  self.assertIn('GameTree',tree);self.assertNotIn('<a ',tree)
+  self.assertIn('/help/five/',self.c.get('/help').get_data(as_text=True))

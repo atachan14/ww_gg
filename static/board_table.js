@@ -48,7 +48,7 @@
   const renderDetails=(player,host,role)=>{
     host.replaceChildren();host.closest('tr').hidden=!['seer','medium'].includes(role);
     if(!['seer','medium'].includes(role))return;
-    const title=document.createElement('span');title.textContent=labels[role];host.append(title);
+    host.closest('tr').querySelector('[data-table-role-label]').textContent=labels[role];
     const current=draft.snapshot();
     if(role==='seer')for(let day=1;day<=seed.day;day++){
       const row=current.seers.find(r=>r.day===day&&r.reporter===player)||{day,reporter:player,target:null,color:null};
@@ -62,14 +62,14 @@
     const mediumSlots=Array.from({length:Math.max(0,seed.day-1)},(_,i)=>[i+2,player,seed.targets[2*i]]);
     if(role==='medium'){const none=document.createElement('span');none.textContent='Day1: --';host.append(none);}
     if(role==='medium')for(const [day,p,target] of mediumSlots){if(p!==player||!target)continue;
-      const row=current.mediums.find(r=>r.day===day&&r.reporter===player&&r.target===target);const span=document.createElement('span');span.append(`Day${day}: Player${target} `);
+      const row=current.mediums.find(r=>r.day===day&&r.reporter===player&&r.target===target);const span=document.createElement('span');span.className='co-day';span.append(`Day${day}: Player${target} `);
       const color=select([['','未公開'],['white','白'],['black','黒']],row?.color,v=>mutate(next=>{next.mediums=next.mediums.filter(r=>!(r.day===day&&r.reporter===player&&r.target===target));if(v)next.mediums.push({day,reporter:player,target,color:v});}));color.dataset.tableMedium=`${day}:${player}:${target}`;color.disabled=seed.finished||!seed.alive.includes(player);span.append(color);host.append(span);
     }
   };
   const render=()=>{
     rendering=true;const current=draft.snapshot();
     for(const {player,picker,host,row,detail} of selectors){picker.value=current.claims[player-1];if(['seer','medium'].includes(picker.value))row.after(detail);else detail.remove();renderDetails(player,host,picker.value);}
-    rendering=false;
+    rendering=false;window.refreshParallelLayout?.();
   };
   for(const row of document.querySelectorAll('.player-table tr[data-player]')){
     const player=Number(row.dataset.player),cell=row.cells[3];cell.replaceChildren();
@@ -80,7 +80,7 @@
       if(value==='seer'||value==='medium'){const key=value==='seer'?'seers':'mediums';const rows=roleStash.get(`${player}:${value}`)||(baseline.claims[player-1]===value?baseline[key].filter(r=>r.reporter===player):[]);if(!next[key].some(r=>r.reporter===player))next[key].push(...clone(rows));}
       });render();
     });picker.dataset.tableCo=String(player);picker.disabled=seed.finished||!seed.alive.includes(player);cell.append(picker);
-    const detail=document.createElement('tr');detail.className='co-detail-row';detail.dataset.tableDetails=String(player);const td=document.createElement('td');td.colSpan=row.cells.length;const host=document.createElement('div');host.className='co-line';td.append(host);detail.append(td);row.after(detail);selectors.push({player,picker,host,row,detail});
+    const detail=document.createElement('tr');detail.className='co-detail-row';detail.dataset.tableDetails=String(player);const spacer=document.createElement('td'),roleCell=document.createElement('td'),statusSpacer=document.createElement('td'),td=document.createElement('td');roleCell.dataset.tableRoleLabel='';roleCell.className='co-role-label';td.dataset.tableResults='';td.colSpan=row.cells.length-3;const host=document.createElement('div');host.className='co-line';td.append(host);detail.append(spacer,roleCell,statusSpacer,td);row.after(detail);selectors.push({player,picker,host,row,detail});
   }
   const preview=async id=>{
     controller=new AbortController();try{
