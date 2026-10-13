@@ -39,18 +39,40 @@ def exchangeable_value(n,w,phase,strategy):
 
 
 class InformationSetForecast:
-    def __init__(self, rules, strategy, *, max_work=250000, trace=None):
+    def __init__(self, rules, strategy, *, max_work=250000, trace=None, memoize_flows=True,
+                 retire_uninformative_scans=True):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
         self.values={};self.scores={};self.policies={};self.acquired={}
         self.symmetries={}
         self.reduced_descriptors={}
         self.action_values={}
+        self.memoize_flows=memoize_flows
+        self.retire_uninformative_scans=retire_uninformative_scans
+        self.mornings={};self.publication_values={}
+        self.day_bounds={}
+        self.joint_descriptors={}
+        self.joint_keys={}
         self.action_policy=InformationSetActionPolicy(self)
+
+    def cached_flow(self,cache,key,compute,kind):
+        if self.trace is not None:
+            stats=self.trace.setdefault('flow_memo',{})
+            stats[kind+'_calls']=stats.get(kind+'_calls',0)+1
+        if self.memoize_flows and key in cache:
+            tick()
+            if self.trace is not None:stats[kind+'_hits']=stats.get(kind+'_hits',0)+1
+            return cache[key]
+        result=compute()  # Exceptions/Pending never install an incomplete value.
+        if self.memoize_flows:cache[key]=result
+        return result
 
     def exchangeable(self,b):
         # Exact reduction: no future information, and all live locations are
         # exchangeable in the PUBLIC wolf marginal. Public max ties are uniform.
         if self.strategy.disclosure_for('medium')=='all' and has_future_medium(b):return False
+        # This fast path has no acquisition/publication ledger. Even a known
+        # fake can have an unspecified initial declaration; validate it in the
+        # full flow before marginalizing its later role-independent noise.
         if self.strategy.disclosure_for('seer')=='all' and any(b.claims[p-1]=='seer' for p in b.alive):return False
         masses={}
         for mask,q in b.belief:
@@ -62,6 +84,21 @@ class InformationSetForecast:
         if isinstance(value,FuturePending):raise Pending(value.reason)
         return value
 
+    def informative_seer(self,b):
+        co=tuple(p for p in b.alive if b.claims[p-1]=='seer')
+        if not co:return False
+        # A single publicly exposed fake emits role-independent noise under
+        # the selected uniform law. Do not invent a multi-fake joint law.
+        return (not self.retire_uninformative_scans or len(co)>1 or
+                any(b.role_probability(p,'seer') for p in co))
+
+    def can_retire_scans(self,b,s,past):
+        if self.informative_seer(b):return False
+        co=tuple(p for p in b.alive if b.claims[p-1]=='seer')
+        if co and s.initial_rule!='none' and not any(r.player==co[0] and r.acquired_day==1 for r in past):
+            return False  # The initial fake law is still unspecified.
+        return True
+
     def project(self,state,board):
         return project_private(state,board,marginalize_private=False)
 
@@ -72,22 +109,30 @@ class InformationSetForecast:
                                                           position=self.strategy.seer_position))
         return self.acquired[key]
 
-    def equivalent_targets(self,b,s,x,y):
-        # Current projected fixed-CO medium model: latent roles have no future
-        # effect. Do not extend this reduction to scans or casualty abilities.
-        if b.initial_seer_count or b.initial_hunter_count:return False
-        if self.strategy.disclosure_for('seer')=='all' and any(b.claims[p-1]=='seer' for p in b.alive):return False
-        if b.claims[x-1]=='medium' or b.claims[y-1]=='medium':return False
-        key=(b,s)
+    def equivalent_targets(self,b,s,x,y,past=()):
+        # Exact permutation test on the PUBLIC joint law, including own scan
+        # histories. Both targets are currently alive, hence shared all past
+        # rosters. A published scan on either target breaks this shortcut.
+        if b.initial_hunter_count:return False
+        if b.initial_seer_count and not any(b.claims[p-1]=='seer' for p in b.alive):return False
+        if b.claims[x-1]!='latent' or b.claims[y-1]!='latent':return False
+        if any(r.target in (x,y) for r in past):return False
+        key=(b,s,past)
         if key not in self.symmetries:
-            co=sum(1<<(p-1) for p in b.alive if b.claims[p-1]=='medium')
+            medium=sum(1<<(p-1) for p in b.alive if b.claims[p-1]=='medium')
+            seer=sum(1<<(p-1) for p in b.alive if b.claims[p-1]=='seer')
             masses={}
             for h in s.hypotheses:
-                k=(h.roles[0],h.roles[1]&co);masses[k]=masses.get(k,F())+h.mass
+                records=tuple(a for a in h.acquisitions if seer&(1<<(a.player-1)))
+                k=(h.roles[0],h.roles[1]&medium,h.roles[2]&seer,records)
+                masses[k]=masses.get(k,F())+h.mass
             self.symmetries[key]=masses
         masses=self.symmetries[key];a=1<<(x-1);c=1<<(y-1)
-        return all(masses.get((w^(a|c) if bool(w&a)!=bool(w&c) else w,m),F())==q
-                   for (w,m),q in masses.items())
+        for (w,m,t,records),q in masses.items():
+            swapped=w^(a|c) if bool(w&a)!=bool(w&c) else w
+            scans=tuple(replace(r,target=y if r.target==x else x if r.target==y else r.target) for r in records)
+            if masses.get((swapped,m,t,scans),F())!=q:return False
+        return True
 
     def public_children(self,b,target):
         if b.phase=='day':return action_outcomes(b,target,self.rules,self.strategy)
@@ -97,14 +142,46 @@ class InformationSetForecast:
             raise Pending('information_set_public_corpse_inconsistent')
 
     def publications(self,b,s,past):
-        if self.strategy.disclosure_for('seer')=='none':return ((F(1),b,s,past),)
+        # Public law only: never key or generate this cache with viewer evidence.
+        return self.cached_flow(self.publication_values,(b,s,past),
+                                lambda:self.generate_publications(b,s,past),'publication')
+
+    def generate_publications(self,b,s,past):
+        if (self.strategy.disclosure_for('seer')=='none' or
+                self.retire_uninformative_scans and self.can_retire_scans(b,s,past)):
+            return ((F(1),b,s,past),)
         branches=self.checked(future_publications(s,past,b.alive,b.claims,
                                                   fake_policy=self.strategy.fake_seer_policy))
         return public_report_branches(b,past,branches)
 
     def scalar(self,b,s,past):return self.solve(b,s,past,s,None)
 
+    def continuation_context(self,b,s,past,private,observer):
+        if (self.retire_uninformative_scans and observer is None and b.initial_seer_count and
+                self.can_retire_scans(b,s,past)):
+            from .evaluation_projection import project_retired_seers
+            b,s,private=project_retired_seers(b,s,private)
+            return b,s,(),private,observer
+        return b,s,past,private,observer
+
+    def renamed_value_key(self,b,s,past,private,target=None):
+        from .joint_value_key import public_variants,value_key
+        if (not b.initial_seer_count or b.initial_hunter_count or
+                b.claims.count('latent')>4 or
+                sum(b.claims[p-1]=='seer' for p in b.alive)!=1):return None
+        source=(b,s,past)
+        key=(*source,private,target)
+        if key in self.joint_keys:return self.joint_keys[key]
+        if source not in self.joint_descriptors:self.joint_descriptors[source]=public_variants(b,s,past)
+        value=value_key(self.joint_descriptors[source],private,target,public_same=private==s)
+        self.joint_keys[key]=value
+        return value
+
     def morning(self,b,s,past):
+        return self.cached_flow(self.mornings,(b,s,past),
+                                lambda:self.generate_morning(b,s,past),'morning')
+
+    def generate_morning(self,b,s,past):
         actions=report_actions(b) if self.strategy.disclosure_for('medium')=='all' else ()
         if not actions:return self.publications(b,s,past)
         if self.strategy.fake_reports=='random':outcomes=random_report_outcomes(b)
@@ -125,13 +202,27 @@ class InformationSetForecast:
     def act(self,b,s,past,target,private,observer):
         if type(target)is not int or target not in b.alive:
             raise Pending('information_set_internal_illegal_action')
+        b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
+        if self.memoize_flows:
+            # Public rankings call this with their own public/actor law. Viewer
+            # payoffs include BOTH the private law and observer identity.
+            key=('joint-action',b,s,past,target,private,observer)
+            return self.cached_flow(self.action_values,key,
+                                    lambda:self.uncached_act(b,s,past,target,private,observer),'action')
+        return self.uncached_act(b,s,past,target,private,observer)
+
+    def uncached_act(self,b,s,past,target,private,observer):
         action_key=None
         if observer is None:
+            if self.memoize_flows:
+                action_key=self.renamed_value_key(b,s,past,private,target)
+                if action_key is not None and action_key in self.action_values:
+                    tick();return self.action_values[action_key]
             from .medium_value_key import public_descriptor,private_action_key
             source=(b,s)
             if source not in self.reduced_descriptors:
                 self.reduced_descriptors[source]=public_descriptor(b,s,self.rules,self.strategy)
-            action_key=private_action_key(self.reduced_descriptors[source],private,target)
+            if action_key is None:action_key=private_action_key(self.reduced_descriptors[source],private,target)
             if action_key is not None and action_key in self.action_values:
                 tick();return self.action_values[action_key]
         tick(len(s.hypotheses)+len(private.hypotheses))
@@ -159,7 +250,7 @@ class InformationSetForecast:
                 computed=[];representatives=[]
                 for p in targets:
                     prior=next((v for t,v in representatives
-                                if bool(mask&(1<<(p-1)))==bool(mask&(1<<(t-1))) and self.equivalent_targets(b,s,p,t)),None)
+                                if bool(mask&(1<<(p-1)))==bool(mask&(1<<(t-1))) and self.equivalent_targets(b,s,p,t,past)),None)
                     value=self.act(b,s,past,p,group,None) if prior is None else prior
                     if prior is None:representatives.append((p,value))
                     computed.append((p,value))
@@ -174,23 +265,45 @@ class InformationSetForecast:
     def day_scores(self,b,s,past):
         key=(b,s,past)
         if key not in self.scores:
-            computed=[];representatives=[]
-            for p in b.alive:
-                prior=next((v for t,v in representatives if self.equivalent_targets(b,s,p,t)),None)
-                value=self.act(b,s,past,p,s,None) if prior is None else prior
-                if prior is None:representatives.append((p,value))
-                computed.append((p,value))
-            self.scores[key]=tuple(computed)
+            self.scores[key]=tuple(self.score_day_targets(b,s,past))
         return self.scores[key]
 
+    def score_day_targets(self,b,s,past):
+        representatives=[]
+        for p in b.alive:
+            prior=next((v for t,v in representatives if self.equivalent_targets(b,s,p,t,past)),None)
+            value=self.act(b,s,past,p,s,None) if prior is None else prior
+            if prior is None:representatives.append((p,value))
+            yield p,value
+
+    def public_day_max(self,b,s,past):
+        key=(b,s,past)
+        if key not in self.day_bounds:
+            if key in self.scores:self.day_bounds[key]=max(v for _,v in self.scores[key])
+            else:
+                computed=[]
+                for p,value in self.score_day_targets(b,s,past):
+                    computed.append((p,value))
+                    if value==1:
+                        # Only the scalar bound is complete. Do not cache a
+                        # partial score vector or choose one of the max ties.
+                        self.day_bounds[key]=F(1)
+                        break
+                else:
+                    self.scores[key]=tuple(computed)
+                    self.day_bounds[key]=max(v for _,v in computed)
+        return self.day_bounds[key]
+
     def solve(self,b,s,past,private,observer):
+        b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
         key=(b,s,past,private,observer)
         if observer is None:
             from .medium_value_key import public_descriptor,private_value_key
             source=(b,s)
             if source not in self.reduced_descriptors:
                 self.reduced_descriptors[source]=public_descriptor(b,s,self.rules,self.strategy)
-            reduced=private_value_key(self.reduced_descriptors[source],private)
+            reduced=self.renamed_value_key(b,s,past,private) if self.memoize_flows else None
+            if reduced is None:reduced=private_value_key(self.reduced_descriptors[source],private)
             if reduced is not None:key=reduced
         if key in self.values:return self.values[key]
         tick(len(private.hypotheses))
@@ -200,6 +313,14 @@ class InformationSetForecast:
                        for h in private.hypotheses),F())
             self.values[key]=value;return value
         if b.phase=='day':
+            if (self.strategy.day=='max' and observer is None and self.memoize_flows and
+                    self.public_day_max(b,s,past)==1 and
+                    {(h.roles,h.acquisitions) for h in private.hypotheses}<=
+                    {(h.roles,h.acquisitions) for h in s.hypotheses}):
+                # A public expected probability of one implies one in every
+                # supported world. Any supported private restriction also has
+                # value one, independently of which equally optimal action wins.
+                self.values[key]=F(1);return F(1)
             if self.strategy.day=='random':targets=b.alive
             else:
                 scores=self.day_scores(b,s,past);best=max(v for _,v in scores)
@@ -259,6 +380,7 @@ class InformationSetActionPolicy:
 
     def morning_value(self,payload):
         child,st,past,own,observer=payload;e=self.engine
+        child,st,past,own,observer=e.continuation_context(child,st,past,own,observer)
         branches=e.push(st,own,e.morning(child,st,past))
         return continuation_value(branches,lambda c,ns,p,priv:e.solve(c,ns,p,priv,observer))
 

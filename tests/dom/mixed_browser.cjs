@@ -1,0 +1,32 @@
+// Actual group UI, distinct from the uniform-role diagnostic fixture.
+const {chromium}=require('playwright'),assert=require('assert');
+(async()=>{
+ const browser=await chromium.launch({channel:'msedge',headless:true});
+ const context=await browser.newContext({baseURL:process.env.WW_GG_TEST_URL||'http://127.0.0.1:8772'});
+ const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ assert((await context.request.post('/start',{form:{citizens:'2',mediums:'2',seers:'1',wolves:'2',cco_medium:'none',cco_seer:'none',initial_seer:'none',day:'max',night:'max'}})).ok());
+ await page.goto('/main');const revision=await page.locator('#action-form input[name="revision"]').inputValue();
+ assert((await context.request.post('/table-publish',{form:{revision,payload:JSON.stringify({claims:['seer','medium','medium','latent','latent','latent','latent'],seers:[],mediums:[]})}})).ok());
+ const started=Date.now();await page.goto('/main');
+ assert.equal(await page.locator('#village-rate').getAttribute('data-fraction'),'113/504');
+ assert.equal(await page.locator('[data-seer-pending]').count(),0);
+ assert.equal(await page.locator('td[data-value-cell="final"] .probability').count(),14);
+ console.log('Edge mixed group D1 complete ms:',Date.now()-started);
+ await page.locator('[data-status-target="7"]').click();await page.locator('#advance-button').click();
+ await page.waitForSelector('#board-viewpoint-seed',{state:'attached'});
+ const cells=await page.locator('[data-value-cell]').allTextContents();
+ const overview=await page.locator('#village-rate').getAttribute('data-fraction');
+ const cookie=()=>context.cookies().then(all=>all.find(c=>c.name==='session').value);const before=await cookie();
+ await page.locator('[data-viewpoint-role="wolf"]').click();
+ await page.locator('tr[data-player="1"]').click();await page.locator('tr[data-player="2"]').click();
+ await page.waitForFunction(()=>document.querySelector('main').dataset.viewpointMode==='viewing');
+ assert.equal(await page.locator('tr[data-player="1"] [data-value-cell="wolf"]').textContent(),'100%');
+ assert.equal(await page.locator('tr[data-player="2"] [data-value-cell="wolf"]').textContent(),'100%');
+ assert.equal(await page.locator('#village-rate').getAttribute('data-fraction'),overview);
+ assert.equal(await cookie(),before);
+ await page.locator('[data-viewpoint-role="public"]').click();
+ assert.deepEqual(await page.locator('[data-value-cell]').allTextContents(),cells);
+ assert.equal(await cookie(),before);
+ assert.deepEqual(errors,[]);await browser.close();
+ console.log('Edge mixed full-disclosure: complete public group rows, night wolf restriction, public policy/cookie unchanged: PASS');
+})().catch(e=>{console.error(e);process.exit(1);});

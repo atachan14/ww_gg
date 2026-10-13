@@ -1,5 +1,5 @@
 {
-  "method": "Windows root snapshots only; cold public/prior caches; exact complete rows or Pending; default 250000work/20sec. First ten preserve historical v0.4 no-seer-ability scope explicitly; last case exercises live seer/medium all. No general performance guarantee or full-history coverage.",
+  "method": "Windows root snapshots only; cold public/prior caches; exact complete rows or Pending; default 250000work/20sec. First ten preserve historical v0.4 no-seer-ability scope explicitly; last case exercises live seer/medium all. No general performance guarantee or full-history coverage. Rules allow self bite in this historical audit; strategy may exclude it. This differs from the fixed no-self-bite seven-player benchmark.",
   "cases": [
     {
       "cast": [
@@ -39,10 +39,14 @@
         ]
       },
       "initial_worlds": 15120,
-      "seconds": 2.59,
+      "seconds": 2.6625,
       "pending": null,
       "village_win": "27/70",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -82,10 +86,14 @@
         ]
       },
       "initial_worlds": 15120,
-      "seconds": 3.6431,
+      "seconds": 3.4758,
       "pending": null,
       "village_win": "691/1890",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -125,10 +133,14 @@
         ]
       },
       "initial_worlds": 15120,
-      "seconds": 3.0353,
+      "seconds": 2.9098,
       "pending": null,
       "village_win": "151/480",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -168,10 +180,14 @@
         ]
       },
       "initial_worlds": 22680,
-      "seconds": 3.8371,
+      "seconds": 3.7365,
       "pending": null,
       "village_win": "94/315",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -211,10 +227,14 @@
         ]
       },
       "initial_worlds": 22680,
-      "seconds": 6.2353,
+      "seconds": 4.3776,
       "pending": null,
       "village_win": "3/7",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -254,10 +274,14 @@
         ]
       },
       "initial_worlds": 15120,
-      "seconds": 10.4889,
+      "seconds": 10.5047,
       "pending": null,
       "village_win": "4/35",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -297,10 +321,14 @@
         ]
       },
       "initial_worlds": 756,
-      "seconds": 1.6969,
+      "seconds": 0.762,
       "pending": null,
       "village_win": "1",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -340,10 +368,14 @@
         ]
       },
       "initial_worlds": 7560,
-      "seconds": 0.1447,
+      "seconds": 0.1526,
       "pending": null,
       "village_win": "94/315",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -383,10 +415,14 @@
         ]
       },
       "initial_worlds": 9,
-      "seconds": 0.4886,
+      "seconds": 0.4834,
       "pending": null,
       "village_win": "187/315",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -426,10 +462,14 @@
         ]
       },
       "initial_worlds": 36,
-      "seconds": 3.6768,
+      "seconds": 3.6054,
       "pending": null,
       "village_win": "13297/15120",
-      "rows": 9
+      "rows": 9,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     },
     {
       "cast": [
@@ -467,10 +507,14 @@
         ]
       },
       "initial_worlds": 630,
-      "seconds": 7.9017,
-      "pending": "information_set_budget_exceeded",
-      "village_win": null,
-      "rows": 0
+      "seconds": 14.9138,
+      "pending": null,
+      "village_win": "83/180",
+      "rows": 7,
+      "rules": {
+        "allow_self_bite": true,
+        "initial_seer": "none"
+      }
     }
   ]
 }

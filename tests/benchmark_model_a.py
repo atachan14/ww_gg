@@ -28,7 +28,7 @@ for n,w,m,s,h,claims,mode,strategy in cases:
  b=(group_initial_board if mode=='group' else condition_claims)(b,claims,policy)
  game={'players':n,'rules':{'initial_seer':'none'},'seer_options':{'initial_rule':'none'},'seer_inputs':[],'public_log':{'version':2}}
  result=evaluate_public_game(game,b,Rules(True,initial_seer='none'),strategy)
- record={'cast':[n,w,m,s,h],'claims':claims,'model':mode,'strategy':strategy.__dict__,
+ record={'rules':{'allow_self_bite':True,'initial_seer':'none'},'cast':[n,w,m,s,h],'claims':claims,'model':mode,'strategy':strategy.__dict__,
          'initial_worlds':initial_worlds,'seconds':round(time.perf_counter()-started,4),
          'pending':result.reason if isinstance(result,FuturePending) else None,
          'village_win':None if isinstance(result,FuturePending) else str(result.village_win),

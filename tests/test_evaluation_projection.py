@@ -33,7 +33,12 @@ class EvaluationProjectionTests(unittest.TestCase):
                         self.assertEqual(dict(fast.by_dawn_values)[t],horizon_for_action(general,b,s,(),t))
                 self.assertEqual((b,s),before)
 
-    def test_live_seer_publications_disable_projection(self):
+    def test_live_seer_truth_is_retained_when_latent_medium_locations_are_projected(self):
         b=replace(initial_board(5,1,1,1),claims=('seer','latent','latent','latent','latent'))
         s=TrueScanState(from_board(b),(b.alive,),initial_rule='none',tracked=())
-        self.assertEqual(project_evaluation(b,s,Strategy()),(b,s))
+        projected,joint=project_evaluation(b,s,Strategy())
+        self.assertEqual(projected.belief,b.belief)
+        self.assertEqual(projected.role_probability(1,'seer'),b.role_probability(1,'seer'))
+        self.assertEqual(joint.public_roles,tuple(sorted(projected.worlds)))
+        self.assertEqual((joint.rosters,joint.initial_rule),(s.rosters,s.initial_rule))
+        self.assertEqual(joint.tracked,s.tracked)

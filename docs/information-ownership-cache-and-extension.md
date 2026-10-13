@@ -55,3 +55,7 @@ seer_forecastは要求内のengineを共有し、3対象の同じ公開仲間方
 全体413テスト、70.307秒、失敗/エラー0。公開prior所有/cache4テスト、既存秘密非漏洩/同率/置換/7/8対5/6を維持。占い視点7テスト1.773秒成功（直前2.056秒、厳密な性能比較ではない）。build/静的ミラー/diffチェック、DOM3種類、最新コードの実Edge3種類も成功。秘密訂正、公開不変、再選択、古い応答排除、reload/revision、昼夜/戻る、死亡済み狼、狩人未対応、狼同率、占い5/6・0/1・混合狼数1/2・生存狼2の1/3を確認。タイムアウトなし。
 
 その後、[夜UIの切り分け](night-ui-current-and-migration.md)に対応するフラグ回帰1テストを追加し単独成功。アプリの追加変更はしていない。確認 http://127.0.0.1:8772 。ローカル保存のみ、push/deployなし。
+
+## 混合能力の共有化更新
+
+[mixed-model-a-optimization.md](mixed-model-a-optimization.md) の公開朝/報告cache、observer識別子付き行動cache、単独偽の公開ノイズ積分、取得履歴付き置換キーを追加。policy自体は置換キーへ保存しない。登録能力が死亡・情報・行動へ影響する場合は、`evaluation_projection`、`joint_value_key`、`informative_seer`、スカラー絶対境界を再審査する。

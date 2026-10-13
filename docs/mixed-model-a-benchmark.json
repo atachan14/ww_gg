@@ -1,0 +1,115 @@
+{
+  "python": "3.12.10",
+  "method": "Fixed cast 7/wolf2/medium2/seer1; CO seer1 medium2 medium3; no initial scan; fixed CO/all; max/max/max; both use production 250000work/20sec. Cold request-local caches and label tables. Counting instrumentation affects wall time. Reference Pending is not an independent full seven-player equality proof.",
+  "cases": [
+    {
+      "mode": "uncompressed_reference",
+      "seconds": 7.644891100004315,
+      "work": 250002,
+      "initial_hypotheses": 72,
+      "calls": {
+        "act": 3690,
+        "morning": 1245,
+        "publications": 4975
+      },
+      "unique_inputs": {
+        "act": 2647,
+        "morning": 259,
+        "publications": 428
+      },
+      "memo": {
+        "morning_calls": 1245,
+        "publication_calls": 4975
+      },
+      "cache_sizes": {
+        "values": 1029,
+        "scores": 409,
+        "policies": 240,
+        "acquired": 308,
+        "action_values": 0,
+        "mornings": 0,
+        "publication_values": 0,
+        "joint_descriptors": 0
+      },
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "actions": null,
+      "horizon": null
+    },
+    {
+      "mode": "optimized",
+      "seconds": 10.26883290000842,
+      "work": 128398,
+      "initial_hypotheses": 72,
+      "calls": {
+        "act": 18753,
+        "morning": 2320,
+        "publications": 3317
+      },
+      "unique_inputs": {
+        "act": 14941,
+        "morning": 1199,
+        "publications": 1923
+      },
+      "memo": {
+        "action_calls": 18753,
+        "morning_calls": 2320,
+        "publication_calls": 3317,
+        "action_hits": 3863,
+        "publication_hits": 1394,
+        "morning_hits": 1121
+      },
+      "cache_sizes": {
+        "values": 5203,
+        "scores": 2095,
+        "policies": 1414,
+        "acquired": 1380,
+        "action_values": 25343,
+        "mornings": 1199,
+        "publication_values": 1923,
+        "joint_descriptors": 3868
+      },
+      "pending": null,
+      "village_win": "149/324",
+      "actions": {
+        "1": "47/108",
+        "2": "149/324",
+        "3": "149/324",
+        "4": "119/360",
+        "5": "119/360",
+        "6": "119/360",
+        "7": "119/360"
+      },
+      "horizon": {
+        "1": [
+          "0",
+          "0"
+        ],
+        "2": [
+          "0",
+          "0"
+        ],
+        "3": [
+          "0",
+          "0"
+        ],
+        "4": [
+          "0",
+          "0"
+        ],
+        "5": [
+          "0",
+          "0"
+        ],
+        "6": [
+          "0",
+          "0"
+        ],
+        "7": [
+          "0",
+          "0"
+        ]
+      }
+    }
+  ]
+}
