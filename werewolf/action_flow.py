@@ -35,15 +35,8 @@ def unchanged_death_outcomes(frame, resolve, prepared=None):
     return prepared if prepared is not None else resolve(frame.board, frame.after, frame.target)
 
 
-def action_flow(board, state, target, policy):
-    """Policy hooks: acquire, outcomes, night_outcomes, project, continuations.
-
-    Acquisition always receives the pre-casualty Board. Terminal branches never
-    project or publish. Legacy skips acquisition for an entirely terminal action;
-    Model A retains its eager acquisition/observer-support validation contract.
-    A policy may preflight terminal death only when acquisition cannot change
-    casualties. Future casualty-changing laws must disable terminal preflight.
-    """
+def resolve_action(board,state,target,policy):
+    """Shared physical resolution for final and bounded-horizon evaluation."""
     night = board.phase == 'night'
     acquired = state
     if night:
@@ -53,6 +46,20 @@ def action_flow(board, state, target, policy):
         outcomes = policy.night_outcomes(NightFrame(board,target,state,acquired),prepared)
     else:
         outcomes = policy.outcomes(board,state,target)
+    return acquired,outcomes
+
+
+def action_flow(board, state, target, policy):
+    """Policy hooks: acquire, outcomes, night_outcomes, project, continuations.
+
+    Acquisition always receives the pre-casualty Board. Terminal branches never
+    project or publish. Legacy skips acquisition for an entirely terminal action;
+    Model A retains its eager acquisition/observer-support validation contract.
+    A policy may preflight terminal death only when acquisition cannot change
+    casualties. Future casualty-changing laws must disable terminal preflight.
+    """
+    acquired,outcomes=resolve_action(board,state,target,policy)
+    night=board.phase=='night'
     value = F()
     for outcome in outcomes:
         if outcome.board.winner is not None:

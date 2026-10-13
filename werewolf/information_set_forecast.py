@@ -9,7 +9,7 @@ from fractions import Fraction as F
 from functools import lru_cache
 from math import comb
 from .exact import (action_outcomes, legal_targets, replace_worlds, report_actions,
-                    random_report_outcomes, BoardOutcome, winner_for)
+                    random_report_outcomes, BoardOutcome, winner_for, has_future_medium)
 from .seer_acquisition import Hypothesis, from_board, normalize
 from .seer_future_uniform import TrueScanState, FuturePending, acquire_uniform
 from .seer_future_forecast import project_private
@@ -47,7 +47,8 @@ class InformationSetForecast:
     def exchangeable(self,b):
         # Exact reduction: no future information, and all live locations are
         # exchangeable in the PUBLIC wolf marginal. Public max ties are uniform.
-        if b.initial_medium_count or any(b.claims[p-1]=='seer' for p in b.alive):return False
+        if self.strategy.disclosure_for('medium')=='all' and has_future_medium(b):return False
+        if self.strategy.disclosure_for('seer')=='all' and any(b.claims[p-1]=='seer' for p in b.alive):return False
         masses={}
         for mask,q in b.belief:
             live=mask&b.alive_mask;masses[live]=masses.get(live,F())+q

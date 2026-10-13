@@ -4,7 +4,6 @@ Manual past evidence is a supplied prior. Future fake probabilities use the
 uniform candidate law conditioned on public truth compatibility.
 Multiple-fake correlation remains unselected.
 """
-from dataclasses import dataclass
 from fractions import Fraction as F
 from .exact import (replace_worlds,action_outcomes,legal_targets,report_actions,
                     random_report_outcomes,build_tree,evaluate_tree,BoardOutcome)
@@ -27,11 +26,7 @@ def project_private(state,board,*,marginalize_private=False):
     entries=tuple(Hypothesis(h.roles,tuple(a for a in h.acquisitions if not marginalize_private or a.player in tracked),h.mass*new[h.roles]/old[h.roles]) for h in state.hypotheses if h.roles in new)
     return TrueScanState(normalize(entries),state.rosters,state.initial_rule,tracked,state.observed_prefix)
 
-@dataclass(frozen=True)
-class Forecast:
-    village_win: F
-    action_values: tuple
-    by_dawn_values: tuple = ()
+from .forecast_result import Forecast
 
 class Unresolved(Exception):
     def __init__(self,pending):self.pending=pending
