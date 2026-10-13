@@ -1,10 +1,10 @@
 /* Viewer-owned truthful evidence, never a public CO/report draft. */
 (() => {
  const copy=value=>JSON.parse(JSON.stringify(value));
- window.createBoardPrivateDraftStore=({boardId,revision,storage=null})=>{
+ window.createBoardPrivateDraftStore=({boardId,revision,storage=null,scopeRevision=true})=>{
   if(typeof boardId!=='string'||!Number.isInteger(revision))throw Error('Board identity required');
   const drafts=new Map();
-  const key=(player,role)=>`${boardId}:${revision}:${player}:${role}`;
+  const key=(player,role)=>`${boardId}:${scopeRevision?revision:'board'}:${player}:${role}`;
   const validate=(results)=>{
    if(!Array.isArray(results))throw Error('Private result list required');
    const days=new Set();
@@ -24,7 +24,7 @@
     if(drafts.has(id))return copy(drafts.get(id));
     try{
      const saved=JSON.parse(storage?.getItem(`wwgg-private:${id}`)||'null');
-     if(saved?.boardId===boardId&&saved.revision===revision&&saved.player===player&&saved.role===role){saved.results=validate(saved.results);return save(id,saved);}
+     if(saved?.boardId===boardId&&(!scopeRevision||saved.revision===revision)&&saved.player===player&&saved.role===role){saved.results=validate(saved.results);return save(id,{...saved,revision});}
     }catch(_){}
     // Copy only when constructing this private row for the first time. An
     // intentionally cleared row remains empty on reopen; do not refill it.

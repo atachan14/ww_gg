@@ -16,4 +16,11 @@ assert.equal(store.open({player:3,role:'seer',claims:[],publicResults:[{reporter
 assert.equal(store.open({player:2,role:'medium',claims:['seer'],publicResults:original}).results.length,0);
 const revised=w.createBoardPrivateDraftStore({...setup,revision:8});assert.equal(revised.open({player:2,role:'seer',claims:['seer'],publicResults:original}).results[0].target,3);
 assert.throws(()=>store.edit({player:2,role:'seer',results:[{day:1,target:3,color:'fake'}]}));
+const scoped=w.createBoardPrivateDraftStore({...setup,scopeRevision:false});
+scoped.open({player:2,role:'seer',claims:['seer'],publicResults:original});
+scoped.edit({player:2,role:'seer',results:[{day:1,target:4,color:'black'}]});
+const nextRevision=w.createBoardPrivateDraftStore({...setup,revision:8,scopeRevision:false});
+assert.equal(nextRevision.open({player:2,role:'seer',claims:['seer'],publicResults:original}).results[0].target,4);
+const otherBoard=w.createBoardPrivateDraftStore({...setup,boardId:'other-board',scopeRevision:false});
+assert.equal(otherBoard.open({player:2,role:'seer',claims:[],publicResults:original}).results.length,0);
 dom.window.close();console.log('Private draft: first-copy, independent edit, clear/reopen, per-view scope, revision isolation: PASS');

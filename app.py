@@ -311,7 +311,14 @@ def create_app(test_config=None, *, deployment=False):
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
         from werewolf.public_log import migrate
-        return render_template("main.html", night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), future_active=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        viewpoint_seed = None
+        if night_context and not finished and not disclosure_error:
+            from werewolf.private_adapter import viewpoint_roles, private_slots
+            viewpoint_seed = {'roles': viewpoint_roles(board), 'revision': state['revision'],
+                              'board_id': state['public_log']['board_id'],
+                              'claims': list(board.claims), 'public_results': state.get('seer_inputs', []),
+                              'slots': {str(p): private_slots(board, p, rules) for p in board.alive}}
+        return render_template("main.html", viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), future_active=manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False) and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual and app.config.get('SEER_UNIFORM_FUTURE_PREVIEW',False), 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
 
@@ -667,6 +674,33 @@ def create_app(test_config=None, *, deployment=False):
         _,p=structural_replay(state)
         batch={'mode':'simultaneous','events':events}
         return transaction_changes(state,p.last_board if p.finished else p.board,batch,finished=p.finished),batch
+
+    @app.post('/private-view')
+    def private_view():
+        from flask import jsonify
+        from werewolf.private_adapter import evaluate_private_table
+        state = game()
+        if state is None or not dawn_enabled(state):
+            return jsonify(error='夜の視点表示はこのBoardでは利用できません。'), 404
+        if (not revision_matches(state) or request.form.getlist('board_id') != [state['public_log']['board_id']]):
+            return jsonify(error='Boardが変更されています。再読み込みしてください。'), 409
+        try:
+            if set(request.form) != {'revision', 'board_id', 'payload'} or len(request.form.getlist('payload')) != 1:
+                raise ValueError('視点入力の形式が不正です。')
+            payload = json.loads(request.form['payload'])
+            if (type(payload) is not dict or set(payload) != {'role', 'players', 'results'} or
+                    payload['role'] not in ('wolf', 'seer', 'hunter') or
+                    type(payload['players']) is not list or type(payload['results']) is not list):
+                raise ValueError('視点入力の形式が不正です。')
+            # Replay only public evidence; the private Board is confined to this adapter.
+            rules, progress = replay(state)
+            if progress.finished or progress.board.phase != 'night':
+                raise ValueError('夜のBoardで視点を選択してください。')
+            result = evaluate_private_table(progress.board, payload['role'], payload['players'], payload['results'],
+                                            rules, Strategy(**state['policy']))
+            return jsonify(**result, board_id=state['public_log']['board_id'], revision=state['revision'])
+        except (ValueError, TypeError, KeyError, DisclosureInconsistent) as exc:
+            return jsonify(error=str(exc)), 400
 
     @app.post('/table-preview')
     def table_preview():

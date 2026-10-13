@@ -52,7 +52,7 @@
         show(result);mode='viewing';paint();
       }catch(error){
         if(revision!==version||error.name==='AbortError')return;
-        mode='selecting';paint();onError(error);
+        mode='viewing';paint();onError(error);
       }
     };
     const choose=id=>{
