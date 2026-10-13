@@ -8,6 +8,8 @@ Public updates retain the engine's chosen-action law, not an additional action
 selection likelihood. No equilibrium or new reporting strategy is introduced.
 """
 from fractions import Fraction as F
+from dataclasses import replace
+from .seer_acquisition import Hypothesis, normalize
 from .exact import (action_outcomes, legal_targets, value_for_action, report_actions,
                     random_report_outcomes, joint_value, replace_worlds)
 from .seer_future_uniform import FuturePending, acquire_uniform
@@ -87,10 +89,10 @@ branch weights and payoffs; each child public Board keeps all public worlds.
         return tuple((branch.probability, replace_worlds(b, branch.state.public_roles),
                       branch.state, published + branch.reports) for branch in generated)
 
-    def morning(b, s, published):
+    def morning_branches(b, s, published):
         actions = report_actions(b) if strategy.disclosure_for('medium') == 'all' else ()
         if not actions:
-            return weighted(b, s, publications(b, s, published))
+            return publications(b, s, published)
         if strategy.fake_reports == 'random':
             outcomes = random_report_outcomes(b)
         else:
@@ -131,7 +133,84 @@ branch weights and payoffs; each child public Board keeps all public worlds.
             next_s = project(s, o.board)
             for q, child, st, reports in publications(o.board, next_s, published):
                 branches.append((o.probability * q, child, st, reports))
-        return weighted(b, s, branches)
+        return tuple(branches)
+
+    def morning(b, s, published):
+        return weighted(b, s, morning_branches(b, s, published))
+
+    def push_private(source, private, branches):
+        """Apply PUBLIC report likelihoods to the separately carried private law."""
+        public_weights = {(h.roles, h.acquisitions): h.mass for h in source.hypotheses}
+        private_weights = {(h.roles, h.acquisitions): h.mass for h in private.hypotheses}
+        result = []
+        for q, child, st, reports in branches:
+            entries = []
+            for h in st.hypotheses:
+                key = (h.roles, h.acquisitions)
+                if key in private_weights:
+                    entries.append(Hypothesis(h.roles, h.acquisitions,
+                                              q * h.mass * private_weights[key] / public_weights[key]))
+            mass_here = sum((h.mass for h in entries), F())
+            if mass_here:
+                result.append((mass_here, child, st, reports, replace(st, hypotheses=normalize(entries))))
+        if sum((q for q, *_ in result), F()) != 1:
+            raise Unresolved('seer_view_report_likelihood_incomplete')
+        return result
+
+    def private_action(b, s, published, target, private):
+        # Both laws use the same fixed PUBLIC instruction, but each law retains
+        # its own count prior and count-wise legal-bite normalizers.
+        key = (b, s, published, target, private)
+        if key in action_memo: return action_memo[key]
+        tick(len(s.hypotheses) + len(private.hypotheses))
+        private_board = replace_worlds(b, private.public_roles)
+        if target not in legal_targets(private_board, rules, strategy):
+            raise Unresolved('seer_view_public_instruction_private_illegal')
+        pub_acquired, priv_acquired = s, private
+        if b.phase == 'night':
+            pub_acquired = checked(acquire_uniform(s, b.alive, max_work=max_work, position=strategy.seer_position))
+            priv_acquired = checked(acquire_uniform(private, b.alive, max_work=max_work, position=strategy.seer_position))
+            kept = tuple(h for h in priv_acquired.hypotheses if observer(h, priv_acquired))
+            if not kept: raise Unresolved('seer_view_scan_outside_public_support')
+            priv_acquired = replace(priv_acquired, hypotheses=normalize(kept))
+        public_children = {o.board.winner: o.board for o in action_outcomes(b, target, rules, strategy)}
+        private_outcomes = action_outcomes(private_board, target, rules, strategy)
+        if trace is not None:
+            trace.setdefault('private_transitions', []).append({'history': tuple((e.day,e.phase,e.target) for e in b.history),
+                'phase': b.phase, 'target': target, 'prior_counts': private_board.wolf_count_distribution,
+                'child_counts': tuple((o.probability, o.board.wolf_count_distribution) for o in private_outcomes),
+                'public_child_counts': tuple(child.wolf_count_distribution for child in public_children.values())})
+        total = F()
+        for o in private_outcomes:
+            if o.board.winner is not None:
+                value = F(o.board.winner == 'village')
+            else:
+                child = public_children[None]
+                pub_next = project(pub_acquired, child)
+                priv_next = project_private(priv_acquired, o.board, marginalize_private=False)
+                if b.phase == 'night':
+                    branches = push_private(pub_next, priv_next, morning_branches(child, pub_next, published))
+                    value = sum((q * private_solve(c, st, reports, priv)
+                                 for q, c, st, reports, priv in branches), F())
+                else:
+                    value = private_solve(child, pub_next, published, priv_next)
+            total += o.probability * value
+        action_memo[key] = total
+        return total
+
+    def private_solve(b, s, published, private):
+        if b.winner is not None: return F(b.winner == 'village')
+        key = (b, s, published, private)
+        if key in conditional_memo: return conditional_memo[key]
+        _, scores = public_values(b, s, published)
+        if getattr(strategy, b.phase) == 'random': chosen = tuple(p for p, _ in scores)
+        else:
+            best = (max if b.phase == 'day' else min)(v for _, v in scores)
+            chosen = tuple(p for p, v in scores if v == best)
+        if not chosen: raise Unresolved('seer_view_no_public_continuation')
+        value = sum((private_action(b, s, published, p, private) for p in chosen), F()) / len(chosen)
+        conditional_memo[key] = value
+        return value
 
     def action(b, s, published, target):
         key = (b, s, published, target)
@@ -183,7 +262,8 @@ branch weights and payoffs; each child public Board keeps all public worlds.
         with calculation_budget(max_work, max_seconds=max_seconds):
             if not mass(public, scan_state): raise ValueError('Inconsistent wolf roster')
             if observer is not None:
-                return solve(public, scan_state, past)
+                private = replace(scan_state, hypotheses=normalize(tuple(h for h in scan_state.hypotheses if observer(h, scan_state))))
+                return private_solve(public, scan_state, past, private)
             targets = tuple(p for p in legal_targets(public, rules, strategy)
                             if strategy.include_self_bite or not mask & (1 << (p - 1)))
             return tuple((p, action(public, scan_state, past, p)) for p in targets)

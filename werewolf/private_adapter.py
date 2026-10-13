@@ -1,6 +1,6 @@
 """Private table projection. Public policy evaluation never receives private worlds.
 
-Wolf finals and supported CO/all/single-live-wolf seer scan comparisons use a
+Wolf finals and supported CO/all seer scan comparisons use a
 separate public-policy continuation. Other seer scopes and hunter mechanics
 remain explicit unsupported values.
 """
@@ -67,7 +67,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 result = seer_forecast(public, players[0], view.acquisitions, rules, strategy,
                                        scan_state=state, past=past, max_work=max_work, max_seconds=max_seconds)
         reasons = {'seer_view_unpublished_own_action_unimplemented': 'なし開示：未公開結果を本人の後続行動へ使う評価は未対応です。',
-                   'seer_view_multiple_live_wolves_unimplemented': '占い先比較は公開側の生存狼数が1匹のBoardに対応します。複数狼・狼数不確定の継続評価は未対応です。',
+                   'seer_view_public_instruction_private_illegal': '公開方針の襲撃先が本人の条件付き分布の一部狼数仮説で不合法です。この場合の秘密戦略は未対応のため未計算です。',
                    'seer_view_latent_future_co_unimplemented': '潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。'}
         if isinstance(result, FuturePending):
             reason = reasons.get(result.reason, '占いの公開取得履歴・未来報告モデルまたは計算予算が未対応のため未計算です。')

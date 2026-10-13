@@ -17,11 +17,6 @@ def seer_forecast(public, player, acquisitions, rules, strategy, *, scan_state, 
         return FuturePending('seer_view_unpublished_own_action_unimplemented')
     if public.claims[player-1] != 'seer' or (scan_state.tracked is not None and player not in scan_state.tracked):
         return FuturePending('seer_view_latent_future_co_unimplemented')
-    # With one publicly live wolf, every continuing branch retains that count.
-    # Multiple-count chosen-bite normalization needs a separate conditional law;
-    # do not silently let the observer condition change that public model.
-    if set(public.wolf_count_distribution) != {1}:
-        return FuturePending('seer_view_multiple_live_wolves_unimplemented')
     def compatible(h):
         return bool(h.roles[2] & (1 << (player-1))) and all(a in h.acquisitions for a in acquisitions)
     supported = tuple(h for h in scan_state.hypotheses if compatible(h))

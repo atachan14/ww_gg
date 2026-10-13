@@ -35,10 +35,6 @@ class SeerForecastTests(unittest.TestCase):
         self.assertIsInstance(seer_forecast(b,1,(),Rules(),Strategy(seer_disclosure='none'),scan_state=s),FuturePending)
         b=replace(b,claims=('latent',)*5)
         self.assertIsInstance(seer_forecast(b,1,(),Rules(),Strategy(),scan_state=s),FuturePending)
-        seed=replace(initial_board(7,2,0,1),claims=('seer',)+('latent',)*6)
-        b=next(o.board for o in action_outcomes(seed,7,Rules(initial_seer='none'),Strategy()) if o.board.winner is None)
-        s=project_private(TrueScanState(from_board(seed),((1,2,3,4,5,6,7),),initial_rule='none',tracked=(1,)),b)
-        self.assertEqual(seer_forecast(b,1,(),Rules(),Strategy(),scan_state=s).reason,'seer_view_multiple_live_wolves_unimplemented')
 
     def test_secret_past_results_are_truth_and_acquisition_days_are_distinct(self):
         from werewolf.seer_acquisition import normalize
