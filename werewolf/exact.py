@@ -427,6 +427,26 @@ def legal_targets(board: Board, rules: Rules, strategy: Strategy) -> tuple[int, 
                  {(w & alive_mask).bit_count() for w, _ in board.belief if not w & (1 << (i - 1))} == counts)
 
 
+def forced_action_worlds(board, target, rules, strategy):
+    """Target intervention: exclude self-bite worlds within each live count.
+
+    Preserve the count prior, distinct from conditioning an observed corpse.
+    Callers use legal_targets first; missing support is never silently dropped.
+    """
+    if board.phase != 'night' or strategy.include_self_bite:return board.worlds
+    bit=1<<(target-1);alive_mask=board.alive_mask
+    count_weights=board.wolf_count_distribution;normalizers={}
+    for mask,q in board.belief:
+        if not mask&bit:
+            w=(mask&alive_mask).bit_count()
+            normalizers[w]=normalizers.get(w,Fraction())+q
+    if set(normalizers)!=set(count_weights):
+        raise ValueError('Target cannot be legally bitten in every count hypothesis')
+    return tuple((*world[:-1],world[-1]*count_weights[(world[0]&alive_mask).bit_count()]/
+                  normalizers[(world[0]&alive_mask).bit_count()])
+                 for world in board.worlds if not world[0]&bit)
+
+
 def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy) -> tuple[BoardOutcome, ...]:
     validate_strategy(rules, strategy)
     if board.winner is not None:
@@ -436,24 +456,8 @@ def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy)
     alive = tuple(player for player in board.alive if player != target)
     bit = 1 << (target - 1)
     groups = {}
-    count_weights = board.wolf_count_distribution
     alive_mask = board.alive_mask
-    if board.phase == "night" and not strategy.include_self_bite:
-        # A forced legal bite, within each count hypothesis. This is not a
-        # globally observed random location (which would reweight the counts).
-        normalizers = {}
-        for mask, q in board.belief:
-            w = (mask & alive_mask).bit_count()
-            if not mask & bit:
-                normalizers[w] = normalizers.get(w, Fraction(0)) + q
-        if set(normalizers) != set(count_weights):
-            raise ValueError("Target cannot be legally bitten in every count hypothesis")
-    for mask, medium, seer, hunter, q in board.worlds:
-        if board.phase == "night" and not strategy.include_self_bite:
-            if mask & bit:
-                continue
-            w = (mask & alive_mask).bit_count()
-            q *= count_weights[w] / normalizers[w]
+    for mask, medium, seer, hunter, q in forced_action_worlds(board,target,rules,strategy):
         w = (mask & (alive_mask ^ bit)).bit_count()
         winner = winner_for(len(alive), w)
         groups.setdefault(winner, []).append((mask, medium, seer, hunter, q))

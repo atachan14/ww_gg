@@ -43,15 +43,15 @@ class PublicModelATests(unittest.TestCase):
         self.assertEqual(result.village_win,F(7,15))
         self.assertEqual(evaluate_tree(build_tree(b,Rules(),strategy),strategy).board_value(build_tree(b,Rules(),strategy)).village_win,result.village_win)
 
-    def test_budget_returns_no_partial_public_table_and_night_contract_is_not_invented(self):
+    def test_budget_returns_no_partial_public_table_and_night_rows_are_complete(self):
         b=initial_board(5,1)
         self.assertIsInstance(public_forecast(b,joint(b),(),Rules(),Strategy(),max_work=1),FuturePending)
         b=replace(b,phase='night')
         result=public_forecast(b,joint(b),(),Rules(initial_seer='none'),Strategy())
         self.assertEqual(result.village_win,F(1,4))
-        self.assertEqual(result.action_values,())
-        self.assertEqual(result.by_dawn_values,())
-        self.assertEqual(result.pending_metrics,('night_actions','night_horizon'))
+        self.assertEqual(dict(result.action_values),{p:F(1,4) for p in b.alive})
+        self.assertEqual(dict(result.by_dawn_values),{p:HorizonValues(F(0),F(0)) for p in b.alive})
+        self.assertEqual(result.pending_metrics,())
 
     def test_count_fast_path_matches_uncompressed_model_a_with_ability_free_roles(self):
         b=initial_board(5,1,1,1,1);s=joint(b)

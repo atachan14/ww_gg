@@ -1,15 +1,17 @@
 """Public-only model A facade. No viewer or secrets enter its inputs.
 
-Night overview policy is supported. Night row intervention semantics are being
-reviewed separately; absent that contract, no target comparison is fabricated.
+Night row interventions preserve the existing live-count prior. Subsequent
+actions and public belief updates follow the information-set model.
 """
 from fractions import Fraction as F
-from .exact import replace_worlds
+from .exact import replace_worlds, forced_action_worlds, legal_targets
 from .action_flow import resolve_action
 from .seer_acquisition import normalize
 from .seer_future_uniform import FuturePending
 from .public_prior import public_history_key, prepare_public_prior
 from .information_set_forecast import InformationSetForecast, Pending
+from .seer_future_forecast import project_private
+from .evaluation_projection import project_evaluation
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 from .forecast_result import Forecast
 from .by_dawn import HorizonValues
@@ -51,9 +53,10 @@ def horizon_for_action(engine,board,state,past,target,private=None):
 
 
 def public_forecast(board,state,past,rules,strategy,*,max_work=250000,max_seconds=20):
-    """Complete public overview and day rows; night rows await their contract."""
+    """Public overview, target rows and horizon under the approved intervention."""
     if state.public_roles!=tuple(sorted(board.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
+    board,state=project_evaluation(board,state,strategy)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work)
@@ -61,11 +64,12 @@ def public_forecast(board,state,past,rules,strategy,*,max_work=250000,max_second
                 from .exchangeable_public import exchangeable_forecast
                 return exchangeable_forecast(board,strategy)
             value=engine.scalar(board,state,past)
-            targets=board.alive if board.phase=='day' and board.winner is None else ()
-            actions=tuple((t,engine.act(board,state,past,t,state,None)) for t in targets)
-            horizon=tuple((t,horizon_for_action(engine,board,state,past,t)) for t in targets)
-            return Forecast(value,actions,horizon,
-                            ('night_actions','night_horizon') if board.phase=='night' and board.winner is None else ())
+            targets=legal_targets(board,rules,strategy)
+            own={t:project_private(state,replace_worlds(board,forced_action_worlds(board,t,rules,strategy)))
+                 if board.phase=='night' else state for t in targets}
+            actions=tuple((t,engine.act(board,state,past,t,own[t],None)) for t in targets)
+            horizon=tuple((t,horizon_for_action(engine,board,state,past,t,own[t])) for t in targets)
+            return Forecast(value,actions,horizon)
     except CalculationBudgetExceeded:return FuturePending('information_set_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)
 

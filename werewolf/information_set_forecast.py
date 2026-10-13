@@ -42,6 +42,9 @@ class InformationSetForecast:
     def __init__(self, rules, strategy, *, max_work=250000, trace=None):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
         self.values={};self.scores={};self.policies={};self.acquired={}
+        self.symmetries={}
+        self.reduced_descriptors={}
+        self.action_values={}
         self.action_policy=InformationSetActionPolicy(self)
 
     def exchangeable(self,b):
@@ -68,6 +71,23 @@ class InformationSetForecast:
             self.acquired[key]=self.checked(acquire_uniform(state,b.alive,max_work=self.max_work,
                                                           position=self.strategy.seer_position))
         return self.acquired[key]
+
+    def equivalent_targets(self,b,s,x,y):
+        # Current projected fixed-CO medium model: latent roles have no future
+        # effect. Do not extend this reduction to scans or casualty abilities.
+        if b.initial_seer_count or b.initial_hunter_count:return False
+        if self.strategy.disclosure_for('seer')=='all' and any(b.claims[p-1]=='seer' for p in b.alive):return False
+        if b.claims[x-1]=='medium' or b.claims[y-1]=='medium':return False
+        key=(b,s)
+        if key not in self.symmetries:
+            co=sum(1<<(p-1) for p in b.alive if b.claims[p-1]=='medium')
+            masses={}
+            for h in s.hypotheses:
+                k=(h.roles[0],h.roles[1]&co);masses[k]=masses.get(k,F())+h.mass
+            self.symmetries[key]=masses
+        masses=self.symmetries[key];a=1<<(x-1);c=1<<(y-1)
+        return all(masses.get((w^(a|c) if bool(w&a)!=bool(w&c) else w,m),F())==q
+                   for (w,m),q in masses.items())
 
     def public_children(self,b,target):
         if b.phase=='day':return action_outcomes(b,target,self.rules,self.strategy)
@@ -111,11 +131,24 @@ class InformationSetForecast:
             incomplete=lambda:Pending('information_set_report_likelihood_incomplete'))
 
     def act(self,b,s,past,target,private,observer):
+        if type(target)is not int or target not in b.alive:
+            raise Pending('information_set_internal_illegal_action')
+        action_key=None
+        if observer is None:
+            from .medium_value_key import public_descriptor,private_action_key
+            source=(b,s)
+            if source not in self.reduced_descriptors:
+                self.reduced_descriptors[source]=public_descriptor(b,s,self.rules,self.strategy)
+            action_key=private_action_key(self.reduced_descriptors[source],private,target)
+            if action_key is not None and action_key in self.action_values:
+                tick();return self.action_values[action_key]
         tick(len(s.hypotheses)+len(private.hypotheses))
         private_board=replace_worlds(b,private.public_roles)
         if target not in legal_targets(private_board,self.rules,self.strategy):
             raise Pending('information_set_internal_illegal_action')
-        return action_flow(b,(s,past,private,observer,private_board),target,self.action_policy)
+        value=action_flow(b,(s,past,private,observer,private_board),target,self.action_policy)
+        if action_key is not None:self.action_values[action_key]=value
+        return value
 
     def wolf_policy(self,b,s,past,mask):
         key=(b,s,past,mask)
@@ -130,7 +163,15 @@ class InformationSetForecast:
             if self.exchangeable(b):
                 w=(mask&b.alive_mask).bit_count();n=len(b.alive)
                 scores=tuple((p,exchangeable_value(n-1,w-int(bool(mask&(1<<(p-1)))),'day',self.strategy)) for p in targets)
-            else:scores=tuple((p,self.act(b,s,past,p,group,None)) for p in targets)
+            else:
+                computed=[];representatives=[]
+                for p in targets:
+                    prior=next((v for t,v in representatives
+                                if bool(mask&(1<<(p-1)))==bool(mask&(1<<(t-1))) and self.equivalent_targets(b,s,p,t)),None)
+                    value=self.act(b,s,past,p,group,None) if prior is None else prior
+                    if prior is None:representatives.append((p,value))
+                    computed.append((p,value))
+                scores=tuple(computed)
             best=min(v for _,v in scores);chosen=tuple(p for p,v in scores if v==best)
         if not chosen:raise Pending('information_set_no_legal_bite')
         result=tuple((p,F(1,len(chosen))) for p in chosen);self.policies[key]=result
@@ -141,11 +182,24 @@ class InformationSetForecast:
     def day_scores(self,b,s,past):
         key=(b,s,past)
         if key not in self.scores:
-            self.scores[key]=tuple((p,self.act(b,s,past,p,s,None)) for p in b.alive)
+            computed=[];representatives=[]
+            for p in b.alive:
+                prior=next((v for t,v in representatives if self.equivalent_targets(b,s,p,t)),None)
+                value=self.act(b,s,past,p,s,None) if prior is None else prior
+                if prior is None:representatives.append((p,value))
+                computed.append((p,value))
+            self.scores[key]=tuple(computed)
         return self.scores[key]
 
     def solve(self,b,s,past,private,observer):
         key=(b,s,past,private,observer)
+        if observer is None:
+            from .medium_value_key import public_descriptor,private_value_key
+            source=(b,s)
+            if source not in self.reduced_descriptors:
+                self.reduced_descriptors[source]=public_descriptor(b,s,self.rules,self.strategy)
+            reduced=private_value_key(self.reduced_descriptors[source],private)
+            if reduced is not None:key=reduced
         if key in self.values:return self.values[key]
         tick(len(private.hypotheses))
         if b.winner is not None:return F(b.winner=='village')
@@ -222,6 +276,10 @@ class InformationSetActionPolicy:
 def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,max_work=250000,max_seconds=20,trace=None):
     if s.public_roles!=tuple(sorted(b.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
+    if observer is None:
+        from .evaluation_projection import project_evaluation
+        before=len(s.hypotheses);b,s=project_evaluation(b,s,strategy)
+        if trace is not None:trace['evaluation_projection']=(before,len(s.hypotheses))
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work,trace=trace)

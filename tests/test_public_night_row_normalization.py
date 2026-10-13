@@ -7,6 +7,7 @@ from werewolf.seer_acquisition import from_board,normalize
 from werewolf.seer_future_uniform import TrueScanState
 from werewolf.information_set_forecast import InformationSetForecast
 from werewolf.model_a_public import horizon_for_action
+from werewolf.model_a_public import public_forecast
 from werewolf.by_dawn import action_by_dawn,HorizonValues
 
 
@@ -38,6 +39,9 @@ class PublicNightNormalizationTests(unittest.TestCase):
         self.assertEqual(action_by_dawn(b,3,self.rules,self.strategy),HorizonValues(F(0),F(2,3)))
         self.assertEqual(horizon_for_action(e,b,s,(),3,own),HorizonValues(F(0),F(3,5)))
         self.assertEqual(e.scalar(b,s,()),F(1,12))
+        approved=public_forecast(b,s,(),self.rules,self.strategy)
+        self.assertEqual(dict(approved.action_values)[3],F(1,12))
+        self.assertEqual(dict(approved.by_dawn_values)[3],HorizonValues(F(0),F(2,3)))
 
     def test_old_row_is_absent_if_a_count_group_has_no_legal_assignment(self):
         seed=replace_worlds(initial_board(6,2),tuple((mask,0,0,0,F(1,4)) for mask in (33,36,3,10)))
@@ -45,6 +49,7 @@ class PublicNightNormalizationTests(unittest.TestCase):
         self.assertNotIn(2,legal_targets(b,self.rules,self.strategy))
         e,s,own=self.proposed(b,2)
         self.assertEqual(e.act(b,s,(),2,own,None),F(1,4))
+        self.assertNotIn(2,dict(public_forecast(b,s,(),self.rules,self.strategy).action_values))
 
     def test_single_count_conditioning_is_identical(self):
         b=replace(initial_board(5,1),phase='night');e,s,own=self.proposed(b,3)

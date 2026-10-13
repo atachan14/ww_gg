@@ -29,7 +29,17 @@ def exchangeable_forecast(board,strategy):
     if board.winner:return Forecast(F(board.winner=='village'),())
     n=len(board.alive);counts=board.wolf_count_distribution
     value=sum((q*exchangeable_value(n,w,board.phase,strategy) for w,q in counts.items()),F())
-    if board.phase=='night':return Forecast(value,(),pending_metrics=('night_actions','night_horizon'))
+    if board.phase=='night':
+        row=village=wolf=F()
+        for w,q in counts.items():
+            kinds=((F(w,n),w-1),(F(n-w,n),w)) if strategy.include_self_bite else ((F(1),w),)
+            for weight,remaining in kinds:
+                if not weight:continue
+                row+=q*weight*exchangeable_value(n-1,remaining,'day',strategy)
+                v,h=terminal_mass(n-1,remaining)
+                village+=q*weight*v;wolf+=q*weight*h
+        return Forecast(value,tuple((p,row) for p in board.alive),
+                        tuple((p,HorizonValues(village,wolf)) for p in board.alive))
     village=wolf=F()
     for w,q in counts.items():
         for weight,remaining in ((F(w,n),w-1),(F(n-w,n),w)):
