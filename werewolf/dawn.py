@@ -5,9 +5,8 @@ and multiple-death observations stay distinct; unsupported observations may be
 recorded, but may not be advanced with a fabricated transition probability.
 """
 from copy import deepcopy
-from fractions import Fraction
 
-from .exact import Progress, Strategy, advance, replace_worlds
+from .exact import Progress, Strategy, advance
 
 FLOW = 'public-dawn-v1'
 OBSERVATION = 'night-deaths-v1'
@@ -66,23 +65,15 @@ def observe(progress, observation, rules, strategy):
     if reason:
         raise ValueError(reason)
     target = observation['deaths'][0]
-    # A public corpse is evidence, not a forced legal bite. Condition globally,
-    # unlike action_outcomes' per-wolf-count normalization for a chosen action.
-    # No additional likelihood for the wolf's choice is assumed at this stage.
-    worlds = tuple(w for w in progress.board.worlds
-                   if rules.allow_self_bite or not w[0] & (1 << (target - 1)))
-    mass = sum((w[-1] for w in worlds), Fraction())
-    if not mass:
+    from .phase_updates import condition_night_corpse, observed_night_strategy
+    try:
+        board = condition_night_corpse(progress.board, target, rules)
+    except ValueError:
         raise ValueError('この死体報告とルールに整合する配役がありません。')
-    board = replace_worlds(progress.board,
-                          tuple((*w[:-1], w[-1] / mass) for w in worlds))
     conditioned = Progress(board, progress.settled_village, progress.settled_wolf,
                            progress.last_board, progress.last_outcomes)
-    # Include all rule-legal corpses even when a chosen-action policy excludes
-    # self bite. A planning preference must not reject observed public evidence.
-    from dataclasses import replace
-    observation_strategy = replace(strategy, include_self_bite=rules.allow_self_bite)
-    return advance(conditioned, target, rules, observation_strategy)
+    return advance(conditioned, target, rules, observed_night_strategy(rules, strategy))
+
 
 
 def advance_step(progress, step, rules):

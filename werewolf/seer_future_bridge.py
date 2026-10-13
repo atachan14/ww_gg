@@ -4,6 +4,7 @@ from fractions import Fraction as F
 from .seer_acquisition import Hypothesis,Acquisition,SeerReport,normalize,from_board
 from .seer_future_uniform import TrueScanState,FuturePending
 from .seer_future_forecast import forecast
+from .phase_updates import acquisition_rosters
 from .calculation_budget import calculation_budget,tick,CalculationBudgetExceeded
 
 
@@ -30,10 +31,7 @@ def prepare_game(g,board,*,max_work=250000):
     rows={(r['day'],r['reporter']):r for r in g['seer_inputs'] if r['target'] is not None and r['color'] is not None}
     # Current full-disclosure omissions already exclude truth in replay.
     # Never create private true acquisitions to rescue those violations.
-    rosters=[]
-    for day in range(1,board.day+1):
-        dead={e.target for e in board.history if day>1 and (e.day<day-1 or e.day==day-1 and e.phase=='day')}
-        rosters.append(tuple(p for p in range(1,g['players']+1) if p not in dead))
+    rosters=acquisition_rosters(board)
     active_only=g.get('public_log',{}).get('version')==2
     entries=[]
     try:

@@ -7,6 +7,7 @@ remain explicit unsupported values.
 from .exact import actual_role, legal_targets
 from .private_view import condition_private
 from .by_dawn import immediate
+from .phase_updates import acquisition_roster
 from .information_set_forecast import information_forecast
 from .seer_future_uniform import FuturePending
 
@@ -35,10 +36,8 @@ def private_slots(board, player, rules):
     for day in range(1, board.day + 1):
         if day == 1 and rules.initial_seer == 'none':
             continue
-        dead = {e.target for e in board.history
-                if e.day < day - 1 or e.day == day - 1 and e.phase == 'day'}
-        slots.append({'day': day, 'targets': [p for p in range(1, board.player_count + 1)
-                                            if p != player and p not in dead]})
+        slots.append({'day': day, 'targets': [p for p in acquisition_roster(board.player_count,board.history,day)
+                                            if p != player]})
     return slots
 
 
@@ -90,9 +89,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         else:
             from .seer_acquisition import from_board
             from .seer_future_uniform import TrueScanState
-            rosters=tuple(tuple(p for p in range(1,public.player_count+1)
-                                if not any(e.target==p and (e.day<day-1 or e.day==day-1 and e.phase=='day') for e in public.history))
-                          for day in range(1,public.day+1))
+            from .phase_updates import acquisition_rosters
+            rosters=acquisition_rosters(public)
             state=TrueScanState(from_board(public),rosters,rules.initial_seer,tracked=(),observed_prefix=public.day)
             result = information_forecast(public, state, past, rules, strategy,
                                           mask=sum(1 << (p-1) for p in players), max_work=max_work, max_seconds=max_seconds)

@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from fractions import Fraction
 from .exact import actual_role, replace_worlds
 from .seer_acquisition import Acquisition
+from .phase_updates import acquisition_roster
 
 
 @dataclass(frozen=True)
@@ -51,8 +52,8 @@ def condition_private(board, role, players, results=(), *, rules):
             if day==1 and (rules.initial_seer=='none' or rules.initial_seer=='random_white' and color=='black'):
                 raise ValueError('Private result conflicts with initial seer rule')
             # Night N acquires result slot N+1 before that night's casualty.
-            dead={event.target for event in board.history if event.day<day-1 or event.day==day-1 and event.phase=='day'}
-            if target in dead or players[0] in dead:raise ValueError('Private scan target was unavailable')
+            roster=acquisition_roster(board.player_count,board.history,day)
+            if target not in roster or players[0] not in roster:raise ValueError('Private scan target was unavailable')
             acquisitions.append(Acquisition(day,players[0],target,color))
         else:
             executions={event.target for event in board.history if event.phase=='day' and event.day==day-1}

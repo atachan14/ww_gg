@@ -12,7 +12,9 @@ from .exact import (action_outcomes, legal_targets, replace_worlds, report_actio
                     random_report_outcomes, BoardOutcome, winner_for)
 from .seer_acquisition import Hypothesis, from_board, normalize
 from .seer_future_uniform import TrueScanState, FuturePending, acquire_uniform
-from .seer_future_forecast import project_private, future_publications
+from .seer_future_forecast import project_private
+from .morning_publications import future_publications, public_report_branches
+from .phase_updates import night_observation_outcomes
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 
 
@@ -63,19 +65,16 @@ class InformationSetForecast:
 
     def public_children(self,b,target):
         if b.phase=='day':return action_outcomes(b,target,self.rules,self.strategy)
-        # Identical to the existing dawn observation: no policy-choice likelihood.
-        worlds=tuple(w for w in b.worlds if self.rules.allow_self_bite or not w[0]&(1<<(target-1)))
-        mass=sum((w[-1] for w in worlds),F())
-        if not mass:raise Pending('information_set_public_corpse_inconsistent')
-        compatible=replace_worlds(b,tuple((*w[:-1],w[-1]/mass) for w in worlds))
-        observed_strategy=replace(self.strategy,include_self_bite=self.rules.allow_self_bite)
-        return action_outcomes(compatible,target,self.rules,observed_strategy)
+        try:
+            return night_observation_outcomes(b,target,self.rules,self.strategy)
+        except ValueError:
+            raise Pending('information_set_public_corpse_inconsistent')
 
     def publications(self,b,s,past):
         if self.strategy.disclosure_for('seer')=='none':return ((F(1),b,s,past),)
         branches=self.checked(future_publications(s,past,b.alive,b.claims,
                                                   fake_policy=self.strategy.fake_seer_policy))
-        return tuple((x.probability,replace_worlds(b,x.state.public_roles),x.state,past+x.reports) for x in branches)
+        return public_report_branches(b,past,branches)
 
     def scalar(self,b,s,past):return self.solve(b,s,past,s,None)
 
