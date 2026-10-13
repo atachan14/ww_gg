@@ -156,11 +156,11 @@ def create_app(test_config=None, *, deployment=False):
         if reports not in ([],['max'],['random']):raise ValueError('偽霊能の報告方針を確認してください。')
         report_mode=reports[0] if reports else (state or {}).get('policy',{}).get('fake_reports','max')
         extra={}
-        for key in ('disclosure_common','seer_disclosure','medium_disclosure','seer_position'):
+        for key in ('disclosure_common','seer_disclosure','medium_disclosure','seer_position','fake_seer_policy'):
             values=request.form.getlist(key)
             if len(values)>1:raise ValueError('結果開示・占い位置は一つ選択してください。')
             if values:
-                try:extra[key]=json.loads(values[0]) if key=='seer_position' else values[0]
+                try:extra[key]=json.loads(values[0]) if key in ('seer_position','fake_seer_policy') else values[0]
                 except json.JSONDecodeError as exc:raise ValueError('占い位置を確認してください。') from exc
             elif state and key in state['policy']:extra[key]=state['policy'][key]
         strategy = Strategy(one("day"), one("night"), inclusion == ["1"],report_mode,**extra)
@@ -408,7 +408,7 @@ def create_app(test_config=None, *, deployment=False):
     def start():
         draft = SetupDraft.from_form(request.form)
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position"}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "fake_seer_policy"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
@@ -580,7 +580,7 @@ def create_app(test_config=None, *, deployment=False):
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
         try:
-            allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "strategy_ui", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
+            allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "strategy_ui", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "fake_seer_policy"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if state.get("seer_mode") == "information-fixed-v1":

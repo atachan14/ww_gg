@@ -4,7 +4,7 @@ window.initializeStrategyEditor = function () {
   if (!root) return;
   const seed = JSON.parse(root.dataset.seed), form = root.closest('form'), dialog = form.querySelector('.strategy-dialog');
   const clone = v => JSON.parse(JSON.stringify(v));
-  let co = clone(seed.co), policy = {disclosure_common:'all',seer_disclosure:'inherit',medium_disclosure:'inherit',seer_position:['unvisited','uniform'],...clone(seed.policy)}, model = seed.model, context, draft, opener;
+  let co = clone(seed.co), policy = {disclosure_common:'all',seer_disclosure:'inherit',medium_disclosure:'inherit',seer_position:['unvisited','uniform'],fake_seer_policy:['noncontradictory','uniform'],...clone(seed.policy)}, model = seed.model, context, draft, opener;
   const labels = {village:'共通',wolfCommon:'共通',villager:'市民',medium:'霊能者',seer:'占い師',hunter:'狩人',wolf:'狼'};
   const options = {fakeable:'騙れる役職',co:'COのお約束',result:'可能な結果騙り'};
   const definitions = {fakeable:[['all','すべて'],...seed.roles.map(r=>[r,labels[r]])],co:[['filled','対抗が埋まったらCCO'],['counter','対抗が出たらCCO'],['dayX','X日にCO'],['blackX','黒をX人見つけたらCO']],result:[['all','すべて'],['white','白と報告'],['black','黒と報告']]};
@@ -37,6 +37,7 @@ window.initializeStrategyEditor = function () {
     const scalar=(title,key,candidates,ordered=false,disabled=false)=>({title,key,candidates,ordered,disabled,min:1,max:1,values:[String(key==='model'?model:policy[key]??'max')],supported:candidates.map(([id])=>id)});
     if(o==='position'&&['village','wolfCommon'].includes(s))return scalar(s==='village'?'処刑位置':'噛み位置',s==='village'?'day':'night',[['max','期待勝率最大化'],['random','均等化']],true);
     if(o==='position'&&s==='seer')return {title:'占い位置',key:'seer_position',ordered:true,min:2,max:2,fixed:true,values:clone(policy.seer_position),candidates:[['unvisited','未占い'],['uniform','均等化']],supported:['unvisited','uniform']};
+    if(o==='fakeSeer'&&s==='wolf')return {title:'偽占い方針',key:'fake_seer_policy',ordered:true,disabled:!seed.future_available,min:1,max:2,values:clone(policy.fake_seer_policy),candidates:[['noncontradictory','破綻しない報告'],['uniform','均等化'],['max','期待勝率最大化']],supported:['noncontradictory','uniform'],valid:items=>['uniform','noncontradictory|uniform'].includes(items.join('|'))};
     if(o==='selfbite')return scalar('自噛み','include_self_bite',[['false','行わない'],['true','行う']],false,!seed.allow_self_bite);
     if(o==='report')return scalar('結果騙りの報告方針','fake_reports',[['max','期待勝率最大化'],['random','均等化']]);
     if(o!=='disclose')return null;
@@ -66,7 +67,7 @@ window.initializeStrategyEditor = function () {
   function scope(s) {
     const common=s==='village'||s==='wolfCommon';
     const opts=s==='wolf'&&seed.roles.includes('medium')?['fakeable','co','result']:['fakeable','co'];
-    return `<details class="scope-section" data-disclosure data-scope="${s}"><summary>${labels[s]}${s==='hunter'?'（未対応）':''}</summary><div class="scope-body">${itemBlock(s,'position')}${s==='wolfCommon'?itemBlock(s,'selfbite'):''}${itemBlock(s,'disclose')}${s==='wolf'&&seed.roles.includes('medium')?itemBlock(s,'report'):''}${opts.map(o=>`<section class="option-block" data-item-mode="unordered"><div class="option-head"><h4>${options[o]}</h4>${button(`data-open="${s}|${o}"`,'追加 / 編集',seed.finished)}</div>${rows(s,o).map(r=>chip(s,o,r)).join('')||'<p class="empty-option">未選択</p>'}</section>`).join('')}</div></details>`;
+    return `<details class="scope-section" data-disclosure data-scope="${s}"><summary>${labels[s]}${s==='hunter'?'（未対応）':''}</summary><div class="scope-body">${itemBlock(s,'position')}${s==='wolfCommon'?itemBlock(s,'selfbite'):''}${itemBlock(s,'disclose')}${s==='wolf'&&seed.roles.includes('medium')?itemBlock(s,'report'):''}${s==='wolf'&&seed.roles.includes('seer')?itemBlock(s,'fakeSeer'):''}${opts.map(o=>`<section class="option-block" data-item-mode="unordered"><div class="option-head"><h4>${options[o]}</h4>${button(`data-open="${s}|${o}"`,'追加 / 編集',seed.finished)}</div>${rows(s,o).map(r=>chip(s,o,r)).join('')||'<p class="empty-option">未選択</p>'}</section>`).join('')}</div></details>`;
   }
   function renderOuter() {
     const remembered=root.closest('main').dataset.strategyDisclosures;
@@ -78,7 +79,7 @@ window.initializeStrategyEditor = function () {
     root.querySelectorAll('[data-team]').forEach(e=>{e.dataset.scope=e.dataset.team+'-team';if(!first)e.open=opened.has(e.dataset.scope);});
   }
   function sync() {
-    for (const [key,value] of Object.entries({model,day:policy.day,night:policy.night,include_self_bite:policy.include_self_bite?'1':'0',fake_reports:policy.fake_reports||'max',disclosure_common:policy.disclosure_common,seer_disclosure:policy.seer_disclosure,medium_disclosure:policy.medium_disclosure,seer_position:JSON.stringify(policy.seer_position),strategy_ui:JSON.stringify(co)})) form.querySelector(`[name="${key}"]`).value=value;
+    for (const [key,value] of Object.entries({model,day:policy.day,night:policy.night,include_self_bite:policy.include_self_bite?'1':'0',fake_reports:policy.fake_reports||'max',disclosure_common:policy.disclosure_common,seer_disclosure:policy.seer_disclosure,medium_disclosure:policy.medium_disclosure,seer_position:JSON.stringify(policy.seer_position),fake_seer_policy:JSON.stringify(policy.fake_seer_policy),strategy_ui:JSON.stringify(co)})) form.querySelector(`[name="${key}"]`).value=value;
   }
   function applyOuter() { sync(); form.dispatchEvent(new Event('strategychange')); }
   function remove(s,id,c=co) {if(s==='village'){c.common=c.common.filter(x=>x!==id);Object.values(c.roles).forEach(r=>r.disabled=r.disabled.filter(x=>x!==id));}else c.roles[s].local=c.roles[s].local.filter(x=>x!==id);}
@@ -103,9 +104,9 @@ window.initializeStrategyEditor = function () {
   function close(apply) {
     if(apply){
       const spec=itemSpec(context.s,context.o);
-      if(spec&&(draft.items.length<spec.min||draft.items.length>spec.max||draft.items.some(id=>!spec.supported.includes(id))||new Set(draft.items).size!==draft.items.length||spec.fixed&&JSON.stringify(draft.items)!==JSON.stringify(spec.values))){dialog.querySelector('.overlay-error').textContent=spec.max===1?'項目を1つ選択してください。':'対応している順序・項目を選択してください。';return;}
+      if(spec&&(draft.items.length<spec.min||draft.items.length>spec.max||draft.items.some(id=>!spec.supported.includes(id))||new Set(draft.items).size!==draft.items.length||spec.fixed&&JSON.stringify(draft.items)!==JSON.stringify(spec.values)||spec.valid&&!spec.valid(draft.items))){dialog.querySelector('.overlay-error').textContent=spec.max===1?'項目を1つ選択してください。':'対応している順序・項目を選択してください。';return;}
       if(Object.values(draft.params).some(x=>!Number.isInteger(x)||x<1||x>9)){dialog.querySelector('.overlay-error').textContent='Xは1〜9の整数にしてください。';return;}
-      if(spec){policy[spec.key]=spec.key==='include_self_bite'?draft.items[0]==='true':spec.key==='seer_position'?clone(draft.items):draft.items[0];}
+      if(spec){policy[spec.key]=spec.key==='include_self_bite'?draft.items[0]==='true':['seer_position','fake_seer_policy'].includes(spec.key)?clone(draft.items):draft.items[0];}
       co=draft.co;preview=draft.preview;candidateParams=draft.params;window.strategyPreviews[seed.board_key]={preview:clone(preview),params:clone(candidateParams)};sync();
     }
     dialog.close();dialog.querySelector('.overlay-error').textContent='';const key=opener.dataset.open;if(apply){renderOuter();root.querySelector(`[data-open="${key}"]`)?.focus();applyOuter();}else opener.focus();draft=null;

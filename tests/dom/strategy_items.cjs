@@ -30,6 +30,9 @@ click('[data-open="seer|position"]');assert.equal(d.querySelector('.overlay-body
 click('[data-open="village|co"]');assert.equal(d.querySelector('.overlay-body [data-item-mode]').dataset.itemMode,'unordered');click('[data-add="counter"]');click('[data-editor-cancel]');assert(!JSON.parse(value('strategy_ui')).common.includes('counter'));
 click('[data-open="village|co"]');click('[data-add="counter"]');click('[data-editor-apply]');assert(JSON.parse(value('strategy_ui')).common.includes('counter'));
 click('[data-open="seer|co"]');click('[data-toggle="counter"]');click('[data-editor-apply]');assert(JSON.parse(value('strategy_ui')).roles.seer.disabled.includes('counter'));
+click('[data-open="wolf|fakeSeer"]');assert(d.querySelector('[data-item-add="max"]').disabled);click('[data-item-remove="noncontradictory"]');click('[data-editor-cancel]');assert.equal(value('fake_seer_policy'),'["noncontradictory","uniform"]');
+click('[data-open="wolf|fakeSeer"]');click('[data-item-remove="noncontradictory"]');click('[data-editor-apply]');assert.equal(value('fake_seer_policy'),'["uniform"]');
+click('[data-open="wolf|fakeSeer"]');click('[data-item-add="noncontradictory"]');click('[data-editor-apply]');assert(d.querySelector('.strategy-dialog').open);assert.equal(value('fake_seer_policy'),'["uniform"]');click('[data-item-up="noncontradictory"]');click('[data-editor-apply]');assert.equal(value('fake_seer_policy'),'["noncontradictory","uniform"]');
 const model=d.querySelector('[data-exclusive="model"]');model.value='equal';model.dispatchEvent(new w.Event('change',{bubbles:true}));assert.equal(value('model'),'equal');
 console.log('All supported Item adapters, ordered/unordered shared panels, cancel, inheritance and model selector: PASS');w.close();
 
@@ -41,7 +44,7 @@ for (const flags of [{finished:true},{model_locked:true,allow_self_bite:false,fu
  win.eval(fs.readFileSync(root+'static/strategy.js','utf8'));win.initializeStrategyEditor();
  assert(doc.querySelector('[data-exclusive="model"]').disabled);
  if(flags.finished)assert([...doc.querySelectorAll('#strategy-editor [data-open]')].every(el=>el.disabled));
- else {assert(doc.querySelector('[data-open="wolfCommon|selfbite"]').disabled);assert(doc.querySelector('[data-open="seer|disclose"]').disabled);}
+ else {assert(doc.querySelector('[data-open="wolfCommon|selfbite"]').disabled);assert(doc.querySelector('[data-open="seer|disclose"]').disabled);assert(doc.querySelector('[data-open="wolf|fakeSeer"]').disabled);}
  testDom.window.close();
 }
 console.log('Finished/model-locked/unavailable policies: PASS');

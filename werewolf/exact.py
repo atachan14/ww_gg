@@ -34,11 +34,14 @@ class Strategy:
     seer_disclosure: str = "inherit"
     medium_disclosure: str = "inherit"
     seer_position: tuple[str,...] = ("unvisited","uniform")
+    fake_seer_policy: tuple[str,...] = ("noncontradictory","uniform")
 
     def __post_init__(self):
         if self.disclosure_common not in ('none','all') or self.seer_disclosure not in ('inherit','none','all') or self.medium_disclosure not in ('inherit','none','all'):raise ValueError('Choose none/all disclosure or inherit')
         if isinstance(self.seer_position,list):object.__setattr__(self,'seer_position',tuple(self.seer_position))
         if self.seer_position!=('unvisited','uniform'):raise ValueError('Only unvisited then uniform scan position is supported')
+        if isinstance(self.fake_seer_policy,list):object.__setattr__(self,'fake_seer_policy',tuple(self.fake_seer_policy))
+        if self.fake_seer_policy not in (('uniform',),('noncontradictory','uniform')):raise ValueError('Choose noncontradictory then uniform, or uniform alone for fake seer reports')
         if self.day not in ("max", "random") or self.night not in ("max", "random"):
             raise ValueError("Choose max or random")
         if self.fake_reports not in ("max","random"):

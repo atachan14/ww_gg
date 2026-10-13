@@ -1,7 +1,8 @@
-"""Unpublished fixed-policy PUBLIC continuation with generated seer disclosures.
+"""Fixed-policy PUBLIC continuation with generated seer disclosures.
 
 Manual past evidence is a supplied prior. Future fake probabilities use the
-approved uniform marginal. Multiple-fake correlation remains unselected.
+uniform candidate law conditioned on public truth compatibility.
+Multiple-fake correlation remains unselected.
 """
 from dataclasses import dataclass
 from itertools import product
@@ -37,14 +38,48 @@ def fake_backlog_options(state,reporters,past):
     return tuple(result)
 
 
-def future_publications(state,past,morning_alive,claims):
+
+def plausible_fake_options(state,reporters,past):
+    """Filter using public support before simultaneous morning declarations.
+
+    A candidate must be obtainable if its reporter were a true seer in at least
+    one supported history. Do not inspect the actual truth owner's new report,
+    teammate identities, or the actual private scan. Existing candidate weights
+    are conditioned on this support, never weighted by hypothetical truth mass.
+    An already exposed fake cannot regain truth status; retain its old noise law.
+    """
+    options=fake_backlog_options(state,reporters,past)
+    if isinstance(options,FuturePending) or not reporters:return options
+    player=reporters[0]
+    possible=tuple(h for h in state.hypotheses if h.roles[2]&(1<<(player-1)))
+    if not possible:return options
+    seen={(r.player,r.acquired_day) for r in past}
+    signatures=set()
+    for h in possible:
+        tick(1+len(h.acquisitions))
+        signatures.add(tuple(sorted((a.day,a.target,a.color) for a in h.acquisitions
+            if a.player==player and (player,a.day) not in seen)))
+    kept=[]
+    for reports,q in options:
+        tick(1+len(reports))
+        if tuple(sorted((r.acquired_day,r.target,r.color) for r in reports)) in signatures:
+            kept.append((reports,q))
+    total=sum((q for _,q in kept),F())
+    if not total:return FuturePending('no_noncontradictory_fake_report')
+    return tuple((reports,q/total) for reports,q in kept)
+
+
+def future_publications(state,past,morning_alive,claims,*,fake_policy=('noncontradictory','uniform')):
     """Merge complete true/fake public vectors before any public action."""
-    groups={};day=len(state.rosters)
+    if tuple(fake_policy) not in (('uniform',),('noncontradictory','uniform')):raise ValueError('Unsupported fake seer policy')
+    generator=plausible_fake_options if 'noncontradictory' in fake_policy else fake_backlog_options
+    groups={};day=len(state.rosters);fake_options={}
     if day<2:return FuturePending('future_fake_law_does_not_specify_initial_declarations')
     for h in state.hypotheses:
         tick(1+len(h.acquisitions))
         fakes=tuple(p for p in morning_alive if claims[p-1]=='seer' and not h.roles[2]&(1<<(p-1)))
-        choices=fake_backlog_options(state,fakes,past)
+        if fakes not in fake_options:fake_options[fakes]=generator(state,fakes,past)
+        choices=fake_options[fakes]
         if isinstance(choices,FuturePending):return choices
         truth=true_reports(h,past,morning_alive,claims,day)
         for fake_reports,q in choices:
@@ -114,7 +149,7 @@ def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,margin
                         tick(1+len(h.acquisitions));r=true_reports(h,published,b.alive,b.claims,len(p.rosters));groups.setdefault(r,[]).append(h)
                     branches=tuple(GeneratedPublication(r,sum((h.mass for h in hs),F()),TrueScanState(normalize(hs),p.rosters,p.initial_rule,p.tracked,p.observed_prefix)) for r,hs in groups.items())
                     if trace is not None:trace['known_single_fake_noise_marginalized']=trace.get('known_single_fake_noise_marginalized',0)+1
-                else:branches=checked(future_publications(p,published,b.alive,b.claims))
+                else:branches=checked(future_publications(p,published,b.alive,b.claims,fake_policy=strategy.fake_seer_policy))
                 if trace is not None:
                     trace['morning_public_vectors']=trace.get('morning_public_vectors',0)+len(branches)
                     trace['max_acquisition_day']=max(trace.get('max_acquisition_day',0),len(p.rosters))

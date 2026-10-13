@@ -21,10 +21,10 @@ class DisclosureStrategyTests(unittest.TestCase):
   s=replace(s,disclosure_common='all',medium_disclosure='none');self.assertEqual(s.disclosure_for('seer'),'all');self.assertEqual(s.disclosure_for('medium'),'none')
   self.assertEqual(Strategy().disclosure_for('seer'),'all');self.assertEqual(Strategy().disclosure_for('medium'),'all')
  def test_all_none_all_switch_matches_information_fixed_and_keeps_input(self):
-  self.report();self.assertEqual(self.rate(),'3/8');before=self.g();self.assertEqual(self.settings(disclosure_common='none',seer_disclosure='inherit',medium_disclosure='inherit').status_code,303)
-  g=self.g();rules,p=replay(g);s=Strategy(**g['policy']);expected=evaluate_tree(build_tree(p.board,rules,s),s).board_value(build_tree(p.board,rules,s)).village_win;self.assertEqual(self.rate(),str(expected));self.assertNotEqual(self.rate(),'3/8');self.assertEqual(g['seer_inputs'],before['seer_inputs']);self.assertEqual(g['public_log']['batches'],before['public_log']['batches'])
+  self.report();self.assertEqual(self.rate(),'1/4');before=self.g();self.assertEqual(self.settings(disclosure_common='none',seer_disclosure='inherit',medium_disclosure='inherit').status_code,303)
+  g=self.g();rules,p=replay(g);s=Strategy(**g['policy']);expected=evaluate_tree(build_tree(p.board,rules,s),s).board_value(build_tree(p.board,rules,s)).village_win;self.assertEqual(self.rate(),str(expected));self.assertEqual(self.rate(),'1/4');self.assertEqual(g['seer_inputs'],before['seer_inputs']);self.assertEqual(g['public_log']['batches'],before['public_log']['batches'])
   with patch('werewolf.seer_future_bridge.evaluate_game',side_effect=AssertionError('none must not acquire/use future scans')):self.assertEqual(self.c.get('/main').status_code,200)
-  self.assertEqual(self.settings(seer_disclosure='all').status_code,303);self.assertEqual(self.rate(),'3/8');self.assertEqual(self.settings(disclosure_common='all',seer_disclosure='inherit').status_code,303);self.assertEqual(self.rate(),'3/8')
+  self.assertEqual(self.settings(seer_disclosure='all').status_code,303);self.assertEqual(self.rate(),'1/4');self.assertEqual(self.settings(disclosure_common='all',seer_disclosure='inherit').status_code,303);self.assertEqual(self.rate(),'1/4')
  def test_none_does_not_require_future_morning_reports_all_does(self):
   self.report();self.assertEqual(self.advance(4).status_code,303);self.assertEqual(self.advance(3).status_code,303);before=self.g();self.assertEqual(self.advance(2).status_code,400);self.assertEqual(self.g(),before)
   self.assertEqual(self.settings(disclosure_common='none').status_code,303);self.assertNotIn(b'data-seer-pending',self.c.get('/main').data);self.assertEqual(self.advance(2).status_code,303)
@@ -61,3 +61,11 @@ class DisclosureStrategyTests(unittest.TestCase):
   with patch('werewolf.seer_future_forecast.acquire_uniform',wraps=acquire_uniform) as calls:
    evaluate_game(g,p.board,rules,Strategy(**g['policy']))
   self.assertTrue(calls.called);self.assertTrue(all(c.kwargs['position']==('unvisited','uniform') for c in calls.call_args_list))
+ def test_fake_seer_item_policy_changes_rate_and_roundtrips(self):
+  self.report();self.assertEqual(self.rate(),'1/4')
+  self.assertEqual(self.settings(fake_seer_policy='["uniform"]').status_code,303);self.assertEqual(self.rate(),'3/8')
+  cookie=self.c.get_cookie('session');cold=self.a.test_client();cold.set_cookie('session',cookie.value)
+  self.assertIn(b'name="fake_seer_policy"',cold.get('/main').data)
+  with cold.session_transaction() as q:self.assertEqual(list(q['game']['policy']['fake_seer_policy']),['uniform'])
+  before=self.g();self.assertEqual(self.settings(fake_seer_policy='["uniform","noncontradictory"]').status_code,400);self.assertEqual(self.g(),before)
+  self.assertEqual(self.settings(fake_seer_policy='["noncontradictory","uniform"]').status_code,303);self.assertEqual(self.rate(),'1/4')
