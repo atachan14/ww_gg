@@ -10,7 +10,7 @@ from .seer_acquisition import normalize
 from .seer_future_uniform import FuturePending
 from .public_prior import public_history_key, prepare_public_prior
 from .information_set_forecast import InformationSetForecast, Pending
-from .seer_future_forecast import project_private
+from .belief_projection import project_private
 from .evaluation_projection import project_evaluation
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 from .forecast_result import Forecast

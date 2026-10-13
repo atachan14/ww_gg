@@ -1,0 +1,476 @@
+{
+  "method": "Windows root snapshots only; cold public/prior caches; exact complete rows or Pending; default 250000work/20sec. First ten preserve historical v0.4 no-seer-ability scope explicitly; last case exercises live seer/medium all. No general performance guarantee or full-history coverage.",
+  "cases": [
+    {
+      "cast": [
+        9,
+        2,
+        2,
+        1,
+        1
+      ],
+      "claims": [
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "equal",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 15120,
+      "seconds": 2.59,
+      "pending": null,
+      "village_win": "27/70",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        2,
+        2,
+        1,
+        1
+      ],
+      "claims": [
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 15120,
+      "seconds": 3.6431,
+      "pending": null,
+      "village_win": "691/1890",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        2,
+        2,
+        1,
+        1
+      ],
+      "claims": [
+        "medium",
+        "medium",
+        "seer",
+        "hunter",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 15120,
+      "seconds": 3.0353,
+      "pending": null,
+      "village_win": "151/480",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        2,
+        2,
+        2,
+        2
+      ],
+      "claims": [
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "equal",
+      "strategy": {
+        "day": "random",
+        "night": "random",
+        "include_self_bite": false,
+        "fake_reports": "random",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 22680,
+      "seconds": 3.8371,
+      "pending": null,
+      "village_win": "94/315",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        2,
+        2,
+        2,
+        2
+      ],
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": true,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 22680,
+      "seconds": 6.2353,
+      "pending": null,
+      "village_win": "3/7",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        3,
+        2,
+        1,
+        1
+      ],
+      "claims": [
+        "medium",
+        "seer",
+        "hunter",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 15120,
+      "seconds": 10.4889,
+      "pending": null,
+      "village_win": "4/35",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        2,
+        2,
+        0,
+        0
+      ],
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 756,
+      "seconds": 1.6969,
+      "pending": null,
+      "village_win": "1",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        2,
+        0,
+        2,
+        2
+      ],
+      "claims": [
+        "seer",
+        "hunter",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 7560,
+      "seconds": 0.1447,
+      "pending": null,
+      "village_win": "94/315",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        1,
+        8,
+        0,
+        0
+      ],
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium"
+      ],
+      "model": "equal",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 9,
+      "seconds": 0.4886,
+      "pending": null,
+      "village_win": "187/315",
+      "rows": 9
+    },
+    {
+      "cast": [
+        9,
+        2,
+        7,
+        0,
+        0
+      ],
+      "claims": [
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium",
+        "medium"
+      ],
+      "model": "group",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "random",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 36,
+      "seconds": 3.6768,
+      "pending": null,
+      "village_win": "13297/15120",
+      "rows": 9
+    },
+    {
+      "cast": [
+        7,
+        2,
+        2,
+        1,
+        0
+      ],
+      "claims": [
+        "seer",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "model": "equal",
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "inherit",
+        "medium_disclosure": "inherit",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "initial_worlds": 630,
+      "seconds": 7.9017,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0
+    }
+  ]
+}

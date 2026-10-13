@@ -1,6 +1,6 @@
 """Marginal-only experiment on an independent initial board."""
 from fractions import Fraction as F
-from .exact import ClaimPolicy, condition_claims, initial_board, build_tree, evaluate_tree, Rules, Strategy, group_initial_board, co_group_compositions, ROLES, ROLE_LABELS, default_bluff_roles
+from .exact import ClaimPolicy, condition_claims, initial_board, Values, Rules, Strategy, group_initial_board, co_group_compositions, ROLES, ROLE_LABELS, default_bluff_roles
 
 
 def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mode='trial', seers=0, hunters=0):
@@ -26,8 +26,13 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
     if mode in ('current','group'):
         if filtered is None:
             return dict(mode=mode, issues=issues, rows=[], totals={}, rates=None, valid=False)
-        root = build_tree(filtered, Rules(), Strategy())
-        rates = evaluate_tree(root, Strategy()).board_value(root)
+        # This independent experiment explicitly has no seer ability. Its
+        # continuation still uses model A, never the historical public solver.
+        from .model_a_public import evaluate_public_game
+        from .seer_future_uniform import FuturePending
+        result = evaluate_public_game({}, filtered, Rules(), Strategy(seer_disclosure='none'))
+        rates = None if isinstance(result, FuturePending) else Values(result.village_win,1-result.village_win)
+        if rates is None:issues.append('モデルAの計算予算に達したため勝率はPendingです。')
         rows = [dict(id=i, values={r:filtered.role_probability(i,r) for r in counts}, total=F(1)) for i in board.alive]
     else:
         rates = None

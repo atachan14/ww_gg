@@ -119,17 +119,9 @@ branch weights and payoffs; each child public Board keeps all public worlds.
             # The randomly selected tie instruction is not public information.
             # Merge equal public vectors before any subsequent public decision,
             # as in the existing random-report law.
-            groups = {}
-            for instruction in tied:
-                for o in instruction.outcomes:
-                    child, entries = groups.setdefault(o.board.reports, (o.board, {}))
-                    for world in o.board.worlds:
-                        entries[world[:-1]] = entries.get(world[:-1], F()) + o.probability * world[-1] / len(tied)
-            from .exact import BoardOutcome
-            outcomes = tuple(BoardOutcome(sum(entries.values(), F()),
-                              replace_worlds(child, tuple((*world, q / sum(entries.values(), F()))
-                                                         for world, q in sorted(entries.items()))))
-                             for child, entries in groups.values())
+            from .exact import BoardOutcome, merge_report_outcomes
+            outcomes = merge_report_outcomes(BoardOutcome(o.probability / len(tied), o.board)
+                                             for instruction in tied for o in instruction.outcomes)
         branches = []
         for o in outcomes:
             next_s = project(s, o.board)

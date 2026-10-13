@@ -656,17 +656,28 @@ def joint_value(board, rules, strategy, reveal_now=False):
 def random_report_outcomes(board):
     actions=report_actions(board)
     if not actions:return ()
+    return merge_report_outcomes(BoardOutcome(outcome.probability/len(actions),outcome.board)
+                                 for action in actions for outcome in action.outcomes)
+
+
+def merge_report_outcomes(outcomes):
+    """Merge weighted instructions from one morning by their public vector.
+
+    Recompute the live wolf count after merging; a representative instruction
+    may have a narrower count support than the resulting public observation.
+    """
     groups={}
-    for action in actions:
-        for outcome in action.outcomes:
-            key=outcome.board.reports
-            child,entries=groups.setdefault(key,(outcome.board,{}))
-            for world in outcome.board.worlds:
-                entries[world[:-1]]=entries.get(world[:-1],Fraction(0))+outcome.probability*world[-1]/len(actions)
+    for outcome in outcomes:
+        key=outcome.board.reports
+        child,entries=groups.setdefault(key,(outcome.board,{}))
+        for world in outcome.board.worlds:
+            entries[world[:-1]]=entries.get(world[:-1],Fraction(0))+outcome.probability*world[-1]
     results=[]
     for child,entries in groups.values():
         mass=sum(entries.values(),Fraction(0))
-        results.append(BoardOutcome(mass,replace_worlds(child,tuple((*world,q/mass) for world,q in sorted(entries.items())))))
+        # Equal public vectors can merge different fake instructions with
+        # different live-count supports; infer the count from the merged law.
+        results.append(BoardOutcome(mass,replace_worlds(child,tuple((*world,q/mass) for world,q in sorted(entries.items())),wolf_count=None)))
     return tuple(results)
 
 

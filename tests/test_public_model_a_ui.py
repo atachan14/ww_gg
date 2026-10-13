@@ -6,6 +6,15 @@ from app import create_app
 
 
 class PublicModelAUiTests(unittest.TestCase):
+    def test_independent_cast_comparison_does_not_call_legacy_solver(self):
+        from werewolf.comparison import compare_initial
+        from werewolf.exact import ClaimPolicy
+        with patch('werewolf.exact.build_tree',side_effect=AssertionError('legacy comparison')):
+            result=compare_initial(3,1,1,('medium',)+('latent',)*4,
+                                   ClaimPolicy(medium='none'),mode='current')
+        self.assertIsNotNone(result['rates'])
+        self.assertEqual(sum(row['values']['wolf'] for row in result['rows']),1)
+
     def test_roster_overview_and_fixed_target_horizon_have_distinct_meanings(self):
         a=create_app({'TESTING':True,'SECRET_KEY':'model-a-ui'})
         c=a.test_client()

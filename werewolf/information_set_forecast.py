@@ -9,10 +9,10 @@ from fractions import Fraction as F
 from functools import lru_cache
 from math import comb
 from .exact import (action_outcomes, legal_targets, replace_worlds, report_actions,
-                    random_report_outcomes, BoardOutcome, winner_for, has_future_medium)
+                    random_report_outcomes, merge_report_outcomes, BoardOutcome, winner_for, has_future_medium)
 from .seer_acquisition import Hypothesis, from_board, normalize
 from .seer_future_uniform import TrueScanState, FuturePending, acquire_uniform
-from .seer_future_forecast import project_private
+from .belief_projection import project_private
 from .morning_publications import future_publications, public_report_branches
 from .phase_updates import night_observation_outcomes
 from .action_flow import action_flow, FlowOutcome, unchanged_death_outcomes
@@ -114,16 +114,8 @@ class InformationSetForecast:
                 value=continuation_value(report_flow(action.outcomes,s,past,self),self.scalar)
                 scored.append((value,action))
             best=min(v for v,_ in scored);tied=tuple(a for v,a in scored if v==best)
-            grouped={}
-            for action in tied:
-                for o in action.outcomes:
-                    child,entries=grouped.setdefault(o.board.reports,(o.board,{}))
-                    for w in o.board.worlds:entries[w[:-1]]=entries.get(w[:-1],F())+o.probability*w[-1]/len(tied)
-            merged=[]
-            for child,entries in grouped.values():
-                mass=sum(entries.values(),F())
-                merged.append(BoardOutcome(mass,replace_worlds(child,tuple((*w,q/mass) for w,q in sorted(entries.items())))))
-            outcomes=tuple(merged)
+            outcomes=merge_report_outcomes(BoardOutcome(o.probability/len(tied),o.board)
+                                           for action in tied for o in action.outcomes)
         return tuple(report_flow(outcomes,s,past,self))
 
     def push(self,source,private,branches):

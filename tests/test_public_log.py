@@ -32,7 +32,7 @@ class PublicLogTests(unittest.TestCase):
   r=self.send(self.batch([self.co(1),self.co(1)]));self.assertEqual(r.status_code,400);self.assertEqual(self.g(),old)
  def test_draft_cancel_restore_no_probability_calculation(self):
   old=self.g();draft=self.batch([self.co(1),{'kind':'seer','player':1}])
-  with patch('app.build_tree',side_effect=AssertionError('draft evaluated')):
+  with patch('werewolf.model_a_public.evaluate_public_game',side_effect=AssertionError('draft evaluated')):
    self.assertEqual(self.send(draft,'draft').status_code,200)
   g=self.g();self.assertEqual(g['revision'],old['revision']);self.assertEqual(g['claims'],old['claims']);self.assertEqual(g['public_draft']['payload'],draft)
   cookie=self.c.get_cookie('session');cold=self.app.test_client();cold.set_cookie('session',cookie.value)

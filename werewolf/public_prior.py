@@ -1,7 +1,7 @@
 """Public-owned acquisition inputs and complete prior cache, never viewer data."""
 from functools import lru_cache
 import json
-from .seer_future_bridge import prepare_game
+from .public_observed_prior import prepare_game
 from .seer_acquisition import from_board
 from .seer_future_uniform import TrueScanState, FuturePending
 from .phase_updates import acquisition_rosters
