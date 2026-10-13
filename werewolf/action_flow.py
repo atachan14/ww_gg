@@ -16,28 +16,48 @@ class FlowOutcome:
     context: object = None
 
 
+@dataclass(frozen=True)
+class NightFrame:
+    """Fixed action, original roster, and separately prepared ability payload.
+
+    The payload belongs to its information policy; the common flow cannot use
+    private evidence to change actor choice. A resolver may inspect after only
+    for physical effects specified by an approved ability law.
+    """
+    board: object
+    target: int
+    before: object
+    after: object
+
+
+def unchanged_death_outcomes(frame, resolve, prepared=None):
+    """Current scans do not affect casualties; reuse a safe preflight if any."""
+    return prepared if prepared is not None else resolve(frame.board, frame.after, frame.target)
+
+
 def action_flow(board, state, target, policy):
-    """Policy hooks: acquire, outcomes, project, morning_value, day_value.
+    """Policy hooks: acquire, outcomes, night_outcomes, project, continuations.
 
     Acquisition always receives the pre-casualty Board. Terminal branches never
     project or publish. Legacy skips acquisition for an entirely terminal action;
     Model A retains its eager acquisition/observer-support validation contract.
-    This flag affects work/validation, not the terminal payoff.
+    A policy may preflight terminal death only when acquisition cannot change
+    casualties. Future casualty-changing laws must disable terminal preflight.
     """
     night = board.phase == 'night'
     acquired = state
-    ready = False
-    if night and policy.acquire_terminal:
-        acquired = policy.acquire(board, state)
-        ready = True
+    if night:
+        prepared = policy.outcomes(board,state,target) if policy.terminal_preflight_safe else None
+        if prepared is None or any(o.board.winner is None for o in prepared):
+            acquired = policy.acquire(board,state)
+        outcomes = policy.night_outcomes(NightFrame(board,target,state,acquired),prepared)
+    else:
+        outcomes = policy.outcomes(board,state,target)
     value = F()
-    for outcome in policy.outcomes(board, state, target):
+    for outcome in outcomes:
         if outcome.board.winner is not None:
             continuation = F(outcome.board.winner == 'village')
         else:
-            if night and not ready:
-                acquired = policy.acquire(board, state)
-                ready = True
             projected = policy.project(board, acquired, outcome, target)
             continuation = (policy.morning_value(projected) if night
                             else policy.day_value(projected))

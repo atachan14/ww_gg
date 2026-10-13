@@ -1,11 +1,11 @@
 import unittest
 from types import SimpleNamespace as Obj
 from fractions import Fraction as F
-from werewolf.action_flow import action_flow, FlowOutcome
+from werewolf.action_flow import action_flow, FlowOutcome, unchanged_death_outcomes
 
 
 class RecordingPolicy:
-    acquire_terminal=False
+    terminal_preflight_safe=True
     def __init__(self,branches):self.branches=branches;self.events=[]
     def acquire(self,b,state):
         self.events.append(('acquire',b.alive))
@@ -13,6 +13,7 @@ class RecordingPolicy:
     def outcomes(self,b,state,target):
         self.events.append(('action',target))
         return self.branches
+    def night_outcomes(self,frame,prepared):return unchanged_death_outcomes(frame,self.outcomes,prepared)
     def project(self,b,state,outcome,target):
         self.events.append(('death',outcome.board.alive,state))
         return outcome.board,state
@@ -40,7 +41,7 @@ class ActionFlowContractTests(unittest.TestCase):
 
     def test_terminal_acquisition_contract_is_explicit_but_payoff_is_identical(self):
         for eager in (False,True):
-            p=RecordingPolicy((FlowOutcome(F(1),Obj(winner='village')),));p.acquire_terminal=eager
+            p=RecordingPolicy((FlowOutcome(F(1),Obj(winner='village')),));p.terminal_preflight_safe=not eager
             self.assertEqual(action_flow(Obj(phase='night',alive=(1,2,3)),(),3,p),1)
             self.assertEqual(p.events,([('acquire',(1,2,3))] if eager else [])+[('action',3)])
 
@@ -51,3 +52,15 @@ class ActionFlowContractTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeError,'unsupported ability'):
             action_flow(Obj(phase='night'),(),3,p)
         self.assertEqual(p.events,[('action',3)])
+
+    def test_night_resolver_receives_acquired_state_without_reselecting_action(self):
+        class DependentPolicy(RecordingPolicy):
+            terminal_preflight_safe=False
+            def outcomes(self,*args):raise AssertionError('Unsafe preflight must not run')
+            def night_outcomes(self,frame,prepared):
+                self.events.append(('resolve',frame.target,frame.board.alive,frame.before,frame.after,prepared))
+                return (FlowOutcome(F(1),Obj(winner=None,alive=frame.board.alive)),)
+        p=DependentPolicy(())
+        self.assertEqual(action_flow(Obj(phase='night',alive=(1,2,3)),('prior',),3,p),F(1,4))
+        self.assertEqual(p.events[:2],[('acquire',(1,2,3)),
+            ('resolve',3,(1,2,3),('prior',),('prior','new-secret'),None)])

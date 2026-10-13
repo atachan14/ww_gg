@@ -15,7 +15,9 @@ from .seer_future_uniform import TrueScanState, FuturePending, acquire_uniform
 from .seer_future_forecast import project_private
 from .morning_publications import future_publications, public_report_branches
 from .phase_updates import night_observation_outcomes
-from .action_flow import action_flow, FlowOutcome
+from .action_flow import action_flow, FlowOutcome, unchanged_death_outcomes
+from .night_acquisition import acquire_laws
+from .information_weights import observer_report_weights
 from .morning_flow import report_flow, continuation_value
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 
@@ -104,15 +106,8 @@ class InformationSetForecast:
         return tuple(report_flow(outcomes,s,past,self))
 
     def push(self,source,private,branches):
-        public={(h.roles,h.acquisitions):h.mass for h in source.hypotheses}
-        own={(h.roles,h.acquisitions):h.mass for h in private.hypotheses};result=[]
-        for q,b,s,past in branches:
-            entries=tuple(Hypothesis(h.roles,h.acquisitions,q*h.mass*own[(h.roles,h.acquisitions)]/public[(h.roles,h.acquisitions)])
-                          for h in s.hypotheses if (h.roles,h.acquisitions) in own)
-            mass=sum((h.mass for h in entries),F())
-            if mass:result.append((mass,b,s,past,replace(s,hypotheses=normalize(entries))))
-        if sum((q for q,*_ in result),F())!=1:raise Pending('information_set_report_likelihood_incomplete')
-        return result
+        return observer_report_weights(source,private,branches,
+            incomplete=lambda:Pending('information_set_report_likelihood_incomplete'))
 
     def act(self,b,s,past,target,private,observer):
         tick(len(s.hypotheses)+len(private.hypotheses))
@@ -177,18 +172,18 @@ class InformationSetForecast:
 
 class InformationSetActionPolicy:
     """Public compatibility updates, separate physical weights and observer law."""
-    acquire_terminal = True
+    terminal_preflight_safe = False
 
     def __init__(self,engine):self.engine=engine
 
     def acquire(self,b,payload):
         s,past,private,observer,physical=payload;e=self.engine
-        public=e.acquire(b,s);own=e.acquire(b,private)
-        if observer is not None:
-            kept=tuple(h for h in own.hypotheses if observer(h,own))
-            if not kept:raise Pending('seer_view_scan_outside_public_support')
-            own=replace(own,hypotheses=normalize(kept))
-        return public,past,own,observer,physical
+        laws=acquire_laws(b,s,lambda source,alive:e.acquire(b,source),private=private,observer=observer,
+                          inconsistent=lambda:Pending('seer_view_scan_outside_public_support'))
+        return laws.public,past,laws.private,observer,physical
+
+    def night_outcomes(self,frame,prepared):
+        return unchanged_death_outcomes(frame,self.outcomes,prepared)
 
     def outcomes(self,b,payload,target):
         s,past,private,observer,physical=payload;e=self.engine

@@ -11,7 +11,8 @@ from .exact import (replace_worlds,action_outcomes,legal_targets,report_actions,
 from .seer_acquisition import Hypothesis,normalize
 from .seer_future_uniform import TrueScanState,FuturePending,acquire_uniform,true_reports
 from .calculation_budget import calculation_budget,tick,CalculationBudgetExceeded
-from .action_flow import action_flow
+from .action_flow import action_flow, unchanged_death_outcomes
+from .night_acquisition import acquire_laws
 from .morning_flow import report_flow, continuation_value
 
 # Compatibility exports retain existing callers and historical tests.
@@ -89,15 +90,20 @@ def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,margin
                      for outcomes in choices)
         return sum(values,F())/len(values) if strategy.fake_reports=='random' else min(values)
     class PublicActionPolicy:
-        acquire_terminal = False
+        terminal_preflight_safe = True
 
         def acquire(self,b,payload):
             s,published=payload;key=(b,s)
-            if key not in acquired_memo:
-                private=checked(acquire_uniform(s,b.alive,max_work=max_work,position=strategy.seer_position))
-                tick(len(private.hypotheses));acquired_memo[key]=private
-                if trace is not None:trace['night_acquisition_calls']=trace.get('night_acquisition_calls',0)+1
-            return acquired_memo[key],published
+            def generate(source,alive):
+                if key not in acquired_memo:
+                    private=checked(acquire_uniform(source,alive,max_work=max_work,position=strategy.seer_position))
+                    tick(len(private.hypotheses));acquired_memo[key]=private
+                    if trace is not None:trace['night_acquisition_calls']=trace.get('night_acquisition_calls',0)+1
+                return acquired_memo[key]
+            return acquire_laws(b,s,generate).public,published
+
+        def night_outcomes(self,frame,prepared):
+            return unchanged_death_outcomes(frame,self.outcomes,prepared)
 
         def outcomes(self,b,payload,target):
             return action_outcomes(b,target,rules,strategy)

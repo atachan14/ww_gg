@@ -10,6 +10,8 @@ selection likelihood. No equilibrium or new reporting strategy is introduced.
 from fractions import Fraction as F
 from dataclasses import replace
 from .seer_acquisition import Hypothesis, normalize
+from .night_acquisition import acquire_laws
+from .information_weights import observer_report_weights
 from .exact import (action_outcomes, legal_targets, value_for_action, report_actions,
                     random_report_outcomes, joint_value, replace_worlds)
 from .seer_future_uniform import FuturePending, acquire_uniform
@@ -140,22 +142,8 @@ branch weights and payoffs; each child public Board keeps all public worlds.
 
     def push_private(source, private, branches):
         """Apply PUBLIC report likelihoods to the separately carried private law."""
-        public_weights = {(h.roles, h.acquisitions): h.mass for h in source.hypotheses}
-        private_weights = {(h.roles, h.acquisitions): h.mass for h in private.hypotheses}
-        result = []
-        for q, child, st, reports in branches:
-            entries = []
-            for h in st.hypotheses:
-                key = (h.roles, h.acquisitions)
-                if key in private_weights:
-                    entries.append(Hypothesis(h.roles, h.acquisitions,
-                                              q * h.mass * private_weights[key] / public_weights[key]))
-            mass_here = sum((h.mass for h in entries), F())
-            if mass_here:
-                result.append((mass_here, child, st, reports, replace(st, hypotheses=normalize(entries))))
-        if sum((q for q, *_ in result), F()) != 1:
-            raise Unresolved('seer_view_report_likelihood_incomplete')
-        return result
+        return observer_report_weights(source,private,branches,
+            incomplete=lambda:Unresolved('seer_view_report_likelihood_incomplete'))
 
     def private_action(b, s, published, target, private):
         # Both laws use the same fixed PUBLIC instruction, but each law retains
@@ -168,11 +156,10 @@ branch weights and payoffs; each child public Board keeps all public worlds.
             raise Unresolved('seer_view_public_instruction_private_illegal')
         pub_acquired, priv_acquired = s, private
         if b.phase == 'night':
-            pub_acquired = checked(acquire_uniform(s, b.alive, max_work=max_work, position=strategy.seer_position))
-            priv_acquired = checked(acquire_uniform(private, b.alive, max_work=max_work, position=strategy.seer_position))
-            kept = tuple(h for h in priv_acquired.hypotheses if observer(h, priv_acquired))
-            if not kept: raise Unresolved('seer_view_scan_outside_public_support')
-            priv_acquired = replace(priv_acquired, hypotheses=normalize(kept))
+            laws = acquire_laws(b,s,
+                lambda source,alive:checked(acquire_uniform(source,alive,max_work=max_work,position=strategy.seer_position)),
+                private=private,observer=observer,inconsistent=lambda:Unresolved('seer_view_scan_outside_public_support'))
+            pub_acquired,priv_acquired = laws.public,laws.private
         public_children = {o.board.winner: o.board for o in action_outcomes(b, target, rules, strategy)}
         private_outcomes = action_outcomes(private_board, target, rules, strategy)
         if trace is not None:
