@@ -35,7 +35,9 @@ def project_without_future_seers(board,state):
 def project_fixed_co_roles(board,state):
     """Fixed CO: retain wolves, publishing role truth and their acquisitions.
 
-    Medium/seer locations outside living COs have no future public effect.
+    Medium/seer locations outside living COs and ability-free hunter locations
+    have no future public effect. Registered guard effects must disable this
+    reduction; the current model has no hunter actions or private guard ledger.
     Keep a valid original joint placement, not independently invented masks.
     Public probabilities and observer ledgers stay on their original Boards.
     """
@@ -45,7 +47,7 @@ def project_fixed_co_roles(board,state):
     seer_truth=sum(1<<(p-1) for p in board.alive if board.claims[p-1]=='seer')
     groups={}
     for w,m,s,h,q in board.worlds:
-        key=(w,m&relevant,s&seer_truth,h)
+        key=(w,m&relevant,s&seer_truth)
         representative,mass=groups.get(key,((w,m,s,h),F()))
         groups[key]=(min(representative,(w,m,s,h)),mass+q)
     roles={key:r for key,(r,_) in groups.items()}
@@ -54,7 +56,7 @@ def project_fixed_co_roles(board,state):
     hypotheses={}
     for hypothesis in state.hypotheses:
         w,m,s,h=hypothesis.roles
-        key=(roles[w,m&relevant,s&seer_truth,h],
+        key=(roles[w,m&relevant,s&seer_truth],
              tuple(a for a in hypothesis.acquisitions if a.player in seers))
         hypotheses[key]=hypotheses.get(key,F())+hypothesis.mass
     joint=replace(state,tracked=seers,hypotheses=tuple(Hypothesis(r,a,q) for (r,a),q in sorted(hypotheses.items())))

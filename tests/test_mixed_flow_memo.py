@@ -7,8 +7,8 @@ from werewolf.model_a_public import public_forecast
 from werewolf.information_set_forecast import InformationSetForecast,Pending
 
 
-def fixture(n,w,m,claims):
-    b=condition_claims(initial_board(n,w,m,1),claims,ClaimPolicy(medium='none',seer='none'))
+def fixture(n,w,m,claims,h=0):
+    b=condition_claims(initial_board(n,w,m,1,h),claims,ClaimPolicy(medium='none',seer='none',hunter='none'))
     rules=Rules(initial_seer='none')
     game={'players':n,'rules':{'initial_seer':'none'},'seer_options':{'initial_rule':'none'},'seer_inputs':[],'public_log':{'version':2}}
     s,past=prepare_public_prior(game,b,rules)
@@ -34,9 +34,10 @@ class MixedFlowMemoTests(unittest.TestCase):
             return public_forecast(b,s,past,rules,strategy)
 
     def test_small_mixed_full_disclosure_matches_general_information_set_model(self):
-        for n,w,m,claims in ((5,1,1,('seer','medium')+('latent',)*3),
-                             (6,2,2,('seer','medium','medium')+('latent',)*3)):
-            b,s,past,rules=fixture(n,w,m,claims)
+        for n,w,m,h,claims in ((5,1,1,0,('seer','medium')+('latent',)*3),
+                               (6,2,2,0,('seer','medium','medium')+('latent',)*3),
+                               (5,1,1,1,('seer','medium')+('latent',)*3)):
+            b,s,past,rules=fixture(n,w,m,claims,h)
             if n==6:
                 # A small asymmetric homotype: retain both true/fake seer
                 # worlds and repeated latent placements, without a large

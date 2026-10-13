@@ -1,0 +1,616 @@
+{
+  "python": "3.12.10",
+  "method": "Fixed set nine-player-audit-set.md; cold public/prior/count/renaming caches; 250000work/20sec unchanged. Complete facade or explicit Pending. Counting role marginals adds overhead; no general performance guarantee. Hunter-free case remeasured after deduplicating inactive hunter locations; baseline retained separately.",
+  "cases": [
+    {
+      "id": "single",
+      "cast": {
+        "wolf": 2,
+        "medium": 0,
+        "seer": 1,
+        "hunter": 0,
+        "villager": 6
+      },
+      "claims": [
+        "seer",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "none",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "all",
+        "medium_disclosure": "all",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 15.790871599980164,
+      "work": 250003,
+      "initial_worlds": 84,
+      "max_live_fake_seers": 1,
+      "joint_law_unselected": false,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0,
+      "horizon_rows": 0,
+      "cache_sizes": {
+        "values": 8485,
+        "scores": 1821,
+        "policies": 1363,
+        "acquired": 1586,
+        "action_values": 18356,
+        "mornings": 823,
+        "publication_values": 823
+      },
+      "flow_memo": {
+        "action_calls": 20581,
+        "morning_calls": 3651,
+        "publication_calls": 823,
+        "action_hits": 2220,
+        "morning_hits": 2828
+      },
+      "role_marginal": {
+        "calls": 28833,
+        "unique_states": 13112,
+        "seconds": 0.24977360107004642
+      }
+    },
+    {
+      "id": "certain",
+      "cast": {
+        "wolf": 2,
+        "medium": 0,
+        "seer": 1,
+        "hunter": 0,
+        "villager": 6
+      },
+      "claims": [
+        "seer",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "filled",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "all",
+        "medium_disclosure": "all",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 19.998544700007187,
+      "work": 227843,
+      "initial_worlds": 28,
+      "max_live_fake_seers": 0,
+      "joint_law_unselected": false,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0,
+      "horizon_rows": 0,
+      "cache_sizes": {
+        "values": 11793,
+        "scores": 919,
+        "policies": 2936,
+        "acquired": 3909,
+        "action_values": 24396,
+        "mornings": 2815,
+        "publication_values": 2815
+      },
+      "flow_memo": {
+        "action_calls": 29259,
+        "morning_calls": 7659,
+        "publication_calls": 2815,
+        "action_hits": 4857,
+        "morning_hits": 4844
+      },
+      "role_marginal": {
+        "calls": 48526,
+        "unique_states": 15565,
+        "seconds": 0.33261170150944963
+      }
+    },
+    {
+      "id": "mixed",
+      "cast": {
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 0,
+        "villager": 4
+      },
+      "claims": [
+        "seer",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "none",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "all",
+        "medium_disclosure": "all",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 16.30250160000287,
+      "work": 250007,
+      "initial_worlds": 180,
+      "max_live_fake_seers": 1,
+      "joint_law_unselected": false,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0,
+      "horizon_rows": 0,
+      "cache_sizes": {
+        "values": 8204,
+        "scores": 1919,
+        "policies": 1703,
+        "acquired": 1715,
+        "action_values": 20087,
+        "mornings": 977,
+        "publication_values": 1224
+      },
+      "flow_memo": {
+        "action_calls": 22250,
+        "morning_calls": 3733,
+        "publication_calls": 1609,
+        "action_hits": 2731,
+        "publication_hits": 385,
+        "morning_hits": 2756
+      },
+      "role_marginal": {
+        "calls": 29726,
+        "unique_states": 13172,
+        "seconds": 0.2595486989011988
+      }
+    },
+    {
+      "id": "named",
+      "cast": {
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 0,
+        "villager": 4
+      },
+      "claims": [
+        "seer",
+        "medium",
+        "medium",
+        "villager",
+        "villager",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "none",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "all",
+        "medium_disclosure": "all",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 20.003873599984217,
+      "work": 224133,
+      "initial_worlds": 105,
+      "max_live_fake_seers": 1,
+      "joint_law_unselected": false,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0,
+      "horizon_rows": 0,
+      "cache_sizes": {
+        "values": 7095,
+        "scores": 1567,
+        "policies": 2620,
+        "acquired": 2109,
+        "action_values": 31039,
+        "mornings": 1071,
+        "publication_values": 1318
+      },
+      "flow_memo": {
+        "action_calls": 25672,
+        "morning_calls": 4333,
+        "publication_calls": 1703,
+        "action_hits": 4998,
+        "publication_hits": 385,
+        "morning_hits": 3262
+      },
+      "role_marginal": {
+        "calls": 28770,
+        "unique_states": 11944,
+        "seconds": 0.256300600245595
+      }
+    },
+    {
+      "id": "hunter-free",
+      "cast": {
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 1,
+        "villager": 3
+      },
+      "claims": [
+        "seer",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "none",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "all",
+        "medium_disclosure": "all",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 20.012593899999047,
+      "work": 201349,
+      "initial_worlds": 720,
+      "max_live_fake_seers": 1,
+      "joint_law_unselected": false,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0,
+      "horizon_rows": 0,
+      "cache_sizes": {
+        "values": 7468,
+        "scores": 1337,
+        "policies": 1588,
+        "acquired": 1531,
+        "action_values": 17735,
+        "mornings": 760,
+        "publication_values": 1007
+      },
+      "flow_memo": {
+        "action_calls": 20127,
+        "morning_calls": 3694,
+        "publication_calls": 1392,
+        "action_hits": 2960,
+        "publication_hits": 385,
+        "morning_hits": 2934
+      },
+      "role_marginal": {
+        "calls": 25971,
+        "unique_states": 11325,
+        "seconds": 0.23671279998961836
+      }
+    },
+    {
+      "id": "medium-none",
+      "cast": {
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 0,
+        "villager": 4
+      },
+      "claims": [
+        "seer",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "none",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "all",
+        "medium_disclosure": "none",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 15.734799600002589,
+      "work": 250003,
+      "initial_worlds": 180,
+      "max_live_fake_seers": 1,
+      "joint_law_unselected": false,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0,
+      "horizon_rows": 0,
+      "cache_sizes": {
+        "values": 8485,
+        "scores": 1821,
+        "policies": 1363,
+        "acquired": 1586,
+        "action_values": 18356,
+        "mornings": 823,
+        "publication_values": 823
+      },
+      "flow_memo": {
+        "action_calls": 20581,
+        "morning_calls": 3651,
+        "publication_calls": 823,
+        "action_hits": 2220,
+        "morning_hits": 2828
+      },
+      "role_marginal": {
+        "calls": 28833,
+        "unique_states": 13112,
+        "seconds": 0.2502150034706574
+      }
+    },
+    {
+      "id": "seer-none",
+      "cast": {
+        "wolf": 2,
+        "medium": 2,
+        "seer": 1,
+        "hunter": 0,
+        "villager": 4
+      },
+      "claims": [
+        "seer",
+        "medium",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "none",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "none",
+        "medium_disclosure": "all",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 3.1981959999829996,
+      "work": 11174,
+      "initial_worlds": 180,
+      "max_live_fake_seers": 1,
+      "joint_law_unselected": false,
+      "pending": null,
+      "village_win": "503/1620",
+      "rows": 9,
+      "horizon_rows": 9,
+      "cache_sizes": {
+        "values": 252,
+        "scores": 99,
+        "policies": 695,
+        "acquired": 520,
+        "action_values": 3564,
+        "mornings": 160,
+        "publication_values": 416
+      },
+      "flow_memo": {
+        "action_calls": 3692,
+        "morning_calls": 275,
+        "publication_calls": 807,
+        "action_hits": 712,
+        "publication_hits": 391,
+        "morning_hits": 115
+      },
+      "role_marginal": {
+        "calls": 2650,
+        "unique_states": 987,
+        "seconds": 0.02663810073863715
+      }
+    },
+    {
+      "id": "multi-law",
+      "cast": {
+        "wolf": 2,
+        "medium": 0,
+        "seer": 2,
+        "hunter": 0,
+        "villager": 5
+      },
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "co_seer_condition": "none",
+      "model": "group",
+      "rules": {
+        "allow_self_bite": false,
+        "initial_seer": "none"
+      },
+      "strategy": {
+        "day": "max",
+        "night": "max",
+        "include_self_bite": false,
+        "fake_reports": "max",
+        "disclosure_common": "all",
+        "seer_disclosure": "all",
+        "medium_disclosure": "all",
+        "seer_position": [
+          "unvisited",
+          "uniform"
+        ],
+        "fake_seer_policy": [
+          "noncontradictory",
+          "uniform"
+        ]
+      },
+      "hunter_scope": "ability-free only; no protection evaluation",
+      "seconds": 15.763448100013193,
+      "work": 250009,
+      "initial_worlds": 126,
+      "max_live_fake_seers": 2,
+      "joint_law_unselected": true,
+      "pending": "information_set_budget_exceeded",
+      "village_win": null,
+      "rows": 0,
+      "horizon_rows": 0,
+      "cache_sizes": {
+        "values": 8485,
+        "scores": 1821,
+        "policies": 1365,
+        "acquired": 1589,
+        "action_values": 18360,
+        "mornings": 825,
+        "publication_values": 825
+      },
+      "flow_memo": {
+        "action_calls": 20591,
+        "morning_calls": 3656,
+        "publication_calls": 825,
+        "action_hits": 2225,
+        "morning_hits": 2831
+      },
+      "role_marginal": {
+        "calls": 28860,
+        "unique_states": 13111,
+        "seconds": 0.25220280018402264
+      },
+      "reachable_law_probe": {
+        "execution": 9,
+        "night_corpse": 8,
+        "day": 2,
+        "reason": "multiple_fake_report_correlation_unselected"
+      }
+    }
+  ]
+}
