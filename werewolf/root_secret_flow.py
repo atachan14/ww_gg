@@ -118,11 +118,20 @@ class RootSecretEngine(InformationSetForecast):
     retain_joint_guard_history=True
     joint_guard_max=True
     def __init__(self,rules,strategy,**kwargs):
-        super().__init__(rules,strategy,retire_uninformative_scans=False,memoize_flows=False,**kwargs)
+        super().__init__(rules,strategy,retire_uninformative_scans=False,memoize_flows=strategy.night=='max',**kwargs)
         self.action_policy=RootSecretPolicy(self)
         self.night_sources={};self.night_kernels={}
         self.verified_actor_kernels=set();self.verifying_actor_mask=None
         self.actor_candidate_keys={};self.actor_proposals={};self.actor_certificates={}
+
+    def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
+        key=super().full_renamed_key(b,s,past,private,observer,target=target,physical=physical)
+        if not self.memoize_flows:return None
+        # Proof-only actor continuation and ordinary public evaluation cannot
+        # share certificates. Keep full ledgers; unsupported renamings fall
+        # back to identity rather than a reduced role/history descriptor.
+        exact=key or (self.rules,self.strategy,b,s,past,private,observer,target,physical)
+        return ('root-complete-payoff',self.verifying_actor_mask,exact)
 
     def actor_candidate_key(self,b,state,past,group,target):
         source=(self.rules,self.strategy,b,state,past,group,target)

@@ -48,7 +48,12 @@ def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None,al
         law=measure  # Unknown-role choices require the SAME belief/payoff law.
     if len(law.rosters)!=board.day:
         return None  # Input is before this night's acquisition, not after it.
-    cache={}
+    # Complete physical-law scalar cache shared across candidate/infoset calls.
+    # Keep the dependency-cut mode separate: a proposal must never become a
+    # known-role certificate merely because its Board and history coincide.
+    cache=getattr(engine,'actor_continuation_values',None)
+    if cache is None:
+        cache={};engine.actor_continuation_values=cache
     # Public reporting choices are left to their existing common flow.
     if any(board.claims[p-1]==role and strategy.disclosure_for(role)!='none'
            for p in board.alive for role in ('seer','medium')):
@@ -67,7 +72,7 @@ def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None,al
     def solve(b,s,forced=None):
         b=replace_worlds(b,s.public_roles,wolf_count=None)
         if b.winner is not None:return F(b.winner=='village')
-        key=(b,s,forced)
+        key=(rules,strategy,actor_only,b,s,forced)
         if key in cache:return cache[key]
         tick(len(s.hypotheses))
         if forced is not None:value=act(b,s,forced)

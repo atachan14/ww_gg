@@ -57,3 +57,13 @@ class FixedActorContinuationTests(unittest.TestCase):
         altered=replace(own,hypotheses=normalize(tuple(replace(h,mass=F(1,2) if i==0 else F(1,8)) for i,h in enumerate(own.hypotheses))))
         self.assertIsNone(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2,measure=altered,allow_actor_only=True))
         self.assertIsNone(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2))
+
+    def test_completed_candidate_reuse_keeps_dependency_cut_modes_separate(self):
+        b,s,e=self.fixture(6)
+        with patch.object(suffix,'physical_actor_outcomes',wraps=suffix.physical_actor_outcomes) as physical:
+            proposal=fixed_actor_value(b,s,e,info=WolfInformation(1),target=2,allow_actor_only=True)
+            self.assertIsNotNone(proposal)
+            physical.reset_mock()
+            self.assertEqual(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2,allow_actor_only=True),proposal)
+            physical.assert_not_called()
+        self.assertIsNone(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2))

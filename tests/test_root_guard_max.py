@@ -108,6 +108,36 @@ class RootGuardMaxTests(unittest.TestCase):
             self.assertTrue(all(r['final']['village']=='719/2400' for r in view['players'][1:5]))
             self.assertEqual(g['policy']['night'],'max')
 
+    def test_all_latent_six_player_initial_and_night_fit_existing_budget(self):
+        for repeat,night in ((True,F(719,2400)),(False,F(719,2400))):
+            g=self.game(repeat,players=6)
+            g['claims']=['latent']*6;g['history'][0]['claims']=['latent']*6
+            for initial in (True,False):
+                current=migrate_game({**g,'history':[] if initial else g['history']})
+                before=deepcopy(current);rules,p=replay(current);s=Strategy(**current['policy'])
+                clear_public_cache()
+                value=evaluate_public_game(current,p.board,rules,s)
+                self.assertNotIsInstance(value,FuturePending)
+                expected=F(1,6)+F(5,6)*night if initial else night
+                self.assertEqual(value.village_win,expected)
+                self.assertTrue(all(v==expected for t,v in value.action_values))
+                self.assertTrue(all(h.village_win==(F(1,6) if initial else 0) and h.wolf_win==0
+                                    for t,h in value.by_dawn_values))
+                self.assertEqual(current,before)
+
+    def test_root_payoff_cache_separates_certificate_mode_and_identity_fallback(self):
+        from unittest.mock import patch
+        g=self.game(players=4);rules,p=replay(g);s=Strategy(**g['policy'])
+        branch=prepare_root_entry(g,p.board,rules,s);e=RootSecretEngine(rules,s)
+        args=(branch.public,branch.public_law,(),branch.physical_law,None)
+        ordinary=e.full_renamed_key(*args,target=2)
+        e.verifying_actor_mask=1
+        self.assertNotEqual(ordinary,e.full_renamed_key(*args,target=2))
+        with patch('werewolf.exact_renaming.canonical_key',return_value=None):
+            e.exact_keys.clear()
+            self.assertIsNotNone(e.full_renamed_key(*args,target=2))
+            self.assertNotEqual(e.full_renamed_key(*args,target=2),e.full_renamed_key(*args,target=3))
+
     def test_unknown_actor_proposal_divergence_is_never_returned_or_cached(self):
         from unittest.mock import patch
         import werewolf.fixed_actor_continuation as continuation
