@@ -55,3 +55,16 @@ exact_renaming.pyは、全Boardフィールド、公開/本人jointの全役職m
 非圧縮120秒では全Forecastは未完了。長い非圧縮参照ではP1候補2/15、P2/P3/P4/P5候補各11/45を独立に確認（各未知側候補約113〜117秒）したところで中断。7人の完全on/off Forecast一致を達成したとは記載しない。標準予算切れ→圧縮完了の効果、完了した非圧縮候補の一致、全Forecastの一致を別に記録する。長いoffの再実行は合理的な資源範囲で抑える。検証ログはtask-6/symmetry-seven-comparison.json、symmetry-seven-off-complete.log。
 
 Windows更新前チェックポイント：全562テスト183.422秒成功、再開後の重点12テスト5.944秒成功。最新指示でpushは取り消され、remoteへの変更はゼロ。ブラウザー確認と18801への新コード反映、7人の非圧縮全Forecast比較は未完。①②の公開ゲートは維持して待機する。
+
+
+## Windows更新後の完了検証
+
+保存HEAD b54b8ceをクリーンな状態から再開。7人の全Forecastを同じ入力・Rules/Strategyでon/off比較し、村勝率、全7候補行、全7のby-dawn値、pending_metricsのすべてがFractionで厳密一致。on6.137937秒、off843.623078秒（完了行ごとのcache保存時間を含む）。on action展開907/value展開400、off action展開611413/value展開254894。offへの比率にはcheckpoint I/O時間も含むため、純粋なCPU速度倍率としては扱わない。
+
+村11/45、P1候補2/15、P2〜P7候補11/45。昼maxは元の6同率候補をすべて保持し各1/6、確率和1。全by-dawnの村/狼値は0。圧縮はchance枝の確率やworld質量を統合せず、scalar/key同値だけを再利用する。
+
+専用18801の空きを確認してPID19100で実装を反映、TOP/HELP HTTP200。ブラウザー制御面は起動直後に終了したため、既存隔離Edge手順（PID20376、専用18802、task-6/post-update-symmetry-edge-profile）を用いた。通常TOPでC4/H1/W2を設定しP1狩人COを公開。昼の11/45、全7行、P1真狩1、市民/狼確率を確認。P2処刑→夜→戻る→再読込の保存表示は厳密一致。夜のP1本人視点では合法護衛P3〜P7の村/狼は11/45・34/45、自護衛P1と死亡P2は空欄。公開へ戻ると襲撃P3〜P7が59/225・166/225へ復元し、本人介入cacheが公開へ混ざらない。各完成行の陣営確率和は1、全7行を保持。
+
+実装の全562テスト183.422秒成功の保存結果と、両護衛ルール・非対称情報・秘密履歴・占い公開報告・max/max・本人狼のon/off回帰を保持。今回の検証でコード変更はなし。②の代表cache実装と検証は完了し、①は一般未知6人の継続maxを共通モデルで解消する残件。①②検証完了までpush/deployは行わない。
+
+証拠：task-6/symmetry-seven-resumed-verify.json（complete_exact_equal=true）、symmetry-seven-final-summary.json、symmetry-browser-consistency-check.json、symmetry-seven-browser*.json/png。非圧縮参照cacheはsymmetry-seven-off-engine.pickleに保存され、再計算は不要。

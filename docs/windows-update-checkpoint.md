@@ -22,3 +22,7 @@
 復旧コピーでAGENTSとこの記録を読み、git --git-dir=.git --work-tree=. status/diff/HEADを確認する。既存DotDashboard② task-1123468027e5405eをresumedへ更新しvalidation/readback。対象app.pyを18801で、--dawn-board --hybrid-table-preview --seer-future-uniform付きで起動し、7人の通常UI設定／P1真狩CO／各行と結果、HELP、過去編集とcacheを確認する。8771/8772を触らない。再開を明示指示されるまで待機。
 
 全テストログと測定JSONはtask-6/symmetry-windows-checkpoint-full.log、symmetry-seven-comparison.json、symmetry-seven-off-complete.log。再開用の正確なcommit SHAと所有プロセス停止結果はtask-6/windows-update-final-checkpoint.jsonへ保存する。
+
+## 更新後の再開結果
+
+HEAD b54b8ceから再開し、②の7人全Forecast on/off厳密一致、通常ブラウザー公開/本人分離・全行保持・戻る/再読込一致、専用18801の実装反映とHTTP/HELPを完了。詳細はseven-known-guard-symmetry-investigation.md末尾。次の実装再開点は①の一般未知6人継続max。公開ゲートは①②完了後のまま。
