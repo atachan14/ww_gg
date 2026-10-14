@@ -107,4 +107,10 @@ class SharedGuardHistoryTests(unittest.TestCase):
         self.assertEqual(dict(known),{2:F(1,8),3:F(3,8)})
         self.assertEqual((b,state),before)
 
+    def test_record_merge_does_not_hide_duplicate_owner_actions(self):
+        b,state=self.fixture()
+        with self.assertRaisesRegex(ValueError,'One personal action per night'):
+            information_forecast(b,state,(),self.rules,self.strategy,mask=1,
+                                 private_attacks=(WolfAttack(1,4),WolfAttack(1,4),WolfAttack(2,4)))
+
 

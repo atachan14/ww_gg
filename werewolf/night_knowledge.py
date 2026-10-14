@@ -14,6 +14,8 @@ class WolfAttack:
 
 def merge_night_records(records,known):
     """Merge validated owner evidence without removing unspecified records."""
+    if any(len({r.night for r in ledger})!=len(ledger) for ledger in (records,known)):
+        raise ValueError('One personal action per night')
     merged={record.night:record for record in records}
     merged.update({record.night:record for record in known})
     return tuple(merged[night] for night in sorted(merged))
