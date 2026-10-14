@@ -24,6 +24,31 @@ class RootProfileEntryTests(unittest.TestCase):
         g['policy']['day']='max';g['history'][0]['policy']['day']='max'
         return migrate_game(g)
 
+    def test_candidate_profiles_share_only_exact_branch_inputs(self):
+        g=self.game();r,p=replay(g);s=Strategy(**g['policy'])
+        b=prepare_root_entry(g,p.board,r,s);resolver=WolfProfileResolver(r,s)
+        legal=tuple((info,tuple(t for t in b.public.alive if not info.initial_roster&(1<<(t-1))))
+                    for info,mass,group in wolf_information_groups(b.public_law))
+        first=tuple((info,uniform_policy(actions)) for info,actions in legal)
+        second=tuple((info,uniform_policy(actions[:1])) for info,actions in legal)
+        a=FixedPublicWolfProfile(b.public,b.public_law,(),r,s,first,resolver=resolver)
+        c=FixedPublicWolfProfile(b.public,b.public_law,(),r,s,second,resolver=resolver)
+        target=b.public.alive[-1]
+        physical=a.physical_children(b.public,target)
+        self.assertIs(c.physical_children(b.public,target),physical)
+        public=a.public_children(b.public,target,b.public_law)
+        self.assertIs(c.public_children(b.public,target,b.public_law),public)
+        self.assertEqual(resolver.branch_stats,{'calls':4,'hits':2})
+        # A physical input with different role support cannot use that entry.
+        changed=replace_worlds(b.public,((*b.public.worlds[0][:-1],F(1)),))
+        self.assertIsNot(c.physical_children(changed,target),physical)
+        self.assertEqual(a.policy_reads+c.policy_reads,0)
+        self.assertEqual(resolver.branch_stats['hits'],2)
+        for unused in range(2):
+            with self.assertRaises(Pending):
+                resolver.branch(('failed',),lambda:(_ for _ in ()).throw(Pending('test')))
+        self.assertNotIn(('failed',),resolver.branch_cache)
+
     def test_normal_public_owner_and_cache_both_rules(self):
         for repeat in (True,False):
             g=self.game(repeat);before=deepcopy(g);r,p=replay(g);s=Strategy(**g['policy'])

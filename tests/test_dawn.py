@@ -110,7 +110,7 @@ class DawnBoardTests(unittest.TestCase):
         self.assertEqual(re.search(r'<thead>.*?</thead>', day, re.S).group(),
                          re.search(r'<thead>.*?</thead>', night, re.S).group())
         self.assertIn('data-night-board', night)
-        self.assertNotIn('BoardLog', night)
+        self.assertIn('data-dawn-open', night)
         self.assertNotIn('data-system-log', night)
         self.assertIn('data-value-cell="final"', night)
         self.assertIn('D1 処刑', night)
@@ -137,14 +137,15 @@ class DawnBoardTests(unittest.TestCase):
         self.report(())
         g = self.g()
         self.assertEqual(g['public_log']['board_graph']['nodes'][g['public_log']['board_id']]['system_observation'], {'deaths': []})
-        self.assertNotIn('data-system-log', self.c.get('/main').get_data(as_text=True))
+        self.assertIn('data-system-log', self.c.get('/main').get_data(as_text=True))
         self.assertEqual(self.post('/dawn-advance').status_code, 400)
         self.assertEqual(self.g(), g)
         self.report((2, 3))
         self.assertEqual(self.g()['public_log']['board_graph']['nodes'][self.g()['public_log']['board_id']]['system_observation'], {'deaths': [2,3]})
         self.assertEqual(self.post('/dawn-advance').status_code, 400)
         self.assertEqual(self.post('/dawn-report', mode='clear').status_code, 303)
-        self.assertNotIn('BoardLog', self.c.get('/main').get_data(as_text=True))
+        self.assertIn('data-dawn-open', self.c.get('/main').get_data(as_text=True))
+        self.assertNotIn('data-system-log', self.c.get('/main').get_data(as_text=True))
         self.assertIsNone(self.g()['public_log']['board_graph']['nodes'][self.g()['public_log']['board_id']].get('system_observation'))
 
     def test_edit_retires_following_boards_and_noop_does_not(self):
@@ -170,7 +171,8 @@ class DawnBoardTests(unittest.TestCase):
         self.assertEqual(self.post('/table-publish', payload=json.dumps(payload)).status_code, 200)
         self.execute()
         self.assertNotEqual(self.g()['public_log']['board_id'], old)
-        self.assertNotIn('BoardLog', self.c.get('/main').get_data(as_text=True))
+        self.assertIn('data-dawn-open', self.c.get('/main').get_data(as_text=True))
+        self.assertNotIn('data-system-log', self.c.get('/main').get_data(as_text=True))
         self.assertIsNone(self.g()['public_log']['board_graph']['nodes'][self.g()['public_log']['board_id']].get('system_observation'))
 
     def test_stale_repeated_invalid_and_wrong_phase_writes(self):

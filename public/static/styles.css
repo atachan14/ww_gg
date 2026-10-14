@@ -373,7 +373,7 @@ main[data-screen="top"] .footer-inner { justify-content:flex-end; }
 .settings-column .option-head h4{margin:0}.settings-column .empty-option{margin:2px 0;padding:2px}.settings-column .settings-group>details>summary{min-height:28px;padding:5px 8px}.settings-column .format-switch label{min-height:28px;padding:3px}
 
 .dawn-report-editor { margin: auto; }
-.dawn-report-editor form { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding: .5rem 0; }
+.dawn-report-editor form, .dawn-report-fields { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; padding: .5rem 0; }
 .dawn-corpses { display: flex; flex-wrap: wrap; gap: .6rem; }
 [data-screen="dawn"] .player-panel { margin-top: 1rem; }
 

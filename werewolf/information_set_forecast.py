@@ -176,6 +176,9 @@ class InformationSetForecast:
             if masses.get((swapped,m,t,scans),F())!=q:return False
         return True
 
+    def physical_children(self,b,target):
+        return action_outcomes(b,target,self.rules,self.strategy)
+
     def public_children(self,b,target,guard_state=None):
         if b.phase=='day':return action_outcomes(b,target,self.rules,self.strategy)
         try:
@@ -425,7 +428,7 @@ class InformationSetActionPolicy:
         s,past,private,observer,physical=payload;e=self.engine
         public={o.board.winner:o.board for o in e.public_children(b,target,s)}
         return tuple(FlowOutcome(o.probability,o.board,public.get(o.board.winner))
-                     for o in action_outcomes(physical,target,e.rules,e.strategy))
+                     for o in e.physical_children(physical,target))
 
     def project(self,b,payload,outcome,target):
         from .guard_model import public_context,GuardContext

@@ -36,6 +36,18 @@ class WolfProfileResolver:
         self.max_work=max_work;self.max_seconds=max_seconds
         self.cache={};self.active=set();self.diagnostics={};self.profiles_evaluated=0
         self.dependencies=DependencyGraph()
+        # Only pure physical/public branch construction is shared between
+        # candidate profiles. Full Boards and joint ledgers remain in keys.
+        self.branch_cache={};self.branch_stats={"calls":0,"hits":0}
+
+    def branch(self,key,compute):
+        self.branch_stats['calls']+=1
+        if key in self.branch_cache:
+            self.branch_stats['hits']+=1
+            return self.branch_cache[key]
+        value=compute()  # Pending/errors never install partial branches.
+        if len(self.branch_cache)<4096:self.branch_cache[key]=value
+        return value
 
     def spend_profile(self):
         if self.profiles_evaluated>=self.max_profiles:
@@ -79,6 +91,16 @@ class FixedPublicWolfProfile(RootSecretEngine):
         # COMPLETE identity key, not a renamed Board with an unrenamed profile.
         return ('fixed-complete-profile',self.fixed_profile,self.rules,self.strategy,
                 b,state,past,private,observer,target,physical)
+    def physical_children(self,b,target):
+        compute=lambda:super(FixedPublicWolfProfile,self).physical_children(b,target)
+        if self.resolver is None:return compute()
+        return self.resolver.branch(('physical',self.rules,self.strategy,b,target),compute)
+
+    def public_children(self,b,target,guard_state=None):
+        compute=lambda:super(FixedPublicWolfProfile,self).public_children(b,target,guard_state)
+        if self.resolver is None:return compute()
+        return self.resolver.branch(('public',self.rules,self.strategy,b,target,guard_state),compute)
+
     def public_night_policies(self,b,state,past=()):
         self.policy_reads+=1
         if self.stop_on_policy_read:raise _PolicyRead()
