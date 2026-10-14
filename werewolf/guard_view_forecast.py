@@ -10,7 +10,7 @@ from .actor_information import wolf_information_groups,condition_actor_state
 from .evaluation_branch import ActionInputs,physical_board
 
 
-def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20):
+def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20,private_state=None,engine_factory=InformationSetForecast):
     from .guard_history_prior import seed_history,guard_matches,public_history_ready
     try:state=seed_history(board,state) if strategy.night=='max' else state
     except ValueError:return FuturePending('guard_public_history_zero_support')
@@ -18,14 +18,22 @@ def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=
     if reason:return FuturePending(reason)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
-            engine=InformationSetForecast(rules,strategy,max_work=max_work)
+            engine=engine_factory(rules,strategy,max_work=max_work)
             allowed=tuple(w[:-1] for w in private_board.worlds)
-            own=condition_actor_state(state,lambda h:h.roles in allowed and guard_matches(h.guards,guards),guards=guards)
+            own=condition_actor_state(state if private_state is None else private_state,lambda h:h.roles in allowed and guard_matches(h.guards,guards),guards=guards)
             values={};dawn={}
             for target,_ in guard_choices(board,actor,rules,strategy.guard_position):
                 observer=GuardObserver(board,actor,target,allowed)
                 values[target]=engine.solve(board,state,past,own,observer)
                 v=w=F()
+                if board.phase=='day':
+                    from .model_a_public import horizon_for_action
+                    from .policy_choice import optimal_targets
+                    executions=board.alive if strategy.day=='random' else optimal_targets(engine.day_scores(board,state,past),maximize=True)
+                    horizons=tuple(horizon_for_action(engine,board,state,past,p,own,observer=observer) for p in executions)
+                    dawn[target]=HorizonValues(sum((h.village_win for h in horizons),F())/len(horizons),
+                                               sum((h.wolf_win for h in horizons),F())/len(horizons))
+                    continue
                 for info,mass,group in wolf_information_groups(own):
                     physical=physical_board(board,group,private_board)
                     for attack,q in engine.wolf_policy(board,state,past,info.initial_roster,info.attacks):

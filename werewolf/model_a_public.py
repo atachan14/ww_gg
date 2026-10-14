@@ -22,7 +22,7 @@ from functools import lru_cache
 import json
 
 
-def horizon_for_action(engine,board,state,past,target,private=None):
+def horizon_for_action(engine,board,state,past,target,private=None,*,observer=None):
     """One execution and one roster-informed night, or the current night only.
 
     Select bites using FINAL continuation values, then count only terminal mass
@@ -30,7 +30,7 @@ def horizon_for_action(engine,board,state,past,target,private=None):
     """
     private=state if private is None else private
     physical=physical_board(board,private)
-    acquired,outcomes=resolve_action(board,ActionInputs(state,past,private,None,physical),target,engine.action_policy)
+    acquired,outcomes=resolve_action(board,ActionInputs(state,past,private,observer,physical),target,engine.action_policy)
     village=wolf=F()
     for o in outcomes:
         tick(len(private.hypotheses))
@@ -43,7 +43,7 @@ def horizon_for_action(engine,board,state,past,target,private=None):
             for info,mass,group in wolf_information_groups(own):
                 physical_next=physical_board(child,group,continuation.physical)
                 for bite,q in engine.wolf_policy(child,public,past,info.initial_roster,info.attacks):
-                    _,night_outcomes=resolve_action(child,ActionInputs(public,past,group,None,physical_next),bite,engine.action_policy)
+                    _,night_outcomes=resolve_action(child,ActionInputs(public,past,group,observer,physical_next),bite,engine.action_policy)
                     for final in night_outcomes:
                         v+=mass*q*final.probability*F(final.board.winner=='village')
                         w+=mass*q*final.probability*F(final.board.winner=='wolf')

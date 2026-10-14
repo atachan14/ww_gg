@@ -23,10 +23,10 @@ class RootSecretScreenTests(unittest.TestCase):
         self.assertTrue(all(v.village_win==F(1,5) for _,v in result.by_dawn_values))
         self.assertIs(evaluate_public_game({'viewer':1,'secret_results':'fixture'},b,Rules(),Strategy('random','random')),result)
 
-    def test_max_fixed_co_midgame_and_hunter_keep_existing_entry(self):
+    def test_max_fixed_co_and_unknown_midgame_keep_existing_entry(self):
         b=initial_board(5,1,1,1);r=Rules();s=Strategy('random','random')
         for board,strategy in ((b,Strategy()),(replace(b,claims=('seer',)+('latent',)*4),s),
-                               (replace(b,phase='night'),s),(initial_board(5,1,0,1,1),s)):
+                               (replace(b,phase='night'),s)):
             self.assertFalse(root_screen_eligible(board,r,strategy))
         with patch('werewolf.root_secret_flow.root_screen_forecast',side_effect=AssertionError('No random replacement')):
             self.assertEqual(evaluate_public_game({},b,r,Strategy()).village_win,F(7,15))
@@ -50,3 +50,13 @@ class RootSecretScreenTests(unittest.TestCase):
         self.assertIn(b'id="village-rate"',response.data)
         self.assertEqual(generated.call_count,1)
         with c.session_transaction() as session:self.assertEqual(session['game'],before)
+
+    def test_uniform_guard_screen_uses_joint_entry_and_existing_rules(self):
+        b=initial_board(4,1,0,0,1);r=Rules();s=Strategy('random','random',fake_reports='random')
+        self.assertTrue(root_screen_eligible(b,r,s))
+        self.assertFalse(root_screen_eligible(b,Rules(allow_repeat_guard=False),s))
+        with patch('werewolf.root_secret_flow.prepare_root_secrets',wraps=prepare_root_secrets) as generated:
+            value=evaluate_public_game({},b,r,s)
+        self.assertEqual(generated.call_count,1)
+        self.assertEqual(value.village_win,F(7,24))
+        self.assertEqual(set(dict(value.action_values).values()),{F(7,24)})

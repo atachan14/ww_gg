@@ -11,6 +11,7 @@ from .guard_effect import GuardIntent,guard_blocks_attack
 from .exact import replace_worlds,winner_for
 from .seer_acquisition import Hypothesis,normalize,public_worlds
 from .night_knowledge import WolfAttack
+from .calculation_budget import tick
 
 
 def live_guard_mass(board):
@@ -92,6 +93,39 @@ def public_context(context):
     return context.public if isinstance(context,GuardContext) else context
 
 
+def public_guard_branch_law(board,state,child,attack,blocked,engine):
+    """Generate Q-owned night records independently of viewer interventions.
+
+    A corpse identifies the bite. A GJ only identifies the outcome, so its
+    public history mixes the configured legal uniform bites and guards. Role
+    weights still come from the existing public Board, not this likelihood.
+    """
+    entries=[]
+    for h in state.hypotheses:
+        tick()
+        actor=next((p for p in board.alive if h.roles[3]&(1<<(p-1))),None)
+        bites=(tuple(p for p in board.alive if engine.strategy.include_self_bite or
+                     not h.roles[0]&(1<<(p-1))) if blocked else (attack,))
+        if actor is None and blocked:continue
+        choices=((None,F(1)),) if actor is None else guard_choices(board,actor,engine.rules,engine.strategy.guard_position)
+        for bite in bites:
+            if not engine.strategy.include_self_bite and h.roles[0]&(1<<(bite-1)):continue
+            for target,q in choices:
+                tick()
+                intent=GuardIntent(board.day,actor,target) if actor is not None else None
+                success=intent is not None and guard_blocks_attack(intent,bite)
+                if success!=blocked:continue
+                entries.append(Hypothesis(h.roles,h.acquisitions,h.mass*q/F(len(bites)),
+                    h.guards+((intent,) if intent else ()),h.attacks+(WolfAttack(board.day,bite),)))
+    totals={}
+    for h in entries:totals[h.roles]=totals.get(h.roles,F())+h.mass
+    weights={w[:-1]:w[-1] for w in child.worlds}
+    if any(not totals.get(roles) for roles in weights):
+        raise engine.pending('guard_public_history_zero_support')
+    return replace(state,hypotheses=normalize(tuple(replace(h,mass=weights[h.roles]*h.mass/totals[h.roles])
+        for h in entries if h.roles in weights)))
+
+
 def guarded_outcomes(frame,outcomes,engine):
     b=frame.board
     if not b.initial_hunter_count:return outcomes
@@ -104,7 +138,8 @@ def guarded_outcomes(frame,outcomes,engine):
     for h in private.hypotheses:
         actor=next((p for p in b.alive if h.roles[3]&(1<<(p-1))),None)
         choices=((None,F(1)),) if actor is None else guard_choices(b,actor,engine.rules,engine.strategy.guard_position)
-        if actor is not None and isinstance(observer,GuardObserver) and observer.board==b:
+        if (actor is not None and isinstance(observer,GuardObserver) and observer.actor==actor and
+                observer.board.day==b.day and observer.target in b.alive):
             choices=((observer.target,F(1)),)
         for target,q in choices:
             intent=GuardIntent(b.day,actor,target) if actor is not None else None
@@ -129,7 +164,8 @@ def guarded_outcomes(frame,outcomes,engine):
         physical_child=replace_worlds(base,public_worlds(hs),wolf_count=None,
                                      alive=child.alive,day=child.day,phase=child.phase,
                                      history=child.history,guard_prior_roster=child.guard_prior_roster)
-        st=engine.project(s,child)
+        st=(public_guard_branch_law(b,s,child,frame.target,blocked,engine)
+            if getattr(engine,'retain_joint_guard_history',False) else engine.project(s,child))
         from .guard_history_prior import hero_deducible
         if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):
             from .guard_history_prior import extend_success

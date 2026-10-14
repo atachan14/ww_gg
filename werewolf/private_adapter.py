@@ -57,8 +57,21 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     if role=="hunter":
         from .guard_view_forecast import guard_forecast
         targets=tuple(p for p in public.alive if p!=players[0])
-        prepared=prepare_public_prior(game_state or {},public,rules,track_live_seers=strategy.disclosure_for("seer")=="all" and bool(public.initial_seer_count),max_work=max_work)
-        result=prepared if isinstance(prepared,FuturePending) else guard_forecast(public,players[0],private,prepared[0],prepared[1],rules,strategy,guards=view.guards,max_work=max_work,max_seconds=max_seconds)
+        from .root_secret_flow import root_screen_eligible,root_replay_eligible,prepare_root_secrets,replay_root_secrets,root_guard_forecast
+        root_entry=(root_screen_eligible(public,rules,strategy) or root_replay_eligible(game_state or {},public,rules,strategy))
+        if root_entry:
+            branch=(prepare_root_secrets(public,rules,max_work=max_work) if root_screen_eligible(public,rules,strategy) else
+                    replay_root_secrets(game_state,public,rules,strategy,max_work=max_work,max_seconds=max_seconds))
+            result=branch if isinstance(branch,FuturePending) else root_guard_forecast(branch,players[0],view.guards,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+            if not isinstance(branch,FuturePending):
+                from .root_secret_flow import root_actor_view
+                actor=root_actor_view(branch,lambda h:bool(h.roles[3]&(1<<(players[0]-1))) and all(g in h.guards for g in view.guards))
+                if not isinstance(actor,FuturePending):
+                    from .exact import replace_worlds
+                    private=replace_worlds(public,actor.belief.public_roles)
+        else:
+            prepared=prepare_public_prior(game_state or {},public,rules,track_live_seers=strategy.disclosure_for("seer")=="all" and bool(public.initial_seer_count),max_work=max_work)
+            result=prepared if isinstance(prepared,FuturePending) else guard_forecast(public,players[0],private,prepared[0],prepared[1],rules,strategy,guards=view.guards,max_work=max_work,max_seconds=max_seconds)
         if isinstance(result,FuturePending):
             reason={"guard_hidden_attack_max_unimplemented":"狩人未確定の襲撃最大化は未対応です。襲撃位置「均等化」に対応しています。","guard_multiple_hunters_unimplemented":"複数狩人の能力計算は未対応です。","guard_no_repeat_unimplemented":"連続護衛なしは未対応です。"}.get(result.reason,"護衛の能力計算は未対応または計算予算に達しました。")
         else:
@@ -110,7 +123,17 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
     if role == 'wolf':
         state = None; past = ()
-        if strategy.disclosure_for('seer') == 'all' and any(public.claims[p-1] == 'seer' for p in public.alive):
+        from .root_secret_flow import root_screen_eligible,root_replay_eligible,prepare_root_secrets,replay_root_secrets,root_wolf_forecast
+        root_entry=(root_screen_eligible(public,rules,strategy) or root_replay_eligible(game_state or {},public,rules,strategy))
+        if root_entry:
+            branch=(prepare_root_secrets(public,rules,max_work=max_work) if root_screen_eligible(public,rules,strategy) else
+                    replay_root_secrets(game_state,public,rules,strategy,max_work=max_work,max_seconds=max_seconds))
+            result=branch if isinstance(branch,FuturePending) else root_wolf_forecast(branch,players,view.attacks,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+            if not isinstance(result,FuturePending):
+                result,guard_dawn,belief=result
+                from .exact import replace_worlds
+                private=replace_worlds(public,belief.public_roles)
+        elif strategy.disclosure_for('seer') == 'all' and any(public.claims[p-1] == 'seer' for p in public.alive):
             prepared = prepare_public_prior(game_state, public, rules, max_work=max_work) if game_state else FuturePending('wolf_view_public_acquisition_prior_missing')
             if isinstance(prepared, FuturePending):
                 result = prepared
@@ -128,7 +151,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                                           mask=sum(1 << (p-1) for p in players), private_board=private if public.initial_hunter_count else None, private_attacks=view.attacks, max_work=max_work, max_seconds=max_seconds)
         missing_attacks={night for night in range(1,public.day) if not any(e.day==night and e.phase=='night' for e in public.history)}-{a.night for a in view.attacks}
         from .guard_history_prior import hero_deducible
-        if public.initial_hunter_count and missing_attacks and not hero_deducible(public):result=FuturePending('wolf_guard_attack_history_missing')
+        if not root_entry and public.initial_hunter_count and missing_attacks and not hero_deducible(public):result=FuturePending('wolf_guard_attack_history_missing')
         if isinstance(result, FuturePending):
             reasons = {'information_set_budget_exceeded': '最終勝率が計算予算を超えたため未計算です。',
                        'future_public_continuation_budget_exceeded': '公開側の未来計算が計算予算を超えたため未計算です。',
@@ -155,8 +178,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 except CalculationBudgetExceeded:guard_dawn={}
             reason += ' 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'
             if set(targets) - set(final_values): reason += ' 公開側の全仮説で合法にならない襲撃先は未対応です。'
-        if root_entry and not isinstance(result,FuturePending):
-            reason = '本人の役職・取得結果・行動履歴で共同分布を条件付け、同じ公開方針の下で次の占い先を比較します。'
+
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
     rows = []
     for p in range(1, public.player_count + 1):

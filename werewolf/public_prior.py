@@ -13,15 +13,18 @@ def public_history_key(game):
         'players':game.get('players'),
         'wolves':game.get('wolves'),'mediums':game.get('mediums'),'seers':game.get('seers'),
         'hunters':game.get('hunters'),'model':game.get('model'),
-        'history':[{k:v for k,v in step.items() if k in ('target','policy','claims','claim_policy','observation','deaths')}
+        'history':[{k:v for k,v in step.items() if k in ('target','policy','claims','claim_policy','observation','deaths','reports','seer_options','result_disclosure_model')}
                    for step in game.get('history',())],
-        'claims':game.get('claims',()),'policy':game.get('policy',{}),
+        'claims':game.get('claims',()),'claim_policy':game.get('claim_policy',{}),'policy':game.get('policy',{}),
+        'seer_mode':game.get('seer_mode'),'result_disclosure_model':game.get('result_disclosure_model'),
         'reports':game.get('reports',()),
-        'rules':{k:v for k,v in game.get('rules',{}).items() if k=='initial_seer'},
+        'rules':{k:v for k,v in game.get('rules',{}).items() if k in ('initial_seer','allow_self_bite','allow_repeat_guard')},
         'seer_options':{'initial_rule':game.get('seer_options',{}).get('initial_rule')},
         'seer_inputs':[{k:r[k] for k in ('day','reporter','target','color')} for r in game.get('seer_inputs',())],
-        'public_log':{'version':log.get('version'),'report_publications':
-            {k:{field:value for field,value in v.items() if field=='published_day'}
+        'public_log':{'version':log.get('version'),
+            **{k:log.get(k,[]) for k in ('base_claims','base_seer','base_medium','batches')},
+            'report_publications':
+            {k:{field:value for field,value in v.items() if field in ('slot','published_day')}
              for k,v in log.get('report_publications',{}).items()}}
     }
     return json.dumps(public,sort_keys=True,separators=(',',':'),allow_nan=False)
