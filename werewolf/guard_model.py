@@ -96,9 +96,9 @@ def guarded_outcomes(frame,outcomes,engine):
     b=frame.board
     if not b.initial_hunter_count:return outcomes
     from .guard_history_prior import public_history_ready
-    reason=scope_reason(b,engine.rules,engine.strategy,public_history_ready(b,frame.after[0]))
-    if reason:raise engine.pending(reason)
     s,past,private,observer,physical=frame.after
+    reason=scope_reason(b,engine.rules,engine.strategy,public_history_ready(b,s))
+    if reason:raise engine.pending(reason)
     groups={};public={o.board.winner:o.context for o in outcomes};templates={o.board.winner:o.board for o in outcomes}
     success=None
     for h in private.hypotheses:
@@ -125,7 +125,10 @@ def guarded_outcomes(frame,outcomes,engine):
             child=success;template=success
         else:child=public[winner];template=templates[winner]
         own=replace(private,hypotheses=hs)
-        physical_child=replace_worlds(template,public_worlds(hs),wolf_count=None)
+        base=physical if blocked else template
+        physical_child=replace_worlds(base,public_worlds(hs),wolf_count=None,
+                                     alive=child.alive,day=child.day,phase=child.phase,
+                                     history=child.history,guard_prior_roster=child.guard_prior_roster)
         st=engine.project(s,child)
         from .guard_history_prior import hero_deducible
         if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):

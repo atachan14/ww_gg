@@ -4,7 +4,10 @@
 <h2 id="reentry">公開sの再投入箇所</h2><pre tabindex="0" role="region" aria-label="コードと再現手順"><code>scalar(b, s, past)          → solve(..., private=s)
 score_day_targets(...)     → act(..., private=s)
 wolf_policy(...)           → group = condition(s, wolf_mask, history)
-uncached_act(..., private) → physical = replace_worlds(b, private.public_roles)</code></pre>
+uncached_act(..., physical) → physical_board(b, private, physical)
+project(outcome)           → ContinuationInputs(..., physical=outcome.board)
+day_value / morning_value → solve(..., physical=actual_branch)</code></pre>
 <p>実際の枝の<code>GuardContext.private</code>は再帰へ残ります。一方、公開候補の仮想採点は公開sから分岐を作り直す経路です。この二つを混同しないでください。</p>
+<p>第一段階で実際の枝のBoardも継承するようにしました。<code>physical_board</code>は明示された物理枝を土台に本人測度と公開された事実だけを更新し、公開役職質量は取り込みません。既存の評価用役職縮約は維持しており、公開の候補採点そのものを一般の新方式へ変えた段階ではありません。</p>
 <h2>キャッシュとPending</h2><p>政策キーは公開状態・狼マスク・履歴、値のキーには本人分布と観測者も含みます。random襲撃のスカラーキーでは無関係な履歴を周辺化できますが、記録本体は保持します。予算超過や未対応を0%として保存しません。</p>
 <p><a href="{{ url_for('help_program',page='design') }}#separation">関連設計案：再帰の役割を分ける</a></p>

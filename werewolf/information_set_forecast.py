@@ -20,6 +20,7 @@ from .night_acquisition import acquire_laws
 from .information_weights import observer_report_weights
 from .morning_flow import report_flow, continuation_value
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
+from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
 
 
 class Pending(Exception):
@@ -212,19 +213,20 @@ class InformationSetForecast:
         return observer_report_weights(source,private,branches,
             incomplete=lambda:Pending('information_set_report_likelihood_incomplete'))
 
-    def act(self,b,s,past,target,private,observer):
+    def act(self,b,s,past,target,private,observer,*,physical=None):
         if type(target)is not int or target not in b.alive:
             raise Pending('information_set_internal_illegal_action')
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
+        physical=physical_board(b,private,physical)
         if self.memoize_flows:
             # Public rankings call this with their own public/actor law. Viewer
             # payoffs include BOTH the private law and observer identity.
             key=('joint-action',b,s,past,target,self.value_law(private),observer)
             return self.cached_flow(self.action_values,key,
-                                    lambda:self.uncached_act(b,s,past,target,private,observer),'action')
-        return self.uncached_act(b,s,past,target,private,observer)
+                                    lambda:self.uncached_act(b,s,past,target,private,observer,physical=physical),'action')
+        return self.uncached_act(b,s,past,target,private,observer,physical=physical)
 
-    def uncached_act(self,b,s,past,target,private,observer):
+    def uncached_act(self,b,s,past,target,private,observer,*,physical=None):
         action_key=None
         if observer is None:
             if self.memoize_flows:
@@ -239,10 +241,10 @@ class InformationSetForecast:
             if action_key is not None and action_key in self.action_values:
                 tick();return self.action_values[action_key]
         tick(len(s.hypotheses)+len(private.hypotheses))
-        private_board=replace_worlds(b,private.public_roles)
+        private_board=physical_board(b,private,physical)
         if target not in legal_targets(private_board,self.rules,self.strategy):
             raise Pending('information_set_internal_illegal_action')
-        value=action_flow(b,(s,past,private,observer,private_board),target,self.action_policy)
+        value=action_flow(b,ActionInputs(s,past,private,observer,private_board),target,self.action_policy)
         if action_key is not None:self.action_values[action_key]=value
         return value
 
@@ -308,13 +310,14 @@ class InformationSetForecast:
                     self.day_bounds[key]=max(v for _,v in computed)
         return self.day_bounds[key]
 
-    def solve(self,b,s,past,private,observer):
+    def solve(self,b,s,past,private,observer,*,physical=None):
         if b.winner is not None:return F(b.winner=='village')
         from .guard_model import scope_reason
         from .guard_history_prior import public_history_ready
         reason=scope_reason(b,self.rules,self.strategy,public_history_ready(b,s))
         if reason:raise Pending(reason)
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
+        physical=physical_board(b,private,physical)
         key=(b,s,past,self.value_law(private),observer)
         if observer is None:
             from .medium_value_key import public_descriptor,private_value_key
@@ -344,14 +347,15 @@ class InformationSetForecast:
             else:
                 scores=self.day_scores(b,s,past);best=max(v for _,v in scores)
                 targets=tuple(p for p,v in scores if v==best)
-            value=sum((self.act(b,s,past,p,private,observer) for p in targets),F())/len(targets)
+            value=sum((self.act(b,s,past,p,private,observer,physical=physical) for p in targets),F())/len(targets)
         else:
             groups={}
             for h in private.hypotheses:groups.setdefault((h.roles[0],h.attacks),[]).append(h)
             value=F()
             for (mask,history),hs in groups.items():
                 mass=sum((h.mass for h in hs),F());group=replace(private,hypotheses=normalize(tuple(hs)))
-                value+=mass*sum((q*self.act(b,s,past,p,group,observer)
+                group_board=physical_board(b,group,physical)
+                value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
                                 for p,q in self.wolf_policy(b,s,past,mask,history)),F())
         self.values[key]=value
         return value
@@ -381,7 +385,7 @@ class InformationSetActionPolicy:
         s,past,private,observer,physical=payload;e=self.engine
         laws=acquire_laws(b,s,lambda source,alive:e.acquire(b,source),private=private,observer=observer,
                           inconsistent=lambda:Pending('seer_view_scan_outside_public_support'))
-        return laws.public,past,laws.private,observer,physical
+        return ActionInputs(laws.public,past,laws.private,observer,physical_board(b,laws.private,physical))
 
     def night_outcomes(self,frame,prepared):
         from .guard_model import guarded_outcomes
@@ -400,15 +404,16 @@ class InformationSetActionPolicy:
         if e.trace is not None and b.phase=='night':
             e.trace.setdefault('public_updates',[]).append({'history':b.history,'target':target,
                 'prior_counts':b.wolf_count_distribution,'child_counts':child.wolf_count_distribution})
-        return child,st,past,own,observer
+        return ContinuationInputs(child,st,past,own,observer,outcome.board)
 
     def morning_value(self,payload):
         child,st,past,own,observer=payload;e=self.engine
         child,st,past,own,observer=e.continuation_context(child,st,past,own,observer)
         branches=e.push(st,own,e.morning(child,st,past))
-        return continuation_value(branches,lambda c,ns,p,priv:e.solve(c,ns,p,priv,observer))
+        return continuation_value(branches,lambda c,ns,p,priv:e.solve(c,ns,p,priv,observer,
+                                 physical=physical_board(c,priv,payload.physical)))
 
-    def day_value(self,payload):return self.engine.solve(*payload)
+    def day_value(self,payload):return self.engine.solve(*payload,physical=payload.physical)
 
 
 def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,private_board=None,private_attacks=(),max_work=250000,max_seconds=20,trace=None):

@@ -33,6 +33,7 @@ class ProgramHelpTests(unittest.TestCase):
                 r=self.c.get(url.path or page_path,follow_redirects=True);self.assertEqual(r.status_code,200,href)
                 if url.fragment:
                     dest=Links();dest.feed(r.get_data(as_text=True));self.assertIn(url.fragment,dest.ids,href)
+                r.close()
         self.assertEqual(self.game(),before)
         self.assertEqual(self.c.get('/help/program/unknown').status_code,404)
         self.assertEqual(self.c.get('/help/program/../../app.py').status_code,404)

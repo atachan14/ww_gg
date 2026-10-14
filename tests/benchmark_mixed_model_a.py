@@ -31,9 +31,9 @@ def run(optimized):
             finally:
                 state=_current.get()
                 if state:work[0]=max(work[0],state[1])
-        def act(self,b,s,past,target,private,observer):
+        def act(self,b,s,past,target,private,observer,**kwargs):
             counts['act']+=1;unique['act'].add((b,s,past,target,private,observer))
-            try:return super().act(b,s,past,target,private,observer)
+            try:return super().act(b,s,past,target,private,observer,**kwargs)
             finally:
                 state=_current.get()
                 if state:work[0]=max(work[0],state[1])

@@ -2,7 +2,7 @@
 {% block content %}
 <main data-screen="help-program" class="help-program"><a class="program-skip" href="#program-content">本文へ移動</a>
 <header class="panel"><p class="eyebrow">TECHNICAL HELP · LOCAL RESEARCH EDITION</p><h1>{{ pages[page] }}</h1>
-<p>説明対象：ローカル実装 <code>{{ audit_version }}</code>／構造監査 <code>{{ review_version }}</code>。HELP追加後も計算モデルは変更していません。</p>
+<p>説明対象：ローカル実装 <code>{{ audit_version }}</code>／構造監査 <code>{{ review_version }}</code>。model Aの規則を保持して構造整理を段階的に進め、実装済みと設計案を区別しています。</p>
 <p>公開ソース参照は <a href="https://github.com/atachan14/ww_gg/tree/{{ public_sha }}" rel="noopener">{{ public_sha[:7] }} の別版</a>です。ローカル版の公開URLはありません。</p>
 <nav aria-label="プログラム詳細の目次" class="program-nav"><a href="{{ url_for('help_route') }}">HELP</a>{% for slug,label in pages.items() %}<a href="{{ url_for('help_program',page=slug) }}"{% if page==slug %} aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}</nav></header>
 <article id="program-content" class="panel" tabindex="-1">{% include 'help_program/' ~ page ~ '.html' %}</article>
