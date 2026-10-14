@@ -96,6 +96,9 @@ def evaluate_public_game(game,board,rules,strategy,*,max_work=250000,max_seconds
 
 def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
     if board.winner:return Forecast(F(board.winner=='village'),())
+    from .root_secret_flow import root_screen_eligible,root_screen_forecast
+    if root_screen_eligible(board,rules,strategy):
+        return root_screen_forecast(board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
     from .guard_model import scope_reason
     from .guard_history_prior import role_exchangeable
     reason=scope_reason(board,rules,strategy,board.guard_prior_roster is not None)

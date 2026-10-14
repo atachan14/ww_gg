@@ -13,6 +13,8 @@ from .information_set_forecast import InformationSetForecast,InformationSetActio
 from .action_flow import resolve_action
 from .night_knowledge import WolfAttack
 from .calculation_budget import calculation_budget,CalculationBudgetExceeded
+from .forecast_result import Forecast
+from .exact import legal_targets
 
 
 @dataclass(frozen=True)
@@ -147,5 +149,38 @@ def root_secret_value(branch,rules,strategy,*,actor=None,max_work=250000,max_sec
             e=RootSecretEngine(rules,strategy,max_work=max_work)
             return e.solve(branch.public,branch.public_law,branch.past,own,None,
                            physical=physical_board(branch.public,own,branch.physical))
+    except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
+    except Pending as error:return FuturePending(error.reason)
+
+
+def root_screen_eligible(board,rules,strategy):
+    """Existing initial screen subset; no change to fixed-CO/max entrypoints."""
+    return (bool(board.initial_seer_count) and not board.initial_hunter_count and
+            board.day==1 and board.phase=='day' and not board.history and
+            board.alive==tuple(range(1,board.player_count+1)) and
+            strategy.day=='random' and strategy.night=='random' and
+            not (rules.allow_self_bite and not strategy.include_self_bite) and
+            not any(board.claims[p-1]=='seer' for p in board.alive) and
+            not (strategy.disclosure_for('medium')=='all' and strategy.fake_reports=='max' and
+                 any(board.claims[p-1]=='medium' for p in board.alive)))
+
+
+def root_screen_forecast(board,rules,strategy,*,max_work=250000,max_seconds=20):
+    """Full initial screen metrics from one complete latent secret law."""
+    if not root_screen_eligible(board,rules,strategy):
+        return FuturePending('root_secret_screen_scope_unimplemented')
+    try:
+        with calculation_budget(max_work,max_seconds=max_seconds):
+            branch=prepare_root_secrets(board,rules,max_work=max_work)
+            if isinstance(branch,FuturePending):return branch
+            e=RootSecretEngine(rules,strategy,max_work=max_work)
+            value=e.solve(board,branch.public_law,(),branch.physical_law,None,physical=branch.physical)
+            targets=legal_targets(board,rules,strategy)
+            actions=tuple((t,e.act(board,branch.public_law,(),t,branch.physical_law,None,
+                                  physical=branch.physical)) for t in targets)
+            from .model_a_public import horizon_for_action
+            horizons=tuple((t,horizon_for_action(e,board,branch.public_law,(),t,branch.physical_law))
+                           for t in targets)
+            return Forecast(value,actions,horizons)
     except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)

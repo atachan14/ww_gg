@@ -2,8 +2,8 @@
 <p class="program-equation" id="eq-role">Σ<sub>W</sub> Q(W) = 1</p><p>式eq-role：公開役職世界の質量は合計1。<code>Board</code>と<code>public_forecast</code>が正規化・一致を確認します。根拠：<code>test_public_prior_ownership</code>。</p>
 <h2 id="information">公開信念と本人条件</h2><p>model Aでは狼の「その相手を噛みやすい」という政策尤度を公開役職更新へ掛けません。死体には合法性と設定済み均等護衛の失敗確率を使います。無死亡では生存狩人が必要ですが、実際の噛み先を公開しません。</p>
 <p><code>condition_private</code>は本人役職・初期狼仲間・本人の記録だけを追加条件にします。本人条件を公開の処刑方針へ流さないことが不変条件です。</p>
-<h2>同じ情報集合には同じ政策</h2><p>狼のキーは公開状態、初期狼マスク、襲撃履歴。死亡済み仲間もマスクに残します。真の狩人位置を見て世界ごとに最適化し、その後平均する全知的計算は使いません。</p>
-<p class="program-equation" id="eq-policy">a* ∈ arg min<sub>a ∈ A(I)</sub> E[V<sub>village</sub> | I, a]</p><p>式eq-policy：情報集合Iで村勝率の期待値を比較してから最小化。同率最適対象は均等化します。関数：<code>wolf_policy</code>。根拠：<code>test_information_set_model_a</code>。</p>
+<h2>同じ情報集合には同じ政策</h2><p>狼のキーは公開状態、初期狼マスク、襲撃履歴。死亡済み仲間もマスクに残します。真の狩人位置を見て世界ごとに勝率最大化し、その後平均する全知的計算は使いません。</p>
+<p class="program-equation" id="eq-policy">a* ∈ arg min<sub>a ∈ A(I)</sub> E[V<sub>village</sub> | I, a]</p><p>式eq-policy：情報集合Iで村勝率の期待値を比較してから最小化。設定済み継続方針の下で同率の期待勝率最大化候補は均等化します。関数：<code>wolf_policy</code>。根拠：<code>test_information_set_model_a</code>。</p>
 <p><a href="{{ url_for('help_program',page='design') }}#information">関連設計案：生履歴から十分な知識要約へ</a></p>
 <h2>行の介入と、観測による更新を分ける</h2><p>夜のTable行は「この相手を噛む」という介入です。<code>forced_action_worlds</code>は対象が狼である世界を除き、生存狼数ごとの事前質量を保ちます。実際の死体を観測した<code>condition_guard_observation</code>による更新とは別です。根拠：<code>test_public_night_row_normalization</code>。</p>
 <h2>根からの継続と途中Boardの入口</h2><p>未来の物理枝では<code>Hypothesis.guards / attacks</code>へ本人記録を追加します。一方、画面再計算の<code>prepare_public_prior → from_board</code>は現在の役職候補から記録が空の仮説を作ります。<code>seed_history</code>の再構築は証明済みケースだけです。役職候補だけで他者の過去知識が一意に決まるわけではありません。</p>
