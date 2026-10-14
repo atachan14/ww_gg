@@ -79,6 +79,23 @@ class HiddenGuardMaxSupportTests(unittest.TestCase):
         actual_board,actual_law=public_guard_branch_law(board,source,after.board,None,True,engine,policies=policies)
         self.assertEqual(actual_board,support_board)
         self.assertEqual(actual_law.public_roles,tuple(sorted(support_board.worlds)))
+        from unittest.mock import patch
+        from werewolf.actor_information import WolfInformation
+        import werewolf.guard_model as guard_module
+        # A nonselected private action does NOT change the public kernel.
+        held=InformationSetForecast(rules,Strategy(**policy),memoize_flows=False)
+        held.retain_joint_guard_history=True
+        private=WolfInformation(2).condition_public(source)
+        original=guard_module.public_guard_branch_law
+        def selected_kernel(b,st,child,attack,blocked,e,**kw):
+            return original(b,st,child,attack,blocked,e,policies=policies)
+        with patch.object(guard_module,'public_guard_branch_law',selected_kernel), \
+             patch.object(held,'wolf_policy',side_effect=AssertionError('No future wolf decision is needed')):
+            value=held.act(board,source,(),3,private,None)
+        # P3 is guarded with 1/2; then random execution wins with 1/3.
+        self.assertEqual(value,F(1,6))
+        self.assertEqual(actual_law.public_roles,tuple(sorted(support_board.worlds)))
+
         with self.assertRaises(Pending) as missing:
             public_guard_branch_law(board,source,after.board,None,True,engine,policies={(1,()):policies[1,()]})
         self.assertEqual(missing.exception.reason,'guard_public_kernel_incomplete')

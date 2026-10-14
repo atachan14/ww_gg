@@ -408,7 +408,13 @@ class InformationSetActionPolicy:
     def morning_value(self,payload):
         child,st,past,own,observer=payload;e=self.engine
         child,st,past,own,observer=e.continuation_context(child,st,past,own,observer)
-        branches=e.push(st,own,e.morning(child,st,past))
+        published=e.morning(child,st,past)
+        if published==((F(1),child,st,past),):
+            # No observation occurred. Keep the physical/observer measure;
+            # a report likelihood ratio would spuriously intersect it with Q.
+            return e.solve(child,st,past,own,observer,
+                           physical=physical_board(child,own,payload.physical))
+        branches=e.push(st,own,published)
         return continuation_value(branches,lambda c,ns,p,priv:e.solve(c,ns,p,priv,observer,
                                  physical=physical_board(c,priv,payload.physical)))
 
