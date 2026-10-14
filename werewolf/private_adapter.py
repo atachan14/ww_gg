@@ -46,6 +46,7 @@ def private_slots(board, player, rules,role="seer"):
 
 def evaluate_private_table(public, role, players, results, rules, strategy, *, game_state=None,
                            max_work=250000, max_seconds=20):
+    root_entry = False
     view = condition_private(public, role, players, results, rules=rules)
     private = view.board
     reason = {'seer': '占い先の取得履歴と将来の公開判断を分離した勝率評価は未対応です。',
@@ -66,7 +67,23 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     if role == 'seer':
         targets = tuple(p for p in public.alive if p != players[0])
         from .seer_view_forecast import seer_forecast
-        if strategy.disclosure_for('seer') != 'all':
+        from .root_secret_flow import (root_screen_eligible,root_replay_eligible,prepare_root_secrets,
+            replay_root_secrets,root_seer_forecast,root_actor_view)
+        root_entry=(root_screen_eligible(public,rules,strategy) or
+                    root_replay_eligible(game_state or {},public,rules,strategy))
+        if root_entry:
+            branch=(prepare_root_secrets(public,rules,max_work=max_work) if
+                    root_screen_eligible(public,rules,strategy) else
+                    replay_root_secrets(game_state,public,rules,strategy,max_work=max_work,max_seconds=max_seconds))
+            result=branch if isinstance(branch,FuturePending) else root_seer_forecast(
+                branch,players[0],view.acquisitions,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+            if not isinstance(branch,FuturePending):
+                actor=root_actor_view(branch,lambda h:bool(h.roles[2]&(1<<(players[0]-1))) and
+                    all(a in h.acquisitions for a in view.acquisitions))
+                if not isinstance(actor,FuturePending):
+                    from .exact import replace_worlds
+                    private=replace_worlds(public,actor.belief.public_roles)
+        elif strategy.disclosure_for('seer') != 'all':
             result = FuturePending('seer_view_unpublished_own_action_unimplemented')
         elif public.claims[players[0]-1] != 'seer':
             result = FuturePending('seer_view_latent_future_co_unimplemented')
@@ -88,6 +105,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         else:
             final_values = dict(result); targets = tuple(final_values)
             reason = '占い先別の最終勝率です。狼は仲間を知って行動し、公開推理は死体との矛盾除外を維持します。すべて開示・CO固定・未訪問先優先。次の朝までの勝率は未対応です。'
+        if root_entry and not isinstance(result,FuturePending):
+            reason = '本人の役職・取得結果・行動履歴で共同分布を条件付け、同じ公開方針の下で次の占い先を比較します。'
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
     if role == 'wolf':
         state = None; past = ()
@@ -136,6 +155,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 except CalculationBudgetExceeded:guard_dawn={}
             reason += ' 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'
             if set(targets) - set(final_values): reason += ' 公開側の全仮説で合法にならない襲撃先は未対応です。'
+        if root_entry and not isinstance(result,FuturePending):
+            reason = '本人の役職・取得結果・行動履歴で共同分布を条件付け、同じ公開方針の下で次の占い先を比較します。'
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
     rows = []
     for p in range(1, public.player_count + 1):

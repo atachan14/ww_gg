@@ -11,6 +11,12 @@ def public_history_key(game):
     log=game.get('public_log',{})
     public={
         'players':game.get('players'),
+        'wolves':game.get('wolves'),'mediums':game.get('mediums'),'seers':game.get('seers'),
+        'hunters':game.get('hunters'),'model':game.get('model'),
+        'history':[{k:v for k,v in step.items() if k in ('target','policy','claims','claim_policy','observation','deaths')}
+                   for step in game.get('history',())],
+        'claims':game.get('claims',()),'policy':game.get('policy',{}),
+        'reports':game.get('reports',()),
         'rules':{k:v for k,v in game.get('rules',{}).items() if k=='initial_seer'},
         'seer_options':{'initial_rule':game.get('seer_options',{}).get('initial_rule')},
         'seer_inputs':[{k:r[k] for k in ('day','reporter','target','color')} for r in game.get('seer_inputs',())],

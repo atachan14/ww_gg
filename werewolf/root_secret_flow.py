@@ -14,7 +14,7 @@ from .action_flow import resolve_action
 from .night_knowledge import WolfAttack
 from .calculation_budget import calculation_budget,CalculationBudgetExceeded
 from .forecast_result import Forecast
-from .exact import legal_targets
+from .exact import legal_targets,Strategy
 
 
 @dataclass(frozen=True)
@@ -182,5 +182,117 @@ def root_screen_forecast(board,rules,strategy,*,max_work=250000,max_seconds=20):
             horizons=tuple((t,horizon_for_action(e,board,branch.public_law,(),t,branch.physical_law))
                            for t in targets)
             return Forecast(value,actions,horizons)
+    except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
+    except Pending as error:return FuturePending(error.reason)
+
+
+def root_replay_eligible(game,board,rules,strategy):
+    """Saved uniform history without ability publications; no invented CO law."""
+    if not game.get('history') or not board.initial_seer_count or board.initial_hunter_count:
+        return False
+    snapshots=(*game['history'],game)
+    return (strategy.day==strategy.night=='random' and
+            not (rules.allow_self_bite and not strategy.include_self_bite) and
+            all(Strategy(**step.get('policy',{})).day==Strategy(**step.get('policy',{})).night=='random'
+                and not any(c in ('seer','medium') for c in step.get('claims',()))
+                for step in snapshots) and not game.get('seer_inputs') and not game.get('reports'))
+
+
+def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=20):
+    """Recreate actual joint histories; observed bites use the configured policy.
+
+    Q is restored from the existing public replay only after P is conditioned.
+    Actions recorded in history are observations, not target-row interventions.
+    """
+    from .exact import initial_board,condition_claims,group_initial_board,ClaimPolicy
+    if not root_replay_eligible(game,board,rules,strategy):
+        return FuturePending('root_secret_replay_scope_unimplemented')
+    try:
+        with calculation_budget(max_work,max_seconds=max_seconds):
+            seed=initial_board(board.player_count,game.get('wolves',1),game.get('mediums',0),
+                               game.get('seers',0),game.get('hunters',0),experimental_cast=True)
+            first=game['history'][0]
+            claims=tuple(first.get('claims',('latent',)*board.player_count))
+            cp=ClaimPolicy(**first.get('claim_policy',{}))
+            seed=(group_initial_board(seed,claims,cp) if game.get('model')=='group'
+                  else condition_claims(seed,claims,cp))
+            branch=prepare_root_secrets(seed,rules,max_work=max_work)
+            if isinstance(branch,FuturePending):return branch
+            for index,step in enumerate(game['history']):
+                policy=Strategy(**step['policy']);target=step['target']
+                if branch.public.phase=='night':
+                    if target is None:return FuturePending('root_secret_replay_observation_unimplemented')
+                    legal=lambda h:policy.include_self_bite or not h.roles[0]&(1<<(target-1))
+                    hs=tuple(replace(h,mass=h.mass/F(len(branch.public.alive) if policy.include_self_bite else
+                        len(branch.public.alive)-(h.roles[0]&branch.public.alive_mask).bit_count()))
+                        for h in branch.physical_law.hypotheses if legal(h))
+                    if not hs:return FuturePending('root_secret_physical_zero_support')
+                    own=replace(branch.physical_law,hypotheses=normalize(hs))
+                    branch=replace(branch,physical_law=own,
+                                   physical=physical_board(branch.public,own,branch.physical))
+                children=step_root_action(branch,target,rules,policy,max_work=max_work,max_seconds=max_seconds)
+                if isinstance(children,FuturePending):return children
+                # Saved ongoing Boards identify survival as well as the corpse.
+                children=tuple((q,c) for q,c in children if not c.public.winner)
+                if len(children)!=1:return FuturePending('root_secret_replay_branch_unresolved')
+                branch=children[0][1]
+            facts=('alive','day','phase','history')
+            if any(getattr(branch.public,k)!=getattr(board,k) for k in facts):
+                return FuturePending('root_secret_replay_board_mismatch')
+            return observe_root_public(branch,board,lambda h:True)
+    except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
+    except Pending as error:return FuturePending(error.reason)
+
+
+def root_branch_forecast(branch,rules,strategy,*,max_work=250000,max_seconds=20):
+    """One retained joint law supplies overview, target rows and dawn values."""
+    reason=root_scope(branch,rules,strategy)
+    if reason:return FuturePending(reason)
+    try:
+        with calculation_budget(max_work,max_seconds=max_seconds):
+            e=RootSecretEngine(rules,strategy,max_work=max_work)
+            b=branch.public;s=branch.public_law;past=branch.past;own=branch.physical_law
+            value=e.solve(b,s,past,own,None,physical=branch.physical)
+            from .belief_projection import project_private
+            from .exact import forced_action_worlds,replace_worlds
+            from .model_a_public import horizon_for_action
+            targets=legal_targets(b,rules,strategy)
+            laws={t:project_private(own,replace_worlds(branch.physical,
+                forced_action_worlds(branch.physical,t,rules,strategy)),marginalize_private=False)
+                if b.phase=='night' else own for t in targets}
+            actions=tuple((t,e.act(b,s,past,t,laws[t],None,
+                physical=physical_board(b,laws[t],branch.physical))) for t in targets)
+            horizons=tuple((t,horizon_for_action(e,b,s,past,t,laws[t])) for t in targets)
+            return Forecast(value,actions,horizons)
+    except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
+    except Pending as error:return FuturePending(error.reason)
+
+
+
+def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=250000,max_seconds=20):
+    """Own scan interventions over the unchanged public joint policy law."""
+    from .seer_future_uniform import candidates
+    compatible=lambda h:bool(h.roles[2]&(1<<(player-1))) and all(a in h.acquisitions for a in acquisitions)
+    actor=root_actor_view(branch,compatible)
+    if isinstance(actor,FuturePending):return actor
+    histories={tuple(a for a in h.acquisitions if a.player==player) for h in actor.physical_law.hypotheses}
+    if len(histories)!=1:return FuturePending('seer_view_past_private_history_unresolved')
+    choices={candidates(h,player,branch.public.alive) for h in actor.physical_law.hypotheses}
+    if len(choices)!=1:return FuturePending('seer_view_target_generation_support_unresolved')
+    reason=root_scope(branch,rules,strategy)
+    if reason:return FuturePending(reason)
+    day=branch.public.day+1;values=[]
+    try:
+        with calculation_budget(max_work,max_seconds=max_seconds):
+            engine=RootSecretEngine(rules,strategy,max_work=max_work)
+            for target in next(iter(choices)):
+                def observer(h,state,target=target):
+                    return compatible(h) and (len(state.rosters)<day or
+                        player not in state.rosters[day-1] or target not in state.rosters[day-1] or
+                        any(a.player==player and a.day==day and a.target==target for a in h.acquisitions))
+                value=engine.solve(branch.public,branch.public_law,branch.past,actor.physical_law,
+                    observer,physical=physical_board(branch.public,actor.physical_law,branch.physical))
+                values.append((target,value))
+            return tuple(values)
     except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)
