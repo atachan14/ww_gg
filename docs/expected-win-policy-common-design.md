@@ -123,3 +123,5 @@ wolf_profile_certificate.pyは完全公開profileを固定したまま既存Info
 終局利得と状態生成の区別: 共通resolve_actionの既定は従来の完全状態/観測検証。action_flowおよびbounded horizonだけがterminal_payoffs=Trueを指定する。物理終局枝は厳密な物理質量・勝者で停止し、存在しない続行信念を生成しない。保存履歴の生成や実際の続行枝は従来どおり完全な秘密履歴と公開支持を要求する。回帰では、同じ反実仮想枝のスカラー利得1/6が計算できても、完全状態生成は支持ゼロを返すことを確認。さらに5人開始の既知狩人・全kernel狩人襲撃（GJ不可能）に対し、別対象の強制襲撃で起きる続行GJは、依然public_generated_observation_zero_supportで停止する。
 
 次の未完: 通常root入口への証明済み方針の接続、後続夜の未知profile依存の閉包、占霊入り6人、既存報告方針の接続。複数解/無解/真の未定義観測/予算未完は新しい規則で補わず、結果分類を維持する。
+
+最終検証: 依存記録の段階1は全576件237.546秒、終局処理修正を含む段階2は全578件231.842秒で成功。専用18801を所有確認後PID5652へ更新し、HELP HTTP200と既存全潜伏6人の通常画面・本人視点・再読込・公開復元を確認した。最小4人について追加仕様判断は不要。通常root入口への接続と後続夜・占霊入りの一般継続は引き続き未完。証拠はtask-6/policy-certificate-four-final.json、policy-certificate-full.log、policy-certificate-browser-consistency.json。
