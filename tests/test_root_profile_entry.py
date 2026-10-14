@@ -141,7 +141,10 @@ class RootProfileRouteTests(unittest.TestCase):
                 with c.session_transaction() as session:return deepcopy(session['game'])
             g=game();self.assertEqual(c.post('/advance',data={'revision':str(g['revision']),'target':'4',
                 'day':'max','night':'max'}).status_code,303)
-            g=game();self.assertIn(b'data-fraction="1/18"',c.get('/main').data)
+            g=game();night=c.get('/main').data
+            self.assertIn(b'data-fraction="1/18"',night)
+            self.assertIn(b'data-dawn-open',night)
+            self.assertIn(b'name="mode" value="none"',night)
             before=deepcopy(g)
             own=c.post('/private-view',data={'revision':str(g['revision']),'board_id':g['public_log']['board_id'],
                 'payload':json.dumps({'role':'wolf','players':[1],'results':[]})})

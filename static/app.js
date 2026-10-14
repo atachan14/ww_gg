@@ -396,12 +396,13 @@ function initializePublicLog() {
 }
 
 // Public dawn observations are independent of the wolf target picker.
-document.querySelectorAll('.dawn-report-editor form').forEach(form => {
+document.querySelectorAll('form[data-dawn-observation]').forEach(form => {
   const update = () => {
-    const hasCorpses = form.querySelector('[name="mode"]:checked')?.value === 'deaths';
-    form.querySelectorAll('[name="deaths"]').forEach(input => { input.disabled = !hasCorpses; });
+    const controls = Array.from(form.elements);
+    const hasCorpses = controls.find(input => input.name === 'mode' && input.checked)?.value === 'deaths';
+    controls.filter(input => input.name === 'deaths').forEach(input => { input.disabled = !hasCorpses; });
   };
-  form.querySelectorAll('[name="mode"]').forEach(input => input.addEventListener('change', update));
+  Array.from(form.elements).filter(input => input.name === 'mode').forEach(input => input.addEventListener('change', update));
   update();
 });
 

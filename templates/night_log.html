@@ -1,5 +1,6 @@
 <section class="board-log" aria-labelledby="dawn-log-title"><h3 class="board-child-title" id="dawn-log-title">BoardLog</h3>
 {% if night_context.observation is not none %}<div class="board-log-item" data-system-log>System：{% if night_context.observation.deaths %}{% for p in night_context.observation.deaths %}Player{{ p }}{% if not loop.last %}・{% endif %}{% endfor %}が死亡（D{{ board.day }} 襲撃）{% else %}死体なし{% endif %}</div>{% endif %}
+{% with observation=night_context.observation %}{% include 'dawn_observation_controls.html' %}{% endwith %}
 {% if night_context.pending and night_context.observation is not none %}<p class="hint" data-dawn-pending>Pending：{{ night_context.pending }} <a href="{{ url_for('help_specs') }}#dawn">Help</a></p>{% endif %}
 {% if night_context.observation is none %}<span hidden data-dawn-pending>未入力</span>{% endif %}
 </section>

@@ -8,6 +8,7 @@
   <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:{% for label,count,note in [('市民',state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0),''),('霊能',state.get('mediums',0),''),('占い師',state.get('seers',0),''),('狩人',state.get('hunters',0),'（護衛：均等化）'),('狼',state.get('wolves',1),'')] if count>0 %}{{ label }}{{ count }}{{ note }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
   <form id="display-options-form"></form>
   <form id="public-log-draft-form"></form>
+  {% if night_context %}{% include 'dawn_observation_forms.html' %}{% endif %}
   <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
     <input type="hidden" name="revision" value="{{ state.revision }}">
     <div class="board-layout">
@@ -27,7 +28,7 @@
     </section>
       <section class="panel player-panel" id="player-panel" aria-labelledby="players-title">
         <div class="panel-heading"><h2 class="board-section-label" id="players-title">BoardInfo</h2><span class="muted" data-table-scope>{{ ('直前の行動の結果全体' if state.history else '初期Boardの公開情報') if finished else '現在Boardの公開情報' }}</span></div>
-        {% if not night_context %}{% include 'public_log.html' %}{% endif %}
+        {% if night_context %}{% include 'night_log.html' %}{% else %}{% include 'public_log.html' %}{% endif %}
         <div class="board-table-heading"><h3 class="board-child-title" id="board-table-title">BoardTable</h3>{% if config.get("HYBRID_TABLE_PREVIEW") and not finished and not night_context %}<button type="button" data-table-update disabled>更新</button><button type="button" data-table-cancel hidden>キャンセル</button><small data-table-preview-status aria-live="polite"></small>{% endif %}</div>
         {% include 'board_table.html' %}
         {% if viewpoint_seed %}

@@ -2,6 +2,7 @@
 {% block title %}Day {{ day }} 夜明け{% endblock %}
 {% block content %}
 <main data-screen="dawn">
+  {% include 'dawn_observation_forms.html' %}
   <section class="panel" aria-labelledby="phase-title">
     <p class="eyebrow">BoardOverview</p><h1 id="phase-title">Day {{ day }} · 夜明け</h1>
     {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
@@ -15,25 +16,7 @@
         <span>System：{% if observation.deaths %}{% for p in observation.deaths %}Player{{ p }}{% if not loop.last %}・{% endif %}{% endfor %}が死亡{% else %}死体なし{% endif %}</span>
       </div>
       {% endif %}
-      <button type="button" class="board-log-add" data-dawn-open>{{ '死体報告を編集' if observation is not none else '死体報告を追加' }}</button>
-      <dialog class="board-log-dialog dawn-report-editor" id="dawn-report-dialog" aria-labelledby="dawn-report-title">
-        <div class="overlay-shell"><header class="overlay-head"><h2 id="dawn-report-title">死体報告</h2><button type="button" data-dawn-close aria-label="閉じる">×</button></header><div class="overlay-body">
-        <form method="post" action="{{ url_for('dawn_report') }}" data-submit-once>
-          <input type="hidden" name="revision" value="{{ state.revision }}">
-          <input type="hidden" name="board_id" value="{{ state.public_log.board_id }}">
-          <label><input type="radio" name="mode" value="deaths" {% if observation is none or observation.deaths %}checked{% endif %}> 死体あり</label>
-          <div class="dawn-corpses">{% for p in board.alive %}<label><input type="checkbox" name="deaths" value="{{ p }}" {% if observation and p in observation.deaths %}checked{% endif %}> Player{{ p }}</label>{% endfor %}</div>
-          <label><input type="radio" name="mode" value="none" {% if observation is not none and not observation.deaths %}checked{% endif %}> 死体なし</label>
-          <button type="submit">確定</button>
-        </form>
-        </div></div>
-      </dialog>
-      {% if observation is not none %}
-      <form method="post" action="{{ url_for('dawn_report') }}" data-submit-once>
-        <input type="hidden" name="revision" value="{{ state.revision }}"><input type="hidden" name="board_id" value="{{ state.public_log.board_id }}"><input type="hidden" name="mode" value="clear">
-        <button type="submit" class="secondary">死体報告を削除</button>
-      </form>
-      {% endif %}
+      {% include 'dawn_observation_controls.html' %}
       {% if pending %}<p class="hint" data-dawn-pending>Pending：{{ pending }} <a href="{{ url_for('help_specs') }}#dawn">Help</a></p>{% endif %}
     </section>
     <h3 class="board-child-title">BoardTable</h3>
