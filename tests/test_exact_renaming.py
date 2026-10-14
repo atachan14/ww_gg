@@ -31,6 +31,24 @@ class ExactRenamingTests(unittest.TestCase):
     def key(self,b,s,past=(),private=None,target=None,repeat=True,observer=None):
         return canonical_key(b,s,past,s if private is None else private,observer,Rules(allow_repeat_guard=repeat),Strategy(),target=target)
 
+    def test_proved_automorphism_pruning_matches_complete_permutation_search(self):
+        from unittest.mock import patch
+        import werewolf.exact_renaming as renaming
+        from werewolf.root_secret_flow import prepare_root_secrets
+        b=initial_board(6,1,0,1,1);rules=Rules();strategy=Strategy('random','random')
+        state=prepare_root_secrets(b,rules).public_law
+        with patch.object(renaming,'state_signature',wraps=renaming.state_signature) as serialized:
+            expected=canonical_key(b,state,(),state,None,rules,strategy,prune_automorphisms=False)
+            complete_calls=serialized.call_count;serialized.reset_mock()
+            self.assertEqual(canonical_key(b,state,(),state,None,rules,strategy),expected)
+            self.assertLess(serialized.call_count,complete_calls)
+        # Equal colors alone are insufficient: a directed private record must
+        # still defeat any swap that fails the complete-snapshot proof.
+        own=WolfInformation(1).condition_public(state)
+        own=replace(own,hypotheses=normalize(tuple(replace(h,mass=h.mass*(2 if any(a.target==3 for a in h.acquisitions) else 1)) for h in own.hypotheses)))
+        self.assertEqual(canonical_key(b,state,(),own,None,rules,strategy,target=2),
+                         canonical_key(b,state,(),own,None,rules,strategy,target=2,prune_automorphisms=False))
+
     def test_whole_state_bijection_and_actor_partition(self):
         b,s=self.fixture();own=WolfInformation(2).condition_public(s)
         original=self.key(b,s,private=own,target=3)
