@@ -102,23 +102,31 @@ def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None,al
 def physical_actor_outcomes(b,s,engine,p,*,acquire=True,observer=None):
     strategy=engine.strategy;rules=engine.rules
     acquired=engine.acquire(b,s) if acquire and b.phase=='night' else s
-    grouped={};templates={}
+    grouped={};templates={};physical={}
     for h in acquired.hypotheses:
         tick()
-        single=replace_worlds(b,((*h.roles,F(1)),),wolf_count=None)
-        actor=next((a for a in b.alive if h.roles[3]&(1<<(a-1))),None)
-        if b.phase=='night' and actor is not None:
-            choices=guard_choices(b,actor,rules,strategy.guard_position,guards=h.guards)
-            from .guard_model import GuardObserver
-            if (isinstance(observer,GuardObserver) and observer.actor==actor and
-                    observer.board.day==b.day and observer.target in {g for g,q in choices}):
-                choices=((observer.target,F(1)),)
-            if not choices:raise engine.pending('guard_no_legal_target_unselected')
-            resolved=tuple((q,resolve_fixed_guard_night(single,GuardIntent(b.day,actor,g),p,rules,
-                            previous=previous_guard(h.guards,actor,b.day))[0].board,
-                            h.guards+(GuardIntent(b.day,actor,g),)) for g,q in choices)
-        else:
-            resolved=tuple((o.probability,o.board,h.guards) for o in action_outcomes(single,p,rules,strategy))
+        # Within this fixed Board/action, casualties depend on roles and the
+        # full guard history, never scans, attack memories or hypothesis mass.
+        # Reuse physical construction only; append each ORIGINAL joint record
+        # below so no private history is marginalized or used for selection.
+        physics=(h.roles,h.guards)
+        if physics not in physical:
+            single=replace_worlds(b,((*h.roles,F(1)),),wolf_count=None)
+            actor=next((a for a in b.alive if h.roles[3]&(1<<(a-1))),None)
+            if b.phase=='night' and actor is not None:
+                choices=guard_choices(b,actor,rules,strategy.guard_position,guards=h.guards)
+                from .guard_model import GuardObserver
+                if (isinstance(observer,GuardObserver) and observer.actor==actor and
+                        observer.board.day==b.day and observer.target in {g for g,q in choices}):
+                    choices=((observer.target,F(1)),)
+                if not choices:raise engine.pending('guard_no_legal_target_unselected')
+                resolved=tuple((q,resolve_fixed_guard_night(single,GuardIntent(b.day,actor,g),p,rules,
+                                previous=previous_guard(h.guards,actor,b.day))[0].board,
+                                h.guards+(GuardIntent(b.day,actor,g),)) for g,q in choices)
+            else:
+                resolved=tuple((o.probability,o.board,h.guards) for o in action_outcomes(single,p,rules,strategy))
+            physical[physics]=resolved
+        resolved=physical[physics]
         for q,child,guards in resolved:
             key=(child.alive,child.day,child.phase,child.history,child.winner)
             record=replace(h,mass=h.mass*q,guards=guards,

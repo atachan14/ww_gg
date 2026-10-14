@@ -67,3 +67,38 @@ class FixedActorContinuationTests(unittest.TestCase):
             self.assertEqual(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2,allow_actor_only=True),proposal)
             physical.assert_not_called()
         self.assertIsNone(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2))
+
+    def test_physics_reuse_preserves_seer_medium_joint_histories_and_guard_rule(self):
+        from werewolf.exact import initial_board,replace_worlds
+        from werewolf.seer_acquisition import Hypothesis,Acquisition
+        from werewolf.guard_effect import GuardIntent
+        from werewolf.night_knowledge import WolfAttack
+        from collections import defaultdict
+        roles=(1,8,2,4)  # W1, M4, S2, H3; two citizens.
+        b=replace(replace_worlds(initial_board(6,1,1,1,1,experimental_cast=True),
+                                ((*roles,F(1)),)),day=2,phase='night')
+        hs=tuple(Hypothesis(roles,(Acquisition(1,2,scan,'white'),Acquisition(2,2,5,'white'),Acquisition(3,2,3,'white')),F(1,4),
+                           (GuardIntent(1,3,guard),),(WolfAttack(1,guard),))
+                 for guard in (4,5) for scan in (4,6))
+        state=TrueScanState(hs,rosters=(tuple(range(1,7)),)*3)
+        def ledger(outcomes):
+            masses=defaultdict(F)
+            for q,child,joint in outcomes:
+                for h in joint.hypotheses:
+                    masses[child.alive,h.roles,h.acquisitions,h.guards,h.attacks]+=q*h.mass
+            return dict(masses)
+        for repeat,gj in ((True,F(1,5)),(False,F(1,8))):
+            e=InformationSetForecast(Rules(allow_repeat_guard=repeat),Strategy('random','max'))
+            expected=defaultdict(F)
+            for h in hs:
+                single=replace(state,hypotheses=(replace(h,mass=F(1)),))
+                for key,q in ledger(suffix.physical_actor_outcomes(b,single,e,4,acquire=False)).items():
+                    expected[key]+=h.mass*q
+            with patch.object(suffix,'resolve_fixed_guard_night',wraps=suffix.resolve_fixed_guard_night) as resolve:
+                result=suffix.physical_actor_outcomes(b,state,e,4,acquire=False)
+            self.assertEqual(ledger(result),dict(expected))
+            self.assertEqual(resolve.call_count,10 if repeat else 8)
+            self.assertEqual(sum((q for q,child,joint in result),F()),1)
+            self.assertEqual(sum((q for q,child,joint in result if child.alive==b.alive),F()),gj)
+            self.assertEqual({h.acquisitions for q,child,joint in result for h in joint.hypotheses},
+                             {h.acquisitions for h in hs})
