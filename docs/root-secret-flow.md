@@ -56,3 +56,12 @@ evaluate_public_gameが呼ぶ入口で、root_screen_eligibleの対応条件を�
 同時に複数の期待勝率最大化を行う一般の相互最大化は未実装。戦略拡張時の課題であり、定義済み均等の実行要件ではない。
 
 画面接続検証: 関連24件、HELP説明更新後4件、全512テスト成功（150.114秒）。
+
+## 2026-10-14 normal root and later-night checkpoint
+
+- Normal C/H/W day-max/night-max entry now uses complete unique profile certification. Both guard-repeat rules pass the route regression. Existing initially known-hunter max entry remains intact.
+- Full regression: 586 tests passed in 244.931 seconds (root-profile-integration-full.log). Following the UI-only dawn-form extraction, the route regression passed in 8.977 seconds and static/app.js passed node --check.
+- Dedicated 18801 browser validation, C2/H1/W1, no repeated guard: P1 hunter claim and P4 execution give public night value 1/10; wolf P1 legal targets P2/P3 each give 1/6. Normal GJ report then advance gives Day2 value 1/2. Reload preserves 1/2; back restores night 1/10 and both max policies. Night Board now exposes the existing dawn observation controls through shared partials.
+- A later Day2 night with six retained joint histories is certified uniquely by policy-independent score proof (729 possible profiles, one evaluation). Five-player coupled root remains budget-unfinished; six-player root domain is 759375. Neither installs an uncertified kernel or substitutes values.
+- The separate initially known live-hunter counterfactual GJ case has genuinely zero public support under the selected profile. It remains undefined/Pending; no new off-path belief rule is supplied.
+- Remaining: coupled later-night budget coverage and seer/medium six-player integration. Overall integration is unfinished; publication remains held. Dedicated preview PID 20352; no push/deploy or shared settings changes.
