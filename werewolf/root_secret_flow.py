@@ -80,9 +80,9 @@ def root_actor_view(branch,compatible,*,guards=(),attacks=()):
 
 
 def root_scope(branch,rules,strategy):
-    if strategy.day!='random' or strategy.night!='random':return 'root_secret_max_unimplemented'
+    if strategy.day!='random' or strategy.night not in (('random','max') if branch.public.initial_hunter_count==1 else ('random',)):return 'root_secret_max_unimplemented'
     from .guard_model import scope_reason
-    reason=scope_reason(branch.public,rules,strategy,True)
+    reason=scope_reason(branch.public,rules,strategy,True,joint_max=True)
     if reason:return reason
     if rules.allow_self_bite and not strategy.include_self_bite:
         return 'root_secret_self_bite_policy_support_unimplemented'
@@ -99,6 +99,11 @@ def root_scope(branch,rules,strategy):
 
 
 class RootSecretPolicy(InformationSetActionPolicy):
+    def acquire(self,b,payload):
+        acquired=super().acquire(b,payload)
+        self.engine.night_sources[b,acquired.public_state,payload.past]=payload.public_state
+        return acquired
+
     def project(self,b,payload,outcome,target):
         continuation=super().project(b,payload,outcome,target)
         if b.phase!='night' or b.initial_hunter_count:return continuation
@@ -111,9 +116,63 @@ class RootSecretPolicy(InformationSetActionPolicy):
 
 class RootSecretEngine(InformationSetForecast):
     retain_joint_guard_history=True
+    joint_guard_max=True
     def __init__(self,rules,strategy,**kwargs):
         super().__init__(rules,strategy,retire_uninformative_scans=False,memoize_flows=False,**kwargs)
         self.action_policy=RootSecretPolicy(self)
+        self.night_sources={};self.night_kernels={}
+
+    def public_night_policies(self,b,state,past=()):
+        from .actor_information import wolf_information_groups
+        from .fixed_actor_continuation import fixed_actor_value
+        from .policy_choice import optimal_targets,uniform_policy
+        before=self.night_sources.get((b,state,past),state)
+        if before.public_roles!=tuple(sorted(b.worlds)):
+            raise Pending('root_guard_max_public_prior_mismatch')
+        key=(b,before,past)
+        if key not in self.night_kernels:
+            result={}
+            for info,mass,group in wolf_information_groups(before):
+                targets=tuple(p for p in b.alive if self.strategy.include_self_bite or
+                              not info.initial_roster&(1<<(p-1)))
+                if self.strategy.night=='random':chosen=targets
+                else:
+                    scores=tuple((p,fixed_actor_value(b,before,self,info=info,target=p)) for p in targets)
+                    if any(v is None for p,v in scores):
+                        raise Pending('root_guard_max_unknown_continuation')
+                    chosen=optimal_targets(scores,maximize=False)
+                result[info.initial_roster,info.attacks]=uniform_policy(chosen)
+            self.night_kernels[key]=result
+        return self.night_kernels[key]
+
+    def wolf_policy(self,b,s,past,mask,history=()):
+        if self.strategy.night!='max' or not b.initial_hunter_count:
+            return super().wolf_policy(b,s,past,mask,history)
+        from .actor_information import WolfInformation
+        info=WolfInformation(mask,history)
+        try:info.condition_public(s)
+        except ValueError:raise Pending('information_set_roster_missing')
+        kernel=self.public_night_policies(b,s,past)
+        if (mask,info.attacks) not in kernel:raise Pending('information_set_roster_missing')
+        return kernel[mask,info.attacks]
+
+    def act(self,b,s,past,target,private,observer,*,physical=None):
+        if type(target)is not int or target not in b.alive:
+            raise Pending('information_set_internal_illegal_action')
+        checked=physical_board(b,private,physical)
+        if target not in legal_targets(checked,self.rules,self.strategy):
+            raise Pending('information_set_internal_illegal_action')
+        if b.phase=='night' and self.strategy.night=='max' and observer is None:
+            from .actor_information import wolf_information_groups
+            from .fixed_actor_continuation import fixed_actor_value
+            value=F();resolved=True
+            for info,mass,group in wolf_information_groups(private):
+                try:part=fixed_actor_value(b,s,self,info=info,target=target,measure=group)
+                except ValueError:part=None
+                if part is None:resolved=False;break
+                value+=mass*part
+            if resolved:return value
+        return super().act(b,s,past,target,private,observer,physical=physical)
 
     def exchangeable(self,b):return False  # Keep the complete latent acquisition flow.
     def value_law(self,state):return state  # No history compression in this entry.
@@ -168,7 +227,7 @@ def root_screen_eligible(board,rules,strategy):
             board.initial_hunter_count<=1 and
             board.day==1 and board.phase=='day' and not board.history and
             board.alive==tuple(range(1,board.player_count+1)) and
-            strategy.day=='random' and strategy.night=='random' and
+            strategy.day=='random' and strategy.night in (('random','max') if board.initial_hunter_count==1 else ('random',)) and
             not (rules.allow_self_bite and not strategy.include_self_bite) and
             not any(board.claims[p-1]=='seer' for p in board.alive) and
             not (strategy.disclosure_for('medium')=='all' and strategy.fake_reports=='max' and
@@ -194,9 +253,9 @@ def root_replay_eligible(game,board,rules,strategy):
             board.initial_hunter_count>1):
         return False
     snapshots=(*game['history'],game)
-    return (strategy.day==strategy.night=='random' and
+    return (strategy.day=='random' and strategy.night in (('random','max') if board.initial_hunter_count==1 else ('random',)) and
             not (rules.allow_self_bite and not strategy.include_self_bite) and
-            all(Strategy(**step.get('policy',{})).day==Strategy(**step.get('policy',{})).night=='random'
+            all(Strategy(**step.get('policy',{})).day=='random' and Strategy(**step.get('policy',{})).night in (('random','max') if board.initial_hunter_count==1 else ('random',))
                 for step in snapshots))
 
 
@@ -275,13 +334,15 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
                     return FuturePending('guard_saved_observation_required')
                 candidates=branch.public.alive if branch.public.phase=='night' and target is None else (target,)
                 selected=[]
+                kernels=(RootSecretEngine(rules,policy,max_work=max_work).public_night_policies(
+                    branch.public,branch.public_law,branch.past) if branch.public.phase=='night' else {})
                 for action in candidates:
                     active=branch;mass=F(1)
                     if branch.public.phase=='night':
                         legal=lambda h:policy.include_self_bite or not h.roles[0]&(1<<(action-1))
-                        hs=tuple(replace(h,mass=h.mass/F(len(branch.public.alive) if policy.include_self_bite else
-                            len(branch.public.alive)-(h.roles[0]&branch.public.alive_mask).bit_count()))
-                            for h in branch.physical_law.hypotheses if legal(h))
+                        hs=tuple(replace(h,mass=h.mass*dict(kernels[h.roles[0],h.attacks]).get(action,F()))
+                            for h in branch.physical_law.hypotheses if legal(h) and
+                            dict(kernels[h.roles[0],h.attacks]).get(action,F())>0)
                         if not hs:continue
                         mass=sum((h.mass for h in hs),F())
                         own=replace(branch.physical_law,hypotheses=normalize(hs))
@@ -415,7 +476,10 @@ def _guard_night_priors(history_key,rules,max_work,max_seconds):
     game=json.loads(history_key)
     seed=initial_board(game['players'],game.get('wolves',1),game.get('mediums',0),
                        game.get('seers',0),game.get('hunters',0),experimental_cast=True)
-    result=replay_root_secrets(game,seed,rules,Strategy(**game['policy']),
+    # Collect facts of saved nights even when today's strategy is outside the
+    # new value scope. Every saved step keeps its own ORIGINAL policy.
+    collecting={**game,'policy':{**game['policy'],'day':'random','night':'random'}}
+    result=replay_root_secrets(collecting,seed,rules,Strategy(**collecting['policy']),
         max_work=max_work,max_seconds=max_seconds,_collect_guard_priors=True)
     if isinstance(result,FuturePending):raise Pending(result.reason)
     return tuple(sorted(result.items()))

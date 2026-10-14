@@ -54,7 +54,13 @@ class HiddenGuardMaxSupportTests(unittest.TestCase):
         gj={'target':None,'claims':claims,'claim_policy':cp,'policy':policy,
             'observation':'night-deaths-v1','deaths':[]}
         observed=migrate_game({**game,'history':[game['history'][0],gj]})
-        _,after=replay(observed)
+        _,max_after=replay(observed)
+        self.assertEqual({w[0] for w in max_after.board.worlds},{1})
+        self.assertEqual({w[-1] for w in max_after.board.worlds},{F(1,2)})
+        # The previous compatibility-only reference is now an actual RANDOM
+        # night; a saved max night uses the approved generated support filter.
+        _,after=replay(migrate_game({**game,'history':[game['history'][0],
+            {**gj,'policy':{**policy,'night':'random'}}]}))
         self.assertEqual(len(after.board.worlds),4)
         self.assertEqual({w[-1] for w in after.board.worlds},{F(1,4)})
         mixture=enumerate_guard_history_mixture(source,after.board.worlds,1,board.alive,policies,deaths=())

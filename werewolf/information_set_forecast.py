@@ -318,7 +318,7 @@ class InformationSetForecast:
         from .guard_model import scope_reason
         from .guard_history_prior import public_history_ready,guard_history_ready
         ready=public_history_ready(b,s) if self.rules.allow_repeat_guard else guard_history_ready(b,s)
-        reason=scope_reason(b,self.rules,self.strategy,ready)
+        reason=scope_reason(b,self.rules,self.strategy,ready,joint_max=getattr(self,'joint_guard_max',False))
         if reason:raise Pending(reason)
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
         physical=physical_board(b,private,physical)

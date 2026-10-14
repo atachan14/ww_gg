@@ -89,7 +89,11 @@ def condition(board,rows,opt,initial_alive):
 def replay(game,*,guard_priors=None):
     g=migrate_game(game)
     rules=Rules(**g['rules'])
-    if guard_priors is None and g.get('hunters',0) and not rules.allow_repeat_guard:
+    saved=g.get('history',())
+    joint_max=(g.get('hunters')==1 and all(Strategy(**x.get('policy',{})).day=='random' for x in saved)
+               and (Strategy(**g.get('policy',{})).night=='max' or
+                    any(Strategy(**x.get('policy',{})).night=='max' for x in saved)))
+    if guard_priors is None and g.get('hunters',0) and (not rules.allow_repeat_guard or joint_max):
         from .root_secret_flow import root_guard_night_priors
         from .seer_future_uniform import FuturePending
         guard_priors=root_guard_night_priors(g,rules)

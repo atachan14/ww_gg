@@ -30,6 +30,12 @@ def horizon_for_action(engine,board,state,past,target,private=None,*,observer=No
     """
     private=state if private is None else private
     physical=physical_board(board,private)
+    if board.phase=='night' and getattr(engine,'joint_guard_max',False) and board.initial_hunter_count:
+        from .fixed_actor_continuation import physical_actor_outcomes
+        acquired=engine.action_policy.acquire(board,ActionInputs(state,past,private,observer,physical))
+        outcomes=physical_actor_outcomes(board,acquired.private,engine,target,acquire=False,observer=observer)
+        return HorizonValues(sum((q*F(child.winner=='village') for q,child,joint in outcomes),F()),
+                             sum((q*F(child.winner=='wolf') for q,child,joint in outcomes),F()))
     acquired,outcomes=resolve_action(board,ActionInputs(state,past,private,observer,physical),target,engine.action_policy)
     village=wolf=F()
     for o in outcomes:

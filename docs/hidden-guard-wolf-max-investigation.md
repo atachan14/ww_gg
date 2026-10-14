@@ -116,3 +116,14 @@ fixed_actor_continuation.pyの依存切断部品で、本人情報集合を完�
 P2のP1襲撃は1/4。P3/P4/P5襲撃は連続あり3/10、連続なし43/144。この評価では後続optimal_targets呼出が実際にある。未知配役のWolfInformation(P1)では後続の未知役職判断が必要になる枝がありNone（未解決依存）を返す。これは新しいbeliefを入れた数値でも、一般実装不能の証明でもない。
 
 追加3テスト成功（0.185秒）：4人未知配役の固定終局まで、6人既知actorの後続max・両連続ルール、viewer法則と公共max判断の不使用。新部品は製品root経路へ未接続で、rootmax適用ゲートは未解除。次はpublic入力の全infoset kernel、選択後生成、実際の公共支持、owner継続を同じ局面で照合して接続する。未定義のoff-path補完、policy事後差替え、uniform fallbackは追加していない。
+
+
+## 最小未知配役の製品root接続
+
+4人開始・昼random・狩人uniform・夜maxを製品経路へ接続。RootSecretEngineが完全public sourceから全WolfInformationの候補利得をfixed_actor_valueで評価し、確定できた場合だけoptimal_targets/uniform_policyで完全kernelを返す。公開取得前sourceを取得後の夜flowへ明示して二重取得を防ぎ、private viewerをkernel生成へ渡さない。候補が後続未知判断に依存した場合はroot_guard_max_unknown_continuationで止める。
+
+P1狩人CO・CO条件none・P4処刑の等重み例では、狼P1はH2/H3/死亡H4を知らず、P2/P3の利得各1/18・選択各1/2。狼P2/P3は公開COからH1を知りP1襲撃のみ。公開全体の夜勝率は1/30。GJ後の公開候補はW1/H2とW1/H3各1/2で、現API本人Tableと公開replayに同じ選択済みkernelが接続された。両連続ルールで確認。
+
+実際に入力された過去max夜はその時のkernelでphysical history massを生成し、公開はゼロrole除去＋既存Q再正規化。過去random・現在maxの夜はrandom kernelのまま4候補を保持する。既存daymax経路を上書きせず、新rootではdayrandomの範囲。初期5/6人の未知配役で候補値が未確定な場合はPendingを保ち、一般対応完了としない。
+
+通常routeでも開始→P4処刑→未知狼P1本人表示→GJ入力→再入場→戻るを検証。NoRepeat入力の新root対応を許可し、候補利得が未確定な盤面の進行は拒否して保存Gameを保持する。旧daymax/defaultmaxを均等へ置換しない。全対応までの残件は未知配役の後続判断を持つ同一公開kernelの解決。

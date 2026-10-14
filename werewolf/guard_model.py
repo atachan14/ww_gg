@@ -23,11 +23,11 @@ def known_guardian(board):
     return next((p for p in board.alive if board.role_probability(p,'hunter')==1),None)
 
 
-def scope_reason(board,rules,strategy=None,latent_ready=False):
+def scope_reason(board,rules,strategy=None,latent_ready=False,*,joint_max=False):
     if not board.initial_hunter_count:return None
     if board.initial_hunter_count!=1:return 'guard_multiple_hunters_unimplemented'
     if not rules.allow_repeat_guard:
-        if strategy is None or strategy.day!='random' or strategy.night!='random':
+        if strategy is None or strategy.day!='random' or strategy.night not in (('random','max') if joint_max else ('random',)):
             return 'guard_no_repeat_max_unimplemented'
         if rules.allow_self_bite and not strategy.include_self_bite:return 'guard_no_repeat_self_bite_policy_unimplemented'
         if not latent_ready:return 'guard_no_repeat_history_missing'
@@ -44,7 +44,7 @@ def scope_reason(board,rules,strategy=None,latent_ready=False):
     closed_history_case=closed_cast and (role_exchangeable(board) and not hidden_past_bite and
                         (len(board.alive)==5 and board.phase=='day' or len(board.alive)==4) or
                         latent_ready and (len(board.alive)<=3 or len(board.alive)==4 and board.phase=='day'))
-    if hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and not closed_history_case and not hero_deducible(board) and (strategy is None or strategy.night!='random'):
+    if not joint_max and hidden_hunter and (live_guard_mass(board) or hidden_past_bite) and not terminal_next_execution and not closed_history_case and not hero_deducible(board) and (strategy is None or strategy.night!='random'):
         return 'guard_hidden_attack_max_unimplemented'
     return None
 
@@ -133,7 +133,7 @@ def public_context(context):
     return context.public if isinstance(context,GuardContext) else context
 
 
-def public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=None):
+def public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=None,past=()):
     """Public-owned generated support; no viewer restriction chooses this law.
 
     The complete kernel covers every public wolf information set. Observations
@@ -145,9 +145,12 @@ def public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=N
     infos=tuple(info for info,mass,group in wolf_information_groups(state))
     if policies is None:
         if engine.strategy.night!='random':
-            raise engine.pending('guard_max_public_kernel_unresolved')
-        policies={(info.initial_roster,info.attacks):uniform_policy(tuple(p for p in board.alive
-            if engine.strategy.include_self_bite or not info.initial_roster&(1<<(p-1)))) for info in infos}
+            provider=getattr(engine,'public_night_policies',None)
+            if provider is None:raise engine.pending('guard_max_public_kernel_unresolved')
+            policies=provider(board,state,past)
+        else:
+            policies={(info.initial_roster,info.attacks):uniform_policy(tuple(p for p in board.alive
+                if engine.strategy.include_self_bite or not info.initial_roster&(1<<(p-1)))) for info in infos}
     for info in infos:
         key=(info.initial_roster,info.attacks)
         if key not in policies:raise engine.pending('guard_public_kernel_incomplete')
@@ -184,7 +187,7 @@ def guarded_outcomes(frame,outcomes,engine):
     from .guard_history_prior import public_history_ready,guard_history_ready
     s,past,private,observer,physical=frame.after
     ready=public_history_ready(b,s) if engine.rules.allow_repeat_guard else guard_history_ready(b,s)
-    reason=scope_reason(b,engine.rules,engine.strategy,ready)
+    reason=scope_reason(b,engine.rules,engine.strategy,ready,joint_max=getattr(engine,'joint_guard_max',False))
     if reason:raise engine.pending(reason)
     groups={};public={o.board.winner:o.context for o in outcomes};templates={o.board.winner:o.board for o in outcomes}
     success=None
@@ -219,10 +222,10 @@ def guarded_outcomes(frame,outcomes,engine):
                                      alive=child.alive,day=child.day,phase=child.phase,
                                      history=child.history,guard_prior_roster=child.guard_prior_roster)
         if getattr(engine,'retain_joint_guard_history',False) or not engine.rules.allow_repeat_guard:
-            child,st=public_guard_branch_law(b,s,child,frame.target,blocked,engine)
+            child,st=public_guard_branch_law(b,s,child,frame.target,blocked,engine,past=past)
         else:st=engine.project(s,child)
         from .guard_history_prior import hero_deducible
-        if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):
+        if not getattr(engine,'retain_joint_guard_history',False) and blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):
             from .guard_history_prior import extend_success
             st=extend_success(st,b.day,b.alive)
         result.append(FlowOutcome(mass,physical_child,GuardContext(child,own,st)))

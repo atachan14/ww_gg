@@ -20,10 +20,21 @@ from .policy_choice import optimal_targets,uniform_policy
 from .calculation_budget import tick
 
 
-def fixed_actor_value(board,public_law,engine,*,info,target=None):
+def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None):
     if public_law.public_roles!=tuple(sorted(board.worlds)):
         raise ValueError('Complete public input required for actor continuation')
     law=info.condition_public(public_law)
+    if measure is not None:
+        # Payoff may use P, but no extra viewer fact may change actor choices.
+        signature=lambda h:(h.roles,h.acquisitions,h.guards,h.attacks)
+        def conditional(state):
+            totals={}
+            for h in state.hypotheses:totals[h.roles]=totals.get(h.roles,F())+h.mass
+            return {signature(h):h.mass/totals[h.roles] for h in state.hypotheses}
+        metadata=lambda state:(state.rosters,state.initial_rule,state.tracked,state.observed_prefix)
+        if metadata(measure)!=metadata(law) or conditional(measure)!=conditional(law):
+            return None
+        law=measure  # Only role mass differs; known-role policy values agree.
     if len(law.rosters)!=board.day:
         return None  # Input is before this night's acquisition, not after it.
     cache={}
@@ -33,32 +44,7 @@ def fixed_actor_value(board,public_law,engine,*,info,target=None):
            for p in board.alive for role in ('seer','medium')):
         return None
 
-    def actions(b,s,p):
-        acquired=engine.acquire(b,s) if b.phase=='night' else s
-        grouped={};templates={}
-        for h in acquired.hypotheses:
-            tick()
-            single=replace_worlds(b,((*h.roles,F(1)),),wolf_count=None)
-            actor=next((a for a in b.alive if h.roles[3]&(1<<(a-1))),None)
-            if b.phase=='night' and actor is not None:
-                choices=guard_choices(b,actor,rules,strategy.guard_position,guards=h.guards)
-                if not choices:raise engine.pending('guard_no_legal_target_unselected')
-                resolved=tuple((q,resolve_fixed_guard_night(single,GuardIntent(b.day,actor,g),p,rules,
-                                previous=previous_guard(h.guards,actor,b.day))[0].board,
-                                h.guards+(GuardIntent(b.day,actor,g),)) for g,q in choices)
-            else:
-                resolved=tuple((o.probability,o.board,h.guards) for o in action_outcomes(single,p,rules,strategy))
-            for q,child,guards in resolved:
-                key=(child.alive,child.day,child.phase,child.history,child.winner)
-                record=replace(h,mass=h.mass*q,guards=guards,
-                    attacks=h.attacks+((WolfAttack(b.day,p),) if b.phase=='night' else ()))
-                grouped.setdefault(key,[]).append(record);templates[key]=child
-        result=[]
-        for key,hs in grouped.items():
-            mass=sum((h.mass for h in hs),F());joint=replace(acquired,hypotheses=normalize(tuple(hs)))
-            child=replace_worlds(templates[key],public_worlds(joint.hypotheses),wolf_count=None)
-            result.append((mass,child,joint))
-        return tuple(result)
+    def actions(b,s,p):return physical_actor_outcomes(b,s,engine,p)
 
     def act(b,s,p):
         value=F()
@@ -96,3 +82,36 @@ def fixed_actor_value(board,public_law,engine,*,info,target=None):
         return value
 
     return solve(board,law,target)
+
+
+def physical_actor_outcomes(b,s,engine,p,*,acquire=True,observer=None):
+    strategy=engine.strategy;rules=engine.rules
+    acquired=engine.acquire(b,s) if acquire and b.phase=='night' else s
+    grouped={};templates={}
+    for h in acquired.hypotheses:
+        tick()
+        single=replace_worlds(b,((*h.roles,F(1)),),wolf_count=None)
+        actor=next((a for a in b.alive if h.roles[3]&(1<<(a-1))),None)
+        if b.phase=='night' and actor is not None:
+            choices=guard_choices(b,actor,rules,strategy.guard_position,guards=h.guards)
+            from .guard_model import GuardObserver
+            if (isinstance(observer,GuardObserver) and observer.actor==actor and
+                    observer.board.day==b.day and observer.target in {g for g,q in choices}):
+                choices=((observer.target,F(1)),)
+            if not choices:raise engine.pending('guard_no_legal_target_unselected')
+            resolved=tuple((q,resolve_fixed_guard_night(single,GuardIntent(b.day,actor,g),p,rules,
+                            previous=previous_guard(h.guards,actor,b.day))[0].board,
+                            h.guards+(GuardIntent(b.day,actor,g),)) for g,q in choices)
+        else:
+            resolved=tuple((o.probability,o.board,h.guards) for o in action_outcomes(single,p,rules,strategy))
+        for q,child,guards in resolved:
+            key=(child.alive,child.day,child.phase,child.history,child.winner)
+            record=replace(h,mass=h.mass*q,guards=guards,
+                attacks=h.attacks+((WolfAttack(b.day,p),) if b.phase=='night' else ()))
+            grouped.setdefault(key,[]).append(record);templates[key]=child
+    result=[]
+    for key,hs in grouped.items():
+        mass=sum((h.mass for h in hs),F());joint=replace(acquired,hypotheses=normalize(tuple(hs)))
+        child=replace_worlds(templates[key],public_worlds(joint.hypotheses),wolf_count=None)
+        result.append((mass,child,joint))
+    return tuple(result)

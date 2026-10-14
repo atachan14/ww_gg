@@ -168,7 +168,7 @@ def create_app(test_config=None, *, deployment=False):
         if not rules.allow_repeat_guard and (hunters if hunters is not None else (state or {}).get('hunters',0)):
             if (hunters if hunters is not None else state.get('hunters',0))!=1:
                 raise ValueError('連続護衛なしは狩人1人に対応しています。複数狩人は未対応です。')
-            if require_supported and (strategy.day!='random' or strategy.night!='random'):
+            if require_supported and (strategy.day!='random' or strategy.night not in ('random','max')):
                 raise ValueError('連続護衛なしは処刑・襲撃の均等化に対応しています。maxは未対応です。')
             if require_supported and rules.allow_self_bite and not strategy.include_self_bite:
                 raise ValueError('連続護衛なしで自噛み可能の場合は、自噛みを含む均等襲撃に対応しています。')
@@ -265,7 +265,7 @@ def create_app(test_config=None, *, deployment=False):
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
                     forecast=evaluate_public_game(state,board,rules,strategy,max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
                     if isinstance(forecast,FuturePending):
-                        guard_scope_pending=forecast.reason.startswith('guard_') or (board.initial_hunter_count and forecast.reason=='information_set_budget_exceeded')
+                        guard_scope_pending=forecast.reason.startswith(('guard_','root_guard_')) or (board.initial_hunter_count and forecast.reason=='information_set_budget_exceeded')
                         from werewolf.seer_manual import Pending
                         reasons={'initial_public_results_incomplete':'未公開結果を含む未来評価は現在Pendingです。','multiple_fake_report_correlation_unselected':'複数偽占いが生存する朝の共同報告は未対応のためPendingです。', 'current_morning_seer_reports_incomplete':'未公開結果を含む未来評価は現在Pendingです。','past_private_scan_history_missing':'過去の本人取得履歴が不足しているため未来評価できません。'}
                         reasons.update({'future_public_continuation_budget_exceeded':'未来の分岐が計算予算を超えました。公開情報を揃えるか、配役を絞ってください。','true_scan_generation_budget_exceeded':'未来占いの結果候補が計算予算を超えました。','observed_prior_private_ledger_budget_exceeded':'過去情報の再構成が計算予算を超えました。','future_fake_law_does_not_specify_initial_declarations':'初日の公開結果を入力してください。初日の偽報告自動生成は未設定です。'})
@@ -629,6 +629,13 @@ def create_app(test_config=None, *, deployment=False):
                 from werewolf.seer_manual import parse_form, pending as manual_pending
                 proposed=parse_form(request.form,proposed,progress.board)
             _, progress = replay(proposed)
+            if (advancing and not rules.allow_repeat_guard and proposed.get('hunters')==1 and
+                    policy['day']=='random' and policy['night']=='max'):
+                from werewolf.model_a_public import evaluate_public_game
+                from werewolf.seer_future_uniform import FuturePending
+                checked=evaluate_public_game(proposed,progress.board,rules,Strategy(**policy))
+                if isinstance(checked,FuturePending):
+                    raise ValueError('この盤面のmax継続はまだ計算できません。設定を確認してください。')
             if advancing and proposed.get('seer_mode')=='information-fixed-v1' and manual_pending(proposed):raise ValueError('Pending: '+manual_pending(proposed).reason)
             target = parse_target(progress, advancing)
             if advancing and target not in legal_targets(progress.board, rules, Strategy(**policy)):

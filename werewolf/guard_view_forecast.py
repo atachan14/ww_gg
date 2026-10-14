@@ -14,7 +14,7 @@ def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=
     from .guard_history_prior import seed_history,guard_matches,public_history_ready,guard_history_ready
     try:state=seed_history(board,state) if strategy.night=='max' else state
     except ValueError:return FuturePending('guard_public_history_zero_support')
-    reason=scope_reason(board,rules,strategy,public_history_ready(board,state) if rules.allow_repeat_guard else guard_history_ready(board,state))
+    reason=scope_reason(board,rules,strategy,public_history_ready(board,state) if rules.allow_repeat_guard else guard_history_ready(board,state),joint_max=getattr(engine_factory,'joint_guard_max',False))
     if reason:return FuturePending(reason)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):

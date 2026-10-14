@@ -66,6 +66,31 @@ def observe(progress, observation, rules, strategy,*,guard_state=None):
     reason = unsupported_reason(observation,progress.board,rules)
     if reason:
         raise ValueError(reason)
+    if (guard_state is not None and progress.board.initial_hunter_count==1 and
+            strategy.day=='random' and strategy.night=='max'):
+        from dataclasses import replace
+        from fractions import Fraction
+        from .exact import BoardOutcome
+        from .guard_model import condition_guard_observation,public_guard_branch_law
+        from .root_secret_flow import RootSecretEngine
+        from .information_set_forecast import Pending
+        engine=RootSecretEngine(rules,strategy)
+        deaths=tuple(observation['deaths'])
+        try:
+            kernels=engine.public_night_policies(progress.board,guard_state)
+            acquired=engine.acquire(progress.board,guard_state)
+            base=condition_guard_observation(progress.board,deaths,rules,state=guard_state)
+            base,joint=public_guard_branch_law(progress.board,acquired,base,
+                deaths[0] if deaths else None,not deaths,engine,policies=kernels)
+        except Pending as error:raise ValueError(error.reason)
+        if not deaths:
+            child=replace(base,day=base.day+1,phase='day')
+            return Progress(child,progress.settled_village,progress.settled_wolf,progress.board,
+                            (BoardOutcome(Fraction(1),child),))
+        conditioned=Progress(base,progress.settled_village,progress.settled_wolf,
+                             progress.last_board,progress.last_outcomes)
+        from .phase_updates import observed_night_strategy
+        return advance(conditioned,deaths[0],rules,observed_night_strategy(rules,strategy))
     if not observation['deaths']:
         from dataclasses import replace
         from .exact import BoardOutcome
