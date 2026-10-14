@@ -224,6 +224,14 @@ def guarded_outcomes(frame,outcomes,engine):
     result=[]
     for (blocked,winner),entries in groups.items():
         mass=sum((h.mass for h in entries),F());hs=normalize(entries)
+        if frame.terminal_payoffs and winner is not None:
+            # Scalar/horizon evaluation stops at the PHYSICAL winner. A
+            # counterfactual terminal branch needs no continuation belief or
+            # selected-policy support. State/history callers retain the full
+            # observation-validation path through resolve_action's default.
+            physical_child=replace_worlds(templates[winner],public_worlds(hs),wolf_count=None)
+            result.append(FlowOutcome(mass,physical_child))
+            continue
         if blocked:
             if success is None:success=replace(condition_guard_observation(b,(),engine.rules,state=s),day=b.day+1,phase='day')
             if engine.strategy.night=='max' and len(b.alive)==4 and known_guardian(b) is None:

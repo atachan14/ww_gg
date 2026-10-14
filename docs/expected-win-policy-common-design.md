@@ -52,9 +52,11 @@ PolicyProfileのキーは actor + 情報集合 + 決定時点。同じ狼陣営�
 
 市民2・狩人1・狼1、P1狩人CO（真偽未確定、ClaimPolicy none）、P4処刑後のNight1、護衛均等、連続護衛あり。狼の3情報集合にそれぞれ合法2択があり、現行の「最大候補全てを同率均等」に従う方針候補は3^3=27個。
 
-既存共通評価で、全合法候補を同じ完全公開kernelの下で評価した。完全評価できた中で整合したkernelは、各infosetが合法2択を各1/2で選ぶもの。W1本人の両候補の村利得は1/6、W2/W3本人の候補は全て0。9個のkernel候補は public_generated_observation_zero_support で停止した（固定方針を含むidentity cacheによる再計測。旧診断の6個を訂正）。
+既存共通評価に完全な固定方針identityキーと物理終局の停止契約を適用し、全27profileを完成評価した。整合方針は1件（各infosetの合法2択各1/2）、残り26件は最善応答不一致、必要な続行観測の支持ゼロは0件。W1本人の両候補村利得は1/6、W2/W3は全候補0、完成方針の公開村利得は1/10。
 
-この結果は「全ての盤面で解が存在する/一意」の証明ではない。初期診断は task-6/day-max-four-kernel-probe.py/.json。訂正後の証拠は task-6/policy-certificate-four-final.json と tests/test_policy_certificates.py。
+初期診断の支持ゼロ6件は、固定方針内のIDを同型cacheへ含めず、さらに物理終局後にも公開続行法則を要求した診断上の不足があった。identityキーへ限定した中間計測では9件となったが、発生箇所を追跡すると全て物理終局の不要な信念生成であり、共通終局処理の修正後は0件。これを観測仕様の未選択や新しい信念補完の必要性と取り違えない。
+
+この盤面での一意性は全27profileの完成評価による。他の盤面での解の存在/一意性を保証しない。最新証拠は task-6/policy-certificate-four-final.json と tests/test_policy_certificates.py。通常rootの昼maxゲートはこの段階では解除していない。
 
 依存は K_wolf -> GJ生成公開支持 -> 公開Q'における昼max -> 狼候補利得 -> K_wolf。同時に現場で行動するという意味の循環とは別で、戦略から推論することによる評価依存である。先にどちらかを均等に固定して結果を返すことはしない。
 
@@ -116,6 +118,8 @@ policy_certificates.pyは現行の「全同率最善手を均等」に許され�
 
 wolf_profile_certificate.pyは完全公開profileを固定したまま既存InformationSetForecast.act/solveとRootSecretPolicyによる共通行動フローを通す。私的な提案短絡は使わない。別profileごとに評価器を分け、完全profileと全identity入力をcacheキーへ含める。方針内部の主体/候補IDを同じ全単射で写すserializerをまだ実装していないため、この証明器では盤面だけの同型cacheは無効である。
 
-最小4人は全27profileを評価し、1件の完成certificate、17件の非最善応答、9件の支持ゼロを得た。完成certificateは全infoset合法2択各1/2、W1村利得各1/6、W2/W3各0、固定profileの公開村利得1/10。9件の未定義観測を含む全体結果はundefined_observations、selected=None。従来の6件という診断は、外部固定profile内のIDを同型cacheへ含めなかったため訂正した。これは診断のみの誤りであり、未完成試作や旧診断値を通常経路へ公開していない。
+最小4人の最終結果はunique、27件完成、1 certificate、26件の非最善応答、支持ゼロ0件。selectedは完成certificateを返す。ただし通常rootの昼maxゲートはまだ解除しておらず、検証APIが値を証明したことと通常経路の接続完了は区別する。
 
-現時点では通常rootの昼maxゲートを解除していない。占霊入り6人、後続夜の未知profile閉包、複数解の選択、新しい非一様混合は未実装。次は、支持ゼロの代替profileを含む探索結果から単一profileを通常評価へ接続できる条件を明示し、必要なら実盤面の今回の例で判断する。任意beliefや暫定勝率は追加しない。
+終局利得と状態生成の区別: 共通resolve_actionの既定は従来の完全状態/観測検証。action_flowおよびbounded horizonだけがterminal_payoffs=Trueを指定する。物理終局枝は厳密な物理質量・勝者で停止し、存在しない続行信念を生成しない。保存履歴の生成や実際の続行枝は従来どおり完全な秘密履歴と公開支持を要求する。回帰では、同じ反実仮想枝のスカラー利得1/6が計算できても、完全状態生成は支持ゼロを返すことを確認。さらに5人開始の既知狩人・全kernel狩人襲撃（GJ不可能）に対し、別対象の強制襲撃で起きる続行GJは、依然public_generated_observation_zero_supportで停止する。
+
+次の未完: 通常root入口への証明済み方針の接続、後続夜の未知profile依存の閉包、占霊入り6人、既存報告方針の接続。複数解/無解/真の未定義観測/予算未完は新しい規則で補わず、結果分類を維持する。

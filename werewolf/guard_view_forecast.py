@@ -41,7 +41,7 @@ def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=
                     physical=physical_board(board,group,private_board)
                     for attack,q in engine.wolf_policy(board,state,past,info.initial_roster,info.attacks):
                         tick()
-                        _,outcomes=resolve_action(board,ActionInputs(state,past,group,observer,physical),attack,engine.action_policy)
+                        _,outcomes=resolve_action(board,ActionInputs(state,past,group,observer,physical),attack,engine.action_policy,terminal_payoffs=True)
                         for o in outcomes:
                             v+=mass*q*o.probability*F(o.board.winner=='village')
                             w+=mass*q*o.probability*F(o.board.winner=='wolf')

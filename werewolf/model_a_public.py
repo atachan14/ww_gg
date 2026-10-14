@@ -36,7 +36,7 @@ def horizon_for_action(engine,board,state,past,target,private=None,*,observer=No
         outcomes=physical_actor_outcomes(board,acquired.private,engine,target,acquire=False,observer=observer)
         return HorizonValues(sum((q*F(child.winner=='village') for q,child,joint in outcomes),F()),
                              sum((q*F(child.winner=='wolf') for q,child,joint in outcomes),F()))
-    acquired,outcomes=resolve_action(board,ActionInputs(state,past,private,observer,physical),target,engine.action_policy)
+    acquired,outcomes=resolve_action(board,ActionInputs(state,past,private,observer,physical),target,engine.action_policy,terminal_payoffs=True)
     village=wolf=F()
     for o in outcomes:
         tick(len(private.hypotheses))
@@ -49,7 +49,7 @@ def horizon_for_action(engine,board,state,past,target,private=None,*,observer=No
             for info,mass,group in wolf_information_groups(own):
                 physical_next=physical_board(child,group,continuation.physical)
                 for bite,q in engine.wolf_policy(child,public,past,info.initial_roster,info.attacks):
-                    _,night_outcomes=resolve_action(child,ActionInputs(public,past,group,observer,physical_next),bite,engine.action_policy)
+                    _,night_outcomes=resolve_action(child,ActionInputs(public,past,group,observer,physical_next),bite,engine.action_policy,terminal_payoffs=True)
                     for final in night_outcomes:
                         v+=mass*q*final.probability*F(final.board.winner=='village')
                         w+=mass*q*final.probability*F(final.board.winner=='wolf')

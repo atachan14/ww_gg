@@ -80,7 +80,7 @@ class UniformProfileTests(unittest.TestCase):
 
 
 class WolfCommonCertificateTests(unittest.TestCase):
-    def test_four_player_day_max_exact_profile_and_undefined_alternatives(self):
+    def test_four_player_day_max_complete_exact_profile(self):
         from dataclasses import replace
         from tests.test_root_guard_max import RootGuardMaxTests
         from werewolf.seer_manual import replay
@@ -92,9 +92,9 @@ class WolfCommonCertificateTests(unittest.TestCase):
         branch=prepare_root_entry(g,p.board,rules,old);before=deepcopy(branch);s=replace(old,day='max')
         result=certify_wolf_profiles(branch.public,branch.public_law,(),rules,s)
         self.assertEqual((result.total,result.evaluated),(27,27))
-        self.assertEqual(result.status,'undefined_observations')
-        self.assertIsNone(result.selected)
-        self.assertEqual(len(result.certified),1);self.assertEqual(len(result.issues),9)
+        self.assertEqual(result.status,'unique')
+        self.assertEqual(result.selected,result.certified[0])
+        self.assertEqual(len(result.certified),1);self.assertEqual(len(result.issues),0)
         cert=result.certified[0]
         self.assertTrue(all(len(policy)==2 and all(q==F(1,2) for t,q in policy) for info,policy in cert.profile))
         scores=dict(cert.scores)
@@ -115,3 +115,48 @@ class WolfCommonCertificateTests(unittest.TestCase):
         original.public_night_policies(branch.public,branch.public_law)
         self.assertTrue(original.policy_dependencies.cycles())
         self.assertEqual(original.policy_dependencies.stack,[])
+
+
+    def test_terminal_payoff_skips_belief_but_state_resolution_still_validates_support(self):
+        from dataclasses import replace
+        from tests.test_root_guard_max import RootGuardMaxTests
+        from werewolf.seer_manual import replay
+        from werewolf.exact import Strategy
+        from werewolf.root_secret_flow import prepare_root_entry
+        from werewolf.wolf_profile_certificate import FixedPublicWolfProfile
+        from werewolf.actor_information import wolf_information_groups
+        from werewolf.evaluation_branch import ActionInputs,physical_board
+        from werewolf.action_flow import resolve_action
+        g=RootGuardMaxTests().game();r,p=replay(g);old=Strategy(**g['policy'])
+        b=prepare_root_entry(g,p.board,r,old);s=replace(old,day='max')
+        groups=wolf_information_groups(b.public_law)
+        profile=tuple((info,((next(t for t in b.public.alive if not info.initial_roster&(1<<(t-1))),F(1)),))
+                      for info,mass,group in groups)
+        info,mass,own=groups[0];e=FixedPublicWolfProfile(b.public,b.public_law,(),r,s,profile)
+        self.assertEqual(e.act(b.public,b.public_law,(),3,own,None),F(1,6))
+        physical=physical_board(b.public,own)
+        with self.assertRaises(Pending) as stopped:
+            resolve_action(b.public,ActionInputs(b.public_law,(),own,None,physical),3,e.action_policy)
+        self.assertEqual(stopped.exception.reason,'public_generated_observation_zero_support')
+        self.assertEqual(e.policy_dependencies.stack,[])
+
+    def test_continuing_gj_zero_support_remains_undefined_without_belief_fill(self):
+        from tests.test_root_guard_max import RootGuardMaxTests
+        from werewolf.seer_manual import replay
+        from werewolf.exact import Strategy
+        from werewolf.root_secret_flow import prepare_root_entry
+        from werewolf.wolf_profile_certificate import FixedPublicWolfProfile
+        from werewolf.actor_information import wolf_information_groups
+        g=RootGuardMaxTests().game(players=5)
+        g['claim_policy']=g['history'][0]['claim_policy']={'hunter':'filled'}
+        r,p=replay(g);s=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,s)
+        groups=wolf_information_groups(b.public_law)
+        # All selected attacks hit the public known hunter P1, which cannot
+        # guard itself. A forced other attack can GJ, but has no public support.
+        profile=tuple((info,((1,F(1)),)) for info,mass,group in groups)
+        e=FixedPublicWolfProfile(b.public,b.public_law,(),r,s,profile)
+        own=next(group for info,mass,group in groups if info.initial_roster==2)
+        before=deepcopy(b)
+        with self.assertRaises(Pending) as stopped:e.act(b.public,b.public_law,(),3,own,None)
+        self.assertEqual(stopped.exception.reason,'public_generated_observation_zero_support')
+        self.assertEqual(b,before);self.assertEqual(e.policy_dependencies.stack,[])
