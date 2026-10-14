@@ -742,6 +742,7 @@ class Progress:
     settled_wolf: Fraction = Fraction(0)
     last_board: Board | None = None
     last_outcomes: tuple[BoardOutcome, ...] = ()
+    guard_state: object = None  # Public joint night prior; never an owner-conditioned law.
 
     def __post_init__(self):
         if any(not isinstance(value, Fraction) or value < 0 for value in (self.settled_village, self.settled_wolf)):

@@ -61,7 +61,7 @@ class InformationSetForecast:
         # Uniform guards/repeat permission and the supported wolf policies do
         # not depend on these histories. Preserve records in flow payloads;
         # scalar memoization may marginalize them after role conditioning.
-        if self.strategy.night=='random' and any(h.guards or h.attacks for h in state.hypotheses):
+        if self.rules.allow_repeat_guard and self.strategy.night=='random' and any(h.guards or h.attacks for h in state.hypotheses):
             from .seer_acquisition import Hypothesis
             return replace(state,hypotheses=normalize(tuple(Hypothesis(h.roles,h.acquisitions,h.mass) for h in state.hypotheses)))
         return state
@@ -150,10 +150,10 @@ class InformationSetForecast:
             if masses.get((swapped,m,t,scans),F())!=q:return False
         return True
 
-    def public_children(self,b,target):
+    def public_children(self,b,target,guard_state=None):
         if b.phase=='day':return action_outcomes(b,target,self.rules,self.strategy)
         try:
-            return night_observation_outcomes(b,target,self.rules,self.strategy)
+            return night_observation_outcomes(b,target,self.rules,self.strategy,guard_state=guard_state)
         except ValueError:
             raise Pending('information_set_public_corpse_inconsistent')
 
@@ -316,8 +316,9 @@ class InformationSetForecast:
     def solve(self,b,s,past,private,observer,*,physical=None):
         if b.winner is not None:return F(b.winner=='village')
         from .guard_model import scope_reason
-        from .guard_history_prior import public_history_ready
-        reason=scope_reason(b,self.rules,self.strategy,public_history_ready(b,s))
+        from .guard_history_prior import public_history_ready,guard_history_ready
+        ready=public_history_ready(b,s) if self.rules.allow_repeat_guard else guard_history_ready(b,s)
+        reason=scope_reason(b,self.rules,self.strategy,ready)
         if reason:raise Pending(reason)
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
         physical=physical_board(b,private,physical)
@@ -391,7 +392,7 @@ class InformationSetActionPolicy:
 
     def outcomes(self,b,payload,target):
         s,past,private,observer,physical=payload;e=self.engine
-        public={o.board.winner:o.board for o in e.public_children(b,target)}
+        public={o.board.winner:o.board for o in e.public_children(b,target,s)}
         return tuple(FlowOutcome(o.probability,o.board,public.get(o.board.winner))
                      for o in action_outcomes(physical,target,e.rules,e.strategy))
 

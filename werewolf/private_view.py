@@ -91,6 +91,10 @@ def condition_private(board, role, players, results=(), *, rules):
             if target not in executions:raise ValueError('Private medium result has no matching execution')
         candidates=tuple(w for w in candidates if bool(w[0]&(1<<(target-1)))==(color=='black'))
         if not candidates:raise ValueError('Inconsistent private evidence')
+    if role=='hunter' and not rules.allow_repeat_guard:
+        by_night={g.night:g for g in guards}
+        if any(g.night-1 in by_night and by_night[g.night-1].target==g.target for g in guards):
+            raise ValueError('Private guard history violates the no-repeat rule')
     total=sum((w[-1] for w in candidates),Fraction())
     private=replace_worlds(board,tuple((*w[:4],w[-1]/total) for w in candidates))
     return PrivateView(private,role,players,tuple(sorted(acquisitions)),tuple(guards),tuple(attacks))

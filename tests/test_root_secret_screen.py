@@ -54,7 +54,7 @@ class RootSecretScreenTests(unittest.TestCase):
     def test_uniform_guard_screen_uses_joint_entry_and_existing_rules(self):
         b=initial_board(4,1,0,0,1);r=Rules();s=Strategy('random','random',fake_reports='random')
         self.assertTrue(root_screen_eligible(b,r,s))
-        self.assertFalse(root_screen_eligible(b,Rules(allow_repeat_guard=False),s))
+        self.assertTrue(root_screen_eligible(b,Rules(allow_repeat_guard=False),s))
         with patch('werewolf.root_secret_flow.prepare_root_secrets',wraps=prepare_root_secrets) as generated:
             value=evaluate_public_game({},b,r,s)
         self.assertEqual(generated.call_count,1)

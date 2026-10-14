@@ -67,7 +67,7 @@ class SetupDraft:
     counts: dict[str, str]
     allow_self_bite: str
     initial_seer: str = "random_white"
-    allow_repeat_guard: bool = True
+    allow_repeat_guard: bool | str = True
 
     @classmethod
     def from_form(cls, form):
@@ -80,7 +80,9 @@ class SetupDraft:
                 counts["citizens"] = str(setup_count(raw("players", ""))-sum(setup_count(counts[key]) for key in COUNT_KEYS if key != "citizens"))
             except ValueError:
                 counts["citizens"] = ""
-        return cls(counts, raw("allow_self_bite", "0"),raw("initial_seer","random_white"))
+        repeat=raw("allow_repeat_guard","1")
+        return cls(counts, raw("allow_self_bite", "0"),raw("initial_seer","random_white"),
+                   True if repeat=='1' else False if repeat=='0' else repeat)
 
     @property
     def cast_preset(self):
@@ -92,7 +94,7 @@ class SetupDraft:
 
     @property
     def rule_preset(self):
-        if self.allow_self_bite not in ("0", "1") or self.initial_seer not in ("normal","random_white","none"):
+        if type(self.allow_repeat_guard) is not bool or self.allow_self_bite not in ("0", "1") or self.initial_seer not in ("normal","random_white","none"):
             return "custom"
         values = asdict(complete_rules({"allow_self_bite": self.allow_self_bite == "1","initial_seer":self.initial_seer,"allow_repeat_guard":self.allow_repeat_guard}))
         return next((key for key, p in preset_data()["rules"].items() if values == p["values"]), "custom")

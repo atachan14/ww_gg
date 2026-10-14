@@ -112,13 +112,14 @@ function initializeUI() {
   const castInputs = Object.fromEntries(['citizens', 'mediums', 'seers', 'hunters', 'wolves'].map(key => [key, document.querySelector(`input[name="${key}"]`)]));
   const ruleInput = document.querySelector('#allow-self-bite');
   const initialSeerInput=document.querySelector('#first-seer');
+  const repeatGuardInput=document.querySelector('#repeat-guard');
   function refreshSetupPresets() {
     if (!setupPresets) return;
     const matches = (presets, values) => Object.entries(presets).find(([, preset]) =>
       Object.entries(preset.values).every(([key, value]) => values[key] === value))?.[0] || 'custom';
     const counts = Object.fromEntries(Object.entries(castInputs).map(([key, input]) => [key, input.value === '' ? null : Number(input.value)]));
     castPreset.value = matches(setupPresets.cast, counts);
-    if (document.activeElement !== rulePreset) rulePreset.value = matches(setupPresets.rules, {allow_self_bite: ruleInput.value === '1' ? true : ruleInput.value === '0' ? false : null,initial_seer:initialSeerInput.value});
+    if (document.activeElement !== rulePreset) rulePreset.value = matches(setupPresets.rules, {allow_self_bite: ruleInput.value === '1' ? true : ruleInput.value === '0' ? false : null,initial_seer:initialSeerInput.value,allow_repeat_guard:repeatGuardInput.value==='1' ? true : repeatGuardInput.value==='0' ? false : null});
   }
   if (setupPresets) {
     castPreset.addEventListener('change', () => {
@@ -128,12 +129,13 @@ function initializeUI() {
     });
     rulePreset.addEventListener('change', () => {
       const preset = setupPresets.rules[rulePreset.value];
-      if (preset) {ruleInput.value = preset.values.allow_self_bite ? '1' : '0';initialSeerInput.value=preset.values.initial_seer;}
+      if (preset) {ruleInput.value = preset.values.allow_self_bite ? '1' : '0';initialSeerInput.value=preset.values.initial_seer;repeatGuardInput.value=preset.values.allow_repeat_guard ? '1' : '0';}
       refreshSetupPresets();
     });
     rulePreset.addEventListener('blur',refreshSetupPresets);
     ruleInput.addEventListener('change', refreshSetupPresets);
     initialSeerInput.addEventListener('change',refreshSetupPresets);
+    repeatGuardInput.addEventListener('change',refreshSetupPresets);
   }
 
   const citizens = document.querySelector('#citizen-count');

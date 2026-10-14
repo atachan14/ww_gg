@@ -193,7 +193,7 @@ class RootReplayTests(unittest.TestCase):
         self.assertTrue(all(attack in x.attacks for x in wolf.belief.hypotheses))
         self.assertGreater(len({x.roles[2] for x in wolf.belief.hypotheses}),1)
         self.assertEqual(root.public,b)
-        self.assertFalse(root_replay_eligible(game,b,Rules(allow_repeat_guard=False),s))
+        self.assertTrue(root_replay_eligible(game,b,Rules(allow_repeat_guard=False),s))
         self.assertFalse(root_replay_eligible(game,b,r,Strategy('max','max')))
 
     def test_gj_owner_tables_share_public_flow_without_mutation(self):

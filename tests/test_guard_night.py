@@ -19,8 +19,7 @@ class GuardNightTests(unittest.TestCase):
             with self.assertRaises(ValueError):Rules(allow_repeat_guard=bad)
         game=dict(players=5,wolves=1,hunters=1,rules=asdict(Rules(allow_repeat_guard=False)))
         self.assertFalse(GameConfig.from_game(game).draft().allow_repeat_guard)
-        with self.assertRaisesRegex(ValueError,'not implemented'):
-            guard_targets(self.board(),1,Rules(allow_repeat_guard=False),2)
+        self.assertEqual(guard_targets(replace(self.board(),day=2),1,Rules(allow_repeat_guard=False),2),(3,4,5))
 
     def test_success_advances_no_death_and_no_private_notification(self):
         b=self.board();intent=GuardIntent(1,1,2)

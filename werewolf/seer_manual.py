@@ -8,7 +8,7 @@ from fractions import Fraction as F
 from functools import lru_cache
 from .exact import (initial_board,Progress,Rules,Strategy,ClaimPolicy,condition_claims,
     group_initial_board,replace_worlds,advance,validate_strategy,MediumReport,condition_reports,available_medium_opportunities)
-from dataclasses import dataclass
+from dataclasses import dataclass,replace
 
 @dataclass(frozen=True)
 class ManualPending:
@@ -23,7 +23,7 @@ LIKELIHOOD=(None,'compatibility')
 def migrate_game(game):
     """Approved deterministic migration; no changes to non-seer games."""
     if game.get('seer_mode') not in (None,'',MODE):raise ValueError('保存された占いモデルが未対応です。')
-    if game.get('seer_mode')!=MODE and not game.get('seers',0):return game
+    if game.get('seer_mode')!=MODE and not game.get('seers',0) and not (game.get('hunters',0) and game.get('rules',{}).get('allow_repeat_guard',True) is False):return game
     from copy import deepcopy
     g=deepcopy(game)
     old=g.get('seer_options',{})
@@ -86,11 +86,20 @@ def condition(board,rows,opt,initial_alive):
     if not mass:raise ValueError('占い結果と公開履歴に整合する配役がありません。')
     return replace_worlds(board,tuple((*x[:-1],x[-1]/mass) for x in entries))
 
-def replay(game):return _replay(json.dumps(migrate_game(game),sort_keys=True,separators=(',',':'),allow_nan=False))
+def replay(game,*,guard_priors=None):
+    g=migrate_game(game)
+    rules=Rules(**g['rules'])
+    if guard_priors is None and g.get('hunters',0) and not rules.allow_repeat_guard:
+        from .root_secret_flow import root_guard_night_priors
+        from .seer_future_uniform import FuturePending
+        guard_priors=root_guard_night_priors(g,rules)
+        if isinstance(guard_priors,FuturePending):raise ValueError('No-repeat history replay: '+guard_priors.reason)
+    return _replay(json.dumps(g,sort_keys=True,separators=(',',':'),allow_nan=False),
+                   tuple(sorted((guard_priors or {}).items())))
 
 @lru_cache(maxsize=32)
-def _replay(text):
-    g=json.loads(text)
+def _replay(text,guard_priors=()):
+    g=json.loads(text);guard_priors=dict(guard_priors)
     if g.get('seer_mode')!=MODE or not cast_scope(g):raise ValueError('手動開発版は1～9人・非負の役職数・合計人数の範囲で指定してください。')
     opt=options(g.get('seer_options',{}));rows=input_rows(g)
     rules=Rules(**g['rules']);seed=initial_board(g['players'],g.get('wolves',1),g.get('mediums',0),g.get('seers',0),g.get('hunters',0),experimental_cast=True);p=Progress.initial(seed);initial=seed.alive
@@ -127,12 +136,12 @@ def _replay(text):
         if step.get('result_disclosure_model') not in (None,'full-observed-v1'):raise ValueError('Invalid disclosure observation model')
         p=apply(p,tuple(step['claims']),ClaimPolicy(**step['claim_policy']),step['policy'],step.get('result_disclosure_model'),i==0 and g.get('model','equal')=='group')
         from .dawn import advance_step
-        p=advance_step(p,step,rules)
+        p=advance_step(p,step,rules,guard_state=guard_priors.get(i))
     if not p.finished:p=apply(p,tuple(g['claims']),ClaimPolicy(**g['claim_policy']),g['policy'],g.get('result_disclosure_model'),not history and g.get('model','equal')=='group')
     if any((r['day'],r['reporter']) not in applied for r in rows):raise ValueError('まだ到達していない日の結果は入力できません。')
     if any((r.day,r.reporter,r.target) not in medium_applied for r in medium_rows):raise ValueError('霊能報告と保存された公開機会が一致しません。')
     validate_strategy(rules,Strategy(**g['policy']))
-    return rules,p
+    return rules,replace(p,guard_state=guard_priors.get(len(history)))
 
 def pending(g):
     g=migrate_game(g)

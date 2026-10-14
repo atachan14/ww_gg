@@ -85,3 +85,14 @@ def guard_matches(records,known):
 
 def merge_guards(records,known):
     return merge_night_records(records,known)
+
+
+def previous_guard(records,actor,night):
+    """Only the same actor's actual preceding-night action restricts this night."""
+    return next((g for g in records if g.actor==actor and g.night==night-1),None)
+
+
+def guard_history_ready(board,state):
+    if board.day==1:return True
+    return all(previous_guard(h.guards,p,board.day) is not None
+               for h in state.hypotheses for p in board.alive if h.roles[3]&(1<<(p-1)))

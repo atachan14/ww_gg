@@ -143,7 +143,7 @@ def create_app(test_config=None, *, deployment=False):
         bid=state.get("public_log",{}).get("board_id")
         return request.form.getlist("revision") == [str(state["revision"])] and (bid is None or request.form.getlist("board_id") in ([],[bid]))
 
-    def parse_policy(rules, state=None):
+    def parse_policy(rules, state=None,*,hunters=None,require_supported=False):
         def one(key):
             values = request.form.getlist(key)
             if len(values) != 1:
@@ -165,6 +165,13 @@ def create_app(test_config=None, *, deployment=False):
             elif state and key in state['policy']:extra[key]=state['policy'][key]
         strategy = Strategy(one("day"), one("night"), inclusion == ["1"],report_mode,**extra)
         validate_strategy(rules, strategy)
+        if not rules.allow_repeat_guard and (hunters if hunters is not None else (state or {}).get('hunters',0)):
+            if (hunters if hunters is not None else state.get('hunters',0))!=1:
+                raise ValueError('連続護衛なしは狩人1人に対応しています。複数狩人は未対応です。')
+            if require_supported and (strategy.day!='random' or strategy.night!='random'):
+                raise ValueError('連続護衛なしは処刑・襲撃の均等化に対応しています。maxは未対応です。')
+            if require_supported and rules.allow_self_bite and not strategy.include_self_bite:
+                raise ValueError('連続護衛なしで自噛み可能の場合は、自噛みを含む均等襲撃に対応しています。')
         return {"day":strategy.day,"night":strategy.night,"include_self_bite":strategy.include_self_bite,**{k:getattr(strategy,k) for k in extra},**({"fake_reports":strategy.fake_reports} if reports or state and "fake_reports" in state["policy"] else {})}
 
     def parse_claim_policy(state=None):
@@ -263,7 +270,7 @@ def create_app(test_config=None, *, deployment=False):
                         reasons={'initial_public_results_incomplete':'未公開結果を含む未来評価は現在Pendingです。','multiple_fake_report_correlation_unselected':'複数偽占いが生存する朝の共同報告は未対応のためPendingです。', 'current_morning_seer_reports_incomplete':'未公開結果を含む未来評価は現在Pendingです。','past_private_scan_history_missing':'過去の本人取得履歴が不足しているため未来評価できません。'}
                         reasons.update({'future_public_continuation_budget_exceeded':'未来の分岐が計算予算を超えました。公開情報を揃えるか、配役を絞ってください。','true_scan_generation_budget_exceeded':'未来占いの結果候補が計算予算を超えました。','observed_prior_private_ledger_budget_exceeded':'過去情報の再構成が計算予算を超えました。','future_fake_law_does_not_specify_initial_declarations':'初日の公開結果を入力してください。初日の偽報告自動生成は未設定です。'})
                         reasons.update({'information_set_budget_exceeded':'計算予算に達したためモデルAの評価はPendingです。旧モデルの数値には切り替えません。'})
-                        reasons.update({'guard_hidden_attack_max_unimplemented':'狩人未確定の襲撃最大化は未対応です。襲撃位置「均等化」に対応しています。','guard_multiple_hunters_unimplemented':'複数狩人の能力計算は未対応です。','guard_no_repeat_unimplemented':'連続護衛なしの合法手制約は未対応です。'})
+                        reasons.update({'guard_hidden_attack_max_unimplemented':'狩人未確定の襲撃最大化は未対応です。襲撃位置「均等化」に対応しています。','guard_multiple_hunters_unimplemented':'複数狩人の能力計算は未対応です。','guard_no_repeat_max_unimplemented':'連続護衛なしのmaxは未対応です。処刑・襲撃の均等化に対応しています。','guard_no_repeat_history_missing':'前夜の護衛履歴を共同分布から再構成できません。'})
                         seer_pending=Pending(reasons.get(forecast.reason,'この情報・配役の未来評価はまだ計算できません。'))
                         primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                         action_values={}
@@ -423,7 +430,7 @@ def create_app(test_config=None, *, deployment=False):
     def start():
         draft = SetupDraft.from_form(request.form)
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy"}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "allow_repeat_guard", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
@@ -460,8 +467,11 @@ def create_app(test_config=None, *, deployment=False):
                 raise ValueError("自噛みのルールが不正です。")
             first=request.form.getlist("initial_seer")
             if len(first)>1:raise ValueError("初日占いは一つ選んでください。")
-            rules = Rules(permission == ["1"],first[0] if first else "random_white")
-            policy = parse_policy(rules)
+            repeat=request.form.getlist('allow_repeat_guard')
+            if repeat not in ([],['0'],['1']):raise ValueError('連続護衛のルールが不正です。')
+            rules = Rules(permission == ["1"],first[0] if first else "random_white",repeat!=['0'])
+            if hunters and not rules.allow_repeat_guard:seer_mode='information-fixed-v1'
+            policy = parse_policy(rules,hunters=hunters)
         except ValueError as exc:
             return render_setup(draft, error=str(exc)), 400
         previous = game()
@@ -474,8 +484,8 @@ def create_app(test_config=None, *, deployment=False):
             session["game"].update(seer_mode=seer_mode,seer_options={"initial_rule":rules.initial_seer,"likelihood":"compatibility"},seer_inputs=[])
             session.modified=True
         if app.config.get('SEER_UNIFORM_FUTURE_PREVIEW'):session['game']={**session['game'],'result_disclosure_model':DISCLOSURE_MODEL}
-        if app.config.get('DAWN_BOARD_PREVIEW'):session['game']={**session['game'],'board_flow':DAWN_FLOW}
-        if app.config.get('HYBRID_TABLE_PREVIEW') or app.config.get('DAWN_BOARD_PREVIEW'):
+        if app.config.get('DAWN_BOARD_PREVIEW') or hunters and not rules.allow_repeat_guard:session['game']={**session['game'],'board_flow':DAWN_FLOW}
+        if app.config.get('HYBRID_TABLE_PREVIEW') or app.config.get('DAWN_BOARD_PREVIEW') or hunters and not rules.allow_repeat_guard:
             from werewolf.public_log import migrate,project
             from werewolf.public_log_changes import upgrade
             created=session['game'];session['game']=project(created,upgrade(migrate({**created,'_owner_game_id':secrets.token_hex(8)})))
@@ -599,7 +609,7 @@ def create_app(test_config=None, *, deployment=False):
             model=models[0] if models else state.get('model','equal')
             if state['history'] and model!=state.get('model','equal'):
                 raise ValueError('このBoardのモデルは変更できません。TOPから新規開始してください。')
-            policy = parse_policy(rules,state)
+            policy = parse_policy(rules,state,require_supported=advancing)
             claims = parse_claims(state)
             editor_values=request.form.getlist('strategy_ui')
             if editor_values:

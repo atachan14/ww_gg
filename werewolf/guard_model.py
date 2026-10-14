@@ -26,7 +26,11 @@ def known_guardian(board):
 def scope_reason(board,rules,strategy=None,latent_ready=False):
     if not board.initial_hunter_count:return None
     if board.initial_hunter_count!=1:return 'guard_multiple_hunters_unimplemented'
-    if not rules.allow_repeat_guard:return 'guard_no_repeat_unimplemented'
+    if not rules.allow_repeat_guard:
+        if strategy is None or strategy.day!='random' or strategy.night!='random':
+            return 'guard_no_repeat_max_unimplemented'
+        if rules.allow_self_bite and not strategy.include_self_bite:return 'guard_no_repeat_self_bite_policy_unimplemented'
+        if not latent_ready:return 'guard_no_repeat_history_missing'
     hidden_hunter=len({w[3] for w in board.worlds})>1
     hidden_past_bite=any(not any(e.phase=='night' and e.day==night for e in board.history) for night in range(1,board.day))
     # Exact base cases: any successful night is followed by a terminal public
@@ -45,9 +49,10 @@ def scope_reason(board,rules,strategy=None,latent_ready=False):
     return None
 
 
-def guard_choices(board,actor,rules,position=('uniform',)):
+def guard_choices(board,actor,rules,position=('uniform',),*,guards=()):
     if tuple(position)!=('uniform',):raise ValueError('Unsupported ordered guard-position items')
-    targets=guard_targets(board,actor,rules)
+    from .guard_history_prior import previous_guard
+    targets=guard_targets(board,actor,rules,previous_guard(guards,actor,board.day))
     return tuple((p,F(1,len(targets))) for p in targets)
 
 
@@ -69,7 +74,7 @@ class GuardContext:
     public_state: object = None
 
 
-def condition_guard_observation(board,deaths,rules):
+def condition_guard_observation(board,deaths,rules,*,state=None):
     """Ability likelihood only; never multiply by the wolf selection policy.
 
     A corpse identifies the bite, so its uniform guard-failure chance is known.
@@ -77,6 +82,8 @@ def condition_guard_observation(board,deaths,rules):
     requiring a guardian alive on that night, without inventing an attack prior.
     """
     if len(deaths)>1:raise ValueError('Multiple deaths unsupported')
+    if not rules.allow_repeat_guard:
+        return condition_joint_guard_observation(board,deaths,rules,state)
     target=deaths[0] if deaths else None;entries=[]
     for world in board.worlds:
         actor=next((p for p in board.alive if world[3]&(1<<(p-1))),None)
@@ -86,6 +93,39 @@ def condition_guard_observation(board,deaths,rules):
         if weight:entries.append((*world[:-1],world[-1]*weight))
     total=sum((w[-1] for w in entries),F())
     if not total:raise ValueError('Night observation has no compatible guard world')
+    return replace_worlds(board,tuple((*w[:-1],w[-1]/total) for w in entries),wolf_count=None)
+
+
+def condition_joint_guard_observation(board,deaths,rules,state):
+    """History-dependent ability evidence, keeping public role Q separate from P."""
+    from .seer_acquisition import from_board
+    from .seer_future_uniform import TrueScanState
+    from .guard_history_prior import guard_history_ready
+    if state is None:
+        if board.day>1 and live_guard_mass(board):raise ValueError('guard_no_repeat_history_missing')
+        state=TrueScanState(from_board(board))
+    if not guard_history_ready(board,state):raise ValueError('guard_no_repeat_history_missing')
+    target=deaths[0] if deaths else None;totals={};effects={}
+    for h in state.hypotheses:
+        tick();totals[h.roles]=totals.get(h.roles,F())+h.mass
+        actor=next((p for p in board.alive if h.roles[3]&(1<<(p-1))),None)
+        choices=((None,F(1)),) if actor is None else guard_choices(board,actor,rules,guards=h.guards)
+        if not choices:raise ValueError('guard_no_legal_target_unselected')
+        if target is None:
+            supported=actor is not None and any(p is not None and (rules.allow_self_bite or
+                not h.roles[0]&(1<<(p-1))) for p,q in choices)
+            effects[h.roles]=max(effects.get(h.roles,F()),F(supported))
+        else:
+            effect=F() if not rules.allow_self_bite and h.roles[0]&(1<<(target-1)) else sum((q for p,q in choices if p!=target),F())
+            effects[h.roles]=effects.get(h.roles,F())+h.mass*effect
+    entries=[]
+    for world in board.worlds:
+        role=world[:-1]
+        if role not in totals:raise ValueError('guard_public_history_zero_support')
+        factor=effects.get(role,F()) if target is None else effects.get(role,F())/totals[role]
+        if factor:entries.append((*role,world[-1]*factor))
+    total=sum((w[-1] for w in entries),F())
+    if not total:raise ValueError('Night observation has no compatible guard history')
     return replace_worlds(board,tuple((*w[:-1],w[-1]/total) for w in entries),wolf_count=None)
 
 
@@ -107,7 +147,8 @@ def public_guard_branch_law(board,state,child,attack,blocked,engine):
         bites=(tuple(p for p in board.alive if engine.strategy.include_self_bite or
                      not h.roles[0]&(1<<(p-1))) if blocked else (attack,))
         if actor is None and blocked:continue
-        choices=((None,F(1)),) if actor is None else guard_choices(board,actor,engine.rules,engine.strategy.guard_position)
+        choices=((None,F(1)),) if actor is None else guard_choices(board,actor,engine.rules,engine.strategy.guard_position,guards=h.guards)
+        if not choices:raise engine.pending('guard_no_legal_target_unselected')
         for bite in bites:
             if not engine.strategy.include_self_bite and h.roles[0]&(1<<(bite-1)):continue
             for target,q in choices:
@@ -129,18 +170,20 @@ def public_guard_branch_law(board,state,child,attack,blocked,engine):
 def guarded_outcomes(frame,outcomes,engine):
     b=frame.board
     if not b.initial_hunter_count:return outcomes
-    from .guard_history_prior import public_history_ready
+    from .guard_history_prior import public_history_ready,guard_history_ready
     s,past,private,observer,physical=frame.after
-    reason=scope_reason(b,engine.rules,engine.strategy,public_history_ready(b,s))
+    ready=public_history_ready(b,s) if engine.rules.allow_repeat_guard else guard_history_ready(b,s)
+    reason=scope_reason(b,engine.rules,engine.strategy,ready)
     if reason:raise engine.pending(reason)
     groups={};public={o.board.winner:o.context for o in outcomes};templates={o.board.winner:o.board for o in outcomes}
     success=None
     for h in private.hypotheses:
         actor=next((p for p in b.alive if h.roles[3]&(1<<(p-1))),None)
-        choices=((None,F(1)),) if actor is None else guard_choices(b,actor,engine.rules,engine.strategy.guard_position)
+        choices=((None,F(1)),) if actor is None else guard_choices(b,actor,engine.rules,engine.strategy.guard_position,guards=h.guards)
         if (actor is not None and isinstance(observer,GuardObserver) and observer.actor==actor and
-                observer.board.day==b.day and observer.target in b.alive):
+                observer.board.day==b.day and observer.target in {p for p,q in choices}):
             choices=((observer.target,F(1)),)
+        if not choices:raise engine.pending('guard_no_legal_target_unselected')
         for target,q in choices:
             intent=GuardIntent(b.day,actor,target) if actor is not None else None
             blocked=intent is not None and guard_blocks_attack(intent,frame.target)
@@ -154,7 +197,7 @@ def guarded_outcomes(frame,outcomes,engine):
     for (blocked,winner),entries in groups.items():
         mass=sum((h.mass for h in entries),F());hs=normalize(entries)
         if blocked:
-            if success is None:success=replace(condition_guard_observation(b,(),engine.rules),day=b.day+1,phase='day')
+            if success is None:success=replace(condition_guard_observation(b,(),engine.rules,state=s),day=b.day+1,phase='day')
             if engine.strategy.night=='max' and len(b.alive)==4 and known_guardian(b) is None:
                 success=replace(success,guard_prior_roster=(b.day,b.alive))
             child=success;template=success
@@ -165,7 +208,7 @@ def guarded_outcomes(frame,outcomes,engine):
                                      alive=child.alive,day=child.day,phase=child.phase,
                                      history=child.history,guard_prior_roster=child.guard_prior_roster)
         st=(public_guard_branch_law(b,s,child,frame.target,blocked,engine)
-            if getattr(engine,'retain_joint_guard_history',False) else engine.project(s,child))
+            if getattr(engine,'retain_joint_guard_history',False) or not engine.rules.allow_repeat_guard else engine.project(s,child))
         from .guard_history_prior import hero_deducible
         if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):
             from .guard_history_prior import extend_success

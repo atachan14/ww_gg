@@ -73,9 +73,10 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
             prepared=prepare_public_prior(game_state or {},public,rules,track_live_seers=strategy.disclosure_for("seer")=="all" and bool(public.initial_seer_count),max_work=max_work)
             result=prepared if isinstance(prepared,FuturePending) else guard_forecast(public,players[0],private,prepared[0],prepared[1],rules,strategy,guards=view.guards,max_work=max_work,max_seconds=max_seconds)
         if isinstance(result,FuturePending):
-            reason={"guard_hidden_attack_max_unimplemented":"狩人未確定の襲撃最大化は未対応です。襲撃位置「均等化」に対応しています。","guard_multiple_hunters_unimplemented":"複数狩人の能力計算は未対応です。","guard_no_repeat_unimplemented":"連続護衛なしは未対応です。"}.get(result.reason,"護衛の能力計算は未対応または計算予算に達しました。")
+            reason={"guard_hidden_attack_max_unimplemented":"狩人未確定の襲撃最大化は未対応です。襲撃位置「均等化」に対応しています。","guard_multiple_hunters_unimplemented":"複数狩人の能力計算は未対応です。","guard_no_repeat_max_unimplemented":"連続護衛なしのmaxは未対応です。","guard_no_repeat_history_missing":"前夜の護衛履歴を共同分布から再構成できません。","guard_view_target_generation_support_unresolved":"本人の前夜護衛による合法候補が未確定です。"}.get(result.reason,"護衛の能力計算は未対応または計算予算に達しました。")
         else:
             final_values,guard_dawn=result
+            targets=tuple(final_values)
             reason="各行を今夜の固定護衛先として比較します。後続の護衛は均等化です。公開情報だけで他者の方針を選び、秘密の護衛先や成功通知は公開しません。"
     if role == 'seer':
         targets = tuple(p for p in public.alive if p != players[0])

@@ -20,11 +20,11 @@ def acquisition_rosters(board):
                  for day in range(1, board.day+1))
 
 
-def condition_night_corpse(board, target, rules):
+def condition_night_corpse(board, target, rules,*,guard_state=None):
     """Compatibility only: never multiply by a wolf policy likelihood."""
     if board.initial_hunter_count==1:
         from .guard_model import condition_guard_observation
-        return condition_guard_observation(board,(target,),rules)
+        return condition_guard_observation(board,(target,),rules,state=guard_state)
     worlds = tuple(w for w in board.worlds
                    if rules.allow_self_bite or not w[0] & (1 << (target-1)))
     mass = sum((w[-1] for w in worlds), Fraction())
@@ -37,6 +37,6 @@ def observed_night_strategy(rules, strategy):
     return replace(strategy, include_self_bite=rules.allow_self_bite)
 
 
-def night_observation_outcomes(board, target, rules, strategy):
-    return action_outcomes(condition_night_corpse(board, target, rules), target,
+def night_observation_outcomes(board, target, rules, strategy,*,guard_state=None):
+    return action_outcomes(condition_night_corpse(board, target, rules,guard_state=guard_state), target,
                            rules, observed_night_strategy(rules, strategy))

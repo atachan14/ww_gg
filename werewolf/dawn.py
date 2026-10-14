@@ -31,7 +31,7 @@ def unsupported_reason(observation,board=None,rules=None):
     if observation is None:
         return '夜明けの死体が未入力です。'
     from .guard_model import live_guard_mass
-    if not observation['deaths'] and not (board is not None and rules is not None and board.initial_hunter_count==1 and live_guard_mass(board) and rules.allow_repeat_guard):
+    if not observation['deaths'] and not (board is not None and rules is not None and board.initial_hunter_count==1 and live_guard_mass(board)):
         return '死体なしの進行は未対応です。'
     if len(observation['deaths']) > 1:
         return '複数死体の進行は未対応です。'
@@ -58,9 +58,10 @@ def record_observation(game, observation):
     return commit_owned_change(game, result)
 
 
-def observe(progress, observation, rules, strategy):
+def observe(progress, observation, rules, strategy,*,guard_state=None):
     if progress.finished or progress.board.phase != 'night':
         raise ValueError('夜明けに到達していません。')
+    guard_state=progress.guard_state if guard_state is None else guard_state
     observation = validate_observation(observation, progress.board.alive)
     reason = unsupported_reason(observation,progress.board,rules)
     if reason:
@@ -70,18 +71,18 @@ def observe(progress, observation, rules, strategy):
         from .exact import BoardOutcome
         from fractions import Fraction
         from .guard_model import condition_guard_observation
-        board=replace(condition_guard_observation(progress.board,(),rules),day=progress.board.day+1,phase='day')
+        board=replace(condition_guard_observation(progress.board,(),rules,state=guard_state),day=progress.board.day+1,phase='day')
         from .guard_history_prior import role_exchangeable
         before=progress.board
         first=not any(not any(e.phase=='night' and e.day==night for e in before.history) for night in range(1,before.day))
-        if first and not rules.allow_self_bite and len(before.alive)==4 and before.initial_hunter_count==1 and set(before.wolf_count_distribution)=={1} and not before.initial_medium_count and not before.initial_seer_count and (strategy.night=='random' or role_exchangeable(before)):
+        if rules.allow_repeat_guard and first and not rules.allow_self_bite and len(before.alive)==4 and before.initial_hunter_count==1 and set(before.wolf_count_distribution)=={1} and not before.initial_medium_count and not before.initial_seer_count and (strategy.night=='random' or role_exchangeable(before)):
             board=replace(board,guard_prior_roster=(before.day,before.alive))
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.board,
                         (BoardOutcome(Fraction(1),board),))
     target = observation['deaths'][0]
     from .phase_updates import condition_night_corpse, observed_night_strategy
     try:
-        board = condition_night_corpse(progress.board, target, rules)
+        board = condition_night_corpse(progress.board, target, rules,guard_state=guard_state)
     except ValueError:
         raise ValueError('この死体報告とルールに整合する配役がありません。')
     conditioned = Progress(board, progress.settled_village, progress.settled_wolf,
@@ -90,11 +91,11 @@ def observe(progress, observation, rules, strategy):
 
 
 
-def advance_step(progress, step, rules):
+def advance_step(progress, step, rules,*,guard_state=None):
     if 'observation' not in step:
         if 'deaths' in step:
             raise ValueError('死体履歴の種別がありません。')
         return advance(progress, step['target'], rules, Strategy(**step['policy']))
     if step['observation'] != OBSERVATION or step.get('deaths') != ([] if step['target'] is None else [step['target']]):
         raise ValueError('夜明けの保存履歴が不正です。')
-    return observe(progress, {'deaths': step['deaths']}, rules, Strategy(**step['policy']))
+    return observe(progress, {'deaths': step['deaths']}, rules, Strategy(**step['policy']),guard_state=guard_state)

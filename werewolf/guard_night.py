@@ -12,23 +12,28 @@ from .guard_effect import GuardIntent, resolve_guard
 def guard_targets(board, actor, rules, previous=None):
     if not isinstance(rules,Rules) or type(actor) is not int or actor not in board.alive:
         raise ValueError('Living guardian and Game rules required')
-    if not rules.allow_repeat_guard:
-        raise ValueError('No-repeat guard rule is not implemented yet')
-    return tuple(p for p in board.alive if p!=actor)
+    if isinstance(previous,GuardIntent):
+        if previous.actor!=actor or previous.night!=board.day-1:
+            raise ValueError('Previous guard must belong to this actor and preceding night')
+        previous=previous.target
+    if not rules.allow_repeat_guard and board.day>1 and previous is None:
+        raise ValueError('Previous guard history required by no-repeat rule')
+    excluded=previous if not rules.allow_repeat_guard and board.day>1 else None
+    return tuple(p for p in board.alive if p!=actor and p!=excluded)
 
 
 class FixedGuardNight:
     """Common-flow physical policy; never use as a forecast selection law."""
     terminal_preflight_safe=False
 
-    def __init__(self,rules):
-        self.rules=rules
+    def __init__(self,rules,previous=None):
+        self.rules=rules;self.previous=previous
 
     def acquire(self,board,intent):
         # The independent choice is already fixed; no attack argument is given.
         if not isinstance(intent,GuardIntent) or intent.night!=board.day:
             raise ValueError('Guard intent must belong to this night')
-        if intent.target not in guard_targets(board,intent.actor,self.rules):
+        if intent.target not in guard_targets(board,intent.actor,self.rules,self.previous):
             raise ValueError('Living nonself guard target required')
         return intent
 
@@ -48,7 +53,7 @@ class FixedGuardNight:
         return (FlowOutcome(Fraction(1),child),)
 
 
-def resolve_fixed_guard_night(board,intent,attack,rules=Rules()):
+def resolve_fixed_guard_night(board,intent,attack,rules=Rules(),*,previous=None):
     """Resolve one known world; shared order obtains intent before casualties.
 
     This returns a Board transition, not a posterior of a public observation.
@@ -56,4 +61,4 @@ def resolve_fixed_guard_night(board,intent,attack,rules=Rules()):
     """
     if type(attack) is not int or attack not in board.alive:
         raise ValueError('Living attack target required')
-    return resolve_action(board,intent,attack,FixedGuardNight(rules))[1]
+    return resolve_action(board,intent,attack,FixedGuardNight(rules,previous))[1]

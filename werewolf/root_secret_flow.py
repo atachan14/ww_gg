@@ -165,7 +165,7 @@ def root_secret_value(branch,rules,strategy,*,actor=None,max_work=250000,max_sec
 def root_screen_eligible(board,rules,strategy):
     """Existing initial screen subset; no change to fixed-CO/max entrypoints."""
     return (bool(board.initial_seer_count or board.initial_hunter_count) and
-            board.initial_hunter_count<=1 and (not board.initial_hunter_count or rules.allow_repeat_guard) and
+            board.initial_hunter_count<=1 and
             board.day==1 and board.phase=='day' and not board.history and
             board.alive==tuple(range(1,board.player_count+1)) and
             strategy.day=='random' and strategy.night=='random' and
@@ -191,7 +191,7 @@ def root_screen_forecast(board,rules,strategy,*,max_work=250000,max_seconds=20):
 def root_replay_eligible(game,board,rules,strategy):
     """Saved uniform history with observed publications; no invented CO law."""
     if (not game.get('history') or not (board.initial_seer_count or board.initial_hunter_count) or
-            board.initial_hunter_count>1 or board.initial_hunter_count and not rules.allow_repeat_guard):
+            board.initial_hunter_count>1):
         return False
     snapshots=(*game['history'],game)
     return (strategy.day==strategy.night=='random' and
@@ -213,7 +213,7 @@ def prepare_root_entry(game,board,rules,strategy,*,max_work=250000,max_seconds=2
     return None
 
 
-def observe_root_snapshot(branch,game,index,rules):
+def observe_root_snapshot(branch,game,index,rules,*,guard_priors=None):
     """Replay the existing public observations, then condition the joint ledger.
 
     Hand reports remain truth-support filters. Their target frequencies never
@@ -232,7 +232,7 @@ def observe_root_snapshot(branch,game,index,rules):
             'seer_options':{'initial_rule':rules.initial_seer,'likelihood':'compatibility'},
             'seer_inputs':[r for r in game.get('seer_inputs',()) if publication_slot(game,'seer',r)<=slot],
             'reports':[r for r in game.get('reports',()) if publication_slot(game,'medium',r)<=slot]}
-    _,progress=replay(migrate_game(prefix))
+    _,progress=replay(migrate_game(prefix),guard_priors=guard_priors or {})
     observed=progress.board
     reports=tuple(SeerReport(r['day'],max(r['day'],1+publication_slot(game,'seer',r)//2),
                             r['reporter'],r['target'],r['color'])
@@ -244,13 +244,14 @@ def observe_root_snapshot(branch,game,index,rules):
         lambda h:(h.roles,h.acquisitions,h.guards,h.attacks) in signatures,past=reports)
 
 
-def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=20):
+def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=20,_collect_guard_priors=False):
     """Recreate actual joint histories; observed bites use the configured policy.
 
     Q is restored from the existing public replay only after P is conditioned.
     Actions recorded in history are observations, not target-row interventions.
     """
     from .exact import initial_board,condition_claims,group_initial_board,ClaimPolicy
+    if _collect_guard_priors and not game.get('history'):return {}
     if not root_replay_eligible(game,board,rules,strategy):
         return FuturePending('root_secret_replay_scope_unimplemented')
     try:
@@ -262,12 +263,16 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
             cp=ClaimPolicy(**first.get('claim_policy',{}))
             seed=(group_initial_board(seed,claims,cp) if game.get('model')=='group'
                   else condition_claims(seed,claims,cp))
+            guard_priors={}
             branch=prepare_root_secrets(seed,rules,max_work=max_work)
             if isinstance(branch,FuturePending):return branch
             for index,step in enumerate(game['history']):
-                branch=observe_root_snapshot(branch,game,index,rules)
+                branch=observe_root_snapshot(branch,game,index,rules,guard_priors=guard_priors)
                 if isinstance(branch,FuturePending):return branch
                 policy=Strategy(**step['policy']);target=step['target']
+                if branch.public.phase=='night':guard_priors[index]=branch.public_law
+                if not rules.allow_repeat_guard and branch.public.phase=='night' and 'observation' not in step:
+                    return FuturePending('guard_saved_observation_required')
                 candidates=branch.public.alive if branch.public.phase=='night' and target is None else (target,)
                 selected=[]
                 for action in candidates:
@@ -287,7 +292,9 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
                     if isinstance(children,FuturePending):return children
                     expected=branch.public.alive if target is None else tuple(p for p in branch.public.alive if p!=target)
                     selected.extend((mass*q,c) for q,c in children if not c.public.winner and c.public.alive==expected)
-                if not selected:return FuturePending('root_secret_replay_observation_zero_support')
+                if not selected:
+                    if _collect_guard_priors and index==len(game['history'])-1:return guard_priors
+                    return FuturePending('root_secret_replay_observation_zero_support')
                 template=selected[0][1]
                 entries=normalize(tuple(replace(h,mass=q*h.mass) for q,c in selected for h in c.physical_law.hypotheses))
                 own=replace(template.physical_law,hypotheses=entries)
@@ -297,8 +304,11 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
                 branch=observe_root_public(RootSecretBranch(physical,own,physical,own,template.past),
                                            template.public,lambda h:True)
                 if isinstance(branch,FuturePending):return branch
-            branch=observe_root_snapshot(branch,game,len(game['history']),rules)
+            branch=observe_root_snapshot(branch,game,len(game['history']),rules,guard_priors=guard_priors)
             if isinstance(branch,FuturePending):return branch
+            if _collect_guard_priors:
+                if branch.public.phase=='night':guard_priors[len(game['history'])]=branch.public_law
+                return guard_priors
             facts=('alive','day','phase','history')
             if any(getattr(branch.public,k)!=getattr(board,k) for k in facts):
                 return FuturePending('root_secret_replay_board_mismatch')
@@ -392,4 +402,27 @@ def root_wolf_forecast(branch,players,attacks,rules,strategy,*,max_work=250000,m
             dawn={t:horizon_for_action(engine,b,state,past,t,own) for t in targets}
             return values,dawn,actor.belief
     except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
+    except Pending as error:return FuturePending(error.reason)
+
+
+from functools import lru_cache
+
+
+@lru_cache(maxsize=16)
+def _guard_night_priors(history_key,rules,max_work,max_seconds):
+    import json
+    from .exact import initial_board
+    game=json.loads(history_key)
+    seed=initial_board(game['players'],game.get('wolves',1),game.get('mediums',0),
+                       game.get('seers',0),game.get('hunters',0),experimental_cast=True)
+    result=replay_root_secrets(game,seed,rules,Strategy(**game['policy']),
+        max_work=max_work,max_seconds=max_seconds,_collect_guard_priors=True)
+    if isinstance(result,FuturePending):raise Pending(result.reason)
+    return tuple(sorted(result.items()))
+
+
+def root_guard_night_priors(game,rules,*,max_work=250000,max_seconds=20):
+    """Public-owned night laws for observation replay; no private data in cache."""
+    from .public_prior import public_history_key
+    try:return dict(_guard_night_priors(public_history_key(game),rules,max_work,max_seconds))
     except Pending as error:return FuturePending(error.reason)

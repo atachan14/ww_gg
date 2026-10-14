@@ -106,7 +106,7 @@ def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
         return root_branch_forecast(branch,rules,strategy,max_work=max_work,max_seconds=max_seconds)
     from .guard_model import scope_reason
     from .guard_history_prior import role_exchangeable
-    reason=scope_reason(board,rules,strategy,board.guard_prior_roster is not None)
+    reason=scope_reason(board,rules,strategy,board.guard_prior_roster is not None or board.day==1)
     if reason:return FuturePending(reason)
     if InformationSetForecast(rules,strategy).exchangeable(board):
         from .exchangeable_public import exchangeable_forecast
