@@ -28,3 +28,60 @@ class HiddenGuardMaxSupportTests(unittest.TestCase):
         self.assertEqual({h.roles for h in mixture.physical.hypotheses},{(4,0,0,2)})
         self.assertEqual(state.public_roles,tuple(sorted(board.worlds)))
         self.assertEqual(mixture.role_prior,state.public_roles)
+    def test_legal_four_player_board_global_support_and_past_policy(self):
+        from dataclasses import asdict
+        from werewolf.seer_manual import migrate_game,replay
+        from werewolf.seer_acquisition import from_board
+        from werewolf.root_secret_flow import RootSecretBranch,observe_root_public
+        from werewolf.evaluation_branch import physical_board
+        claims=['hunter','latent','latent','latent']
+        cp={'hunter':'none'}
+        policy=asdict(Strategy(day='random',night='max',fake_reports='random',disclosure_common='none'))
+        game=migrate_game({'players':4,'wolves':1,'hunters':1,'mediums':0,'seers':0,
+            'history':[{'target':4,'claims':claims,'claim_policy':cp,'policy':policy}],
+            'claims':claims,'claim_policy':cp,'policy':policy,'rules':asdict(Rules()),
+            'seer_mode':'information-fixed-v1','seer_inputs':[]})
+        rules,before=replay(game)
+        board=before.board
+        self.assertEqual(board.alive,(1,2,3))
+        source=TrueScanState(from_board(board),rosters=((1,2,3,4),(1,2,3)))
+        policies={}
+        for mask in {h.roles[0] for h in source.hypotheses}:
+            values=information_forecast(board,source,(),rules,Strategy(**policy),mask=mask)
+            policies[mask,()]=uniform_policy(optimal_targets(values,maximize=False))
+        self.assertEqual(policies,{(1,()):((2,F(1,2)),(3,F(1,2))),
+                                   (2,()):((1,F(1)),),(4,()):((1,F(1)),)})
+        gj={'target':None,'claims':claims,'claim_policy':cp,'policy':policy,
+            'observation':'night-deaths-v1','deaths':[]}
+        observed=migrate_game({**game,'history':[game['history'][0],gj]})
+        _,after=replay(observed)
+        self.assertEqual(len(after.board.worlds),4)
+        self.assertEqual({w[-1] for w in after.board.worlds},{F(1,4)})
+        mixture=enumerate_guard_history_mixture(source,after.board.worlds,1,board.alive,policies,deaths=())
+        self.assertEqual(mixture.physical_mass,F(1,10))
+        self.assertEqual(set(mixture.zero_support_roles),{(2,0,0,1),(4,0,0,1)})
+        # Proposal only: public support over ALL wolf rosters, no owner predicate.
+        supported={roles for roles,likelihood in mixture.role_support if likelihood>0}
+        kept=tuple(w for w in after.board.worlds if w[:-1] in supported)
+        total=sum((w[-1] for w in kept),F())
+        support_board=replace_worlds(after.board,tuple((*w[:-1],w[-1]/total) for w in kept))
+        self.assertEqual({w[0] for w in support_board.worlds},{1})
+        self.assertEqual({w[-1] for w in support_board.worlds},{F(1,2)})
+        # Existing world reweighting accepts the support-filtered public Board.
+        own=mixture.physical
+        physical=physical_board(support_board,own)
+        projected=observe_root_public(RootSecretBranch(physical,own,physical,own),support_board,lambda h:True)
+        self.assertNotIsInstance(projected,FuturePending)
+        self.assertEqual(projected.public_law.public_roles,tuple(sorted(support_board.worlds)))
+        # Current max must not retroactively replace an earlier random night.
+        old_random={**gj,'policy':{**policy,'night':'random'}}
+        historical=migrate_game({**game,'history':[game['history'][0],old_random]})
+        self.assertEqual(historical['policy']['night'],'max')
+        self.assertEqual(historical['history'][1]['policy']['night'],'random')
+        _,random_after=replay(historical)
+        random_kernels={(mask,()):uniform_policy(tuple(p for p in board.alive if not mask&(1<<(p-1))))
+                        for mask in {h.roles[0] for h in source.hypotheses}}
+        random_mix=enumerate_guard_history_mixture(source,random_after.board.worlds,1,board.alive,random_kernels,deaths=())
+        self.assertEqual(random_mix.zero_support_roles,())
+        self.assertEqual(random_mix.physical_mass,F(1,5))
+        self.assertEqual(random_mix.public.public_roles,tuple(sorted(random_after.board.worlds)))
