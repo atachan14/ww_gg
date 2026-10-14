@@ -1,0 +1,26 @@
+# 狩人未確定・狼襲撃maxの接続調査
+
+HEAD149a302の既存部品を調査。狩人は設定済み均等、狼のみ襲撃max、昼は設定済み方針。相互最大化、複数狩人、新しいCO/報告最適化は対象外。
+
+既存の InformationSetForecast.wolf_policy は公開jointlawを WolfInformation（初期狼配役、自身の襲撃履歴）で条件付け、候補の村勝率を平均してからminを選ぶ。optimal_targets と uniform_policy が同率均等を担う。solve は物理lawを同じinfosetに集約し同じ方針を適用する。真狩人や護衛先をキーに足す必要はない。
+
+新root入口は root_scope/root_screen_eligible/root_replay_eligible が昼夜randomに限定。guard_model.scope_reasonは連続なしのmaxを拒否。public_guard_branch_lawとreplay_root_secretsは均等襲撃確率を直接使用しているため、制限を外すだけではmaxのjoint履歴にならない。
+
+## 実装前に再現した未定義境界
+
+3人生存、狼P3。公開jointlawは狩人P1が3/4、P2が1/4。護衛は自護衛なし・連続あり・均等。狼は狩人を知らず、合法襲撃先P1/P2を同じinfosetで比較する。既存評価器で村勝率はP1襲撃1/24、P2襲撃1/8。狼maxはP1のみを選ぶ。
+
+GJの物理確率は1/8で、P2狩人がP1を護衛した履歴のみが存在する。しかし公開Model AのGJは狩人生存の互換性だけで配役を保つので、P1狩人の公開重み3/4も残る。この配役には選ばれたP1襲撃を防ぐ合法護衛がなく、秘密履歴支持はゼロ。既存 enumerate_guard_history_mixture は guard_public_history_zero_support を返す。これはoracle選択や計算予算の問題ではない。
+
+公開重みを消せばModel Aが変わり、均等襲撃や非最適襲撃を足せば設定済みmaxが変わる。現契約にはこの配役の条件付き秘密履歴を定義する規則がない。rootの将来夜はその公開lawから再び狼infosetを作るため、汎用的なmax継続を数値化する前提が欠ける。既存の終盤maxは秘密履歴が後続選択へ不要な場合の値を扱っており、完全joint履歴への拡張とは区別する。
+
+最小再現を tests/test_hidden_guard_max_support.py に固定。ゲーム実行コードは変更せず、均等への黙った代替も追加しない。
+
+## 決定後の接続順
+
+1. Model A正重み・設定済み方針支持ゼロの扱いを決める。決まるまではその観測枝を明示Pendingとし、配役や秘密支持を補完しない。
+2. 公開wolf_policyから得たinfoset別kernelを、GJの公開世界内履歴生成と保存履歴replayへ共通に渡す。Qは配役ごと正規化、Pは実際の方針×護衛×観測の枝質量を保持。
+3. root入口の昼設定／夜maxを段階解放し、将来夜も同一設定のwolf_policy/solveを使う。既存max例外・同率処理・合法候補・継続を共有。連続なしでは各hypothesisの前夜護衛を残す。
+4. 複数夜GJ、公開/狼本人、履歴編集/取消、cache、旧max値を検証。予算250000work/20秒を維持し、超過はPending。rootは履歴圧縮なし・flow memoなしなので、一般複数夜maxの実測は別途必要。
+
+現時点で一般対応は未実装。先延ばしする技術的理由は土台不足ではなく、上の具体的な未定義支持境界。特設モデルや未承認の方針補完で通さない。
