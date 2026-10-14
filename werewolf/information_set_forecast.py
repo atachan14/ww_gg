@@ -21,6 +21,7 @@ from .information_weights import observer_report_weights
 from .morning_flow import report_flow, continuation_value
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
+from .actor_information import WolfInformation,wolf_information_groups
 
 
 class Pending(Exception):
@@ -249,13 +250,14 @@ class InformationSetForecast:
         return value
 
     def wolf_policy(self,b,s,past,mask,history=()):
-        key=(b,s,past,mask,history)
+        if s.public_roles!=tuple(sorted(b.worlds)):
+            raise ValueError('Wolf policy requires the public role prior')
+        info=WolfInformation(mask,history)
+        key=(b,s,past,info)
         if key in self.policies:return self.policies[key]
         # This conditional law starts from the PUBLIC joint prior, never the viewer.
-        from .guard_history_prior import matches
-        hs=tuple(h for h in s.hypotheses if h.roles[0]==mask and matches(h.attacks,history))
-        if not hs:raise Pending('information_set_roster_missing')
-        group=replace(s,hypotheses=normalize(hs))
+        try:group=info.condition_public(s)
+        except ValueError:raise Pending('information_set_roster_missing')
         targets=tuple(p for p in b.alive if self.strategy.include_self_bite or not mask&(1<<(p-1)))
         if self.strategy.night=='random':scores=();chosen=targets
         else:
@@ -349,14 +351,11 @@ class InformationSetForecast:
                 targets=tuple(p for p,v in scores if v==best)
             value=sum((self.act(b,s,past,p,private,observer,physical=physical) for p in targets),F())/len(targets)
         else:
-            groups={}
-            for h in private.hypotheses:groups.setdefault((h.roles[0],h.attacks),[]).append(h)
             value=F()
-            for (mask,history),hs in groups.items():
-                mass=sum((h.mass for h in hs),F());group=replace(private,hypotheses=normalize(tuple(hs)))
+            for info,mass,group in wolf_information_groups(private):
                 group_board=physical_board(b,group,physical)
                 value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
-                                for p,q in self.wolf_policy(b,s,past,mask,history)),F())
+                                for p,q in self.wolf_policy(b,s,past,info.initial_roster,info.attacks)),F())
         self.values[key]=value
         return value
 

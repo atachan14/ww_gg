@@ -9,6 +9,8 @@ from .information_set_forecast import InformationSetForecast,Pending
 from .action_flow import resolve_action
 from .by_dawn import HorizonValues
 from .calculation_budget import calculation_budget,CalculationBudgetExceeded,tick
+from .actor_information import wolf_information_groups
+from .evaluation_branch import ActionInputs,physical_board
 
 
 def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20):
@@ -26,15 +28,12 @@ def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=
             for target,_ in guard_choices(board,actor,rules,strategy.guard_position):
                 observer=GuardObserver(board,actor,target,allowed)
                 values[target]=engine.solve(board,state,past,own,observer)
-                v=w=F();groups={}
-                for h in own.hypotheses:groups.setdefault((h.roles[0],h.attacks),[]).append(h)
-                for (mask,history),hs in groups.items():
-                    mass=sum((h.mass for h in hs),F())
-                    group=replace(own,hypotheses=normalize(hs))
-                    physical=replace_worlds(board,group.public_roles)
-                    for attack,q in engine.wolf_policy(board,state,past,mask,history):
+                v=w=F()
+                for info,mass,group in wolf_information_groups(own):
+                    physical=physical_board(board,group,private_board)
+                    for attack,q in engine.wolf_policy(board,state,past,info.initial_roster,info.attacks):
                         tick()
-                        _,outcomes=resolve_action(board,(state,past,group,observer,physical),attack,engine.action_policy)
+                        _,outcomes=resolve_action(board,ActionInputs(state,past,group,observer,physical),attack,engine.action_policy)
                         for o in outcomes:
                             v+=mass*q*o.probability*F(o.board.winner=='village')
                             w+=mass*q*o.probability*F(o.board.winner=='wolf')

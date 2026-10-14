@@ -14,6 +14,8 @@ from .belief_projection import project_private
 from .evaluation_projection import project_evaluation
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 from .forecast_result import Forecast
+from .actor_information import wolf_information_groups
+from .evaluation_branch import ActionInputs,physical_board
 from .by_dawn import HorizonValues
 from dataclasses import replace
 from functools import lru_cache
@@ -27,8 +29,8 @@ def horizon_for_action(engine,board,state,past,target,private=None):
     through dawn. Generated reports cannot themselves change the winner rule.
     """
     private=state if private is None else private
-    physical=replace_worlds(board,private.public_roles)
-    _,outcomes=resolve_action(board,(state,past,private,None,physical),target,engine.action_policy)
+    physical=physical_board(board,private)
+    acquired,outcomes=resolve_action(board,ActionInputs(state,past,private,None,physical),target,engine.action_policy)
     village=wolf=F()
     for o in outcomes:
         tick(len(private.hypotheses))
@@ -36,16 +38,12 @@ def horizon_for_action(engine,board,state,past,target,private=None):
             v=F(o.board.winner=='village');w=F(o.board.winner=='wolf')
         elif board.phase=='night':v=w=F()
         else:
-            from .guard_model import public_context
-            child=public_context(o.context);public=engine.project(state,child);own=engine.project(private,o.board)
-            groups={};v=w=F()
-            for h in own.hypotheses:groups.setdefault((h.roles[0],h.attacks),[]).append(h)
-            for (mask,history),hs in groups.items():
-                mass=sum((h.mass for h in hs),F())
-                group=replace(own,hypotheses=normalize(tuple(hs)))
-                physical_next=replace_worlds(child,group.public_roles)
-                for bite,q in engine.wolf_policy(child,public,past,mask,history):
-                    _,night_outcomes=resolve_action(child,(public,past,group,None,physical_next),bite,engine.action_policy)
+            continuation=engine.action_policy.project(board,acquired,o,target)
+            child,public,past,own,_=continuation;v=w=F()
+            for info,mass,group in wolf_information_groups(own):
+                physical_next=physical_board(child,group,continuation.physical)
+                for bite,q in engine.wolf_policy(child,public,past,info.initial_roster,info.attacks):
+                    _,night_outcomes=resolve_action(child,ActionInputs(public,past,group,None,physical_next),bite,engine.action_policy)
                     for final in night_outcomes:
                         v+=mass*q*final.probability*F(final.board.winner=='village')
                         w+=mass*q*final.probability*F(final.board.winner=='wolf')
