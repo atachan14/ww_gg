@@ -106,3 +106,13 @@ GJを入力すると既存公開replayはH4死亡候補を消し、残る4候補
 未解決の一般範囲は、その後に支持外actor情報集合から新たな最大化判断が必要な場合、または公共観測そのものが全kernelで支持ゼロで、公共最大化主体の判断が必要な場合。actor_information.WolfInformation.condition_publicは前者を拒否し、condition_generated_supportは後者を拒否する。4人昼randomの例はどちらの判断も要求しないため、新信念の仕様選択なしで解けた。より大きな局面を同じ例だけで一括保留にせず、この依存が本当に消費される箇所を調べる。
 
 共通エンジンで今夜の完全kernelを、選択済みpublic観測生成に入力する構造は必要。単純な再帰接続には選択分布→公開支持/世界内履歴→候補継続利得→選択分布という依存があるが、利得が公開支持に依存しない終局までの固定方針chance枝では切断できる。候補評価のために現在kernelを差し替える案は採用していない。未定義のoff-path信念をuniform等で補う修正も入れていない。
+
+## 6人開始の後続max必要例：限定した実装チェックポイント
+
+通常6人（市民4・狩人1・狼1）、P1狩人CO、狩人CO条件none、Day1にP6を処刑、昼random・夜max・護衛uniform。夜は5人生存で、GJ後にも昼→夜が残る。WolfInformation(P2)は公開COからH1と全配役を知る。誰かの秘密を追加していない。
+
+fixed_actor_continuation.pyの依存切断部品で、本人情報集合を完全public入力から作り、未知の護衛選択を積分した後に共通optimal_targets/uniform_policyで選ぶ。role worldごとのoracle maxにはしない。後続actor maxは全配役が本人の既知情報で確定した時だけこの部品で評価し、それ以外は通常public evaluatorへの依存を返す。viewerで絞った入力は拒否。
+
+P2のP1襲撃は1/4。P3/P4/P5襲撃は連続あり3/10、連続なし43/144。この評価では後続optimal_targets呼出が実際にある。未知配役のWolfInformation(P1)では後続の未知役職判断が必要になる枝がありNone（未解決依存）を返す。これは新しいbeliefを入れた数値でも、一般実装不能の証明でもない。
+
+追加3テスト成功（0.185秒）：4人未知配役の固定終局まで、6人既知actorの後続max・両連続ルール、viewer法則と公共max判断の不使用。新部品は製品root経路へ未接続で、rootmax適用ゲートは未解除。次はpublic入力の全infoset kernel、選択後生成、実際の公共支持、owner継続を同じ局面で照合して接続する。未定義のoff-path補完、policy事後差替え、uniform fallbackは追加していない。
