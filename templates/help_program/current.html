@@ -1,0 +1,4 @@
+<p class="program-state">現在実装 · ローカル監査版</p><h2>公開状態と物理分岐を別の役割で読む</h2>
+<p><code>Board</code>は公開の候補、<code>Hypothesis</code>は役職と私有記録を持つ仮説です。現在は公開・物理の両分布が同じ状態型を使い、政策採点では公開分布が物理評価へ再投入されます。二つの変数があるだけで完全な分離とは言えません。</p>
+<ul><li><a href="{{ url_for('help_program',page='model') }}">確率モデルと情報集合</a></li><li><a href="{{ url_for('help_program',page='flow') }}">処理フローと評価アルゴリズム</a></li><li><a href="{{ url_for('help_program',page='reference') }}">型・関数リファレンス</a></li><li><a href="{{ url_for('help_program',page='verification') }}">再現例と検証</a></li></ul>
+<h2>拡張意図と現状</h2><p><code>action_flow</code>は能力・政策の詳細をフックへ分け、<code>GuardContext</code>は公開と本人の分布を別に運びます。占い用の<code>TrueScanState</code>には護衛・襲撃記録が追加されています。この既存構造を使った一般化は<a href="{{ url_for('help_program',page='design') }}#separation">設計案の分離節</a>で検討します。一般の最適政策求解が完成しているという意味ではありません。</p>

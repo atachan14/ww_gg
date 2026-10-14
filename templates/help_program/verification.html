@@ -1,0 +1,7 @@
+<h2 id="five">固定5人村の再現例</h2><p>村人4・狼1、能力・COなし、自己襲撃なし。最初の処刑で狼なら勝利。村人なら夜に村人1人が死亡し、残る3人の処刑で狼を選ぶ確率は1/3です。</p>
+<p class="program-equation" id="eq-five">{{ fixture.execution_wolf }} × 1 + {{ fixture.execution_other }} × {{ fixture.three_value }} = <strong>{{ fixture.village_win }}</strong></p>
+<p>式eq-fiveの意味：枝の確率×その枝の最終勝率を足す。表示値は共通fixtureから渡します。HELPテストは同じ値を既存の公開solver出力と比較します。<a href="{{ url_for('help_five') }}">既存の段階表示サンプル</a>。</p>
+<h2>秘密の違いを潰さない検証</h2><p>同じ公開盤面でも、狼1が過去GJで2を噛んだなら次は3、3を噛んだなら次は2、処刑済み4を噛んだなら2・3が同率となる既存例があります。根拠：<code>test_guard_max_history</code>。この履歴を公開したり、役職世界だけのキーへ潰したりしません。</p>
+<h2>ローカル再現</h2><pre tabindex="0" role="region" aria-label="コードと再現手順"><code>python -B -m unittest tests.test_help tests.test_help_program -v
+python -B -m unittest tests.test_guard_max_history tests.test_guard_history_mixture -v</code></pre>
+<p>GETによるゲーム不変、ページ・アンカー・コード参照、式fixture、狭い画面とキーボードを確認します。テストが保証する実装と、未実装の<a href="{{ url_for('help_program',page='design') }}">設計案</a>を分けます。</p>

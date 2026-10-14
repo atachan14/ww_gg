@@ -393,6 +393,15 @@ def create_app(test_config=None, *, deployment=False):
     @app.get('/help')
     def help_route():return render_template('help.html')
 
+    @app.get('/help/program/')
+    @app.get('/help/program/<page>')
+    def help_program(page='index'):
+        from werewolf.help_program import PAGES,TERMS,REFERENCES,FIVE_FIXTURE,AUDIT_VERSION,REVIEW_VERSION,PUBLIC_SHA
+        if page not in PAGES:abort(404)
+        return render_template('help_program.html',page=page,pages=PAGES,terms=TERMS,
+                               references=REFERENCES,fixture=FIVE_FIXTURE,audit_version=AUDIT_VERSION,
+                               review_version=REVIEW_VERSION,public_sha=PUBLIC_SHA)
+
     @app.get('/help/specs')
     def help_specs():return render_template('help_specs.html')
 
