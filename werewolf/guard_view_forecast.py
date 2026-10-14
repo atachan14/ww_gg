@@ -12,10 +12,10 @@ from .calculation_budget import calculation_budget,CalculationBudgetExceeded,tic
 
 
 def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20):
-    from .guard_history_prior import seed_history,guard_matches,merge_guards
+    from .guard_history_prior import seed_history,guard_matches,merge_guards,public_history_ready
     try:state=seed_history(board,state) if strategy.night=='max' else state
     except ValueError:return FuturePending('guard_public_history_zero_support')
-    reason=scope_reason(board,rules,strategy,any(h.attacks for h in state.hypotheses))
+    reason=scope_reason(board,rules,strategy,public_history_ready(board,state))
     if reason:return FuturePending(reason)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):

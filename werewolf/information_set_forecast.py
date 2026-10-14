@@ -311,7 +311,8 @@ class InformationSetForecast:
     def solve(self,b,s,past,private,observer):
         if b.winner is not None:return F(b.winner=='village')
         from .guard_model import scope_reason
-        reason=scope_reason(b,self.rules,self.strategy,any(h.attacks for h in s.hypotheses))
+        from .guard_history_prior import public_history_ready
+        reason=scope_reason(b,self.rules,self.strategy,public_history_ready(b,s))
         if reason:raise Pending(reason)
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
         key=(b,s,past,self.value_law(private),observer)

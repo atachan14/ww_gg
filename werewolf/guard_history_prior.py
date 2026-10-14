@@ -42,14 +42,23 @@ def seed_history(board,state):
     if len({w[3] for w in board.worlds})==1:return state
     nights=[night for night in range(1,board.day) if not any(e.phase=='night' and e.day==night for e in board.history)]
     if not nights:return state
-    if len(nights)>1:
-        return replace(state,hypotheses=normalize(tuple(replace(h,guards=(),attacks=()) for h in state.hypotheses)))
-    if any(h.attacks for h in state.hypotheses):return state
+    # Keep an existing joint ledger, including several nights. Missing records
+    # are a scope/support issue, never a reason to erase known owner actions.
+    if any(h.guards or h.attacks for h in state.hypotheses):return state
+    if len(nights)>1:return state
     # Only the four-alive success leaves another nonterminal wolf decision.
     if board.guard_prior_roster is None:return state
     night,alive=board.guard_prior_roster
     if night!=nights[0] or len(alive)!=4:return state
     return extend_success(state,night,alive)
+
+
+def public_history_ready(board,state):
+    """Every public hypothesis represents all past unobserved bite nights."""
+    missing={night for night in range(1,board.day)
+             if not any(e.phase=='night' and e.day==night for e in board.history)}
+    return bool(missing) and all(missing<={a.night for a in h.attacks}
+                                 for h in state.hypotheses)
 
 
 def extend_success(state,night,alive):
