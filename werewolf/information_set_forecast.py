@@ -21,7 +21,7 @@ from .information_weights import observer_report_weights
 from .morning_flow import report_flow, continuation_value
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
-from .actor_information import WolfInformation,wolf_information_groups
+from .actor_information import WolfInformation,wolf_information_groups,condition_actor_state
 
 
 class Pending(Exception):
@@ -364,11 +364,10 @@ class InformationSetForecast:
         if s.public_roles!=tuple(sorted(b.worlds)):
             raise ValueError('Public acquisition prior must match public Board')
         from .guard_history_prior import matches
-        from .night_knowledge import merge_night_records
         knows_attacks=mask is not None or bool(private_attacks)
-        hs=tuple(h for h in s.hypotheses if (not knows_attacks or matches(h.attacks,private_attacks)) and (observer(h,s) if observer is not None else h.roles[0]==mask) and (private_board is None or h.roles in {w[:-1] for w in private_board.worlds}))
-        if not hs:raise ValueError('Inconsistent observer')
-        private=replace(s,hypotheses=normalize(tuple(replace(h,attacks=merge_night_records(h.attacks,private_attacks)) for h in hs)))
+        compatible=lambda h:(not knows_attacks or matches(h.attacks,private_attacks)) and (observer(h,s) if observer is not None else h.roles[0]==mask) and (private_board is None or h.roles in {w[:-1] for w in private_board.worlds})
+        if not any(compatible(h) for h in s.hypotheses):raise ValueError('Inconsistent observer')
+        private=condition_actor_state(s,compatible,attacks=private_attacks)
         if observer is not None:return self.solve(b,s,past,private,observer)
         targets=tuple(p for p in b.alive if self.strategy.include_self_bite or not mask&(1<<(p-1)))
         return tuple((p,self.act(b,s,past,p,private,None)) for p in targets)

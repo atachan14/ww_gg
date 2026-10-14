@@ -1,4 +1,4 @@
-"""Extract wolf-owned information and aggregate branches before policy choice.
+"""Condition actor views and aggregate wolf information before policy choice.
 
 No true guardian, other actor's scan or current observer intervention enters
 the key. Public policy beliefs and actual branch masses remain separate inputs.
@@ -7,6 +7,20 @@ from dataclasses import dataclass,replace
 from fractions import Fraction as F
 from .night_knowledge import WolfAttack,merge_night_records
 from .seer_acquisition import normalize
+
+
+def condition_actor_state(state,compatible,*,guards=(),attacks=()):
+    """Condition an existing joint law; never generate missing history mass.
+
+    Callers own the observation predicate and its support checks. All roles,
+    scan results, other actors' records and state metadata survive. Explicit
+    owner records are merged only after compatibility has been established.
+    """
+    entries=tuple(replace(h,
+                  guards=merge_night_records(h.guards,guards) if guards else h.guards,
+                  attacks=merge_night_records(h.attacks,attacks) if attacks else h.attacks)
+                  for h in state.hypotheses if compatible(h))
+    return replace(state,hypotheses=normalize(entries))
 
 
 @dataclass(frozen=True)
@@ -26,11 +40,10 @@ class WolfInformation:
 
     def condition_public(self,state):
         known={a.night:a.target for a in self.attacks}
-        entries=tuple(replace(h,attacks=merge_night_records(h.attacks,self.attacks))
-                      for h in state.hypotheses if h.roles[0]==self.initial_roster and
-                      all(known.get(a.night)==a.target for a in h.attacks))
-        if not entries:raise ValueError('Wolf information outside public support')
-        return replace(state,hypotheses=normalize(entries))
+        compatible=lambda h:h.roles[0]==self.initial_roster and all(known.get(a.night)==a.target for a in h.attacks)
+        if not any(compatible(h) for h in state.hypotheses):
+            raise ValueError('Wolf information outside public support')
+        return condition_actor_state(state,compatible,attacks=self.attacks)
 
 
 def wolf_information_groups(state):

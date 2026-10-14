@@ -1,20 +1,17 @@
 """Fixed current guard comparison; public policy never sees the viewer's intent."""
-from dataclasses import replace
 from fractions import Fraction as F
 from .guard_model import GuardObserver,scope_reason,guard_choices
-from .exact import replace_worlds
-from .seer_acquisition import normalize
 from .seer_future_uniform import FuturePending
 from .information_set_forecast import InformationSetForecast,Pending
 from .action_flow import resolve_action
 from .by_dawn import HorizonValues
 from .calculation_budget import calculation_budget,CalculationBudgetExceeded,tick
-from .actor_information import wolf_information_groups
+from .actor_information import wolf_information_groups,condition_actor_state
 from .evaluation_branch import ActionInputs,physical_board
 
 
 def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20):
-    from .guard_history_prior import seed_history,guard_matches,merge_guards,public_history_ready
+    from .guard_history_prior import seed_history,guard_matches,public_history_ready
     try:state=seed_history(board,state) if strategy.night=='max' else state
     except ValueError:return FuturePending('guard_public_history_zero_support')
     reason=scope_reason(board,rules,strategy,public_history_ready(board,state))
@@ -23,7 +20,7 @@ def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=InformationSetForecast(rules,strategy,max_work=max_work)
             allowed=tuple(w[:-1] for w in private_board.worlds)
-            own=replace(state,hypotheses=normalize(tuple(replace(h,guards=merge_guards(h.guards,guards)) for h in state.hypotheses if h.roles in allowed and guard_matches(h.guards,guards))))
+            own=condition_actor_state(state,lambda h:h.roles in allowed and guard_matches(h.guards,guards),guards=guards)
             values={};dawn={}
             for target,_ in guard_choices(board,actor,rules,strategy.guard_position):
                 observer=GuardObserver(board,actor,target,allowed)

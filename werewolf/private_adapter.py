@@ -125,14 +125,13 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 from .model_a_public import horizon_for_action
                 from .information_set_forecast import InformationSetForecast
                 from .calculation_budget import calculation_budget,CalculationBudgetExceeded
-                from .seer_acquisition import normalize
-                from dataclasses import replace
+                from .actor_information import condition_actor_state
                 mask=sum(1<<(p-1) for p in players)
                 try:
                     with calculation_budget(max_work,max_seconds=max_seconds):
                         engine=InformationSetForecast(rules,strategy,max_work=max_work)
                         from .guard_history_prior import matches
-                        own=replace(state,hypotheses=normalize(tuple(replace(h,attacks=view.attacks) for h in state.hypotheses if h.roles[0]==mask and h.roles in {w[:-1] for w in private.worlds} and matches(h.attacks,view.attacks))))
+                        own=condition_actor_state(state,lambda h:h.roles[0]==mask and h.roles in {w[:-1] for w in private.worlds} and matches(h.attacks,view.attacks),attacks=view.attacks)
                         guard_dawn={p:horizon_for_action(engine,public,state,past,p,own) for p in final_values}
                 except CalculationBudgetExceeded:guard_dawn={}
             reason += ' 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'

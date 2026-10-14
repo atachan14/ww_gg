@@ -1,16 +1,50 @@
 import copy,unittest
 from dataclasses import replace
 from fractions import Fraction as F
-from werewolf.actor_information import WolfInformation,wolf_information_groups
+from werewolf.actor_information import WolfInformation,wolf_information_groups,condition_actor_state
 from werewolf.night_knowledge import WolfAttack
 from werewolf.guard_effect import GuardIntent
-from werewolf.seer_acquisition import Hypothesis,normalize
+from werewolf.seer_acquisition import Hypothesis,normalize,Acquisition
 from werewolf.seer_future_uniform import TrueScanState
 from werewolf.exact import initial_board,Rules,Strategy,replace_worlds,action_outcomes
 from werewolf.public_prior import prepare_public_prior
 from werewolf.information_set_forecast import InformationSetForecast
 
 class ActorInformationTests(unittest.TestCase):
+    def mixed_state(self):
+        return TrueScanState((
+            Hypothesis((1,2,4,8),(Acquisition(1,3,5,'white'),),F(1,4),
+                       (GuardIntent(1,4,5),),(WolfAttack(1,5),)),
+            Hypothesis((1,2,4,8),(Acquisition(1,3,4,'white'),),F(3,4),
+                       (GuardIntent(1,4,3),),(WolfAttack(1,5),))),
+            ((1,2,3,4,5),)*3,initial_rule='normal',tracked=(3,),observed_prefix=3)
+
+    def test_seer_condition_preserves_other_owners_and_public_source(self):
+        source=self.mixed_state();before=copy.deepcopy(source)
+        known=Acquisition(1,3,5,'white')
+        own=condition_actor_state(source,lambda h:known in h.acquisitions)
+        self.assertEqual(own.hypotheses,(replace(source.hypotheses[0],mass=F(1)),))
+        self.assertEqual((own.rosters,own.initial_rule,own.tracked,own.observed_prefix),
+                         (source.rosters,source.initial_rule,source.tracked,source.observed_prefix))
+        self.assertEqual(source,before)
+
+    def test_guard_evidence_merges_without_dropping_scans_or_attacks(self):
+        source=self.mixed_state();known=(GuardIntent(2,4,5),)
+        own=condition_actor_state(source,lambda h:True,guards=known)
+        for h,before in zip(own.hypotheses,sorted(source.hypotheses,key=lambda h:h.acquisitions)):
+            self.assertEqual(h.guards,before.guards+known)
+            self.assertEqual((h.roles,h.acquisitions,h.attacks,h.mass),
+                             (before.roles,before.acquisitions,before.attacks,before.mass))
+
+    def test_medium_and_villager_conditions_do_not_invent_private_histories(self):
+        source=self.mixed_state()
+        for compatible in (lambda h:bool(h.roles[1]&2),
+                           lambda h:not any(mask&16 for mask in h.roles)):
+            own=condition_actor_state(source,compatible)
+            self.assertEqual(own,replace(source,hypotheses=normalize(source.hypotheses)))
+        with self.assertRaisesRegex(ValueError,'No compatible'):
+            condition_actor_state(source,lambda h:False)
+
     def test_guard_truth_is_not_an_information_key_and_mass_is_aggregated(self):
         alive=(1,2,3,4)
         state=TrueScanState((Hypothesis((1,0,0,2),(),F(1,4),(GuardIntent(1,2,4),),(WolfAttack(1,4),)),
