@@ -95,4 +95,16 @@ class SharedGuardHistoryTests(unittest.TestCase):
             result=public_forecast(b,partial,(),self.rules,self.strategy)
             self.assertEqual(result,FuturePending('guard_hidden_attack_max_unimplemented'))
 
+    def test_observer_without_attack_knowledge_keeps_the_public_latent_ledger(self):
+        b,state=self.fixture();before=copy.deepcopy((b,state))
+        # A viewer with no attack evidence averages over the public mixture.
+        # Empty viewer input does not mean every world had an empty ledger.
+        result=information_forecast(b,state,(),self.rules,self.strategy,
+                                    observer=lambda h,s:True)
+        self.assertEqual(result,F(1,8))
+        known=information_forecast(b,state,(),self.rules,self.strategy,mask=1,
+                                   private_attacks=(WolfAttack(1,4),WolfAttack(2,4)))
+        self.assertEqual(dict(known),{2:F(1,8),3:F(3,8)})
+        self.assertEqual((b,state),before)
+
 

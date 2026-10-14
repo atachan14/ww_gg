@@ -53,8 +53,11 @@ uniform attack prior for an asymmetric information set.
 
 The first recovery removed the extra ledger deletion introduced specifically
 for wolf-deducible hunters. The next milestone below removes two more erasure
-paths; private attack replacement in `InformationSetForecast.evaluate` remains
-a separate owner-projection issue. General policy-dependent reconstruction of
+paths. The subsequent owner-projection correction also retains latent attacks
+when a viewer supplies no attack knowledge, instead of rejecting all recorded
+hypotheses or replacing their ledger with an empty tuple. Wolf views still
+require and filter their own known history; hunter and attack records share the
+same validated per-night merge operation. General policy-dependent reconstruction of
 multiple nights and arbitrary mixed casts remain outside these milestones.
 No new game rule or public UI text was added.
 

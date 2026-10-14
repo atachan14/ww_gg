@@ -8,7 +8,7 @@ from dataclasses import replace
 from fractions import Fraction as F
 from .seer_acquisition import normalize
 from .guard_effect import GuardIntent
-from .night_knowledge import WolfAttack
+from .night_knowledge import WolfAttack,merge_night_records
 from .phase_updates import acquisition_roster
 
 
@@ -86,5 +86,4 @@ def guard_matches(records,known):
 
 
 def merge_guards(records,known):
-    merged={r.night:r for r in records};merged.update({r.night:r for r in known})
-    return tuple(merged[night] for night in sorted(merged))
+    return merge_night_records(records,known)
