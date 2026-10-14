@@ -73,6 +73,19 @@ class HiddenGuardMaxSupportTests(unittest.TestCase):
         projected=observe_root_public(RootSecretBranch(physical,own,physical,own),support_board,lambda h:True)
         self.assertNotIsInstance(projected,FuturePending)
         self.assertEqual(projected.public_law.public_roles,tuple(sorted(support_board.worlds)))
+        from werewolf.guard_model import public_guard_branch_law
+        from werewolf.information_set_forecast import InformationSetForecast,Pending
+        engine=InformationSetForecast(rules,Strategy(**policy))
+        actual_board,actual_law=public_guard_branch_law(board,source,after.board,None,True,engine,policies=policies)
+        self.assertEqual(actual_board,support_board)
+        self.assertEqual(actual_law.public_roles,tuple(sorted(support_board.worlds)))
+        with self.assertRaises(Pending) as missing:
+            public_guard_branch_law(board,source,after.board,None,True,engine,policies={(1,()):policies[1,()]})
+        self.assertEqual(missing.exception.reason,'guard_public_kernel_incomplete')
+        with self.assertRaises(Pending) as unresolved:
+            public_guard_branch_law(board,source,after.board,None,True,engine)
+        self.assertEqual(unresolved.exception.reason,'guard_max_public_kernel_unresolved')
+
         # Current max must not retroactively replace an earlier random night.
         old_random={**gj,'policy':{**policy,'night':'random'}}
         historical=migrate_game({**game,'history':[game['history'][0],old_random]})
@@ -85,3 +98,27 @@ class HiddenGuardMaxSupportTests(unittest.TestCase):
         self.assertEqual(random_mix.zero_support_roles,())
         self.assertEqual(random_mix.physical_mass,F(1,5))
         self.assertEqual(random_mix.public.public_roles,tuple(sorted(random_after.board.worlds)))
+
+
+    def test_public_support_keeps_role_weights_despite_unequal_likelihoods(self):
+        from dataclasses import replace
+        from werewolf.public_observation_support import condition_generated_support
+        from werewolf.seer_acquisition import normalize
+        from werewolf.guard_effect import GuardIntent
+        from werewolf.night_knowledge import WolfAttack
+        board=replace_worlds(initial_board(3,1,0,0,1),
+            ((4,0,0,1,F(3,4)),(4,0,0,2,F(1,4))),phase='night')
+        source=TrueScanState(tuple(Hypothesis(w[:-1],(),w[-1]) for w in board.worlds),
+                            rosters=((1,2,3),(1,2,3)))
+        # A public GJ leaves both roles; 1/8 vs 3/8 likelihood is NOT a Q weight.
+        entries=(Hypothesis((4,0,0,1),(),F(3,32),(GuardIntent(1,1,2),),(WolfAttack(1,2),)),
+                 Hypothesis((4,0,0,2),(),F(3,32),(GuardIntent(1,2,1),),(WolfAttack(1,1),)))
+        child=replace(board,phase='day',day=2)
+        public,joint=condition_generated_support(child,source,entries)
+        self.assertEqual(public.worlds,child.worlds)
+        self.assertEqual(joint.public_roles,source.public_roles)
+        bayes=replace(source,hypotheses=normalize(entries))
+        self.assertEqual({w[-1] for w in bayes.public_roles},{F(1,2)})
+        self.assertNotEqual(bayes.public_roles,joint.public_roles)
+        with self.assertRaisesRegex(ValueError,'public_generated_observation_zero_support'):
+            condition_generated_support(child,source,())

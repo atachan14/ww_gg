@@ -133,38 +133,49 @@ def public_context(context):
     return context.public if isinstance(context,GuardContext) else context
 
 
-def public_guard_branch_law(board,state,child,attack,blocked,engine):
-    """Generate Q-owned night records independently of viewer interventions.
+def public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=None):
+    """Public-owned generated support; no viewer restriction chooses this law.
 
-    A corpse identifies the bite. A GJ only identifies the outcome, so its
-    public history mixes the configured legal uniform bites and guards. Role
-    weights still come from the existing public Board, not this likelihood.
+    The complete kernel covers every public wolf information set. Observations
+    remove zero-support roles only; positive likelihoods never reweight Q.
     """
+    from .actor_information import WolfInformation,wolf_information_groups
+    from .policy_choice import uniform_policy
+    from .public_observation_support import condition_generated_support
+    infos=tuple(info for info,mass,group in wolf_information_groups(state))
+    if policies is None:
+        if engine.strategy.night!='random':
+            raise engine.pending('guard_max_public_kernel_unresolved')
+        policies={(info.initial_roster,info.attacks):uniform_policy(tuple(p for p in board.alive
+            if engine.strategy.include_self_bite or not info.initial_roster&(1<<(p-1)))) for info in infos}
+    for info in infos:
+        key=(info.initial_roster,info.attacks)
+        if key not in policies:raise engine.pending('guard_public_kernel_incomplete')
+        kernel=policies[key]
+        if (not kernel or len({p for p,q in kernel})!=len(kernel) or
+            any(type(p)is not int or p not in board.alive or
+                not engine.strategy.include_self_bite and info.initial_roster&(1<<(p-1)) or
+                not isinstance(q,F) or q<=0 for p,q in kernel) or
+            sum((q for p,q in kernel),F())!=1):
+            raise ValueError('Complete legal public wolf kernel required')
     entries=[]
     for h in state.hypotheses:
         tick()
         actor=next((p for p in board.alive if h.roles[3]&(1<<(p-1))),None)
-        bites=(tuple(p for p in board.alive if engine.strategy.include_self_bite or
-                     not h.roles[0]&(1<<(p-1))) if blocked else (attack,))
         if actor is None and blocked:continue
         choices=((None,F(1)),) if actor is None else guard_choices(board,actor,engine.rules,engine.strategy.guard_position,guards=h.guards)
         if not choices:raise engine.pending('guard_no_legal_target_unselected')
-        for bite in bites:
-            if not engine.strategy.include_self_bite and h.roles[0]&(1<<(bite-1)):continue
-            for target,q in choices:
+        for bite,qa in policies[h.roles[0],h.attacks]:
+            if not blocked and bite!=attack:continue
+            for target,qg in choices:
                 tick()
                 intent=GuardIntent(board.day,actor,target) if actor is not None else None
                 success=intent is not None and guard_blocks_attack(intent,bite)
                 if success!=blocked:continue
-                entries.append(Hypothesis(h.roles,h.acquisitions,h.mass*q/F(len(bites)),
+                entries.append(Hypothesis(h.roles,h.acquisitions,h.mass*qa*qg,
                     h.guards+((intent,) if intent else ()),h.attacks+(WolfAttack(board.day,bite),)))
-    totals={}
-    for h in entries:totals[h.roles]=totals.get(h.roles,F())+h.mass
-    weights={w[:-1]:w[-1] for w in child.worlds}
-    if any(not totals.get(roles) for roles in weights):
-        raise engine.pending('guard_public_history_zero_support')
-    return replace(state,hypotheses=normalize(tuple(replace(h,mass=weights[h.roles]*h.mass/totals[h.roles])
-        for h in entries if h.roles in weights)))
+    try:return condition_generated_support(child,state,tuple(entries))
+    except ValueError as error:raise engine.pending(str(error))
 
 
 def guarded_outcomes(frame,outcomes,engine):
@@ -207,8 +218,9 @@ def guarded_outcomes(frame,outcomes,engine):
         physical_child=replace_worlds(base,public_worlds(hs),wolf_count=None,
                                      alive=child.alive,day=child.day,phase=child.phase,
                                      history=child.history,guard_prior_roster=child.guard_prior_roster)
-        st=(public_guard_branch_law(b,s,child,frame.target,blocked,engine)
-            if getattr(engine,'retain_joint_guard_history',False) or not engine.rules.allow_repeat_guard else engine.project(s,child))
+        if getattr(engine,'retain_joint_guard_history',False) or not engine.rules.allow_repeat_guard:
+            child,st=public_guard_branch_law(b,s,child,frame.target,blocked,engine)
+        else:st=engine.project(s,child)
         from .guard_history_prior import hero_deducible
         if blocked and engine.strategy.night=='max' and len(child.alive)>3 and known_guardian(b) is None and not hero_deducible(b):
             from .guard_history_prior import extend_success
