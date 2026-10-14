@@ -7,6 +7,14 @@ from werewolf.information_set_forecast import Pending
 
 
 class PolicyDependencyTests(unittest.TestCase):
+    def test_undefined_witness_refuses_without_claiming_complete_search(self):
+        def undefined(profile):raise Pending('public_generated_observation_zero_support')
+        result=certify_uniform_profiles((('a',(1,2)),),undefined,stop_on_undefined=True)
+        self.assertEqual((result.status,result.total,result.evaluated),('undefined_observations',3,1))
+        self.assertEqual(result.proof,'undefined_witness')
+        self.assertIsNone(result.selected)
+        self.assertEqual(len(result.issues),1)
+
     def test_cached_request_records_cycle_without_recomputing_or_leaking_stack(self):
         g=DependencyGraph();policy=Dependency('policy',('public',));value=Dependency('value',('candidate',))
         with g.evaluating(policy):

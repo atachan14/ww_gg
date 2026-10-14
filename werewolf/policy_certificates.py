@@ -64,11 +64,13 @@ def best_response_profile(legal,scores,*,maximize=False):
 
 
 def certify_uniform_profiles(legal,evaluate,*,maximize=False,max_profiles=4096,
-                             max_work=250000,max_seconds=20):
+                             max_work=250000,max_seconds=20,stop_on_undefined=False):
     """Evaluate every complete profile and every legal deviation exactly.
 
     evaluate(profile) must use that SAME complete public profile for all rows.
     Undefined/unsupported candidates remain separate issues, never fake scores.
+    stop_on_undefined permits early REFUSAL from a witnessed required candidate;
+    its proof metadata/evaluated count never claim the other profiles finished.
     """
     legal=tuple((info,tuple(actions)) for info,actions in legal)
     if not legal or len({i for i,a in legal})!=len(legal):raise ValueError('Unique nonempty infosets required')
@@ -97,7 +99,15 @@ def certify_uniform_profiles(legal,evaluate,*,maximize=False,max_profiles=4096,
                         'root_secret_public_history_zero_support',
                         'root_secret_physical_zero_support','root_secret_actor_belief_zero_support')
                         else 'unresolved_dependency')
-                    issues.append(ProfileIssue(profile,kind,error.reason));evaluated+=1;continue
+                    issues.append(ProfileIssue(profile,kind,error.reason));evaluated+=1
+                    if stop_on_undefined and kind=='undefined_observation':
+                        # One required but undefined candidate is enough to
+                        # refuse a numeric result. This is witness evidence,
+                        # not a claim to have classified every other profile.
+                        return ProfileSearch('undefined_observations',total,evaluated,
+                            tuple(certificates),tuple(issues),reason='undefined_candidate_witness',
+                            proof='undefined_witness')
+                    continue
                 expected,rows=best_response_profile(legal,scores,maximize=maximize)
                 if expected==profile:certificates.append(ProfileCertificate(profile,rows))
                 evaluated+=1

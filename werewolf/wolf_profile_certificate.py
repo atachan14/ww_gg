@@ -9,7 +9,7 @@ from .policy_certificates import certify_uniform_profiles
 from .policy_dependencies import Dependency,DependencyGraph
 from .information_set_forecast import InformationSetForecast,Pending
 from .root_secret_flow import RootSecretEngine
-from .policy_certificates import ProfileSearch,ProfileCertificate,best_response_profile
+from .policy_certificates import ProfileSearch,ProfileCertificate,ProfileIssue,best_response_profile
 from .calculation_budget import CalculationBudgetExceeded,calculation_budget
 
 
@@ -59,6 +59,9 @@ class WolfProfileResolver:
         node=Dependency('profile-proof',(self.rules,self.strategy,*key))
         self.dependencies.request(node)
         if key in self.cache:return self.cache[key]
+        prior=self.diagnostics.get(key)
+        if prior is not None and prior.status in ('multiple','no_admissible_profile','undefined_observations'):
+            return prior  # Reuse refusal evidence, never a kernel/choice.
         if key in self.active:
             return ProfileSearch('dependency_unfinished',0,0,reason='cyclic_profile_dependency')
         self.active.add(key)
@@ -116,6 +119,18 @@ class FixedPublicWolfProfile(RootSecretEngine):
                                       for info,policy in selected.profile}
         return self.future_kernels[key]
 
+    def terminal_day(self,b,state):
+        # Every legal execution must physically terminate in EVERY public
+        # role world. Then no scan/report/guard/attack memory or future kernel
+        # is consulted by the common action flow. Reuse is local to one exact
+        # certificate input with all of its fixed private deviation groups;
+        # only the public secret mixing can then be omitted from the key.
+        if b.phase!='day' or b.winner or state.public_roles!=tuple(sorted(b.worlds)):return False
+        from .exact import winner_for
+        return all(winner_for(len(b.alive)-1,
+            (w[0]&b.alive_mask).bit_count()-bool(w[0]&(1<<(p-1)))) is not None
+            for w in b.worlds for p in b.alive)
+
     # Certification must traverse the common action flow, not a proposal's
     # private-only shortcut or a scalar guessed from an individual role world.
     def act(self,*args,**kwargs):return InformationSetForecast.act(self,*args,**kwargs)
@@ -132,12 +147,41 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
     groups=wolf_information_groups(state)
     legal=tuple((info,tuple(p for p in board.alive if strategy.include_self_bite or
                  not info.initial_roster&(1<<(p-1)))) for info,mass,group in groups)
+    terminal_rows={}
     def evaluate_raw(profile,*,independence_only=False):
-        # Request-local isolation is intentional: no scalar certified under
-        # one provisional public profile can escape into another candidate.
-        resolver.spend_profile()
+        # Ordinary scalar caches remain isolated by candidate. Only the
+        # proved terminal dependency class below shares complete score rows.
         engine=FixedPublicWolfProfile(board,state,past,rules,strategy,profile,
                                       resolver=resolver,stop_on_policy_read=independence_only,max_work=max_work)
+        signature=None
+        # A proof of the dependency boundary, not a different payoff model:
+        # with no active public ability reports and three survivors, every
+        # death is terminal and a GJ precedes terminal executions only. Private
+        # acquisitions are still generated and retained by the common flow.
+        # Thus the
+        # fixed profile can affect candidate scores solely through the FULL
+        # public Board after GJ. Keep the complete joint law in the actual flow.
+        if (not independence_only and len(board.alive)==3 and
+                not any(board.claims[p-1]==role and strategy.disclosure_for(role)!='none'
+                        for p in board.alive for role in ('seer','medium'))):
+            from .guard_model import guard_choices,condition_guard_observation,public_guard_branch_law
+            from dataclasses import replace
+            possible=False
+            for h in state.hypotheses:
+                actor=next((a for a in board.alive if h.roles[3]&(1<<(a-1))),None)
+                if actor is not None and any(strategy.include_self_bite or not h.roles[0]&(1<<(a-1))
+                        for a,q in guard_choices(board,actor,rules,strategy.guard_position,guards=h.guards)):
+                    possible=True;break
+            if possible:
+                acquired=engine.acquire(board,state)
+                engine.night_sources[board,acquired,past]=state
+                child=replace(condition_guard_observation(board,(),rules,state=acquired),day=board.day+1,phase='day')
+                kernel=engine.public_night_policies(board,acquired,past)
+                public,joint=public_guard_branch_law(board,acquired,child,None,True,engine,policies=kernel,past=past)
+                if engine.terminal_day(public,joint):signature=('terminal-after-gj',public)
+            else:signature=('all-physical-terminal',)
+            if signature in terminal_rows:return terminal_rows[signature],engine.policy_reads
+        resolver.spend_profile()
         scores={}
         for info,mass,group in groups:
             rows=[]
@@ -146,17 +190,28 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
                 with engine.policy_dependencies.evaluating(node):
                     rows.append((target,engine.act(board,state,past,target,group,None)))
             scores[info]=tuple(rows)
+        if signature is not None:terminal_rows[signature]=scores
         return scores,engine.policy_reads
     from .policy_choice import uniform_policy
     probe=tuple((info,uniform_policy(actions)) for info,actions in legal)
     total=1
     for info,actions in legal:total*=(1<<len(actions))-1
+    if total>max_profiles:
+        # A legal deterministic candidate is refusal evidence only, never a
+        # selected policy. It can expose undefined continuations even when the
+        # full domain is too large to certify.
+        probe=tuple((info,uniform_policy(actions[:1])) for info,actions in legal)
     probed=None
     try:
-        probed=evaluate_raw(probe,independence_only=total>max_profiles)
+        probed=evaluate_raw(probe)
     except _PolicyRead:
         return ProfileSearch('budget_unfinished',total,0,reason='profile_count_limit')
-    except Pending:pass
+    except Pending as error:
+        if error.reason in ('public_generated_observation_zero_support',
+                            'root_guard_profile_undefined_observations'):
+            return ProfileSearch('undefined_observations',total,1,issues=(
+                ProfileIssue(probe,'undefined_observation',error.reason),),
+                reason='undefined_candidate_witness',proof='undefined_witness')
     except CalculationBudgetExceeded:
         return ProfileSearch('budget_unfinished',total,0,reason='profile_probe_budget')
     if probed is not None and probed[1]==0:
@@ -172,4 +227,4 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
         if profile==probe and probed is not None:return probed[0]
         return evaluate_raw(profile)[0]
     return certify_uniform_profiles(legal,evaluate,maximize=False,max_profiles=max_profiles,
-                                    max_work=max_work,max_seconds=max_seconds)
+                                    max_work=max_work,max_seconds=max_seconds,stop_on_undefined=True)
