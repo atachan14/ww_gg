@@ -36,3 +36,22 @@
 順序は現在の狼襲撃max（task-c857928fd4324a51）→代表計算（task-1123468027e5405e）。今回の再現/profileを土台に、一般同値判定・多重度維持・実装検証へ進む。大きな設計変更は原因と改善案の報告後に判断する。
 
 その次は同時行動の相互期待勝率最大化の共通設計。Strategy.seer_positionはunvisited→uniform、guard_positionはuniformのみ、本人Tableの固定位置比較は共有取得lawを変えないため、役職の自動maxとは別。占い×狼、狩人×狼、占い＋狩人＋狼を同じ情報集合・混合選択分布・設定済み継続方針で設計する。敵側が固定policyのときだけ単側maxでよく、双方maxを逐次best responseや相手の現在行動を知るoracleで代用しない。村側役職同士が秘密を共有できる協調プレイヤーと仮定しない。均衡の定義・混合/相関の許可・解法・計算量・複数解選択は設計段階で整理する。先に共通flowの未確定kernelと候補評価の依存問題を解く必要がある。計測指標の限定：1,127状態／1,033重複は、連続あり・昼夜max・7人既知狩人の3秒サンプルで、完成したvalue cache key同士を全状態置換して検出した件数。完全探索総ノードでも実装後ベンチマークでもない。代表計算実装による実行時間改善はまだ測定・実証していない。
+
+
+## 実装：完全情報の名前置換による候補・利得cache
+
+ユーザー承認で①を残件として保留し②を先行。①の79c4297のpublic_continuation_zero_supportおよび一般未知6人max未解決は変更しない。公開ゲートは①②完了後のまま。
+
+exact_renaming.pyは、全Boardフィールド、公開/本人jointの全役職mask・各仮説の確率・scan/guard/attack記録、獲得roster、tracked、observed_prefix、過去公開報告、物理Board、Rules/Strategy、現在候補target、認識済みGuardObserverをまとめて正準化する。色分けは探索候補の削減だけであり、同じ色や表示確率だけで同値と判断せず、最終的に完全なsnapshot同士を比較する。役職や公開/私有履歴の有向関係を同じbijectionで置換する。
+
+対象はInformationSetForecastの狩人を含む既存正常経路のscalar/action cacheと候補同値。狼候補の同値判定にはPUBLIC由来の本人情報集合も含め、公開候補用フックと分離した。利得scalarだけを再利用し、確率枝や配役worldの質量を統合しない。max/tieの選択、元の全行IDと人数、多重度、chance massは従来のflowで保持する。policy cache自体は名前置換しない。
+
+名前置換全数が10000を超える場合、未知のrecord/observer/configuration形の場合は正準化を省略し既存計算へ戻す。上限は人数の決め打ちではなく正準化の計算量制限。正準化中も既存calculation_budgetを確認する。現行方針項目をStrategy全体としてkeyへ含め、新しいplayer-ID付き方針を勝手に対称扱いしない。完全root秘密経路はmemoize_flows=Falseを維持し、①のPendingや支持を圧縮で隠さない。
+
+新規回帰はon/off全Forecast厳密一致（5人、昼夜random、両連続護衛ルール）、max/maxと本人狼配役の厳密一致、非対称配役重みの不統合、狼の秘密襲撃履歴・GJ記録、合法な公開占い報告の有向関係、GuardObserverと本人介入、探索上限時の未圧縮継続。旧NoRepeat maxの未対応Pendingも保持する。既存公開候補フックの互換性を維持。
+
+最初の標準7人測定：off20.000秒でPending、value展開6221/action展開15813。on5.680秒で全Forecast完了・村11/45、value展開400/action展開907、policy cache268。最終ソースの再測定（全回帰と並行中）：off19.994秒でPending、value展開5787/action展開14795、on6.422秒で完了・村11/45、value展開400/action展開907。正準key問い合わせ4090・raw key再利用1282・支持済raw key2808。CPU条件の差を速度倍率の厳密保証には使わない。
+
+非圧縮120秒では全Forecastは未完了。長い非圧縮参照ではP1候補2/15、P2/P3/P4/P5候補各11/45を独立に確認（各未知側候補約113〜117秒）したところで中断。7人の完全on/off Forecast一致を達成したとは記載しない。標準予算切れ→圧縮完了の効果、完了した非圧縮候補の一致、全Forecastの一致を別に記録する。長いoffの再実行は合理的な資源範囲で抑える。検証ログはtask-6/symmetry-seven-comparison.json、symmetry-seven-off-complete.log。
+
+Windows更新前チェックポイント：全562テスト183.422秒成功、再開後の重点12テスト5.944秒成功。最新指示でpushは取り消され、remoteへの変更はゼロ。ブラウザー確認と18801への新コード反映、7人の非圧縮全Forecast比較は未完。①②の公開ゲートは維持して待機する。

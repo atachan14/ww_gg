@@ -43,7 +43,7 @@ def exchangeable_value(n,w,phase,strategy):
 
 class InformationSetForecast:
     def __init__(self, rules, strategy, *, max_work=250000, trace=None, memoize_flows=True,
-                 retire_uninformative_scans=True):
+                 retire_uninformative_scans=True, exact_renaming=True):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
         self.values={};self.scores={};self.policies={};self.acquired={}
         self.symmetries={}
@@ -52,6 +52,10 @@ class InformationSetForecast:
         self.memoize_flows=memoize_flows
         self.retire_uninformative_scans=retire_uninformative_scans
         self.mornings={};self.publication_values={}
+        self.exact_renaming=exact_renaming
+        self.exact_keys={}
+        self.expansions={"actions":0,"values":0}
+        self.renaming_stats={"requests":0,"key_hits":0,"supported":0}
         self.day_bounds={}
         self.joint_descriptors={}
         self.joint_keys={}
@@ -125,7 +129,29 @@ class InformationSetForecast:
                                                           position=self.strategy.seer_position))
         return self.acquired[key]
 
+    def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
+        if not self.exact_renaming or not self.memoize_flows or not b.initial_hunter_count:return None
+        source=(self.rules,self.strategy,b,s,past,private,observer,target,physical)
+        stats=self.renaming_stats;stats['requests']+=1
+        if source in self.exact_keys:
+            stats['key_hits']+=1;return self.exact_keys[source]
+        from .exact_renaming import canonical_key
+        key=canonical_key(b,s,past,private,observer,self.rules,self.strategy,target=target,physical=physical)
+        if key is not None:stats['supported']+=1
+        self.exact_keys[source]=key
+        return key
+
+    def full_target_equivalence(self,b,s,x,y,past,private):
+        first=self.full_renamed_key(b,s,past,private,None,target=x)
+        return first is not None and first==self.full_renamed_key(b,s,past,private,None,target=y)
+
+    def actor_equivalent_targets(self,b,s,x,y,past,private):
+        if b.initial_hunter_count:return self.full_target_equivalence(b,s,x,y,past,private)
+        return self.equivalent_targets(b,s,x,y,past)
+
     def equivalent_targets(self,b,s,x,y,past=()):
+        if b.initial_hunter_count:return self.full_target_equivalence(b,s,x,y,past,s)
+
         # Exact permutation test on the PUBLIC joint law, including own scan
         # histories. Both targets are currently alive, hence shared all past
         # rosters. A published scan on either target breaks this shortcut.
@@ -224,6 +250,7 @@ class InformationSetForecast:
             # Public rankings call this with their own public/actor law. Viewer
             # payoffs include BOTH the private law and observer identity.
             key=('joint-action',b,s,past,target,self.value_law(private),observer)
+            key=self.full_renamed_key(b,s,past,private,observer,target=target,physical=physical) or key
             return self.cached_flow(self.action_values,key,
                                     lambda:self.uncached_act(b,s,past,target,private,observer,physical=physical),'action')
         return self.uncached_act(b,s,past,target,private,observer,physical=physical)
@@ -246,6 +273,7 @@ class InformationSetForecast:
         private_board=physical_board(b,private,physical)
         if target not in legal_targets(private_board,self.rules,self.strategy):
             raise Pending('information_set_internal_illegal_action')
+        self.expansions["actions"]+=1
         value=action_flow(b,ActionInputs(s,past,private,observer,private_board),target,self.action_policy)
         if action_key is not None:self.action_values[action_key]=value
         return value
@@ -269,7 +297,7 @@ class InformationSetForecast:
                 computed=[];representatives=[]
                 for p in targets:
                     prior=next((v for t,v in representatives
-                                if bool(mask&(1<<(p-1)))==bool(mask&(1<<(t-1))) and self.equivalent_targets(b,s,p,t,past)),None)
+                                if bool(mask&(1<<(p-1)))==bool(mask&(1<<(t-1))) and self.actor_equivalent_targets(b,s,p,t,past,group)),None)
                     value=self.act(b,s,past,p,group,None) if prior is None else prior
                     if prior is None:representatives.append((p,value))
                     computed.append((p,value))
@@ -323,7 +351,9 @@ class InformationSetForecast:
         b,s,past,private,observer=self.continuation_context(b,s,past,private,observer)
         physical=physical_board(b,private,physical)
         key=(b,s,past,self.value_law(private),observer)
-        if observer is None:
+        full=self.full_renamed_key(b,s,past,private,observer,physical=physical)
+        if full is not None:key=full
+        if observer is None and full is None:
             from .medium_value_key import public_descriptor,private_value_key
             source=(b,s)
             if source not in self.reduced_descriptors:
@@ -332,6 +362,7 @@ class InformationSetForecast:
             if reduced is None:reduced=private_value_key(self.reduced_descriptors[source],private)
             if reduced is not None:key=reduced
         if key in self.values:return self.values[key]
+        self.expansions["values"]+=1
         tick(len(private.hypotheses))
         if b.winner is not None:return F(b.winner=='village')
         if self.exchangeable(b):
