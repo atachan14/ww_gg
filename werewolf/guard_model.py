@@ -6,6 +6,7 @@ base cases are supported for hidden guardians; larger max policies stay explicit
 from dataclasses import dataclass, replace
 from fractions import Fraction as F
 from .action_flow import FlowOutcome
+from .evaluation_branch import require_public_observation
 from .guard_night import guard_targets
 from .guard_effect import GuardIntent,guard_blocks_attack
 from .exact import replace_worlds,winner_for
@@ -215,7 +216,8 @@ def guarded_outcomes(frame,outcomes,engine):
             if engine.strategy.night=='max' and len(b.alive)==4 and known_guardian(b) is None:
                 success=replace(success,guard_prior_roster=(b.day,b.alive))
             child=success;template=success
-        else:child=public[winner];template=templates[winner]
+        else:child=public.get(winner);template=templates[winner]
+        child=require_public_observation(child,template,engine.pending)
         own=replace(private,hypotheses=hs)
         base=physical if blocked else template
         physical_child=replace_worlds(base,public_worlds(hs),wolf_count=None,

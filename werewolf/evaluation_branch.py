@@ -23,6 +23,23 @@ def physical_board(public,law,physical=None):
     return replace_worlds(physical,law.public_roles,**updates)
 
 
+def require_public_observation(public,physical,pending):
+    """Actual termination/continuation is an observation, not a Q prediction.
+
+    A physical terminal payoff is resolved before continuation projection.
+    For a continuing branch, absence of a matching public outcome means that
+    the fixed public model gives observed play zero support. Never reuse a
+    different terminal branch or seed beliefs from the physical role law.
+    """
+    if public is None:
+        reason=('public_continuation_zero_support' if physical.winner is None
+                else 'public_terminal_observation_zero_support')
+        raise pending(reason)
+    if public.winner!=physical.winner:
+        raise ValueError('Public observation does not match physical termination')
+    return public
+
+
 @dataclass(frozen=True)
 class ActionInputs:
     public_state: object

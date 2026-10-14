@@ -20,7 +20,7 @@ from .night_acquisition import acquire_laws
 from .information_weights import observer_report_weights
 from .morning_flow import report_flow, continuation_value
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
-from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
+from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board,require_public_observation
 from .actor_information import WolfInformation,wolf_information_groups,condition_actor_state
 from .policy_choice import optimal_targets,uniform_policy
 
@@ -399,6 +399,7 @@ class InformationSetActionPolicy:
     def project(self,b,payload,outcome,target):
         from .guard_model import public_context,GuardContext
         s,past,private,observer,physical=payload;e=self.engine;child=public_context(outcome.context)
+        child=require_public_observation(child,outcome.board,e.pending)
         st=outcome.context.public_state if isinstance(outcome.context,GuardContext) and outcome.context.public_state is not None else e.project(s,child);own=outcome.context.private if isinstance(outcome.context,GuardContext) else e.project(private,outcome.board)
         if e.trace is not None and b.phase=='night':
             e.trace.setdefault('public_updates',[]).append({'history':b.history,'target':target,
