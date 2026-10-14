@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block shell_class %}help-page-shell{% endblock %}
+{% block body_attributes %}data-help-page="{{ help_page }}"{% endblock %}
+{% block extra_head %}
+{% block help_styles %}{% endblock %}
+<link rel="stylesheet" href="{{ url_for('help_five_asset',name='help-shell.css') }}">
+<script src="{{ url_for('help_five_asset',name='help-shell.js') }}" defer></script>
+{% block help_scripts %}{% endblock %}
+{% endblock %}
+{% block content %}<div class="help-layout">{% include 'help_bookshelf.html' %}<main class="help-article" data-screen="{{ help_page }}">{% block help_content %}{% endblock %}</main></div>{% endblock %}
+{% block site_footer %}{% endblock %}

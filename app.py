@@ -414,12 +414,19 @@ def create_app(test_config=None, *, deployment=False):
     @app.get('/help/specs')
     def help_specs():return render_template('help_specs.html')
 
+    @app.get('/help/examples')
+    def help_examples():return render_template('help_examples.html')
+
+    @app.get('/help/medium/')
+    def help_medium():return render_template('help_medium.html')
+
     @app.get('/help/five/')
-    def help_five():return send_from_directory(os.path.join(app.root_path,'help_assets'),'tree-prototype.html')
+    def help_five():return render_template('help_five.html')
 
     @app.get('/help/five/<name>')
     def help_five_asset(name):
-        if name not in ('tree-prototype.css','tree-prototype.js'):abort(404)
+        if name not in ('tree-prototype.css','tree-prototype.js','help-shell.css','help-shell.js',
+                        'help-header-integration.css','medium-co.css','medium-co.js'):abort(404)
         return send_from_directory(os.path.join(app.root_path,'help_assets'),name)
 
     @app.get("/")

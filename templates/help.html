@@ -1,2 +1,2 @@
-{% extends 'base.html' %}{% block title %}Help{% endblock %}{% block content %}
-<main data-screen="help"><section class="panel"><h1>Help</h1><nav class="help-links"><a class="secondary" href="{{ url_for('help_five') }}">5 人村の例</a><a class="secondary" href="{{ url_for('help_specs') }}">仕様の補足</a><a class="secondary" href="{{ url_for('help_program') }}">プログラム詳細（仮）</a></nav><a href="{{ url_for('top') }}">TOP</a></section></main>{% endblock %}{% block site_footer %}{% endblock %}
+{% extends 'help_base.html' %}{% set help_page='intro' %}{% block title %}はじめに{% endblock %}
+{% block help_content %}<section class="help-panel"><h1>はじめに</h1><p>現在の計算例と、実装にある補足記事を左の本棚から選べます。</p><div class="article-links"><a href="{{ url_for('help_five') }}">サンプル2：市民4狼1での計算例</a><a href="{{ url_for('help_medium') }}">サンプル3：霊能を入れた計算例</a><a href="{{ url_for('help_specs') }}">仕様の補足</a><a href="{{ url_for('help_program',page='index') }}">プログラム詳細</a></div></section>{% endblock %}

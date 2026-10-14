@@ -1,5 +1,5 @@
-{% extends 'base.html' %}{% block title %}仕様の補足{% endblock %}{% block content %}
-<main data-screen="help-specs"><section class="panel help-specs"><h1>仕様の補足</h1><a href="{{ url_for('help_route') }}">Help</a>
+{% extends 'help_base.html' %}{% block title %}仕様の補足{% endblock %}{% set help_page='specs' %}{% block help_content %}
+<section class="panel help-specs"><h1>仕様の補足</h1><a href="{{ url_for('help_route') }}">Help</a>
 <h2>配役と公開情報</h2><p>1〜9人、各役職は非負の人数を指定します。狼なし・初期の狼過半数は終局として表示します。誰が本当の役職かを選ばず、公開情報と整合する役職配置の分布を使います。</p>
 <p>手動の占い報告は真結果との整合性で条件付け、偽報告の入力尤度は一定です。既存の事前重みを保ち、成立しない配置だけを除きます。初日占いはGameルールの「あり／ランダム白／なし」に従います。ランダム白の初日黒は真として不成立です。手動入力には対象生成確率を掛けません。</p>
 <p>COグループ表は生存者を現在のCO別に集計します。死者の役職候補は内部の分布に残ります。各行は共通の役職配置の内訳なので、グループ間の確率を独立に掛け合わせることはできません。</p>
@@ -20,4 +20,4 @@
 <p>夜のTableは襲撃前の公開情報に基づく比較を表示します。選択した死体の情報を反映した盤面へは、次の昼に進む際に移行します。未入力と「死体なし」は別の状態です。現在は死体1人の進行に対応し、死体なし・複数死体は記録のみ可能です。未対応の進行には勝率を割り当てません。</p>
 <p>自噛み不許可では死体が狼である候補を全体で除外・再正規化します。狼の選択方針から報告の尤度は追加しません。自噛み許可では死体だけで狼を除外しません。護衛成功・特殊死因の推定は未対応です。</p>
 <p>報告の編集・削除時は後続Boardを作り直します。処刑で決着した枝を含む累積勝率の扱いは従来通りです。</p></section>
-</section></main>{% endblock %}{% block site_footer %}{% endblock %}
+</section>{% endblock %}{% block site_footer %}{% endblock %}

@@ -13,13 +13,12 @@
   <script src="{{ url_for('static',filename='board_private_row.js') }}" defer></script>
   <script src="{{ url_for('static',filename='board_viewpoint.js') }}" defer></script>
   <script src="{{ url_for('static',filename='board_private_table.js') }}" defer></script>
+  <link rel="stylesheet" href="{{ url_for('help_five_asset',name='help-header-integration.css') }}">
+  {% block extra_head %}{% endblock %}
 </head>
-<body>
-  <div class="page-shell">
-    <header class="site-head">
-      <a class="brand" href="{{ url_for('top') }}">ww_gg<span>人狼の期待勝率</span></a>
-      <span class="badge">v0.4</span>
-    </header>
+<body {% block body_attributes %}{% endblock %}>
+  <div class="{% block shell_class %}page-shell{% endblock %}">
+    {% include 'site_header.html' %}
     {% block content %}{% endblock %}
     {% block site_footer %}<footer class="site-foot">公開情報から、処刑と襲撃の候補ごとに最終勝率を確認する。</footer>{% endblock %}
   </div>

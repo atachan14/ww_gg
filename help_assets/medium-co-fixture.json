@@ -1,0 +1,308 @@
+{
+  "0": {
+    "filled": {
+      "count": 12,
+      "worlds": [
+        {
+          "wolf": "A",
+          "mediums": "BC"
+        },
+        {
+          "wolf": "A",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "A",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "D",
+          "mediums": "BC"
+        }
+      ]
+    },
+    "counter": {
+      "count": 12,
+      "worlds": [
+        {
+          "wolf": "A",
+          "mediums": "BC"
+        },
+        {
+          "wolf": "A",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "A",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "D",
+          "mediums": "BC"
+        }
+      ]
+    },
+    "none": {
+      "count": 12,
+      "worlds": [
+        {
+          "wolf": "A",
+          "mediums": "BC"
+        },
+        {
+          "wolf": "A",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "A",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "D",
+          "mediums": "BC"
+        }
+      ]
+    }
+  },
+  "1": {
+    "filled": {
+      "count": 9,
+      "worlds": [
+        {
+          "wolf": "A",
+          "mediums": "BC"
+        },
+        {
+          "wolf": "A",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "A",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AC"
+        }
+      ]
+    },
+    "counter": {
+      "count": 0,
+      "worlds": []
+    },
+    "none": {
+      "count": 9,
+      "worlds": [
+        {
+          "wolf": "A",
+          "mediums": "BC"
+        },
+        {
+          "wolf": "A",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "A",
+          "mediums": "CD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AC"
+        }
+      ]
+    }
+  },
+  "2": {
+    "filled": {
+      "count": 2,
+      "worlds": [
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        }
+      ]
+    },
+    "counter": {
+      "count": 2,
+      "worlds": [
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        }
+      ]
+    },
+    "none": {
+      "count": 6,
+      "worlds": [
+        {
+          "wolf": "A",
+          "mediums": "BC"
+        },
+        {
+          "wolf": "A",
+          "mediums": "BD"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AC"
+        },
+        {
+          "wolf": "B",
+          "mediums": "AD"
+        },
+        {
+          "wolf": "C",
+          "mediums": "AB"
+        },
+        {
+          "wolf": "D",
+          "mediums": "AB"
+        }
+      ]
+    }
+  }
+}
