@@ -127,3 +127,5 @@ P1狩人CO・CO条件none・P4処刑の等重み例では、狼P1はH2/H3/死亡
 実際に入力された過去max夜はその時のkernelでphysical history massを生成し、公開はゼロrole除去＋既存Q再正規化。過去random・現在maxの夜はrandom kernelのまま4候補を保持する。既存daymax経路を上書きせず、新rootではdayrandomの範囲。初期5/6人の未知配役で候補値が未確定な場合はPendingを保ち、一般対応完了としない。
 
 通常routeでも開始→P4処刑→未知狼P1本人表示→GJ入力→再入場→戻るを検証。NoRepeat入力の新root対応を許可し、候補利得が未確定な盤面の進行は拒否して保存Gameを保持する。旧daymax/defaultmaxを均等へ置換しない。全対応までの残件は未知配役の後続判断を持つ同一公開kernelの解決。
+
+最小製品経路の最終検証：全554テスト成功（187.357秒）。既存独立Edgeを再利用し、通常設定4人・昼random/夜maxで連続なし/ありの両方を実操作確認。初日7/24、P4処刑後の夜1/18。狼P1本人TableでP2/P3の最終村利得各1/18・狼17/18、H2/H3/死亡H4各1/3を実表示。戻る後の7/24と夜max保持も確認。証拠task-6/root-max-no-repeat-owner.json、root-max-repeat-owner.jsonおよびPNG。専用18801は所有元確認後にPID30880へ反映、HTTP200。一般未知6人の後続判断はPendingのままで①全体完了とはしない。公開は①②の完了後のみ、現在未実施。
