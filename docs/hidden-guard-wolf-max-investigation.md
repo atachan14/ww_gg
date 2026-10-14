@@ -159,3 +159,11 @@ fixed_actor_valueの既存呼出しは既知役職cutのまま。未知役職の
 6人P1狩人CO・hunter ClaimPolicy none・D1P6処刑後：両護衛ルールの公開村1199/4320、P1狼本人の合法P2〜P5各719/2400。PUBLICの行P1は1/4、他行はrepeat1151/3840、no-repeat383/1280。ActorP1の選択は4候補各1/4。過去maxGJ→D2P3処刑後は4世界で村23/72。過去randomGJ→同じ死亡では7世界を保持し、現在maxの村はrepeat79/252、no-repeat13/42。本人が過去P2を襲撃してGJならH2を除外し、死亡H3と生存H4/H5の支持を残す。
 
 回帰は仮候補値を故意に変えた場合の拒否/cache除去、Pをactor Qに使う試みの拒否、両護衛・max/random保存歴・複数夜GJ/死亡・戻り保存を含む。最終全565テスト224.288秒成功。ブラウザー6人確認と18801のこの修正への再起動は次の検証であり、現時点では未実施。public reportingを伴う新max、guardian自身max、同時複数maxの一般化は今回追加しない。
+
+### Browser checkpoint (2026-10-14 20:32 UTC)
+
+Dedicated localhost:18801 was restarted after verifying its owner, using code d89cf200cdb330f1c2dd6be0deb286d6f6d8427a (PID 23428). Ordinary browser controls exercised C4/H1/W1, equal public role weights, hunter CO policy disabled, P1 hunter CO, day random/night max, and D1 execution of P6.
+
+For both repeat-guard rules the public village value was exactly 1199/4320. Wolf P1's legal targets P2..P5 each showed 719/2400 (wolf 1681/2400); self and dead P6 remained blank. Public restoration recovered P1=1/4 and P2..P5=1151/3840 with repeat guards, 383/1280 without. Repeat-guard public reload retained every exact candidate fraction. Back returned to Day1. No-repeat reload and back/re-execution reproduced the entire public fraction snapshot exactly, retaining the configured max policy. Evidence: task-6/actor-browser-*.json, including actor-browser-consistency.json (reloadEqual=true, replayEqual=true).
+
+All 565 backend tests passed before this documentation-only checkpoint (224.288 seconds; actor-common-proof-full-final.log). The earlier seven-player symmetry on/off exact comparison and browser checkpoint remain complete. General unverified max closures, report policies and mutual max remain explicitly Pending as documented in HELP; this checkpoint does not expand that scope. No push or deployment was performed. Dashboard task-c857928fd4324a51 update remains held following automatic approval rejection for mismatch with the originally authorized task ID; parent is obtaining explicit authorization.
