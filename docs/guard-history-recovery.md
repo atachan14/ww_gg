@@ -112,3 +112,39 @@ choice before implementation:
 Dropping or downweighting the hunter-2 world using the chosen max policy would
 add behavioral inference and contradict the agreed Model A rule. It is not
 implemented as a fallback.
+
+## Supported policy mixture interface
+
+`enumerate_guard_history_mixture` receives an explicit, already selected kernel
+keyed by initial wolf roster and its attack history. It cannot select a bite
+using the true hunter, a current guard intent, or private scan acquisitions.
+It enumerates that kernel against uniform nonself guard choices and matches
+the public observation. Existing scan acquisitions and both owner ledgers are
+retained, with the original night roster validated.
+
+The immutable result exposes two different measures:
+
+- `physical`: the normalized observed physical world/history law and its
+  branch mass; `wolf_view` and `hunter_view` project this owner measure.
+- `public`: each world's conditional history law weighted by the externally
+  supplied public Board role prior. No selection likelihood updates that prior.
+- `role_support` and `zero_support_roles`: exact support for every requested
+  public role world. Any zero support makes the complete public mixture
+  `guard_public_history_zero_support`, retaining the requested prior unchanged.
+  Physically feasible owner branches remain inspectable as a separate measure.
+
+For wolf 1, hunter priors (1/2,1/3,1/6) at (2,3,4), and supplied bite weights
+(1/2,1/3,1/6) at the same targets, every world has success support. Its success
+likelihoods are (1/6,2/9,5/18), and physical success mass is 11/54. Public role
+mass remains (1/2,1/3,1/6); physical conditional role mass is (9/22,4/11,5/22).
+After the wolf's known attack on 2, its actual owner law is hunter 3:4 = 2:1.
+Incorrectly projecting the public world-renormalized measure would give 5:2.
+This is why the interface projects owners from the separate physical measure.
+
+The existing, proven first informative max-tie `extend_success` now supplies
+its uniform information-set kernel to this shared enumerator. Its scope and
+tie proof are unchanged. No optimal-policy solver or zero-support completion
+has been added. In particular, the unapproved legal-attack-uniform completion
+proposal is not implemented in either measure. Any future public-only
+counterfactual completion must not be treated as an actually selected owner
+action or used to replace this physical measure.

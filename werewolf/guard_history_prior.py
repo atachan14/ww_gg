@@ -4,12 +4,8 @@ The first informative bite is a uniform max tie by permutation symmetry.
 Normalize its histories within each role world: Model A role priors stay owned
 by the public Board. No actual viewer history chooses this mixture.
 """
-from dataclasses import replace
 from fractions import Fraction as F
-from .seer_acquisition import normalize
-from .guard_effect import GuardIntent
-from .night_knowledge import WolfAttack,merge_night_records
-from .phase_updates import acquisition_roster
+from .night_knowledge import merge_night_records
 
 
 def hero_deducible(board):
@@ -62,17 +58,19 @@ def public_history_ready(board,state):
 
 
 def extend_success(state,night,alive):
-    entries=[]
+    # This existing entry point is restricted by its caller's first-night max
+    # tie proof. It supplies that proven kernel; it is not a zero-support fill.
+    from .guard_history_mixture import enumerate_guard_history_mixture
+    from .seer_future_uniform import FuturePending
+    policies={}
     for h in state.hypotheses:
-        actor=next((p for p in alive if h.roles[3]&(1<<(p-1))),None)
-        targets=tuple(p for p in alive if not (h.roles[0]|h.roles[3])&(1<<(p-1)))
-        if actor is None or not targets:
-            raise ValueError('Public role world has zero compatible private history support')
-        for target in targets:
-            entries.append(replace(h,mass=h.mass/F(len(targets)),
-                                   guards=h.guards+(GuardIntent(night,actor,target),),
-                                   attacks=h.attacks+(WolfAttack(night,target),)))
-    return replace(state,hypotheses=normalize(entries))
+        targets=tuple(p for p in alive if not h.roles[0]&(1<<(p-1)))
+        if not targets:raise ValueError('Public role world has zero compatible private history support')
+        policies[(h.roles[0],h.attacks)]=tuple((p,F(1,len(targets))) for p in targets)
+    mixture=enumerate_guard_history_mixture(state,state.public_roles,night,alive,policies)
+    if isinstance(mixture.public,FuturePending):
+        raise ValueError('Public role world has zero compatible private history support')
+    return mixture.public
 
 
 def matches(records,known):
