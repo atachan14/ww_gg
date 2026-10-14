@@ -4,7 +4,7 @@ from fractions import Fraction as F
 from unittest.mock import patch
 from werewolf.exact import Rules,Strategy
 from werewolf.seer_manual import migrate_game,replay
-from werewolf.seer_acquisition import from_board
+from werewolf.seer_acquisition import from_board,normalize
 from werewolf.seer_future_uniform import TrueScanState
 from werewolf.actor_information import WolfInformation
 from werewolf.information_set_forecast import InformationSetForecast
@@ -50,3 +50,10 @@ class FixedActorContinuationTests(unittest.TestCase):
             fixed_actor_value(b,private,e,info=WolfInformation(2),target=3)
         e.strategy=replace(e.strategy,day='max')
         self.assertIsNone(fixed_actor_value(b,s,e,info=WolfInformation(2),target=3))
+
+    def test_unknown_role_payoff_weights_cannot_be_used_as_actor_belief(self):
+        b,s,e=self.fixture(6)
+        own=WolfInformation(1).condition_public(s)
+        altered=replace(own,hypotheses=normalize(tuple(replace(h,mass=F(1,2) if i==0 else F(1,8)) for i,h in enumerate(own.hypotheses))))
+        self.assertIsNone(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2,measure=altered,allow_actor_only=True))
+        self.assertIsNone(fixed_actor_value(b,s,e,info=WolfInformation(1),target=2))

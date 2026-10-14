@@ -91,12 +91,63 @@ class RootGuardMaxTests(unittest.TestCase):
         view=evaluate_private_table(p.board,'wolf',[2],[],rules,Strategy(**g['policy']),game_state=g)
         self.assertEqual(view['players'][2]['final']['village'],'3/10')
 
-    def test_unresolved_six_player_unknown_actor_stays_explicit(self):
-        g=self.game(players=6);rules,p=replay(g)
-        value=evaluate_public_game(g,p.board,rules,Strategy(**g['policy']))
-        self.assertIsInstance(value,FuturePending)
-        self.assertEqual(value.reason,'root_guard_max_unknown_continuation')
-        self.assertEqual(g['policy']['night'],'max')
+    def test_six_player_unknown_actor_requires_complete_common_flow_certificate(self):
+        for repeat,row in ((True,F(1151,3840)),(False,F(383,1280))):
+            g=self.game(repeat,players=6);rules,p=replay(g);s=Strategy(**g['policy'])
+            branch=prepare_root_entry(g,p.board,rules,s)
+            e=RootSecretEngine(rules,s)
+            kernel=e.public_night_policies(branch.public,branch.public_law)
+            self.assertEqual(kernel[1,()],tuple((i,F(1,4)) for i in range(2,6)))
+            self.assertIn((branch.public,branch.public_law,()),e.verified_actor_kernels)
+            self.assertIsNone(e.verifying_actor_mask)
+            value=evaluate_public_game(g,p.board,rules,s)
+            self.assertNotIsInstance(value,FuturePending)
+            self.assertEqual(value.village_win,F(1199,4320))
+            self.assertEqual(dict(value.action_values)[2],row)
+            view=evaluate_private_table(p.board,'wolf',[1],[],rules,s,game_state=g)
+            self.assertTrue(all(r['final']['village']=='719/2400' for r in view['players'][1:5]))
+            self.assertEqual(g['policy']['night'],'max')
+
+    def test_unknown_actor_proposal_divergence_is_never_returned_or_cached(self):
+        from unittest.mock import patch
+        import werewolf.fixed_actor_continuation as continuation
+        from werewolf.information_set_forecast import Pending
+        g=self.game(False,players=6);rules,p=replay(g);s=Strategy(**g['policy'])
+        branch=prepare_root_entry(g,p.board,rules,s);e=RootSecretEngine(rules,s)
+        original=continuation.fixed_actor_value
+        def changed(*args,**kw):
+            value=original(*args,**kw)
+            return value+F(1,100000) if value is not None and kw.get('allow_actor_only') else value
+        with patch.object(continuation,'fixed_actor_value',side_effect=changed):
+            with self.assertRaises(Pending) as stopped:e.public_night_policies(branch.public,branch.public_law)
+        self.assertEqual(stopped.exception.reason,'root_actor_continuation_belief_divergence')
+        self.assertNotIn((branch.public,branch.public_law,()),e.night_kernels)
+        self.assertNotIn((branch.public,branch.public_law,()),e.verified_actor_kernels)
+        self.assertIsNone(e.verifying_actor_mask)
+
+
+    def test_saved_max_and_uniform_gj_two_night_actor_support(self):
+        from werewolf.night_knowledge import WolfAttack
+        expected={(True,'max'):F(23,72),(False,'max'):F(23,72),
+                  (True,'random'):F(79,252),(False,'random'):F(13,42)}
+        for repeat in (True,False):
+            for saved in ('max','random'):
+                g=self.game(repeat,players=6)
+                gj={'target':None,'claims':g['claims'],'claim_policy':g['claim_policy'],
+                    'policy':{**g['policy'],'night':saved},'observation':'night-deaths-v1','deaths':[]}
+                day={'target':3,'claims':g['claims'],'claim_policy':g['claim_policy'],'policy':g['policy']}
+                g=migrate_game({**g,'history':[g['history'][0],gj,day]})
+                r,p=replay(g);branch=prepare_root_entry(g,p.board,r,Strategy(**g['policy']))
+                self.assertNotIsInstance(branch,FuturePending)
+                self.assertEqual(len(p.board.worlds),4 if saved=='max' else 7)
+                actor=WolfInformation(1,(WolfAttack(1,2),)).condition_public(branch.public_law)
+                self.assertEqual({h.roles[3] for h in actor.hypotheses},{4,8,16})
+                self.assertTrue(all(h.guards[0].target==2 for h in actor.hypotheses))
+                value=evaluate_public_game(g,p.board,r,Strategy(**g['policy']),max_work=1000000,max_seconds=30)
+                self.assertNotIsInstance(value,FuturePending)
+                self.assertEqual(value.village_win,expected[repeat,saved])
+                self.assertEqual(g['history'][1]['policy']['night'],saved)
+                self.assertEqual(g['policy']['night'],'max')
 
 
 class RootGuardMaxRouteTests(unittest.TestCase):

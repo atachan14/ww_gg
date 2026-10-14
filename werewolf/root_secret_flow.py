@@ -121,6 +121,16 @@ class RootSecretEngine(InformationSetForecast):
         super().__init__(rules,strategy,retire_uninformative_scans=False,memoize_flows=False,**kwargs)
         self.action_policy=RootSecretPolicy(self)
         self.night_sources={};self.night_kernels={}
+        self.verified_actor_kernels=set();self.verifying_actor_mask=None
+        self.actor_candidate_keys={};self.actor_proposals={};self.actor_certificates={}
+
+    def actor_candidate_key(self,b,state,past,group,target):
+        source=(self.rules,self.strategy,b,state,past,group,target)
+        if source not in self.actor_candidate_keys:
+            from .exact_renaming import canonical_key
+            self.actor_candidate_keys[source]=canonical_key(b,state,past,group,None,
+                self.rules,self.strategy,target=target)
+        return self.actor_candidate_keys[source]
 
     def public_night_policies(self,b,state,past=()):
         from .actor_information import wolf_information_groups
@@ -131,18 +141,50 @@ class RootSecretEngine(InformationSetForecast):
             raise Pending('root_guard_max_public_prior_mismatch')
         key=(b,before,past)
         if key not in self.night_kernels:
-            result={}
+            result={};verify=[]
             for info,mass,group in wolf_information_groups(before):
                 targets=tuple(p for p in b.alive if self.strategy.include_self_bite or
                               not info.initial_roster&(1<<(p-1)))
                 if self.strategy.night=='random':chosen=targets
                 else:
-                    scores=tuple((p,fixed_actor_value(b,before,self,info=info,target=p)) for p in targets)
+                    scores=[]
+                    for p in targets:
+                        candidate=self.actor_candidate_key(b,before,past,group,p)
+                        if candidate is not None and candidate in self.actor_proposals:
+                            value=self.actor_proposals[candidate]
+                        else:
+                            value=fixed_actor_value(b,before,self,info=info,target=p,allow_actor_only=True)
+                            if candidate is not None and value is not None:self.actor_proposals[candidate]=value
+                        scores.append((p,value))
+                    scores=tuple(scores)
                     if any(v is None for p,v in scores):
                         raise Pending('root_guard_max_unknown_continuation')
                     chosen=optimal_targets(scores,maximize=False)
+                    if len({h.roles for h in group.hypotheses})>1:verify.append((info,group,scores))
                 result[info.initial_roster,info.attacks]=uniform_policy(chosen)
+            # A full proposal is visible only inside its common-flow proof.
+            # No unknown-role actor-only value escapes unless EVERY candidate
+            # agrees with the fixed PUBLIC-kernel Model A continuation.
             self.night_kernels[key]=result
+            try:
+                certified=[]
+                for info,group,scores in verify:
+                    previous=self.verifying_actor_mask;self.verifying_actor_mask=info.initial_roster
+                    try:
+                        checked=[]
+                        for p,v in scores:
+                            candidate=self.actor_candidate_key(b,before,past,group,p)
+                            value=(self.actor_certificates[candidate] if candidate is not None and
+                                candidate in self.actor_certificates else self.act(b,before,past,p,group,None))
+                            checked.append((p,value));certified.append((candidate,value))
+                        checked=tuple(checked)
+                    finally:self.verifying_actor_mask=previous
+                    if checked!=scores:raise Pending('root_actor_continuation_belief_divergence')
+                self.verified_actor_kernels.add(key)
+                for candidate,value in certified:
+                    if candidate is not None:self.actor_certificates[candidate]=value
+            except BaseException:
+                self.night_kernels.pop(key,None);raise
         return self.night_kernels[key]
 
     def wolf_policy(self,b,s,past,mask,history=()):
@@ -164,28 +206,59 @@ class RootSecretEngine(InformationSetForecast):
             raise Pending('information_set_internal_illegal_action')
         if b.phase=='night' and self.strategy.night=='max' and observer is None:
             from .actor_information import wolf_information_groups
+            if self.verifying_actor_mask is not None:
+                groups=wolf_information_groups(private)
+                # This law starts as the PUBLIC-derived actor infoset in the
+                # proof above, then only its own actions/public outcomes split
+                # it. Singleton roles are actual actor knowledge, never viewer
+                # restriction; remaining unknown guard records stay integrated.
+                if (len(groups)==1 and groups[0][0].initial_roster==self.verifying_actor_mask and
+                        len({h.roles for h in private.hypotheses})==1):
+                    from .fixed_actor_continuation import fixed_actor_value
+                    part=fixed_actor_value(checked,private,self,info=groups[0][0],target=target)
+                    if part is not None:return part
+                return super().act(b,s,past,target,private,observer,physical=physical)
             from .fixed_actor_continuation import fixed_actor_value
             value=F();resolved=True
             for info,mass,group in wolf_information_groups(private):
-                try:part=fixed_actor_value(b,s,self,info=info,target=target,measure=group)
+                try:part=fixed_actor_value(b,s,self,info=info,target=target,measure=group,allow_actor_only=True)
                 except ValueError:part=None
                 if part is None:resolved=False;break
+                actor=info.condition_public(s)
+                if len({h.roles for h in actor.hypotheses})>1:
+                    self.public_night_policies(b,s,past)
+                    source=self.night_sources.get((b,s,past),s)
+                    if (b,source,past) not in self.verified_actor_kernels:
+                        raise Pending('root_actor_continuation_unverified')
                 value+=mass*part
             if resolved:return value
         return super().act(b,s,past,target,private,observer,physical=physical)
+
+    def solve(self,b,s,past,private,observer,*,physical=None):
+        if self.verifying_actor_mask is not None and observer is None:
+            from .actor_information import wolf_information_groups
+            groups=wolf_information_groups(private)
+            if (len(groups)==1 and groups[0][0].initial_roster==self.verifying_actor_mask and
+                    len({h.roles for h in private.hypotheses})==1):
+                from .fixed_actor_continuation import fixed_actor_value
+                actual=physical_board(b,private,physical)
+                value=fixed_actor_value(actual,private,self,info=groups[0][0])
+                if value is not None:return value
+        return super().solve(b,s,past,private,observer,physical=physical)
 
     def exchangeable(self,b):return False  # Keep the complete latent acquisition flow.
     def value_law(self,state):return state  # No history compression in this entry.
 
 
-def step_root_action(branch,target,rules,strategy,*,max_work=250000,max_seconds=20,publish=True):
+def step_root_action(branch,target,rules,strategy,*,max_work=250000,max_seconds=20,publish=True,_engine=None):
     """Explicit action intervention through the shared ability/death/report flow."""
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)
     if branch.public.winner:return FuturePending('root_secret_terminal_action')
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
-            e=RootSecretEngine(rules,strategy,max_work=max_work)
+            e=_engine or RootSecretEngine(rules,strategy,max_work=max_work)
+            if (e.rules,e.strategy)!=(rules,strategy):raise ValueError('Action engine configuration mismatch')
             own=branch.physical_law;physical=branch.physical
             if branch.public.phase=='night':
                 from .exact import forced_action_worlds,replace_worlds
@@ -334,8 +407,9 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
                     return FuturePending('guard_saved_observation_required')
                 candidates=branch.public.alive if branch.public.phase=='night' and target is None else (target,)
                 selected=[]
-                kernels=(RootSecretEngine(rules,policy,max_work=max_work).public_night_policies(
-                    branch.public,branch.public_law,branch.past) if branch.public.phase=='night' else {})
+                engine=RootSecretEngine(rules,policy,max_work=max_work)
+                kernels=(engine.public_night_policies(branch.public,branch.public_law,branch.past)
+                         if branch.public.phase=='night' else {})
                 for action in candidates:
                     active=branch;mass=F(1)
                     if branch.public.phase=='night':
@@ -349,7 +423,7 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
                         active=replace(branch,physical_law=own,
                                        physical=physical_board(branch.public,own,branch.physical))
                     children=step_root_action(active,action,rules,policy,max_work=max_work,
-                                              max_seconds=max_seconds,publish=False)
+                                              max_seconds=max_seconds,publish=False,_engine=engine)
                     if isinstance(children,FuturePending):return children
                     expected=branch.public.alive if target is None else tuple(p for p in branch.public.alive if p!=target)
                     selected.extend((mass*q,c) for q,c in children if not c.public.winner and c.public.alive==expected)

@@ -2,9 +2,10 @@
 
 This is a dependency cut, not a substitute public belief. Call it only with an
 actor law derived from the complete public input, never a viewer restriction.
-Unknown roles are integrated BEFORE any max. Future actor max is evaluated
-here only when that actor already knows the complete role assignment and all
-other value-relevant choices are fixed. None requests the ordinary evaluator.
+Unknown roles are integrated BEFORE any max. When all other choices are
+fixed and only this actor has information-dependent decisions, its carried
+law conditions on the observed physical outcomes and its own actions. This
+never installs a replacement PUBLIC belief. None requests the ordinary evaluator.
 """
 from dataclasses import replace
 from fractions import Fraction as F
@@ -20,10 +21,14 @@ from .policy_choice import optimal_targets,uniform_policy
 from .calculation_budget import tick
 
 
-def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None):
+def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None,allow_actor_only=False):
     if public_law.public_roles!=tuple(sorted(board.worlds)):
         raise ValueError('Complete public input required for actor continuation')
     law=info.condition_public(public_law)
+    strategy=engine.strategy;rules=engine.rules
+    actor_only=(allow_actor_only and strategy.day=="random" and strategy.guard_position==("uniform",) and
+                board.initial_hunter_count<=1 and not board.initial_seer_count and
+                not board.initial_medium_count)
     if measure is not None:
         # Payoff may use P, but no extra viewer fact may change actor choices.
         signature=lambda h:(h.roles,h.acquisitions,h.guards,h.attacks)
@@ -34,11 +39,16 @@ def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None):
         metadata=lambda state:(state.rosters,state.initial_rule,state.tracked,state.observed_prefix)
         if metadata(measure)!=metadata(law) or conditional(measure)!=conditional(law):
             return None
-        law=measure  # Only role mass differs; known-role policy values agree.
+        if len({h.roles for h in law.hypotheses})>1:
+            def role_mass(state):
+                totals={}
+                for h in state.hypotheses:totals[h.roles]=totals.get(h.roles,F())+h.mass
+                return totals
+            if not actor_only or role_mass(measure)!=role_mass(law):return None
+        law=measure  # Unknown-role choices require the SAME belief/payoff law.
     if len(law.rosters)!=board.day:
         return None  # Input is before this night's acquisition, not after it.
     cache={}
-    strategy=engine.strategy;rules=engine.rules
     # Public reporting choices are left to their existing common flow.
     if any(board.claims[p-1]==role and strategy.disclosure_for(role)!='none'
            for p in board.alive for role in ('seer','medium')):
@@ -72,7 +82,7 @@ def fixed_actor_value(board,public_law,engine,*,info,target=None,measure=None):
             info,mass,group=groups[0]
             targets=tuple(p for p in b.alive if strategy.include_self_bite or
                           not info.initial_roster&(1<<(p-1)))
-            if strategy.night=='max' and len({h.roles for h in s.hypotheses})!=1:
+            if strategy.night=='max' and len({h.roles for h in s.hypotheses})!=1 and not actor_only:
                 return None
             scores=tuple((p,act(b,group,p)) for p in targets)
             if any(v is None for p,v in scores):return None

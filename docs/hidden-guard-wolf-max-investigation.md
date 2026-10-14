@@ -144,3 +144,18 @@ GJの公開支持はW1/H2〜H5各1/4。一方、PUBLIC CO＋自分の狼役か�
 追加2回帰＋既存9重点回帰が成功。一般未知6人の完全max kernel解決はまだ未完了。全支持ゼロ時に任意beliefを足す契約は導入していない。②を先行せず、①・②完了後の公開ゲートを維持する。
 
 今回の対象そのものの全回帰は556テスト・188.639秒で成功。重点11テストは4.386秒。新しい完全kernel試案の再実行はしていない。
+
+
+## 未知6人継続：全候補の共通評価証明
+
+②を完了したa43c4c1の上で、C4/H1uniform/W1・昼random・夜max・公開能力報告なしの未知6人を接続。本人lawだけで進めた未知配役候補値は内部提案に限定し、完全PUBLIC sourceから全wolf infosetのkernelを組む。固定した完全kernel下の既存共通action/evaluation flowで未知役職の全候補値をFraction比較し、すべて一致した場合だけ採用する。不一致はroot_actor_continuation_belief_divergence、未検証はPending、失敗したkernelはcacheから除去する。共通値を確定する前に均等fallbackや仮の値を公開しない。
+
+証明の開始はPUBLIC由来のWolfInformation（役職roster＋自身の襲撃履歴）であり、途中の物理分岐は自身の行動と公開された死亡/GJだけで分割する。それらによって配役を完全に知った継続は、公開側がその非選択襲撃履歴を持たなくても既存の既知本人継続で評価する。真の配役worldを先に一つ選んでmaxせず、未知の他人の護衛履歴は混合したまま。guardian/seer viewerの秘密をこの入口に入れない。
+
+fixed_actor_valueの既存呼出しは既知役職cutのまま。未知役職のactor-only仮計算は明示opt-inで、他の選択が固定されたC/W/Hの範囲だけ。未知役職の物理measureとactor beliefの役職重みが異なる場合はその仮計算を使わない。公開Q、world内の秘密履歴混合、物理Pを置き換えない。真に必要な公共支持がゼロなら従来どおりPendingであり、任意beliefは補わない。
+
+②の完全joint正準keyを、純粋な候補提案と検証済みscalarに再利用。元の候補ID・同率多重度を保持し、physical/joint ledgerを圧縮しない。各保存夜のkernel検証と各物理actionは同じRules/その夜のStrategyのengineを共有し、過去randomを現在maxへ変更しない。
+
+6人P1狩人CO・hunter ClaimPolicy none・D1P6処刑後：両護衛ルールの公開村1199/4320、P1狼本人の合法P2〜P5各719/2400。PUBLICの行P1は1/4、他行はrepeat1151/3840、no-repeat383/1280。ActorP1の選択は4候補各1/4。過去maxGJ→D2P3処刑後は4世界で村23/72。過去randomGJ→同じ死亡では7世界を保持し、現在maxの村はrepeat79/252、no-repeat13/42。本人が過去P2を襲撃してGJならH2を除外し、死亡H3と生存H4/H5の支持を残す。
+
+回帰は仮候補値を故意に変えた場合の拒否/cache除去、Pをactor Qに使う試みの拒否、両護衛・max/random保存歴・複数夜GJ/死亡・戻り保存を含む。最終全565テスト224.288秒成功。ブラウザー6人確認と18801のこの修正への再起動は次の検証であり、現時点では未実施。public reportingを伴う新max、guardian自身max、同時複数maxの一般化は今回追加しない。

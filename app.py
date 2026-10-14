@@ -265,7 +265,7 @@ def create_app(test_config=None, *, deployment=False):
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
                     forecast=evaluate_public_game(state,board,rules,strategy,max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
                     if isinstance(forecast,FuturePending):
-                        guard_scope_pending=forecast.reason.startswith(('guard_','root_guard_')) or (board.initial_hunter_count and forecast.reason=='information_set_budget_exceeded')
+                        guard_scope_pending=forecast.reason.startswith(('guard_','root_guard_','root_actor_')) or (board.initial_hunter_count and forecast.reason=='information_set_budget_exceeded')
                         from werewolf.seer_manual import Pending
                         reasons={'initial_public_results_incomplete':'未公開結果を含む未来評価は現在Pendingです。','multiple_fake_report_correlation_unselected':'複数偽占いが生存する朝の共同報告は未対応のためPendingです。', 'current_morning_seer_reports_incomplete':'未公開結果を含む未来評価は現在Pendingです。','past_private_scan_history_missing':'過去の本人取得履歴が不足しているため未来評価できません。'}
                         reasons.update({'future_public_continuation_budget_exceeded':'未来の分岐が計算予算を超えました。公開情報を揃えるか、配役を絞ってください。','true_scan_generation_budget_exceeded':'未来占いの結果候補が計算予算を超えました。','observed_prior_private_ledger_budget_exceeded':'過去情報の再構成が計算予算を超えました。','future_fake_law_does_not_specify_initial_declarations':'初日の公開結果を入力してください。初日の偽報告自動生成は未設定です。'})
