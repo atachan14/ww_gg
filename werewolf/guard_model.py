@@ -135,6 +135,19 @@ def public_context(context):
 
 
 def public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=None,past=()):
+    graph=getattr(engine,'policy_dependencies',None)
+    if graph is None:
+        return _public_guard_branch_law(board,state,child,attack,blocked,engine,policies=policies,past=past)
+    from .policy_dependencies import Dependency
+    profile=None if policies is None else tuple(sorted(policies.items()))
+    node=Dependency('public-support',(board,state,child,attack,blocked,past,profile))
+    # A supplied/cached complete profile may close this recorded dependency.
+    # Do not reject that legitimate fixed-profile proof as infinite recursion.
+    with graph.evaluating(node,allow_reentry=True):
+        return _public_guard_branch_law(board,state,child,attack,blocked,engine,policies=policies,past=past)
+
+
+def _public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=None,past=()):
     """Public-owned generated support; no viewer restriction chooses this law.
 
     The complete kernel covers every public wolf information set. Observations

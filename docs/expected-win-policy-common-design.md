@@ -52,9 +52,9 @@ PolicyProfileのキーは actor + 情報集合 + 決定時点。同じ狼陣営�
 
 市民2・狩人1・狼1、P1狩人CO（真偽未確定、ClaimPolicy none）、P4処刑後のNight1、護衛均等、連続護衛あり。狼の3情報集合にそれぞれ合法2択があり、現行の「最大候補全てを同率均等」に従う方針候補は3^3=27個。
 
-既存共通評価で、全合法候補を同じ完全公開kernelの下で評価した。完全評価できた中で整合したkernelは、各infosetが合法2択を各1/2で選ぶもの。W1本人の両候補の村利得は1/6、W2/W3本人の候補は全て0。6個のkernel候補は public_generated_observation_zero_support で停止した。
+既存共通評価で、全合法候補を同じ完全公開kernelの下で評価した。完全評価できた中で整合したkernelは、各infosetが合法2択を各1/2で選ぶもの。W1本人の両候補の村利得は1/6、W2/W3本人の候補は全て0。9個のkernel候補は public_generated_observation_zero_support で停止した（固定方針を含むidentity cacheによる再計測。旧診断の6個を訂正）。
 
-この結果は「全ての盤面で解が存在する/一意」の証明ではない。証拠は task-6/day-max-four-kernel-probe.py/.json。
+この結果は「全ての盤面で解が存在する/一意」の証明ではない。初期診断は task-6/day-max-four-kernel-probe.py/.json。訂正後の証拠は task-6/policy-certificate-four-final.json と tests/test_policy_certificates.py。
 
 依存は K_wolf -> GJ生成公開支持 -> 公開Q'における昼max -> 狼候補利得 -> K_wolf。同時に現場で行動するという意味の循環とは別で、戦略から推論することによる評価依存である。先にどちらかを均等に固定して結果を返すことはしない。
 
@@ -107,3 +107,15 @@ PolicyProfileのキーは actor + 情報集合 + 決定時点。同じ狼陣営�
 現在の実盤面で複数整合解が存在するとはまだ確認していない。未定義観測の例と、将来起こり得る複数解/無解のAPI設計を分けて扱う。
 
 検証・保存: 独立した同型キー改善に対する全569テストが229.304秒で成功（task-6/exact-key-pruning-full.log）。占霊試作は差分保存後に製品経路から戻した。設計案は新しい最大化戦略や解選択規則を実装するものではない。18801の実行中版は前回検証済み版のまま、公開操作なし。
+
+## 10. 最初の実装チェックポイント
+
+policy_dependencies.pyに依存グラフ/SCC/未解決再入を追加し、現行RootSecretEngineの公開狼方針、候補提案、共通候補証明、公開GJ生成支持へ接続した。完成cacheを要求する辺も記録し、固定kernelが既にある証明を無限再帰と誤判定しない。未解決の同じ方針を再計算する場合は専用Pending理由を返す。
+
+policy_certificates.pyは現行の「全同率最善手を均等」に許される全非空支持集合の完全profileを有界列挙する。各主体の全合法候補値は厳密な完成ベクトルが必要。既存optimal_targets/uniform_policyを使い、unique/multiple/no_admissible_profile/undefined_observations/dependency_unfinished/budget_unfinishedを分ける。予算打切りや未定義の代替profileを含む結果ではselectedはNone。完成した個別certificateは診断証拠として保持するが、未証明の選択値へ昇格しない。
+
+wolf_profile_certificate.pyは完全公開profileを固定したまま既存InformationSetForecast.act/solveとRootSecretPolicyによる共通行動フローを通す。私的な提案短絡は使わない。別profileごとに評価器を分け、完全profileと全identity入力をcacheキーへ含める。方針内部の主体/候補IDを同じ全単射で写すserializerをまだ実装していないため、この証明器では盤面だけの同型cacheは無効である。
+
+最小4人は全27profileを評価し、1件の完成certificate、17件の非最善応答、9件の支持ゼロを得た。完成certificateは全infoset合法2択各1/2、W1村利得各1/6、W2/W3各0、固定profileの公開村利得1/10。9件の未定義観測を含む全体結果はundefined_observations、selected=None。従来の6件という診断は、外部固定profile内のIDを同型cacheへ含めなかったため訂正した。これは診断のみの誤りであり、未完成試作や旧診断値を通常経路へ公開していない。
+
+現時点では通常rootの昼maxゲートを解除していない。占霊入り6人、後続夜の未知profile閉包、複数解の選択、新しい非一様混合は未実装。次は、支持ゼロの代替profileを含む探索結果から単一profileを通常評価へ接続できる条件を明示し、必要なら実盤面の今回の例で判断する。任意beliefや暫定勝率は追加しない。

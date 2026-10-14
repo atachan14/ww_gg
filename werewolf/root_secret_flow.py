@@ -123,6 +123,8 @@ class RootSecretEngine(InformationSetForecast):
         self.night_sources={};self.night_kernels={}
         self.verified_actor_kernels=set();self.verifying_actor_mask=None
         self.actor_candidate_keys={};self.actor_proposals={};self.actor_certificates={}
+        from .policy_dependencies import DependencyGraph
+        self.policy_dependencies=DependencyGraph()
 
     def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
         key=super().full_renamed_key(b,s,past,private,observer,target=target,physical=physical)
@@ -142,8 +144,22 @@ class RootSecretEngine(InformationSetForecast):
         return self.actor_candidate_keys[source]
 
     def public_night_policies(self,b,state,past=()):
+        from .policy_dependencies import Dependency,DependencyCycle
+        before=self.night_sources.get((b,state,past),state)
+        node=Dependency('wolf-policy',(self.rules,self.strategy,b,before,past))
+        self.policy_dependencies.request(node)
+        if (b,before,past) in self.night_kernels:
+            return self._public_night_policies(b,state,past)
+        try:
+            with self.policy_dependencies.evaluating(node):
+                return self._public_night_policies(b,state,past)
+        except DependencyCycle as error:
+            raise Pending('root_guard_policy_dependency_cycle') from error
+
+    def _public_night_policies(self,b,state,past=()):
         from .actor_information import wolf_information_groups
         from .fixed_actor_continuation import fixed_actor_value
+        from .policy_dependencies import Dependency
         from .policy_choice import optimal_targets,uniform_policy
         before=self.night_sources.get((b,state,past),state)
         if before.public_roles!=tuple(sorted(b.worlds)):
@@ -159,10 +175,14 @@ class RootSecretEngine(InformationSetForecast):
                     scores=[]
                     for p in targets:
                         candidate=self.actor_candidate_key(b,before,past,group,p)
+                        node=Dependency('actor-proposal',(b,before,past,info,p))
+                        self.policy_dependencies.request(node)
                         if candidate is not None and candidate in self.actor_proposals:
                             value=self.actor_proposals[candidate]
+                            self.policy_dependencies.completed.add(node)
                         else:
-                            value=fixed_actor_value(b,before,self,info=info,target=p,allow_actor_only=True)
+                            with self.policy_dependencies.evaluating(node):
+                                value=fixed_actor_value(b,before,self,info=info,target=p,allow_actor_only=True)
                             if candidate is not None and value is not None:self.actor_proposals[candidate]=value
                         scores.append((p,value))
                     scores=tuple(scores)
@@ -183,8 +203,10 @@ class RootSecretEngine(InformationSetForecast):
                         checked=[]
                         for p,v in scores:
                             candidate=self.actor_candidate_key(b,before,past,group,p)
-                            value=(self.actor_certificates[candidate] if candidate is not None and
-                                candidate in self.actor_certificates else self.act(b,before,past,p,group,None))
+                            node=Dependency('common-candidate',(b,before,past,info,p))
+                            with self.policy_dependencies.evaluating(node):
+                                value=(self.actor_certificates[candidate] if candidate is not None and
+                                    candidate in self.actor_certificates else self.act(b,before,past,p,group,None))
                             checked.append((p,value));certified.append((candidate,value))
                         checked=tuple(checked)
                     finally:self.verifying_actor_mask=previous
