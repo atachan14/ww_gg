@@ -1,8 +1,8 @@
 """Private table projection. Public policy evaluation never receives private worlds.
 
-Wolf finals and supported CO/all seer scan comparisons use a
-separate public-policy continuation. Uniform guards with a public-known single
-hunter are supported; hidden hunter/attack histories remain explicit unsupported.
+All owner tables keep the public-policy continuation separate from evidence.
+Supported uniform entries retain the shared joint history; legacy CO/max entries
+keep their existing contracts and explicit Pending for unsupported histories.
 """
 from .exact import actual_role, legal_targets
 from .private_view import condition_private
@@ -46,9 +46,12 @@ def private_slots(board, player, rules,role="seer"):
 
 def evaluate_private_table(public, role, players, results, rules, strategy, *, game_state=None,
                            max_work=250000, max_seconds=20):
-    root_entry = False
     view = condition_private(public, role, players, results, rules=rules)
     private = view.board
+    from .root_secret_flow import prepare_root_entry
+    branch=prepare_root_entry(game_state or {},public,rules,strategy,
+                              max_work=max_work,max_seconds=max_seconds)
+    root_entry=branch is not None
     reason = {'seer': '占い先の取得履歴と将来の公開判断を分離した勝率評価は未対応です。',
               'hunter': '護衛能力の計算と秘密の護衛履歴は未対応です。',
               'wolf': '仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。'}[role]
@@ -57,11 +60,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     if role=="hunter":
         from .guard_view_forecast import guard_forecast
         targets=tuple(p for p in public.alive if p!=players[0])
-        from .root_secret_flow import root_screen_eligible,root_replay_eligible,prepare_root_secrets,replay_root_secrets,root_guard_forecast
-        root_entry=(root_screen_eligible(public,rules,strategy) or root_replay_eligible(game_state or {},public,rules,strategy))
+        from .root_secret_flow import root_guard_forecast
         if root_entry:
-            branch=(prepare_root_secrets(public,rules,max_work=max_work) if root_screen_eligible(public,rules,strategy) else
-                    replay_root_secrets(game_state,public,rules,strategy,max_work=max_work,max_seconds=max_seconds))
             result=branch if isinstance(branch,FuturePending) else root_guard_forecast(branch,players[0],view.guards,rules,strategy,max_work=max_work,max_seconds=max_seconds)
             if not isinstance(branch,FuturePending):
                 from .root_secret_flow import root_actor_view
@@ -80,14 +80,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
     if role == 'seer':
         targets = tuple(p for p in public.alive if p != players[0])
         from .seer_view_forecast import seer_forecast
-        from .root_secret_flow import (root_screen_eligible,root_replay_eligible,prepare_root_secrets,
-            replay_root_secrets,root_seer_forecast,root_actor_view)
-        root_entry=(root_screen_eligible(public,rules,strategy) or
-                    root_replay_eligible(game_state or {},public,rules,strategy))
+        from .root_secret_flow import root_seer_forecast,root_actor_view
         if root_entry:
-            branch=(prepare_root_secrets(public,rules,max_work=max_work) if
-                    root_screen_eligible(public,rules,strategy) else
-                    replay_root_secrets(game_state,public,rules,strategy,max_work=max_work,max_seconds=max_seconds))
             result=branch if isinstance(branch,FuturePending) else root_seer_forecast(
                 branch,players[0],view.acquisitions,rules,strategy,max_work=max_work,max_seconds=max_seconds)
             if not isinstance(branch,FuturePending):
@@ -123,11 +117,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
     if role == 'wolf':
         state = None; past = ()
-        from .root_secret_flow import root_screen_eligible,root_replay_eligible,prepare_root_secrets,replay_root_secrets,root_wolf_forecast
-        root_entry=(root_screen_eligible(public,rules,strategy) or root_replay_eligible(game_state or {},public,rules,strategy))
+        from .root_secret_flow import root_wolf_forecast
         if root_entry:
-            branch=(prepare_root_secrets(public,rules,max_work=max_work) if root_screen_eligible(public,rules,strategy) else
-                    replay_root_secrets(game_state,public,rules,strategy,max_work=max_work,max_seconds=max_seconds))
             result=branch if isinstance(branch,FuturePending) else root_wolf_forecast(branch,players,view.attacks,rules,strategy,max_work=max_work,max_seconds=max_seconds)
             if not isinstance(result,FuturePending):
                 result,guard_dawn,belief=result

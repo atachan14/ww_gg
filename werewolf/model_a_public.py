@@ -99,9 +99,9 @@ def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
     from .root_secret_flow import root_screen_eligible,root_screen_forecast
     if root_screen_eligible(board,rules,strategy):
         return root_screen_forecast(board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
-    from .root_secret_flow import root_replay_eligible,replay_root_secrets,root_branch_forecast
-    if root_replay_eligible(game,board,rules,strategy):
-        branch=replay_root_secrets(game,board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+    from .root_secret_flow import prepare_root_entry,root_branch_forecast
+    branch=prepare_root_entry(game,board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+    if branch is not None:
         if isinstance(branch,FuturePending):return branch
         return root_branch_forecast(branch,rules,strategy,max_work=max_work,max_seconds=max_seconds)
     from .guard_model import scope_reason
