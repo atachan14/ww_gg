@@ -22,6 +22,7 @@ from .morning_flow import report_flow, continuation_value
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
 from .actor_information import WolfInformation,wolf_information_groups,condition_actor_state
+from .policy_choice import optimal_targets,uniform_policy
 
 
 class Pending(Exception):
@@ -273,9 +274,9 @@ class InformationSetForecast:
                     if prior is None:representatives.append((p,value))
                     computed.append((p,value))
                 scores=tuple(computed)
-            best=min(v for _,v in scores);chosen=tuple(p for p,v in scores if v==best)
+            chosen=optimal_targets(scores,maximize=False)
         if not chosen:raise Pending('information_set_no_legal_bite')
-        result=tuple((p,F(1,len(chosen))) for p in chosen);self.policies[key]=result
+        result=uniform_policy(chosen);self.policies[key]=result
         if self.trace is not None:
             self.trace.setdefault('wolf_policies',[]).append({'history':b.history,'mask':mask,'scores':scores,'policy':result})
         return result
@@ -347,8 +348,7 @@ class InformationSetForecast:
                 self.values[key]=F(1);return F(1)
             if self.strategy.day=='random':targets=b.alive
             else:
-                scores=self.day_scores(b,s,past);best=max(v for _,v in scores)
-                targets=tuple(p for p,v in scores if v==best)
+                targets=optimal_targets(self.day_scores(b,s,past),maximize=True)
             value=sum((self.act(b,s,past,p,private,observer,physical=physical) for p in targets),F())/len(targets)
         else:
             value=F()
