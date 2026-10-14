@@ -79,8 +79,36 @@ def root_actor_view(branch,compatible,*,guards=(),attacks=()):
                          condition_actor_state(branch.physical_law,compatible,guards=guards,attacks=attacks))
 
 
+def root_policy_supported(strategy,*,hunters,seers,mediums):
+    if strategy.day=='random':
+        return strategy.night in (('random','max') if hunters==1 else ('random',))
+    return (strategy.day=='max' and strategy.night=='max' and hunters==1
+            and not seers and not mediums)
+
+
+def root_strategy_supported(board,strategy):
+    return root_policy_supported(strategy,hunters=board.initial_hunter_count,
+                                 seers=board.initial_seer_count,mediums=board.initial_medium_count)
+
+
+def root_max_history_needed(game,board):
+    """Retain legacy fixed-known-hunter max entry contracts.
+
+    Saved root histories still need their full ledger if the INITIAL public
+    hunter was unknown, even when a later observation identifies its location.
+    """
+    if not game.get('history'):return len({w[3] for w in board.worlds})>1
+    from .exact import initial_board,condition_claims,ClaimPolicy
+    first=game['history'][0]
+    seed=initial_board(board.player_count,game.get('wolves',1),board.initial_medium_count,
+                       board.initial_seer_count,board.initial_hunter_count,experimental_cast=True)
+    seed=condition_claims(seed,tuple(first.get('claims',('latent',)*board.player_count)),
+                          ClaimPolicy(**first.get('claim_policy',{})))
+    return len({w[3] for w in seed.worlds})>1
+
+
 def root_scope(branch,rules,strategy):
-    if strategy.day!='random' or strategy.night not in (('random','max') if branch.public.initial_hunter_count==1 else ('random',)):return 'root_secret_max_unimplemented'
+    if not root_strategy_supported(branch.public,strategy):return 'root_secret_max_unimplemented'
     from .guard_model import scope_reason
     reason=scope_reason(branch.public,rules,strategy,True,joint_max=True)
     if reason:return reason
@@ -125,6 +153,22 @@ class RootSecretEngine(InformationSetForecast):
         self.actor_candidate_keys={};self.actor_proposals={};self.actor_certificates={}
         from .policy_dependencies import DependencyGraph
         self.policy_dependencies=DependencyGraph()
+        self._profile_resolver=None
+
+    def certified_night_policies(self,b,state,past=()):
+        from .wolf_profile_certificate import WolfProfileResolver,require_profile
+        if self._profile_resolver is None:
+            self._profile_resolver=WolfProfileResolver(self.rules,self.strategy,max_work=self.max_work)
+        from .policy_dependencies import Dependency
+        self.policy_dependencies.request(Dependency('profile-proof',(self.rules,self.strategy,b,state,past)))
+        result=self._profile_resolver.resolve(b,state,past)
+        self.policy_dependencies.include(self._profile_resolver.dependencies)
+        selected=require_profile(result)
+        key=(b,state,past)
+        kernel={(info.initial_roster,info.attacks):policy for info,policy in selected.profile}
+        self.night_kernels[key]=kernel
+        self.verified_actor_kernels.add(key)
+        return kernel
 
     def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
         key=super().full_renamed_key(b,s,past,private,observer,target=target,physical=physical)
@@ -165,6 +209,8 @@ class RootSecretEngine(InformationSetForecast):
         if before.public_roles!=tuple(sorted(b.worlds)):
             raise Pending('root_guard_max_public_prior_mismatch')
         key=(b,before,past)
+        if key not in self.night_kernels and self.strategy.day=='max':
+            return self.certified_night_policies(b,before,past)
         if key not in self.night_kernels:
             result={};verify=[]
             for info,mass,group in wolf_information_groups(before):
@@ -187,7 +233,7 @@ class RootSecretEngine(InformationSetForecast):
                         scores.append((p,value))
                     scores=tuple(scores)
                     if any(v is None for p,v in scores):
-                        raise Pending('root_guard_max_unknown_continuation')
+                        return self.certified_night_policies(b,before,past)
                     chosen=optimal_targets(scores,maximize=False)
                     if len({h.roles for h in group.hypotheses})>1:verify.append((info,group,scores))
                 result[info.initial_roster,info.attacks]=uniform_policy(chosen)
@@ -326,12 +372,13 @@ def root_secret_value(branch,rules,strategy,*,actor=None,max_work=250000,max_sec
 
 
 def root_screen_eligible(board,rules,strategy):
-    """Existing initial screen subset; no change to fixed-CO/max entrypoints."""
+    """Uniform roots and certified C/H/W day-max; legacy known hunters stay separate."""
     return (bool(board.initial_seer_count or board.initial_hunter_count) and
             board.initial_hunter_count<=1 and
             board.day==1 and board.phase=='day' and not board.history and
             board.alive==tuple(range(1,board.player_count+1)) and
-            strategy.day=='random' and strategy.night in (('random','max') if board.initial_hunter_count==1 else ('random',)) and
+            root_strategy_supported(board,strategy) and
+            (strategy.day=='random' or root_max_history_needed({},board)) and
             not (rules.allow_self_bite and not strategy.include_self_bite) and
             not any(board.claims[p-1]=='seer' for p in board.alive) and
             not (strategy.disclosure_for('medium')=='all' and strategy.fake_reports=='max' and
@@ -352,15 +399,15 @@ def root_screen_forecast(board,rules,strategy,*,max_work=250000,max_seconds=20):
 
 
 def root_replay_eligible(game,board,rules,strategy):
-    """Saved uniform history with observed publications; no invented CO law."""
+    """Saved supported policies and observed publications; no invented CO law."""
     if (not game.get('history') or not (board.initial_seer_count or board.initial_hunter_count) or
             board.initial_hunter_count>1):
         return False
     snapshots=(*game['history'],game)
-    return (strategy.day=='random' and strategy.night in (('random','max') if board.initial_hunter_count==1 else ('random',)) and
+    return (root_strategy_supported(board,strategy) and
+            (strategy.day=='random' or root_max_history_needed(game,board)) and
             not (rules.allow_self_bite and not strategy.include_self_bite) and
-            all(Strategy(**step.get('policy',{})).day=='random' and Strategy(**step.get('policy',{})).night in (('random','max') if board.initial_hunter_count==1 else ('random',))
-                for step in snapshots))
+            all(root_strategy_supported(board,Strategy(**step.get('policy',{}))) for step in snapshots))
 
 
 def prepare_root_entry(game,board,rules,strategy,*,max_work=250000,max_seconds=20):

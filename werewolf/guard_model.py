@@ -28,7 +28,7 @@ def scope_reason(board,rules,strategy=None,latent_ready=False,*,joint_max=False)
     if not board.initial_hunter_count:return None
     if board.initial_hunter_count!=1:return 'guard_multiple_hunters_unimplemented'
     if not rules.allow_repeat_guard:
-        if strategy is None or strategy.day!='random' or strategy.night not in (('random','max') if joint_max else ('random',)):
+        if strategy is None or strategy.day not in (('random','max') if joint_max else ('random',)) or strategy.night not in (('random','max') if joint_max else ('random',)):
             return 'guard_no_repeat_max_unimplemented'
         if rules.allow_self_bite and not strategy.include_self_bite:return 'guard_no_repeat_self_bite_policy_unimplemented'
         if not latent_ready:return 'guard_no_repeat_history_missing'

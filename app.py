@@ -168,8 +168,10 @@ def create_app(test_config=None, *, deployment=False):
         if not rules.allow_repeat_guard and (hunters if hunters is not None else (state or {}).get('hunters',0)):
             if (hunters if hunters is not None else state.get('hunters',0))!=1:
                 raise ValueError('連続護衛なしは狩人1人に対応しています。複数狩人は未対応です。')
-            if require_supported and (strategy.day!='random' or strategy.night not in ('random','max')):
-                raise ValueError('連続護衛なしは処刑・襲撃の均等化に対応しています。maxは未対応です。')
+            from werewolf.root_secret_flow import root_policy_supported
+            if require_supported and not root_policy_supported(strategy,hunters=1,
+                    seers=(state or {}).get('seers',0),mediums=(state or {}).get('mediums',0)):
+                raise ValueError('この配役・方針の連続護衛なし評価は未対応です。対応する設定を選んでください。')
             if require_supported and rules.allow_self_bite and not strategy.include_self_bite:
                 raise ValueError('連続護衛なしで自噛み可能の場合は、自噛みを含む均等襲撃に対応しています。')
         return {"day":strategy.day,"night":strategy.night,"include_self_bite":strategy.include_self_bite,**{k:getattr(strategy,k) for k in extra},**({"fake_reports":strategy.fake_reports} if reports or state and "fake_reports" in state["policy"] else {})}
@@ -630,7 +632,7 @@ def create_app(test_config=None, *, deployment=False):
                 proposed=parse_form(request.form,proposed,progress.board)
             _, progress = replay(proposed)
             if (advancing and not rules.allow_repeat_guard and proposed.get('hunters')==1 and
-                    policy['day']=='random' and policy['night']=='max'):
+                    policy['night']=='max'):
                 from werewolf.model_a_public import evaluate_public_game
                 from werewolf.seer_future_uniform import FuturePending
                 checked=evaluate_public_game(proposed,progress.board,rules,Strategy(**policy))

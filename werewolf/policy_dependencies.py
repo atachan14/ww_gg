@@ -35,6 +35,11 @@ class DependencyGraph:
         finally:
             assert self.stack.pop()==node
 
+    def include(self,other):
+        """Join completed subsolver traces without inventing parent edges."""
+        for node,children in other.edges.items():self.edges.setdefault(node,set()).update(children)
+        self.completed.update(other.completed)
+
     def components(self):
         """Strongly connected components, including recorded cached requests."""
         indices={};low={};active=[];on_stack=set();result=[]

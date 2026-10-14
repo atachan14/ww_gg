@@ -32,6 +32,7 @@ class ProfileSearch:
     certified: tuple = ()
     issues: tuple = ()
     reason: str | None = None
+    proof: str = "exhaustive"
 
     @property
     def selected(self):
@@ -44,6 +45,22 @@ def uniform_options(actions):
     if not actions or len(set(actions))!=len(actions):raise ValueError('Unique nonempty legal actions required')
     return tuple(uniform_policy(selected) for n in range(1,len(actions)+1)
                  for selected in combinations(actions,n))
+
+
+def best_response_profile(legal,scores,*,maximize=False):
+    if set(scores)!={info for info,actions in legal}:raise ValueError('Complete infoset scores required')
+    rows=[];expected=[]
+    for info,actions in legal:
+        row=tuple(scores[info])
+        if (len(row)!=len(actions) or len({a for a,v in row})!=len(row) or
+            {a for a,v in row}!=set(actions) or
+            any(type(v) not in (int,F) or not 0<=v<=1 for a,v in row)):
+            raise ValueError('Complete exact legal score vectors required')
+        values=dict(row);row=tuple((a,F(values[a])) for a in actions)
+        rows.append((info,row))
+        direction=maximize[info] if isinstance(maximize,dict) else maximize
+        expected.append((info,uniform_policy(optimal_targets(row,maximize=direction))))
+    return tuple(expected),tuple(rows)
 
 
 def certify_uniform_profiles(legal,evaluate,*,maximize=False,max_profiles=4096,
@@ -75,23 +92,14 @@ def certify_uniform_profiles(legal,evaluate,*,maximize=False,max_profiles=4096,
                     scores=evaluate(profile)
                 except Pending as error:
                     kind=('undefined_observation' if error.reason in (
-                        'public_generated_observation_zero_support','root_secret_public_history_zero_support',
+                        'public_generated_observation_zero_support','root_guard_profile_undefined_observations',
+                        'public_continuation_zero_support','public_terminal_observation_zero_support',
+                        'root_secret_public_history_zero_support',
                         'root_secret_physical_zero_support','root_secret_actor_belief_zero_support')
                         else 'unresolved_dependency')
                     issues.append(ProfileIssue(profile,kind,error.reason));evaluated+=1;continue
-                if set(scores)!={info for info,actions in legal}:raise ValueError('Complete infoset scores required')
-                rows=[];expected=[]
-                for info,actions in legal:
-                    row=tuple(scores[info])
-                    if (len(row)!=len(actions) or len({a for a,v in row})!=len(row) or
-                        {a for a,v in row}!=set(actions) or
-                        any(type(v) not in (int,F) or not 0<=v<=1 for a,v in row)):
-                        raise ValueError('Complete exact legal score vectors required')
-                    values=dict(row);row=tuple((a,F(values[a])) for a in actions)
-                    rows.append((info,row))
-                    direction=maximize[info] if isinstance(maximize,dict) else maximize
-                    expected.append((info,uniform_policy(optimal_targets(row,maximize=direction))))
-                if tuple(expected)==profile:certificates.append(ProfileCertificate(profile,tuple(rows)))
+                expected,rows=best_response_profile(legal,scores,maximize=maximize)
+                if expected==profile:certificates.append(ProfileCertificate(profile,rows))
                 evaluated+=1
     except CalculationBudgetExceeded:
         return ProfileSearch('budget_unfinished',total,evaluated,tuple(certificates),tuple(issues),

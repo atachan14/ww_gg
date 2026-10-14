@@ -1,0 +1,162 @@
+import unittest
+from dataclasses import replace
+from fractions import Fraction as F
+from copy import deepcopy
+from unittest.mock import patch
+from tests import test_root_guard_max as fixtures
+from werewolf.exact import Strategy,Rules,initial_board,replace_worlds
+from werewolf.seer_manual import migrate_game,replay
+from werewolf.root_secret_flow import prepare_root_entry,root_screen_eligible,RootSecretEngine
+from werewolf.model_a_public import evaluate_public_game,clear_public_cache,public_cache_info
+from werewolf.private_adapter import evaluate_private_table
+from werewolf.seer_future_uniform import FuturePending
+from werewolf.information_set_forecast import Pending
+from werewolf.policy_certificates import ProfileSearch
+from werewolf.wolf_profile_certificate import WolfProfileResolver,FixedPublicWolfProfile
+from werewolf.actor_information import WolfInformation,wolf_information_groups
+from werewolf.policy_choice import uniform_policy
+from werewolf.night_knowledge import WolfAttack
+
+
+class RootProfileEntryTests(unittest.TestCase):
+    def game(self,repeat=True):
+        g=fixtures.RootGuardMaxTests().game(repeat)
+        g['policy']['day']='max';g['history'][0]['policy']['day']='max'
+        return migrate_game(g)
+
+    def test_normal_public_owner_and_cache_both_rules(self):
+        for repeat in (True,False):
+            g=self.game(repeat);before=deepcopy(g);r,p=replay(g);s=Strategy(**g['policy'])
+            clear_public_cache();v=evaluate_public_game(g,p.board,r,s)
+            self.assertNotIsInstance(v,FuturePending);self.assertEqual(v.village_win,F(1,10))
+            self.assertEqual(dict(v.action_values),{1:F(),2:F(1,8),3:F(1,8)})
+            self.assertEqual({t:h.wolf_win for t,h in v.by_dawn_values},{1:F(1),2:F(3,4),3:F(3,4)})
+            self.assertIs(evaluate_public_game(g,p.board,r,s),v)
+            self.assertGreaterEqual(public_cache_info().hits,1)
+            owner=evaluate_private_table(p.board,'wolf',[1],[],r,s,game_state=g)
+            self.assertEqual([row['final']['village'] for row in owner['players'][1:3]],['1/6','1/6'])
+            self.assertIsNone(owner['players'][0]['final']);self.assertIsNone(owner['players'][3]['final'])
+            self.assertEqual(g,before)
+            clear_public_cache();self.assertEqual(evaluate_public_game(g,p.board,r,s),v)
+
+    def test_saved_day_max_gj_replays_its_original_profile(self):
+        for repeat in (True,False):
+            g=self.game(repeat)
+            gj={'target':None,'claims':g['claims'],'claim_policy':g['claim_policy'],
+                'policy':deepcopy(g['policy']),'observation':'night-deaths-v1','deaths':[]}
+            g=migrate_game({**g,'history':[*g['history'],gj]});before=deepcopy(g)
+            r,p=replay(g);s=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,s)
+            self.assertNotIsInstance(b,FuturePending)
+            self.assertEqual(len(b.public.worlds),4)
+            v=evaluate_public_game(g,p.board,r,s);self.assertEqual(v.village_win,F(1,2))
+            self.assertEqual(dict(v.action_values),{1:F(1,2),2:F(1,4),3:F(1,4)})
+            own=WolfInformation(1,(WolfAttack(1,2),)).condition_public(b.public_law)
+            self.assertEqual({h.roles[3] for h in own.hypotheses},{4})
+            changed=migrate_game({**g,'policy':{**g['policy'],'day':'random'}})
+            _,q=replay(changed)
+            self.assertEqual(q.board.worlds,p.board.worlds)
+            self.assertEqual(changed['history'][-1]['policy']['day'],'max')
+            self.assertEqual(g,before)
+
+    def test_fixed_known_hunter_legacy_entry_is_preserved(self):
+        g=self.game();g['claim_policy']=g['history'][0]['claim_policy']={'hunter':'filled'}
+        r,p=replay(g);s=Strategy(**g['policy'])
+        self.assertIsNone(prepare_root_entry(g,p.board,r,s))
+        initial=replace(initial_board(4,1,0,0,1),claims=('hunter','latent','latent','latent'))
+        from werewolf.exact import condition_claims,ClaimPolicy
+        initial=condition_claims(initial,initial.claims,ClaimPolicy(hunter='filled'))
+        self.assertFalse(root_screen_eligible(initial,r,s))
+
+    def test_failed_profile_classes_never_install_a_kernel(self):
+        g=self.game();r,p=replay(g);s=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,s)
+        for status in ('multiple','no_admissible_profile','undefined_observations','budget_unfinished','dependency_unfinished'):
+            e=RootSecretEngine(r,s)
+            with patch.object(WolfProfileResolver,'resolve',return_value=ProfileSearch(status,1,0)):
+                with self.assertRaises(Pending) as stopped:e.public_night_policies(b.public,b.public_law)
+            self.assertEqual(stopped.exception.reason,'root_guard_profile_'+status)
+            self.assertEqual(e.night_kernels,{})
+
+    def test_actual_later_night_reuses_a_complete_policy_independence_proof(self):
+        from werewolf.root_secret_flow import prepare_root_secrets,step_root_action
+        from werewolf.night_knowledge import WolfAttack
+        for repeat in (True,False):
+            r=Rules(allow_repeat_guard=repeat);old=Strategy('random','random',disclosure_common='none')
+            seed=replace_worlds(initial_board(6,1,0,0,1),((1,0,0,32,F(1)),))
+            root=prepare_root_secrets(seed,r)
+            parent=step_root_action(root,6,r,old)[0][1]
+            later=step_root_action(parent,5,r,old)[0][1]
+            later=step_root_action(later,4,r,old)[0][1];before=deepcopy(later)
+            s=replace(old,day='max',night='max');resolver=WolfProfileResolver(r,s,max_profiles=1)
+            parent_profile=((WolfInformation(1),uniform_policy((2,3,4,5))),)
+            e=FixedPublicWolfProfile(parent.public,parent.public_law,(),r,s,parent_profile,resolver=resolver)
+            k=e.public_night_policies(later.public,later.public_law)
+            self.assertEqual(k,{(1,(WolfAttack(1,5),)):uniform_policy((2,3))})
+            result=resolver.cache[later.public,later.public_law,()]
+            self.assertEqual(result.proof,'policy_independent_scores')
+            self.assertEqual((result.total,result.evaluated),(3,1))
+            self.assertTrue(all(v==0 for info,row in result.selected.scores for t,v in row))
+            used=resolver.profiles_evaluated;e.public_night_policies(later.public,later.public_law)
+            self.assertEqual(resolver.profiles_evaluated,used)
+            self.assertEqual(resolver.active,set());self.assertEqual(resolver.dependencies.stack,[])
+            self.assertEqual(later,before)
+            self.assertTrue(all(h.attacks==(WolfAttack(1,5),) for h in later.public_law.hypotheses))
+
+    def test_public_known_live_hunter_offpath_gj_has_no_added_belief(self):
+        from werewolf.wolf_profile_certificate import certify_wolf_profiles
+        for repeat in (True,False):
+            g=fixtures.RootGuardMaxTests().game(repeat)
+            g['claim_policy']=g['history'][0]['claim_policy']={'hunter':'filled'}
+            r,p=replay(g);old=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,old)
+            result=certify_wolf_profiles(b.public,b.public_law,(),r,replace(old,day='max'))
+            self.assertEqual((result.total,result.evaluated),(9,9))
+            self.assertEqual(result.status,'undefined_observations')
+            self.assertEqual(result.certified,());self.assertIsNone(result.selected)
+            self.assertEqual(len(result.issues),1)
+            self.assertEqual(result.issues[0].reason,'public_generated_observation_zero_support')
+            self.assertTrue(all(policy==((1,F(1)),) for info,policy in result.issues[0].profile))
+
+    def test_profile_dependent_over_limit_context_stays_pending_and_uncached(self):
+        g=self.game();r,p=replay(g);s=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,s)
+        resolver=WolfProfileResolver(r,s,max_profiles=1)
+        result=resolver.resolve(b.public,b.public_law)
+        self.assertEqual(result.status,'budget_unfinished');self.assertIsNone(result.selected)
+        self.assertEqual(resolver.cache,{})
+        self.assertEqual(resolver.active,set());self.assertEqual(resolver.dependencies.stack,[])
+
+
+class RootProfileRouteTests(unittest.TestCase):
+    def test_normal_routes_day_max_saved_gj_reload_and_back_both_rules(self):
+        from app import create_app
+        import json
+        for repeat in ('1','0'):
+            app=create_app({'TESTING':True,'SECRET_KEY':'root-profile-route',
+                            'HYBRID_TABLE_PREVIEW':True,'DAWN_BOARD_PREVIEW':True})
+            c=app.test_client()
+            form={'citizens':'2','hunters':'1','wolves':'1','day':'max','night':'max',
+                  'fake_reports':'random','disclosure_common':'none','allow_repeat_guard':repeat,
+                  'seer_mode':'information-fixed-v1'}
+            self.assertEqual(c.post('/start',data=form).status_code,303)
+            self.assertIn(b'data-fraction="7/24"',c.get('/main').data)
+            def game():
+                with c.session_transaction() as session:return deepcopy(session['game'])
+            g=game();self.assertEqual(c.post('/advance',data={'revision':str(g['revision']),'target':'4',
+                'day':'max','night':'max'}).status_code,303)
+            g=game();self.assertIn(b'data-fraction="1/18"',c.get('/main').data)
+            before=deepcopy(g)
+            own=c.post('/private-view',data={'revision':str(g['revision']),'board_id':g['public_log']['board_id'],
+                'payload':json.dumps({'role':'wolf','players':[1],'results':[]})})
+            self.assertEqual(own.status_code,200);self.assertEqual(own.json['players'][1]['final']['village'],'1/18')
+            self.assertEqual(game(),before)
+            self.assertEqual(c.post('/dawn-report',data={'revision':str(g['revision']),
+                'board_id':g['public_log']['board_id'],'mode':'none'}).status_code,303)
+            g=game();self.assertEqual(c.post('/dawn-advance',data={'revision':str(g['revision']),
+                'board_id':g['public_log']['board_id']}).status_code,303)
+            saved=game();self.assertEqual(saved['history'][-1]['policy']['day'],'max')
+            self.assertIn(b'data-fraction="1/3"',c.get('/main').data)
+            with c.session_transaction() as session:stored=deepcopy(dict(session))
+            reopened=app.test_client()
+            with reopened.session_transaction() as session:session.update(stored)
+            self.assertIn(b'data-fraction="1/3"',reopened.get('/main').data)
+            self.assertEqual(c.post('/back',data={'revision':str(saved['revision'])}).status_code,303)
+            self.assertEqual(game()['policy']['day'],'max')
+            self.assertIn(b'data-fraction="1/18"',c.get('/main').data)
