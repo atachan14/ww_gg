@@ -15,3 +15,5 @@ Base: 1bbbda8。デフォルト allow_repeat_guard=True を維持。False は単
 回帰：合法手、自己/死亡対象、死亡狩人、候補0/終局、初夜、複数夜GJ、占い併存、本人/公開、前夜対象死亡、cache冷温、旧値、設定保存/再入場、戻りと死亡編集、不正ルール/max送信の非破壊性。
 
 検証チェックポイント：対象上の全542テスト成功（188.104秒）。専用18801は最終コードでPID4936稼働。CUA初期化は2回ともtrusted Node終了。独立Edge155（PID4520、専用検証プロファイル、debug18802）の実DOMで既定ありと2択、通常Boardへの開始、昼random/夜maxの保持を確認。ルール両側の最終表示値と本人表示の実ブラウザ確認は継続中。
+
+最終実ブラウザ確認：既存専用Edgeと18801を再利用し、通常設定・戦略編集・Table選択UIから、連続護衛あり83/180、なし11/24、Day1夜公開31/96、P1狩人本人のP2/P3/P4固定護衛各23/72を確認。自己護衛欄は対象外。証拠はtask-6のedge-repeat-true-values.json、edge-repeat-false-values.json、edge-owner-values.jsonおよびPNG。API代替ではなく実DOM表示の検証完了。技術検証完了、人間受入は未実施。
