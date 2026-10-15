@@ -1,0 +1,1501 @@
+[
+  {
+    "type": "Board",
+    "fields": {
+      "player_count": 6,
+      "alive": [
+        1,
+        4,
+        5
+      ],
+      "wolf_count": 1,
+      "day": 3,
+      "phase": "night",
+      "history": [
+        {
+          "type": "PublicEvent",
+          "fields": {
+            "day": 1,
+            "phase": "day",
+            "target": 6
+          }
+        },
+        {
+          "type": "PublicEvent",
+          "fields": {
+            "day": 2,
+            "phase": "day",
+            "target": 2
+          }
+        },
+        {
+          "type": "PublicEvent",
+          "fields": {
+            "day": 3,
+            "phase": "day",
+            "target": 3
+          }
+        }
+      ],
+      "belief": [
+        [
+          1,
+          {
+            "fraction": [
+              3,
+              5
+            ]
+          }
+        ],
+        [
+          8,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ],
+        [
+          16,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ]
+      ],
+      "initial_medium_count": 0,
+      "claims": [
+        "hunter",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "role_belief": [
+        [
+          1,
+          0,
+          {
+            "fraction": [
+              3,
+              5
+            ]
+          }
+        ],
+        [
+          8,
+          0,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ],
+        [
+          16,
+          0,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ]
+      ],
+      "initial_seer_count": 0,
+      "initial_hunter_count": 1,
+      "world_belief": [
+        [
+          1,
+          0,
+          0,
+          4,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ],
+        [
+          1,
+          0,
+          0,
+          8,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ],
+        [
+          1,
+          0,
+          0,
+          16,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ],
+        [
+          8,
+          0,
+          0,
+          1,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ],
+        [
+          16,
+          0,
+          0,
+          1,
+          {
+            "fraction": [
+              1,
+              5
+            ]
+          }
+        ]
+      ],
+      "medium_opportunities": [],
+      "reports": [],
+      "report_resolved": [],
+      "guard_prior_roster": [
+        2,
+        [
+          1,
+          3,
+          4,
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "type": "TrueScanState",
+    "fields": {
+      "hypotheses": [
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              4
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 3,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 3,
+                  "target": 4
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              4
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 3,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 3,
+                  "target": 5
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              4
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                3,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 3,
+                  "target": 4
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 3,
+                  "target": 4
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 4
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              4
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                3,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 3,
+                  "target": 5
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 3,
+                  "target": 5
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 5
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              8
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 4,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 4,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              8
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 4,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 4,
+                  "target": 5
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              8
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                3,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 4,
+                  "target": 3
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 4,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              8
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                3,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 4,
+                  "target": 5
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 4,
+                  "target": 5
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 5
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              16
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 5,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 5,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              16
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 5,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 5,
+                  "target": 4
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              16
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                3,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 5,
+                  "target": 3
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 5,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              1,
+              0,
+              0,
+              16
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                3,
+                40
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 5,
+                  "target": 4
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 5,
+                  "target": 4
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 4
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              8,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              8,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 5
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              8,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              8,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 5
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              8,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 5
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 5
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              8,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 5
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 5
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 5
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 5
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              16,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              16,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 4
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 2
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              16,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              16,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 4
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 3
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              16,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 4
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 3
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 4
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 3
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "Hypothesis",
+          "fields": {
+            "roles": [
+              16,
+              0,
+              0,
+              1
+            ],
+            "acquisitions": [],
+            "mass": {
+              "fraction": [
+                1,
+                30
+              ]
+            },
+            "guards": [
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 1,
+                  "actor": 1,
+                  "target": 4
+                }
+              },
+              {
+                "type": "GuardIntent",
+                "fields": {
+                  "night": 2,
+                  "actor": 1,
+                  "target": 4
+                }
+              }
+            ],
+            "attacks": [
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 1,
+                  "target": 4
+                }
+              },
+              {
+                "type": "WolfAttack",
+                "fields": {
+                  "night": 2,
+                  "target": 4
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "rosters": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          1,
+          3,
+          4,
+          5
+        ]
+      ],
+      "initial_rule": "random_white",
+      "tracked": null,
+      "observed_prefix": 0
+    }
+  },
+  [],
+  {
+    "type": "Rules",
+    "fields": {
+      "allow_self_bite": false,
+      "initial_seer": "random_white",
+      "allow_repeat_guard": true
+    }
+  },
+  {
+    "type": "Strategy",
+    "fields": {
+      "day": "max",
+      "night": "max",
+      "include_self_bite": false,
+      "fake_reports": "random",
+      "disclosure_common": "none",
+      "seer_disclosure": "inherit",
+      "medium_disclosure": "inherit",
+      "seer_position": [
+        "unvisited",
+        "uniform"
+      ],
+      "fake_seer_policy": [
+        "noncontradictory",
+        "uniform"
+      ],
+      "guard_position": [
+        "uniform"
+      ]
+    }
+  }
+]

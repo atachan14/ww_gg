@@ -120,3 +120,169 @@ def certify_uniform_profiles(legal,evaluate,*,maximize=False,max_profiles=4096,
     elif certificates:status='unique'
     else:status='no_admissible_profile'
     return ProfileSearch(status,total,evaluated,tuple(certificates),tuple(issues))
+
+
+def certify_support_profiles(legal,evaluate,contributions,forced,*,maximize=False,
+                             max_profiles=4096,max_work=250000,max_seconds=20):
+    """Exact quotient of ALL uniform profiles by a proved OR-support signature.
+
+    Caller proves complete candidate scores depend only on this signature.
+    Every local uniform policy must be supplied. DP retains its multiplicity
+    and a complete witness. A class has at most one admissible profile: its
+    uniform best response, which must map back to that same class.
+    """
+    legal=tuple((i,tuple(actions)) for i,actions in legal);total=1
+    if not legal or len({i for i,a in legal})!=len(legal):raise ValueError('Unique nonempty infosets required')
+    if type(max_profiles)is not int or max_profiles<1:raise ValueError('Positive profile limit required')
+    if (type(maximize)is not bool and not isinstance(maximize,dict) or
+        isinstance(maximize,dict) and (set(maximize)!={info for info,actions in legal} or
+                                      any(type(v)is not bool for v in maximize.values()))):
+        raise ValueError('Explicit objective for every infoset required')
+    tables={};options={};dimensions=len(forced)
+    if not dimensions or any(type(x)is not int or x<0 for x in forced):
+        raise ValueError('Nonnegative complete support signature required')
+    for info,actions in legal:
+        policies=uniform_options(actions);total*=len(policies)
+        rows=contributions[info]
+        if (len(rows)!=len(policies) or {p for p,delta in rows}!=set(policies) or
+            any(len(delta)!=dimensions or any(type(x)is not int or x<0 for x in delta)
+                for policy,delta in rows)):
+            raise ValueError('Every legal uniform policy contribution required')
+        tables[info]=dict(rows);grouped={}
+        for policy,delta in rows:
+            count,witness=grouped.get(delta,(0,policy));grouped[delta]=(count+1,witness)
+        options[info]=tuple((delta,count,policy) for delta,(count,policy) in grouped.items())
+    if set(contributions)!={i for i,a in legal}:raise ValueError('Complete infoset contributions required')
+    def signature(profile):
+        key=forced
+        for info,policy in profile:
+            key=tuple(a|b for a,b in zip(key,tables[info][policy]))
+        return key
+    evaluated=0;certificates=[];issues=[]
+    try:
+        with calculation_budget(max_work,max_seconds=max_seconds):
+            states={forced:(1,())}
+            for info,actions in legal:
+                following={}
+                for key,(count,witness) in states.items():
+                    for delta,multiplicity,policy in options[info]:
+                        tick();updated=tuple(a|b for a,b in zip(key,delta))
+                        old_count,old_witness=following.get(updated,(0,witness+((info,policy),)))
+                        following[updated]=(old_count+count*multiplicity,old_witness)
+                if len(following)>max_profiles:
+                    return ProfileSearch('budget_unfinished',total,0,reason='support_partition_limit',
+                                         proof='support_partition')
+                states=following
+            if sum(count for count,witness in states.values())!=total:
+                raise ValueError('Incomplete support partition')
+            for key,(count,witness) in states.items():
+                tick()
+                try:scores=evaluate(witness)
+                except Pending as error:
+                    undefined=error.reason in ('public_generated_observation_zero_support',
+                        'root_guard_profile_undefined_observations','public_continuation_zero_support',
+                        'public_terminal_observation_zero_support','root_secret_public_history_zero_support',
+                        'root_secret_physical_zero_support','root_secret_actor_belief_zero_support')
+                    issues.append(ProfileIssue(witness,'undefined_observation' if undefined else
+                        'unresolved_dependency',error.reason));evaluated+=count
+                    return ProfileSearch('undefined_observations' if undefined else 'dependency_unfinished',
+                        total,evaluated,tuple(certificates),tuple(issues),reason=error.reason,
+                        proof='support_partition')
+                expected,rows=best_response_profile(legal,scores,maximize=maximize)
+                if signature(expected)==key:certificates.append(ProfileCertificate(expected,rows))
+                evaluated+=count
+    except CalculationBudgetExceeded:
+        return ProfileSearch('budget_unfinished',total,evaluated,tuple(certificates),tuple(issues),
+                             reason='calculation_budget_exceeded',proof='support_partition')
+    status='multiple' if len(certificates)>1 else 'unique' if certificates else 'no_admissible_profile'
+    return ProfileSearch(status,total,evaluated,tuple(certificates),proof='support_partition')
+
+
+def certify_dependency_profiles(legal,evaluate_rows,dependencies,*,maximize=False,
+                                max_profiles=4096,max_work=250000,max_seconds=20):
+    """Eliminate necessary best-response equations without restricting profiles.
+
+    Caller proves each COMPLETE row depends only on the listed policy rows.
+    SCCs are processed after their dependencies. In each SCC an independent
+    block is uniquely forced by the remaining assignment; asymmetric responses
+    stay separate. All legal candidates of each retained profile are computed.
+    """
+    legal=tuple((i,tuple(a)) for i,a in legal);infos=tuple(i for i,a in legal)
+    if not legal or len(set(infos))!=len(infos) or set(dependencies)!=set(infos):
+        raise ValueError('Complete unique dependency inputs required')
+    if type(max_profiles)is not int or max_profiles<1:raise ValueError('Positive profile limit required')
+    if any(not set(d)<=set(infos) for d in dependencies.values()):raise ValueError('Unknown dependency')
+    if (type(maximize)is not bool and not isinstance(maximize,dict) or isinstance(maximize,dict) and
+        (set(maximize)!=set(infos) or any(type(v)is not bool for v in maximize.values()))):
+        raise ValueError('Explicit objective for every infoset required')
+    options={i:uniform_options(a) for i,a in legal};total=1
+    for choices in options.values():total*=len(choices)
+    # Tarjan emits a component only after its outgoing dependencies.
+    indices={};low={};stack=[];active=set();components=[]
+    def visit(i):
+        indices[i]=low[i]=len(indices);stack.append(i);active.add(i)
+        for d in infos:
+            if d not in dependencies[i]:continue
+            if d not in indices:visit(d);low[i]=min(low[i],low[d])
+            elif d in active:low[i]=min(low[i],indices[d])
+        if low[i]==indices[i]:
+            members=set()
+            while True:
+                d=stack.pop();active.remove(d);members.add(d)
+                if d==i:break
+            components.append(tuple(d for d in infos if d in members))
+    for i in infos:
+        if i not in indices:visit(i)
+    def subset_legal(members):return tuple((i,a) for i,a in legal if i in members)
+    def direction(members):return {i:maximize[i] for i in members} if isinstance(maximize,dict) else maximize
+    states=[({}, {})];work=0
+    try:
+        with calculation_budget(max_work,max_seconds=max_seconds):
+            for component in components:
+                blocks=[()]
+                for seed in component:
+                    if seed in dependencies[seed]:continue
+                    block=[seed]
+                    for i in component:
+                        if i not in block and not set(dependencies[i])&set((*block,i)) and all(i not in dependencies[d] for d in block):block.append(i)
+                    blocks.append(tuple(block))
+                def size(block):
+                    n=1
+                    for i in block:n*=len(options[i])
+                    return n
+                eliminated=max(blocks,key=size);feedback=tuple(i for i in component if i not in eliminated)
+                count=1
+                for i in feedback:count*=len(options[i])
+                if work+count*len(states)>max_profiles:
+                    return ProfileSearch('budget_unfinished',total,0,reason='dependency_feedback_limit',proof='dependency_elimination')
+                following=[]
+                for assigned,known_scores in states:
+                    for choices in product(*(options[i] for i in feedback)):
+                        tick();work+=1
+                        values={i:uniform_policy(a) for i,a in legal};values.update(assigned)
+                        values.update(zip(feedback,choices));profile=tuple((i,values[i]) for i in infos)
+                        if eliminated:
+                            scores=evaluate_rows(profile,eliminated)
+                            forced,_=best_response_profile(subset_legal(eliminated),scores,maximize=direction(eliminated))
+                            values.update(forced)
+                        profile=tuple((i,values[i]) for i in infos)
+                        scores=evaluate_rows(profile,component)
+                        expected,rows=best_response_profile(subset_legal(component),scores,maximize=direction(component))
+                        if all(values[i]==p for i,p in expected):
+                            accepted=dict(assigned);accepted.update((i,values[i]) for i in component)
+                            complete=dict(known_scores);complete.update(rows);following.append((accepted,complete))
+                states=following
+                if not states:break
+    except Pending as error:
+        undefined=error.reason in ('public_generated_observation_zero_support','root_guard_profile_undefined_observations',
+            'public_continuation_zero_support','public_terminal_observation_zero_support',
+            'root_secret_public_history_zero_support','root_secret_physical_zero_support','root_secret_actor_belief_zero_support')
+        return ProfileSearch('undefined_observations' if undefined else 'dependency_unfinished',total,0,
+            issues=(ProfileIssue(profile,'undefined_observation' if undefined else 'unresolved_dependency',error.reason),),
+            reason=error.reason,proof='dependency_elimination')
+    except CalculationBudgetExceeded:
+        return ProfileSearch('budget_unfinished',total,0,reason='calculation_budget_exceeded',proof='dependency_elimination')
+    certificates=tuple(ProfileCertificate(tuple((i,values[i]) for i in infos),tuple((i,scores[i]) for i in infos))
+                       for values,scores in states)
+    status='multiple' if len(certificates)>1 else 'unique' if certificates else 'no_admissible_profile'
+    return ProfileSearch(status,total,total,certificates,proof='dependency_elimination')

@@ -224,12 +224,14 @@ class NoRepeatGuardRouteTests(unittest.TestCase):
         self.assertEqual(self.game(c)['board_flow'],FLOW)
         self.assertEqual(c.get('/main').status_code,200)
 
-    def test_default_max_is_preserved_pending_and_each_phase_can_be_edited(self):
+    def test_default_max_is_preserved_when_exact_value_matches_uniform_and_each_phase_can_be_edited(self):
         response=self.c.post('/start',data={**self.form,'day':'max','night':'max'})
         self.assertEqual(response.status_code,303)
         g=self.game();self.assertEqual((g['policy']['day'],g['policy']['night']),('max','max'))
         main=self.c.get('/main');self.assertEqual(main.status_code,200)
-        self.assertNotIn(b'data-fraction="11/24"',main.data)
+        # This no-repeat case has the same exact value under both settings;
+        # equality is not evidence of replacing the stored max strategy.
+        self.assertIn(b'data-fraction="11/24"',main.data)
         self.assertEqual(self.c.post('/strategy',data={'revision':str(g['revision']),'day':'random','night':'max'}).status_code,303)
         middle=self.game();self.assertEqual((middle['policy']['day'],middle['policy']['night']),('random','max'))
         self.assertEqual(self.c.post('/advance',data={'revision':str(middle['revision']),'target':'5','day':'random','night':'max'}).status_code,303)

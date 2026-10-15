@@ -44,7 +44,16 @@ class TrueScanState:
                 actual={a.player for a in h.acquisitions if a.day==day}
                 if day>self.observed_prefix and expected!=actual:raise ValueError('Missing own acquisition history cannot become unvisited')
     @property
-    def public_roles(self):return public_worlds(self.hypotheses)
+    def public_roles(self):
+        cached=self.__dict__.get('_public_roles_cache')
+        if cached is not None:return cached
+        result=public_worlds(self.hypotheses)
+        # Retain full immutable hypotheses; cache only this derived exact sum.
+        # Noncanonical mutable caller inputs keep the uncached behavior.
+        if type(self.hypotheses)is tuple and all(type(h)is Hypothesis and type(h.roles)is tuple
+                                                for h in self.hypotheses):
+            object.__setattr__(self,'_public_roles_cache',result)
+        return result
 
 def validate_roster(alive):
     if not isinstance(alive,tuple) or len(set(alive))!=len(alive) or any(type(p)is not int or not 1<=p<=9 for p in alive):raise ValueError('Explicit unique 1-9 player roster required')

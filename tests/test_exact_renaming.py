@@ -49,6 +49,19 @@ class ExactRenamingTests(unittest.TestCase):
         self.assertEqual(canonical_key(b,state,(),own,None,rules,strategy,target=2),
                          canonical_key(b,state,(),own,None,rules,strategy,target=2,prune_automorphisms=False))
 
+    def test_shared_serialization_keeps_full_private_input_and_configuration(self):
+        b,state=self.fixture();serialization={};marginals={};rules=Rules();strategy=Strategy()
+        first=WolfInformation(2).condition_public(state)
+        weighted=replace(state,hypotheses=normalize(tuple(replace(h,mass=h.mass*(2 if h.roles[0]==2 else 1))
+                                                         for h in state.hypotheses)))
+        cases=((state,first,2),(state,first,3),(weighted,WolfInformation(2).condition_public(weighted),3))
+        for law,private,target in cases:
+            actual=canonical_key(b,law,(),private,None,rules,strategy,target=target,
+                                 serialization_cache=serialization,marginal_cache=marginals)
+            expected=canonical_key(b,law,(),private,None,rules,strategy,target=target)
+            self.assertEqual(actual,expected)
+        self.assertEqual(state.public_roles,TrueScanState(state.hypotheses,rosters=state.rosters).public_roles)
+
     def test_whole_state_bijection_and_actor_partition(self):
         b,s=self.fixture();own=WolfInformation(2).condition_public(s)
         original=self.key(b,s,private=own,target=3)

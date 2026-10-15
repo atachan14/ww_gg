@@ -39,7 +39,13 @@ class CandidatePolicyCoherenceTests(unittest.TestCase):
         g['claim_policy']=g['history'][0]['claim_policy']={'hunter':'filled'}
         r,p=replay(g);old=Strategy(**g['policy']);root=prepare_root_entry(g,p.board,r,old)
         result=certify_wolf_profiles(root.public,root.public_law,(),r,replace(old,day='max'))
-        self.assertEqual(result.status,'unique');self.assertEqual(result.evaluated,9)
+        self.assertEqual(result.status,'unique');self.assertEqual(result.evaluated,1)
+        self.assertEqual(result.proof,'candidate_rule_independent')
+        from unittest.mock import patch
+        with patch('werewolf.wolf_profile_certificate.candidate_parameter_independence',return_value=None):
+            exhaustive=certify_wolf_profiles(root.public,root.public_law,(),r,replace(old,day='max'))
+        self.assertEqual(exhaustive.evaluated,9)
+        self.assertEqual(result.certified,exhaustive.certified)
         self.assertEqual(result.issues,())
         self.assertTrue(all(policy==((1,F(1)),) for info,policy in result.selected.profile))
         self.assertTrue(all(dict(row)[1]==0 and max(v for a,v in row)==F(1,4)
@@ -80,3 +86,25 @@ class CandidatePolicyCoherenceTests(unittest.TestCase):
         other=next(i for i,m,law in groups if i.initial_roster==2)
         changed=wolf_candidate_profile(first,other,1,rules=candidates)
         self.assertNotEqual(key(first,2),key(changed,2))
+
+    def test_acquisition_cache_keeps_complete_source_and_never_keeps_failure(self):
+        from unittest.mock import patch
+        from werewolf.wolf_profile_certificate import WolfProfileResolver
+        from werewolf.information_set_forecast import Pending
+        g=fixtures.RootGuardMaxTests().game();r,p=replay(g);s=Strategy(**g['policy'])
+        root=prepare_root_entry(g,p.board,r,s);before=deepcopy(root)
+        resolver=WolfProfileResolver(r,s)
+        engines=[FixedPublicWolfProfile(root.public,root.public_law,(),r,s,(),resolver=resolver)
+                 for n in range(2)]
+        generated=engines[0].acquire(root.public,root.public_law)
+        self.assertIs(engines[1].acquire(root.public,root.public_law),generated)
+        self.assertEqual(resolver.acquisition_stats,{'calls':2,'hits':1})
+        changed=replace(root.public_law,initial_rule='normal')
+        self.assertEqual(engines[1].acquire(root.public,changed).initial_rule,'normal')
+        self.assertEqual(resolver.acquisition_stats['hits'],1)
+        unseen=replace(root.public_law,observed_prefix=1)
+        with patch.object(engines[0],'checked',side_effect=Pending('generation_unfinished')):
+            with self.assertRaises(Pending):engines[0].acquire(root.public,unseen)
+        self.assertNotIn((r,s,root.public,unseen),resolver.acquisition_cache)
+        self.assertEqual(engines[1].acquire(root.public,unseen).observed_prefix,1)
+        self.assertEqual(root,before)

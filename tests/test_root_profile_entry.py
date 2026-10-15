@@ -139,6 +139,14 @@ class RootProfileEntryTests(unittest.TestCase):
             before=deepcopy(later);s=replace(old,day='max');resolver=WolfProfileResolver(r,s)
             result=resolver.resolve(later.public,later.public_law)
             self.assertEqual((result.status,result.total,result.evaluated),('unique',2187,2187))
+            from unittest.mock import patch
+            from werewolf.policy_certificates import certify_uniform_profiles
+            def exhaustive(legal,evaluate,contributions,forced,**kwargs):
+                return certify_uniform_profiles(legal,evaluate,**kwargs)
+            with patch('werewolf.policy_certificates.certify_support_profiles',side_effect=exhaustive):
+                reference=WolfProfileResolver(r,s).resolve(later.public,later.public_law)
+            self.assertEqual(set(result.certified),set(reference.certified))
+
             self.assertLess(resolver.profiles_evaluated,20)
             # Independently recompute EVERY selected legal deviation using the
             # ordinary full common flow, with no score-class memo provider.
@@ -198,7 +206,7 @@ class RootProfileEntryTests(unittest.TestCase):
             g['claim_policy']=g['history'][0]['claim_policy']={'hunter':'filled'}
             r,p=replay(g);old=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,old)
             result=certify_wolf_profiles(b.public,b.public_law,(),r,replace(old,day='max'))
-            self.assertEqual((result.total,result.evaluated),(9,9))
+            self.assertEqual((result.total,result.evaluated),(9,1))
             self.assertEqual(result.status,'unique');self.assertEqual(result.issues,())
             self.assertTrue(all(policy==((1,F(1)),) for info,policy in result.selected.profile))
 

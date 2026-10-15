@@ -152,6 +152,7 @@ class RootSecretEngine(InformationSetForecast):
         self.verified_actor_kernels=set();self.verifying_actor_mask=None
         self.candidate_profiles=();self.candidate_profile_ids={};self.candidate_contexts=();self.candidate_rule_cache={}
         self.actor_candidate_keys={};self.actor_proposals={};self.actor_certificates={}
+        self.owned_flow_engines={}
         from .policy_dependencies import DependencyGraph
         self.policy_dependencies=DependencyGraph()
         self._profile_resolver=None
@@ -219,7 +220,11 @@ class RootSecretEngine(InformationSetForecast):
         if before.public_roles!=tuple(sorted(b.worlds)):
             raise Pending('root_guard_max_public_prior_mismatch')
         key=(b,before,past)
-        if key not in self.night_kernels and self.strategy.day=='max':
+        if key not in self.night_kernels and self.strategy.night=='max' and (self.strategy.day=='max' or
+                b.initial_seer_count or b.initial_medium_count):
+            # The actor-only proposal deliberately excludes mixed-role states.
+            # Do not expand its physical tree merely to discover that later;
+            # use the complete shared certificate directly.
             return self.certified_night_policies(b,before,past)
         if key not in self.night_kernels:
             result={};verify=[]
@@ -308,12 +313,49 @@ class RootSecretEngine(InformationSetForecast):
         if (mask,info.attacks) not in kernel:raise Pending('information_set_roster_missing')
         return kernel[mask,info.attacks]
 
+    def owned_night_action(self,b,s,past,target,private,observer,*,physical=None):
+        # Conditional scalar decomposition, not a replacement public Board or
+        # a physical-only proposal. Public choices are fixed, and the only
+        # subsequent night has three survivors and fixed public day choices.
+        if (self.verifying_actor_mask is not None or b.phase!='night' or len(b.alive)!=4 or
+            len(s.rosters)!=b.day or observer is not None or
+            self.strategy.day!='random' or self.strategy.night!='max' or
+            self.strategy.guard_position!=('uniform',) or
+            any(b.claims[p-1]==role and self.strategy.disclosure_for(role)!='none'
+                for p in b.alive for role in ('seer','medium')) or
+            len({h.roles[0] for h in s.hypotheses})<=1):return None
+        from .actor_information import wolf_information_groups,condition_actor_state
+        from .exact import replace_worlds
+        from .wolf_profile_certificate import FixedPublicWolfProfile
+        kernels=self.public_night_policies(b,s,past)
+        before=self.night_sources.get((b,s,past),s)
+        resolver=getattr(self,'resolver',None) or self._profile_resolver
+        if resolver is None:return None  # Preserve the existing verified actor-cut route.
+        value=F()
+        for info,mass,group in wolf_information_groups(private):
+            law=condition_actor_state(before,lambda h:h.roles[0]==info.initial_roster)
+            own_board=replace_worlds(b,law.public_roles,wolf_count=None)
+            profile=tuple((i,kernels[i.initial_roster,i.attacks])
+                          for i,m,g in wolf_information_groups(law))
+            key=(own_board,law,past,profile)
+            if key not in self.owned_flow_engines:
+                child=FixedPublicWolfProfile(own_board,law,past,self.rules,self.strategy,profile,
+                    resolver=resolver,max_work=self.max_work)
+                if len(self.owned_flow_engines)<32:self.owned_flow_engines[key]=child
+            else:child=self.owned_flow_engines[key]
+            value+=mass*child.act(own_board,law,past,target,group,None,
+                physical=physical_board(own_board,group,physical))
+            self.policy_dependencies.include(child.policy_dependencies)
+        return value
+
     def act(self,b,s,past,target,private,observer,*,physical=None):
         if type(target)is not int or target not in b.alive:
             raise Pending('information_set_internal_illegal_action')
         checked=physical_board(b,private,physical)
         if target not in legal_targets(checked,self.rules,self.strategy):
             raise Pending('information_set_internal_illegal_action')
+        owned_value=self.owned_night_action(b,s,past,target,private,observer,physical=physical)
+        if owned_value is not None:return owned_value
         if b.phase=='night' and self.strategy.night=='max' and observer is None:
             from .actor_information import wolf_information_groups
             if self.verifying_actor_mask is not None:
@@ -327,6 +369,8 @@ class RootSecretEngine(InformationSetForecast):
                     from .fixed_actor_continuation import fixed_actor_value
                     part=fixed_actor_value(checked,private,self,info=groups[0][0],target=target)
                     if part is not None:return part
+                return super().act(b,s,past,target,private,observer,physical=physical)
+            if b.initial_seer_count or b.initial_medium_count:
                 return super().act(b,s,past,target,private,observer,physical=physical)
             from .fixed_actor_continuation import fixed_actor_value
             value=F();resolved=True
