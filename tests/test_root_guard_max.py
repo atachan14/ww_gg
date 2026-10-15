@@ -156,6 +156,24 @@ class RootGuardMaxTests(unittest.TestCase):
         self.assertIsNone(e.verifying_actor_mask)
 
 
+    def test_saved_max_observation_children_match_full_unfiltered_joint_laws(self):
+        from werewolf.root_secret_flow import step_root_action
+        from werewolf.fixed_actor_continuation import fixed_uniform_action_value
+        for repeat in (True,False):
+            g=self.game(repeat,players=6);rules,p=replay(g);strategy=Strategy(**g['policy'])
+            branch=prepare_root_entry(g,p.board,rules,strategy);before=deepcopy(branch)
+            engine=RootSecretEngine(rules,strategy)
+            for target in branch.public.alive:
+                self.assertIsNone(fixed_uniform_action_value(branch.public,branch.public_law,
+                    branch.physical_law,engine,target))
+                complete=step_root_action(branch,target,rules,strategy,publish=False,_engine=engine)
+                self.assertNotIsInstance(complete,FuturePending)
+                for alive in (branch.public.alive,tuple(x for x in branch.public.alive if x!=target)):
+                    selected=step_root_action(branch,target,rules,strategy,publish=False,
+                        _engine=engine,_observed_alive=alive)
+                    self.assertEqual(selected,tuple((q,c) for q,c in complete if c.public.alive==alive))
+            self.assertEqual(branch,before)
+
     def test_saved_max_and_uniform_gj_two_night_actor_support(self):
         from werewolf.night_knowledge import WolfAttack
         expected={(True,'max'):F(23,72),(False,'max'):F(23,72),
@@ -173,7 +191,7 @@ class RootGuardMaxTests(unittest.TestCase):
                 actor=WolfInformation(1,(WolfAttack(1,2),)).condition_public(branch.public_law)
                 self.assertEqual({h.roles[3] for h in actor.hypotheses},{4,8,16})
                 self.assertTrue(all(h.guards[0].target==2 for h in actor.hypotheses))
-                value=evaluate_public_game(g,p.board,r,Strategy(**g['policy']),max_work=1000000,max_seconds=30)
+                value=evaluate_public_game(g,p.board,r,Strategy(**g['policy']))
                 self.assertNotIsInstance(value,FuturePending)
                 self.assertEqual(value.village_win,expected[repeat,saved])
                 self.assertEqual(g['history'][1]['policy']['night'],saved)

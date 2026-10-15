@@ -1,8 +1,11 @@
 # Fixed-uniform joint-law scalar backup
 
-This checkpoint addresses item I's original random/random joint-law integration.
-New-path random/max and coupled max remain separate policy expansion; their
-completion is not added to item I. No configured strategy or proof budget changes.
+Terminology correction: this checkpoint is random/random joint-law groundwork,
+not the user's original item ①. Original ① is expected-win-maximizing wolf
+attacks under an unknown uniform guardian. The earlier use of 'item I' here
+conflated these tasks. See original-i-acceptance-audit.md for the finite original
+acceptance matrix. Deferred new-path max and simultaneous max are not added as
+completion gates. No configured strategy or proof budget changes.
 
 ## Preconditions and data ownership
 
