@@ -41,3 +41,24 @@ class DependencyProfileTests(unittest.TestCase):
         def undefined(profile,requested):raise Pending('public_generated_observation_zero_support')
         result=certify_dependency_profiles(legal,undefined,deps)
         self.assertEqual(result.status,'undefined_observations');self.assertIsNone(result.selected)
+
+    def test_game_roster_quotient_is_bounded_and_never_applied_to_public_max(self):
+        from unittest.mock import patch
+        from dataclasses import replace
+        from tests import test_root_guard_max as fixtures
+        from werewolf.seer_manual import replay
+        from werewolf.exact import Strategy
+        from werewolf.root_secret_flow import prepare_root_entry
+        from werewolf.wolf_profile_certificate import WolfProfileResolver
+        from werewolf.policy_certificates import ProfileSearch
+        for players,day,expect_cross in ((6,'random',True),(5,'random',False),(5,'max',True)):
+            g=fixtures.RootGuardMaxTests().game(players=players);rules,p=replay(g)
+            strategy=Strategy(**g['policy']);root=prepare_root_entry(g,p.board,rules,strategy)
+            seen=[]
+            def capture(legal,evaluate,dependencies,**kwargs):
+                seen.append(dependencies);return ProfileSearch('budget_unfinished',1,0)
+            with patch('werewolf.policy_certificates.certify_dependency_profiles',side_effect=capture):
+                WolfProfileResolver(rules,replace(strategy,day=day)).resolve(root.public,root.public_law)
+            self.assertTrue(seen)
+            cross=any(other.initial_roster!=info.initial_roster for info,rows in seen[0].items() for other in rows)
+            self.assertEqual(cross,expect_cross,(players,day))

@@ -349,7 +349,11 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
         # owned wolf law conditions on its initial roster. Per-role generated
         # normalization is independent of all other rosters' kernel rows;
         # their global Q normalization cancels under that observation.
-        isolated=fixed_public_choices
+        # The implemented observation quotient is bounded to four survivors;
+        # later three-survivor candidate values are profile-group independent.
+        # Larger sources retain all cross-roster dependencies unless the
+        # original complete candidate rule itself overwrites those parameters.
+        isolated=fixed_public_choices and len(board.alive)<=4
         if isolated:
             dependencies={info:{other for other in rows if other.initial_roster==info.initial_roster}
                           for info,rows in dependencies.items()}
