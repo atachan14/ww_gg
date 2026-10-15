@@ -852,7 +852,7 @@ def create_app(test_config=None, *, deployment=False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="ww_gg local public Board v0.4")
+    parser = argparse.ArgumentParser(description="ww_gg local public Board v0.5")
     parser.add_argument("--port", type=int, default=8771)
     parser.add_argument("--hybrid-table-preview", action="store_true", help="Enable unpublished table draft preview locally")
     parser.add_argument("--dawn-board", action="store_true", help="Preview public dawn Boards")
