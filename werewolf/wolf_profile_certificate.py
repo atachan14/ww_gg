@@ -23,6 +23,24 @@ def require_profile(result,*,dependent=False):
     raise Pending('root_guard_profile_'+result.status)
 
 
+def renamed_profile_search(result,ids,order=None):
+    """Transport a COMPLETE certificate using its full-source bijection."""
+    from dataclasses import replace
+    from .actor_information import WolfInformation
+    from .night_knowledge import WolfAttack
+    def info(i):
+        mask=sum(1<<(ids[p]-1) for p in range(len(ids)) if i.initial_roster&(1<<p))
+        return WolfInformation(mask,tuple(WolfAttack(a.night,ids[a.target-1]) for a in i.attacks))
+    def rows(values):
+        mapped={info(i):tuple(sorted((ids[t-1],q) for t,q in row)) for i,row in values}
+        sequence=order if order is not None else sorted(mapped,key=lambda i:(i.initial_roster,i.attacks))
+        if set(sequence)!=set(mapped):raise ValueError('Complete renamed information partition required')
+        return tuple((i,mapped[i]) for i in sequence)
+    if result.selected is None:raise ValueError('Only a complete unique certificate may be transported')
+    c=result.selected
+    return replace(result,certified=(ProfileCertificate(rows(c.profile),rows(c.scores)),))
+
+
 class WolfProfileResolver:
     """Complete public-context memoization, including later-night proofs.
 
@@ -30,7 +48,7 @@ class WolfProfileResolver:
     results remain diagnostics, not cached choices. Parent calculation deadlines
     are inherited by each nested certificate; the profile-work cap is shared.
     """
-    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=250000,max_seconds=20):
+    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=250000,max_seconds=20,canonical_certificates=True):
         if type(max_profiles)is not int or max_profiles<1:raise ValueError('Positive profile limit required')
         self.rules=rules;self.strategy=strategy;self.max_profiles=max_profiles
         self.max_work=max_work;self.max_seconds=max_seconds
@@ -41,6 +59,9 @@ class WolfProfileResolver:
         self.branch_cache={};self.branch_stats={"calls":0,"hits":0}
         self.row_reuse_stats={"classes":0,"hits":0,"vector_hits":0}
         self.candidate_rule_cache={};self.acquisition_cache={}
+        self.canonical_certificates=canonical_certificates
+        self.certificate_cache={};self.certificate_cache_size=0
+        self.certificate_cache_stats={'calls':0,'hits':0}
         self.acquisition_stats={"calls":0,"hits":0}
 
     def branch(self,key,compute):
@@ -83,11 +104,33 @@ class WolfProfileResolver:
         try:
             with self.dependencies.evaluating(node):
                 with calculation_budget(self.max_work,max_seconds=self.max_seconds):
+                    canonical=None
+                    # Cache complete contexts within the input-size cap. The full source,
+                    # every secret ledger/mass and all rules enter the key. Limits
+                    # bound retained serialized input, not the mathematical domain.
+                    if self.canonical_certificates and len(state.hypotheses)<=4000:
+                        from .exact_renaming import canonical_key
+                        self.certificate_cache_stats['calls']+=1
+                        canonical=canonical_key(board,state,past,state,None,self.rules,self.strategy,
+                                                return_mapping=True,serialization_cache={})
+                        if canonical is not None and canonical[0] in self.certificate_cache:
+                            ids=canonical[1];inverse=tuple(ids.index(p)+1 for p in range(1,len(ids)+1))
+                            order=tuple(i for i,mass,group in wolf_information_groups(state))
+                            result=renamed_profile_search(self.certificate_cache[canonical[0]],inverse,order)
+                            self.certificate_cache_stats['hits']+=1
+                            self.cache[key]=result;self.diagnostics[key]=result
+                            return result
                     result=certify_wolf_profiles(board,state,past,self.rules,self.strategy,
                         max_profiles=self.max_profiles,max_work=self.max_work,
                         max_seconds=self.max_seconds,resolver=self)
                 self.diagnostics[key]=result
-                if result.selected is not None:self.cache[key]=result
+                if result.selected is not None:
+                    self.cache[key]=result
+                    if (canonical is not None and canonical[0] not in self.certificate_cache and
+                        len(self.certificate_cache)<128 and
+                        self.certificate_cache_size+len(state.hypotheses)<=32000):
+                        self.certificate_cache[canonical[0]]=renamed_profile_search(result,canonical[1])
+                        self.certificate_cache_size+=len(state.hypotheses)
                 return result
         finally:self.active.remove(key)
 
@@ -237,7 +280,7 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
         from dataclasses import replace
         terminal=FixedPublicWolfProfile(board,state,past,rules,strategy,()).terminal_day(
             replace(board,phase='day'),state)
-    terminal_table=None;terminal_physics={}
+    terminal_table=None;terminal_physics={};terminal_inputs={}
     if terminal:
         from .terminal_followup import terminal_payoff_table
         terminal_table=terminal_payoff_table(board,rules,strategy)
@@ -316,8 +359,10 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
                             from .terminal_followup import terminal_followup_value
                             physical_key=(info,target)
                             if physical_key not in terminal_physics:
-                                from .terminal_followup import terminal_physical_measures
-                                measures=terminal_physical_measures(board,group,engine,target)
+                                from .terminal_followup import terminal_physical_measures,terminal_physical_input
+                                if info not in terminal_inputs:terminal_inputs[info]=terminal_physical_input(group)
+                                measures=terminal_physical_measures(board,group,engine,target,
+                                    physical_input=terminal_inputs[info])
                                 terminal_physics[physical_key]=(physical_actor_outcomes(board,group,engine,target)
                                                                if measures is None else measures)
                             support=(public_support[candidate_class] if candidate_class in public_support else

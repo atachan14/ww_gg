@@ -39,3 +39,47 @@ Partial or ambiguous policy certificates remain Pending. All required legal rows
 The five-player max/max source is unique for both guard rules. All selected legal rows match an unreduced full common evaluator using only previously completed future certificates; overall value is 4/7. Dependency elimination reduced a local measurement from about 13.34 seconds to about one second.
 
 The latent-medium six-player day-random/night-max case completed with 719/2400 in every action row (13.54 seconds in one local run), matching the existing all-latent reference without public abilities. The latent-seer and seer+medium cases, and unrestricted six-player max/max, are still being measured. The first complete regression exposed a mixed-role dispatch error: saved random nights had incorrectly entered the max certificate path. Dispatch is now explicitly limited to night=max. Existing verified actor-cut paths also retain their original continuation-provider behavior. The repaired complete regression passed all 607 tests in 282.542 seconds. UI save/recalculation checks and the remaining cases continue; item I is not finished.
+
+
+## Complete-certificate bijections and scalar physical input plans
+
+A resolver-local cache now transports only a finished UNIQUE certificate under
+an exact full-source player bijection. Its key contains the complete Board,
+every secret hypothesis and exact mass, acquisition/guard/attack ledgers, past
+reports, Rules and Strategy. The same mapping transports every information key,
+legal target, policy probability and action score; current source row order is
+restored. No unfinished or ambiguous result enters this cache. It is bounded by
+128 entries and 32000 input hypotheses, and sources over 4000 hypotheses use the
+ordinary path. These retention limits do not restrict the policy domain.
+Independent renamed-source recomputation with the cache disabled agrees on all
+legal scores and profile rows for both guard rules. Changed full input weights
+miss the cache even when their positive supports are unchanged.
+
+At the already-proved three-survivor terminal cut, a scalar physical input plan
+sums exact input mass only for identical `(roles, full guards)` arguments of the
+existing physical kernel. It retains a strong reference to the complete source
+and rejects use with another source. The plan can be shared between candidate
+targets; no shorter acquisition/history state is constructed. Original scans,
+guard and attack records remain in actual replay, private observations and public
+conditioning. Tests compare every resulting physical role mass with the original
+full scan expansion, for both guard rules and living/dead guarded targets.
+
+Measured six-player day-random/night-max medium-only source: all five action rows
+remain 719/2400, with one local run reduced from 13.35 to 4.79 seconds. Original
+seer-only and seer+medium sources still exhaust the current proof budget (15.57
+and 11.35 seconds); six-player max/max also remains unfinished (15.38 seconds).
+These measurements do not establish broader numeric coverage. Budgets, max rules
+and all configured continuations are unchanged. Item I remains incomplete.
+
+Browser QA on the saved 608-test checkpoint completed the actual fake-game flow:
+11/24 initially, 31/96 at night, 13/48 after GJ, and 31/96 after returning. Save,
+reload, reopening in a new session, HELP/back and game/back preserve results and
+max/max configuration, with zero JavaScript errors. Publication remains held.
+
+Final exact-code regression: all 610 tests passed in 303.017 seconds
+(`task-6/canonical-full-final.log`). The earlier complete run had 609 passes and
+one newly added test-count assertion (`7` internal hits versus `1` expected);
+its exact score/profile comparisons had passed. The assertion now isolates the
+renamed source's hit from legitimate internal terminal-context hits. Both new
+tests passed separately, then the entire 610-test suite passed. No runtime
+calculation was changed in that assertion repair.

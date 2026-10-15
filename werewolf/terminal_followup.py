@@ -51,7 +51,29 @@ class TerminalRoleMeasure:
     public_roles: tuple
 
 
-def terminal_physical_measures(board,state,engine,target):
+@dataclass(frozen=True)
+class TerminalPhysicalInput:
+    source: object
+    entries: tuple
+
+
+def terminal_physical_input(state):
+    """Sum equal physical inputs, retaining the exact source and its ledgers.
+
+    This is only a scalar-integral plan. Physical transitions read roles and
+    guards; scans and attacks remain untouched in source and every caller.
+    """
+    from .calculation_budget import tick
+    grouped={}
+    for h in state.hypotheses:
+        tick();key=(h.roles,h.guards)
+        if key in grouped:
+            original,mass=grouped[key];grouped[key]=(original,mass+h.mass)
+        else:grouped[key]=(h,h.mass)
+    return TerminalPhysicalInput(state,tuple(grouped.values()))
+
+
+def terminal_physical_measures(board,state,engine,target,*,physical_input=None):
     """Integrate only an unused FUTURE scan kernel at a proved terminal cut.
 
     Every existing acquisition/guard/attack record remains in the input. The
@@ -66,14 +88,15 @@ def terminal_physical_measures(board,state,engine,target):
             for p in board.alive for role in ('seer','medium'))):return None
     from .fixed_actor_continuation import physical_hypothesis_outcomes
     from .calculation_budget import tick
-    plans={};groups={};templates={}
-    for h in state.hypotheses:
-        tick();key=(h.roles,h.guards)
-        if key not in plans:plans[key]=physical_hypothesis_outcomes(board,h,engine,target)
-        for q,child,guards in plans[key]:
+    if physical_input is None:physical_input=terminal_physical_input(state)
+    if physical_input.source is not state:raise ValueError('Exact physical input source required')
+    groups={};templates={}
+    for h,input_mass in physical_input.entries:
+        tick()
+        for q,child,guards in physical_hypothesis_outcomes(board,h,engine,target):
             branch=(child.alive,child.day,child.phase,child.history,child.winner)
             roles=groups.setdefault(branch,{})
-            roles[h.roles]=roles.get(h.roles,F())+h.mass*q;templates[branch]=child
+            roles[h.roles]=roles.get(h.roles,F())+input_mass*q;templates[branch]=child
     result=[]
     for branch,roles in groups.items():
         mass=sum(roles.values(),F())

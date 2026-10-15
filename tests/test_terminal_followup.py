@@ -8,7 +8,7 @@ from werewolf.root_secret_flow import prepare_root_entry,step_root_action,RootSe
 from werewolf.actor_information import WolfInformation
 from werewolf.night_knowledge import WolfAttack
 from werewolf.fixed_actor_continuation import physical_actor_outcomes
-from werewolf.terminal_followup import terminal_physical_measures
+from werewolf.terminal_followup import terminal_physical_measures,terminal_physical_input
 
 class TerminalPhysicalMeasureTests(unittest.TestCase):
     def test_complete_scan_expansion_and_terminal_measure_have_identical_physical_law(self):
@@ -26,9 +26,13 @@ class TerminalPhysicalMeasureTests(unittest.TestCase):
                 def signature(outcomes):
                     return tuple((q,b.alive,b.day,b.phase,b.history,b.winner,b.worlds,joint.public_roles)
                                  for q,b,joint in outcomes)
+                compiled=terminal_physical_input(state)
+                self.assertIs(compiled.source,state)
+                self.assertEqual(sum(mass for h,mass in compiled.entries),sum(h.mass for h in state.hypotheses))
+                self.assertLess(len(compiled.entries),len(state.hypotheses))
                 for target in later.public.alive:
                     if target==1:continue
-                    actual=terminal_physical_measures(later.public,state,engine,target)
+                    actual=terminal_physical_measures(later.public,state,engine,target,physical_input=compiled)
                     expected=physical_actor_outcomes(later.public,state,engine,target)
                     self.assertEqual(signature(actual),signature(expected))
                 self.assertEqual((later,state),before)

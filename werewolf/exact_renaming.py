@@ -106,7 +106,7 @@ def colors(b,s,private,target,*,marginal_cache=None):
                   private.tracked is not None and p in private.tracked)
                  for p in range(1,b.player_count+1))
 
-def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physical=None,max_mappings=10000,prune_automorphisms=True,marginal_cache=None,wolf_profiles=(),actor_mask=None,serialization_cache=None):
+def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physical=None,max_mappings=10000,prune_automorphisms=True,marginal_cache=None,wolf_profiles=(),actor_mask=None,serialization_cache=None,return_mapping=False):
     """Return an exact payoff key, or None when safe search exceeds its cap."""
     if observer is not None and type(observer).__name__!='GuardObserver':return None
     groups={}
@@ -117,7 +117,7 @@ def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physica
     if count>max_mappings:return None
     try:base=(configuration(rules),configuration(strategy))
     except Unsupported:return None
-    best=None;offsets=[];offset=0
+    best=None;best_ids=None;offsets=[];offset=0
     for block in blocks:offsets.append(tuple(range(offset+1,offset+len(block)+1)));offset+=len(block)
     def masks_for(ids):
         return tuple(sum(1<<(ids[p]-1) for p in range(b.player_count) if m&(1<<p))
@@ -177,6 +177,7 @@ def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physica
             mapping={p:q for order,slots in zip(orders,offsets) for p,q in zip(order,slots)}
             ids=tuple(mapping[p] for p in range(1,b.player_count+1))
             key=snapshot(ids,masks_for(ids))
-            if best is None or key<best:best=key
+            if best is None or key<best:best=key;best_ids=ids
     except Unsupported:return None
-    return ('exact-full-renaming',best)
+    result=('exact-full-renaming',best)
+    return (result,best_ids) if return_mapping else result
