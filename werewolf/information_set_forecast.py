@@ -246,10 +246,10 @@ class InformationSetForecast:
             scored=[]
             for action in actions:
                 value=continuation_value(report_flow(action.outcomes,s,past,self),self.scalar)
-                scored.append((value,action))
-            best=min(v for v,_ in scored);tied=tuple(a for v,a in scored if v==best)
-            outcomes=merge_report_outcomes(BoardOutcome(o.probability/len(tied),o.board)
-                                           for action in tied for o in action.outcomes)
+                scored.append((action,value))
+            tied=optimal_targets(scored,maximize=False)
+            outcomes=merge_report_outcomes(BoardOutcome(o.probability*q,o.board)
+                                           for action,q in uniform_policy(tied) for o in action.outcomes)
         return tuple(report_flow(outcomes,s,past,self))
 
     def push(self,source,private,branches):

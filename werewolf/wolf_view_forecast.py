@@ -17,6 +17,7 @@ from .exact import (action_outcomes, legal_targets, value_for_action, report_act
 from .seer_future_uniform import FuturePending, acquire_uniform
 from .seer_future_forecast import forecast, project_private, future_publications
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
+from .policy_choice import optimal_targets, uniform_policy
 
 
 class Unresolved(Exception):
@@ -113,15 +114,14 @@ branch weights and payoffs; each child public Board keeps all public worlds.
                         continuation = sum((q * public_values(child, st, reports)[0]
                                             for q, child, st, reports in publications(o.board, next_s, published)), F())
                     value += o.probability * continuation
-                candidates.append((value, action))
-            best = min(value for value, _ in candidates)
-            tied = tuple(action for value, action in candidates if value == best)
+                candidates.append((action, value))
+            tied = optimal_targets(candidates, maximize=False)
             # The randomly selected tie instruction is not public information.
             # Merge equal public vectors before any subsequent public decision,
             # as in the existing random-report law.
             from .exact import BoardOutcome, merge_report_outcomes
-            outcomes = merge_report_outcomes(BoardOutcome(o.probability / len(tied), o.board)
-                                             for instruction in tied for o in instruction.outcomes)
+            outcomes = merge_report_outcomes(BoardOutcome(o.probability * q, o.board)
+                                             for instruction, q in uniform_policy(tied) for o in instruction.outcomes)
         branches = []
         for o in outcomes:
             next_s = project(s, o.board)
