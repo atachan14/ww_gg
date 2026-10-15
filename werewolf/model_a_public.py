@@ -29,6 +29,11 @@ def horizon_for_action(engine,board,state,past,target,private=None,*,observer=No
     through dawn. Generated reports cannot themselves change the winner rule.
     """
     private=state if private is None else private
+    if observer is None and getattr(engine,'trace',None) is None:
+        key=(board,engine.rules,engine.strategy,past,id(state),id(private),target)
+        completed=getattr(engine,'uniform_action_horizons',{}).get(key)
+        if completed is not None and completed[0] is state and completed[1] is private:
+            tick();return HorizonValues(*completed[2])
     physical=physical_board(board,private)
     if board.phase=='night' and getattr(engine,'joint_guard_max',False) and board.initial_hunter_count:
         from .fixed_actor_continuation import physical_actor_outcomes

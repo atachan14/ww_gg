@@ -104,3 +104,74 @@ def terminal_physical_measures(board,state,engine,target,*,physical_input=None):
         child=replace_worlds(templates[branch],worlds,wolf_count=None)
         result.append((mass,child,TerminalRoleMeasure(worlds)))
     return tuple(result)
+
+
+def _cached_terminal_table(board,engine):
+    cache=getattr(engine,'terminal_tables',None)
+    if cache is None:cache={};engine.terminal_tables=cache
+    key=(board,engine.rules,engine.strategy)
+    if key not in cache:
+        value=terminal_payoff_table(board,engine.rules,engine.strategy)
+        if len(cache)>=16:cache.pop(next(iter(cache)))
+        cache[key]=value
+    return cache[key]
+
+
+def uniform_terminal_action_value(board,state,private,engine,target,*,observer=None,physical=None):
+    """Exact scalar backup through existing kernels; no replacement joint law.
+
+    A day cut requires every execution to end physically. A uniform night cut
+    additionally requires the next unobserved scan to have no strategic or
+    reporting effect. Replay and actual observation paths are never shortened.
+    """
+    if board.winner is not None or observer is not None or len(board.alive)!=3:return None
+    if state.public_roles!=tuple(sorted(board.worlds)):return None
+    from .calculation_budget import tick
+    roles=private.public_roles
+    if not {w[:-1] for w in roles}<={w[:-1] for w in board.worlds}:return None
+    if physical is not None and replace_worlds(board,roles,wolf_count=None)!=physical:return None
+    if board.phase=='day':
+        table=_cached_terminal_table(board,engine)
+        if table is None:return None
+        tick(len(roles))
+        return sum((w[-1]*table[w[:-1]][target] for w in roles),F())
+    if (not engine.rules.allow_self_bite or not engine.strategy.include_self_bite) and any(
+        w[0]&(1<<(target-1)) for w in roles):return None
+    if (board.phase!='night' or len(board.alive)!=3 or engine.strategy.night!='random' or
+        engine.strategy.guard_position!=('uniform',) or len(state.rosters)!=board.day or
+        any(board.claims[p-1]==role and engine.strategy.disclosure_for(role)!='none'
+            for p in board.alive for role in ('seer','medium'))):return None
+    table=_cached_terminal_table(board,engine)
+    if table is None:return None
+    plans=getattr(engine,'terminal_inputs',None)
+    if plans is None:plans={};engine.terminal_inputs=plans
+    def plan(source):
+        key=id(source)  # Cached plans hold strong source references.
+        if key not in plans:
+            value=terminal_physical_input(source)
+            if len(plans)>=16:plans.pop(next(iter(plans)))
+            plans[key]=value
+        return plans[key]
+    actual=terminal_physical_measures(board,private,engine,target,physical_input=plan(private))
+    if actual is None:return None
+    supported=()
+    if any(child.winner is None for mass,child,measure in actual):
+        supports=getattr(engine,'terminal_uniform_support',None)
+        if supports is None:supports={};engine.terminal_uniform_support=supports
+        key=(board,state,engine.rules,engine.strategy)
+        if key not in supports:
+            from .fixed_actor_continuation import physical_hypothesis_outcomes
+            possible=set()
+            for h,mass in plan(state).entries:
+                for bite in board.alive:
+                    if not engine.strategy.include_self_bite and h.roles[0]&(1<<(bite-1)):continue
+                    tick()
+                    if any(child.winner is None for q,child,guards in
+                           physical_hypothesis_outcomes(board,h,engine,bite)):
+                        possible.add(h.roles);break
+            if len(supports)>=16:supports.pop(next(iter(supports)))
+            supports[key]=tuple(sorted(possible))
+        supported=supports[key]
+        if not supported:return None  # Ordinary flow owns zero-support refusal.
+    value,reads=terminal_followup_value(board,supported,actual,table,engine.strategy)
+    return value

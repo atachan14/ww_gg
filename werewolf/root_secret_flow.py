@@ -228,7 +228,11 @@ class RootSecretEngine(InformationSetForecast):
             return self.certified_night_policies(b,before,past)
         if key not in self.night_kernels:
             result={};verify=[]
-            for info,mass,group in wolf_information_groups(before):
+            if self.strategy.night=='random':
+                from .actor_information import wolf_information_keys
+                rows=((info,None,None) for info in wolf_information_keys(before))
+            else:rows=wolf_information_groups(before)
+            for info,mass,group in rows:
                 targets=tuple(p for p in b.alive if self.strategy.include_self_bite or
                               not info.initial_roster&(1<<(p-1)))
                 if self.strategy.night=='random':chosen=targets
@@ -354,6 +358,13 @@ class RootSecretEngine(InformationSetForecast):
         checked=physical_board(b,private,physical)
         if target not in legal_targets(checked,self.rules,self.strategy):
             raise Pending('information_set_internal_illegal_action')
+        if self.strategy.night=='random':
+            from .fixed_actor_continuation import fixed_uniform_action_value
+            uniform=fixed_uniform_action_value(b,s,private,self,target,observer=observer,physical=checked,past=past)
+            if uniform is not None:return uniform
+            from .terminal_followup import uniform_terminal_action_value
+            terminal=uniform_terminal_action_value(b,s,private,self,target,observer=observer,physical=checked)
+            if terminal is not None:return terminal
         owned_value=self.owned_night_action(b,s,past,target,private,observer,physical=physical)
         if owned_value is not None:return owned_value
         if b.phase=='night' and self.strategy.night=='max' and observer is None:
@@ -389,6 +400,10 @@ class RootSecretEngine(InformationSetForecast):
         return super().act(b,s,past,target,private,observer,physical=physical)
 
     def solve(self,b,s,past,private,observer,*,physical=None):
+        if self.strategy.day=='random' and self.strategy.night=='random' and observer is None:
+            from .fixed_actor_continuation import fixed_uniform_action_value
+            uniform=fixed_uniform_action_value(b,s,private,self,None,physical=physical_board(b,private,physical),past=past)
+            if uniform is not None:return uniform
         if self.verifying_actor_mask is not None and observer is None:
             from .actor_information import wolf_information_groups
             groups=wolf_information_groups(private)
@@ -648,6 +663,14 @@ def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=2500
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             engine=RootSecretEngine(rules,strategy,max_work=max_work)
+            from .fixed_actor_continuation import fixed_uniform_action_value
+            invariant=fixed_uniform_action_value(branch.public,branch.public_law,actor.physical_law,
+                engine,None,physical=physical_board(branch.public,actor.physical_law,branch.physical),past=branch.past)
+            if invariant is not None:
+                # Current scan choices were validated above against OWN known
+                # history. In this fixed/no-report scope no future selector
+                # reads the scan; its unit-mass kernel cannot change this value.
+                return tuple((target,invariant) for target in next(iter(choices)))
             for target in next(iter(choices)):
                 def observer(h,state,target=target):
                     return compatible(h) and (len(state.rosters)<day or

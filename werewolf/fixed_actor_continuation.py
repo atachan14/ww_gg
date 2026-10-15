@@ -7,9 +7,9 @@ fixed and only this actor has information-dependent decisions, its carried
 law conditions on the observed physical outcomes and its own actions. This
 never installs a replacement PUBLIC belief. None requests the ordinary evaluator.
 """
-from dataclasses import replace
+from dataclasses import replace,dataclass
 from fractions import Fraction as F
-from .exact import replace_worlds,action_outcomes
+from .exact import replace_worlds,action_outcomes,legal_targets,winner_for
 from .seer_acquisition import normalize,public_worlds
 from .guard_model import guard_choices
 from .guard_history_prior import previous_guard
@@ -145,3 +145,124 @@ def physical_actor_outcomes(b,s,engine,p,*,acquire=True,observer=None):
         child=replace_worlds(templates[key],public_worlds(joint.hypotheses),wolf_count=None)
         result.append((mass,child,joint))
     return tuple(result)
+
+
+@dataclass(frozen=True)
+class UniformPhysicalInput:
+    """Arguments of the pure physical kernel, never a joint belief/state."""
+    roles: tuple
+    guards: tuple
+
+
+def fixed_uniform_action_value(board,source,private,engine,target,*,observer=None,physical=None,past=()):
+    """Linear backup of fixed uniform choices through the SAME physical kernel.
+
+    Complete source/private ledgers remain at the caller. Future unobserved
+    scans integrate to one only when no later choice or report can read them.
+    Public Q is never replaced by a chosen physical world. No max is performed
+    inside worlds: this cut accepts fixed uniform day/night/guard policies only.
+    """
+    strategy=engine.strategy;rules=engine.rules
+    from .exact_renaming import configuration,Unsupported
+    try:configuration(rules);configuration(strategy)
+    except Unsupported:return None
+    if (strategy.day!='random' or strategy.night!='random' or observer is not None or
+        engine.trace is not None or hasattr(engine,'fixed_profile') or
+        getattr(engine,'verifying_actor_mask',None) is not None or strategy.guard_position!=('uniform',) or
+        tuple(strategy.seer_position)!=('unvisited','uniform') or board.initial_hunter_count>1 or
+        strategy.include_self_bite and not rules.allow_self_bite or
+        len(source.rosters)!=board.day or len(private.rosters)!=board.day or not source.rosters or
+        not set(board.alive)<=set(source.rosters[-1]) or
+        source.public_roles!=tuple(sorted(board.worlds)) or
+        any(board.claims[p-1]==role and strategy.disclosure_for(role)!='none'
+            for p in board.alive for role in ('seer','medium'))):return None
+    metadata=lambda x:(x.rosters,x.initial_rule,x.tracked,x.observed_prefix)
+    if metadata(source)!=metadata(private):return None
+    if any(winner_for(len(board.alive),(w[0]&board.alive_mask).bit_count()) is not None
+           for w in private.public_roles):return None
+    if physical is not None and replace_worlds(board,private.public_roles,wolf_count=None)!=physical:return None
+    if target is not None and board.phase=='night' and not strategy.include_self_bite and any(
+        w[0]&(1<<(target-1)) for w in private.public_roles):return None
+    supports=getattr(engine,'uniform_source_support',None)
+    if supports is None:supports={};engine.uniform_source_support=supports
+    identity=(id(source),board,rules,strategy)
+    signature=lambda h:(h.roles,h.acquisitions,h.guards,h.attacks)
+    if identity not in supports:
+        from .guard_history_prior import guard_history_ready,public_history_ready
+        from .guard_model import scope_reason
+        ready=(public_history_ready(board,source) if rules.allow_repeat_guard else guard_history_ready(board,source))
+        if scope_reason(board,rules,strategy,ready,joint_max=getattr(engine,'joint_guard_max',False)):return None
+        tick(len(source.hypotheses))
+        value=(source,frozenset(signature(h) for h in source.hypotheses))
+        if len(supports)>=16:supports.pop(next(iter(supports)))
+        supports[identity]=value
+    allowed=supports[identity][1]
+    projections=getattr(engine,'uniform_physical_inputs',None)
+    if projections is None:projections={};engine.uniform_physical_inputs=projections
+    projection_key=(board,rules,strategy,id(source),id(private))
+    if projection_key not in projections:
+        grouped={}
+        for h in private.hypotheses:
+            tick()
+            if signature(h) not in allowed:return None
+            hunter=next((p for p in board.alive if h.roles[3]&(1<<(p-1))),None)
+            previous=previous_guard(h.guards,hunter,board.day) if hunter is not None else None
+            if hunter is not None and not rules.allow_repeat_guard and board.day>1 and previous is None:return None
+            identity=(h.roles[0],h.roles[3],None if rules.allow_repeat_guard or previous is None else previous.target)
+            if identity in grouped:
+                mass,original=grouped[identity];grouped[identity]=(mass+h.mass,original)
+            else:grouped[identity]=(h.mass,UniformPhysicalInput(h.roles,h.guards))
+        value=(source,private,tuple(grouped.values()))
+        if len(projections)>=16:projections.pop(next(iter(projections)))
+        projections[projection_key]=value
+    else:tick()
+    entries=projections[projection_key][2]
+    cache=getattr(engine,'uniform_physical_values',None)
+    if cache is None:cache={};engine.uniform_physical_values=cache
+    def key(b,h,forced):
+        actor=next((p for p in b.alive if h.roles[3]&(1<<(p-1))),None)
+        previous=(previous_guard(h.guards,actor,b.day) if actor is not None and
+                  not rules.allow_repeat_guard else None)
+        # S/M cannot affect any accepted selector or physical transition. Their
+        # original masks stay in the kernel input; this caches a scalar only.
+        return (rules,strategy,b.alive,b.phase,h.roles[0],h.roles[3],
+                None if previous is None else previous.target,forced)
+    def solve(b,h):
+        if b.winner is not None:return F(b.winner=='village')
+        identity=key(b,h,None)
+        if identity in cache:tick();return cache[identity]
+        actions=legal_targets(b,rules,strategy)
+        value=sum((act(b,h,p)[0] for p in actions),F())/len(actions)
+        if len(cache)<16384:cache[identity]=value
+        return value
+    def act(b,h,p):
+        identity=key(b,h,p)
+        if identity in cache:tick();return cache[identity]
+        tick();value=village=wolf=F()
+        for mass,child,guards in physical_hypothesis_outcomes(b,h,engine,p):
+            next_input=UniformPhysicalInput(h.roles,guards)
+            value+=mass*solve(child,next_input)
+            if child.winner is not None:
+                village+=mass*F(child.winner=='village');wolf+=mass*F(child.winner=='wolf')
+            elif b.phase=='day':
+                bites=legal_targets(child,rules,strategy)
+                village+=mass*sum((act(child,next_input,bite)[1] for bite in bites),F())/len(bites)
+                wolf+=mass*sum((act(child,next_input,bite)[2] for bite in bites),F())/len(bites)
+        result=(value,village,wolf)
+        if len(cache)<16384:cache[identity]=result
+        return result
+    value=village=wolf=F()
+    for mass,h in entries:
+        tick()
+        single=replace_worlds(board,((*h.roles,F(1)),),wolf_count=None)
+        if target is None:value+=mass*solve(single,h)
+        else:
+            result=act(single,h,target)
+            value+=mass*result[0];village+=mass*result[1];wolf+=mass*result[2]
+    if target is not None:
+        horizons=getattr(engine,'uniform_action_horizons',None)
+        if horizons is None:horizons={};engine.uniform_action_horizons=horizons
+        identity=(board,rules,strategy,past,id(source),id(private),target)
+        if len(horizons)>=32:horizons.pop(next(iter(horizons)))
+        horizons[identity]=(source,private,(village,wolf))
+    return value

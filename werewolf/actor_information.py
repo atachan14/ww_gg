@@ -52,3 +52,9 @@ def wolf_information_groups(state):
     for h in state.hypotheses:groups.setdefault(WolfInformation.from_hypothesis(h),[]).append(h)
     return tuple((info,sum((h.mass for h in hs),F()),replace(state,hypotheses=normalize(tuple(hs))))
                  for info,hs in groups.items())
+
+
+def wolf_information_keys(state):
+    """Owned keys only; fixed policies do not need conditional probability laws."""
+    histories=dict.fromkeys((h.roles[0],h.attacks) for h in state.hypotheses)
+    return tuple(dict.fromkeys(WolfInformation(mask,attacks) for mask,attacks in histories))

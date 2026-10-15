@@ -27,5 +27,6 @@ REFERENCES=(('公開状態','exact.py','Board / initial_board / replace_worlds',
  ('初日均等画面の接続','root_secret_flow.py','root_screen_eligible / root_screen_forecast','test_root_secret_screen'),
  ('護衛と公開更新','guard_model.py','GuardContext / guarded_outcomes / condition_guard_observation','test_guard_hidden'),
  ('混合の補助API','guard_history_mixture.py','GuardHistoryMixture / enumerate_guard_history_mixture','test_guard_history_mixture'),
+ ('固定均等の共同分布評価（複数GJの連続護衛なしは予算制限あり）','fixed_actor_continuation.py','fixed_uniform_action_value','test_uniform_fixed_backup'),
  ('計算予算','calculation_budget.py','calculation_budget / tick','test_mixed_flow_memo'))
 FIVE_FIXTURE={'execution_wolf':'1/5','execution_other':'4/5','three_value':'1/3','village_win':'7/15'}

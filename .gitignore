@@ -21,3 +21,6 @@ Thumbs.db
 
 # Local debug / scratch files
 *.log
+
+# Local integration validation logs and browser artifacts
+.artifacts/integration-validation/

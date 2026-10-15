@@ -144,9 +144,12 @@ def public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=N
         compute=lambda:_public_guard_branch_law(board,state,child,attack,blocked,engine,
                                                 policies=kernel,past=past)
         resolver=getattr(engine,'resolver',None) or getattr(engine,'_profile_resolver',None)
-        memo=getattr(resolver,'public_support',None)
-        if memo is None or kernel is None:return compute()
-        profile=tuple(sorted((key,tuple(row)) for key,row in kernel.items()))
+        memo=getattr(resolver,'public_support',None) or getattr(engine,'public_support',None)
+        if memo is None:return compute()
+        if kernel is None:
+            if engine.strategy.night!='random':return compute()
+            profile=('configured-uniform',)
+        else:profile=tuple(sorted((key,tuple(row)) for key,row in kernel.items()))
         # A GJ observes no bite target. The existing generation below reads
         # attack only on the no-GJ branch. Keep every source record and the
         # COMPLETE same public kernel in the cache key, never a private view.
@@ -172,10 +175,10 @@ def _public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=
     The complete kernel covers every public wolf information set. Observations
     remove zero-support roles only; positive likelihoods never reweight Q.
     """
-    from .actor_information import WolfInformation,wolf_information_groups
+    from .actor_information import WolfInformation,wolf_information_keys
     from .policy_choice import uniform_policy
     from .public_observation_support import condition_generated_support
-    infos=tuple(info for info,mass,group in wolf_information_groups(state))
+    infos=wolf_information_keys(state)
     if policies is None:
         if engine.strategy.night!='random':
             provider=getattr(engine,'public_night_policies',None)
@@ -201,15 +204,21 @@ def _public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=
         if actor is None and blocked:continue
         choices=((None,F(1)),) if actor is None else guard_choices(board,actor,engine.rules,engine.strategy.guard_position,guards=h.guards)
         if not choices:raise engine.pending('guard_no_legal_target_unselected')
-        for bite,qa in policies[h.roles[0],h.attacks]:
-            if not blocked and bite!=attack:continue
-            for target,qg in choices:
-                tick()
-                intent=GuardIntent(board.day,actor,target) if actor is not None else None
-                success=intent is not None and guard_blocks_attack(intent,bite)
-                if success!=blocked:continue
-                entries.append(Hypothesis(h.roles,h.acquisitions,h.mass*qa*qg,
-                    h.guards+((intent,) if intent else ()),h.attacks+(WolfAttack(board.day,bite),)))
+        kernel=policies[h.roles[0],h.attacks]
+        # Condition the PRODUCT of already-configured independent chance
+        # kernels. An indexed diagonal join does not let a guard react to a bite.
+        if blocked:
+            guard_mass={}
+            for guarded,qg in choices:guard_mass[guarded]=guard_mass.get(guarded,F())+qg
+            pairs=((bite,qa,bite,guard_mass[bite]) for bite,qa in kernel if bite in guard_mass)
+        else:
+            qa=dict(kernel).get(attack,F())
+            pairs=() if not qa else ((attack,qa,target,qg) for target,qg in choices if target!=attack)
+        for bite,qa,target,qg in pairs:
+            tick()
+            intent=GuardIntent(board.day,actor,target) if actor is not None else None
+            entries.append(Hypothesis(h.roles,h.acquisitions,h.mass*qa*qg,
+                h.guards+((intent,) if intent else ()),h.attacks+(WolfAttack(board.day,bite),)))
     try:return condition_generated_support(child,state,tuple(entries))
     except ValueError as error:raise engine.pending(str(error))
 

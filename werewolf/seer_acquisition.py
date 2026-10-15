@@ -70,13 +70,27 @@ class Hypothesis:
 
 
 def normalize(entries):
-    grouped={}
+    from .guard_effect import GuardIntent
+    from .night_knowledge import WolfAttack
+    grouped={};originals={}
     for h in entries:
         key=(h.roles,h.acquisitions,h.guards,h.attacks)
-        grouped[key]=grouped.get(key,Fraction())+h.mass
+        grouped[key]=grouped.get(key,Fraction())+h.mass;originals.setdefault(key,h)
     total=sum(grouped.values(),Fraction())
     if not total:raise ValueError('No compatible acquisition/report hypothesis')
-    return tuple(Hypothesis(roles,records,q/total,guards,attacks) for (roles,records,guards,attacks),q in sorted(grouped.items()))
+    result=[]
+    for key,q in sorted(grouped.items()):
+        roles,records,guards,attacks=key;mass=q/total;original=originals[key]
+        # Already-validated immutable data need no second constructor pass when
+        # normalization changes NOTHING. Unknown/subclass/mutable inputs keep
+        # the original full validation; no history or positive mass is invented.
+        reusable=(type(original)is Hypothesis and type(mass)is Fraction and
+            type(original.mass)is Fraction and mass==original.mass and
+            type(roles)is tuple and type(records)is tuple and type(guards)is tuple and type(attacks)is tuple and
+            all(type(a)is Acquisition and type(a.color)is str for a in records) and
+            all(type(g)is GuardIntent for g in guards) and all(type(a)is WolfAttack for a in attacks))
+        result.append(original if reusable else Hypothesis(roles,records,mass,guards,attacks))
+    return tuple(result)
 
 
 def from_board(board):

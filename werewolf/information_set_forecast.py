@@ -49,6 +49,7 @@ class InformationSetForecast:
         self.symmetries={}
         self.reduced_descriptors={}
         self.action_values={}
+        self.public_support_values={};self.public_support_stats={"calls":0,"hits":0}
         self.memoize_flows=memoize_flows
         self.retire_uninformative_scans=retire_uninformative_scans
         self.mornings={};self.publication_values={}
@@ -81,6 +82,17 @@ class InformationSetForecast:
         result=compute()  # Exceptions/Pending never install an incomplete value.
         if self.memoize_flows:cache[key]=result
         return result
+
+    def public_support(self,key,compute):
+        """Reuse completed full public laws, independently of scalar shortcuts."""
+        self.public_support_stats['calls']+=1
+        if key in self.public_support_values:
+            self.public_support_stats['hits']+=1
+            return self.public_support_values[key]
+        value=compute()
+        if len(self.public_support_values)>=16:self.public_support_values.pop(next(iter(self.public_support_values)))
+        self.public_support_values[key]=value
+        return value
 
     pending=Pending
 
