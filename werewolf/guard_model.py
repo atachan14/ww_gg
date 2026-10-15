@@ -244,6 +244,7 @@ def guarded_outcomes(frame,outcomes,engine):
             intent=GuardIntent(b.day,actor,target) if actor is not None else None
             blocked=intent is not None and guard_blocks_attack(intent,frame.target)
             alive=b.alive if blocked else tuple(p for p in b.alive if p!=frame.target)
+            if frame.observed_alive is not None and alive!=frame.observed_alive:continue
             wolf=(h.roles[0]&sum(1<<(p-1) for p in alive)).bit_count()
             winner=winner_for(len(alive),wolf)
             guards=h.guards+((intent,) if intent else ())

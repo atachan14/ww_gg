@@ -102,12 +102,28 @@ full input histories, cache/recalculation equality and unsupported-scope refusal
 The initial 12-assignment/36-secret-state random-white regression is retained.
 
 For the larger six-player both-role history (execute6, GJ1, execute5, GJ2),
-repeat allowed now completes in 23.852 seconds across the existing separate
-replay/forecast stage budgets: overview and every action row 7/24, with dawn
-village/wolf terminal mass 1/4 and 5/8. Repeat forbidden still stops after
-20.011 seconds in no-repeat full-joint history replay with
-`root_secret_budget_exceeded`. This remaining resource case belongs to item I;
-it is not max work. Budgets have not been raised.
+repeat allowed completes with overview/every row 7/24 and dawn village/wolf
+terminal mass 1/4 and 5/8. Repeat forbidden initially stopped at the 20-second
+replay budget. Observation-directed construction now completes the exact same
+history: replay 11.783 seconds, total replay plus forecast 24.405 seconds, all
+rows 13/48, dawn village/wolf terminal mass 1/4 and 11/16. Repeat-allowed total
+was 13.435 seconds in that local run. Existing separate stage budgets were not
+raised. The no-repeat regression also compares the complete Forecast to an
+inactive-role reference; full input histories remain unchanged.
+
+Saved replay passes its observed alive roster AFTER configured action selection
+and acquisition into the common physical flow. Guard/death resolution discards
+only branches whose resulting roster disagrees before building their public
+continuation laws. Accepted branches retain their ORIGINAL unnormalized masses,
+full acquisition/guard/bite records, and configured policy weights. The final
+existing observation mixture still does its original normalization. Exhaustive
+filtered-vs-unfiltered children compare equal for both guard rules and both GJ
+and death observations. Ordinary forecasts/actions pass no observation filter.
+
 Arbitrary active-report, owner-observer or larger-history cases may still use
 the full flow and its explicit Pending limits. No general simultaneous-max
 implementation is supplied. Publication remains held; no push/deploy occurred.
+
+Final observed-replay follow-up: all 625 tests passed in 285.725 seconds
+(2026-10-15 UTC), including the complete-child observation comparison and
+six-player no-repeat two-GJ reference.

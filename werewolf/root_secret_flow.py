@@ -419,7 +419,7 @@ class RootSecretEngine(InformationSetForecast):
     def value_law(self,state):return state  # No history compression in this entry.
 
 
-def step_root_action(branch,target,rules,strategy,*,max_work=250000,max_seconds=20,publish=True,_engine=None):
+def step_root_action(branch,target,rules,strategy,*,max_work=250000,max_seconds=20,publish=True,_engine=None,_observed_alive=None):
     """Explicit action intervention through the shared ability/death/report flow."""
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)
@@ -435,7 +435,7 @@ def step_root_action(branch,target,rules,strategy,*,max_work=250000,max_seconds=
                 physical=replace_worlds(physical,forced_action_worlds(physical,target,rules,strategy))
                 own=project_private(own,physical,marginalize_private=False)
             acquired,outcomes=resolve_action(branch.public,ActionInputs(branch.public_law,branch.past,
-                own,None,physical),target,e.action_policy)
+                own,None,physical),target,e.action_policy,observed_alive=_observed_alive)
             result=[]
             for o in outcomes:
                 c=e.action_policy.project(branch.public,acquired,o,target)
@@ -592,10 +592,11 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
                         own=replace(branch.physical_law,hypotheses=normalize(hs))
                         active=replace(branch,physical_law=own,
                                        physical=physical_board(branch.public,own,branch.physical))
-                    children=step_root_action(active,action,rules,policy,max_work=max_work,
-                                              max_seconds=max_seconds,publish=False,_engine=engine)
-                    if isinstance(children,FuturePending):return children
                     expected=branch.public.alive if target is None else tuple(p for p in branch.public.alive if p!=target)
+                    children=step_root_action(active,action,rules,policy,max_work=max_work,
+                                              max_seconds=max_seconds,publish=False,_engine=engine,
+                                              _observed_alive=expected)
+                    if isinstance(children,FuturePending):return children
                     selected.extend((mass*q,c) for q,c in children if not c.public.winner and c.public.alive==expected)
                 if not selected:
                     if _collect_guard_priors and index==len(game['history'])-1:return guard_priors

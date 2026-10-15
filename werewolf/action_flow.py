@@ -29,6 +29,7 @@ class NightFrame:
     before: object
     after: object
     terminal_payoffs: bool = False
+    observed_alive: tuple | None = None
 
 
 def unchanged_death_outcomes(frame, resolve, prepared=None):
@@ -36,12 +37,14 @@ def unchanged_death_outcomes(frame, resolve, prepared=None):
     return prepared if prepared is not None else resolve(frame.board, frame.after, frame.target)
 
 
-def resolve_action(board,state,target,policy,*,terminal_payoffs=False):
+def resolve_action(board,state,target,policy,*,terminal_payoffs=False,observed_alive=None):
     """Shared physical resolution; full observation contexts by default.
 
     Scalar/horizon callers may stop terminal payoffs before public belief
     generation. Those terminal outcomes need no continuation context. History
     callers keep the default and validate every retained public/secret law.
+    Saved observation replay may restrict resulting alive rosters, after action
+    selection/acquisition. Retained branch probabilities are never renormalized.
     """
     night = board.phase == 'night'
     acquired = state
@@ -49,9 +52,11 @@ def resolve_action(board,state,target,policy,*,terminal_payoffs=False):
         prepared = policy.outcomes(board,state,target) if policy.terminal_preflight_safe else None
         if prepared is None or any(o.board.winner is None for o in prepared):
             acquired = policy.acquire(board,state)
-        outcomes = policy.night_outcomes(NightFrame(board,target,state,acquired,terminal_payoffs),prepared)
+        outcomes = policy.night_outcomes(NightFrame(board,target,state,acquired,terminal_payoffs,observed_alive),prepared)
     else:
         outcomes = policy.outcomes(board,state,target)
+    if observed_alive is not None:
+        outcomes=tuple(o for o in outcomes if o.board.alive==observed_alive)
     return acquired,outcomes
 
 

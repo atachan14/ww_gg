@@ -52,6 +52,35 @@ class UniformFixedBackupTests(unittest.TestCase):
         later=step_root_action(root,5,rules,strategy)[0][1]
         return rules,strategy,later
 
+    def test_no_repeat_six_player_two_gj_replay_matches_inactive_role_reference(self):
+        from werewolf.dawn import OBSERVATION
+        forecasts=[]
+        for m,z in ((0,0),(1,1)):
+            g=game6(m,z,False);base=deepcopy(g['history'][0])
+            gj=dict(deepcopy(base),target=None,observation=OBSERVATION,deaths=[])
+            g['history'] += [gj,dict(deepcopy(base),target=5),deepcopy(gj)]
+            before=deepcopy(g);rules,p=replay(g);clear_public_cache()
+            forecast=evaluate_public_game(g,p.board,rules,Strategy(**g['policy']))
+            self.assertNotIsInstance(forecast,FuturePending)
+            forecasts.append(forecast);self.assertEqual(g,before)
+        self.assertEqual(forecasts[0],forecasts[1])
+        self.assertEqual(forecasts[1].village_win,F(13,48))
+
+    def test_saved_observation_filter_equals_complete_children_with_original_mass(self):
+        for repeat in (True,False):
+            rules,strategy,branch=self.fixture(repeat)
+            for target in (2,3,4):
+                full=step_root_action(branch,target,rules,strategy,publish=False)
+                self.assertNotIsInstance(full,FuturePending)
+                for alive in (branch.public.alive,tuple(p for p in branch.public.alive if p!=target)):
+                    expected=tuple((q,c) for q,c in full if c.public.alive==alive)
+                    observed=step_root_action(branch,target,rules,strategy,publish=False,
+                                              _observed_alive=alive)
+                    self.assertEqual(observed,expected)
+                    self.assertLessEqual(sum((q for q,c in observed),F()),F(1))
+                self.assertEqual(step_root_action(branch,target,rules,strategy,publish=False,
+                                                  _observed_alive=()),())
+
     def test_correlated_unknown_roles_and_separate_q_p_match_unreduced_common_flow(self):
         for repeat in (True,False):
             rules,strategy,later=self.fixture(repeat);b,s=later.public,later.public_law
