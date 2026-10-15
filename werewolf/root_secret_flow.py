@@ -150,6 +150,7 @@ class RootSecretEngine(InformationSetForecast):
         self.action_policy=RootSecretPolicy(self)
         self.night_sources={};self.night_kernels={}
         self.verified_actor_kernels=set();self.verifying_actor_mask=None
+        self.candidate_profiles=();self.candidate_profile_ids={};self.candidate_contexts=();self.candidate_rule_cache={}
         self.actor_candidate_keys={};self.actor_proposals={};self.actor_certificates={}
         from .policy_dependencies import DependencyGraph
         self.policy_dependencies=DependencyGraph()
@@ -171,13 +172,22 @@ class RootSecretEngine(InformationSetForecast):
         return kernel
 
     def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
+        if self.candidate_contexts and self.memoize_flows:
+            source=(b,s,past,private,observer,target,physical,self.candidate_profiles,self.verifying_actor_mask)
+            if source not in self.exact_keys:
+                from .exact_renaming import canonical_key
+                self.exact_keys[source]=canonical_key(b,s,past,private,observer,self.rules,self.strategy,
+                    target=target,physical=physical,wolf_profiles=self.candidate_contexts,
+                    actor_mask=self.verifying_actor_mask)
+            complete=self.exact_keys[source]
+            return ('root-candidate-complete',complete) if complete is not None else ('root-candidate-identity',source)
         key=super().full_renamed_key(b,s,past,private,observer,target=target,physical=physical)
         if not self.memoize_flows:return None
         # Proof-only actor continuation and ordinary public evaluation cannot
         # share certificates. Keep full ledgers; unsupported renamings fall
         # back to identity rather than a reduced role/history descriptor.
         exact=key or (self.rules,self.strategy,b,s,past,private,observer,target,physical)
-        return ('root-complete-payoff',self.verifying_actor_mask,exact)
+        return ('root-complete-payoff',self.verifying_actor_mask,self.candidate_profiles,exact)
 
     def actor_candidate_key(self,b,state,past,group,target):
         source=(self.rules,self.strategy,b,state,past,group,target)
@@ -251,8 +261,31 @@ class RootSecretEngine(InformationSetForecast):
                             candidate=self.actor_candidate_key(b,before,past,group,p)
                             node=Dependency('common-candidate',(b,before,past,info,p))
                             with self.policy_dependencies.evaluating(node):
-                                value=(self.actor_certificates[candidate] if candidate is not None and
-                                    candidate in self.actor_certificates else self.act(b,before,past,p,group,None))
+                                if candidate is not None and candidate in self.actor_certificates:
+                                    value=self.actor_certificates[candidate]
+                                else:
+                                    from .wolf_profile_certificate import wolf_candidate_profile
+                                    profile=tuple((owned,result[owned.initial_roster,owned.attacks])
+                                                  for owned,mass,law in wolf_information_groups(before))
+                                    from .candidate_policy import CandidateRules
+                                    if key not in self.candidate_rule_cache:
+                                        self.candidate_rule_cache[key]=CandidateRules(b,before,past,self.rules,self.strategy)
+                                    rules_for_candidates=self.candidate_rule_cache[key]
+                                    tested=wolf_candidate_profile(profile,info,p,rules=rules_for_candidates)
+                                    previous_kernel=self.night_kernels[key]
+                                    previous_profiles=self.candidate_profiles
+                                    previous_contexts=self.candidate_contexts
+                                    self.night_kernels[key]={(owned.initial_roster,owned.attacks):policy
+                                                             for owned,policy in tested}
+                                    identity=(key,tested)
+                                    token=self.candidate_profile_ids.setdefault(identity,len(self.candidate_profile_ids)+1)
+                                    self.candidate_profiles=(*previous_profiles,token)
+                                    self.candidate_contexts=(*previous_contexts,(b,before,past,tested))
+                                    try:value=self.act(b,before,past,p,group,None)
+                                    finally:
+                                        self.night_kernels[key]=previous_kernel
+                                        self.candidate_profiles=previous_profiles
+                                        self.candidate_contexts=previous_contexts
                             checked.append((p,value));certified.append((candidate,value))
                         checked=tuple(checked)
                     finally:self.verifying_actor_mask=previous

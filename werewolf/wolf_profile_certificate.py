@@ -10,7 +10,7 @@ from .policy_dependencies import Dependency,DependencyGraph
 from .information_set_forecast import InformationSetForecast,Pending
 from .root_secret_flow import RootSecretEngine
 from .policy_certificates import ProfileSearch,ProfileCertificate,ProfileIssue,best_response_profile
-from .calculation_budget import CalculationBudgetExceeded,calculation_budget
+from .calculation_budget import CalculationBudgetExceeded,calculation_budget,tick
 
 
 class _PolicyRead(Exception):pass
@@ -39,6 +39,8 @@ class WolfProfileResolver:
         # Only pure physical/public branch construction is shared between
         # candidate profiles. Full Boards and joint ledgers remain in keys.
         self.branch_cache={};self.branch_stats={"calls":0,"hits":0}
+        self.row_reuse_stats={"classes":0,"hits":0}
+        self.candidate_rule_cache={}
 
     def branch(self,key,compute):
         self.branch_stats['calls']+=1
@@ -137,6 +139,11 @@ class FixedPublicWolfProfile(RootSecretEngine):
     def solve(self,*args,**kwargs):return InformationSetForecast.solve(self,*args,**kwargs)
 
 
+def wolf_candidate_profile(profile,info,target,*,rules):
+    """Apply one candidate rule to its proved full-public symmetry orbit."""
+    return rules.candidate(profile,info,target)
+
+
 def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
                           max_work=250000,max_seconds=20,resolver=None):
     if resolver is None:
@@ -145,62 +152,75 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
     if board.phase!='night' or board.winner:raise ValueError('Continuing public night required')
     if state.public_roles!=tuple(sorted(board.worlds)):raise ValueError('Complete public prior required')
     groups=wolf_information_groups(state)
+    from .candidate_policy import CandidateRules
+    source=(board,state,past)
+    if source not in resolver.candidate_rule_cache:
+        resolver.candidate_rule_cache[source]=CandidateRules(board,state,past,rules,strategy)
+    candidate_rules=resolver.candidate_rule_cache[source]
     legal=tuple((info,tuple(p for p in board.alive if strategy.include_self_bite or
                  not info.initial_roster&(1<<(p-1)))) for info,mass,group in groups)
-    terminal_rows={}
+    from .policy_choice import uniform_policy
+    # A candidate applies the same rule to exactly renamed information/action
+    # pairs. Private focal identity is not promoted to public information.
+    row_values={}
+    # Exact terminal dependency boundary: after GJ, every execution ends the
+    # game and there is no active public ability report. Public day choices
+    # then depend on Q's supported full role worlds, not hidden-history mixing.
+    # Compile support possibilities from EVERY source hypothesis; carry the
+    # original histories/masses through the actual common evaluator unchanged.
+    terminal=(len(board.alive)==3 and not any(board.claims[p-1]==role and
+        strategy.disclosure_for(role)!='none' for p in board.alive for role in ('seer','medium')))
+    if terminal:
+        from dataclasses import replace
+        terminal=FixedPublicWolfProfile(board,state,past,rules,strategy,()).terminal_day(
+            replace(board,phase='day'),state)
+    supports={};owned_support={}
+    if terminal:
+        from .guard_model import guard_choices
+        from .actor_information import WolfInformation
+        for h in state.hypotheses:
+            tick()
+            actor=next((a for a in board.alive if h.roles[3]&(1<<(a-1))),None)
+            if actor is None:continue
+            owned=WolfInformation.from_hypothesis(h)
+            mask=sum(1<<(t-1) for t,q in guard_choices(board,actor,rules,strategy.guard_position,guards=h.guards))
+            rows=supports.setdefault(h.roles,{})
+            rows[owned]=rows.get(owned,0)|mask
+            owned_support[owned]=owned_support.get(owned,0)|mask
     def evaluate_raw(profile,*,independence_only=False):
-        # Ordinary scalar caches remain isolated by candidate. Only the
-        # proved terminal dependency class below shares complete score rows.
-        engine=FixedPublicWolfProfile(board,state,past,rules,strategy,profile,
-                                      resolver=resolver,stop_on_policy_read=independence_only,max_work=max_work)
-        signature=None
-        # A proof of the dependency boundary, not a different payoff model:
-        # with no active public ability reports and three survivors, every
-        # death is terminal and a GJ precedes terminal executions only. Private
-        # acquisitions are still generated and retained by the common flow.
-        # Thus the
-        # fixed profile can affect candidate scores solely through the FULL
-        # public Board after GJ. Keep the complete joint law in the actual flow.
-        if (not independence_only and len(board.alive)==3 and
-                not any(board.claims[p-1]==role and strategy.disclosure_for(role)!='none'
-                        for p in board.alive for role in ('seer','medium'))):
-            from .guard_model import guard_choices,condition_guard_observation,public_guard_branch_law
-            from dataclasses import replace
-            possible=False
-            for h in state.hypotheses:
-                actor=next((a for a in board.alive if h.roles[3]&(1<<(a-1))),None)
-                if actor is not None and any(strategy.include_self_bite or not h.roles[0]&(1<<(a-1))
-                        for a,q in guard_choices(board,actor,rules,strategy.guard_position,guards=h.guards)):
-                    possible=True;break
-            if possible:
-                acquired=engine.acquire(board,state)
-                engine.night_sources[board,acquired,past]=state
-                child=replace(condition_guard_observation(board,(),rules,state=acquired),day=board.day+1,phase='day')
-                kernel=engine.public_night_policies(board,acquired,past)
-                public,joint=public_guard_branch_law(board,acquired,child,None,True,engine,policies=kernel,past=past)
-                if engine.terminal_day(public,joint):signature=('terminal-after-gj',public)
-            else:signature=('all-physical-terminal',)
-            if signature in terminal_rows:return terminal_rows[signature],engine.policy_reads
-        resolver.spend_profile()
-        scores={}
+        scores={};reads=0;spent=False
         for info,mass,group in groups:
-            rows=[]
+            row=[]
             for target in dict(legal)[info]:
-                node=Dependency('candidate-deviation',(board,state,past,info,target,profile))
-                with engine.policy_dependencies.evaluating(node):
-                    rows.append((target,engine.act(board,state,past,target,group,None)))
-            scores[info]=tuple(rows)
-        if signature is not None:terminal_rows[signature]=scores
-        return scores,engine.policy_reads
+                candidate=wolf_candidate_profile(profile,info,target,rules=candidate_rules)
+                key=(info,target,candidate)
+                if terminal:
+                    bit=1<<(target-1)
+                    if not owned_support.get(info,0)&bit:
+                        key=(info,target,'physical-terminal')
+                    else:
+                        candidate_masks={owned:sum(1<<(t-1) for t,q in policy) for owned,policy in candidate}
+                        role_support=tuple(roles for roles,owners in sorted(supports.items())
+                            if any(candidate_masks[owned]&allowed for owned,allowed in owners.items()))
+                        key=(info,target,'terminal-public-role-support',role_support)
+                if key not in row_values:
+                    if not spent:resolver.spend_profile();spent=True
+                    engine=FixedPublicWolfProfile(board,state,past,rules,strategy,candidate,
+                        resolver=resolver,stop_on_policy_read=independence_only,max_work=max_work)
+                    node=Dependency('candidate-action',(board,state,past,info,target,candidate))
+                    with engine.policy_dependencies.evaluating(node):
+                        value=engine.act(board,state,past,target,group,None)
+                    row_values[key]=(value,engine.policy_reads)
+                    resolver.row_reuse_stats['classes']+=1
+                else:
+                    tick();resolver.row_reuse_stats['hits']+=1
+                value,count=row_values[key];reads+=count;row.append((target,value))
+            scores[info]=tuple(row)
+        return scores,reads
     from .policy_choice import uniform_policy
     probe=tuple((info,uniform_policy(actions)) for info,actions in legal)
     total=1
     for info,actions in legal:total*=(1<<len(actions))-1
-    if total>max_profiles:
-        # A legal deterministic candidate is refusal evidence only, never a
-        # selected policy. It can expose undefined continuations even when the
-        # full domain is too large to certify.
-        probe=tuple((info,uniform_policy(actions[:1])) for info,actions in legal)
     probed=None
     try:
         probed=evaluate_raw(probe)
@@ -223,8 +243,19 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
         chosen,rows=best_response_profile(legal,probed[0],maximize=False)
         return ProfileSearch('unique',total,1,(ProfileCertificate(chosen,rows),),
                              proof='policy_independent_scores')
-    def evaluate(profile):
-        if profile==probe and probed is not None:return probed[0]
-        return evaluate_raw(profile)[0]
-    return certify_uniform_profiles(legal,evaluate,maximize=False,max_profiles=max_profiles,
-                                    max_work=max_work,max_seconds=max_seconds,stop_on_undefined=True)
+    score_records={}
+    def evaluate(reduced):
+        profile=reduced
+        if profile==probe and probed is not None:scores=probed[0]
+        else:scores=evaluate_raw(profile)[0]
+        score_records[profile]=scores
+        return {info:scores[info] for info,actions in legal}
+    result=certify_uniform_profiles(legal,evaluate,maximize=False,max_profiles=max_profiles,
+        max_work=max_work,max_seconds=max_seconds,stop_on_undefined=True)
+    from dataclasses import replace
+    certificates=tuple(ProfileCertificate(c.profile,
+        tuple((info,score_records[c.profile][info]) for info,mass,group in groups))
+        for c in result.certified)
+    issues=result.issues
+    return replace(result,certified=certificates,issues=issues,
+        proof=result.proof)

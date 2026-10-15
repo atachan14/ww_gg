@@ -105,7 +105,7 @@ def colors(b,s,private,target,*,marginal_cache=None):
                   private.tracked is not None and p in private.tracked)
                  for p in range(1,b.player_count+1))
 
-def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physical=None,max_mappings=10000,prune_automorphisms=True,marginal_cache=None):
+def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physical=None,max_mappings=10000,prune_automorphisms=True,marginal_cache=None,wolf_profiles=(),actor_mask=None):
     """Return an exact payoff key, or None when safe search exceeds its cap."""
     if observer is not None and type(observer).__name__!='GuardObserver':return None
     groups={}
@@ -122,12 +122,28 @@ def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physica
         return tuple(sum(1<<(ids[p]-1) for p in range(b.player_count) if m&(1<<p))
                      for m in range(1<<b.player_count))
     record_cache={}  # Per-key, immutable record serialization only.
+    def profiles_signature(ids,masks):
+        result=[]
+        for source,law,reports,profile in wolf_profiles:
+            if source.player_count!=b.player_count:raise Unsupported()
+            rows=[]
+            for info,policy in profile:
+                if (not is_dataclass(info) or type(info).__name__!='WolfInformation' or
+                        field_names(info,record_cache)!={'initial_roster','attacks'}):raise Unsupported()
+                rows.append((masks[info.initial_roster],tuple(record(a,ids,record_cache) for a in info.attacks),
+                             tuple(sorted((ids[t-1],q) for t,q in policy))))
+            result.append((board_signature(source,ids,masks,record_cache),
+                state_signature(law,ids,masks,record_cache),
+                tuple(record(r,ids,record_cache) for r in reports),tuple(sorted(rows))))
+        return tuple(result)
+
     def snapshot(ids,masks):
         public=board_signature(b,ids,masks,record_cache);law=state_signature(s,ids,masks,record_cache)
         own=law if private==s else state_signature(private,ids,masks,record_cache)
         actual=public if physical is None or physical==b else board_signature(physical,ids,masks,record_cache)
         return (base,public,law,tuple(record(r,ids,record_cache) for r in past),own,
-                observer_signature(observer,ids,masks,record_cache),actual,0 if target is None else ids[target-1])
+                observer_signature(observer,ids,masks,record_cache),actual,0 if target is None else ids[target-1],
+                profiles_signature(ids,masks),0 if actor_mask is None else masks[actor_mask])
     try:
         # Prove automorphisms against the ENTIRE input, not just colors. The
         # swaps (leader,other) generate every permutation inside a block. If

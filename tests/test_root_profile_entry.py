@@ -12,9 +12,10 @@ from werewolf.private_adapter import evaluate_private_table
 from werewolf.seer_future_uniform import FuturePending
 from werewolf.information_set_forecast import Pending
 from werewolf.policy_certificates import ProfileSearch
-from werewolf.wolf_profile_certificate import WolfProfileResolver,FixedPublicWolfProfile
+from werewolf.wolf_profile_certificate import WolfProfileResolver,FixedPublicWolfProfile,wolf_candidate_profile
 from werewolf.actor_information import WolfInformation,wolf_information_groups
 from werewolf.policy_choice import uniform_policy
+from werewolf.candidate_policy import CandidateRules
 from werewolf.night_knowledge import WolfAttack
 
 
@@ -142,7 +143,8 @@ class RootProfileEntryTests(unittest.TestCase):
             # Independently recompute EVERY selected legal deviation using the
             # ordinary full common flow, with no score-class memo provider.
             engine=FixedPublicWolfProfile(later.public,later.public_law,(),r,s,result.selected.profile)
-            expected=tuple((info,tuple((target,engine.act(later.public,later.public_law,(),target,group,None))
+            candidates=CandidateRules(later.public,later.public_law,(),r,s)
+            expected=tuple((info,tuple((target,FixedPublicWolfProfile(later.public,later.public_law,(),r,s,wolf_candidate_profile(result.selected.profile,info,target,rules=candidates)).act(later.public,later.public_law,(),target,group,None))
                 for target in later.public.alive if not info.initial_roster&(1<<(target-1))))
                 for info,mass,group in wolf_information_groups(later.public_law))
             self.assertEqual(result.selected.scores,expected);self.assertEqual(later,before)
@@ -170,40 +172,35 @@ class RootProfileEntryTests(unittest.TestCase):
             resolver=WolfProfileResolver(r,old);result=resolver.resolve(later.public,later.public_law)
             self.assertEqual(result.status,'unique')
             engine=FixedPublicWolfProfile(later.public,later.public_law,(),r,old,result.selected.profile)
-            expected=tuple((info,tuple((target,engine.act(later.public,later.public_law,(),target,group,None))
+            candidates=CandidateRules(later.public,later.public_law,(),r,old)
+            expected=tuple((info,tuple((target,FixedPublicWolfProfile(later.public,later.public_law,(),r,old,wolf_candidate_profile(result.selected.profile,info,target,rules=candidates)).act(later.public,later.public_law,(),target,group,None))
                 for target in later.public.alive if not info.initial_roster&(1<<(target-1))))
                 for info,mass,group in wolf_information_groups(later.public_law))
             self.assertEqual(result.selected.scores,expected);self.assertEqual(later,before)
             if seer:self.assertTrue(any(h.acquisitions for h in later.public_law.hypotheses))
 
-    def test_five_six_root_refusal_witness_is_not_a_chosen_kernel(self):
-        from werewolf.wolf_profile_certificate import require_profile
+    def test_five_six_candidate_search_does_not_misclassify_legal_alternatives(self):
         for n in (5,6):
             g=fixtures.RootGuardMaxTests().game(players=n)
             g['policy']['day']=g['history'][0]['policy']['day']='max'
             r,p=replay(g);s=Strategy(**g['policy']);root=prepare_root_entry(g,p.board,r,s)
             resolver=WolfProfileResolver(r,s);result=resolver.resolve(root.public,root.public_law)
-            self.assertEqual(result.status,'undefined_observations')
-            self.assertEqual(result.proof,'undefined_witness');self.assertIsNone(result.selected)
-            self.assertLess(result.evaluated,result.total)
-            self.assertNotIn((root.public,root.public_law,()),resolver.cache)
-            self.assertIs(resolver.resolve(root.public,root.public_law),result)
-            with self.assertRaises(Pending):require_profile(result)
+            self.assertNotEqual(result.status,'undefined_observations')
+            self.assertTrue(all(issue.kind!='undefined_observation' for issue in result.issues))
+            if result.status!='unique':
+                self.assertIsNone(result.selected)
+                self.assertNotIn((root.public,root.public_law,()),resolver.cache)
 
-    def test_public_known_live_hunter_offpath_gj_has_no_added_belief(self):
+    def test_public_known_live_hunter_legal_candidates_are_not_off_path(self):
         from werewolf.wolf_profile_certificate import certify_wolf_profiles
         for repeat in (True,False):
             g=fixtures.RootGuardMaxTests().game(repeat)
             g['claim_policy']=g['history'][0]['claim_policy']={'hunter':'filled'}
             r,p=replay(g);old=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,old)
             result=certify_wolf_profiles(b.public,b.public_law,(),r,replace(old,day='max'))
-            self.assertEqual((result.total,result.evaluated),(9,1))
-            self.assertEqual(result.proof,'undefined_witness')
-            self.assertEqual(result.status,'undefined_observations')
-            self.assertEqual(result.certified,());self.assertIsNone(result.selected)
-            self.assertEqual(len(result.issues),1)
-            self.assertEqual(result.issues[0].reason,'public_generated_observation_zero_support')
-            self.assertTrue(all(policy==((1,F(1)),) for info,policy in result.issues[0].profile))
+            self.assertEqual((result.total,result.evaluated),(9,9))
+            self.assertEqual(result.status,'unique');self.assertEqual(result.issues,())
+            self.assertTrue(all(policy==((1,F(1)),) for info,policy in result.selected.profile))
 
     def test_profile_dependent_over_limit_context_stays_pending_and_uncached(self):
         g=self.game();r,p=replay(g);s=Strategy(**g['policy']);b=prepare_root_entry(g,p.board,r,s)
