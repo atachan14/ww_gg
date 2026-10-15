@@ -83,3 +83,36 @@ its exact score/profile comparisons had passed. The assertion now isolates the
 renamed source's hit from legitimate internal terminal-context hits. Both new
 tests passed separately, then the entire 610-test suite passed. No runtime
 calculation was changed in that assertion repair.
+
+
+## Full generated-public-law reuse
+
+The guard public-observation wrapper can reuse a completed generated public law
+only for identical Rules, Strategy, full source Board, every joint hypothesis
+and mass, child Board, complete public wolf kernel and past reports. GJ hides
+the bite target; the original generator never reads its `attack` argument on a
+blocked branch, so that argument alone is omitted for GJ. No-GJ keys retain it.
+The full returned state retains all acquisition/guard/attack records. The
+resolver-local cache holds at most 16 completed entries; exceptions and Pending
+never install an entry. Engines without this optional cache use the original
+common generator.
+
+Regression comparisons cover both guard rules, unchanged complete GJ laws from
+different private bite targets, changed complete kernels, and changed secret
+history mixtures with exactly the SAME public role marginal. Every retained
+state equals the uncached common generator's output. The attempted larger
+row-key input threshold did not complete additional coverage and was withdrawn;
+the existing 128-hypothesis threshold remains. Bounded complete serialization
+reuse within those existing keys remains.
+
+Scope correction: the preceding six-player seer/medium Pending measurements
+were day-random/night-max diagnostics. They do not add new max support to item
+I's original completion conditions. Uniform random/random six-player integration
+is checked separately; see v0.5-release-assessment.md. IV/VI coupled-max expansion
+is not used to hold item I open. Existing max regressions remain mandatory.
+
+Final full-public-support checkpoint: related 10 tests passed in 4.017 seconds;
+all 612 tests passed in 289.745 seconds (`task-6/public-support-full.log`). This
+saves the three runtime/test files reviewed after 9915d73, with the original row
+threshold retained. Uniform item-I six-player measurement follows this saved
+checkpoint; no max completion or broader coverage is claimed.

@@ -63,6 +63,7 @@ class WolfProfileResolver:
         self.certificate_cache={};self.certificate_cache_size=0
         self.certificate_cache_stats={'calls':0,'hits':0}
         self.acquisition_stats={"calls":0,"hits":0}
+        self.support_cache={};self.support_stats={"calls":0,"hits":0}
 
     def branch(self,key,compute):
         self.branch_stats['calls']+=1
@@ -83,6 +84,17 @@ class WolfProfileResolver:
         # much larger pure-Board cache. Failed generations never enter it.
         if len(self.acquisition_cache)>=16:self.acquisition_cache.pop(next(iter(self.acquisition_cache)))
         self.acquisition_cache[key]=value
+        return value
+
+    def public_support(self,key,compute):
+        """Memoize only completed generated FULL public joint laws."""
+        self.support_stats['calls']+=1
+        if key in self.support_cache:
+            self.support_stats['hits']+=1
+            return self.support_cache[key]
+        value=compute()  # Never cache Pending or a partial generation.
+        if len(self.support_cache)>=16:self.support_cache.pop(next(iter(self.support_cache)))
+        self.support_cache[key]=value
         return value
 
     def spend_profile(self):
@@ -248,7 +260,7 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
     from .policy_choice import uniform_policy
     # A candidate applies the same rule to exactly renamed information/action
     # pairs. Private focal identity is not promoted to public information.
-    row_values={};vector_values={};row_keys={};key_marginals={};owned_sources={}
+    row_values={};vector_values={};row_keys={};key_marginals={};key_serializations={};owned_sources={}
     legal_actions=dict(legal)
     fixed_public_choices=(strategy.day=='random' and strategy.guard_position==('uniform',) and
         not any(board.claims[p-1]==role and strategy.disclosure_for(role)!='none'
@@ -343,7 +355,8 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
                         if len(value_state.hypotheses)<=128:
                             from .exact_renaming import canonical_key
                             exact=canonical_key(value_board,value_state,past,group,None,rules,strategy,target=target,
-                                wolf_profiles=((value_board,value_state,past,value_profile),),marginal_cache=key_marginals)
+                                wolf_profiles=((value_board,value_state,past,value_profile),),marginal_cache=key_marginals,
+                                serialization_cache=key_serializations)
                         row_keys[identity]=('complete-renamed-candidate',exact) if exact is not None else identity
                     key=row_keys[identity]
                 if key not in row_values:

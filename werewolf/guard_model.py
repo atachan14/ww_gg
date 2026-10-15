@@ -135,16 +135,35 @@ def public_context(context):
 
 
 def public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=None,past=()):
+    def complete_branch():
+        kernel=policies
+        if kernel is None and engine.strategy.night=='max':
+            provider=getattr(engine,'public_night_policies',None)
+            if provider is None:raise engine.pending('guard_max_public_kernel_unresolved')
+            kernel=provider(board,state,past)
+        compute=lambda:_public_guard_branch_law(board,state,child,attack,blocked,engine,
+                                                policies=kernel,past=past)
+        resolver=getattr(engine,'resolver',None) or getattr(engine,'_profile_resolver',None)
+        memo=getattr(resolver,'public_support',None)
+        if memo is None or kernel is None:return compute()
+        profile=tuple(sorted((key,tuple(row)) for key,row in kernel.items()))
+        # A GJ observes no bite target. The existing generation below reads
+        # attack only on the no-GJ branch. Keep every source record and the
+        # COMPLETE same public kernel in the cache key, never a private view.
+        key=(engine.rules,engine.strategy,board,state,child,None if blocked else attack,
+             blocked,past,profile)
+        try:hash(key)
+        except TypeError:return compute()
+        return memo(key,compute)
     graph=getattr(engine,'policy_dependencies',None)
-    if graph is None:
-        return _public_guard_branch_law(board,state,child,attack,blocked,engine,policies=policies,past=past)
+    if graph is None:return complete_branch()
     from .policy_dependencies import Dependency
     profile=None if policies is None else tuple(sorted(policies.items()))
     node=Dependency('public-support',(board,state,child,attack,blocked,past,profile))
     # A supplied/cached complete profile may close this recorded dependency.
     # Do not reject that legitimate fixed-profile proof as infinite recursion.
     with graph.evaluating(node,allow_reentry=True):
-        return _public_guard_branch_law(board,state,child,attack,blocked,engine,policies=policies,past=past)
+        return complete_branch()
 
 
 def _public_guard_branch_law(board,state,child,attack,blocked,engine,*,policies=None,past=()):
