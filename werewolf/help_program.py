@@ -3,9 +3,9 @@ PAGES={'index':'プログラム詳細（仮）','current':'プログラム詳細
        'model':'確率モデルと情報集合','flow':'処理フローと評価アルゴリズム',
        'reference':'型・関数リファレンス','verification':'再現例と検証',
        'design':'プログラム詳細（設計案）','terms':'共通用語・記法'}
-AUDIT_VERSION='v0.5（実装基準 ca018fd）'
+AUDIT_VERSION='v0.5.1（実装基準 fe4bd0b）'
 REVIEW_VERSION='97d0ed4'
-PUBLIC_SHA='ca018fd670a46aa750ed874e4baf7aaebfe71989'
+PUBLIC_SHA='fe4bd0be30f2c5c5c78fd61c6545031542a9e0b4'
 TERMS=(('world','役職世界 W','狼・霊能・占い師・狩人の位置を表すマスクの組。一つを実役職として抽選してはいない。'),
        ('public','公開信念 Q','公開Boardの役職候補と重み。狼の行動選択尤度で役職を推測しないmodel Aの入力。'),
        ('physical','物理分布 P','候補世界を真と置いて、政策と能力の確率から列挙する結果・情報状態の分布。'),

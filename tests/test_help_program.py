@@ -24,7 +24,7 @@ class ProgramHelpTests(unittest.TestCase):
         for page in PAGES:
             path='/help/program/'+page;r=self.c.get(path);self.assertEqual(r.status_code,200)
             html=r.get_data(as_text=True);p=Links();p.feed(html);cache[path]=p
-            self.assertIn('id="program-content"',html);self.assertIn('v0.5実装',html)
+            self.assertIn('id="program-content"',html);self.assertIn('v0.5.1実装',html)
             self.assertNotIn('github.com/atachan14/ww_gg/tree/eb8116d',html)
         for page_path,p in cache.items():
             for href in p.links:

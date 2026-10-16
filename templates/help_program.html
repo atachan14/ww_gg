@@ -1,9 +1,9 @@
 {% extends 'help_base.html' %}{% block title %}{{ pages[page] }}{% endblock %}
 {% set help_page='program-' ~ page %}{% block help_content %}
 <div data-screen="help-program" class="help-program"><a class="program-skip" href="#program-content">本文へ移動</a>
-<header class="panel"><p class="eyebrow">TECHNICAL HELP · v0.5</p><h1>{{ pages[page] }}</h1>
-<p>説明対象：v0.5実装 <code>{{ audit_version }}</code>／構造監査 <code>{{ review_version }}</code>。model Aの規則を保持して構造整理を段階的に進め、実装済みと設計案を区別しています。</p>
-<p>v0.5実装の基準は <a href="https://github.com/atachan14/ww_gg/tree/{{ public_sha }}" rel="noopener">{{ public_sha[:7] }}</a>です。公開アプリは <a href="https://ww-gg.vercel.app/" rel="noopener">ww-gg.vercel.app</a> です。</p>
+<header class="panel"><p class="eyebrow">TECHNICAL HELP · v0.5.1</p><h1>{{ pages[page] }}</h1>
+<p>説明対象：v0.5.1実装 <code>{{ audit_version }}</code>／構造監査 <code>{{ review_version }}</code>。model Aの規則を保持して構造整理を段階的に進め、実装済みと設計案を区別しています。</p>
+<p>v0.5.1実装の基準は <a href="https://github.com/atachan14/ww_gg/tree/{{ public_sha }}" rel="noopener">{{ public_sha[:7] }}</a>です。公開アプリは <a href="https://ww-gg.vercel.app/" rel="noopener">ww-gg.vercel.app</a> です。</p>
 <nav aria-label="プログラム詳細の目次" class="program-nav"><a href="{{ url_for('help_route') }}">HELP</a>{% for slug,label in pages.items() %}<a href="{{ url_for('help_program',page=slug) }}"{% if page==slug %} aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}</nav></header>
 <article id="program-content" class="panel" tabindex="-1">{% include 'help_program/' ~ page ~ '.html' %}</article>
 <footer><a href="{{ url_for('help_program') }}">技術入口へ</a> · <a href="{{ url_for('help_program',page='terms') }}">共通用語・記法</a> · <a href="{{ url_for('help_route') }}">HELPへ</a></footer></div>
