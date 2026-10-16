@@ -1,4 +1,12 @@
+B案の校正版：[階層フロー](board-b-flow.md)、ローカルHELP `/help/program/board-design` に掲載（検討中・未実装）。
+
+Step4最新：[構造と更新フローの正式比較](board-structure-flow-step4.md)／[図解](previews/board-structure-step4.html)。ユーザーがStep4開始を許可。成果の完了確認待ち、Step5未開始。
+
 # 後続設計・UIバックログ
+
+## 進行中：Board構造・flow整理（承認済み5Step）
+
+[計画とStep1の比較土台](board-structure-flow-plan.md)を参照。Step1はユーザー完了承認済み。Step2は完了・Step3着手許可受領。Step3は成果提出・ユーザー完了確認待ち、Step4〜5は未着手。[Step2調査](board-structure-flow-step2.md)・[Step3資料](board-structure-flow-step3.md)を参照。各Stepの明示完了確認後に次へ進み、計画承認を実装・公開承認として扱わない。
 
 共同分布・勝率接続のcheckpointは `c692640`。今回の追加事項はここへ記録し、共同分布の実装へ混ぜない。
 
@@ -94,3 +102,6 @@ UI調整の詳細・検証は [UI確認記録](ui-followup-checks.md)。
 ## CO詳細のスリム化（2026-10-09）
 
 Slack message `1791526059.165739` の7項目を反映。CO概要・追加・削除の見た目を軽くし、宣言は通常文字、未COは空白と小さい矢印、詳細行は28pxにした。Player IDごとの展開状態を計算とは別に保持し、Board進行・戻る・再計算で維持、新ゲーム成功時は初期化する。単独COと報告保持の範囲は変更しない。README/archive、計算モデル、ギドラ仕様は変更なし。
+
+
+Step3具体例：[5人盤面の入力から7/15まで](board-structure-flow-step3-example.md)／[図解](previews/board-structure-step3-example.html)。Step3完了確認待ち。
