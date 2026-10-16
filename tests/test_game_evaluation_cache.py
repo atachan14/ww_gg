@@ -117,3 +117,46 @@ class HypothesisIdentityTests(unittest.TestCase):
   Roles=namedtuple('Roles','w m s h')
   left=Hypothesis((1,0,0,0),(),F(1,2));right=Hypothesis(Roles(1,0,0,0),(),F(1,3))
   self.assertEqual(identity(left),identity(right));self.assertEqual(hash(identity(left)),hash(identity(right)))
+
+class SnapshotOwnershipTests(unittest.TestCase):
+ def test_snapshot_policy_borrows_recipe_owned_engine_without_cycle(self):
+  import weakref
+  from werewolf.board_future import kernel_snapshot,ActionEvidence
+  from werewolf.information_set_forecast import InformationSetForecast
+  from werewolf.exact import Rules,Strategy
+  original=InformationSetForecast(Rules(),Strategy())
+  snapshot=kernel_snapshot(original);ref=weakref.ref(snapshot)
+  recipe=ActionEvidence(snapshot,1,())
+  del snapshot
+  self.assertIsNotNone(ref())
+  self.assertEqual(recipe.engine.action_policy.engine.strategy,original.strategy)
+  del recipe
+  # No gc.collect(): destroying the recipe releases its snapshot immediately.
+  self.assertIsNone(ref())
+  self.assertIs(original.action_policy.engine,original)
+
+ def test_completed_scoped_evaluation_releases_root_engine_without_gc(self):
+  import weakref
+  from werewolf import board_future as flow
+  references=[];original=flow.register_origin
+  children=[];original_child=flow.reconstruct_child
+  def record_child(*args,**kwargs):
+   value=original_child(*args,**kwargs)
+   if value.board_data is not None:children.append(value)
+   return value
+  def record(engine,*args,**kwargs):
+   if type(engine) not in weakref.ProxyTypes:references.append(weakref.ref(engine))
+   return original(engine,*args,**kwargs)
+  source=game(seers=1,rules={'allow_self_bite':False,'initial_seer':'none','allow_repeat_guard':True},
+    claims=['seer']+['latent']*4,seer_mode='information-fixed-v1',
+    seer_options={'initial_rule':'none','likelihood':'compatibility'},seer_inputs=[])
+  with patch.object(flow,'register_origin',record),patch.object(flow,'reconstruct_child',record_child):
+   value=BoardData.from_game(source).roles().forecast()
+  self.assertTrue(hasattr(value,'village_win'))
+  self.assertTrue(references)
+  self.assertTrue(all(ref() is None for ref in references))
+  self.assertTrue(children)
+  held=children[-1]
+  # A retained generated Board still owns every snapshot needed for replay.
+  with flow.reconstruction_kernel_reuse(False):rebuilt=held.board_data.roles()
+  self.assertEqual(rebuilt,held)

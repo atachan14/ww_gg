@@ -1,0 +1,185 @@
+{
+  "product_file_sha256": {
+    "werewolf/board_future.py": "f6ae93cdef3ab0a0b96c261660bc7776102f32be521e94b263f253d1e3b847b9",
+    "werewolf/board_flow.py": "a510373982d1edf11bc5cc9a0709daee3d26fcafc84eadcbac95c493f10b827b",
+    "werewolf/game_runtime.py": "9eeec6038971c7fd5e04552ff41dcd2283123a857cdd417eb752797127485fa1",
+    "app.py": "f2160dba72c5b1fc4febbf1bbf64691fa3ed6bf765dc7cbca392f4b78d60b66a"
+  },
+  "change": "Recipe owns its snapshot and active evaluation owns its root engine. Action policy back-references borrow these owners; standalone unscoped engines keep existing ownership. No budget, expectation or rule changes.",
+  "diagnostic_before": {
+    "tests": 35,
+    "success": true,
+    "target_phases": [
+      {
+        "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+        "phase": "prepare_evaluation",
+        "wall": 0.0017789999983506277,
+        "cpu": 0.0,
+        "gc_seconds": 0
+      },
+      {
+        "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+        "phase": "prepare_evaluation",
+        "wall": 0.0017745999939506873,
+        "cpu": 0.0,
+        "gc_seconds": 0
+      },
+      {
+        "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+        "phase": "forecast",
+        "wall": 18.40181830000074,
+        "cpu": 18.296875,
+        "gc_seconds": 2.862079000202357
+      }
+    ],
+    "target_work_highwater": null,
+    "gc_seconds": 6.077262700491701,
+    "gc_collected": 2889542,
+    "expired": []
+  },
+  "diagnostic_after": {
+    "tests": 35,
+    "success": true,
+    "target_phases": [
+      {
+        "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+        "phase": "prepare_evaluation",
+        "wall": 0.0019107999978587031,
+        "cpu": 0.0,
+        "gc_seconds": 0
+      },
+      {
+        "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+        "phase": "prepare_evaluation",
+        "wall": 0.0018576000002212822,
+        "cpu": 0.015625,
+        "gc_seconds": 0
+      },
+      {
+        "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+        "phase": "forecast",
+        "wall": 17.79203779999807,
+        "cpu": 17.71875,
+        "gc_seconds": 2.0169598997890716
+      }
+    ],
+    "target_work_highwater": 129496,
+    "gc_seconds": 4.698046800098382,
+    "gc_collected": 107330,
+    "expired": []
+  },
+  "diagnostic_note": "Single diagnostic runs; instrumentation itself changes GC timing. Shows retention/GC reduction, not a complete attribution of every earlier timeout or a new formal benchmark.",
+  "full_suite": {
+    "command": "python -B -m unittest discover -s tests -v",
+    "tests": 673,
+    "seconds": 402.845,
+    "result": "OK",
+    "log": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\.artifacts\\integration-validation\\b-root-ownership-full-tests.log"
+  },
+  "enhanced_ownership_regressions": {
+    "tests": 14,
+    "seconds": 0.608,
+    "result": "OK",
+    "covers": [
+      "retained recipe keeps snapshot alive",
+      "snapshot released without cyclic GC",
+      "root released after completed scoped evaluation without cyclic GC",
+      "retained generated Board replays after root release with reuse disabled",
+      "standalone engine ownership retained"
+    ],
+    "log": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\.artifacts\\integration-validation\\b-ownership-final-tests.log"
+  },
+  "browser": {
+    "ui": {
+      "at": "2026-10-16T21:06:37.980Z",
+      "rows": [
+        {
+          "width": 1366,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 320,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "dark",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        }
+      ]
+    },
+    "seven": {
+      "at": "2026-10-16T21:06:11.416Z",
+      "status": 200,
+      "publicRate": "113/504",
+      "seconds": 16.827,
+      "errors": []
+    },
+    "private_history": {
+      "status": 200,
+      "rows": [
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        },
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        }
+      ],
+      "session_unchanged": true,
+      "log": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\.artifacts\\integration-validation\\b-ownership-private-browser.log"
+    },
+    "server_pid": 13684,
+    "startup_race": "First UI request preceded listen and returned ECONNREFUSED; confirmed GET /help 200 then reran all four UI configurations successfully."
+  },
+  "preserved_formal_benchmark_revision": "1609d2f",
+  "formal_note": "The earlier 120-result benchmark remains evidence for 1609d2f, not a new measurement of this ownership patch."
+}

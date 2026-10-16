@@ -111,7 +111,10 @@ def kernel_snapshot(engine):
     for key,value in vars(engine).items():
         if key in ('night_kernels','night_sources','candidate_rule_cache'):
             setattr(frozen,key,value.copy())
-    frozen.action_policy=type(engine.action_policy)(frozen)
+    # The recipe owns this snapshot. Its policy only borrows it; a strong
+    # back-reference would retain every completed recipe until cyclic GC.
+    from weakref import proxy
+    frozen.action_policy=type(engine.action_policy)(proxy(frozen))
     frozen.board_sources={}
     frozen.trace=None
     if not _reuse_kernels.get():frozen.memoize_flows=False
@@ -167,6 +170,12 @@ def register_origin(engine,board,payload):
                             payload.observer,payload.physical)
     context=_active_origin.get()
     if context is not None:
+        # The active evaluation call owns its engine. Its action adapter only
+        # borrows it, so a completed evaluation cannot retain the entire recipe
+        # graph in an engine -> policy -> engine cycle until cyclic GC.
+        from weakref import proxy,ProxyTypes
+        if type(engine) not in ProxyTypes and engine.action_policy.engine is engine:
+            engine.action_policy.engine=proxy(engine)
         if key in context[1]:return remember(engine,context[1][key],root)
         known=context[2].get(public_source_key(engine,board,payload.public_state,payload.past))
         if known is not None:
