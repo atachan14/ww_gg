@@ -15,6 +15,11 @@ _COMMON=('players','wolves','mediums','seers','hunters','rules')
 def _text(value):
     return json.dumps(value,sort_keys=True,separators=(',',':'),allow_nan=False)
 
+
+def validate_budget(max_work,max_seconds):
+    if max_work is not None and (type(max_work)is not int or max_work<1):raise ValueError('Positive calculation budget required')
+    if max_seconds is not None and (type(max_seconds) not in (int,float) or max_seconds<=0):raise ValueError('Positive calculation time budget required')
+
 @dataclass(frozen=True)
 class GameData:
     players:int
@@ -83,40 +88,59 @@ class RoleState:
             value=sum((o.probability*int(o.board.winner=='village')
                        for o in self.progress.last_outcomes),Fraction())
             return Forecast(value,())
+        validate_budget(max_work,max_seconds)
+        key=('public',self.owner.inputs,max_work,max_seconds)
+        from .calculation_budget import CalculationBudgetExceeded
+        try:hit,value=self.owner.runtime.get(key)
+        except CalculationBudgetExceeded:
+            from .seer_future_uniform import FuturePending
+            return FuturePending('information_set_budget_exceeded')
+        if hit:return value
         game=self.owner.to_game();strategy=Strategy(**game['policy'])
         prepared=prepare_evaluation(game,self.board,self.rules,strategy,
                                     max_work=max_work,max_seconds=max_seconds)
         from .board_future import calculation_origin
         with calculation_origin(self.owner):
-            return evaluate_prepared_public(prepared,self.board,self.rules,strategy,
+            result=evaluate_prepared_public(prepared,self.board,self.rules,strategy,
                                             max_work=max_work,max_seconds=max_seconds)
+        self.owner.runtime.put(key,result)
+        return result
 
     def private(self,role,players,results,*,max_work=250000,max_seconds=20):
         from .board_roles import prepare_private
         from .private_adapter import evaluate_private_table
+        validate_budget(max_work,max_seconds)
+        key=('private',self.owner.inputs,_text(dict(role=role,players=players,results=results)),max_work,max_seconds)
+        hit,value=self.owner.runtime.get(key,private=True)
+        if hit:return value
         game=self.owner.to_game();strategy=Strategy(**game['policy'])
         prepared=prepare_private(self.board,role,players,results,self.rules,strategy,
                                  game_state=game,max_work=max_work,max_seconds=max_seconds)
         from .board_future import calculation_origin
         with calculation_origin(self.owner):
-            return evaluate_private_table(self.board,role,players,results,self.rules,strategy,
+            result=evaluate_private_table(self.board,role,players,results,self.rules,strategy,
                                           game_state=game,max_work=max_work,max_seconds=max_seconds,
                                           _prepared=prepared)
+        self.owner.runtime.put(key,result,private=True,require_dawn=role in ('wolf','hunter'))
+        return result
 
 @dataclass(frozen=True)
 class BoardData:
     game_data:GameData
     inputs:str=field(repr=False)
     facts:BoardFacts
+    runtime:object=field(compare=False,hash=False,repr=False)
 
     @classmethod
-    def from_game(cls,game,*,game_data=None):
-        common=game_data or GameData.from_game(game)
-        if common!=GameData.from_game(game):raise ValueError('GameData version mismatch')
+    def from_game(cls,game,*,game_data=None,runtime=None):
+        from .game_runtime import GameRuntime
+        if runtime is None:runtime=GameRuntime(game_data) if game_data is not None else GameRuntime.from_game(game)
+        common=runtime.data
+        if game_data is not None and common is not game_data:raise ValueError('Different Game runtime')
         # Snapshot ONLY board evidence. Common cast/rules are held once above.
         inputs={k:v for k,v in game.items() if k not in _COMMON}
         text=_text(inputs)
-        return cls(common,text,BoardFacts.from_inputs(common,inputs))
+        return cls(common,text,BoardFacts.from_inputs(common,inputs),runtime)
 
     def to_game(self):
         # A transient adapter for existing kernels, never a second saved truth.
@@ -125,16 +149,15 @@ class BoardData:
     def updated(self,**changes):
         if set(changes)&set(_COMMON):raise ValueError('GameData changes require a new game version')
         game=self.to_game();game.update(changes)
-        return BoardData.from_game(game,game_data=self.game_data)
+        return BoardData.from_game(game,game_data=self.game_data,runtime=self.runtime)
 
     def child(self,step,**changes):
         game=self.to_game();game['history']=[*game.get('history',()),step]
         game.update(changes)
-        return BoardData.from_game(game,game_data=self.game_data)
+        return BoardData.from_game(game,game_data=self.game_data,runtime=self.runtime)
 
     def roles(self):
         from .board_roles import reconstruct_roles,role_rates,role_summary
         rules,progress=reconstruct_roles(self)
-        if rules!=self.game_data.rules:raise ValueError('Reconstruction changed GameData rules')
         groups,counts=role_summary(progress)
         return RoleState(self,progress,role_rates(progress),groups,counts)

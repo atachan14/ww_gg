@@ -324,9 +324,41 @@ class SavedOrigin:
         raise Pending('board_future_origin_scope')
 
 
+def canonical_hypothesis(h):
+    # Preserve compatibility behavior for mutable or subclass records.
+    from .seer_acquisition import Hypothesis,Acquisition
+    from .guard_effect import GuardIntent
+    from .night_knowledge import WolfAttack
+    return (type(h)is Hypothesis and type(h.roles)is tuple and
+        type(h.acquisitions)is tuple and all(type(a)is Acquisition for a in h.acquisitions) and
+        type(h.guards)is tuple and all(type(g)is GuardIntent for g in h.guards) and
+        type(h.attacks)is tuple and all(type(a)is WolfAttack for a in h.attacks))
+
+
 def identity(h):
+    # Mass-free comparison key, not a second hypothesis/role distribution.
+    # Include all compared fields so new secret-history fields cannot disappear.
+    from .seer_acquisition import Hypothesis
     from fractions import Fraction
+    if type(h)is Hypothesis:
+        # Noncanonical compatibility inputs keep their old validation, but
+        # equal tuple subclasses still share the same semantic key.
+        source=h if canonical_hypothesis(h) else replace(h,mass=Fraction(1))
+        return (type(source),*(getattr(source,name) for name in identity_fields(type(source))))
     return replace(h,mass=Fraction(1))
+
+
+from functools import lru_cache
+@lru_cache(maxsize=16)
+def identity_fields(kind):
+    from dataclasses import fields
+    return tuple(f.name for f in fields(kind) if f.compare and f.name!='mass')
+
+
+def weighted_hypothesis(h,mass):
+    # Already validated canonical immutable records need no reconstruction
+    # when even the mass is unchanged. Subclasses/mutable inputs keep validation.
+    return h if canonical_hypothesis(h) and h.mass==mass else replace(h,mass=mass)
 
 @dataclass(frozen=True)
 class ConditionEvidence:
@@ -346,8 +378,8 @@ class ConditionEvidence:
         from .evaluation_branch import ContinuationInputs,physical_board
         law=source.public_state if self.source_kind=='public' else source.private
         mapping=dict(self.mapping)
-        entries=tuple(replace(mapping[identity(h)],mass=h.mass)
-                      for h in law.hypotheses if identity(h) in mapping)
+        entries=tuple(weighted_hypothesis(mapping[key],h.mass)
+                      for h in law.hypotheses if (key:=identity(h)) in mapping)
         own=replace(law,hypotheses=normalize(entries),**dict(self.metadata))
         return ContinuationInputs(source.public,source.public_state,source.past,own,
             self.observer,physical_board(source.public,own,
@@ -359,7 +391,7 @@ def condition_recipe(source,target):
     from .seer_acquisition import normalize
     metadata=tuple((f.name,getattr(target.private,f.name)) for f in fields(target.private)
                    if f.name!='hypotheses')
-    targets=tuple(identity(h) for h in target.private.hypotheses)
+    targets=target.private.hypotheses
     # Exact structural index narrows candidates; guard/attack compatibility
     # and unique-match requirements remain unchanged.
     candidates={}
@@ -373,8 +405,8 @@ def condition_recipe(source,target):
             if len(compatible)==1:mapping.append((key,compatible[0]))
         if not mapping:continue
         by_key=dict(mapping)
-        entries=tuple(replace(by_key[identity(h)],mass=h.mass)
-                      for h in law.hypotheses if identity(h) in by_key)
+        entries=tuple(weighted_hypothesis(by_key[key],h.mass)
+                      for h in law.hypotheses if (key:=identity(h)) in by_key)
         rebuilt=replace(law,hypotheses=normalize(entries),**dict(metadata))
         if rebuilt==target.private:
             from .evaluation_branch import physical_board
@@ -428,6 +460,9 @@ def evidence_reconstruction():
     token=_rebuilding.set(True)
     try:yield
     finally:_rebuilding.reset(token)
+
+
+def reconstruction_reuse_enabled():return _reuse_kernels.get()
 
 
 @contextmanager

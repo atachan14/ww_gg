@@ -13,7 +13,7 @@ def worker(a):
  cases=json.loads(Path(a.cases).read_text(encoding='utf-8'));rows={}
  for name,case in cases.items():
   game=case['game'];strategy=Strategy(**game['policy'])
-  if a.version=='new':
+  if a.version!='old':
    from werewolf.board_flow import BoardData
    from werewolf.board_roles import prepare_evaluation
    roles=BoardData.from_game(game).roles();rules,progress=roles.replay_result
@@ -44,16 +44,16 @@ def worker(a):
 
 def main():
  p=argparse.ArgumentParser(description=__doc__);s=p.add_subparsers(dest='command',required=True)
- q=s.add_parser('run');q.add_argument('--snapshots',required=True);q.add_argument('--output',required=True);q.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'))
+ q=s.add_parser('run');q.add_argument('--versions',default='old,new');q.add_argument('--snapshots',required=True);q.add_argument('--output',required=True);q.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'))
  q=s.add_parser('worker');q.add_argument('--tree',required=True);q.add_argument('--output',required=True);q.add_argument('--cases',required=True);q.add_argument('--version',required=True)
  a=p.parse_args()
  if a.command=='worker':worker(a);return
  out=Path(a.output).resolve();out.mkdir(parents=True,exist_ok=True);versions={}
- for v in ('old','new'):
+ for v in a.versions.split(','):
   target=out/(v+'.json')
   subprocess.run([sys.executable,'-B',str(Path(__file__).resolve()),'worker','--tree',str(Path(a.snapshots).resolve()/v),'--cases',str(Path(a.cases).resolve()),'--version',v,'--output',str(target)],check=True,timeout=150)
   versions[v]=json.loads(target.read_text(encoding='utf-8'))
- failures=[k for k in versions['old'] if versions['old'][k]['digest']!=versions['new'][k]['digest']]
+ names=list(versions);failures=[(k,v) for k in versions[names[0]] for v in names[1:] if versions[names[0]][k]['digest']!=versions[v][k]['digest']]
  result={'cases':list(versions['old']),'failures':failures,'versions':versions}
  (out/'summary.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8');print(json.dumps({'cases':result['cases'],'failures':failures}),flush=True)
  if failures:raise AssertionError(failures)

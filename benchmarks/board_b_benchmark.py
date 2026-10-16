@@ -154,7 +154,7 @@ def experiment_bypass_generated_replay(enabled):
         yield
 
 
-def cache_counters():
+def cache_counters(runtime=None):
     from werewolf.model_a_public import public_cache_info
     import werewolf.public_prior as prior
     import werewolf.seer_manual as manual
@@ -162,6 +162,7 @@ def cache_counters():
     for label,fn in [('complete_public',public_cache_info),('public_prior',getattr(prior._complete_prior,'cache_info',None)),('seer_replay',getattr(getattr(manual,'_replay',None),'cache_info',None))]:
         if fn:
             info=fn();result[label]={k:getattr(info,k) for k in ('hits','misses','currsize')}
+    if runtime is not None:result['game_completed']=runtime.info()
     return result
 
 
@@ -173,7 +174,7 @@ def worker(args):
     spec=importlib.util.spec_from_file_location('frozen_replay',ROOT/'tests/fixtures/board_replay_v051.py')
     oracle=importlib.util.module_from_spec(spec);spec.loader.exec_module(oracle)
     case=json.loads(Path(args.cases).read_text(encoding='utf-8'))[args.case]
-    new=args.version=='new';diagnostic=Diagnostic() if args.diagnostic=='counts' else None
+    new=args.version!='old';runtime=None;diagnostic=Diagnostic() if args.diagnostic=='counts' else None
     if diagnostic:diagnostic.install(new,oracle)
     profile=None
     if args.diagnostic=='profile':
@@ -181,6 +182,9 @@ def worker(args):
         profile=cProfile.Profile()
     if new:
         from werewolf.board_flow import BoardData
+        if importlib.util.find_spec('werewolf.game_runtime') is not None:
+            from werewolf.game_runtime import GameRuntime
+            runtime=GameRuntime.from_game(case['game'])
     else:
         from werewolf.model_a_public import evaluate_public_game
         from werewolf.private_adapter import evaluate_private_table
@@ -188,13 +192,13 @@ def worker(args):
     rows=[];ready=time.perf_counter()-began
     for index in range(args.iterations):
         scope=diagnostic.scope if diagnostic else lambda p:contextlib.nullcontext()
-        caches_before=cache_counters()
+        caches_before=cache_counters(runtime)
         if profile:profile.enable()
         start=time.perf_counter();cpu=time.process_time()
         with experiment_bypass_generated_replay(args.experiment=='bypass-generated'):
             with scope('3a'):
                 if new:
-                    state=BoardData.from_game(case['game']).roles();rules,progress=state.replay_result
+                    state=(BoardData.from_game(case['game'],runtime=runtime) if runtime is not None else BoardData.from_game(case['game'])).roles();rules,progress=state.replay_result
                 else:
                     rules,progress=(replay(case['game']) if case['game'].get('seer_mode')=='information-fixed-v1' else oracle.reconstruct_saved(case['game']))
                 board=progress.last_board if progress.finished else progress.board
@@ -212,7 +216,7 @@ def worker(args):
                     result=state.private(view['role'],view['players'],view['results'],**BUDGET) if new else evaluate_private_table(board,view['role'],view['players'],view['results'],rules,strategy,game_state=case['game'],**BUDGET)
         seconds=time.perf_counter()-start;cpu_seconds=time.process_time()-cpu
         if profile:profile.disable()
-        caches_after=cache_counters()
+        caches_after=cache_counters(runtime)
         pending=census_pending(result)
         if case['view']!='public' and any(r['legal'] and r['final'] is None for r in result.get('players',())):
             pending.append(result.get('reason','private_numeric_result_missing'))
@@ -261,13 +265,14 @@ def snapshot(destination,revision):
 def run(args):
     out=Path(args.output).resolve();out.mkdir(parents=True,exist_ok=True)
     trees=out/'snapshots';versions={'old':OLD,'new':NEW}
+    if args.improved_ref:versions['improved']=subprocess.check_output(['git','rev-parse','--verify',args.improved_ref],cwd=ROOT,text=True).strip()
     for version,revision in versions.items():snapshot(trees/version,revision)
     cases=json.loads(Path(args.cases).read_text(encoding='utf-8'))
     chosen=args.select.split(',') if args.select else list(cases)
     records=[]
     for repetition in range(args.repeats):
         for name in chosen if repetition%2==0 else reversed(chosen):
-            order=('old','new') if repetition%2==0 else ('new','old')
+            order=tuple(versions) if repetition%2==0 else tuple(reversed(versions))
             if args.experiment!='none':order=('new',)
             for version in order:
                 target=out/f'{repetition:02d}-{name}-{version}-{args.diagnostic}-{args.experiment}.json'
@@ -303,9 +308,9 @@ def run(args):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='command',required=True)
-    p=sub.add_parser('run');p.add_argument('--output',required=True);p.add_argument('--repeats',type=int,default=5);p.add_argument('--select');p.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'))
+    p=sub.add_parser('run');p.add_argument('--output',required=True);p.add_argument('--repeats',type=int,default=5);p.add_argument('--select');p.add_argument('--improved-ref');p.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'))
     p.add_argument('--diagnostic',choices=('none','counts','profile'),default='none');p.add_argument('--experiment',choices=('none','bypass-generated'),default='none')
-    p=sub.add_parser('worker');p.add_argument('--tree',required=True);p.add_argument('--cases',required=True);p.add_argument('--case',required=True);p.add_argument('--version',choices=('old','new'),required=True);p.add_argument('--output',required=True);p.add_argument('--iterations',type=int,default=2);p.add_argument('--diagnostic',choices=('none','counts','profile'),default='none');p.add_argument('--experiment',choices=('none','bypass-generated'),default='none')
+    p=sub.add_parser('worker');p.add_argument('--tree',required=True);p.add_argument('--cases',required=True);p.add_argument('--case',required=True);p.add_argument('--version',choices=('old','new','improved'),required=True);p.add_argument('--output',required=True);p.add_argument('--iterations',type=int,default=2);p.add_argument('--diagnostic',choices=('none','counts','profile'),default='none');p.add_argument('--experiment',choices=('none','bypass-generated'),default='none')
     args=parser.parse_args();worker(args) if args.command=='worker' else run(args)
 
 if __name__=='__main__':main()

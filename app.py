@@ -50,15 +50,24 @@ def create_app(test_config=None, *, deployment=False):
     app.jinja_env.filters["fraction"] = str
     app.jinja_env.globals.update(role_labels=ROLE_LABELS, role_order=ROLES)
 
+    from werewolf.game_runtime import GameRuntimes
+    game_runtimes=GameRuntimes()
+    app.extensions['board_game_runtimes']=game_runtimes
+
+    def board_data(state):
+        from werewolf.board_flow import BoardData
+        game_id=session.setdefault('co_display_game',secrets.token_hex(8))
+        return BoardData.from_game(state,runtime=game_runtimes.get(game_id,state))
+
     def replay(state):
         from werewolf.board_flow import BoardData
-        return BoardData.from_game(state).roles().replay_result
+        return board_data(state).roles().replay_result
 
     def structural_roles(state):
         from werewolf.board_flow import BoardData
-        try:return BoardData.from_game(state).roles()
+        try:return board_data(state).roles()
         except DisclosureInconsistent:
-            return BoardData.from_game({**state,'result_disclosure_model':None,
+            return board_data({**state,'result_disclosure_model':None,
                 'history':[{k:v for k,v in step.items() if k!='result_disclosure_model'}
                            for step in state['history']]}).roles()
 
@@ -205,7 +214,7 @@ def create_app(test_config=None, *, deployment=False):
         by_dawn_values={}
         from werewolf.board_flow import BoardData
         try:
-            role_state=BoardData.from_game(state).roles()
+            role_state=board_data(state).roles()
             rules,progress=role_state.replay_result
         except DisclosureInconsistent as exc:
             disclosure_error=str(exc);role_state=structural_roles(state);rules,progress=role_state.replay_result
@@ -455,6 +464,7 @@ def create_app(test_config=None, *, deployment=False):
         except ValueError as exc:
             return render_setup(draft, error=str(exc)), 400
         previous = game()
+        game_runtimes.discard(session.get('co_display_game'))
         session["co_display_game"] = secrets.token_hex(8)
         session["game"] = {**({"seers":seers,"hunters":hunters} if seers or hunters else {}), "players": players, "wolves": wolves, "mediums": mediums,
                            "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite,"initial_seer":rules.initial_seer,"allow_repeat_guard":rules.allow_repeat_guard},
@@ -698,7 +708,7 @@ def create_app(test_config=None, *, deployment=False):
                 raise ValueError('視点入力の形式が不正です。')
             # Replay only public evidence; the private Board is confined to this adapter.
             from werewolf.board_flow import BoardData
-            private_source=BoardData.from_game(state).roles()
+            private_source=board_data(state).roles()
             rules, progress = private_source.replay_result
             if progress.finished or progress.board.phase != 'night':
                 raise ValueError('夜のBoardで視点を選択してください。')

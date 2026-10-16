@@ -61,6 +61,7 @@ class GeneratedBoardTests(unittest.TestCase):
         def old_child(engine,board,payload,outcome,target,legacy):return legacy()
         def old_publication(engine,payload,child,public,past,private,physical,**kwargs):
             return ContinuationInputs(child,public,past,private,payload.observer,physical)
+        roles.owner.runtime.clear()  # Exercise the independent kernels, not a completed Forecast hit.
         with ExitStack() as stack:
             stack.enter_context(patch.object(flow,'before_action',return_value=None))
             stack.enter_context(patch.object(flow,'record_publications',lambda e,b,s,p,rows,**kwargs:rows))

@@ -22,8 +22,8 @@ def with_reports(progress, reports, history=None):
         board=(condition_published_medium(progress.board,tuple(MediumReport(**r) for r in reports),history) if history is not None else condition_reports(progress.board,tuple(MediumReport(**r) for r in reports)))
         return Progress(board,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
 
-def reconstruct_standard(state):
-        rules = complete_rules(state["rules"])
+def reconstruct_standard(state,common_rules=None):
+        rules = common_rules if common_rules is not None else complete_rules(state["rules"])
         progress = Progress.initial(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
         if len(state["history"]) > max(0, 2*state["players"] - 2):
             raise ValueError("Too much history")
@@ -48,12 +48,12 @@ def reconstruct_standard(state):
             b=condition_observed(state,progress.board,tuple(state.get('claims',['latent']*state['players'])),ClaimPolicy(**state.get('claim_policy',{})),state['policy']);progress=Progress(b,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
         return rules, progress
 
-def reconstruct_manual(g,guard_priors):
+def reconstruct_manual(g,guard_priors,common_rules=None):
     from .seer_manual import MODE,cast_scope,options,input_rows,condition
     guard_priors=dict(guard_priors)
     if g.get('seer_mode')!=MODE or not cast_scope(g):raise ValueError('手動開発版は1～9人・非負の役職数・合計人数の範囲で指定してください。')
     opt=options(g.get('seer_options',{}));rows=input_rows(g)
-    rules=Rules(**g['rules']);seed=initial_board(g['players'],g.get('wolves',1),g.get('mediums',0),g.get('seers',0),g.get('hunters',0),experimental_cast=True);p=Progress.initial(seed);initial=seed.alive
+    rules=common_rules if common_rules is not None else Rules(**g['rules']);seed=initial_board(g['players'],g.get('wolves',1),g.get('mediums',0),g.get('seers',0),g.get('hunters',0),experimental_cast=True);p=Progress.initial(seed);initial=seed.alive
     medium_rows=tuple(MediumReport(**r) for r in g.get('reports',()))
     medium_applied=set()
     from .report_publication import publication_slot,condition_published_medium
@@ -95,13 +95,13 @@ def reconstruct_manual(g,guard_priors):
     return rules,replace(p,guard_state=guard_priors.get(len(history)))
 
 @evidence_reconstruction()
-def reconstruct_saved(game, *, guard_priors=None):
+def reconstruct_saved(game, *, guard_priors=None,common_rules=None):
     """3a baseline: rebuild from effective inputs, not a prior calculation."""
     if game.get('seer_mode') != 'information-fixed-v1':
-        return reconstruct_standard(game)
+        return reconstruct_standard(game,common_rules)
     from .seer_manual import migrate_game
     g=migrate_game(game)
-    rules=Rules(**g['rules'])
+    rules=common_rules if common_rules is not None else Rules(**g['rules'])
     saved=g.get('history',())
     joint_max=(g.get('hunters')==1 and all(Strategy(**x.get('policy',{})).day=='random' for x in saved)
                and (Strategy(**g.get('policy',{})).night=='max' or
@@ -111,7 +111,7 @@ def reconstruct_saved(game, *, guard_priors=None):
         from .seer_future_uniform import FuturePending
         guard_priors=root_guard_night_priors(g,rules)
         if isinstance(guard_priors,FuturePending):raise ValueError('No-repeat history replay: '+guard_priors.reason)
-    return reconstruct_manual(g,tuple(sorted((guard_priors or {}).items())))
+    return reconstruct_manual(g,tuple(sorted((guard_priors or {}).items())),rules)
 
 
 def role_rates(progress):
@@ -221,4 +221,4 @@ def reconstruct_roles(request):
     """
     from .board_future import GeneratedBoard
     if isinstance(request,GeneratedBoard):return request._reconstruct()
-    return reconstruct_saved(request.to_game())
+    return reconstruct_saved(request.to_game(),common_rules=request.game_data.rules)
