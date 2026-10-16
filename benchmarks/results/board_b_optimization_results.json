@@ -1,0 +1,6693 @@
+{
+  "versions": {
+    "old": "ec513c2eb60bd20d5dbfbbe6c29bceb5648ff049",
+    "new": "c6dd47539644c65e83c708b824b7792410c62130",
+    "improved": "1609d2fd81bfa023c4dea9896bb4984fc9762b86"
+  },
+  "environment": {
+    "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+    "executable": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "processor": "AMD64 Family 23 Model 113 Stepping 0, AuthenticAMD",
+    "logical_cpus": 6
+  },
+  "budget": {
+    "max_work": 250000,
+    "max_seconds": 20
+  },
+  "cases_sha256": "93fa1656726ccf81ee1010d1d0833ce0da89bee38162dee8b0cd86cd0376b6e7",
+  "complete_semantic_comparisons": 120,
+  "baseline": [
+    {
+      "case": "basic",
+      "version": "old",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0008816000045044348,
+      "min_seconds": 0.000856100014061667,
+      "max_seconds": 0.001003199999104254,
+      "iqr_seconds": 1.3299999409355223e-05,
+      "raw_seconds": [
+        0.0008816000045044348,
+        0.001003199999104254,
+        0.0008818999922368675,
+        0.0008685999928275123,
+        0.000856100014061667
+      ],
+      "low_background_completed_seconds": [
+        0.001003199999104254,
+        0.0008818999922368675,
+        0.0008685999928275123,
+        0.000856100014061667
+      ],
+      "low_background_median_seconds": 0.0008752499925321899,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "basic",
+      "version": "old",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0004658000107156113,
+      "min_seconds": 0.00045819999650120735,
+      "max_seconds": 0.0005900999967707321,
+      "iqr_seconds": 4.430000262800604e-05,
+      "raw_seconds": [
+        0.00046579999616369605,
+        0.0005100999987917021,
+        0.0004658000107156113,
+        0.00045819999650120735,
+        0.0005900999967707321
+      ],
+      "low_background_completed_seconds": [
+        0.0005100999987917021,
+        0.0004658000107156113,
+        0.00045819999650120735,
+        0.0005900999967707321
+      ],
+      "low_background_median_seconds": 0.0004879500047536567,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "basic",
+      "version": "new",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0008407999994233251,
+      "min_seconds": 0.0008378999918932095,
+      "max_seconds": 0.0008914000063668936,
+      "iqr_seconds": 1.2999982573091984e-05,
+      "raw_seconds": [
+        0.0008914000063668936,
+        0.0008407999994233251,
+        0.0008383000094909221,
+        0.0008512999920640141,
+        0.0008378999918932095
+      ],
+      "low_background_completed_seconds": [
+        0.0008383000094909221
+      ],
+      "low_background_median_seconds": 0.0008383000094909221,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "basic",
+      "version": "new",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0006098999874666333,
+      "min_seconds": 0.0006051999953342602,
+      "max_seconds": 0.0006216000037966296,
+      "iqr_seconds": 4.899993655271828e-06,
+      "raw_seconds": [
+        0.0006124999927124009,
+        0.0006216000037966296,
+        0.0006051999953342602,
+        0.0006098999874666333,
+        0.000607599999057129
+      ],
+      "low_background_completed_seconds": [
+        0.0006051999953342602
+      ],
+      "low_background_median_seconds": 0.0006051999953342602,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "basic",
+      "version": "improved",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0008368999988306314,
+      "min_seconds": 0.0008283999923150986,
+      "max_seconds": 0.0008527000027243048,
+      "iqr_seconds": 1.2499993317760527e-05,
+      "raw_seconds": [
+        0.0008527000027243048,
+        0.0008368999988306314,
+        0.0008368999988306314,
+        0.0008283999923150986,
+        0.0008493999921483919
+      ],
+      "low_background_completed_seconds": [
+        0.0008527000027243048,
+        0.0008368999988306314,
+        0.0008368999988306314,
+        0.0008283999923150986,
+        0.0008493999921483919
+      ],
+      "low_background_median_seconds": 0.0008368999988306314,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "basic",
+      "version": "improved",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0004428000102052465,
+      "min_seconds": 0.0004381000035209581,
+      "max_seconds": 0.00044499999785330147,
+      "iqr_seconds": 9.999930625781417e-07,
+      "raw_seconds": [
+        0.00044499999785330147,
+        0.0004381000035209581,
+        0.0004420000041136518,
+        0.00044299999717622995,
+        0.0004428000102052465
+      ],
+      "low_background_completed_seconds": [
+        0.00044499999785330147,
+        0.0004381000035209581,
+        0.0004420000041136518,
+        0.00044299999717622995,
+        0.0004428000102052465
+      ],
+      "low_background_median_seconds": 0.0004428000102052465,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "seven",
+      "version": "old",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 11.160981699998956,
+      "min_seconds": 11.117349399995874,
+      "max_seconds": 11.236132699996233,
+      "iqr_seconds": 0.03966670000227168,
+      "raw_seconds": [
+        11.117349399995874,
+        11.236132699996233,
+        11.159312199990381,
+        11.160981699998956,
+        11.198978899992653
+      ],
+      "low_background_completed_seconds": [
+        11.117349399995874,
+        11.236132699996233,
+        11.159312199990381,
+        11.160981699998956,
+        11.198978899992653
+      ],
+      "low_background_median_seconds": 11.160981699998956,
+      "median_cpu_seconds": 11.140625
+    },
+    {
+      "case": "seven",
+      "version": "old",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0011529000039445236,
+      "min_seconds": 0.0011457999935373664,
+      "max_seconds": 0.0011760000052163377,
+      "iqr_seconds": 1.3299984857439995e-05,
+      "raw_seconds": [
+        0.0011457999935373664,
+        0.0011760000052163377,
+        0.0011529000039445236,
+        0.0011476000072434545,
+        0.0011608999921008945
+      ],
+      "low_background_completed_seconds": [
+        0.0011457999935373664,
+        0.0011760000052163377,
+        0.0011529000039445236,
+        0.0011476000072434545,
+        0.0011608999921008945
+      ],
+      "low_background_median_seconds": 0.0011529000039445236,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "seven",
+      "version": "new",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 15.143767999994452,
+      "min_seconds": 15.09990299999481,
+      "max_seconds": 15.181585500002257,
+      "iqr_seconds": 0.017409000007319264,
+      "raw_seconds": [
+        15.09990299999481,
+        15.143767999994452,
+        15.14532809999946,
+        15.181585500002257,
+        15.127919099992141
+      ],
+      "low_background_completed_seconds": [
+        15.09990299999481,
+        15.143767999994452,
+        15.14532809999946,
+        15.181585500002257,
+        15.127919099992141
+      ],
+      "low_background_median_seconds": 15.143767999994452,
+      "median_cpu_seconds": 15.0625
+    },
+    {
+      "case": "seven",
+      "version": "new",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 16.44676599999366,
+      "min_seconds": 16.364880200009793,
+      "max_seconds": 16.510786800005008,
+      "iqr_seconds": 0.05514929999480955,
+      "raw_seconds": [
+        16.364880200009793,
+        16.44676599999366,
+        16.510786800005008,
+        16.478492099995492,
+        16.423342800000682
+      ],
+      "low_background_completed_seconds": [
+        16.364880200009793,
+        16.44676599999366,
+        16.510786800005008,
+        16.478492099995492,
+        16.423342800000682
+      ],
+      "low_background_median_seconds": 16.44676599999366,
+      "median_cpu_seconds": 16.375
+    },
+    {
+      "case": "seven",
+      "version": "improved",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 14.877456600006553,
+      "min_seconds": 14.756354099998134,
+      "max_seconds": 14.9446001000033,
+      "iqr_seconds": 0.05416939999850001,
+      "raw_seconds": [
+        14.877456600006553,
+        14.9446001000033,
+        14.892002399996272,
+        14.756354099998134,
+        14.837832999997772
+      ],
+      "low_background_completed_seconds": [
+        14.877456600006553,
+        14.9446001000033,
+        14.892002399996272,
+        14.756354099998134,
+        14.837832999997772
+      ],
+      "low_background_median_seconds": 14.877456600006553,
+      "median_cpu_seconds": 14.78125
+    },
+    {
+      "case": "seven",
+      "version": "improved",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.012206500003230758,
+      "min_seconds": 0.012044500006595626,
+      "max_seconds": 0.0123071000125492,
+      "iqr_seconds": 5.599998985417187e-05,
+      "raw_seconds": [
+        0.012044500006595626,
+        0.012206500003230758,
+        0.012236700000357814,
+        0.0123071000125492,
+        0.012180700010503642
+      ],
+      "low_background_completed_seconds": [
+        0.012044500006595626,
+        0.012206500003230758,
+        0.012236700000357814,
+        0.0123071000125492,
+        0.012180700010503642
+      ],
+      "low_background_median_seconds": 0.012206500003230758,
+      "median_cpu_seconds": 0.015625
+    },
+    {
+      "case": "seven-observed",
+      "version": "old",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 10.905270000002929,
+      "min_seconds": 10.85926890000701,
+      "max_seconds": 10.93463969998993,
+      "iqr_seconds": 0.04731169999286067,
+      "raw_seconds": [
+        10.85926890000701,
+        10.875330399998347,
+        10.93463969998993,
+        10.905270000002929,
+        10.922642099991208
+      ],
+      "low_background_completed_seconds": [
+        10.85926890000701,
+        10.875330399998347,
+        10.93463969998993,
+        10.905270000002929,
+        10.922642099991208
+      ],
+      "low_background_median_seconds": 10.905270000002929,
+      "median_cpu_seconds": 10.890625
+    },
+    {
+      "case": "seven-observed",
+      "version": "old",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0013612000038847327,
+      "min_seconds": 0.0013482999929692596,
+      "max_seconds": 0.00136900000507012,
+      "iqr_seconds": 9.600014891475439e-06,
+      "raw_seconds": [
+        0.00136900000507012,
+        0.001363100003800355,
+        0.0013482999929692596,
+        0.0013534999889088795,
+        0.0013612000038847327
+      ],
+      "low_background_completed_seconds": [
+        0.00136900000507012,
+        0.001363100003800355,
+        0.0013482999929692596,
+        0.0013534999889088795,
+        0.0013612000038847327
+      ],
+      "low_background_median_seconds": 0.0013612000038847327,
+      "median_cpu_seconds": 0.0
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 14.626965400006156,
+      "min_seconds": 14.560182000001078,
+      "max_seconds": 14.907975399997667,
+      "iqr_seconds": 0.06631629999901634,
+      "raw_seconds": [
+        14.580585300005623,
+        14.626965400006156,
+        14.907975399997667,
+        14.64690160000464,
+        14.560182000001078
+      ],
+      "low_background_completed_seconds": [
+        14.580585300005623,
+        14.626965400006156,
+        14.907975399997667,
+        14.64690160000464,
+        14.560182000001078
+      ],
+      "low_background_median_seconds": 14.626965400006156,
+      "median_cpu_seconds": 14.5625
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 15.548994299999322,
+      "min_seconds": 15.501581200005603,
+      "max_seconds": 15.740554300005897,
+      "iqr_seconds": 0.04255399999965448,
+      "raw_seconds": [
+        15.517510899997433,
+        15.560064899997087,
+        15.740554300005897,
+        15.548994299999322,
+        15.501581200005603
+      ],
+      "low_background_completed_seconds": [
+        15.517510899997433,
+        15.560064899997087,
+        15.740554300005897,
+        15.548994299999322,
+        15.501581200005603
+      ],
+      "low_background_median_seconds": 15.548994299999322,
+      "median_cpu_seconds": 15.484375
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 14.323776400007773,
+      "min_seconds": 14.286593199998606,
+      "max_seconds": 14.358744800003478,
+      "iqr_seconds": 0.01184980000834912,
+      "raw_seconds": [
+        14.286593199998606,
+        14.358744800003478,
+        14.321130399999674,
+        14.332980200008024,
+        14.323776400007773
+      ],
+      "low_background_completed_seconds": [
+        14.286593199998606,
+        14.358744800003478,
+        14.321130399999674,
+        14.332980200008024,
+        14.323776400007773
+      ],
+      "low_background_median_seconds": 14.323776400007773,
+      "median_cpu_seconds": 14.265625
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.015749700003652833,
+      "min_seconds": 0.015540099993813783,
+      "max_seconds": 0.01606819999869913,
+      "iqr_seconds": 0.00019169998995494097,
+      "raw_seconds": [
+        0.015749700003652833,
+        0.015675800008466467,
+        0.015867499998421408,
+        0.01606819999869913,
+        0.015540099993813783
+      ],
+      "low_background_completed_seconds": [
+        0.015749700003652833,
+        0.015675800008466467,
+        0.015867499998421408,
+        0.01606819999869913,
+        0.015540099993813783
+      ],
+      "low_background_median_seconds": 0.015749700003652833,
+      "median_cpu_seconds": 0.015625
+    },
+    {
+      "case": "private-history",
+      "version": "old",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.022878299991134554,
+      "min_seconds": 0.022543099999893457,
+      "max_seconds": 0.024108700003125705,
+      "iqr_seconds": 0.0004619999963324517,
+      "raw_seconds": [
+        0.02312569999776315,
+        0.022878299991134554,
+        0.024108700003125705,
+        0.022663700001430698,
+        0.022543099999893457
+      ],
+      "low_background_completed_seconds": [
+        0.022663700001430698,
+        0.022543099999893457
+      ],
+      "low_background_median_seconds": 0.022603400000662077,
+      "median_cpu_seconds": 0.015625
+    },
+    {
+      "case": "private-history",
+      "version": "old",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.019820499990601093,
+      "min_seconds": 0.019120099997962825,
+      "max_seconds": 0.020760200000950135,
+      "iqr_seconds": 0.00036970000655855983,
+      "raw_seconds": [
+        0.019827199997962452,
+        0.019820499990601093,
+        0.020760200000950135,
+        0.019457499991403893,
+        0.019120099997962825
+      ],
+      "low_background_completed_seconds": [
+        0.019457499991403893,
+        0.019120099997962825
+      ],
+      "low_background_median_seconds": 0.01928879999468336,
+      "median_cpu_seconds": 0.03125
+    },
+    {
+      "case": "private-history",
+      "version": "new",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.028589900000952184,
+      "min_seconds": 0.02837490000820253,
+      "max_seconds": 0.028834299999289215,
+      "iqr_seconds": 0.00029690000519622117,
+      "raw_seconds": [
+        0.02837490000820253,
+        0.028684200005955063,
+        0.028589900000952184,
+        0.028834299999289215,
+        0.02838730000075884
+      ],
+      "low_background_completed_seconds": [
+        0.02837490000820253,
+        0.028684200005955063,
+        0.028834299999289215,
+        0.02838730000075884
+      ],
+      "low_background_median_seconds": 0.028535750003356952,
+      "median_cpu_seconds": 0.03125
+    },
+    {
+      "case": "private-history",
+      "version": "new",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.028304200008278713,
+      "min_seconds": 0.028001099999528378,
+      "max_seconds": 0.02835120000236202,
+      "iqr_seconds": 0.00022799998987466097,
+      "raw_seconds": [
+        0.028001099999528378,
+        0.028102000011131167,
+        0.02833000000100583,
+        0.028304200008278713,
+        0.02835120000236202
+      ],
+      "low_background_completed_seconds": [
+        0.028001099999528378,
+        0.028102000011131167,
+        0.028304200008278713,
+        0.02835120000236202
+      ],
+      "low_background_median_seconds": 0.02820310000970494,
+      "median_cpu_seconds": 0.03125
+    },
+    {
+      "case": "private-history",
+      "version": "improved",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.02829290000954643,
+      "min_seconds": 0.028038100004778244,
+      "max_seconds": 0.030488899996271357,
+      "iqr_seconds": 0.0002722000062931329,
+      "raw_seconds": [
+        0.02804669999750331,
+        0.02829290000954643,
+        0.028038100004778244,
+        0.028318900003796443,
+        0.030488899996271357
+      ],
+      "low_background_completed_seconds": [
+        0.02804669999750331,
+        0.028318900003796443
+      ],
+      "low_background_median_seconds": 0.028182800000649877,
+      "median_cpu_seconds": 0.03125
+    },
+    {
+      "case": "private-history",
+      "version": "improved",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.0020106999872950837,
+      "min_seconds": 0.001970400000573136,
+      "max_seconds": 0.002321799998753704,
+      "iqr_seconds": 0.0002874999918276444,
+      "raw_seconds": [
+        0.001976300001842901,
+        0.002321799998753704,
+        0.0020106999872950837,
+        0.001970400000573136,
+        0.0022637999936705455
+      ],
+      "low_background_completed_seconds": [
+        0.001976300001842901,
+        0.001970400000573136
+      ],
+      "low_background_median_seconds": 0.0019733500012080185,
+      "median_cpu_seconds": 0.0
+    }
+  ],
+  "method": "Three fixed revisions; fresh process per case/repetition/version; five repetitions, serial old/new/improved then reversed order. Cold then same-Game warm. Runtime creation outside measured request, matching Game lifetime. No concurrent test/browser benchmark. All requested results retained; no Pending silently omitted.",
+  "cache_audit": {
+    "cases": [
+      "base",
+      "input",
+      "history",
+      "strategy",
+      "rule",
+      "view-wolf4",
+      "view-wolf5",
+      "pending-latent-seer",
+      "strategy-night",
+      "rule-initial-scan",
+      "completed-seer-history",
+      "root-wolf4-partial",
+      "root-wolf5-partial",
+      "night-wolf3",
+      "night-wolf4"
+    ],
+    "warm_request_count_per_version": 29,
+    "failures": [],
+    "input_immutability_checked": true,
+    "fresh_semantic_digests": {
+      "old": {
+        "base": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "input": "5869a0dee84f78ff3aaf79b4375bde7dcb26284e0caf3af2f23e33db493b90f4",
+        "history": "063027c4624e119032c1748e2ba5db39d797aadad65a6b79068e04b32c523692",
+        "strategy": "e6e1876c45ab9ac47e295fc9a8541976680935fdb76756a95f08dd9d739b84c0",
+        "rule": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "view-wolf4": "2e3d60304bbc09df472ec64de071d2dc331aab10b0242ef4cd46b304d607d5a7",
+        "view-wolf5": "3f34c7b1d4f65d7a2723c29f9ebb9eacc22bad1f295f342b2f4c163c1e50d8d3",
+        "pending-latent-seer": "13020f1235dc3bd7be084ec01b423361c706ee55513e510dcf2bddad32f9919d",
+        "strategy-night": "06f910ecab5f49f1e40bf8a8071f1af8a58885627d493c721c7ff37e2e807ce5",
+        "rule-initial-scan": "55b51a83f2da86650c11b425731c5a03b0a778856a8940b4753fcfdfcdc3c632",
+        "completed-seer-history": "cb4e89777b321fa93305d8348c2a7063a889a6a2ca1509ff376f52bae92070f2",
+        "root-wolf4-partial": "68f04df9e97d0b6425fe1d2672bea9e271ada4ca547b8357e667fdba68084d82",
+        "root-wolf5-partial": "3954bc109c7e5554852b64eb1d68594ded96d7b56b96619e44ff0e4da6ce638e",
+        "night-wolf3": "b6b23e49f297889d20a591ce8335402b82ed9f21ccb1798fa60ff5b011b74ff1",
+        "night-wolf4": "e7c8c9badb38c8a0bead5e290031415806ec3151d2bb35c631eda633a226ebaa"
+      },
+      "new": {
+        "base": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "input": "5869a0dee84f78ff3aaf79b4375bde7dcb26284e0caf3af2f23e33db493b90f4",
+        "history": "063027c4624e119032c1748e2ba5db39d797aadad65a6b79068e04b32c523692",
+        "strategy": "e6e1876c45ab9ac47e295fc9a8541976680935fdb76756a95f08dd9d739b84c0",
+        "rule": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "view-wolf4": "2e3d60304bbc09df472ec64de071d2dc331aab10b0242ef4cd46b304d607d5a7",
+        "view-wolf5": "3f34c7b1d4f65d7a2723c29f9ebb9eacc22bad1f295f342b2f4c163c1e50d8d3",
+        "pending-latent-seer": "13020f1235dc3bd7be084ec01b423361c706ee55513e510dcf2bddad32f9919d",
+        "strategy-night": "06f910ecab5f49f1e40bf8a8071f1af8a58885627d493c721c7ff37e2e807ce5",
+        "rule-initial-scan": "55b51a83f2da86650c11b425731c5a03b0a778856a8940b4753fcfdfcdc3c632",
+        "completed-seer-history": "cb4e89777b321fa93305d8348c2a7063a889a6a2ca1509ff376f52bae92070f2",
+        "root-wolf4-partial": "68f04df9e97d0b6425fe1d2672bea9e271ada4ca547b8357e667fdba68084d82",
+        "root-wolf5-partial": "3954bc109c7e5554852b64eb1d68594ded96d7b56b96619e44ff0e4da6ce638e",
+        "night-wolf3": "b6b23e49f297889d20a591ce8335402b82ed9f21ccb1798fa60ff5b011b74ff1",
+        "night-wolf4": "e7c8c9badb38c8a0bead5e290031415806ec3151d2bb35c631eda633a226ebaa"
+      },
+      "improved": {
+        "base": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "input": "5869a0dee84f78ff3aaf79b4375bde7dcb26284e0caf3af2f23e33db493b90f4",
+        "history": "063027c4624e119032c1748e2ba5db39d797aadad65a6b79068e04b32c523692",
+        "strategy": "e6e1876c45ab9ac47e295fc9a8541976680935fdb76756a95f08dd9d739b84c0",
+        "rule": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "view-wolf4": "2e3d60304bbc09df472ec64de071d2dc331aab10b0242ef4cd46b304d607d5a7",
+        "view-wolf5": "3f34c7b1d4f65d7a2723c29f9ebb9eacc22bad1f295f342b2f4c163c1e50d8d3",
+        "pending-latent-seer": "13020f1235dc3bd7be084ec01b423361c706ee55513e510dcf2bddad32f9919d",
+        "strategy-night": "06f910ecab5f49f1e40bf8a8071f1af8a58885627d493c721c7ff37e2e807ce5",
+        "rule-initial-scan": "55b51a83f2da86650c11b425731c5a03b0a778856a8940b4753fcfdfcdc3c632",
+        "completed-seer-history": "cb4e89777b321fa93305d8348c2a7063a889a6a2ca1509ff376f52bae92070f2",
+        "root-wolf4-partial": "68f04df9e97d0b6425fe1d2672bea9e271ada4ca547b8357e667fdba68084d82",
+        "root-wolf5-partial": "3954bc109c7e5554852b64eb1d68594ded96d7b56b96619e44ff0e4da6ce638e",
+        "night-wolf3": "b6b23e49f297889d20a591ce8335402b82ed9f21ccb1798fa60ff5b011b74ff1",
+        "night-wolf4": "e7c8c9badb38c8a0bead5e290031415806ec3151d2bb35c631eda633a226ebaa"
+      }
+    },
+    "pending": {
+      "old": {
+        "view-wolf4": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "view-wolf5": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "pending-latent-seer": [
+          "潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。"
+        ],
+        "rule-initial-scan": [
+          "full_disclosure_truth_not_conditioned"
+        ],
+        "root-wolf4-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "root-wolf5-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ]
+      },
+      "new": {
+        "view-wolf4": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "view-wolf5": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "pending-latent-seer": [
+          "潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。"
+        ],
+        "rule-initial-scan": [
+          "full_disclosure_truth_not_conditioned"
+        ],
+        "root-wolf4-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "root-wolf5-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ]
+      },
+      "improved": {
+        "view-wolf4": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "view-wolf5": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "pending-latent-seer": [
+          "潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。"
+        ],
+        "rule-initial-scan": [
+          "full_disclosure_truth_not_conditioned"
+        ],
+        "root-wolf4-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "root-wolf5-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ]
+      }
+    }
+  },
+  "joint_audit": {
+    "cases": [
+      "basic",
+      "seven",
+      "seven-observed",
+      "private-history"
+    ],
+    "failures": [],
+    "digests": {
+      "old": {
+        "basic": "d88d65f1ea0bad8c9f3080b205e70b6c9e378526d5177366b2d9f5caa1101dac",
+        "seven": "e2468af03559300537a2571f341e322cd0eed9af9e05d9330222da67c153e6ea",
+        "seven-observed": "0174df2e01a12fe8bcfbaef1d2da562c44a9de13585c6064105a2d9492df4161",
+        "private-history": "dfb53515f6b3245a7fc89a0ab192e10238c81809e36246b903f6bc5cae6c4ec5"
+      },
+      "new": {
+        "basic": "d88d65f1ea0bad8c9f3080b205e70b6c9e378526d5177366b2d9f5caa1101dac",
+        "seven": "e2468af03559300537a2571f341e322cd0eed9af9e05d9330222da67c153e6ea",
+        "seven-observed": "0174df2e01a12fe8bcfbaef1d2da562c44a9de13585c6064105a2d9492df4161",
+        "private-history": "dfb53515f6b3245a7fc89a0ab192e10238c81809e36246b903f6bc5cae6c4ec5"
+      },
+      "improved": {
+        "basic": "d88d65f1ea0bad8c9f3080b205e70b6c9e378526d5177366b2d9f5caa1101dac",
+        "seven": "e2468af03559300537a2571f341e322cd0eed9af9e05d9330222da67c153e6ea",
+        "seven-observed": "0174df2e01a12fe8bcfbaef1d2da562c44a9de13585c6064105a2d9492df4161",
+        "private-history": "dfb53515f6b3245a7fc89a0ab192e10238c81809e36246b903f6bc5cae6c4ec5"
+      }
+    }
+  },
+  "raw_summary_paths": [
+    ".artifacts/b-benchmark/optimization-formal/summary.json",
+    ".artifacts/b-benchmark/optimization-cache/summary.json",
+    ".artifacts/b-benchmark/optimization-joint/summary.json"
+  ],
+  "counters": [
+    {
+      "case": "basic",
+      "version": "old",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008816000045044348,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.00046579999616369605,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "new",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008914000063668936,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0006124999927124009,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "improved",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008527000027243048,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.00044499999785330147,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "old",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 11.117349399995874,
+          "cpu_seconds": 11.078125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0011457999935373664,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "new",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 15.09990299999481,
+          "cpu_seconds": 15.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 16.364880200009793,
+          "cpu_seconds": 16.34375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "improved",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.877456600006553,
+          "cpu_seconds": 14.8125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.012044500006595626,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "old",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 10.85926890000701,
+          "cpu_seconds": 10.84375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.00136900000507012,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.580585300005623,
+          "cpu_seconds": 14.53125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 15.517510899997433,
+          "cpu_seconds": 15.46875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.286593199998606,
+          "cpu_seconds": 14.265625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.015749700003652833,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "old",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.02312569999776315,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.019827199997962452,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "new",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.02837490000820253,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.028001099999528378,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "improved",
+      "repetition": 0,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.02804669999750331,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.001976300001842901,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "improved",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.02829290000954643,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.002321799998753704,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "new",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.028684200005955063,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.028102000011131167,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "old",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.022878299991134554,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.019820499990601093,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.358744800003478,
+          "cpu_seconds": 14.28125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.015675800008466467,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.626965400006156,
+          "cpu_seconds": 14.578125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 15.560064899997087,
+          "cpu_seconds": 15.53125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "old",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 10.875330399998347,
+          "cpu_seconds": 10.828125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.001363100003800355,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "improved",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.9446001000033,
+          "cpu_seconds": 14.890625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.012206500003230758,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "new",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 15.143767999994452,
+          "cpu_seconds": 15.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 16.44676599999366,
+          "cpu_seconds": 16.34375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "old",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 11.236132699996233,
+          "cpu_seconds": 11.1875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0011760000052163377,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "improved",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008368999988306314,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0004381000035209581,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "new",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008407999994233251,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0006216000037966296,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "old",
+      "repetition": 1,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.001003199999104254,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0005100999987917021,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "old",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008818999922368675,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0004658000107156113,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "new",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008383000094909221,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0006051999953342602,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "improved",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008368999988306314,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0004420000041136518,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "old",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 11.159312199990381,
+          "cpu_seconds": 11.125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0011529000039445236,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "new",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 15.14532809999946,
+          "cpu_seconds": 15.078125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 16.510786800005008,
+          "cpu_seconds": 16.375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "improved",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.892002399996272,
+          "cpu_seconds": 14.75,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.012236700000357814,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "old",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 10.93463969998993,
+          "cpu_seconds": 10.890625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0013482999929692596,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.907975399997667,
+          "cpu_seconds": 14.640625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 15.740554300005897,
+          "cpu_seconds": 15.5625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.321130399999674,
+          "cpu_seconds": 14.3125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.015867499998421408,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "old",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.024108700003125705,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.020760200000950135,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "new",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.028589900000952184,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.02833000000100583,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "improved",
+      "repetition": 2,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.028038100004778244,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0020106999872950837,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "improved",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.028318900003796443,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.001970400000573136,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "new",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.028834299999289215,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.028304200008278713,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "old",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.022663700001430698,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.019457499991403893,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.332980200008024,
+          "cpu_seconds": 14.234375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.01606819999869913,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.64690160000464,
+          "cpu_seconds": 14.5625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 15.548994299999322,
+          "cpu_seconds": 15.484375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "old",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 10.905270000002929,
+          "cpu_seconds": 10.890625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0013534999889088795,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "improved",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.756354099998134,
+          "cpu_seconds": 14.71875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0123071000125492,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "new",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 15.181585500002257,
+          "cpu_seconds": 14.9375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 16.478492099995492,
+          "cpu_seconds": 16.484375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "old",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 11.160981699998956,
+          "cpu_seconds": 11.140625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0011476000072434545,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "improved",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008283999923150986,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.00044299999717622995,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "new",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008512999920640141,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0006098999874666333,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "old",
+      "repetition": 3,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008685999928275123,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.00045819999650120735,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "old",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.000856100014061667,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0005900999967707321,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "new",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008378999918932095,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.000607599999057129,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "basic",
+      "version": "improved",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.0008493999921483919,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0004428000102052465,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "old",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 11.198978899992653,
+          "cpu_seconds": 11.171875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0011608999921008945,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "new",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 15.127919099992141,
+          "cpu_seconds": 15.125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 16.423342800000682,
+          "cpu_seconds": 16.40625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven",
+      "version": "improved",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.837832999997772,
+          "cpu_seconds": 14.78125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.012180700010503642,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "old",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 10.922642099991208,
+          "cpu_seconds": 10.890625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0013612000038847327,
+          "cpu_seconds": 0.0,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.560182000001078,
+          "cpu_seconds": 14.515625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 15.501581200005603,
+          "cpu_seconds": 15.484375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.323776400007773,
+          "cpu_seconds": 14.21875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.015540099993813783,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "old",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.022543099999893457,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.019120099997962825,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "new",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.02838730000075884,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.02835120000236202,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 1,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "case": "private-history",
+      "version": "improved",
+      "repetition": 4,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 0.030488899996271357,
+          "cpu_seconds": 0.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0022637999936705455,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 1,
+              "currsize": 1
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "observation_window_utc": {
+    "approx_start": "2026-10-16T20:29:12.472460+00:00",
+    "approx_end": "2026-10-16T20:39:23.254845+00:00",
+    "method": "Raw file mtime minus child process wall; approximate."
+  }
+}
