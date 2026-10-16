@@ -184,8 +184,7 @@ branch weights and payoffs; each child public Board keeps all public worlds.
         _, scores = public_values(b, s, published)
         if getattr(strategy, b.phase) == 'random': chosen = tuple(p for p, _ in scores)
         else:
-            best = (max if b.phase == 'day' else min)(v for _, v in scores)
-            chosen = tuple(p for p, v in scores if v == best)
+            chosen = optimal_targets(scores, maximize=b.phase == 'day')
         if not chosen: raise Unresolved('seer_view_no_public_continuation')
         value = sum((private_action(b, s, published, p, private) for p in chosen), F()) / len(chosen)
         conditional_memo[key] = value
@@ -228,8 +227,7 @@ branch weights and payoffs; each child public Board keeps all public worlds.
         if getattr(strategy, b.phase) == 'random':
             chosen = tuple(p for p, _ in available)
         else:
-            best = (max if b.phase == 'day' else min)(v for _, v in available)
-            chosen = tuple(p for p, v in available if v == best)
+            chosen = optimal_targets(available, maximize=b.phase == 'day')
         if trace is not None:
             trace.setdefault('choices', []).append({'day': b.day, 'phase': b.phase,
                 'history': tuple((e.day, e.phase, e.target) for e in b.history), 'targets': chosen})
