@@ -152,7 +152,10 @@ def remember(engine,request,state):
     context=_active_origin.get()
     if context is not None:
         context[1][key]=request
-        context[2][public_source_key(engine,state.public,state.public_state,state.past)]=(request,state)
+        public_key=public_source_key(engine,state.public,state.public_state,state.past)
+        context[2][public_key]=(request,state)
+        point=(state.public.day,state.public.phase,state.public.alive,state.public.history)
+        context[3].setdefault(point,{})[public_key]=(request,state)
     return request
 
 
@@ -174,7 +177,8 @@ def register_origin(engine,board,payload):
                 return remember(engine,request,root)
         # Existing exact information retirement is an explicit recipe too;
         # it must not silently become a new origin at a computed child.
-        for parent,source in tuple(context[2].values()):
+        point=(board.day,board.phase,board.alive,board.history)
+        for parent,source in tuple(context[3].get(point,{}).values()):
             if (source.public.day,source.public.phase,source.public.alive,source.public.history)!=(
                     board.day,board.phase,board.alive,board.history):continue
             view=None
@@ -233,7 +237,7 @@ def reconstruct_child(engine,board,payload,outcome,target,legacy):
     return replace(state,board_data=request)
 
 
-def reconstruct_publication(engine,payload,child,public,past,private,physical):
+def reconstruct_publication(engine,payload,child,public,past,private,physical,*,replay_unique=False):
     from .evaluation_branch import ContinuationInputs,physical_board
     if _rebuilding.get():return ContinuationInputs(child,public,past,private,payload.observer,physical)
     source=payload.board_data
@@ -241,8 +245,13 @@ def reconstruct_publication(engine,payload,child,public,past,private,physical):
         from .evaluation_branch import ActionInputs
         source=register_origin(engine,payload.public,ActionInputs(payload.public_state,payload.past,
             payload.private,payload.observer,payload.physical))
-    request=source.child(PublicationEvidence(kernel_snapshot(engine),publication_key(child,past)),
-                         (child.day,child.phase,child.alive))
+    operation=PublicationEvidence(kernel_snapshot(engine),publication_key(child,past))
+    if _reuse_kernels.get() and replay_unique:
+        # The normal flow already generated this unique publication event.
+        # Reuse it only when full reconstructed source inputs compare equal.
+        completed=ContinuationInputs(child,public,past,private,payload.observer,physical)
+        operation._completed[:]=(payload,completed,0)
+    request=source.child(operation,(child.day,child.phase,child.alive))
     result=request.roles()
     if same_role_board(result.physical,physical):result=replace(result,physical=physical)
     remember(engine,request,result)
@@ -263,7 +272,7 @@ def after_acquisition(policy,board,acquired,source,*,target=None,terminal_payoff
 
 @contextmanager
 def calculation_origin(board):
-    token=_active_origin.set((board,{},{}))
+    token=_active_origin.set((board,{},{},{}))
     try:yield
     finally:_active_origin.reset(token)
 
@@ -273,11 +282,20 @@ class SavedOrigin:
     rules:object
     strategy:object
     project_public:bool=True
+    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
 
     @property
     def game_data(self):return self.board_data.game_data
 
     def __call__(self):
+        # This origin owns one immutable complete input snapshot. Reuse only
+        # its completed reconstruction; reference mode always rebuilds it.
+        if _reuse_kernels.get() and self._completed:return self._completed[0]
+        result=self._reconstruct()
+        if _reuse_kernels.get():self._completed[:]=(result,)
+        return result
+
+    def _reconstruct(self):
         from .board_roles import prepare_evaluation
         from .evaluation_branch import ContinuationInputs,physical_board
         from .seer_future_uniform import FuturePending
@@ -342,12 +360,16 @@ def condition_recipe(source,target):
     metadata=tuple((f.name,getattr(target.private,f.name)) for f in fields(target.private)
                    if f.name!='hypotheses')
     targets=tuple(identity(h) for h in target.private.hypotheses)
+    # Exact structural index narrows candidates; guard/attack compatibility
+    # and unique-match requirements remain unchanged.
+    candidates={}
+    for t in targets:candidates.setdefault((t.roles,t.acquisitions),[]).append(t)
     for kind,law in (('private',source.private),('public',source.public_state)):
         mapping=[]
         for h in law.hypotheses:
             key=identity(h)
-            compatible=[t for t in targets if t.roles==h.roles and t.acquisitions==h.acquisitions
-                        and set(h.guards)<=set(t.guards) and set(h.attacks)<=set(t.attacks)]
+            compatible=[t for t in candidates.get((h.roles,h.acquisitions),())
+                        if set(h.guards)<=set(t.guards) and set(h.attacks)<=set(t.attacks)]
             if len(compatible)==1:mapping.append((key,compatible[0]))
         if not mapping:continue
         by_key=dict(mapping)
@@ -390,9 +412,14 @@ class KernelOrigin:
 
 def same_role_board(left,right):
     """Compare semantic role laws across the existing sparse/full encodings."""
+    if left is right:return True
+    if type(left) is not type(right):return False
     if tuple(sorted(left.worlds))!=tuple(sorted(right.worlds)):return False
-    return replace(left,belief=right.belief,role_belief=right.role_belief,
-                   world_belief=right.world_belief)==right
+    # Compare validated immutable facts directly; constructing a throwaway
+    # Board here would repeat all normalization/count checks for equality.
+    return all(getattr(left,name)==getattr(right,name)
+        for name,descriptor in left.__dataclass_fields__.items()
+        if descriptor.compare and name not in ('belief','role_belief','world_belief'))
 
 
 @contextmanager
@@ -471,11 +498,17 @@ class MediumInstructionEvidence:
         return ContinuationInputs(outcome.board,law,source.past,law,None,physical_board(outcome.board,law))
 
 
-def record_medium_instruction(engine,board,state,past,outcome,fake_colors):
+def record_medium_instruction(engine,board,state,past,outcome,fake_colors,*,law=None):
     if _rebuilding.get():return
     from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
     source=register_origin(engine,board,ActionInputs(state,past,state,None,physical_board(board,state)))
-    child=outcome.board;law=engine.project(state,child)
+    child=outcome.board
+    if law is None:law=engine.project(state,child)
+    if fake_colors is None:
+        from .exact import report_actions
+        fake_colors=next(a.fake_colors for a in report_actions(board)
+            if any((o.board.reports,o.board.report_resolved)==(child.reports,child.report_resolved)
+                   for o in a.outcomes))
     request=source.child(MediumInstructionEvidence(kernel_snapshot(engine),fake_colors,
         child.reports,child.report_resolved),(child.day,child.phase,child.alive))
     remember(engine,request,ContinuationInputs(child,law,past,law,None,physical_board(child,law)))

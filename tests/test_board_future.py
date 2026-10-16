@@ -5,7 +5,7 @@ from fractions import Fraction as F
 from unittest.mock import patch
 from tests.test_board_flow import game
 from werewolf.board_flow import BoardData
-from werewolf.exact import initial_board,Rules,Strategy
+from werewolf.exact import initial_board,Rules,Strategy,PublicEvent
 from werewolf.seer_acquisition import from_board
 from werewolf.seer_future_uniform import TrueScanState
 from werewolf.information_set_forecast import InformationSetForecast
@@ -59,7 +59,7 @@ class GeneratedBoardTests(unittest.TestCase):
         # Disable the new orchestration only, preserving the pre-migration pure
         # role/publication kernels as an independent comparison calculation.
         def old_child(engine,board,payload,outcome,target,legacy):return legacy()
-        def old_publication(engine,payload,child,public,past,private,physical):
+        def old_publication(engine,payload,child,public,past,private,physical,**kwargs):
             return ContinuationInputs(child,public,past,private,payload.observer,physical)
         with ExitStack() as stack:
             stack.enter_context(patch.object(flow,'before_action',return_value=None))
@@ -152,3 +152,69 @@ class GeneratedBoardTests(unittest.TestCase):
         own=TrueScanState(from_board(restricted),initial_rule='none',tracked=())
         self.assertIs(physical_board(b,own,restricted),restricted)
         self.assertEqual(restricted.worlds,own.public_roles)
+
+    def test_saved_seven_player_mixed_board_preserves_previous_complete_table(self):
+        # Saved public Board, not the standalone public_forecast kernel route.
+        # Frozen ec513c2 result, including rows and dawn horizon; default budgets.
+        from werewolf.by_dawn import HorizonValues
+        source=game(players=7,wolves=2,mediums=2,seers=1,
+            claims=['seer','medium','medium']+['latent']*4,
+            rules=asdict(Rules(initial_seer='none')),policy=asdict(Strategy()),
+            claim_policy={'medium':'none','seer':'none'},
+            seer_mode='information-fixed-v1',
+            seer_options={'initial_rule':'none','likelihood':'compatibility'},seer_inputs=[])
+        result=BoardData.from_game(source).roles().forecast()
+        self.assertTrue(hasattr(result,'village_win'),result)
+        self.assertEqual(result.village_win,F(149,324))
+        self.assertEqual(result.action_values,((1,F(47,108)),(2,F(149,324)),
+            (3,F(149,324)),*((p,F(119,360)) for p in range(4,8))))
+        self.assertEqual(result.by_dawn_values,
+            tuple((p,HorizonValues(F(0),F(0))) for p in range(1,8)))
+        self.assertEqual(result.pending_metrics,())
+
+    def test_saved_origin_reuse_matches_uncached_complete_reconstruction(self):
+        from werewolf.board_future import SavedOrigin,reconstruction_kernel_reuse
+        import werewolf.board_roles as roles
+        data=BoardData.from_game(game(seers=1,rules=asdict(Rules(initial_seer='none')),
+            claims=['seer']+['latent']*4,seer_mode='information-fixed-v1',
+            seer_options={'initial_rule':'none','likelihood':'compatibility'},seer_inputs=[]))
+        origin=SavedOrigin(data,data.game_data.rules,Strategy())
+        with patch.object(roles,'prepare_evaluation',wraps=roles.prepare_evaluation) as prepare:
+            first=origin();self.assertEqual(origin(),first)
+            self.assertEqual(prepare.call_count,1)
+            with reconstruction_kernel_reuse(False):reference=origin()
+            self.assertEqual(prepare.call_count,2)
+        self.assertEqual(first,reference)
+        # A changed complete snapshot receives a distinct origin, never the old result.
+        changed=SavedOrigin(data.updated(claims=['latent']*5),data.game_data.rules,Strategy())
+        self.assertNotEqual(changed.board_data,origin.board_data)
+        with reconstruction_kernel_reuse(False):expected=changed()
+        self.assertEqual(changed(),expected)
+
+    def test_saved_seven_player_observed_model_completes_the_http_request_budget(self):
+        from app import create_app
+        import json
+        from pathlib import Path
+        # Preserve the public log too: later CO observation is not an initial CO prior.
+        source=json.loads((Path(__file__).parent/'fixtures'/'board_saved_seven_observed.json').read_text(encoding='utf-8'))
+        app=create_app({'TESTING':True,'SECRET_KEY':'seven-http-regression',
+            'HYBRID_TABLE_PREVIEW':True,'SEER_UNIFORM_FUTURE_PREVIEW':True,'DAWN_BOARD_PREVIEW':True})
+        client=app.test_client()
+        with client.session_transaction() as session:session['game']=source
+        response=client.get('/main')
+        self.assertEqual(response.status_code,200)
+        self.assertIn('data-fraction="113/504"',response.get_data(as_text=True))
+
+    def test_count_sum_reuse_is_exact_and_caller_mutation_cannot_change_it(self):
+        from dataclasses import replace
+        b=initial_board(5,2,experimental_cast=True)
+        before=hash(b)
+        first=b.wolf_count_distribution;first.clear()
+        self.assertEqual(b.wolf_count_distribution,{2:F(1)})
+        self.assertEqual(hash(b),before)
+        changed=replace(b,alive=(1,2,3,4),history=(PublicEvent(1,'day',5),),wolf_count=None)
+        expected={}
+        mask=sum(1<<(p-1) for p in changed.alive)
+        for w,q in changed.belief:
+            k=(w&mask).bit_count();expected[k]=expected.get(k,F())+q
+        self.assertEqual(changed.wolf_count_distribution,expected)

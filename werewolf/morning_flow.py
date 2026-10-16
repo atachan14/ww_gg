@@ -13,10 +13,10 @@ def report_flow(outcomes, source, past, policy, *, source_board=None, fake_color
     recursive evaluation. No observer state is supplied to publication policy.
     """
     for outcome in outcomes:
-        if source_board is not None and fake_colors is not None:
-            from .board_future import record_medium_instruction
-            record_medium_instruction(policy,source_board,source,past,outcome,fake_colors)
         state = policy.project(source, outcome.board)
+        if source_board is not None:
+            from .board_future import record_medium_instruction
+            record_medium_instruction(policy,source_board,source,past,outcome,fake_colors,law=state)
         for probability, board, joint, reports in policy.publications(outcome.board, state, past):
             yield outcome.probability * probability, board, joint, reports
 

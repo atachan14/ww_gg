@@ -259,7 +259,7 @@ class InformationSetForecast:
             tied=optimal_targets(scored,maximize=False)
             outcomes=merge_report_outcomes(BoardOutcome(o.probability*q,o.board)
                                            for action,q in uniform_policy(tied) for o in action.outcomes)
-        return tuple(report_flow(outcomes,s,past,self))
+        return tuple(report_flow(outcomes,s,past,self,source_board=b))
 
     def push(self,source,private,branches):
         return observer_report_weights(source,private,branches,
@@ -470,10 +470,14 @@ class InformationSetActionPolicy:
             return e.solve(child,st,past,own,observer,
                            physical=physical_board(child,own,payload.physical))
         branches=e.push(st,own,published)
-        from .board_future import reconstruct_publication
+        from .board_future import reconstruct_publication,publication_key
+        observations={}
+        for q,c,ns,p,priv in branches:
+            key=publication_key(c,p);observations[key]=observations.get(key,0)+1
         def evaluate(c,ns,p,priv):
             rebuilt=reconstruct_publication(e,payload,c,ns,p,priv,
-                                            physical_board(c,priv,payload.physical))
+                                            physical_board(c,priv,payload.physical),
+                                            replay_unique=observations[publication_key(c,p)]==1)
             return e.solve(*rebuilt,physical=rebuilt.physical)
         return continuation_value(branches,evaluate)
 

@@ -349,11 +349,22 @@ class Board:
 
     @property
     def wolf_count_distribution(self) -> dict[int, Fraction]:
+        cached=getattr(self,'_wolf_counts_cache',None)
+        if cached is not None and cached[0] is self.alive and cached[1] is self.belief:
+            return dict(cached[2])
         result = {}
+        alive_mask=self.alive_mask
         for mask, weight in self.belief:
-            count = (mask & self.alive_mask).bit_count()
+            count = (mask & alive_mask).bit_count()
             result[count] = result.get(count, Fraction(0)) + weight
-        return dict(sorted(result.items()))
+        items=tuple(sorted(result.items()))
+        # Derived exact sum only; frozen canonical inputs and a fresh dict for
+        # every caller. Mutable compatibility inputs remain uncached.
+        if (type(self.alive)is tuple and type(self.belief)is tuple and
+                all(type(pair)is tuple and type(pair[0])is int and type(pair[1])is Fraction
+                    for pair in self.belief)):
+            object.__setattr__(self,'_wolf_counts_cache',(self.alive,self.belief,items))
+        return dict(items)
 
     @property
     def villagers(self) -> int | None:

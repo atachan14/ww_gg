@@ -1,0 +1,288 @@
+{
+  "board_flow": "public-dawn-v1",
+  "claim_policy": {
+    "medium": "none",
+    "seer": "none",
+    "villager": "filled",
+    "wolf": "none"
+  },
+  "claims": [
+    "seer",
+    "medium",
+    "medium",
+    "latent",
+    "latent",
+    "latent",
+    "latent"
+  ],
+  "history": [],
+  "hunters": 0,
+  "mediums": 2,
+  "model": "group",
+  "players": 7,
+  "policy": {
+    "day": "max",
+    "disclosure_common": "all",
+    "fake_reports": "max",
+    "include_self_bite": false,
+    "night": "max"
+  },
+  "public_log": {
+    "acquisition_provenance": [],
+    "base_claims": [
+      [
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ]
+    ],
+    "base_medium": [],
+    "base_seer": [],
+    "batches": [
+      {
+        "board_id": "b45d2b1a16d80920:board:1",
+        "day": 1,
+        "events": [
+          {
+            "action": "assert",
+            "id": "b1:e0",
+            "kind": "co",
+            "player": 1,
+            "role": "seer"
+          },
+          {
+            "action": "assert",
+            "id": "b1:e1",
+            "kind": "co",
+            "player": 2,
+            "role": "medium"
+          },
+          {
+            "action": "assert",
+            "id": "b1:e2",
+            "kind": "co",
+            "player": 3,
+            "role": "medium"
+          }
+        ],
+        "id": 1,
+        "mode": "simultaneous",
+        "phase": "day",
+        "slot": 0
+      }
+    ],
+    "board_graph": {
+      "archives": [
+        {
+          "ancestor_path": [
+            "b45d2b1a16d80920:board:1"
+          ],
+          "generation": 1,
+          "nodes": {
+            "b45d2b1a16d80920:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "b45d2b1a16d80920:board:1",
+              "input_revision": 0,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [],
+              "parent": null,
+              "phase": "day",
+              "revision": 0,
+              "slot": 0
+            }
+          },
+          "owner": "b45d2b1a16d80920:board:1",
+          "retired_roots": [],
+          "settings": {
+            "claim_policy": {
+              "medium": "none",
+              "seer": "none",
+              "villager": "filled",
+              "wolf": "none"
+            },
+            "hunters": 0,
+            "mediums": 2,
+            "model": "group",
+            "players": 7,
+            "policy": {
+              "day": "max",
+              "disclosure_common": "all",
+              "fake_reports": "max",
+              "include_self_bite": false,
+              "night": "max"
+            },
+            "rules": {
+              "allow_repeat_guard": true,
+              "allow_self_bite": false,
+              "initial_seer": "none"
+            },
+            "seers": 1,
+            "wolves": 2
+          }
+        }
+      ],
+      "board_flow": "public-dawn-v1",
+      "current": "b45d2b1a16d80920:board:1",
+      "game_id": "b45d2b1a16d80920",
+      "generation": 1,
+      "invalidated": [
+        "b45d2b1a16d80920:board:1"
+      ],
+      "next_board": 2,
+      "next_branch": 2,
+      "nodes": {
+        "b45d2b1a16d80920:board:1": {
+          "active": true,
+          "branch": 1,
+          "children": [],
+          "content_generation": 1,
+          "day": 1,
+          "edge": null,
+          "generation": 0,
+          "id": "b45d2b1a16d80920:board:1",
+          "input_revision": 1,
+          "legacy_claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "legacy_medium": [],
+          "legacy_seer": [],
+          "local_batches": [
+            {
+              "board_id": "b45d2b1a16d80920:board:1",
+              "day": 1,
+              "events": [
+                {
+                  "action": "assert",
+                  "id": "b1:e0",
+                  "kind": "co",
+                  "player": 1,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e1",
+                  "kind": "co",
+                  "player": 2,
+                  "role": "medium"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e2",
+                  "kind": "co",
+                  "player": 3,
+                  "role": "medium"
+                }
+              ],
+              "id": 1,
+              "mode": "simultaneous",
+              "phase": "day",
+              "slot": 0
+            }
+          ],
+          "parent": null,
+          "phase": "day",
+          "retired_children": [],
+          "revision": 1,
+          "slot": 0
+        }
+      },
+      "root": "b45d2b1a16d80920:board:1"
+    },
+    "board_id": "b45d2b1a16d80920:board:1",
+    "branch_id": 1,
+    "has_local_legacy": false,
+    "legacy": false,
+    "local_batches": [
+      {
+        "board_id": "b45d2b1a16d80920:board:1",
+        "day": 1,
+        "events": [
+          {
+            "action": "assert",
+            "id": "b1:e0",
+            "kind": "co",
+            "player": 1,
+            "role": "seer"
+          },
+          {
+            "action": "assert",
+            "id": "b1:e1",
+            "kind": "co",
+            "player": 2,
+            "role": "medium"
+          },
+          {
+            "action": "assert",
+            "id": "b1:e2",
+            "kind": "co",
+            "player": 3,
+            "role": "medium"
+          }
+        ],
+        "id": 1,
+        "mode": "simultaneous",
+        "phase": "day",
+        "slot": 0
+      }
+    ],
+    "local_legacy": {
+      "claims": [
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "medium": [],
+      "seer": []
+    },
+    "next_id": 2,
+    "report_publications": {},
+    "retired_input_reports": [],
+    "version": 2
+  },
+  "reports": [],
+  "result_disclosure_model": "full-observed-v1",
+  "revision": 1,
+  "rules": {
+    "allow_repeat_guard": true,
+    "allow_self_bite": false,
+    "initial_seer": "none"
+  },
+  "seer_inputs": [],
+  "seer_mode": "information-fixed-v1",
+  "seer_options": {
+    "initial_rule": "none",
+    "likelihood": "compatibility"
+  },
+  "seers": 1,
+  "selection": null,
+  "wolves": 2
+}
