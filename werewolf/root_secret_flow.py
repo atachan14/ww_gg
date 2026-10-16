@@ -132,14 +132,6 @@ class RootSecretPolicy(InformationSetActionPolicy):
         self.engine.night_sources[b,acquired.public_state,payload.past]=payload.public_state
         return acquired
 
-    def project(self,b,payload,outcome,target):
-        continuation=super().project(b,payload,outcome,target)
-        if b.phase!='night' or b.initial_hunter_count:return continuation
-        known=(WolfAttack(b.day,target),)
-        # In this non-guard path the corpse publicly identifies the bite.
-        return replace(continuation,
-            public_state=condition_actor_state(continuation.public_state,lambda h:True,attacks=known),
-            private=condition_actor_state(continuation.private,lambda h:True,attacks=known))
 
 
 class RootSecretEngine(InformationSetForecast):

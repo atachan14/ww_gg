@@ -106,27 +106,26 @@ def evaluate_public_game(game,board,rules,strategy,*,max_work=250000,max_seconds
 
 
 def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
+    from .board_roles import prepare_evaluation
+    prepared=prepare_evaluation(game,board,rules,strategy,
+                                max_work=max_work,max_seconds=max_seconds)
+    return evaluate_prepared_public(prepared,board,rules,strategy,
+                                    max_work=max_work,max_seconds=max_seconds)
+
+
+def evaluate_prepared_public(prepared,board,rules,strategy,*,max_work=250000,max_seconds=20):
+    """Stage 3b consumes 3a state; it does not prepare role evidence itself."""
     if board.winner:return Forecast(F(board.winner=='village'),())
-    from .root_secret_flow import root_screen_eligible,root_screen_forecast
-    if root_screen_eligible(board,rules,strategy):
-        return root_screen_forecast(board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
-    from .root_secret_flow import prepare_root_entry,root_branch_forecast
-    branch=prepare_root_entry(game,board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
-    if branch is not None:
-        if isinstance(branch,FuturePending):return branch
-        return root_branch_forecast(branch,rules,strategy,max_work=max_work,max_seconds=max_seconds)
-    from .guard_model import scope_reason
-    from .guard_history_prior import role_exchangeable
-    reason=scope_reason(board,rules,strategy,board.guard_prior_roster is not None or board.day==1)
-    if reason:return FuturePending(reason)
-    if InformationSetForecast(rules,strategy).exchangeable(board):
+    kind,value=prepared
+    if kind=='pending' or isinstance(value,FuturePending):return value
+    if kind=='root':
+        from .root_secret_flow import root_branch_forecast
+        return root_branch_forecast(value,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+    if kind=='exchangeable':
         from .exchangeable_public import exchangeable_forecast
         try:
             with calculation_budget(max_work,max_seconds=max_seconds):
                 return exchangeable_forecast(board,strategy)
         except CalculationBudgetExceeded:return FuturePending('information_set_budget_exceeded')
-    prepared=prepare_public_prior(game,board,rules,
-        track_live_seers=strategy.disclosure_for('seer')=='all',max_work=max_work)
-    if isinstance(prepared,FuturePending):return prepared
-    state,past=prepared
+    state,past=value
     return public_forecast(board,state,past,rules,strategy,max_work=max_work,max_seconds=max_seconds)

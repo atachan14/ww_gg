@@ -50,48 +50,19 @@ def create_app(test_config=None, *, deployment=False):
     app.jinja_env.filters["fraction"] = str
     app.jinja_env.globals.update(role_labels=ROLE_LABELS, role_order=ROLES)
 
-    def with_claims(progress, claims, policy, initial_group=False):
-        board = (group_initial_board(progress.board, claims, policy) if initial_group else condition_claims(progress.board, claims, policy))
-        return Progress(board, progress.settled_village, progress.settled_wolf,
-                        progress.last_board, progress.last_outcomes)
-
-    def with_reports(progress, reports, history=None):
-        from werewolf.report_publication import condition_published_medium
-        board=(condition_published_medium(progress.board,tuple(MediumReport(**r) for r in reports),history) if history is not None else condition_reports(progress.board,tuple(MediumReport(**r) for r in reports)))
-        return Progress(board,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
-
     def replay(state):
-        if state.get("seer_mode") == "information-fixed-v1":
-            from werewolf.seer_manual import replay as manual_replay
-            return manual_replay(state)
-        rules = complete_rules(state["rules"])
-        progress = Progress.initial(initial_board(state["players"], state.get("wolves", 1), state.get("mediums", 0), state.get("seers",0), state.get("hunters",0)))
-        if len(state["history"]) > max(0, 2*state["players"] - 2):
-            raise ValueError("Too much history")
-        for index, step in enumerate(state["history"]):
-            if step.get('result_disclosure_model') not in (None,DISCLOSURE_MODEL):raise ValueError('Invalid disclosure model')
-            if set(step)-{'result_disclosure_model','observation','deaths'} not in ({"target", "policy"}, {"target", "policy", "claims", "claim_policy"}, {"target","policy","claims","claim_policy","reports"}, {"target","policy","claims","claim_policy","strategy_ui"}, {"target","policy","claims","claim_policy","reports","strategy_ui"}):
-                raise ValueError("Invalid history")
-            if "claims" in step:
-                progress = with_claims(progress, tuple(step["claims"]), ClaimPolicy(**step["claim_policy"]), initial_group=index==0 and state.get("model","equal")=="group")
-            if not progress.finished and step.get('reports'):
-                progress = with_reports(progress, step['reports'],state['history'])
-            if not progress.finished:
-                b=condition_observed({**state,'result_disclosure_model':step.get('result_disclosure_model')},progress.board,tuple(step.get('claims',['latent']*state['players'])),ClaimPolicy(**step.get('claim_policy',{})),step['policy']);progress=Progress(b,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
-            progress = advance_step(progress, step, rules)
-        validate_strategy(rules, Strategy(**state["policy"]))
-        if not progress.finished:
-            progress = with_claims(progress, tuple(state.get("claims", ['latent'] * state["players"])),
-                                   ClaimPolicy(**state.get("claim_policy", {})), initial_group=not state["history"] and state.get("model","equal")=="group")
-            if state.get('reports'):
-                progress = with_reports(progress, state['reports'],state['history'])
-        if not progress.finished:
-            b=condition_observed(state,progress.board,tuple(state.get('claims',['latent']*state['players'])),ClaimPolicy(**state.get('claim_policy',{})),state['policy']);progress=Progress(b,progress.settled_village,progress.settled_wolf,progress.last_board,progress.last_outcomes)
-        return rules, progress
+        from werewolf.board_flow import BoardData
+        return BoardData.from_game(state).roles().replay_result
 
-    def structural_replay(state):
-        try:return replay(state)
-        except DisclosureInconsistent:return replay({**state,'result_disclosure_model':None,'history':[{k:v for k,v in step.items() if k!='result_disclosure_model'} for step in state['history']]})
+    def structural_roles(state):
+        from werewolf.board_flow import BoardData
+        try:return BoardData.from_game(state).roles()
+        except DisclosureInconsistent:
+            return BoardData.from_game({**state,'result_disclosure_model':None,
+                'history':[{k:v for k,v in step.items() if k!='result_disclosure_model'}
+                           for step in state['history']]}).roles()
+
+    def structural_replay(state):return structural_roles(state).replay_result
 
     def game():
         state = session.get("game")
@@ -232,9 +203,12 @@ def create_app(test_config=None, *, deployment=False):
         disclosure_error=None
         guard_scope_pending=False
         by_dawn_values={}
-        try:rules,progress=replay(state)
+        from werewolf.board_flow import BoardData
+        try:
+            role_state=BoardData.from_game(state).roles()
+            rules,progress=role_state.replay_result
         except DisclosureInconsistent as exc:
-            disclosure_error=str(exc);rules,progress=structural_replay(state)
+            disclosure_error=str(exc);role_state=structural_roles(state);rules,progress=role_state.replay_result
         strategy = Strategy(**state["policy"])
         manual = state.get("seer_mode") == "information-fixed-v1"
         from werewolf.seer_manual import pending as manual_pending, timeline as seer_timeline
@@ -262,10 +236,9 @@ def create_app(test_config=None, *, deployment=False):
             from werewolf.calculation_budget import calculation_budget, CalculationBudgetExceeded, tick
             try:
                 with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',250000) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20) if manual else None):
-                    from werewolf.model_a_public import evaluate_public_game
                     from werewolf.seer_future_uniform import FuturePending
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
-                    forecast=evaluate_public_game(state,board,rules,strategy,max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
+                    forecast=role_state.forecast(max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
                     if isinstance(forecast,FuturePending):
                         guard_scope_pending=forecast.reason.startswith(('guard_','root_guard_','root_actor_')) or (board.initial_hunter_count and forecast.reason=='information_set_budget_exceeded')
                         from werewolf.seer_manual import Pending
@@ -291,12 +264,10 @@ def create_app(test_config=None, *, deployment=False):
         deaths = {event.target: f"D{event.day} " + ("処刑" if event.phase == "day" else "襲撃") for event in event_history}
         players = []
         for player in range(1, state["players"] + 1):
-            wolf = (sum((outcome.probability * outcome.board.wolf_probability(player) for outcome in progress.last_outcomes), Fraction(0))
-                    if finished else board.wolf_probability(player))
-            medium = (sum((outcome.probability * outcome.board.role_probability(player, 'medium') for outcome in progress.last_outcomes), Fraction(0))
-                      if finished else board.role_probability(player, 'medium'))
-            players.append({"medium_probability": medium, "citizen_probability": (sum((o.probability*o.board.role_probability(player,"villager") for o in progress.last_outcomes),Fraction(0)) if finished else board.role_probability(player,"villager")),
-                            "extra_probabilities": {r:(sum((o.probability*o.board.role_probability(player,r) for o in progress.last_outcomes),Fraction(0)) if finished else board.role_probability(player,r)) for r in ("seer","hunter")},
+            probabilities=role_state.probabilities(player)
+            wolf=probabilities['wolf'];medium=probabilities['medium']
+            players.append({"medium_probability": medium, "citizen_probability": probabilities['villager'],
+                            "extra_probabilities": {r:probabilities[r] for r in ("seer","hunter")},
                             "claim": board.claims[player - 1], "legal": player in action_values or (guard_scope_pending and not finished and board.phase=='day' and player in board.alive),
                             "id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
                             "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
@@ -328,7 +299,7 @@ def create_app(test_config=None, *, deployment=False):
                               'public_attacks': [{'day':e.day,'target':e.target,'color':None} for e in board.history if e.phase=='night']}
         return render_template("main.html", guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=co_group_compositions(board) if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else progress.last_outcomes[0].board.wolf_count_distribution if finished else board.wolf_count_distribution)), status
+                               players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
     @app.before_request
     def same_origin_posts():
@@ -712,7 +683,6 @@ def create_app(test_config=None, *, deployment=False):
     @app.post('/private-view')
     def private_view():
         from flask import jsonify
-        from werewolf.private_adapter import evaluate_private_table
         state = game()
         if state is None or not dawn_enabled(state):
             return jsonify(error='夜の視点表示はこのBoardでは利用できません。'), 404
@@ -727,11 +697,12 @@ def create_app(test_config=None, *, deployment=False):
                     type(payload['players']) is not list or type(payload['results']) is not list):
                 raise ValueError('視点入力の形式が不正です。')
             # Replay only public evidence; the private Board is confined to this adapter.
-            rules, progress = replay(state)
+            from werewolf.board_flow import BoardData
+            private_source=BoardData.from_game(state).roles()
+            rules, progress = private_source.replay_result
             if progress.finished or progress.board.phase != 'night':
                 raise ValueError('夜のBoardで視点を選択してください。')
-            result = evaluate_private_table(progress.board, payload['role'], payload['players'], payload['results'],
-                                            rules, Strategy(**state['policy']), game_state=state,
+            result = private_source.private(payload['role'], payload['players'], payload['results'],
                                             max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),
                                             max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
             return jsonify(**result, board_id=state['public_log']['board_id'], revision=state['revision'])

@@ -2,7 +2,7 @@
 PAGES={'index':'プログラム詳細（仮）','current':'プログラム詳細（現在実装）',
        'model':'確率モデルと情報集合','flow':'処理フローと評価アルゴリズム',
        'reference':'型・関数リファレンス','verification':'再現例と検証',
-       'design':'プログラム詳細（設計案）','board-design':'B案：Board更新フロー（検討中）','terms':'共通用語・記法'}
+       'design':'プログラム詳細（設計案）','board-design':'B案：Board更新フロー（ローカル実装）','terms':'共通用語・記法'}
 AUDIT_VERSION='v0.5.1（実装基準 fe4bd0b）'
 REVIEW_VERSION='97d0ed4'
 PUBLIC_SHA='fe4bd0be30f2c5c5c78fd61c6545031542a9e0b4'

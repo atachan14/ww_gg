@@ -10,7 +10,7 @@ from .by_dawn import immediate
 from .phase_updates import acquisition_roster
 from .information_set_forecast import information_forecast
 from .seer_future_uniform import FuturePending
-from .public_prior import prepare_public_prior
+from .board_roles import prepare_compat_prior as prepare_public_prior
 
 
 LABELS = {'seer': '占い視点', 'hunter': '狩人視点', 'wolf': '狼視点'}
@@ -45,12 +45,12 @@ def private_slots(board, player, rules,role="seer"):
 
 
 def evaluate_private_table(public, role, players, results, rules, strategy, *, game_state=None,
-                           max_work=250000, max_seconds=20):
-    view = condition_private(public, role, players, results, rules=rules)
+                           max_work=250000, max_seconds=20, _prepared=None):
+    from .board_roles import prepare_private
+    view,branch=_prepared if _prepared is not None else prepare_private(
+        public,role,players,results,rules,strategy,game_state=game_state,
+        max_work=max_work,max_seconds=max_seconds)
     private = view.board
-    from .root_secret_flow import prepare_root_entry
-    branch=prepare_root_entry(game_state or {},public,rules,strategy,
-                              max_work=max_work,max_seconds=max_seconds)
     root_entry=branch is not None
     reason = {'seer': '占い先の取得履歴と将来の公開判断を分離した勝率評価は未対応です。',
               'hunter': '護衛能力の計算と秘密の護衛履歴は未対応です。',
@@ -67,8 +67,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 from .root_secret_flow import root_actor_view
                 actor=root_actor_view(branch,lambda h:bool(h.roles[3]&(1<<(players[0]-1))) and all(g in h.guards for g in view.guards))
                 if not isinstance(actor,FuturePending):
-                    from .exact import replace_worlds
-                    private=replace_worlds(public,actor.belief.public_roles)
+                    from .board_roles import joint_view_board
+                    private=joint_view_board(public,actor.belief)
         else:
             prepared=prepare_public_prior(game_state or {},public,rules,track_live_seers=strategy.disclosure_for("seer")=="all" and bool(public.initial_seer_count),max_work=max_work)
             result=prepared if isinstance(prepared,FuturePending) else guard_forecast(public,players[0],private,prepared[0],prepared[1],rules,strategy,guards=view.guards,max_work=max_work,max_seconds=max_seconds)
@@ -89,8 +89,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 actor=root_actor_view(branch,lambda h:bool(h.roles[2]&(1<<(players[0]-1))) and
                     all(a in h.acquisitions for a in view.acquisitions))
                 if not isinstance(actor,FuturePending):
-                    from .exact import replace_worlds
-                    private=replace_worlds(public,actor.belief.public_roles)
+                    from .board_roles import joint_view_board
+                    private=joint_view_board(public,actor.belief)
         elif strategy.disclosure_for('seer') != 'all':
             result = FuturePending('seer_view_unpublished_own_action_unimplemented')
         elif public.claims[players[0]-1] != 'seer':
@@ -123,8 +123,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
             result=branch if isinstance(branch,FuturePending) else root_wolf_forecast(branch,players,view.attacks,rules,strategy,max_work=max_work,max_seconds=max_seconds)
             if not isinstance(result,FuturePending):
                 result,guard_dawn,belief=result
-                from .exact import replace_worlds
-                private=replace_worlds(public,belief.public_roles)
+                from .board_roles import joint_view_board
+                private=joint_view_board(public,belief)
         elif strategy.disclosure_for('seer') == 'all' and any(public.claims[p-1] == 'seer' for p in public.alive):
             prepared = prepare_public_prior(game_state, public, rules, max_work=max_work) if game_state else FuturePending('wolf_view_public_acquisition_prior_missing')
             if isinstance(prepared, FuturePending):
@@ -172,11 +172,13 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
             if set(targets) - set(final_values): reason += ' 公開側の全仮説で合法にならない襲撃先は未対応です。'
 
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
+    from .board_roles import private_role_rates
+    marginal=private_role_rates(private)
     rows = []
     for p in range(1, public.player_count + 1):
-        probabilities = {r: str(private.role_probability(p, r)) for r in ('villager', 'medium', 'seer', 'hunter', 'wolf')}
+        probabilities = {r:str(value) for r,value in marginal[p-1].items()}
         probabilities['citizen'] = probabilities.pop('villager')
-        probabilities['village'] = str(1 - private.wolf_probability(p))
+        probabilities['village'] = str(1-marginal[p-1]['wolf'])
         dawn = immediate(private, p, rules, strategy) if role == 'wolf' and p in targets and not public.initial_hunter_count else guard_dawn.get(p)
         rows.append({'id': p, 'probabilities': probabilities,
                      'dawn': {'village': str(dawn.village_win), 'wolf': str(dawn.wolf_win)} if dawn else None,

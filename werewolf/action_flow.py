@@ -46,6 +46,10 @@ def resolve_action(board,state,target,policy,*,terminal_payoffs=False,observed_a
     Saved observation replay may restrict resulting alive rosters, after action
     selection/acquisition. Retained branch probabilities are never renormalized.
     """
+    from .board_future import before_action,after_acquisition,reuse_resolution,remember_resolution
+    role_source=before_action(policy,board,state)
+    reused=reuse_resolution(policy,board,state,target,terminal_payoffs,observed_alive)
+    if reused is not None:return reused
     night = board.phase == 'night'
     acquired = state
     if night:
@@ -55,8 +59,11 @@ def resolve_action(board,state,target,policy,*,terminal_payoffs=False,observed_a
         outcomes = policy.night_outcomes(NightFrame(board,target,state,acquired,terminal_payoffs,observed_alive),prepared)
     else:
         outcomes = policy.outcomes(board,state,target)
+    after_acquisition(policy,board,acquired,role_source,target=target,
+                      terminal_payoffs=terminal_payoffs,observed_alive=observed_alive)
     if observed_alive is not None:
         outcomes=tuple(o for o in outcomes if o.board.alive==observed_alive)
+    remember_resolution(policy,board,state,target,terminal_payoffs,observed_alive,(acquired,outcomes))
     return acquired,outcomes
 
 

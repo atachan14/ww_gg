@@ -45,6 +45,11 @@ class InformationSetForecast:
     def __init__(self, rules, strategy, *, max_work=250000, trace=None, memoize_flows=True,
                  retire_uninformative_scans=True, exact_renaming=True):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
+        self.board_sources={}
+        self.board_action_options={}
+        self.board_action_kernels={}
+        self.board_key_hashes={}
+        self.board_replay_stats={"requests":0,"hits":0}
         self.values={};self.scores={};self.policies={};self.acquired={}
         self.symmetries={}
         self.reduced_descriptors={}
@@ -200,8 +205,10 @@ class InformationSetForecast:
 
     def publications(self,b,s,past):
         # Public law only: never key or generate this cache with viewer evidence.
-        return self.cached_flow(self.publication_values,(b,s,past),
-                                lambda:self.generate_publications(b,s,past),'publication')
+        from .board_future import record_publications
+        branches=self.cached_flow(self.publication_values,(b,s,past),
+                                  lambda:self.generate_publications(b,s,past),'publication')
+        return record_publications(self,b,s,past,branches,provider='publications')
 
     def generate_publications(self,b,s,past):
         if (self.strategy.disclosure_for('seer')=='none' or
@@ -235,8 +242,10 @@ class InformationSetForecast:
         return value
 
     def morning(self,b,s,past):
-        return self.cached_flow(self.mornings,(b,s,past),
-                                lambda:self.generate_morning(b,s,past),'morning')
+        from .board_future import record_publications
+        branches=self.cached_flow(self.mornings,(b,s,past),
+                                  lambda:self.generate_morning(b,s,past),'morning')
+        return record_publications(self,b,s,past,branches)
 
     def generate_morning(self,b,s,past):
         actions=report_actions(b) if self.strategy.disclosure_for('medium')=='all' else ()
@@ -245,7 +254,7 @@ class InformationSetForecast:
         else:
             scored=[]
             for action in actions:
-                value=continuation_value(report_flow(action.outcomes,s,past,self),self.scalar)
+                value=continuation_value(report_flow(action.outcomes,s,past,self,source_board=b,fake_colors=action.fake_colors),self.scalar)
                 scored.append((action,value))
             tied=optimal_targets(scored,maximize=False)
             outcomes=merge_report_outcomes(BoardOutcome(o.probability*q,o.board)
@@ -443,14 +452,13 @@ class InformationSetActionPolicy:
                      for o in e.physical_children(physical,target))
 
     def project(self,b,payload,outcome,target):
-        from .guard_model import public_context,GuardContext
-        s,past,private,observer,physical=payload;e=self.engine;child=public_context(outcome.context)
-        child=require_public_observation(child,outcome.board,e.pending)
-        st=outcome.context.public_state if isinstance(outcome.context,GuardContext) and outcome.context.public_state is not None else e.project(s,child);own=outcome.context.private if isinstance(outcome.context,GuardContext) else e.project(private,outcome.board)
-        if e.trace is not None and b.phase=='night':
-            e.trace.setdefault('public_updates',[]).append({'history':b.history,'target':target,
-                'prior_counts':b.wolf_count_distribution,'child_counts':child.wolf_count_distribution})
-        return ContinuationInputs(child,st,past,own,observer,outcome.board)
+        from .board_future import reconstruct_child
+        return reconstruct_child(self.engine,b,payload,outcome,target,
+            lambda:self._project_roles(b,payload,outcome,target))
+
+    def _project_roles(self,b,payload,outcome,target):
+        from .board_roles import project_generated
+        return project_generated(self.engine,b,payload,outcome,target)
 
     def morning_value(self,payload):
         child,st,past,own,observer=payload;e=self.engine
@@ -462,8 +470,12 @@ class InformationSetActionPolicy:
             return e.solve(child,st,past,own,observer,
                            physical=physical_board(child,own,payload.physical))
         branches=e.push(st,own,published)
-        return continuation_value(branches,lambda c,ns,p,priv:e.solve(c,ns,p,priv,observer,
-                                 physical=physical_board(c,priv,payload.physical)))
+        from .board_future import reconstruct_publication
+        def evaluate(c,ns,p,priv):
+            rebuilt=reconstruct_publication(e,payload,c,ns,p,priv,
+                                            physical_board(c,priv,payload.physical))
+            return e.solve(*rebuilt,physical=rebuilt.physical)
+        return continuation_value(branches,evaluate)
 
     def day_value(self,payload):return self.engine.solve(*payload,physical=payload.physical)
 

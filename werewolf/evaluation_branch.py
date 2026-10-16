@@ -1,5 +1,5 @@
 """Named public/physical carriers for the existing shared action flow."""
-from dataclasses import dataclass
+from dataclasses import dataclass,field
 from .exact import replace_worlds
 
 
@@ -11,7 +11,11 @@ def physical_board(public,law,physical=None):
     are updated from the public observation. Existing solver-only role
     projections may change count descriptors, but not the surviving facts.
     """
-    if physical is None:return replace_worlds(public,law.public_roles)
+    if physical is None:
+        # The complete explicit law is already canonical: no new Board or
+        # count validation is needed. This never replaces a supplied P base.
+        if public.world_belief and public.world_belief==law.public_roles:return public
+        return replace_worlds(public,law.public_roles)
     facts=('player_count','alive','day','phase','history')
     if any(getattr(public,k)!=getattr(physical,k) for k in facts):
         raise ValueError('Public and physical branch facts disagree')
@@ -64,6 +68,7 @@ class ContinuationInputs:
     private: object
     observer: object
     physical: object
+    board_data: object = field(default=None,compare=False,hash=False,repr=False)
 
     def __iter__(self):
         # Existing five-input evaluation helpers can still inspect a carrier;
