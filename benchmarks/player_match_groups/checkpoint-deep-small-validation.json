@@ -1,0 +1,37 @@
+[
+  {
+    "players": 5,
+    "wolves": 1,
+    "identity": "194efd1838f93e3e3080ec845b20ee7e6edf1cfbe65723a5f0003a84997e085d",
+    "complete": true,
+    "value": "7/15",
+    "units": 18,
+    "verified_targets": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "seconds": 16.922168799996143,
+    "reused": true
+  },
+  {
+    "players": 6,
+    "wolves": 2,
+    "identity": "069e59b9c7649196169217d97fa12d0ef7a6307c51ab4d8344b0a13687f049bb",
+    "complete": true,
+    "value": "1/12",
+    "units": 30,
+    "verified_targets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "seconds": 36.03084469999885,
+    "reused": true
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "players": 5,
+    "wolves": 1,
+    "identity": "7e1eab2910ad2fdf6d7887e31b49c00dc0c9f3c643192c03913cee3d5916810c",
+    "complete": true,
+    "verified_targets": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "value": "7/15",
+    "initial_consumed_seconds": 6.066374300018651,
+    "cache_reused": true,
+    "missing_value_pending": true
+  },
+  {
+    "players": 6,
+    "wolves": 2,
+    "identity": "b27bf010144121f5a86c10bab7a5911de448a967892addc0861479fbe05a3f26",
+    "complete": true,
+    "verified_targets": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "value": "1/12",
+    "initial_consumed_seconds": 14.747012400010135,
+    "cache_reused": true,
+    "missing_value_pending": true
+  }
+]
