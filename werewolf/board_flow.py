@@ -4,6 +4,7 @@ GameData is shared. Board inputs contain evidence, never a calculated parent
 prior. roles() is the uncached reference reconstruction for stage 3a; ordinary
 updates and corrections use exactly that same entry.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import dataclass, field
 from fractions import Fraction
 import json
@@ -79,7 +80,7 @@ class RoleState:
 
     def probabilities(self,player):return dict(self.rates[player-1])
 
-    def forecast(self,*,max_work=250000,max_seconds=20):
+    def forecast(self,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
         # Joint preparation belongs to 3a, before stage 3b starts evaluation.
         from .board_roles import prepare_evaluation
         from .model_a_public import evaluate_prepared_public
@@ -106,7 +107,7 @@ class RoleState:
         self.owner.runtime.put(key,result)
         return result
 
-    def private(self,role,players,results,*,max_work=250000,max_seconds=20):
+    def private(self,role,players,results,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
         from .board_roles import prepare_private
         from .private_adapter import evaluate_private_table
         validate_budget(max_work,max_seconds)

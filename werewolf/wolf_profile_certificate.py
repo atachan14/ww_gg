@@ -4,6 +4,7 @@ No replacement Board, acquisition ledger or private posterior is constructed.
 Later public contexts use bounded complete-profile proofs. Unsupported or
 unproved dependencies remain Pending, never an arbitrary completed choice.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from .actor_information import wolf_information_groups
 from .policy_certificates import certify_uniform_profiles
 from .policy_dependencies import Dependency,DependencyGraph
@@ -48,7 +49,7 @@ class WolfProfileResolver:
     results remain diagnostics, not cached choices. Parent calculation deadlines
     are inherited by each nested certificate; the profile-work cap is shared.
     """
-    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=250000,max_seconds=20,canonical_certificates=True):
+    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,canonical_certificates=True):
         if type(max_profiles)is not int or max_profiles<1:raise ValueError('Positive profile limit required')
         self.rules=rules;self.strategy=strategy;self.max_profiles=max_profiles
         self.max_work=max_work;self.max_seconds=max_seconds
@@ -243,7 +244,7 @@ def candidate_parameter_independence(board,strategy,candidate_rules,*,terminal):
 
 
 def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
-                          max_work=250000,max_seconds=20,resolver=None):
+                          max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,resolver=None):
     if resolver is None:
         return WolfProfileResolver(rules,strategy,max_profiles=max_profiles,max_work=max_work,
                                    max_seconds=max_seconds).resolve(board,state,past)

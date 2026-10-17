@@ -4,6 +4,7 @@ Each request starts from the game's initial cast and replays the effective
 history. No parent calculated Board is accepted as an authoritative prior.
 Compatibility entry points delegate here; cached results are not the baseline.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import replace
 from .board_future import evidence_reconstruction
 from .exact import (Progress,Rules,Strategy,ClaimPolicy,MediumReport,initial_board,
@@ -127,13 +128,13 @@ def role_rates(progress):
 
 
 @evidence_reconstruction()
-def prepare_joint(game,board,rules,strategy,*,max_work=250000,max_seconds=20):
+def prepare_joint(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     from .root_secret_flow import prepare_root_entry
     return prepare_root_entry(game,board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
 
 
 @evidence_reconstruction()
-def prepare_evaluation(game,board,rules,strategy,*,max_work=250000,max_seconds=20):
+def prepare_evaluation(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Stage 3a prepares the public/secret laws consumed by stage 3b."""
     from .seer_future_uniform import FuturePending
     if board.winner:return ('terminal',None)
@@ -157,7 +158,7 @@ def prepare_evaluation(game,board,rules,strategy,*,max_work=250000,max_seconds=2
 
 @evidence_reconstruction()
 def prepare_private(public,role,players,results,rules,strategy,*,game_state=None,
-                    max_work=250000,max_seconds=20):
+                    max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     from .private_view import condition_private
     view=condition_private(public,role,players,results,rules=rules)
     branch=prepare_joint(game_state or {},public,rules,strategy,max_work=max_work,max_seconds=max_seconds)
@@ -183,7 +184,7 @@ def private_role_rates(board):
 
 
 @evidence_reconstruction()
-def prepare_compat_prior(game,board,rules,*,track_live_seers=True,max_work=250000):
+def prepare_compat_prior(game,board,rules,*,track_live_seers=True,max_work=DEFAULT_MAX_WORK):
     # Older standalone evaluator APIs retain their bounded complete-prior cache;
     # BoardData's reference 3a reconstructs its evidence without that cache.
     from .public_prior import prepare_public_prior

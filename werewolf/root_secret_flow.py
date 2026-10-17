@@ -3,6 +3,7 @@
 This API never replaces the fixed-CO entry or an unsupported max with random.
 Public Model A role weights and actual branch measures remain distinct.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import dataclass,replace,asdict
 from fractions import Fraction as F
 from .seer_acquisition import from_board,normalize
@@ -39,7 +40,7 @@ class RootActorView:
     physical_law: TrueScanState
 
 
-def prepare_root_secrets(board,rules,*,max_work=250000):
+def prepare_root_secrets(board,rules,*,max_work=DEFAULT_MAX_WORK):
     if board.day!=1 or board.phase!='day' or board.history or board.alive!=tuple(range(1,board.player_count+1)):
         return FuturePending('root_secret_initial_board_required')
     initial=TrueScanState(from_board(board),initial_rule=rules.initial_seer,tracked=None)
@@ -411,7 +412,7 @@ class RootSecretEngine(InformationSetForecast):
     def value_law(self,state):return state  # No history compression in this entry.
 
 
-def step_root_action(branch,target,rules,strategy,*,max_work=250000,max_seconds=20,publish=True,_engine=None,_observed_alive=None):
+def step_root_action(branch,target,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,publish=True,_engine=None,_observed_alive=None):
     """Explicit action intervention through the shared ability/death/report flow."""
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)
@@ -441,7 +442,7 @@ def step_root_action(branch,target,rules,strategy,*,max_work=250000,max_seconds=
     except Pending as error:return FuturePending(error.reason)
 
 
-def root_secret_value(branch,rules,strategy,*,actor=None,max_work=250000,max_seconds=20):
+def root_secret_value(branch,rules,strategy,*,actor=None,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     if branch.public.winner:return F(branch.public.winner=='village')
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)
@@ -469,7 +470,7 @@ def root_screen_eligible(board,rules,strategy):
                  any(board.claims[p-1]=='medium' for p in board.alive)))
 
 
-def root_screen_forecast(board,rules,strategy,*,max_work=250000,max_seconds=20):
+def root_screen_forecast(board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Full initial screen metrics from one complete latent secret law."""
     if not root_screen_eligible(board,rules,strategy):
         return FuturePending('root_secret_screen_scope_unimplemented')
@@ -494,7 +495,7 @@ def root_replay_eligible(game,board,rules,strategy):
             all(root_strategy_supported(board,Strategy(**step.get('policy',{}))) for step in snapshots))
 
 
-def prepare_root_entry(game,board,rules,strategy,*,max_work=250000,max_seconds=20):
+def prepare_root_entry(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Shared public/private entry selection; None preserves the legacy route.
 
     A supported entry that cannot be prepared returns Pending, never None.
@@ -538,7 +539,7 @@ def observe_root_snapshot(branch,game,index,rules,*,guard_priors=None):
         lambda h:(h.roles,h.acquisitions,h.guards,h.attacks) in signatures,past=reports)
 
 
-def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=20,_collect_guard_priors=False):
+def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_collect_guard_priors=False):
     """Recreate actual joint histories; observed bites use the configured policy.
 
     Q is restored from the existing public replay only after P is conditioned.
@@ -615,7 +616,7 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=250000,max_seconds=
     except Pending as error:return FuturePending(error.reason)
 
 
-def root_branch_forecast(branch,rules,strategy,*,max_work=250000,max_seconds=20):
+def root_branch_forecast(branch,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """One retained joint law supplies overview, target rows and dawn values."""
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)
@@ -640,7 +641,7 @@ def root_branch_forecast(branch,rules,strategy,*,max_work=250000,max_seconds=20)
 
 
 
-def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=250000,max_seconds=20):
+def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Own scan interventions over the unchanged public joint policy law."""
     from .seer_future_uniform import candidates
     compatible=lambda h:bool(h.roles[2]&(1<<(player-1))) and all(a in h.acquisitions for a in acquisitions)
@@ -677,7 +678,7 @@ def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=2500
     except Pending as error:return FuturePending(error.reason)
 
 
-def root_guard_forecast(branch,player,guards,rules,strategy,*,max_work=250000,max_seconds=20):
+def root_guard_forecast(branch,player,guards,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Owner guard records condition P; public policy continues using Q."""
     from .guard_view_forecast import guard_forecast
     compatible=lambda h:bool(h.roles[3]&(1<<(player-1))) and all(g in h.guards for g in guards)
@@ -690,7 +691,7 @@ def root_guard_forecast(branch,player,guards,rules,strategy,*,max_work=250000,ma
         max_work=max_work,max_seconds=max_seconds)
 
 
-def root_wolf_forecast(branch,players,attacks,rules,strategy,*,max_work=250000,max_seconds=20):
+def root_wolf_forecast(branch,players,attacks,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Aggregate unknown other roles and their secrets before each wolf action."""
     mask=sum(1<<(p-1) for p in players)
     actor=root_actor_view(branch,lambda h:h.roles[0]==mask and all(a in h.attacks for a in attacks))
@@ -730,7 +731,7 @@ def _guard_night_priors(history_key,rules,max_work,max_seconds):
     return tuple(sorted(result.items()))
 
 
-def root_guard_night_priors(game,rules,*,max_work=250000,max_seconds=20):
+def root_guard_night_priors(game,rules,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Public-owned night laws for observation replay; no private data in cache."""
     from .public_prior import public_history_key
     try:return dict(_guard_night_priors(public_history_key(game),rules,max_work,max_seconds))

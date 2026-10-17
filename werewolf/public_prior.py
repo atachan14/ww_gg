@@ -1,4 +1,5 @@
 """Public-owned acquisition inputs and complete prior cache, never viewer data."""
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from functools import lru_cache
 import json
 from .public_observed_prior import prepare_game
@@ -44,7 +45,7 @@ def _complete_prior(history_key,board,rules,track_live_seers,max_work):
                           tracked=(),observed_prefix=board.day),())
 
 
-def prepare_public_prior(game,board,rules,*,track_live_seers=True,max_work=250000):
+def prepare_public_prior(game,board,rules,*,track_live_seers=True,max_work=DEFAULT_MAX_WORK):
     try:return _complete_prior(public_history_key(game),board,rules,track_live_seers,max_work)
     except PriorPending as error:return FuturePending(error.reason)
 

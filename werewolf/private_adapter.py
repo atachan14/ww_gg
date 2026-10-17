@@ -4,6 +4,7 @@ All owner tables keep the public-policy continuation separate from evidence.
 Supported uniform entries retain the shared joint history; legacy CO/max entries
 keep their existing contracts and explicit Pending for unsupported histories.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from .exact import actual_role, legal_targets
 from .private_view import condition_private
 from .by_dawn import immediate
@@ -45,7 +46,7 @@ def private_slots(board, player, rules,role="seer"):
 
 
 def evaluate_private_table(public, role, players, results, rules, strategy, *, game_state=None,
-                           max_work=250000, max_seconds=20, _prepared=None):
+                           max_work=DEFAULT_MAX_WORK, max_seconds=DEFAULT_MAX_SECONDS, _prepared=None):
     from .board_roles import prepare_private
     view,branch=_prepared if _prepared is not None else prepare_private(
         public,role,players,results,rules,strategy,game_state=game_state,

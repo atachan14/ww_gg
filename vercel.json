@@ -3,7 +3,7 @@
   "framework": "flask",
   "functions": {
     "wsgi.py": {
-      "maxDuration": 60,
+      "maxDuration": 300,
       "excludeFiles": "{archive/**,benchmarks/**,.artifacts/**,docs/**,tests/**,.venv/**,.tmp/**,.git/**,**/__pycache__/**,**/*.pyc,.env,.env.*,static/**,public/**}"
     }
   }

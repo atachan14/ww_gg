@@ -4,6 +4,7 @@ Physical branch mass and public decision beliefs are separate. Wolf policies
 average unknown roles/acquisitions within a PUBLIC-prior roster group before
 maximizing. Observer-only evidence never enters the policy cache or ranking.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import replace
 from fractions import Fraction as F
 from functools import lru_cache
@@ -42,7 +43,7 @@ def exchangeable_value(n,w,phase,strategy):
 
 
 class InformationSetForecast:
-    def __init__(self, rules, strategy, *, max_work=250000, trace=None, memoize_flows=True,
+    def __init__(self, rules, strategy, *, max_work=DEFAULT_MAX_WORK, trace=None, memoize_flows=True,
                  retire_uninformative_scans=True, exact_renaming=True):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
         self.board_sources={}
@@ -484,7 +485,7 @@ class InformationSetActionPolicy:
     def day_value(self,payload):return self.engine.solve(*payload,physical=payload.physical)
 
 
-def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,private_board=None,private_attacks=(),max_work=250000,max_seconds=20,trace=None):
+def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,private_board=None,private_attacks=(),max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,trace=None):
     if s.public_roles!=tuple(sorted(b.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
     from .guard_history_prior import seed_history

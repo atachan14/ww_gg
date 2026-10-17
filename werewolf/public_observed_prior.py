@@ -1,4 +1,5 @@
 """Reconstruct public-owned acquisition history; no continuation solver or viewer."""
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from itertools import product
 from fractions import Fraction as F
 from .seer_acquisition import Hypothesis,Acquisition,SeerReport,normalize,from_board
@@ -7,7 +8,7 @@ from .phase_updates import acquisition_rosters
 from .calculation_budget import calculation_budget,tick,CalculationBudgetExceeded
 
 
-def prepare_game(g,board,*,max_work=250000):
+def prepare_game(g,board,*,max_work=DEFAULT_MAX_WORK):
     """Build the public joint acquisition prior without any viewer conditioning."""
     tracked=tuple(p for p in board.alive if board.claims[p-1]=='seer')
     initial=g['rules'].get('initial_seer',g['seer_options']['initial_rule'])

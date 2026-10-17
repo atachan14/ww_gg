@@ -2,7 +2,7 @@
 {% set help_page='program-' ~ page %}{% block help_content %}
 <div data-screen="help-program" class="help-program"><a class="program-skip" href="#program-content">本文へ移動</a>
 <header class="panel"><p class="eyebrow">TECHNICAL HELP · v0.5.2</p><h1>{{ pages[page] }}</h1>
-<p>説明対象：v0.5.2実装 <code>{{ audit_version }}</code>／整理記録 <code>{{ review_version }}</code>。保存Boardと具体化する未来子を共通3aへ接続し、公開・本人評価の入口を統合しました。model A、完全履歴、既存の戦略と計算予算を維持しています。一般9人・複数max・新しいCOや報告規則を追加したものではありません。</p>
+<p>説明対象：v0.5.2実装 <code>{{ audit_version }}</code>／整理記録 <code>{{ review_version }}</code>。保存Boardと具体化する未来子を共通3aへ接続し、公開・本人評価の入口を統合しました。model A、完全履歴、既存の戦略と確率計算を維持し、上限追補で時間・作業量の予算を拡張しています。一般9人・複数max・新しいCOや報告規則を追加したものではありません。</p>
 <p>v0.5.2実装の基準は <a href="https://github.com/atachan14/ww_gg/tree/{{ public_sha }}" rel="noopener">{{ public_sha[:7] }}</a>です。公開アプリは <a href="https://ww-gg.vercel.app/" rel="noopener">ww-gg.vercel.app</a> です。以下の旧版の構造説明・設計経過は履歴として残し、現在のB実装と未決の拡張はBoard更新フローで区別しています。</p>
 <nav aria-label="プログラム詳細の目次" class="program-nav"><a href="{{ url_for('help_route') }}">HELP</a>{% for slug,label in pages.items() %}<a href="{{ url_for('help_program',page=slug) }}"{% if page==slug %} aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}</nav></header>
 <article id="program-content" class="panel" tabindex="-1">{% include 'help_program/' ~ page ~ '.html' %}</article>

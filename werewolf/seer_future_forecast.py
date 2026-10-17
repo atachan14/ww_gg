@@ -4,6 +4,7 @@ Manual past evidence is a supplied prior. Future fake probabilities use the
 uniform candidate law conditioned on public truth compatibility.
 Multiple-fake correlation remains unselected.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from fractions import Fraction as F
 from .exact import (replace_worlds,action_outcomes,legal_targets,report_actions,
                     random_report_outcomes,build_tree,evaluate_tree,BoardOutcome)
@@ -27,7 +28,7 @@ class Unresolved(Exception):
     def __init__(self,pending):self.pending=pending
 
 
-def forecast(board,state,past,rules,strategy,*,max_work=250000,trace=None,marginalize_known_fake=True,marginalize_private=True):
+def forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,trace=None,marginalize_known_fake=True,marginalize_private=True):
     """Fixed CO; existing public day/night choices; no private-world maximization.
 
     Truth acquisitions occur on the night roster before casualties. Survivors

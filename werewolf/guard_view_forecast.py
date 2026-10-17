@@ -1,4 +1,5 @@
 """Fixed current guard comparison; public policy never sees the viewer's intent."""
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from fractions import Fraction as F
 from .guard_model import GuardObserver,scope_reason,guard_choices
 from .seer_future_uniform import FuturePending
@@ -10,7 +11,7 @@ from .actor_information import wolf_information_groups,condition_actor_state
 from .evaluation_branch import ActionInputs,physical_board
 
 
-def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=250000,max_seconds=20,private_state=None,engine_factory=InformationSetForecast):
+def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=(),max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,private_state=None,engine_factory=InformationSetForecast):
     from .guard_history_prior import seed_history,guard_matches,public_history_ready,guard_history_ready
     try:state=seed_history(board,state) if strategy.night=='max' else state
     except ValueError:return FuturePending('guard_public_history_zero_support')

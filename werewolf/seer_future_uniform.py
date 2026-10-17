@@ -3,6 +3,7 @@
 Generation probabilities here are distinct from manual compatibility filtering.
 Acquisition roster is before night casualties; publication roster is morning.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import dataclass
 from fractions import Fraction as F
 from itertools import product
@@ -65,7 +66,7 @@ def candidates(h,player,alive):
     preferred=tuple(p for p in legal if p not in visited)
     return preferred or legal
 
-def acquire_uniform(state,alive,*,max_work=250000,position=('unvisited','uniform')):
+def acquire_uniform(state,alive,*,max_work=DEFAULT_MAX_WORK,position=('unvisited','uniform')):
     """Slot1: uniform nonwolf white; later slots: own-unvisited uniform targets.
 
     Every live true seer, including latent true seers, independently scans.
@@ -106,7 +107,7 @@ class TruthPublication:
     probability: F
     state: TrueScanState
 
-def truth_only_publications(state,morning_alive,claims,published=(),*,max_work=250000):
+def truth_only_publications(state,morning_alive,claims,published=(),*,max_work=DEFAULT_MAX_WORK):
     """Exact public outcomes only when no possible fake reporter is involved.
 
     Any possible fake keeps the whole result Pending, including multiple wolves;

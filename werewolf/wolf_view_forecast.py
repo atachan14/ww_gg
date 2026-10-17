@@ -7,6 +7,7 @@ this does not optimize public executions inside the known wolf assignment.
 Public updates retain the engine's chosen-action law, not an additional action
 selection likelihood. No equilibrium or new reporting strategy is introduced.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from fractions import Fraction as F
 from dataclasses import replace
 from .seer_acquisition import Hypothesis, normalize
@@ -25,7 +26,7 @@ class Unresolved(Exception):
 
 
 def wolf_forecast(public, mask, rules, strategy, *, scan_state=None, past=(),
-                  max_work=250000, max_seconds=20, trace=None, observer=None):
+                  max_work=DEFAULT_MAX_WORK, max_seconds=DEFAULT_MAX_SECONDS, trace=None, observer=None):
     """Return forced-bite village values; exact Fractions, or a complete Pending.
 
 scan_state is the PUBLIC role/acquisition prior. Conditioning applies only to

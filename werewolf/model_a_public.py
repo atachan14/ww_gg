@@ -3,6 +3,7 @@
 Night row interventions preserve the existing live-count prior. Subsequent
 actions and public belief updates follow the information-set model.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from fractions import Fraction as F
 from .exact import replace_worlds, forced_action_worlds, legal_targets
 from .action_flow import resolve_action
@@ -62,7 +63,7 @@ def horizon_for_action(engine,board,state,past,target,private=None,*,observer=No
     return HorizonValues(village,wolf)
 
 
-def public_forecast(board,state,past,rules,strategy,*,max_work=250000,max_seconds=20):
+def public_forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Public overview, target rows and horizon under the approved intervention."""
     if state.public_roles!=tuple(sorted(board.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
@@ -99,7 +100,7 @@ def clear_public_cache():_complete_public_snapshot.cache_clear()
 def public_cache_info():return _complete_public_snapshot.cache_info()
 
 
-def evaluate_public_game(game,board,rules,strategy,*,max_work=250000,max_seconds=20):
+def evaluate_public_game(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     try:
         return _complete_public_snapshot(public_history_key(game),board,rules,strategy,max_work,max_seconds)
     except Pending as error:return FuturePending(error.reason)
@@ -113,7 +114,7 @@ def _evaluate_public_game(game,board,rules,strategy,*,max_work,max_seconds):
                                     max_work=max_work,max_seconds=max_seconds)
 
 
-def evaluate_prepared_public(prepared,board,rules,strategy,*,max_work=250000,max_seconds=20):
+def evaluate_prepared_public(prepared,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Stage 3b consumes 3a state; it does not prepare role evidence itself."""
     if board.winner:return Forecast(F(board.winner=='village'),())
     kind,value=prepared

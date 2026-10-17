@@ -5,6 +5,7 @@ Its target probability is constant across viewer-compatible hypotheses; dividing
 out that constant conditions an intervention, without reweighting the role prior.
 Public decisions see the full prior, including every possible target and fake CO.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from fractions import Fraction as F
 from .seer_future_uniform import FuturePending, candidates
 from .information_set_forecast import InformationSetForecast, Pending
@@ -12,7 +13,7 @@ from .calculation_budget import calculation_budget, tick, CalculationBudgetExcee
 
 
 def seer_forecast(public, player, acquisitions, rules, strategy, *, scan_state, past=(),
-                  max_work=250000, max_seconds=20, trace=None):
+                  max_work=DEFAULT_MAX_WORK, max_seconds=DEFAULT_MAX_SECONDS, trace=None):
     acquisitions=tuple(acquisitions)
     if strategy.disclosure_for('seer') != 'all':
         return FuturePending('seer_view_unpublished_own_action_unimplemented')

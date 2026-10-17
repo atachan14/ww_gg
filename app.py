@@ -1,11 +1,14 @@
 """Local public-Board analysis. No role assignment/sampling, dotenv, or database."""
 
 import argparse
+from copy import deepcopy
 from decimal import Decimal
 from fractions import Fraction
 import secrets
+from threading import BoundedSemaphore
 import os
 import json
+from werewolf.calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS, calculation_budget, CalculationBudgetExceeded, tick, reset_diagnostics, budget_stop, stop_message, log_result
 from werewolf.dawn import FLOW as DAWN_FLOW, enabled as dawn_enabled, advance_step
 from werewolf.strategy_ui import co_editor, resolve_co_editor
 from werewolf.result_disclosure import MODEL as DISCLOSURE_MODEL, DisclosureInconsistent, condition_observed
@@ -14,7 +17,7 @@ from werewolf.co_ui import CO_LABELS, CO_RENDERERS, medium_timeline
 from werewolf.setup import GameConfig, SetupDraft, setup_count, complete_rules, preset_data
 from werewolf.comparison import compare_initial
 
-from flask import Flask, redirect, render_template, request, session, url_for, make_response, send_from_directory, abort
+from flask import g, jsonify, Flask, redirect, render_template, request, session, url_for, make_response, send_from_directory, abort
 from werkzeug.http import dump_cookie
 
 from werewolf.exact import (ClaimPolicy, Progress, Rules, Strategy, Values, advance,
@@ -52,6 +55,7 @@ def create_app(test_config=None, *, deployment=False):
 
     from werewolf.game_runtime import GameRuntimes
     game_runtimes=GameRuntimes()
+    calculation_slot=BoundedSemaphore(1)
     app.extensions['board_game_runtimes']=game_runtimes
 
     def board_data(state):
@@ -244,10 +248,10 @@ def create_app(test_config=None, *, deployment=False):
         else:
             from werewolf.calculation_budget import calculation_budget, CalculationBudgetExceeded, tick
             try:
-                with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',250000) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20) if manual else None):
+                with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) if manual else None):
                     from werewolf.seer_future_uniform import FuturePending
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
-                    forecast=role_state.forecast(max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
+                    forecast=role_state.forecast(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
                     if isinstance(forecast,FuturePending):
                         guard_scope_pending=forecast.reason.startswith(('guard_','root_guard_','root_actor_')) or (board.initial_hunter_count and forecast.reason=='information_set_budget_exceeded')
                         from werewolf.seer_manual import Pending
@@ -256,6 +260,7 @@ def create_app(test_config=None, *, deployment=False):
                         reasons.update({'information_set_budget_exceeded':'計算予算に達したためモデルAの評価はPendingです。旧モデルの数値には切り替えません。'})
                         reasons.update({'guard_hidden_attack_max_unimplemented':'狩人未確定の襲撃最大化は未対応です。襲撃位置「均等化」に対応しています。','guard_multiple_hunters_unimplemented':'複数狩人の能力計算は未対応です。','guard_no_repeat_max_unimplemented':'連続護衛なしのmaxは未対応です。処刑・襲撃の均等化に対応しています。','guard_no_repeat_history_missing':'前夜の護衛履歴を共同分布から再構成できません。'})
                         seer_pending=Pending(reasons.get(forecast.reason,'この情報・配役の未来評価はまだ計算できません。'))
+                        if budget_stop() is not None:seer_pending=Pending(stop_message())
                         primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                         action_values={}
                     else:
@@ -311,6 +316,43 @@ def create_app(test_config=None, *, deployment=False):
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
     @app.before_request
+    def begin_request_budget():
+        if request.method=='POST':
+            origin=request.headers.get('Origin')
+            if request.headers.get('Sec-Fetch-Site')=='cross-site' or (origin and origin!=request.host_url.rstrip('/')):
+                return 'Cross-site form submission is not allowed',403
+        reset_diagnostics()
+        if request.method=='POST':g.calculation_previous_session=deepcopy(dict(session))
+        if request.endpoint in ('static','help_five_asset','help_medium_asset'):return
+        scope=calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+                                 max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+        scope.__enter__();g.calculation_scope=scope
+        if request.method=='POST' or request.path in ('/main','/comparison'):
+            acquired=calculation_slot.acquire(timeout=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
+            if not acquired:
+                app.logger.warning('wwgg_budget_stop kind=time phase=request_queue')
+                raise CalculationBudgetExceeded('Calculation queue time limit',kind='time')
+            g.calculation_slot=True
+            tick(0)
+
+    @app.teardown_request
+    def finish_request_budget(error):
+        if g.pop('calculation_slot',False):calculation_slot.release()
+        scope=g.pop('calculation_scope',None)
+        if scope is not None:scope.__exit__(None,None,None)
+
+    @app.errorhandler(CalculationBudgetExceeded)
+    def calculation_stopped(error):
+        g.calculation_stop_kind=error.kind
+        previous=g.get('calculation_previous_session')
+        if previous is not None:
+            session.clear();session.update(previous);session.modified=True
+        message=stop_message(error.kind)
+        if request.method=='POST' and request.path in ('/private-view','/table-preview','/table-publish','/public-log','/dawn-report'):
+            return jsonify(error=message,budget_kind=(budget_stop() or {}).get('kind',error.kind),pending=True),503
+        return render_template('budget_pending.html',message=message),503
+
+    @app.before_request
     def same_origin_posts():
         if request.method == "POST":
             origin = request.headers.get("Origin")
@@ -319,6 +361,7 @@ def create_app(test_config=None, *, deployment=False):
 
     @app.after_request
     def no_stale_pages(response):
+        if request.path in ('/main','/private-view','/comparison'):log_result(request.endpoint,response.status_code,g.get('calculation_stop_kind'))
         # Reject an oversized update before Flask emits Set-Cookie. Preserve the
         # previously accepted browser cookie rather than silently losing a Board.
         if session.modified and session:
@@ -713,8 +756,9 @@ def create_app(test_config=None, *, deployment=False):
             if progress.finished or progress.board.phase != 'night':
                 raise ValueError('夜のBoardで視点を選択してください。')
             result = private_source.private(payload['role'], payload['players'], payload['results'],
-                                            max_work=app.config.get('MANUAL_CALC_MAX_WORK',250000),
-                                            max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',20))
+                                            max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+                                            max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+            if budget_stop() is not None:result={**result,'reason':stop_message(),'budget_kind':budget_stop()['kind']}
             return jsonify(**result, board_id=state['public_log']['board_id'], revision=state['revision'])
         except (ValueError, TypeError, KeyError, DisclosureInconsistent) as exc:
             return jsonify(error=str(exc)), 400

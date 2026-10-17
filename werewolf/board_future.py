@@ -4,6 +4,7 @@ A generated child stores an action/observation recipe, not a parent's computed
 posterior. Its role state is reconstructed from the calculation's origin and
 all recorded recipes. The existing kernels define the recipes' semantics.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import dataclass,replace,field
 from contextvars import ContextVar
 from contextlib import contextmanager
@@ -326,7 +327,7 @@ class SavedOrigin:
         if kind=='exchangeable':
             from .public_prior import _complete_prior,public_history_key
             value=_complete_prior.__wrapped__(public_history_key(self.board_data.to_game()),b,
-                self.rules,False,250000)
+                self.rules,False,DEFAULT_MAX_WORK)
             kind='prior'
         if kind=='prior':
             from .guard_history_prior import seed_history

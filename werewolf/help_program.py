@@ -3,7 +3,7 @@ PAGES={'index':'プログラム詳細（仮）','current':'プログラム詳細
        'model':'確率モデルと情報集合','flow':'処理フローと評価アルゴリズム',
        'reference':'型・関数リファレンス','verification':'再現例と検証',
        'design':'プログラム詳細（設計案）','board-design':'B案：Board更新フロー（v0.5.2）','terms':'共通用語・記法'}
-AUDIT_VERSION='v0.5.2（実装基準 79b487b）'
+AUDIT_VERSION='v0.5.2（共通フロー基準79b487b・上限追補）'
 REVIEW_VERSION='9a0463a（軽量化区切り）'
 PUBLIC_SHA='79b487b422f89d8cec57c57ec46688c2baceeb89'
 TERMS=(('world','役職世界 W','狼・霊能・占い師・狩人の位置を表すマスクの組。一つを実役職として抽選してはいない。'),

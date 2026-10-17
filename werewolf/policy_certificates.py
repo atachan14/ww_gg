@@ -3,6 +3,7 @@
 This module never chooses a profile from an incomplete or ambiguous search.
 It does not add arbitrary mixtures, off-path beliefs or new payoff models.
 """
+from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import dataclass
 from fractions import Fraction as F
 from itertools import combinations,product
@@ -64,7 +65,7 @@ def best_response_profile(legal,scores,*,maximize=False):
 
 
 def certify_uniform_profiles(legal,evaluate,*,maximize=False,max_profiles=4096,
-                             max_work=250000,max_seconds=20,stop_on_undefined=False):
+                             max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,stop_on_undefined=False):
     """Evaluate every complete profile and every legal deviation exactly.
 
     evaluate(profile) must use that SAME complete public profile for all rows.
@@ -123,7 +124,7 @@ def certify_uniform_profiles(legal,evaluate,*,maximize=False,max_profiles=4096,
 
 
 def certify_support_profiles(legal,evaluate,contributions,forced,*,maximize=False,
-                             max_profiles=4096,max_work=250000,max_seconds=20):
+                             max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Exact quotient of ALL uniform profiles by a proved OR-support signature.
 
     Caller proves complete candidate scores depend only on this signature.
@@ -199,7 +200,7 @@ def certify_support_profiles(legal,evaluate,contributions,forced,*,maximize=Fals
 
 
 def certify_dependency_profiles(legal,evaluate_rows,dependencies,*,maximize=False,
-                                max_profiles=4096,max_work=250000,max_seconds=20):
+                                max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     """Eliminate necessary best-response equations without restricting profiles.
 
     Caller proves each COMPLETE row depends only on the listed policy rows.

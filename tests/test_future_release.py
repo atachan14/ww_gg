@@ -28,4 +28,5 @@ class FutureReleaseTests(unittest.TestCase):
    self.clock=0;h=c.get('/main').get_data(as_text=True)
   self.assertIn('data-seer-pending',h);self.assertNotIn('id="village-rate"',h)
  def _clock_tick(self):
-  self.clock+=21;return self.clock
+  from werewolf.calculation_budget import DEFAULT_MAX_SECONDS
+  self.clock+=DEFAULT_MAX_SECONDS+1;return self.clock
