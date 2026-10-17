@@ -126,10 +126,41 @@ class MatchingForecast(InformationSetForecast):
         try:return super().evaluate(*args,**kwargs)
         finally:self.public_entry=previous
 
+def _dual_white_ledger_supported(board,state,past,rules,claimants,relations):
+    """Uniform existing CO-group law: one true seer, one wolf, same white."""
+    if board.player_count>6:return False
+    from .seer_acquisition import Acquisition,SeerReport
+    if (rules.initial_seer!='random_white'or state.initial_rule!='random_white'
+        or len(past)!=2 or any(type(r)is not SeerReport for r in past)
+        or state.tracked!=claimants or state.observed_prefix!=1
+        or {r.player for r in past}!=set(claimants)
+        or len({r.target for r in past})!=1):return False
+    target=past[0].target
+    if (target not in board.alive or target in claimants
+        or board.role_probability(target,'wolf')!=0
+        or any(r.acquired_day!=1 or r.published_day!=1 or r.color!='white'for r in past)
+        or any(board.role_probability(p,'seer')!=F(1,2)or board.role_probability(p,'wolf')!=F(1,2)for p in claimants)):return False
+    whites=tuple(r for r in relations.reports if r[0]=='seer')
+    if (len(whites)!=2 or any(r[0]not in ('co','seer')for r in relations.reports)
+        or {(r[1],r[2],r[4],r[5],r[6],r[7],r[8])for r in whites}
+           !={(p,target,1,'white',0,1,'day')for p in claimants}):return False
+    expected=2*comb(board.player_count-3,board.wolf_count-1)
+    if len(state.hypotheses)!=expected:return False
+    co_mask=sum(1<<(p-1)for p in claimants)
+    for h in state.hypotheses:
+        true=tuple(p for p in claimants if h.roles[2]==1<<(p-1))
+        if len(true)!=1 or h.mass!=F(1,expected):return False
+        actor=true[0]
+        if (h.roles[0]&co_mask)!=(co_mask^(1<<(actor-1))):return False
+        if h.acquisitions!=(Acquisition(1,actor,target,'white'),):return False
+    return True
+
+
 def _root_ledger_supported(board,state,past,rules,claimants,relations):
-    """Only empty initial ledger or one observed known-true initial white."""
+    """Empty ledger, one known-true white, or the narrow dual-white mixture."""
     from .seer_acquisition import Acquisition,SeerReport
     if any(h.guards or h.attacks for h in state.hypotheses):return False
+    if len(claimants)==2:return _dual_white_ledger_supported(board,state,past,rules,claimants,relations)
     if rules.initial_seer=='none':
         return (state.initial_rule=='none'and not past
             and not any(h.acquisitions for h in state.hypotheses)
@@ -157,7 +188,7 @@ def make_engine(board,state,past,rules,strategy,*,enabled=False,view=None,audit=
         and (n,board.wolf_count)in((5,1),(6,1),(6,2),(7,1),(7,2)) and board.day==1 and board.phase=='day'
         and board.alive==tuple(range(1,n+1)) and not board.history
         and not board.initial_hunter_count and not board.initial_medium_count and board.initial_seer_count==1
-        and len(claimants)==1 and board.role_probability(claimants[0],'seer')==1
+        and len(claimants)in(1,2) and sum((board.role_probability(p,'seer')for p in claimants),F())==1
         and all(c in ('seer','latent')for c in board.claims)
         and not rules.allow_self_bite and not strategy.include_self_bite
         and state.rosters==(board.alive,)

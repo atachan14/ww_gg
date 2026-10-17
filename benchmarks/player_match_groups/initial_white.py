@@ -18,19 +18,19 @@ def prepare(client):
     return data,roles,board,state,past,roles.rules,strategy,view
 
 
-def publish(client,target=3):
+def publish(client,target=3,actors=(1,)):
     with client.session_transaction()as session:g=copy.deepcopy(session['game'])
-    payload={'claims':['seer']+['latent']*(g['players']-1),'seers':[{'day':1,'reporter':1,'target':target,'color':'white'}],'mediums':[]}
+    payload={'claims':['seer'if p in actors else 'latent'for p in range(1,g['players']+1)],'seers':[{'day':1,'reporter':p,'target':target,'color':'white'}for p in actors],'mediums':[]}
     response=client.post('/table-publish',data={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps(payload)})
     assert response.status_code==200,response.data
 
 
-def initial_white_source(n=5,wolves=1,target=3,*,return_client=False):
+def initial_white_source(n=5,wolves=1,target=3,*,return_client=False,actors=(1,)):
     app=create_app({'TESTING':True,'SECRET_KEY':'matching-initial-white','HYBRID_TABLE_PREVIEW':True,'SEER_UNIFORM_FUTURE_PREVIEW':True})
     client=app.test_client()
     response=client.post('/start',data={'citizens':str(n-wolves-1),'seers':'1','wolves':str(wolves),'day':'random','night':'random','fake_reports':'random','initial_seer':'random_white'})
     assert response.status_code==303,response.data
-    publish(client,target)
+    publish(client,target,actors)
     result=prepare(client)
     assert result[6].fake_reports=='random'
     return (result,client)if return_client else result

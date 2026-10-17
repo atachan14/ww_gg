@@ -85,7 +85,37 @@ class PlayerMatchGroupTests(unittest.TestCase):
         response=client.post('/table-publish',data={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps(payload)})
         self.assertEqual(response.status_code,200)
         competing=prepare(client)
-        self.assertFalse(make_engine(*competing[2:7],enabled=True,view=competing[7]).grouping)
+        self.assertTrue(make_engine(*competing[2:7],enabled=True,view=competing[7]).grouping)
+        # Different initial white targets are a separate, unproved condition.
+        with client.session_transaction()as session:g=copy.deepcopy(session['game'])
+        payload['seers'][1]['target']=4
+        response=client.post('/table-publish',data={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps(payload)})
+        self.assertEqual(response.status_code,200)
+        mixed=prepare(client)
+        self.assertFalse(make_engine(*mixed[2:7],enabled=True,view=mixed[7]).grouping)
+
+    def test_actual_two_co_same_white_keeps_true_fake_secret_mixture(self):
+        from benchmarks.player_match_groups.initial_white import initial_white_source
+        prepared=initial_white_source(5,1,actors=(1,2))
+        _,_,b,state,past,rules,strategy,view=prepared
+        self.assertEqual(tuple(b.role_probability(p,'seer')for p in(1,2)),(F(1,2),F(1,2)))
+        self.assertEqual(tuple(b.role_probability(p,'wolf')for p in(1,2)),(F(1,2),F(1,2)))
+        self.assertEqual(b.joint_wolf_probability((1,2)),0)
+        self.assertEqual(len(past),2)
+        for h in state.hypotheses:
+            self.assertEqual(len(h.acquisitions),1)
+            acquisition=h.acquisitions[0]
+            self.assertTrue(h.roles[2]&(1<<(acquisition.player-1)))
+            self.assertFalse(h.roles[0]&(1<<(acquisition.player-1)))
+            self.assertEqual(acquisition.target,3)
+        old=run(5,1,prepared=prepared);new=run(5,1,True,True,prepared=prepared)
+        self.assertTrue(old['complete']);self.assertTrue(new['complete'])
+        self.assertEqual((old['value'],old['table']),(new['value'],new['table']))
+        self.assertTrue(new['stats']['active']);self.assertGreater(new['stats']['audited_batches'],0)
+        self.assertFalse(make_engine(b,state,past,rules,replace(strategy,night='max'),enabled=True,view=view).grouping)
+        self.assertFalse(make_engine(b,state,past[:1],rules,strategy,enabled=True,view=view).grouping)
+        seven=initial_white_source(7,2,actors=(1,2))
+        self.assertFalse(make_engine(*seven[2:7],enabled=True,view=seven[7]).grouping)
 
     def test_default_entry_never_selects_experimental_engine(self):
         from werewolf.model_a_public import public_forecast
