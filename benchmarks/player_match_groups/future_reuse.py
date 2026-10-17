@@ -34,6 +34,9 @@ class FutureReuseForecast(InformationSetForecast):
             or tuple(self.strategy.fake_seer_policy)not in(('uniform',),('noncontradictory','uniform'))
             or not gap):
             return super().full_renamed_key(b,s,past,private,observer,target=target,physical=physical)
+        return self.complete_reuse_key(b,s,past,private,observer,target=target,physical=physical)
+
+    def complete_reuse_key(self,b,s,past,private,observer,*,target=None,physical=None):
         started=perf_counter();stats=self.reuse_stats;stats['key_requests']+=1
         values=(self.rules,self.strategy,b,s,past,private,observer,target,physical)
         source=evidence_key(self,values)if self.compact_keys else values

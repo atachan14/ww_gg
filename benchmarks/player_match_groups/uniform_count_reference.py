@@ -1,4 +1,4 @@
-"""Independent count-law reference for the completed uniform/no-ability fixture.
+"""Independent count-law reference for the completed uniform/no-medium/no-hunter fixture.
 
 Acceptance-only, never a forecast fallback or application dispatch. Reports are
 normalized chance observations, and fixed random actions cannot depend on them.

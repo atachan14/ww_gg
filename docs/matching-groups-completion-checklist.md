@@ -7,7 +7,7 @@ Completion means exact supported inputs/observations/physical transitions and co
 - [x] Empty initial ledger and known-true single initial public white: limited uniform continuation roots through seven players.
 - [x] Uniform two-seer same-white CO mixture, five/six-player complete Table/branch checks; true/fake identities remain mixed.
 - [x] Seven-player same-white two-CO complete prototype and independent fixed-random count-law numerical reference: all Table rows and terminal payoff match. All 98 original oracle primitives also match. This does not complete an entirely unmodified old-engine full run or general seven-player support.
-- [ ] Actual heavy target: medium CO, two seer CO, initial white, configured max policies, full Table/terminal completion.
+- [x] Supplied seven-player case (citizens3/medium1/seer1/wolves2; P1/P2 white P4, P3 medium; default max) completes in the OFF prototype: 17/36, 19.519 seconds. Complete labelled reference with same retirement/physical caching matches all rows in 34.203 seconds; 128 untouched-original nontrivial conditional values also match. Entirely untouched original full run remains uncompleted.
 - [ ] General multiple reports, different targets/colors, later/hidden histories, sparse/nonuniform two-CO support and edit/cancel/recompute coverage for each extended scope.
 - [ ] Medium and hunter/GJ/no-repeat support in the new sharing route, with their information histories and policy certificates.
 - [ ] Max: actor information, complete legal score vectors and tie-distribution transport; existing max stays unchanged, never replaced by random.
@@ -22,3 +22,6 @@ Current prototype also covers the one remaining live claimant with more than fou
 
 
 Retirement-proof milestone: solver-only retention of the actual observed public report tuple after an already validated no-information retirement. This remains a separate OFF experiment with random/no-medium/no-hunter/private-entry guards. Unknown initial evidence is never blessed. All 98 frozen old oracle primitives were re-evaluated and matched after verifying old engine/input/plan checksums, coefficients and complete public/private/physical laws. Whole seven-player result: 8/35; claimants 3/10 each, white target 2/15, other four targets 13/60 each. These numbers are complete in the new prototype, not proof of full original-reference completion or support for medium/max/hunter/general histories.
+
+
+Extended scope is local and guarded: medium/random, no-medium/max and combined medium/max have independent OFF switches. Five/six-player complete original comparisons and labelled actor-vector/tie tests cover these examples. Corrections/withdrawal/death/back and public/private/public controls match; root-replay and personal observers deliberately fall back. Hunters remain on the existing path, not newly supported. General arbitrary history coverage, fresh max vector transport, root-route integration and normal app wiring are still open; the actual seven-player milestone is not completion of the whole checklist. See player-match-extensions.md.
