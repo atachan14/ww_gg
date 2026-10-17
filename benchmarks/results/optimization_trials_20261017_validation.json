@@ -1,0 +1,128 @@
+{
+  "recorded_at_utc": "2026-10-17T03:09:08.110646+00:00",
+  "product_ref": "9052bf1fa183be0ca20b44fcf669970f409c9035",
+  "prefix_removal_ref": "c033993660c746f5852e6c72eb08f51927ea153a",
+  "comparison_baseline_ref": "1604a62867ba047806a06cd62e43b261178e1e06",
+  "full_suite": {
+    "tests": 687,
+    "seconds": 384.492,
+    "result": "OK",
+    "exit_code": 0,
+    "source": ".artifacts\\integration-validation\\role-validation-full-tests-final.log",
+    "sha256": "68939ad8700b6968f35eb1d476d51393a978e75ff52fce39034f639d0fc884eb"
+  },
+  "http": {
+    "screens": {
+      "at": "2026-10-17T03:08:29.425Z",
+      "rows": [
+        {
+          "width": 1366,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 320,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "dark",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        }
+      ]
+    },
+    "private": {
+      "at": "2026-10-17T03:08:31.104Z",
+      "status": 200,
+      "rows": [
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        },
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        }
+      ],
+      "sessionUnchanged": true
+    },
+    "seven_observed": {
+      "at": "2026-10-17T03:08:47.325Z",
+      "status": 200,
+      "publicRate": "113/504",
+      "seconds": 14.493,
+      "errors": []
+    }
+  },
+  "owned_18801_restart": {
+    "port": 18801,
+    "old_pid": 22740,
+    "script": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\.artifacts\\integration-validation\\b-help-server.py",
+    "new_pid": 20328,
+    "at_utc": "2026-10-17T03:08:05.5473131Z",
+    "ownership_rechecked": true
+  },
+  "latest_help_verified": true,
+  "normal_budget": {
+    "max_work": 250000,
+    "max_seconds": 20
+  },
+  "prior_full_run": {
+    "tests": 687,
+    "seconds": 390.383,
+    "errors": 1,
+    "reason": "Test accessed removed GeneratedBoard._completed; numeric expectations unchanged. Test now checks full-history equality, absence of prefix memo and existing recipe reuse; focused regression passed in 0.028 seconds.",
+    "source": ".artifacts/integration-validation/role-validation-full-tests.log"
+  },
+  "adoption": {
+    "prefix_removal": "accepted: lower retained memory, no established CPU improvement",
+    "complete_role_validation": "accepted: formal cold/CPU/memory benefit, exact results, mixed cache audit, joint audit, full regression and HTTP passed"
+  },
+  "scope": "Existing policies and complete histories retained. No new symmetry grouping, role, shared secret, budget relaxation, push or deploy. Whole-worker native peaks are not per-request allocation totals. Large/other 9-player configurations have not received a new broad performance guarantee."
+}

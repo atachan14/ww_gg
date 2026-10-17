@@ -37,6 +37,11 @@ class CompleteRoleProjectionTests(unittest.TestCase):
   for law in [(x,x),((*x[:4],F(1,3)),y),((1,1,4,8,F(1,2)),y)]:
    with self.assertRaises(ValueError):self.board(law)
   with self.assertRaisesRegex(ValueError,'guard-history'):replace(a,guard_prior_roster=(1,(1,2,3,4)))
+  valid=replace(a,day=2,guard_prior_roster=(1,(1,2,3,4)))
+  self.assertEqual(valid.world_belief,a.world_belief)
+  two_wolves=Board(4,(1,2,3,4),wolf_count=2,day=2,initial_hunter_count=1,world_belief=((3,0,0,4,F(1)),))
+  with self.assertRaisesRegex(ValueError,'conflicts with role/history'):
+   replace(two_wolves,guard_prior_roster=(1,(1,2,3,4)))
 
  def test_large_exact_laws_are_validated_without_retention(self):
   from itertools import combinations
