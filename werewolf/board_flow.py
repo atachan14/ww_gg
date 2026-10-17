@@ -107,7 +107,7 @@ class RoleState:
         self.owner.runtime.put(key,result)
         return result
 
-    def private(self,role,players,results,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+    def private(self,role,players,results,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_prepared=None):
         from .board_roles import prepare_private
         from .private_adapter import evaluate_private_table
         validate_budget(max_work,max_seconds)
@@ -115,7 +115,7 @@ class RoleState:
         hit,value=self.owner.runtime.get(key,private=True)
         if hit:return value
         game=self.owner.to_game();strategy=Strategy(**game['policy'])
-        prepared=prepare_private(self.board,role,players,results,self.rules,strategy,
+        prepared=_prepared if _prepared is not None else prepare_private(self.board,role,players,results,self.rules,strategy,
                                  game_state=game,max_work=max_work,max_seconds=max_seconds)
         from .board_future import calculation_origin
         with calculation_origin(self.owner):

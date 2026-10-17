@@ -203,6 +203,7 @@ function initializeUI() {
   initializeLiveClaims();
   initializePublicLog();
   window.initializeBoardTable?.();
+  window.initializeBoardPrivateTable?.();
 }
 
 function initializeLiveClaims() {
@@ -254,9 +255,20 @@ function initializeLiveClaims() {
       try {
         const response = await fetch(document.querySelector('#strategy-button').formAction, {
           method: 'POST', body: (() => { const data = new FormData(form); if (form.dataset.manualSelection !== 'true') data.delete('target'); return data; })(), credentials: 'same-origin',
-          headers: {'Accept': 'text/html'}
+          headers: {'Accept': 'application/x-ndjson'}
         });
-        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const streamed=response.headers.get('content-type')?.includes('application/x-ndjson');
+        const outcome=streamed?await window.readCalculationResponse(response,event=>{
+          if(sentVersion!==version||!form.isConnected||window.boardTableDraft?.isDirty())return;
+          const doc=new DOMParser().parseFromString(event.html,'text/html');
+          const source=doc.querySelector('#information-panel');if(source)document.querySelector('#information-panel').innerHTML=source.innerHTML;
+          for(const row of document.querySelectorAll('.player-table tr[data-player]')){
+            const remote=doc.querySelector(`.player-table tr[data-player="${row.dataset.player}"]`);
+            for(const cell of row.querySelectorAll('[data-value-cell]')){const next=remote?.querySelector(`[data-value-cell="${cell.dataset.valueCell}"]`);if(next)cell.innerHTML=next.innerHTML;}
+          }
+          attachStatus();status.textContent='役職率を表示しています。勝率を計算中です。';
+        }):{html:await response.text()};
+        const html = new DOMParser().parseFromString(outcome.html, 'text/html');
         const revision = html.querySelector('#action-form input[name="revision"]');
         if (!revision) throw new Error('画面を再読込してから入力してください。');
         document.querySelectorAll('input[name="revision"]').forEach(input => input.value = revision.value);
@@ -453,3 +465,32 @@ function initializeStatusChoices() {
  }));
  refresh();
 }
+
+// A normal navigation gets a light shell; one read-only request prepares the
+// public state once, sends roles, and continues to the exact win evaluation.
+document.addEventListener('DOMContentLoaded',async()=>{
+ let mounted=document.querySelector('[data-calculation-start]');if(!mounted)return;
+ let generation=0,identity=null,finalDocument=null;
+ const changed=e=>{if(e.target.matches('[data-table-co],[data-table-details] select,#strategy-editor input,#strategy-editor select,#strategy-editor button'))generation++;};
+ const install=doc=>{
+  const next=doc.querySelector('main');if(!next||!mounted.isConnected)return;
+  const selected=mounted.querySelector('input[name="target"]:checked')?.value;
+  const manual=mounted.querySelector('#action-form')?.dataset.manualSelection==='true';
+  if(manual){next.querySelector('#action-form').dataset.manualSelection='true';next.querySelectorAll('input[name="target"]').forEach(e=>e.checked=e.value===selected);}
+  window.boardTableDraft?.suspend?.();mounted.replaceWith(next);mounted=next;document.title=doc.title;
+  initializeUI();mounted.addEventListener('change',changed);
+  mounted.addEventListener('viewpointchange',()=>{if(mounted.dataset.viewpointMode==='public'&&finalDocument&&!generation){const doc=finalDocument;finalDocument=null;install(doc);}});
+ };
+ try{
+  const response=await fetch('/main',{headers:{Accept:'application/x-ndjson'},credentials:'same-origin'});
+  const result=await window.readCalculationResponse(response,event=>{
+   if(!mounted.isConnected||generation)return;identity={board_id:event.board_id,revision:event.revision};install(new DOMParser().parseFromString(event.html,'text/html'));
+  });
+  if(!response.ok)throw Error(result.error||'盤面を計算できませんでした。');
+  if(!mounted.isConnected||generation||window.isStrategyCalculationPending?.()||window.boardTableDraft?.isDirty()||!identity||result.board_id!==identity.board_id||result.revision!==identity.revision)return;
+  const doc=new DOMParser().parseFromString(result.html,'text/html');
+  if(mounted.dataset.viewpointMode&&mounted.dataset.viewpointMode!=='public'){
+   finalDocument=doc;const remote=doc.querySelector('#information-panel');if(remote)mounted.querySelector('#information-panel').innerHTML=remote.innerHTML;
+  }else install(doc);
+ }catch(error){if(mounted.isConnected&&!generation){const pending=mounted.querySelector('[data-seer-pending]');if(pending)pending.textContent='勝率は未計算です。役職率は表示済みです。';mounted.querySelectorAll('[data-value-cell="dawn"],[data-value-cell="final"]').forEach(cell=>cell.textContent='未計算');const note=document.createElement('p');note.className='error';note.setAttribute('role','alert');note.textContent=error.message;mounted.append(note);}}
+});

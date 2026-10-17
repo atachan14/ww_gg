@@ -23,16 +23,19 @@
       const signal=new AbortController().signal;
       const input=task.input instanceof Request?new Request(task.input,{signal}):task.input;
       const response=await nativeFetch.call(window,input,{...task.init,signal});
+      const streaming=response.headers.get('content-type')?.includes('application/x-ndjson');
+      if(streaming&&!task.cancelled)task.resolve(response);
       await response.clone().arrayBuffer();
-      if(!task.cancelled)task.resolve(response);
+      if(!streaming&&!task.cancelled)task.resolve(response);
     }catch(error){if(!task.cancelled)task.reject(error);}
     finally{task.detach();active=null;queueMicrotask(pump);}
   }
   window.fetch=function(input,init={}){
     const url=new URL(input instanceof Request?input.url:String(input),location.href);
     const method=(init.method||(input instanceof Request?input.method:'GET')).toUpperCase();
-    if(url.origin!==location.origin||method!=='POST')return nativeFetch.apply(this,arguments);
-    const readonly=['/table-preview','/private-view','/comparison'].includes(url.pathname);
+    const streaming=new Headers(init.headers||(input instanceof Request?input.headers:undefined)).get('Accept')==='application/x-ndjson';
+    if(url.origin!==location.origin||(method!=='POST'&&!streaming))return nativeFetch.apply(this,arguments);
+    const readonly=['/main','/table-preview','/private-view','/comparison'].includes(url.pathname);
     const signal=init.signal||(input instanceof Request?input.signal:null);
     return new Promise((resolve,reject)=>{
       const task={input,init,key:url.pathname,resolve,reject,cancelled:false,sequence:++sequence,detach:()=>{}};
@@ -44,6 +47,19 @@
       else writes.push(task); // Accepted edits/saves are never discarded/coalesced.
       paint();pump();
     });
+  };
+  window.readCalculationResponse=async(response,onRoles=()=>{})=>{
+    if(!response.headers.get('content-type')?.includes('application/x-ndjson'))return response.json();
+    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',complete=null,roles=false;
+    const consume=line=>{if(!line.trim())return;const event=JSON.parse(line);
+      if(event.event==='error')throw Error(event.error||'計算が完了しませんでした。');
+      if(event.event==='redirect'){location.assign(event.url);return;}
+      if(event.event==='roles'){if(roles||complete)throw Error('計算応答の順序が不正です。');roles=true;onRoles(event);}
+      else if(event.event==='complete'){if(complete)throw Error('計算応答が重複しました。');complete=event;}
+    };
+    try{while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let pos;while((pos=buffer.indexOf('\n'))>=0){consume(buffer.slice(0,pos));buffer=buffer.slice(pos+1);}if(done)break;}consume(buffer);}
+    finally{reader.releaseLock();}
+    if(!complete)throw Error('計算応答が途中で終了しました。入力は保持されています。');return complete;
   };
   document.addEventListener('submit',event=>{
     if(!event.defaultPrevented&&event.target.method?.toLowerCase()==='post'){

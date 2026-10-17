@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}盤面を計算中{% endblock %}{% block content %}<main data-screen="loading" data-calculation-start><p role="status">役職率を計算しています。続けて勝率を表示します。</p><noscript><a href="{{ url_for('main',complete=1) }}">計算が完了した盤面を表示する</a></noscript></main>{% endblock %}

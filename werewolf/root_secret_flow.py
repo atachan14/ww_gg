@@ -641,11 +641,11 @@ def root_branch_forecast(branch,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_s
 
 
 
-def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_actor=None):
     """Own scan interventions over the unchanged public joint policy law."""
     from .seer_future_uniform import candidates
     compatible=lambda h:bool(h.roles[2]&(1<<(player-1))) and all(a in h.acquisitions for a in acquisitions)
-    actor=root_actor_view(branch,compatible)
+    actor=_actor if _actor is not None else root_actor_view(branch,compatible)
     if isinstance(actor,FuturePending):return actor
     histories={tuple(a for a in h.acquisitions if a.player==player) for h in actor.physical_law.hypotheses}
     if len(histories)!=1:return FuturePending('seer_view_past_private_history_unresolved')
@@ -678,11 +678,11 @@ def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFA
     except Pending as error:return FuturePending(error.reason)
 
 
-def root_guard_forecast(branch,player,guards,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+def root_guard_forecast(branch,player,guards,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_actor=None):
     """Owner guard records condition P; public policy continues using Q."""
     from .guard_view_forecast import guard_forecast
     compatible=lambda h:bool(h.roles[3]&(1<<(player-1))) and all(g in h.guards for g in guards)
-    actor=root_actor_view(branch,compatible)
+    actor=_actor if _actor is not None else root_actor_view(branch,compatible)
     if isinstance(actor,FuturePending):return actor
     from .exact import replace_worlds
     private=replace_worlds(branch.public,actor.belief.public_roles)
@@ -691,10 +691,10 @@ def root_guard_forecast(branch,player,guards,rules,strategy,*,max_work=DEFAULT_M
         max_work=max_work,max_seconds=max_seconds)
 
 
-def root_wolf_forecast(branch,players,attacks,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+def root_wolf_forecast(branch,players,attacks,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_actor=None):
     """Aggregate unknown other roles and their secrets before each wolf action."""
     mask=sum(1<<(p-1) for p in players)
-    actor=root_actor_view(branch,lambda h:h.roles[0]==mask and all(a in h.attacks for a in attacks))
+    actor=_actor if _actor is not None else root_actor_view(branch,lambda h:h.roles[0]==mask and all(a in h.attacks for a in attacks))
     if isinstance(actor,FuturePending):return actor
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)

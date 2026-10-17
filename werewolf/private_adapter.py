@@ -45,13 +45,32 @@ def private_slots(board, player, rules,role="seer"):
     return slots
 
 
+def prepared_private_role_rows(public,role,players,prepared):
+    """Project own joint observations before continuation; never use public rows."""
+    from .board_roles import private_role_rates
+    view,branch=prepared
+    private=view.board
+    actor=getattr(prepared,'actor',None)
+    if isinstance(branch,FuturePending) or isinstance(actor,FuturePending):
+        return {'players':[],'reason':'本人の条件に基づく役職率をまだ計算できません。'}
+    private=getattr(prepared,'role_board',private)
+    rows=[]
+    for player,marginal in enumerate(private_role_rates(private),1):
+        probabilities={r:str(value) for r,value in marginal.items()}
+        probabilities['citizen']=probabilities.pop('villager')
+        probabilities['village']=str(1-marginal['wolf'])
+        rows.append({'id':player,'probabilities':probabilities,'dawn':None,'final':None,'legal':False})
+    return {'players':rows,'reason':'本人の役職率を表示しています。勝率を計算中です。'}
+
+
 def evaluate_private_table(public, role, players, results, rules, strategy, *, game_state=None,
                            max_work=DEFAULT_MAX_WORK, max_seconds=DEFAULT_MAX_SECONDS, _prepared=None):
     from .board_roles import prepare_private
-    view,branch=_prepared if _prepared is not None else prepare_private(
+    prepared=_prepared if _prepared is not None else prepare_private(
         public,role,players,results,rules,strategy,game_state=game_state,
         max_work=max_work,max_seconds=max_seconds)
-    private = view.board
+    view,branch=prepared
+    private = getattr(prepared,'role_board',view.board)
     root_entry=branch is not None
     reason = {'seer': '占い先の取得履歴と将来の公開判断を分離した勝率評価は未対応です。',
               'hunter': '護衛能力の計算と秘密の護衛履歴は未対応です。',
@@ -63,10 +82,10 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         targets=tuple(p for p in public.alive if p!=players[0])
         from .root_secret_flow import root_guard_forecast
         if root_entry:
-            result=branch if isinstance(branch,FuturePending) else root_guard_forecast(branch,players[0],view.guards,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+            result=branch if isinstance(branch,FuturePending) else root_guard_forecast(branch,players[0],view.guards,rules,strategy,max_work=max_work,max_seconds=max_seconds,_actor=getattr(prepared,'actor',None))
             if not isinstance(branch,FuturePending):
                 from .root_secret_flow import root_actor_view
-                actor=root_actor_view(branch,lambda h:bool(h.roles[3]&(1<<(players[0]-1))) and all(g in h.guards for g in view.guards))
+                actor=getattr(prepared,'actor',None) or root_actor_view(branch,lambda h:bool(h.roles[3]&(1<<(players[0]-1))) and all(g in h.guards for g in view.guards))
                 if not isinstance(actor,FuturePending):
                     from .board_roles import joint_view_board
                     private=joint_view_board(public,actor.belief)
@@ -85,9 +104,9 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         from .root_secret_flow import root_seer_forecast,root_actor_view
         if root_entry:
             result=branch if isinstance(branch,FuturePending) else root_seer_forecast(
-                branch,players[0],view.acquisitions,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+                branch,players[0],view.acquisitions,rules,strategy,max_work=max_work,max_seconds=max_seconds,_actor=getattr(prepared,'actor',None))
             if not isinstance(branch,FuturePending):
-                actor=root_actor_view(branch,lambda h:bool(h.roles[2]&(1<<(players[0]-1))) and
+                actor=getattr(prepared,'actor',None) or root_actor_view(branch,lambda h:bool(h.roles[2]&(1<<(players[0]-1))) and
                     all(a in h.acquisitions for a in view.acquisitions))
                 if not isinstance(actor,FuturePending):
                     from .board_roles import joint_view_board
@@ -121,7 +140,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
         state = None; past = ()
         from .root_secret_flow import root_wolf_forecast
         if root_entry:
-            result=branch if isinstance(branch,FuturePending) else root_wolf_forecast(branch,players,view.attacks,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+            result=branch if isinstance(branch,FuturePending) else root_wolf_forecast(branch,players,view.attacks,rules,strategy,max_work=max_work,max_seconds=max_seconds,_actor=getattr(prepared,'actor',None))
             if not isinstance(result,FuturePending):
                 result,guard_dawn,belief=result
                 from .board_roles import joint_view_board

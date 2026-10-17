@@ -7,6 +7,7 @@
   const root=seedNode.closest('main'),seed=JSON.parse(seedNode.textContent),table=root.querySelector('.player-table');
   const status=root.querySelector('[data-viewpoint-status]');
   const scope=root.querySelector('[data-table-scope]'),publicScope=scope?.textContent;
+  let receivedRoles=false;
   let storage=null;try{storage=window.sessionStorage;}catch(_){}
   const store=window.createBoardPrivateDraftStore({boardId:seed.board_id,revision:seed.revision,storage,scopeRevision:false});
   const cells=[...table.querySelectorAll('[data-value-cell]')],original=new Map(cells.map(c=>[c,c.innerHTML]));
@@ -57,11 +58,11 @@
    }
   });
   controller=window.createBoardViewpointController({root,roles:seed.roles,restore,
-   load:async({role,players,signal})=>{
-    const results=mountSecret(role,role==='wolf'?Math.min(...players):players[0],players);
-    const response=await fetch('/private-view',{method:'POST',signal,body:new URLSearchParams({
+   load:async({role,players,signal,onPartial})=>{
+    receivedRoles=false;const results=mountSecret(role,role==='wolf'?Math.min(...players):players[0],players);
+    const response=await fetch('/private-view',{method:'POST',headers:{Accept:'application/x-ndjson'},signal,body:new URLSearchParams({
      revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify({role,players,results})})});
-    const result=await response.json();if(!response.ok)throw Error(result.error);
+    const result=await window.readCalculationResponse(response,event=>{if(event.board_id===seed.board_id&&event.revision===seed.revision){receivedRoles=true;onPartial(event);}});if(!response.ok)throw Error(result.error);
     if(result.board_id!==seed.board_id||result.revision!==seed.revision)throw Error('Boardが変更されています。再読み込みしてください。');
     return result;
    },
@@ -72,13 +73,13 @@
       const key=cell.dataset.valueCell;cell.replaceChildren();
       if(key in player.probabilities)cell.append(probability(player.probabilities[key]));
       else if(player[key])cell.append(probability(player[key].village),' / ',probability(player[key].wolf));
-      else{cell.textContent=['wolf','seer','hunter'].includes(controller.getState().role)&&!player.legal?'—':'未対応';cell.title=result.reason;}
+      else{cell.textContent=result.event==='roles'?'計算中':['wolf','seer','hunter'].includes(controller.getState().role)&&!player.legal?'—':'未対応';cell.title=result.reason;}
      }
     }
     status.textContent=`${result.reason} ${controller.getState().role==='wolf'?'能力先の比較用です。':'秘密欄だけ編集できます。'} 公開CO・公開ログは変更しません。BoardOverviewは公開情報の計算です。`;
     window.refreshParallelLayout?.();
    },
-   onError:error=>{pending('不整合');status.textContent=`不整合：${error.message} 秘密欄を修正するか「全体」で戻ってください。`;}
+   onError:error=>{if(!receivedRoles)pending('不整合');else table.querySelectorAll('[data-value-cell="dawn"],[data-value-cell="final"]').forEach(cell=>cell.textContent='未計算');status.textContent=`不整合：${error.message} 秘密欄を修正するか「全体」で戻ってください。`;}
   });
   root.boardViewpointController=controller;root.boardPrivateDraftStore=store;
  };

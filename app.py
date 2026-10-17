@@ -77,7 +77,7 @@ def create_app(test_config=None, *, deployment=False):
 
     def structural_replay(state):return structural_roles(state).replay_result
 
-    def game():
+    def game(*,validate_roles=True):
         state = session.get("game")
         try:
             required = {"players", "rules", "policy", "history", "selection", "revision"}
@@ -107,11 +107,11 @@ def create_app(test_config=None, *, deployment=False):
                     log=upgrade(log)
                 state=project(state,log)
                 if draft is not None:state["public_draft"]=draft
-            _, progress = structural_replay(state)
+            progress = structural_replay(state)[1] if validate_roles else None
             target = state["selection"]
             if target is not None and (type(target) is not int or not 1 <= target <= state["players"]):
                 return None
-            if not progress.finished and target is not None and target not in progress.board.alive:
+            if progress is not None and not progress.finished and target is not None and target not in progress.board.alive:
                 return None
         except (ValueError, TypeError, KeyError):
             return None
@@ -212,13 +212,13 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200, night_context=None):
+    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False):
         disclosure_error=None
         guard_scope_pending=False
         by_dawn_values={}
         from werewolf.board_flow import BoardData
         try:
-            role_state=board_data(state).roles()
+            role_state=role_state if role_state is not None else board_data(state).roles()
             rules,progress=role_state.replay_result
         except DisclosureInconsistent as exc:
             disclosure_error=str(exc);role_state=structural_roles(state);rules,progress=role_state.replay_result
@@ -241,6 +241,11 @@ def create_app(test_config=None, *, deployment=False):
             action_values = {}
             event_history = progress.last_outcomes[0].board.history
             alive = progress.last_outcomes[0].board.alive
+        elif roles_only and not seer_pending:
+            from werewolf.seer_manual import Pending
+            seer_pending=Pending('役職率を表示しています。勝率を計算中です。')
+            primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
+            action_values={};event_history,alive=board.history,board.alive
         elif seer_pending:
             primary = cumulative = {"village_win":seer_pending,"wolf_win":seer_pending}
             action_values = {}
@@ -295,6 +300,7 @@ def create_app(test_config=None, *, deployment=False):
                 player['extra_probabilities']={k:seer_pending for k in player['extra_probabilities']}
             player['medium_timeline'] = medium_timeline(board, player['id'], finished)
             player['co_pending'] = player['claim'] == 'medium' and any(entry['editable'] and not entry['color'] for entry in player['medium_timeline'])
+        if roles_only and night_context:night_context={**night_context,'pending':True}
         display_selection = (night_context['observation']['deaths'][0] if night_context and night_context['observation'] and len(night_context['observation']['deaths'])==1 else None) if night_context else state['selection']
         if not night_context and not finished and not seer_pending and display_selection is None and getattr(strategy, board.phase) == 'max':
             score = 'village_win' if board.phase == 'day' else 'wolf_win'
@@ -315,6 +321,36 @@ def create_app(test_config=None, *, deployment=False):
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
+    def wants_calculation_stream():
+        return (request.path in ('/main','/table-preview','/private-view') and
+                request.headers.get('Accept')=='application/x-ndjson')
+
+    def calculation_stream(events):
+        # The iterator owns its budget and slot: Flask tears down the initial
+        # request before the response body is consumed. Never extend that budget
+        # by starting a new continuation request or an external background job.
+        from flask import Response,stream_with_context
+        session.setdefault('co_display_game',secrets.token_hex(8))
+        @stream_with_context
+        def generate():
+            acquired=False
+            with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+                                    max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS)):
+                try:
+                    acquired=calculation_slot.acquire(timeout=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
+                    if not acquired:raise CalculationBudgetExceeded('Calculation queue time limit',kind='time')
+                    tick(0)
+                    for event in events():
+                        yield json.dumps(event,ensure_ascii=False)+'\n'
+                except CalculationBudgetExceeded as exc:
+                    yield json.dumps({'event':'error','error':stop_message(exc.kind),'budget_kind':exc.kind,'pending':True},ensure_ascii=False)+'\n'
+                except (ValueError,TypeError,KeyError,DisclosureInconsistent) as exc:
+                    yield json.dumps({'event':'error','error':str(exc)},ensure_ascii=False)+'\n'
+                finally:
+                    log_result(request.endpoint,200)
+                    if acquired:calculation_slot.release()
+        return Response(generate(),mimetype='application/x-ndjson',headers={'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'})
+
     @app.before_request
     def begin_request_budget():
         if request.method=='POST':
@@ -323,7 +359,7 @@ def create_app(test_config=None, *, deployment=False):
                 return 'Cross-site form submission is not allowed',403
         reset_diagnostics()
         if request.method=='POST':g.calculation_previous_session=deepcopy(dict(session))
-        if request.endpoint in ('static','help_five_asset','help_medium_asset'):return
+        if request.endpoint in ('static','help_five_asset','help_medium_asset') or wants_calculation_stream():return
         scope=calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                  max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
         scope.__enter__();g.calculation_scope=scope
@@ -361,7 +397,7 @@ def create_app(test_config=None, *, deployment=False):
 
     @app.after_request
     def no_stale_pages(response):
-        if request.path in ('/main','/private-view','/comparison'):log_result(request.endpoint,response.status_code,g.get('calculation_stop_kind'))
+        if not wants_calculation_stream() and request.path in ('/main','/private-view','/comparison'):log_result(request.endpoint,response.status_code,g.get('calculation_stop_kind'))
         # Reject an oversized update before Flask emits Set-Cookie. Preserve the
         # previously accepted browser cookie rather than silently losing a Board.
         if session.modified and session:
@@ -526,18 +562,34 @@ def create_app(test_config=None, *, deployment=False):
 
     @app.get("/main")
     def main():
-        state = game()
+        shell=request.headers.get('Sec-Fetch-Dest')=='document' and request.args.get('complete')!='1' and not wants_calculation_stream()
+        state = game(validate_roles=not (wants_calculation_stream() or shell))
         if state is None:
             return redirect(url_for("top"), code=303)
+        if shell:return render_template('main_loading.html')
+        if wants_calculation_stream():
+            def events():
+                prepared=board_data(state).roles()
+                if prepared.progress.finished:
+                    yield {'event':'redirect','url':url_for('result')};return
+                if state['selection'] is not None and state['selection'] not in prepared.board.alive:
+                    raise ValueError('保存された選択対象を確認してください。')
+                identity={'board_id':state.get('public_log',{}).get('board_id'),'revision':state['revision']}
+                night=dawn_enabled(state) and prepared.board.phase=='night'
+                context=dawn_context(state,prepared) if night else None
+                for stage in ('roles','complete'):
+                    html,status=render_main(state,night_context=context,role_state=prepared,roles_only=stage=='roles')
+                    yield dict(event=stage,html=html,**identity)
+            return calculation_stream(events)
         if structural_replay(state)[1].finished:
-            return redirect(url_for("result"), code=303)
+            return redirect(url_for('result'),code=303)
         if dawn_enabled(state) and structural_replay(state)[1].board.phase == 'night':
             return render_dawn(state)
         return render_main(state)
 
-    def render_dawn(state, error=None, status=200):
+    def dawn_context(state,prepared=None):
         from werewolf.dawn import current_observation, validate_observation, unsupported_reason, observe
-        rules, before = structural_replay(state)
+        rules,before=prepared.replay_result if prepared is not None else structural_replay(state)
         observation = validate_observation(current_observation(state), before.board.alive)
         pending = unsupported_reason(observation, before.board, rules)
         after = None
@@ -546,9 +598,12 @@ def create_app(test_config=None, *, deployment=False):
                 after = observe(before, observation, rules, Strategy(**state['policy']))
             except ValueError as exc:
                 pending = str(exc)
-        return render_main(state, error, status, night_context={
+        return {
             'observation': observation, 'pending': pending,
-            'finished': after is not None and after.finished})
+            'finished': after is not None and after.finished}
+
+    def render_dawn(state,error=None,status=200,**render_options):
+        return render_main(state,error,status,night_context=dawn_context(state,render_options.get('role_state')),**render_options)
 
     @app.post('/dawn-report')
     def dawn_report():
@@ -736,7 +791,7 @@ def create_app(test_config=None, *, deployment=False):
     @app.post('/private-view')
     def private_view():
         from flask import jsonify
-        state = game()
+        state = game(validate_roles=not wants_calculation_stream())
         if state is None or not dawn_enabled(state):
             return jsonify(error='夜の視点表示はこのBoardでは利用できません。'), 404
         if (not revision_matches(state) or request.form.getlist('board_id') != [state['public_log']['board_id']]):
@@ -749,6 +804,26 @@ def create_app(test_config=None, *, deployment=False):
                     payload['role'] not in ('wolf', 'seer', 'hunter') or
                     type(payload['players']) is not list or type(payload['results']) is not list):
                 raise ValueError('視点入力の形式が不正です。')
+            if wants_calculation_stream():
+                def events():
+                    from werewolf.board_roles import prepare_private
+                    from werewolf.private_adapter import prepared_private_role_rows
+                    source=board_data(state).roles()
+                    if source.progress.finished or source.board.phase!='night':
+                        raise ValueError('夜のBoardで視点を選択してください。')
+                    strategy=Strategy(**state['policy'])
+                    prepared=prepare_private(source.board,payload['role'],payload['players'],payload['results'],
+                        source.rules,strategy,game_state=state,
+                        max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+                        max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+                    identity={'board_id':state['public_log']['board_id'],'revision':state['revision']}
+                    yield dict(event='roles',**prepared_private_role_rows(source.board,payload['role'],payload['players'],prepared),**identity)
+                    result=source.private(payload['role'],payload['players'],payload['results'],_prepared=prepared,
+                        max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+                        max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+                    if budget_stop() is not None:result={**result,'reason':stop_message(),'budget_kind':budget_stop()['kind']}
+                    yield dict(event='complete',**result,**identity)
+                return calculation_stream(events)
             # Replay only public evidence; the private Board is confined to this adapter.
             from werewolf.board_flow import BoardData
             private_source=board_data(state).roles()
@@ -767,9 +842,21 @@ def create_app(test_config=None, *, deployment=False):
     def table_preview():
         from flask import jsonify
         if not app.config.get('HYBRID_TABLE_PREVIEW'):return jsonify(error='Not enabled'),404
-        state=game()
+        state=game(validate_roles=not wants_calculation_stream())
         if state is None or not revision_matches(state):return jsonify(error='確定状態が変わりました。再読み込みしてください。'),409
         try:
+            if wants_calculation_stream():
+                payload=json.loads(request.form.get('payload',''))
+                request_id=request.form.get('request_id')
+                def events():
+                    proposed,batch=table_proposal(state,payload)
+                    identity={'batch':batch,'request_id':request_id,
+                              'revision':state['revision'],'board_id':state['public_log']['board_id']}
+                    prepared=board_data(proposed).roles()
+                    for stage in ('roles','complete'):
+                        html,status=render_main(proposed,role_state=prepared,roles_only=stage=='roles')
+                        yield dict(event=stage,html=html,**identity)
+                return calculation_stream(events)
             proposed,batch=table_proposal(state,json.loads(request.form.get('payload','')))
             replay(proposed)
             html,status=render_main(proposed)

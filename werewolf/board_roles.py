@@ -156,13 +156,32 @@ def prepare_evaluation(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max
     return ('prior',prepared)
 
 
+class PrivatePreparation:
+    """Request-local own conditioning, shared by role projection and evaluation."""
+    def __init__(self,view,branch,role,players,public):
+        self.view,self.branch,self.actor,self.role_board=view,branch,None,view.board
+        from .seer_future_uniform import FuturePending
+        if branch is None or isinstance(branch,FuturePending):return
+        from .root_secret_flow import root_actor_view
+        if role=='wolf':
+            mask=sum(1<<(p-1) for p in players)
+            compatible=lambda h:h.roles[0]==mask and all(a in h.attacks for a in view.attacks)
+        elif role=='seer':
+            compatible=lambda h:bool(h.roles[2]&(1<<(players[0]-1))) and all(a in h.acquisitions for a in view.acquisitions)
+        else:
+            compatible=lambda h:bool(h.roles[3]&(1<<(players[0]-1))) and all(g in h.guards for g in view.guards)
+        self.actor=root_actor_view(branch,compatible)
+        if not isinstance(self.actor,FuturePending):self.role_board=joint_view_board(public,self.actor.belief)
+    def __iter__(self):return iter((self.view,self.branch))
+
+
 @evidence_reconstruction()
 def prepare_private(public,role,players,results,rules,strategy,*,game_state=None,
                     max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
     from .private_view import condition_private
     view=condition_private(public,role,players,results,rules=rules)
     branch=prepare_joint(game_state or {},public,rules,strategy,max_work=max_work,max_seconds=max_seconds)
-    return view,branch
+    return PrivatePreparation(view,branch,role,players,public)
 
 
 def role_summary(progress):

@@ -83,12 +83,15 @@
     const detail=document.createElement('tr');detail.className='co-detail-row';detail.dataset.tableDetails=String(player);const spacer=document.createElement('td'),roleCell=document.createElement('td'),td=document.createElement('td');roleCell.dataset.tableRoleLabel='';roleCell.className='co-role-label';td.dataset.tableResults='';td.colSpan=row.cells.length-2;const host=document.createElement('div');host.className='co-line';td.append(host);detail.append(spacer,roleCell,td);row.after(detail);selectors.push({player,picker,host,row,detail});
   }
   const preview=async id=>{
-    controller=new AbortController();try{
-      const response=await fetch('/table-preview',{method:'POST',signal:controller.signal,body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,request_id:String(id),payload:JSON.stringify(draft.snapshot())})});const data=await response.json();
+    let receivedRoles=false;controller=new AbortController();try{
+      const response=await fetch('/table-preview',{method:'POST',headers:{Accept:'application/x-ndjson'},signal:controller.signal,body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,request_id:String(id),payload:JSON.stringify(draft.snapshot())})});const data=await window.readCalculationResponse(response,event=>{
+        if(!main.isConnected||id!==version||!draft.isDirty()||String(event.request_id)!==String(id)||event.revision!==seed.revision||event.board_id!==seed.board_id)return;
+        receivedRoles=true;apply(new DOMParser().parseFromString(event.html,'text/html'));status.textContent='役職率を表示・勝率を計算中';
+      });
       if(!main.isConnected||id!==version||!draft.isDirty())return;
       if(!response.ok)throw Error(data.error);if(String(data.request_id)!==String(id)||data.revision!==seed.revision||data.board_id!==seed.board_id)return;
       apply(new DOMParser().parseFromString(data.html,'text/html'));lastPreview=clone(draft.snapshot());status.textContent='プレビュー';
-    }catch(e){if(id===version&&e.name!=='AbortError'){const inconsistent=e.message.includes('全開示')||e.message.includes('整合する配役');showWaiting(inconsistent?'不整合':'入力待ち');status.textContent=`${inconsistent?'不整合':'プレビュー・入力待ち'}: ${e.message}`;}}
+    }catch(e){if(id===version&&e.name!=='AbortError'){const inconsistent=e.message.includes('全開示')||e.message.includes('整合する配役');if(!receivedRoles)showWaiting(inconsistent?'不整合':'入力待ち');else document.querySelectorAll('#information-panel .probability,[data-value-cell="dawn"],[data-value-cell="final"]').forEach(cell=>{cell.textContent='未計算';cell.removeAttribute('data-fraction');cell.removeAttribute('data-percent');});status.textContent=`${inconsistent?'不整合':'プレビュー・入力待ち'}: ${e.message}`;}}
   };
   if(seed.finished){render();window.boardTableDraft=draft;return;}
   let commitControls=null;
