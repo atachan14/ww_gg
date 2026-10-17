@@ -20,10 +20,10 @@ class PlayerMatchGroupTests(unittest.TestCase):
                 self.assertEqual(old['value'],value);self.assertEqual(new['value'],value)
                 self.assertEqual(old['table'],new['table']);self.assertTrue(new['stats']['active'])
                 if n==6:self.assertLess(new['stats']['actual_action_expansions'],old['stats']['actual_action_expansions'])
-    def test_seven_root_stays_fallback_without_completed_audit(self):
+    def test_seven_root_keeps_recursive_boundary_and_two_wolf_fallback(self):
         data,roles,b,s,past,rules,strategy,view=source(7,1)
         engine=make_engine(b,s,past,rules,strategy,enabled=True,view=view)
-        self.assertFalse(engine.grouping)
+        self.assertTrue(engine.grouping)
         self.assertFalse(engine.supported(b,None))
         data,roles,b,s,past,rules,strategy,view=source(7,2)
         self.assertFalse(make_engine(b,s,past,rules,strategy,enabled=True,view=view).grouping)

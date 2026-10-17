@@ -44,3 +44,19 @@ The temporary (7,1) gate completed uncompressed and grouped calculations with id
 However the independent all-member terminal audit exhausted the existing 20-second budget (19.9871s) and returned pending. It did not establish complete branch-by-branch terminal equivalence. The root eligibility change was therefore reverted before commit; seven-player roots remain fallback. No six-survivor or two-wolf expansion was attempted. This is a bounded audit-cost blocker, not an authorization denial or a mathematical counterexample. Preserve the proof requirement rather than silently raising budgets or claiming the heavy target works.
 
 Reproduction: measure_seven.py temporarily enables (7,1) in memory in each isolated child, never changes the runtime gate, and stops on the first pending result. Recorded raw results: seven-stage1-results.json. The successful boundary tests verify the retained fallback.
+
+## Finite audit follow-up
+
+The parent explicitly authorized up to 300 seconds for the missing audit. Inspection found the independent ungrouped oracle already retains its own value/action/acquisition caches across all batches. No member was skipped, no marginal-only shortcut was added, and no solver/cache algorithm was changed. The previous 20-second stop was an insufficient validation budget, not a structural impossibility.
+
+The first extended run completed 2,280 audited batches and 5,880 original continuations in 34.319s (439,869,440-byte peak working set). Its post-run saved-Table comparison failed in the harness because raw Fraction objects were compared directly with serialized fraction strings. The audit assertions themselves had completed. The corrected harness normalizes JSON before comparison and saves the result before asserting, so future failures retain evidence. This correction required one bounded verification repeat, rather than treating that serialization mismatch as a solver difference. Both runs retain ten-second progress records.
+
+The proof covers complete transported board, public and private joint state, physical board, history, role marginals, legal targets, exact incoming branch mass, every original member terminal value, and the weighted representative value. The previously saved uncompressed full Table is reused, avoiding a fresh baseline run.
+
+### Completed certificate and retained scope
+
+The corrected run completed in 34.614 seconds (34.630 seconds including source/monitor setup), 2,280 audited batches, 5,880 original continuations, 5,640 representatives, zero unproved branches. Peak working set: 440,061,952 bytes. Independent oracle: 20,160 solve calls, 42,240 uncached action expansions, 13,682 cached values. The audit's own caches are independent of the compressed solver. All transport and terminal assertions passed.
+
+The repeat retained a second serialization issue: dataclass Values/HorizonValues were stringified instead of asdict. Because the complete result had already been saved, these exact repr strings were decoded using a whitelist AST (only Values, HorizonValues and integer Fraction calls), and every Table field plus final value matched the stored baseline. No third solve was performed. Future runs use the original benchmark's dataclass-aware serializer. This was solely a record-format correction; no numeric tolerance or changed expected result was used.
+
+The (7,1) root gate is now retained as explicit opt-in, while recursive survivors remain <=5. Seven/two-wolf, medium, competing CO, initial-result histories, nonuniform conditioned joint laws, max policies, personal scopes and hunter/GJ remain fallback. The actual heavy target is still unsupported by this optimization. Default remains OFF.

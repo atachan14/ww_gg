@@ -1,0 +1,206 @@
+[
+  {
+    "stage": "running",
+    "seconds": 10.020549000008032,
+    "memory": {
+      "peak_working_set_bytes": 160858112,
+      "peak_process_commit_bytes": 152547328,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 1.2375901996565517,
+      "unproved_branches": 0,
+      "raw_continuations": 1916,
+      "representative_continuations": 1836,
+      "solve_calls": 2900,
+      "act_calls": 8243,
+      "uncached_act_calls": 8243,
+      "generated_publication_branches": 2160,
+      "generated_acquisition_rows": 1836,
+      "generated_acquisition_states": 571,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      ]
+    },
+    "audited_batches": 741,
+    "oracle_stats": {
+      "proof_seconds": 0.0,
+      "unproved_branches": 0,
+      "raw_continuations": 0,
+      "representative_continuations": 0,
+      "solve_calls": 6580,
+      "act_calls": 13802,
+      "uncached_act_calls": 13801,
+      "generated_publication_branches": 3174,
+      "generated_acquisition_rows": 2889,
+      "generated_acquisition_states": 986
+    },
+    "oracle_values": 4471,
+    "oracle_actions": 13801
+  },
+  {
+    "stage": "running",
+    "seconds": 21.151495199999772,
+    "memory": {
+      "peak_working_set_bytes": 283217920,
+      "peak_process_commit_bytes": 275673088,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 2.369067798514152,
+      "unproved_branches": 0,
+      "raw_continuations": 3611,
+      "representative_continuations": 3463,
+      "solve_calls": 5475,
+      "act_calls": 15558,
+      "uncached_act_calls": 15558,
+      "generated_publication_branches": 4193,
+      "generated_acquisition_rows": 3560,
+      "generated_acquisition_states": 1092,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      ]
+    },
+    "audited_batches": 1399,
+    "oracle_stats": {
+      "proof_seconds": 0.0,
+      "unproved_branches": 0,
+      "raw_continuations": 0,
+      "representative_continuations": 0,
+      "solve_calls": 12417,
+      "act_calls": 26048,
+      "uncached_act_calls": 26048,
+      "generated_publication_branches": 6188,
+      "generated_acquisition_rows": 5592,
+      "generated_acquisition_states": 1884
+    },
+    "oracle_values": 8438,
+    "oracle_actions": 26048
+  },
+  {
+    "stage": "running",
+    "seconds": 31.265964699996402,
+    "memory": {
+      "peak_working_set_bytes": 400740352,
+      "peak_process_commit_bytes": 393568256,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 3.043140298483195,
+      "unproved_branches": 0,
+      "raw_continuations": 5251,
+      "representative_continuations": 5035,
+      "solve_calls": 7963,
+      "act_calls": 22635,
+      "uncached_act_calls": 22635,
+      "generated_publication_branches": 6037,
+      "generated_acquisition_rows": 5162,
+      "generated_acquisition_states": 1584,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      ]
+    },
+    "audited_batches": 2035,
+    "oracle_stats": {
+      "proof_seconds": 0.0,
+      "unproved_branches": 0,
+      "raw_continuations": 0,
+      "representative_continuations": 0,
+      "solve_calls": 18103,
+      "act_calls": 38016,
+      "uncached_act_calls": 38016,
+      "generated_publication_branches": 8948,
+      "generated_acquisition_rows": 8166,
+      "generated_acquisition_states": 2748
+    },
+    "oracle_values": 12314,
+    "oracle_actions": 38016
+  },
+  {
+    "stage": "complete",
+    "seconds": 34.62980689998949,
+    "memory": {
+      "peak_working_set_bytes": 440061952,
+      "peak_process_commit_bytes": 433512448,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 3.3031419986800756,
+      "unproved_branches": 0,
+      "raw_continuations": 5880,
+      "representative_continuations": 5640,
+      "solve_calls": 8918,
+      "act_calls": 25364,
+      "uncached_act_calls": 25357,
+      "generated_publication_branches": 6546,
+      "generated_acquisition_rows": 5592,
+      "generated_acquisition_states": 1753,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ]
+      ]
+    },
+    "audited_batches": 2280,
+    "oracle_stats": {
+      "proof_seconds": 0.0,
+      "unproved_branches": 0,
+      "raw_continuations": 0,
+      "representative_continuations": 0,
+      "solve_calls": 20160,
+      "act_calls": 42240,
+      "uncached_act_calls": 42240,
+      "generated_publication_branches": 9600,
+      "generated_acquisition_rows": 8760,
+      "generated_acquisition_states": 3000
+    },
+    "oracle_values": 13682,
+    "oracle_actions": 42240
+  }
+]

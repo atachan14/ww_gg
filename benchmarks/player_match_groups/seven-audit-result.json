@@ -1,0 +1,287 @@
+{
+  "complete": true,
+  "players": 7,
+  "wolves": 1,
+  "enabled": true,
+  "audit": true,
+  "seconds": 34.61390319999191,
+  "value": "19/35",
+  "table": [
+    {
+      "medium_probability": "0",
+      "citizen_probability": "0",
+      "extra_probabilities": {
+        "seer": "1",
+        "hunter": "0"
+      },
+      "claim": "seer",
+      "legal": true,
+      "id": 1,
+      "name": "Player 1",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "0",
+      "village_probability": "1",
+      "action": {
+        "village_win": "7/15",
+        "wolf_win": "8/15"
+      },
+      "by_dawn": {
+        "village_win": "0",
+        "wolf_win": "0"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "5/6",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 2,
+      "name": "Player 2",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "1/6",
+      "village_probability": "5/6",
+      "action": {
+        "village_win": "5/9",
+        "wolf_win": "4/9"
+      },
+      "by_dawn": {
+        "village_win": "1/6",
+        "wolf_win": "0"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "5/6",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 3,
+      "name": "Player 3",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "1/6",
+      "village_probability": "5/6",
+      "action": {
+        "village_win": "5/9",
+        "wolf_win": "4/9"
+      },
+      "by_dawn": {
+        "village_win": "1/6",
+        "wolf_win": "0"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "5/6",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 4,
+      "name": "Player 4",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "1/6",
+      "village_probability": "5/6",
+      "action": {
+        "village_win": "5/9",
+        "wolf_win": "4/9"
+      },
+      "by_dawn": {
+        "village_win": "1/6",
+        "wolf_win": "0"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "5/6",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 5,
+      "name": "Player 5",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "1/6",
+      "village_probability": "5/6",
+      "action": {
+        "village_win": "5/9",
+        "wolf_win": "4/9"
+      },
+      "by_dawn": {
+        "village_win": "1/6",
+        "wolf_win": "0"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "5/6",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 6,
+      "name": "Player 6",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "1/6",
+      "village_probability": "5/6",
+      "action": {
+        "village_win": "5/9",
+        "wolf_win": "4/9"
+      },
+      "by_dawn": {
+        "village_win": "1/6",
+        "wolf_win": "0"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "5/6",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 7,
+      "name": "Player 7",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "1/6",
+      "village_probability": "5/6",
+      "action": {
+        "village_win": "5/9",
+        "wolf_win": "4/9"
+      },
+      "by_dawn": {
+        "village_win": "1/6",
+        "wolf_win": "0"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    }
+  ],
+  "stats": {
+    "proof_seconds": 3.3031419986800756,
+    "unproved_branches": 0,
+    "raw_continuations": 5880,
+    "representative_continuations": 5640,
+    "solve_calls": 8918,
+    "act_calls": 25364,
+    "uncached_act_calls": 25357,
+    "generated_publication_branches": 6546,
+    "generated_acquisition_rows": 5592,
+    "generated_acquisition_states": 1753,
+    "requested": true,
+    "active": true,
+    "root_candidates": [
+      [
+        1
+      ],
+      [
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    ],
+    "actual_action_expansions": 25357,
+    "actual_value_expansions": 8171,
+    "audited_batches": 2280
+  },
+  "memory": {
+    "peak_working_set_bytes": 440025088,
+    "peak_process_commit_bytes": 433512448,
+    "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+  },
+  "budget_stop": null,
+  "saved_uncompressed_full_table_equal": true,
+  "record_normalization": "Exact saved dataclass repr decoded with whitelist AST (Values/HorizonValues/Fraction integers); no solver repeat."
+}
