@@ -90,7 +90,8 @@ class RoleState:
                        for o in self.progress.last_outcomes),Fraction())
             return Forecast(value,())
         validate_budget(max_work,max_seconds)
-        key=('public',self.owner.inputs,max_work,max_seconds)
+        from .local_reuse import enabled
+        key=('public',self.owner.inputs,max_work,max_seconds,enabled())
         from .calculation_budget import CalculationBudgetExceeded
         try:hit,value=self.owner.runtime.get(key)
         except CalculationBudgetExceeded:

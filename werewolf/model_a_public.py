@@ -76,7 +76,9 @@ def public_forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,
             if match_groups or diagnostics is not None:
                 from .match_groups import make_engine
                 engine=make_engine(board,state,past,rules,strategy,enabled=match_groups,view=match_view,audit=match_audit,max_work=max_work)
-            else:engine=InformationSetForecast(rules,strategy,max_work=max_work)
+            else:
+                from .local_reuse import make_public_engine
+                engine=make_public_engine(InformationSetForecast,board,state,past,rules,strategy,max_work=max_work)
             if engine.exchangeable(board):
                 from .exchangeable_public import exchangeable_forecast
                 return exchangeable_forecast(board,strategy)
@@ -94,9 +96,11 @@ def public_forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,
 
 
 @lru_cache(maxsize=16)
-def _complete_public_snapshot(history_key,board,rules,strategy,max_work,max_seconds):
-    result=_evaluate_public_game(json.loads(history_key),board,rules,strategy,
-                                 max_work=max_work,max_seconds=max_seconds)
+def _complete_public_snapshot(history_key,board,rules,strategy,max_work,max_seconds,local_mode=False):
+    from .local_reuse import reuse_scope
+    with reuse_scope(local_mode):
+        result=_evaluate_public_game(json.loads(history_key),board,rules,strategy,
+                                     max_work=max_work,max_seconds=max_seconds)
     if isinstance(result,FuturePending):raise Pending(result.reason)
     return result
 
@@ -106,8 +110,9 @@ def public_cache_info():return _complete_public_snapshot.cache_info()
 
 
 def evaluate_public_game(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+    from .local_reuse import enabled
     try:
-        return _complete_public_snapshot(public_history_key(game),board,rules,strategy,max_work,max_seconds)
+        return _complete_public_snapshot(public_history_key(game),board,rules,strategy,max_work,max_seconds,enabled())
     except Pending as error:return FuturePending(error.reason)
 
 

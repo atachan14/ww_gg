@@ -31,13 +31,13 @@ class PrimitiveCheckpointTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'primitive plan changed'):
                 primitive.selected_worker(Path('unused'),{'root':1,'bite':3,'index':0,'signature':'expected','weight':'1'},'oracle',Path('unused'),1,1500000000,base.engine_version(),primitive.adapter_version())
 
-    def test_committed_input_and_partial_results_restore_without_recomputation(self):
+    def test_old_committed_results_are_rejected_after_routing_fingerprint_changes(self):
+        # Local dispatch is now part of the engine fingerprint. Preserve the
+        # frozen old evidence, but never silently rebind it to this engine.
         with tempfile.TemporaryDirectory(prefix='ww-primitive-provenance-')as folder:
             with patch.object(base,'CACHE',Path(folder)):
                 path,game,plans,items=primitive.context(7,2)
-                parts,imports=primitive.import_legacy(7,2,game,plans,items,base.engine_version(),primitive.adapter_version())
-                self.assertEqual(imports['complete_unit_pairs'],14)
-                self.assertEqual(imports['verified_prefix_terms'],3)
-                self.assertEqual((len(parts['oracle']),len(parts['audit'])),(86,83))
+                with self.assertRaisesRegex(ValueError,'Legacy engine/input mismatch'):
+                    primitive.import_legacy(7,2,game,plans,items,base.engine_version(),primitive.adapter_version())
                 with self.assertRaisesRegex(ValueError,'Legacy engine/input mismatch'):
                     primitive.import_legacy(7,2,game,plans,items,'changed-core',primitive.adapter_version())

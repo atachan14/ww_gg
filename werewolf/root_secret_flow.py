@@ -170,7 +170,7 @@ class RootSecretEngine(InformationSetForecast):
             source=(b,s,past,private,observer,target,physical,self.candidate_profiles,self.verifying_actor_mask)
             if source not in self.exact_keys:
                 from .exact_renaming import canonical_key
-                self.exact_keys[source]=canonical_key(b,s,past,private,observer,self.rules,self.strategy,
+                self.exact_keys[source]=self.canonical_payoff_key(b,s,past,private,observer,self.rules,self.strategy,
                     target=target,physical=physical,wolf_profiles=self.candidate_contexts,
                     actor_mask=self.verifying_actor_mask)
             complete=self.exact_keys[source]
@@ -622,7 +622,8 @@ def root_branch_forecast(branch,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_s
     if reason:return FuturePending(reason)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
-            e=RootSecretEngine(rules,strategy,max_work=max_work)
+            from .local_reuse import make_root_engine
+            e=make_root_engine(RootSecretEngine,branch.public,rules,strategy,max_work=max_work)
             b=branch.public;s=branch.public_law;past=branch.past;own=branch.physical_law
             value=e.solve(b,s,past,own,None,physical=branch.physical)
             from .belief_projection import project_private

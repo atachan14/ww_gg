@@ -42,7 +42,7 @@ def create_app(test_config=None, *, deployment=False):
             raise RuntimeError("WW_GG_SECRET_KEY must be a 64-character hexadecimal key")
     else:
         key = (test_config or {}).get("SECRET_KEY") or secrets.token_bytes(32)
-    app.config.update(SECRET_KEY=key, MAX_CONTENT_LENGTH=4096,
+    app.config.update(SECRET_KEY=key, EXACT_FUTURE_REUSE_PREVIEW=False, MAX_CONTENT_LENGTH=4096,
                       MAX_FORM_PARTS=100, MAX_FORM_MEMORY_SIZE=4096,
                       SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
                       SESSION_COOKIE_SECURE=hosted, MAX_COOKIE_SIZE=4093)
@@ -50,6 +50,9 @@ def create_app(test_config=None, *, deployment=False):
         app.config.update(test_config)
     if hosted:
         app.config.update(SECRET_KEY=key, SESSION_COOKIE_SECURE=True)
+    if hosted and app.config.get('EXACT_FUTURE_REUSE_PREVIEW'):
+        raise ValueError('Exact future reuse is a local-only experiment')
+
     app.jinja_env.filters["percent"] = percent
     app.jinja_env.filters["fraction"] = str
     app.jinja_env.globals.update(role_labels=ROLE_LABELS, role_order=ROLES)
@@ -325,9 +328,10 @@ def create_app(test_config=None, *, deployment=False):
         def note(event,**fields):
             if trace is not None:trace.emit(event,**fields)
         def generate():
+            from werewolf.local_reuse import reuse_scope
             reset_diagnostics()
             acquired=False;cancelled=False;stop_kind=None;completed=False
-            with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+            with reuse_scope(bool(app.config.get('EXACT_FUTURE_REUSE_PREVIEW',False))), calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                     max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS)):
                 try:
                     note('stream_wait')
@@ -1021,8 +1025,9 @@ if __name__ == "__main__":
     parser.add_argument("--hybrid-table-preview", action="store_true", help="Enable unpublished table draft preview locally")
     parser.add_argument("--dawn-board", action="store_true", help="Preview public dawn Boards")
     parser.add_argument("--seer-future-uniform", action="store_true", help="Enable unpublished fixed-policy seer forecast locally")
+    parser.add_argument("--exact-future-reuse", action="store_true", help="Enable local experimental exact future computation sharing")
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("Choose a port between 1024 and 65535")
-    create_app({"DAWN_BOARD_PREVIEW":args.dawn_board,"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview,"SEER_UNIFORM_FUTURE_PREVIEW":args.seer_future_uniform}).run(host="127.0.0.1", port=args.port, debug=False,
+    create_app({"DAWN_BOARD_PREVIEW":args.dawn_board,"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview,"SEER_UNIFORM_FUTURE_PREVIEW":args.seer_future_uniform,"EXACT_FUTURE_REUSE_PREVIEW":args.exact_future_reuse}).run(host="127.0.0.1", port=args.port, debug=False,
                      use_reloader=False, load_dotenv=False)

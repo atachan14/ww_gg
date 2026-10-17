@@ -147,6 +147,10 @@ class InformationSetForecast:
                                                           position=self.strategy.seer_position))
         return self.acquired[key]
 
+    def canonical_payoff_key(self,*args,**kwargs):
+        from .exact_renaming import canonical_key
+        return canonical_key(*args,**kwargs)
+
     def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
         if not self.exact_renaming or not self.memoize_flows or not b.initial_hunter_count:return None
         source=(self.rules,self.strategy,b,s,past,private,observer,target,physical)
@@ -154,7 +158,7 @@ class InformationSetForecast:
         if source in self.exact_keys:
             stats['key_hits']+=1;return self.exact_keys[source]
         from .exact_renaming import canonical_key
-        key=canonical_key(b,s,past,private,observer,self.rules,self.strategy,target=target,physical=physical)
+        key=self.canonical_payoff_key(b,s,past,private,observer,self.rules,self.strategy,target=target,physical=physical)
         if key is not None:stats['supported']+=1
         self.exact_keys[source]=key
         return key

@@ -1,0 +1,45 @@
+{
+  "result": "FuturePending(reason='seer_view_scan_outside_public_support')",
+  "baseline_commit": "8f7455d",
+  "observer_and_acquisition_sources_equal": true,
+  "numerical_evaluate_and_acquire_ast_equal": true,
+  "source_sha256": {
+    "werewolf/seer_view_forecast.py": "c8c6e7ad42b285b1f9674b1b51d0f1cad6f64c05d1619bc2a80acb32ec6913b6",
+    "werewolf/night_acquisition.py": "97a0f5a6ab5ce522557464443c39d5c59a7bcc9d45ab62317062351e174838fd"
+  },
+  "events": [
+    {
+      "reason": "seer_view_scan_outside_public_support",
+      "day": 1,
+      "phase": "night",
+      "alive": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "rosters": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "hypotheses": 1,
+      "observer_kept": 0,
+      "viewer_alive": false,
+      "scan_days": [
+        1
+      ]
+    }
+  ],
+  "interpretation": "Viewer dies before next acquisition, but observer still requires a next-day scan. No behavior correction applied; definition of an unexecuted intervention needs a decision."
+}

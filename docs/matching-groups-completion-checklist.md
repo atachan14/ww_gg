@@ -25,3 +25,9 @@ Retirement-proof milestone: solver-only retention of the actual observed public 
 
 
 Extended scope is local and guarded: medium/random, no-medium/max and combined medium/max have independent OFF switches. Five/six-player complete original comparisons and labelled actor-vector/tie tests cover these examples. Corrections/withdrawal/death/back and public/private/public controls match; root-replay and personal observers deliberately fall back. Hunters remain on the existing path, not newly supported. General arbitrary history coverage, fresh max vector transport, root-route integration and normal app wiring are still open; the actual seven-player milestone is not completion of the whole checklist. See player-match-extensions.md.
+
+
+Local pilot: explicit --exact-future-reuse can now connect only checked initial same-white scopes to ordinary rendering; default OFF, hosted rejection, mode-separated caches and legacy fallback are tested. Actual seven-player roles-first UI matches all prior rows, and isolated Edge verifies live draft edits and cold-browser reproduction. Root/one-hunter <=6 adds only exact existing-key construction acceleration with complete actor profiles and histories. Root/private/general group compression is still open. Existing own-seer Pending after the owner dies before acquisition needs an explicit intervention-semantics decision; no behavior change has been applied. Details: docs/local-reuse-ui.md.
+
+
+The personal-view decision is now concrete: fixed-CO rejects the dead-before-acquisition branch, while existing root explicitly does not force an unavailable actor/target scan. A review-only alignment copy changes the small max examples from Pending to value1. It is not selected by the app. Confirming that shared interpretation is the next step for personal completion; root/hunter construction and UI pilot work remain independently validated.

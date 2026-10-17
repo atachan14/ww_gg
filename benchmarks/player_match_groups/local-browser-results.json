@@ -1,0 +1,12 @@
+{
+  "isolatedHeadlessEdge": true,
+  "initialAllNumericCellsMatch": true,
+  "coldBrowserSameCookieMatches": true,
+  "editedRolesBeforeContinuation": true,
+  "staleActionCellsCleared": true,
+  "editedAllNumericCellsMatchRenamedReference": true,
+  "previewDidNotPublish": true,
+  "terminal": "17/36",
+  "seconds": 39.871,
+  "errors": []
+}
