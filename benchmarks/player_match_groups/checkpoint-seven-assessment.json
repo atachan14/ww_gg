@@ -1,0 +1,6444 @@
+{
+  "identity": "2b40cf9e423c2680c229613fcec6e0baa27d492cc4c9a7c94b3095faccc5ba18",
+  "engine": "052651c37b736787a4dcaa9f365c599299d1a9a1b9a247718ae38326b5ada153",
+  "input": "11b0c8f8b34324feeb3c7343a52e86e5f10b75c3c06d90922cd8ef6b0a04491d",
+  "cache_directory": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\.artifacts\\player-match-checkpoints\\2b40cf9e423c2680c229613fcec6e0baa27d492cc4c9a7c94b3095faccc5ba18",
+  "limits": {
+    "total_seconds": 600.0,
+    "chunk_seconds": 120,
+    "memory_bytes": 1500000000
+  },
+  "consumed_seconds": 600.1426496000204,
+  "complete": false,
+  "planned_units": 42,
+  "complete_oracle_units": 15,
+  "complete_audit_units": 14,
+  "verified_units": [
+    "1:2",
+    "1:3",
+    "1:4",
+    "1:5",
+    "1:6",
+    "1:7",
+    "2:1",
+    "2:3",
+    "2:4",
+    "2:5",
+    "2:6",
+    "2:7",
+    "3:1",
+    "3:2"
+  ],
+  "verified_targets": [
+    1,
+    2
+  ],
+  "root_parts": {
+    "oracle": {
+      "1": {
+        "status": "complete",
+        "action": "3/10",
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 1
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 1
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "2": {
+        "status": "complete",
+        "action": "3/10",
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 2
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 2
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "3": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": 2,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 3
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": 2,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 3
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "4": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 4
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 4
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "5": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 5
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 5
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "6": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 6
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 6
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "7": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 7
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 7
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      }
+    },
+    "audit": {
+      "1": {
+        "status": "complete",
+        "action": "3/10",
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 1
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 1
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "2": {
+        "status": "complete",
+        "action": "3/10",
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 2
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                3,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 2
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "3": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": 2,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 3
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                4,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": 2,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 3
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "4": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 4
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                5,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 4
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "5": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 5
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                6,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 5
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "6": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 6
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                7
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 6
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      },
+      "7": {
+        "status": "pending",
+        "action": null,
+        "dawn": {
+          "village_win": "0",
+          "wolf_win": "0"
+        },
+        "root_branches": [
+          {
+            "probability": "1",
+            "board": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 7
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            },
+            "context": {
+              "player_count": 7,
+              "alive": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "wolf_count": null,
+              "day": 1,
+              "phase": "night",
+              "history": [
+                {
+                  "day": 1,
+                  "phase": "day",
+                  "target": 7
+                }
+              ],
+              "belief": [
+                [
+                  9,
+                  "1/8"
+                ],
+                [
+                  10,
+                  "1/8"
+                ],
+                [
+                  17,
+                  "1/8"
+                ],
+                [
+                  18,
+                  "1/8"
+                ],
+                [
+                  33,
+                  "1/8"
+                ],
+                [
+                  34,
+                  "1/8"
+                ],
+                [
+                  65,
+                  "1/8"
+                ],
+                [
+                  66,
+                  "1/8"
+                ]
+              ],
+              "initial_medium_count": 0,
+              "claims": [
+                "seer",
+                "seer",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "role_belief": [
+                [
+                  9,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "initial_seer_count": 1,
+              "initial_hunter_count": 0,
+              "world_belief": [
+                [
+                  9,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  10,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  17,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  18,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  33,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  34,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ],
+                [
+                  65,
+                  0,
+                  2,
+                  0,
+                  "1/8"
+                ],
+                [
+                  66,
+                  0,
+                  1,
+                  0,
+                  "1/8"
+                ]
+              ],
+              "medium_opportunities": [],
+              "reports": [],
+              "report_resolved": [],
+              "guard_prior_roster": null
+            }
+          }
+        ]
+      }
+    }
+  },
+  "oracle": {
+    "status": "pending",
+    "completed_targets": [
+      1,
+      2
+    ],
+    "missing_targets": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "value": null,
+    "table": null
+  },
+  "audit": {
+    "status": "pending",
+    "completed_targets": [
+      1,
+      2
+    ],
+    "missing_targets": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "value": null,
+    "table": null
+  },
+  "peak_worker_bytes": 613826560,
+  "max_chunk_wall_seconds": 120.12400180002442,
+  "records": [
+    {
+      "unit": "1:2",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 0.18878130000666715,
+      "weighted_contribution": "7/150",
+      "completed_terms": [
+        {
+          "signature": "ac05ca2b39eb95477fa618efaf63331733125c6beceaae9d8df6b3fe17c0f548",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "ea3e7380e0d0d871eb60c5d7be2c6acfabe56dae8ccc0477ccb69e493e87c105",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "c69fe1d3f1692e7b20bedda02aaa5024aeb4ac281ca6b9361af0fcebe1d40e0b",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "1ae058e55cffdc3c7a7323edb899a23138022721fa62104bf75b1f30d885550d",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 28266496,
+        "peak_process_commit_bytes": 19718144,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "d3812a4fce69650703f25b58d35eebc44afaf505cbde1596e540173bebff3147"
+    },
+    {
+      "unit": "1:3",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 12.030437499983236,
+      "weighted_contribution": "19/300",
+      "completed_terms": [
+        {
+          "signature": "88ce7871512d7de4c11575f1a9ab15af9ad0911558ca5c975c6a272782ca04de",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "55f2cca697b5761c9d09cfb5062e2e16f9b85599465dc9f65c230ae15fa1d730",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "1f33e8c2b920ff82c96c5c019be3a15464744c3528ce002287f7292cefdf779a",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "76290c56efd4ed8de689204f431823a289c7a0dd049f1f0a20e6c9bed81a6733",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "3baf0c068ddac2495591ca65b239e7bff4091fd31f12b3415e4f1e4f4bb8b7ea",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "b0e726fec1a88c99856ff7270826cb9e8ca432a3fe53ff94a81e7663d42204da",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "8fd6b9543d580de281cf64715d386ca9df644f68abcc1376a35aaf4830881fc8",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "98a560788b6cb4c473b13a56b93d38a5f54add26a37211656773ad1be483ff67",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 244482048,
+        "peak_process_commit_bytes": 236519424,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "3948e4c7b4890c1e4a36399154a8919e0e02ecd13ce77a1e585fc2a55d93714d"
+    },
+    {
+      "unit": "1:4",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 9.563205300015397,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "45469a453da03adef81903e4356c0db31346a2caad3d1cffbb085635dadbe805",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "7ba34bd78c32e4b29c719c96c1d697b0eaa1905d909f78a37f3eec34aee3a05c",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "fd95acf96985841fef8fb13f439443cfead39463822b757ef5706eedf4879457",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "1cf8fe578a00586b022bc644c3a866112c7db74cbe0ccb34676db7ae14eaf953",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "845bdb0b3add9d5ec007994c2f6719f2d52546625bc9916e63b5cc5344779211",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "ac008fee3ffafd66193f9560f7a0608ef741ad0d05ea0d0f0945c152c2ccdbef",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 194637824,
+        "peak_process_commit_bytes": 186982400,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "7d99e9949c377ba20fdbf35dbe4bd08b0a935b85ffcd4e358828481a5183618c"
+    },
+    {
+      "unit": "1:5",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 9.480024699994829,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "219691681c675dfe8e8f7d4d193afb560c05d1915f240f86aa97a45dd0426183",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "53d4a84df31f8048476eacc808303acda8dbf2308a81b8b4cd2dc3edde4824e6",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "5010bb1525568edb6555109dc1c76bb81a9d43e4342d806455de9a639c3151ad",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "1154f76b16aae587f50b07cb05a530991b27007ddaeb6bdfe146454a5be5da5a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "6d60a5105203b884a4191a90e25807f8037dd3042d10dfb2444381398dc28a03",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "2d37c942eba4fe14b4737c7dd4b44840ae4a2985866912e204b6181593551652",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 194904064,
+        "peak_process_commit_bytes": 187383808,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "c0089bc8b3c422913cfed1557b2d1865a9bc9a1b5c8026d735d137f1659ce99d"
+    },
+    {
+      "unit": "1:6",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 9.760227799997665,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "f5f45e64b3526e1d9cb8197a58bfd829707ac67e9b9790ffba94491c9afbbb7e",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "89f5ff3eadc51c2279ced53fb4c9e3ce8f173bd275b03dfe315010aa003d92d7",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "3a777a10f0e0bd86c3301c46e00f2f390eee6e24284d93ecc9ab95f6a553a620",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "6aef7b48f8179d8887fcd552cae35d50dd3f28a8f7a76089a3f53548171ffbb3",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "fad7518197bbcd36ee6e39cbb99a42a02a13273b225068ab7c145b6674330caf",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "17a1690b15828c374541a0ebb13e9d8286b10deb83db1ff02a924769fac3d7c2",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 194842624,
+        "peak_process_commit_bytes": 187248640,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "7589a897fa68bed679aac0805a043ac928216de76b2177d1823bd8570a18619c"
+    },
+    {
+      "unit": "1:7",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 9.55146709998371,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "3985648c787b1a5793cac029e90cb3e01a97557eee2f97d47e103f51a9028433",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "9cb9ae608b4c29ee91067633319f7fb3a64d46d34d2f1e49f16a5101084c5e0e",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "5531bcaf1850d42e01a570a881bd4872cc453bdd556322d1031333a9c871a937",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "5bf7b4aef6af280f22fbe9cda1b63fe45b8164ad7260df341fed5d68a7d4cc27",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "4abc4b8bfc8a5ecdd2ef241959bdb86aff4c787c2417018b002e796ee85f69dc",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "796371e194c2f70790d104c03f05e2bbbd1159439c7a2abe5d537714e4b94bfa",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 194572288,
+        "peak_process_commit_bytes": 187154432,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "b8be23c322fe29d3c1e436c95eb699373b645e8954385437835bced0b463175e"
+    },
+    {
+      "unit": "2:1",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 0.2261704000120517,
+      "weighted_contribution": "7/150",
+      "completed_terms": [
+        {
+          "signature": "b239e2706a6e63fd446d69b41368e6187306bd9e29a8026f643270c149757706",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "352e3d2348cf8f6e18d12b32973de392cc3599e62716367bc57d009dc5aea3b0",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "62e927c734180e72084e599f8c0efb926ac7833f9075e2bda3cc85a51fbdcc0f",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "2cb255441f784956d05c97d36ae86e1f577c13b53ce924e2cd4dec1f0523c875",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 28028928,
+        "peak_process_commit_bytes": 19468288,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "1d8347ad7e05ebb66904f8f1967a69424cd9d690f09b226bed3e699fc2702b0f"
+    },
+    {
+      "unit": "2:3",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 12.94817749998765,
+      "weighted_contribution": "19/300",
+      "completed_terms": [
+        {
+          "signature": "6322afcfca5888c9b334120ffafca9592161ea93eeef3cf5bc1bd2e24b434bcc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "cc20616a9f3ef61bd41c660361eff7f15fb1cede8e7e0cac75fd6e2eaf9ea299",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "265378425f84715b2f081cd900a202ca52f5506ebe334028f9d506518622c36f",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "2fef657e4a3514b1dd6ee9332c583ad399ee152460997e643871007a59fa99aa",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "fd3a1f21bf0a268cfa3286f2a130ef3c91368522fe085b03bc9f72c54e94a63a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "a3becc1c0cbd57b91b1d690757b666e96bf5bb875e6a02e9a1bd78784e5983f4",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "d4680a8fe79ab4aa26c982e3c9097b75f9b1d1907b89fbbaa258a93c563c757e",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "d2554f81836733b73e9d87aec42148e16aee19ba90165faac7c2308846aab30a",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 244408320,
+        "peak_process_commit_bytes": 236486656,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "156dad268fd9d3d578ea424ea954aec7801d8c01b956e61a4cf3279162fbe02e"
+    },
+    {
+      "unit": "2:4",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 20.788480999995954,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "eb688e15161c342c1b468d2b71f545694ab9137ab2ac6570ee48cb0acc6a8c1b",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "09eea0c13e4f6c14e0bbaa05a423cf9602a3290ce7f6653ffcc02c830f77709b",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "13e3d397ef935dd7d71d9ffe9355b07d19a48bc0affad457298e4d68745902bd",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "6ec89adaa3773aa0f5662d5303c478639687a650822f22c991a830fb8a0baca9",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "ad1c04b33eecf6558b4bf261ee45e5ae8587c46b5d29111bf42c0c6d4a9843dc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "369d92d83a458942ed0309a17440e736da4fdcd8459ef726c0debf788aa9c583",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 193900544,
+        "peak_process_commit_bytes": 185933824,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "5d8f8fde816d48efdd5aeb8cde61e231f12a83da20ef7c5fe5e155b12265258f"
+    },
+    {
+      "unit": "2:5",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 10.090651000005892,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "f30d34aca314d76a9b6660d539ec9a80aa7b2f49a66d8c8cbea35bfba83694b1",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "2f02c768e0252a8e89865c5d0f1c22b1252232a32fd5857dbffbba3ddd17b9e3",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "5fd2df73f2371a78bcebd30df261874bd68dffc943ede8c27845abaf3eee0982",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "32b684b360268413bbf7dacb1858044a18b05da9410f69b7e23e78484b1a1190",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "5d49ea264b980b61ca67a414736edb2f890f1679d86c32a0355287bdc36cb508",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "52795a774f6c2b134ac0d006b773299214d3ead0920a685fe1230f0895f950b4",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 193310720,
+        "peak_process_commit_bytes": 185544704,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "06bf40a007b5d6d9e11a578689ffd8a8ac75fa0089566241d7d1ee818d8de355"
+    },
+    {
+      "unit": "2:6",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 9.59738130000187,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "e83c329b5630cd3a22022039d1e3820918c1d072a811a41b43e375f60ae914ca",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "7af3850159c751b36f3c577f5e1df5a414f513625a3cc4490fa7d3f477356b87",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "e4309b333e7181e1afc0c93fb02b4640d75a135d273652b9842781a07dd793e8",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "14cc3818eb92f2939eb98e463aa90c9f71fccac0b35b7242e9e1c4a9f29102a6",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "6793c614ee3b13b848951552ffb09533282eaa2e07890f9e48e303a70766f757",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "63e07a3b636683e3703a06ce00b6d593c7bf2a19f1516f9c8c3d2de1f1ce8331",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 193572864,
+        "peak_process_commit_bytes": 185692160,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "1b629f846c8d1454c999a50d2c70054f1e10f69a34eadad6f9292609237a2998"
+    },
+    {
+      "unit": "2:7",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 9.574530100013362,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "3a1bb86fd2bbb893f008c5b4eb5e97137f1b6cc6e04a74238a50eca1060a3304",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "bd3aca8bf08c36346de043bec84a81cee7c843acd76f9357392539c44cc7498e",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "0eacc2621b2eb4ca9fd0a775ea5afcfb532957501ba8d73c7987a0ffbe783ffc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "bbd22ea292c8bb332c83761e60c5159eddd5d0110086c350c92669149b2e1951",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "4e819d3a11e5500ce6b18577635f6adfb1a5b7e7591651ee6357826372159996",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "126ebbb7e0b47bef45b16b7be9acf083c6014b0a65818caedf4e17e0b272e799",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 193761280,
+        "peak_process_commit_bytes": 186195968,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "1280706aefbd9e17632facd9ea912f25a11ee32ea9d173334c21ec0f344b05f9"
+    },
+    {
+      "unit": "3:1",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 2.694759100006195,
+      "weighted_contribution": "1/60",
+      "completed_terms": [
+        {
+          "signature": "611a3af078bab348818f7850f90bc7934880b03886ecc81e3e963ffa8b3c8e99",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "f93a10290d465abc85f27df1818ca62efb0ad83e5167bca1e844e8607c77118a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "4d08ca9f9e828a7c0fad789c18e30aaa4100e6dc2225808f4a5012bb98c3c61a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "ccaff5c143bf80fc95485339183c8b884a131e045ebcfdcafbc4577f6ea92464",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 71421952,
+        "peak_process_commit_bytes": 63262720,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "da3c452d6f4459cbb62ac3ea9cbea770bf76f1af632a24fcca125aac5a64d51f"
+    },
+    {
+      "unit": "3:2",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 2.6573749000090174,
+      "weighted_contribution": "1/60",
+      "completed_terms": [
+        {
+          "signature": "a9f7d18351e2da1c5f6311be20b1b421cc62a05e8cffb2fe2d30985fbf6c1f1c",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "9a6e78bf21664ae0aeda36ae522e5006c0e337f5d00ec70b9ab8ba59c2ed10d2",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "52c485556c4176d3bf433a9810bd2577710709297a5838fa76b2c719d0ded0cc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "6d28b02864fa73e3b80bd73f3c0612a73b39e06c2779cf1dbd4b53078f9669c1",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 71962624,
+        "peak_process_commit_bytes": 63930368,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "2732c0a8d45aed558a2ac38782911c099ead68a4e0d54cb587cd55c3f84a160f"
+    },
+    {
+      "unit": "3:4",
+      "mode": "oracle",
+      "status": "complete",
+      "reason": null,
+      "seconds": 57.441403899982106,
+      "weighted_contribution": "1/40",
+      "completed_terms": [
+        {
+          "signature": "4a6e63bec3c7e13bea64f60afe433a1d0d0f6b753a77cca355815474dbcbbad7",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "82ae7bc9ceb9776635d87fda196b3d34e9a00cb4819db4ac4c71d394f2f3286d",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "3e7eec67b9fc2005df9f15d8e2af7e4e35714ad7f53e5ee27aa832749c2226b4",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "652c78d03123f2c186c1f2cb3fc7c74a984fc47ac5dd4142e3f07e433cf9cc4d",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "289b7c05f7cdf129764d8003c064e0e03df8178aa1b8269922fa114895bc8175",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "30e3e4aba45666b52c4ee0ed38cdc362d3664ae7d32e40e9fd1361c4dfb09996",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 613826560,
+        "peak_process_commit_bytes": 607035392,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "f0df9d2b1c3b93feaf1566b14ce22e8a8028859655e42f9fe62ddfe03c8d209f"
+    },
+    {
+      "unit": "3:5",
+      "mode": "oracle",
+      "status": "pending",
+      "reason": "time_limit",
+      "seconds": 4.370434499986004,
+      "weighted_contribution": null,
+      "completed_terms": [],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 75534336,
+        "peak_process_commit_bytes": 67457024,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": null
+    },
+    {
+      "unit": "1:2",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 0.18461159997968934,
+      "weighted_contribution": "7/150",
+      "completed_terms": [
+        {
+          "signature": "ac05ca2b39eb95477fa618efaf63331733125c6beceaae9d8df6b3fe17c0f548",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "ea3e7380e0d0d871eb60c5d7be2c6acfabe56dae8ccc0477ccb69e493e87c105",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "c69fe1d3f1692e7b20bedda02aaa5024aeb4ac281ca6b9361af0fcebe1d40e0b",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "1ae058e55cffdc3c7a7323edb899a23138022721fa62104bf75b1f30d885550d",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 27987968,
+        "peak_process_commit_bytes": 19357696,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "acb7bc3f4fdaa3ac161a0cb9ee72b8e4b2153f86e5156926148140f553061aba"
+    },
+    {
+      "unit": "1:3",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 26.481570000003558,
+      "weighted_contribution": "19/300",
+      "completed_terms": [
+        {
+          "signature": "88ce7871512d7de4c11575f1a9ab15af9ad0911558ca5c975c6a272782ca04de",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "55f2cca697b5761c9d09cfb5062e2e16f9b85599465dc9f65c230ae15fa1d730",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "1f33e8c2b920ff82c96c5c019be3a15464744c3528ce002287f7292cefdf779a",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "76290c56efd4ed8de689204f431823a289c7a0dd049f1f0a20e6c9bed81a6733",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "3baf0c068ddac2495591ca65b239e7bff4091fd31f12b3415e4f1e4f4bb8b7ea",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "b0e726fec1a88c99856ff7270826cb9e8ca432a3fe53ff94a81e7663d42204da",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "8fd6b9543d580de281cf64715d386ca9df644f68abcc1376a35aaf4830881fc8",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "98a560788b6cb4c473b13a56b93d38a5f54add26a37211656773ad1be483ff67",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 92,
+      "memory": {
+        "peak_working_set_bytes": 441327616,
+        "peak_process_commit_bytes": 434561024,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "423569cf7a721aa97b47116ea96611cd0798d91eb0e35b3b5061afa135dc5ca2"
+    },
+    {
+      "unit": "1:4",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 23.15904599998612,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "45469a453da03adef81903e4356c0db31346a2caad3d1cffbb085635dadbe805",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "7ba34bd78c32e4b29c719c96c1d697b0eaa1905d909f78a37f3eec34aee3a05c",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "fd95acf96985841fef8fb13f439443cfead39463822b757ef5706eedf4879457",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "1cf8fe578a00586b022bc644c3a866112c7db74cbe0ccb34676db7ae14eaf953",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "845bdb0b3add9d5ec007994c2f6719f2d52546625bc9916e63b5cc5344779211",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "ac008fee3ffafd66193f9560f7a0608ef741ad0d05ea0d0f0945c152c2ccdbef",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 345182208,
+        "peak_process_commit_bytes": 338436096,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "66fce8069e46be78ed6312171f732e026fbee0be786778e3699f0d694784dbbb"
+    },
+    {
+      "unit": "1:5",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 23.564476300001843,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "219691681c675dfe8e8f7d4d193afb560c05d1915f240f86aa97a45dd0426183",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "53d4a84df31f8048476eacc808303acda8dbf2308a81b8b4cd2dc3edde4824e6",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "5010bb1525568edb6555109dc1c76bb81a9d43e4342d806455de9a639c3151ad",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "1154f76b16aae587f50b07cb05a530991b27007ddaeb6bdfe146454a5be5da5a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "6d60a5105203b884a4191a90e25807f8037dd3042d10dfb2444381398dc28a03",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "2d37c942eba4fe14b4737c7dd4b44840ae4a2985866912e204b6181593551652",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 344666112,
+        "peak_process_commit_bytes": 338006016,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "98a4c8e1e723de7f10446751e71b6b890cbe64c62c4008fbe760925c774054a8"
+    },
+    {
+      "unit": "1:6",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 23.530574399977922,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "f5f45e64b3526e1d9cb8197a58bfd829707ac67e9b9790ffba94491c9afbbb7e",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "89f5ff3eadc51c2279ced53fb4c9e3ce8f173bd275b03dfe315010aa003d92d7",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "3a777a10f0e0bd86c3301c46e00f2f390eee6e24284d93ecc9ab95f6a553a620",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "6aef7b48f8179d8887fcd552cae35d50dd3f28a8f7a76089a3f53548171ffbb3",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "fad7518197bbcd36ee6e39cbb99a42a02a13273b225068ab7c145b6674330caf",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "17a1690b15828c374541a0ebb13e9d8286b10deb83db1ff02a924769fac3d7c2",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 345108480,
+        "peak_process_commit_bytes": 337829888,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "b31d72840b71c3fa378de70fcfdaa93428975cb085c64a3ac5d6cf534f1918e3"
+    },
+    {
+      "unit": "1:7",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 23.756877099978738,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "3985648c787b1a5793cac029e90cb3e01a97557eee2f97d47e103f51a9028433",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "9cb9ae608b4c29ee91067633319f7fb3a64d46d34d2f1e49f16a5101084c5e0e",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "5531bcaf1850d42e01a570a881bd4872cc453bdd556322d1031333a9c871a937",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "5bf7b4aef6af280f22fbe9cda1b63fe45b8164ad7260df341fed5d68a7d4cc27",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "4abc4b8bfc8a5ecdd2ef241959bdb86aff4c787c2417018b002e796ee85f69dc",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "796371e194c2f70790d104c03f05e2bbbd1159439c7a2abe5d537714e4b94bfa",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 344563712,
+        "peak_process_commit_bytes": 338026496,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "553ba9b3229e5f6228ba91c44e327f520082d765f5e797bd1d807d438f3be005"
+    },
+    {
+      "unit": "2:1",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 0.20862630000920035,
+      "weighted_contribution": "7/150",
+      "completed_terms": [
+        {
+          "signature": "b239e2706a6e63fd446d69b41368e6187306bd9e29a8026f643270c149757706",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "352e3d2348cf8f6e18d12b32973de392cc3599e62716367bc57d009dc5aea3b0",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "62e927c734180e72084e599f8c0efb926ac7833f9075e2bda3cc85a51fbdcc0f",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "2cb255441f784956d05c97d36ae86e1f577c13b53ce924e2cd4dec1f0523c875",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 0,
+      "memory": {
+        "peak_working_set_bytes": 28188672,
+        "peak_process_commit_bytes": 19542016,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "9572413f8ef920f1f8a5b1a78bb18b739945ea23acd3b5e4ed34f82c6c78c2cf"
+    },
+    {
+      "unit": "2:3",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 26.858299099985743,
+      "weighted_contribution": "19/300",
+      "completed_terms": [
+        {
+          "signature": "6322afcfca5888c9b334120ffafca9592161ea93eeef3cf5bc1bd2e24b434bcc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "cc20616a9f3ef61bd41c660361eff7f15fb1cede8e7e0cac75fd6e2eaf9ea299",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "265378425f84715b2f081cd900a202ca52f5506ebe334028f9d506518622c36f",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "2fef657e4a3514b1dd6ee9332c583ad399ee152460997e643871007a59fa99aa",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "fd3a1f21bf0a268cfa3286f2a130ef3c91368522fe085b03bc9f72c54e94a63a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "a3becc1c0cbd57b91b1d690757b666e96bf5bb875e6a02e9a1bd78784e5983f4",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "d4680a8fe79ab4aa26c982e3c9097b75f9b1d1907b89fbbaa258a93c563c757e",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "d2554f81836733b73e9d87aec42148e16aee19ba90165faac7c2308846aab30a",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 92,
+      "memory": {
+        "peak_working_set_bytes": 442691584,
+        "peak_process_commit_bytes": 435896320,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "516c348989b500becf6625e5f79dac555c796629f16ac3da023ae77ace2299ec"
+    },
+    {
+      "unit": "2:4",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 29.78005599998869,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "eb688e15161c342c1b468d2b71f545694ab9137ab2ac6570ee48cb0acc6a8c1b",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "09eea0c13e4f6c14e0bbaa05a423cf9602a3290ce7f6653ffcc02c830f77709b",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "13e3d397ef935dd7d71d9ffe9355b07d19a48bc0affad457298e4d68745902bd",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "6ec89adaa3773aa0f5662d5303c478639687a650822f22c991a830fb8a0baca9",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "ad1c04b33eecf6558b4bf261ee45e5ae8587c46b5d29111bf42c0c6d4a9843dc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "369d92d83a458942ed0309a17440e736da4fdcd8459ef726c0debf788aa9c583",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 345460736,
+        "peak_process_commit_bytes": 338382848,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "23658674cd366ddf3ebaa97d062056b6943a2f87258616c6d79d030ecf320eed"
+    },
+    {
+      "unit": "2:5",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 24.270518000004813,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "f30d34aca314d76a9b6660d539ec9a80aa7b2f49a66d8c8cbea35bfba83694b1",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "2f02c768e0252a8e89865c5d0f1c22b1252232a32fd5857dbffbba3ddd17b9e3",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "5fd2df73f2371a78bcebd30df261874bd68dffc943ede8c27845abaf3eee0982",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "32b684b360268413bbf7dacb1858044a18b05da9410f69b7e23e78484b1a1190",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "5d49ea264b980b61ca67a414736edb2f890f1679d86c32a0355287bdc36cb508",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "52795a774f6c2b134ac0d006b773299214d3ead0920a685fe1230f0895f950b4",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 345350144,
+        "peak_process_commit_bytes": 337940480,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "b9defd08ca3829f2bce0f14270deb0ff58382768e731a4ba4dc9329cbf2c3852"
+    },
+    {
+      "unit": "2:6",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 23.607308700011345,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "e83c329b5630cd3a22022039d1e3820918c1d072a811a41b43e375f60ae914ca",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "7af3850159c751b36f3c577f5e1df5a414f513625a3cc4490fa7d3f477356b87",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "e4309b333e7181e1afc0c93fb02b4640d75a135d273652b9842781a07dd793e8",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "14cc3818eb92f2939eb98e463aa90c9f71fccac0b35b7242e9e1c4a9f29102a6",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "6793c614ee3b13b848951552ffb09533282eaa2e07890f9e48e303a70766f757",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "63e07a3b636683e3703a06ce00b6d593c7bf2a19f1516f9c8c3d2de1f1ce8331",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 345018368,
+        "peak_process_commit_bytes": 337850368,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "ca882d6c3386858848cfd1b42c58e13492c38072e7da4766b7b17bff9f0e9009"
+    },
+    {
+      "unit": "2:7",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 23.671546300000045,
+      "weighted_contribution": "19/400",
+      "completed_terms": [
+        {
+          "signature": "3a1bb86fd2bbb893f008c5b4eb5e97137f1b6cc6e04a74238a50eca1060a3304",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "bd3aca8bf08c36346de043bec84a81cee7c843acd76f9357392539c44cc7498e",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "0eacc2621b2eb4ca9fd0a775ea5afcfb532957501ba8d73c7987a0ffbe783ffc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "bbd22ea292c8bb332c83761e60c5159eddd5d0110086c350c92669149b2e1951",
+          "weight": "1/40",
+          "value": "7/15"
+        },
+        {
+          "signature": "4e819d3a11e5500ce6b18577635f6adfb1a5b7e7591651ee6357826372159996",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "126ebbb7e0b47bef45b16b7be9acf083c6014b0a65818caedf4e17e0b272e799",
+          "weight": "1/40",
+          "value": "7/15"
+        }
+      ],
+      "audited_batches": 96,
+      "memory": {
+        "peak_working_set_bytes": 344788992,
+        "peak_process_commit_bytes": 337723392,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "21bbe1cd018f140910c48406d6bad4a7de0ca38874dd298c98f2b0304533c1e3"
+    },
+    {
+      "unit": "3:1",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 5.013755399995716,
+      "weighted_contribution": "1/60",
+      "completed_terms": [
+        {
+          "signature": "611a3af078bab348818f7850f90bc7934880b03886ecc81e3e963ffa8b3c8e99",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "f93a10290d465abc85f27df1818ca62efb0ad83e5167bca1e844e8607c77118a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "4d08ca9f9e828a7c0fad789c18e30aaa4100e6dc2225808f4a5012bb98c3c61a",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "ccaff5c143bf80fc95485339183c8b884a131e045ebcfdcafbc4577f6ea92464",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 4,
+      "memory": {
+        "peak_working_set_bytes": 89739264,
+        "peak_process_commit_bytes": 81756160,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "f11c96491a1847a8b79850fbcf785d7cf072c53cb644fd775e93aad37105c040"
+    },
+    {
+      "unit": "3:2",
+      "mode": "audit",
+      "status": "complete",
+      "reason": null,
+      "seconds": 5.056712500023423,
+      "weighted_contribution": "1/60",
+      "completed_terms": [
+        {
+          "signature": "a9f7d18351e2da1c5f6311be20b1b421cc62a05e8cffb2fe2d30985fbf6c1f1c",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "9a6e78bf21664ae0aeda36ae522e5006c0e337f5d00ec70b9ab8ba59c2ed10d2",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "52c485556c4176d3bf433a9810bd2577710709297a5838fa76b2c719d0ded0cc",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "6d28b02864fa73e3b80bd73f3c0612a73b39e06c2779cf1dbd4b53078f9669c1",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 4,
+      "memory": {
+        "peak_working_set_bytes": 90038272,
+        "peak_process_commit_bytes": 82280448,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": "aa900c140a8a59bbba870b76c08941804bcf60e28346eb664949070aaf2cdd5c"
+    },
+    {
+      "unit": "3:4",
+      "mode": "audit",
+      "status": "pending",
+      "reason": "time_limit",
+      "seconds": 120.04517460000352,
+      "weighted_contribution": null,
+      "completed_terms": [
+        {
+          "signature": "4a6e63bec3c7e13bea64f60afe433a1d0d0f6b753a77cca355815474dbcbbad7",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "82ae7bc9ceb9776635d87fda196b3d34e9a00cb4819db4ac4c71d394f2f3286d",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "signature": "3e7eec67b9fc2005df9f15d8e2af7e4e35714ad7f53e5ee27aa832749c2226b4",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ],
+      "audited_batches": 393,
+      "memory": {
+        "peak_working_set_bytes": 532471808,
+        "peak_process_commit_bytes": 527523840,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "numeric_digest": null
+    }
+  ],
+  "partial_verified_primitives": [
+    {
+      "unit": "3:4",
+      "terms": [
+        {
+          "index": 0,
+          "signature": "4a6e63bec3c7e13bea64f60afe433a1d0d0f6b753a77cca355815474dbcbbad7",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "index": 1,
+          "signature": "82ae7bc9ceb9776635d87fda196b3d34e9a00cb4819db4ac4c71d394f2f3286d",
+          "weight": "1/32",
+          "value": "2/15"
+        },
+        {
+          "index": 2,
+          "signature": "3e7eec67b9fc2005df9f15d8e2af7e4e35714ad7f53e5ee27aa832749c2226b4",
+          "weight": "1/32",
+          "value": "2/15"
+        }
+      ]
+    }
+  ]
+}

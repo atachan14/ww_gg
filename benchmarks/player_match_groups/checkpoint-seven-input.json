@@ -1,0 +1,358 @@
+{
+  "players": 7,
+  "wolves": 2,
+  "mediums": 0,
+  "seers": 1,
+  "hunters": 0,
+  "rules": {
+    "allow_self_bite": false,
+    "initial_seer": "random_white",
+    "allow_repeat_guard": true
+  },
+  "claim_policy": {
+    "medium": "filled",
+    "villager": "filled",
+    "wolf": "none"
+  },
+  "claims": [
+    "seer",
+    "seer",
+    "latent",
+    "latent",
+    "latent",
+    "latent",
+    "latent"
+  ],
+  "history": [],
+  "model": "group",
+  "policy": {
+    "day": "random",
+    "fake_reports": "random",
+    "include_self_bite": false,
+    "night": "random"
+  },
+  "public_log": {
+    "acquisition_provenance": [
+      {
+        "action": "assert",
+        "color": "white",
+        "day": 1,
+        "player": 1,
+        "source": "b1:e2",
+        "target": 3
+      },
+      {
+        "action": "assert",
+        "color": "white",
+        "day": 1,
+        "player": 2,
+        "source": "b1:e3",
+        "target": 3
+      }
+    ],
+    "base_claims": [
+      [
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ]
+    ],
+    "base_medium": [],
+    "base_seer": [],
+    "batches": [
+      {
+        "board_id": "c69d374f1b022cf7:board:1",
+        "day": 1,
+        "events": [
+          {
+            "action": "assert",
+            "id": "b1:e0",
+            "kind": "co",
+            "player": 1,
+            "role": "seer"
+          },
+          {
+            "action": "assert",
+            "id": "b1:e1",
+            "kind": "co",
+            "player": 2,
+            "role": "seer"
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "id": "b1:e2",
+            "kind": "seer",
+            "player": 1,
+            "target": 3
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "id": "b1:e3",
+            "kind": "seer",
+            "player": 2,
+            "target": 3
+          }
+        ],
+        "id": 1,
+        "mode": "simultaneous",
+        "phase": "day",
+        "slot": 0
+      }
+    ],
+    "board_graph": {
+      "archives": [
+        {
+          "ancestor_path": [
+            "c69d374f1b022cf7:board:1"
+          ],
+          "generation": 1,
+          "nodes": {
+            "c69d374f1b022cf7:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "c69d374f1b022cf7:board:1",
+              "input_revision": 0,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [],
+              "parent": null,
+              "phase": "day",
+              "revision": 0,
+              "slot": 0
+            }
+          },
+          "owner": "c69d374f1b022cf7:board:1",
+          "retired_roots": [],
+          "settings": {
+            "claim_policy": {
+              "medium": "filled",
+              "villager": "filled",
+              "wolf": "none"
+            },
+            "hunters": 0,
+            "mediums": 0,
+            "model": "group",
+            "players": 7,
+            "policy": {
+              "day": "random",
+              "fake_reports": "random",
+              "include_self_bite": false,
+              "night": "random"
+            },
+            "rules": {
+              "allow_repeat_guard": true,
+              "allow_self_bite": false,
+              "initial_seer": "random_white"
+            },
+            "seers": 1,
+            "wolves": 2
+          }
+        }
+      ],
+      "current": "c69d374f1b022cf7:board:1",
+      "game_id": "c69d374f1b022cf7",
+      "generation": 1,
+      "invalidated": [
+        "c69d374f1b022cf7:board:1"
+      ],
+      "next_board": 2,
+      "next_branch": 2,
+      "nodes": {
+        "c69d374f1b022cf7:board:1": {
+          "active": true,
+          "branch": 1,
+          "children": [],
+          "content_generation": 1,
+          "day": 1,
+          "edge": null,
+          "generation": 0,
+          "id": "c69d374f1b022cf7:board:1",
+          "input_revision": 1,
+          "legacy_claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "legacy_medium": [],
+          "legacy_seer": [],
+          "local_batches": [
+            {
+              "board_id": "c69d374f1b022cf7:board:1",
+              "day": 1,
+              "events": [
+                {
+                  "action": "assert",
+                  "id": "b1:e0",
+                  "kind": "co",
+                  "player": 1,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e1",
+                  "kind": "co",
+                  "player": 2,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e2",
+                  "kind": "seer",
+                  "player": 1,
+                  "target": 3
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e3",
+                  "kind": "seer",
+                  "player": 2,
+                  "target": 3
+                }
+              ],
+              "id": 1,
+              "mode": "simultaneous",
+              "phase": "day",
+              "slot": 0
+            }
+          ],
+          "parent": null,
+          "phase": "day",
+          "retired_children": [],
+          "revision": 1,
+          "slot": 0
+        }
+      },
+      "root": "c69d374f1b022cf7:board:1"
+    },
+    "board_id": "c69d374f1b022cf7:board:1",
+    "branch_id": 1,
+    "has_local_legacy": false,
+    "legacy": false,
+    "local_batches": [
+      {
+        "board_id": "c69d374f1b022cf7:board:1",
+        "day": 1,
+        "events": [
+          {
+            "action": "assert",
+            "id": "b1:e0",
+            "kind": "co",
+            "player": 1,
+            "role": "seer"
+          },
+          {
+            "action": "assert",
+            "id": "b1:e1",
+            "kind": "co",
+            "player": 2,
+            "role": "seer"
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "id": "b1:e2",
+            "kind": "seer",
+            "player": 1,
+            "target": 3
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "id": "b1:e3",
+            "kind": "seer",
+            "player": 2,
+            "target": 3
+          }
+        ],
+        "id": 1,
+        "mode": "simultaneous",
+        "phase": "day",
+        "slot": 0
+      }
+    ],
+    "local_legacy": {
+      "claims": [
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "medium": [],
+      "seer": []
+    },
+    "next_id": 2,
+    "report_publications": {
+      "seer:1:1": {
+        "board_id": "c69d374f1b022cf7:board:1",
+        "published_day": 1,
+        "published_phase": "day",
+        "slot": 0
+      },
+      "seer:1:2": {
+        "board_id": "c69d374f1b022cf7:board:1",
+        "published_day": 1,
+        "published_phase": "day",
+        "slot": 0
+      }
+    },
+    "retired_input_reports": [],
+    "version": 2
+  },
+  "reports": [],
+  "result_disclosure_model": "full-observed-v1",
+  "revision": 1,
+  "seer_inputs": [
+    {
+      "color": "white",
+      "day": 1,
+      "reporter": 1,
+      "target": 3
+    },
+    {
+      "color": "white",
+      "day": 1,
+      "reporter": 2,
+      "target": 3
+    }
+  ],
+  "seer_mode": "information-fixed-v1",
+  "seer_options": {
+    "initial_rule": "random_white",
+    "likelihood": "compatibility"
+  },
+  "selection": null
+}
