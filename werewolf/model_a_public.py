@@ -63,7 +63,7 @@ def horizon_for_action(engine,board,state,past,target,private=None,*,observer=No
     return HorizonValues(village,wolf)
 
 
-def public_forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+def public_forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,match_groups=False,match_view=None,match_audit=False,diagnostics=None):
     """Public overview, target rows and horizon under the approved intervention."""
     if state.public_roles!=tuple(sorted(board.worlds)):
         raise ValueError('Public acquisition prior must match public Board')
@@ -73,7 +73,10 @@ def public_forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,
     board,state=project_evaluation(board,state,strategy)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
-            engine=InformationSetForecast(rules,strategy,max_work=max_work)
+            if match_groups or diagnostics is not None:
+                from .match_groups import make_engine
+                engine=make_engine(board,state,past,rules,strategy,enabled=match_groups,view=match_view,audit=match_audit,max_work=max_work)
+            else:engine=InformationSetForecast(rules,strategy,max_work=max_work)
             if engine.exchangeable(board):
                 from .exchangeable_public import exchangeable_forecast
                 return exchangeable_forecast(board,strategy)
@@ -83,6 +86,8 @@ def public_forecast(board,state,past,rules,strategy,*,max_work=DEFAULT_MAX_WORK,
                  if board.phase=='night' else state for t in targets}
             actions=tuple((t,engine.act(board,state,past,t,own[t],None)) for t in targets)
             horizon=tuple((t,horizon_for_action(engine,board,state,past,t,own[t])) for t in targets)
+            if diagnostics is not None:
+                diagnostics.update(engine.stats,actual_action_expansions=engine.expansions['actions'],actual_value_expansions=engine.expansions['values'],audited_batches=len(engine.audits))
             return Forecast(value,actions,horizon)
     except CalculationBudgetExceeded:return FuturePending('information_set_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)

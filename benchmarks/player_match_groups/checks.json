@@ -1,0 +1,25 @@
+{
+  "base": "63c4af9",
+  "math_base": "03e4e31",
+  "singleton_reuse_enabled": false,
+  "default_enabled": false,
+  "related_tests": 165,
+  "seconds": 59.59,
+  "passed": true,
+  "browser_default": {
+    "initial": "7/15",
+    "roles_then_complete": true,
+    "edit_during_calculation_and_stale_preview_rejected": true,
+    "input_update_persisted": true,
+    "personal_public_switch": true,
+    "stale_personal_response_rejected": true,
+    "errors": []
+  },
+  "measured_cases": [
+    "5/1",
+    "6/1",
+    "6/2"
+  ],
+  "nine_future_evaluation": false,
+  "full_suite_rerun": false
+}
