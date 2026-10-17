@@ -1,0 +1,126 @@
+{
+  "baseline_revision": "899b45316249b8c3ed5fdacbcada039b693dc95e",
+  "product_sha256": "28c7894b9aaa18b13d7294ab9f81ac261012062cde96290731fe97ece35c0e50",
+  "case": "five-seer",
+  "cases_file_sha256": "56e94b8d945574c3101e42193a21e228300dec8e089e904b88d197df07056d1d",
+  "before_counts": {
+    "reconstruct_calls": 12,
+    "completed_request_hits": 0,
+    "completed_prefix_hits": 0,
+    "actual_recipe_applications": 25
+  },
+  "after_counts": {
+    "reconstruct_calls": 14,
+    "completed_request_hits": 0,
+    "completed_prefix_hits": 11,
+    "actual_recipe_applications": 13
+  },
+  "complete_results_equal": true,
+  "semantic_digest": "a25374f499f99d3b0d47f44d727930a7d8910fdd0a6d035bc9da343768271b4b",
+  "budget": {
+    "max_work": 250000,
+    "max_seconds": 20
+  },
+  "normal_wall_measurement": "Not started. Concurrent Morishi work; diagnostic wall excluded.",
+  "latest_units": {
+    "tests": 30,
+    "seconds": 0.605,
+    "result": "OK",
+    "scope": "7 evidence-prefix, 14 Game cache/ownership, 9 measurement harness"
+  },
+  "initial_full_suite": {
+    "tests": 680,
+    "seconds": 459.389,
+    "successes": 678,
+    "failures": 2,
+    "notes": "Intermediate implementation before final input/Pending-boundary refinements. Seven-player completed forecast returned true_scan_generation_budget_exceeded; seven-player HTTP numeric value absent. Final full suite and heavy cases remain pending quiet window; no budget or expected-value change."
+  },
+  "browser": {
+    "server_pid": 4892,
+    "ui": {
+      "at": "2026-10-17T00:26:33.304Z",
+      "rows": [
+        {
+          "width": 1366,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 320,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "dark",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        }
+      ]
+    },
+    "private": {
+      "status": 200,
+      "rows": [
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        },
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        }
+      ],
+      "sessionUnchanged": true
+    }
+  },
+  "remaining": [
+    "Final full suite under quiet conditions",
+    "Seven-player before/after actual recipe counts and exact result equality",
+    "Fixed-commit formal cold/warm comparison after coordination",
+    "Seven-player latest HTTP verification"
+  ]
+}

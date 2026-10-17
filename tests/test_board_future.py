@@ -35,8 +35,7 @@ class GeneratedBoardTests(unittest.TestCase):
         self.assertEqual(replay.call_count,2)
         with reconstruction_kernel_reuse(True):reused=final.board_data.roles()
         self.assertEqual(reused,rebuilt)
-        self.assertTrue(any(getattr(step,'_completed',[]) and step._completed[2]>0
-                            for step in final.board_data.history))
+        self.assertGreater(final.board_data._completed[1],0)
         self.assertEqual(sum(h.mass for h in rebuilt.public_state.hypotheses),1)
 
     def test_publication_and_actor_conditioning_match_previous_kernels(self):

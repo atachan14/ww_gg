@@ -1,0 +1,34 @@
+# 完全証拠prefixの再構築再利用
+
+基準は899b453。対称行のグループ拡張は行わず、Bの数値キャッシュ確認前に同一の証拠履歴prefixを繰り返し走査する部分だけを対象とする。
+
+## 不変の根拠と派生結果
+
+GeneratedBoardは完全なorigin・history・factsを引き続き保持する。childで同じ証拠列を一手だけ延長したとき、そのprefixオブジェクトも保持する。再利用できるのは、既知の不変originと既存の証拠型からなり、エンジンを必要とする証拠はkernel_snapshotで設定・証明文脈を捕捉しているものだけ。未知のcallable origin、可変history、未捕捉エンジンは従来の完全再構築へ戻る。
+
+各GeneratedBoardの完了キャッシュは、その同一の不変証拠列を3aで再構築した結果だけを持つ。remember()へ渡された親のfilter済み候補や3bの物理payloadをキャッシュの種にしない。親prefixが未検証なら、まずその証拠列を再構築する。すでに完了したprefixなら、新しいレシピだけを適用する。GameDataは従来どおり共有し、BoardごとのRule値比較・copyは追加しない。
+
+訂正で新しいorigin/history/recipeを作ったとき、dataclasses.replaceも含めて派生memoとprefixリンクを引き継がない。SavedOriginと各証拠ステップの内部memoもinit=Falseとし、意味フィールドを変更したコピーに古いmemoが付くことを防ぐ。参照モード reconstruction_kernel_reuse(False) は完了結果とprefixの双方を迂回し、全履歴を再構築する。
+
+完了後だけ保存する。例外/Pendingではそのノードを保存しない。既存の完全なprefixを、後続の失敗で未完了値へ上書きしない。完了値の再利用時にも計算期限を確認する。親リンクは祖先方向のみで、結果は証拠所有者へ戻り参照を作らない。既存のエンジン借用・寿命修正を維持する。
+
+## 検証中
+
+専用回帰7件と既存Gameキャッシュ/寿命回帰14件、計21件成功。全680件を実行中。関連の初回実行では7人HTTP時間上限1件が負荷下で失敗しており、成功扱いにしない。予算・期待値は変更していない。
+
+変更前の基準は生成Board再構築7945回、履歴レシピ走査80773回。新しい診断器 board_b_prefix_diagnostic.py は、論理的な_reconstruct呼出し数と実際に適用したレシピ数、検証済みprefix hitを区別する。内部prefixの初回検証で_reconstruct呼出し数自体が増えても、それを完全な履歴再走査と混同しない。
+
+Morishiの正式計測枠と重なるため、まだ正式cold計測は行わない。負荷下のwall timeを改善の性能根拠にしない。回数・数理一致の診断と、固定コミットの排他的な正式計測は別に記録する。
+
+
+## 正式計測前のチェックポイント
+
+最新の専用回帰・Gameキャッシュ/寿命・計測器回帰は計30件0.605秒、OK。実際の対象5→4変更、CO解除、本人条件の兄弟枝、公開視点への候補復帰、未知入力/可変履歴のfallback、失敗/Pending非保存、期限、置換時の派生memo破棄、非循環寿命を確認。
+
+途中版の全680件は459.389秒、678成功・7人2件未完了。1件はFuturePending(true_scan_generation_budget_exceeded)、もう1件はHTTP上の113/504未表示。時間/作業量のどちらが停止要因かはこのログだけで断定せず、成功扱いにしない。この実行後に入力型とPending保存の境界をさらに限定しており、最終コードの全suiteはquiet枠で再確認する。予算・期待値・max方針を緩和していない。
+
+小型の5人占いCOケースを同じ条件・予算で899b453と比較し、役職率・候補・合法手・勝率・同率分布・夜明け値の完全結果が一致。実レシピ適用25→13、検証済みprefix hit 0→11。_reconstruct呼出しは12→14（内部prefix初回検証を含む）。7人の7945/80773からの変化へ外挿しない。証跡board_b_prefix_progress.json。
+
+専用18801の所有を再確認してPID4892へ反映。起動完了HTTP200の後、4表示設定で基本7/15、進行、本人狼、公開不変、HELP、狭幅・ダーク、横溢れなし、JSエラーなしを確認。本人占い履歴は村5/6・狼1/6、セッション不変。重い7人HTTPはquiet枠で確認する。
+
+正式計測の準備だけ完了。board_b_benchmark.py の --board-before-ref 899b453 --improved-ref <改修commit> により、両方をBoardData経路で実行する。旧版legacy facadeへ誤って経路を変えない。7人のactual_recipe_applicationsはboard_b_prefix_diagnostic.pyで別に採取し、通常時間へ診断overheadを混ぜない。

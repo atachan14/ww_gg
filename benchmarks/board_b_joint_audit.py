@@ -54,7 +54,7 @@ def main():
   subprocess.run([sys.executable,'-B',str(Path(__file__).resolve()),'worker','--tree',str(Path(a.snapshots).resolve()/v),'--cases',str(Path(a.cases).resolve()),'--version',v,'--output',str(target)],check=True,timeout=150)
   versions[v]=json.loads(target.read_text(encoding='utf-8'))
  names=list(versions);failures=[(k,v) for k in versions[names[0]] for v in names[1:] if versions[names[0]][k]['digest']!=versions[v][k]['digest']]
- result={'cases':list(versions['old']),'failures':failures,'versions':versions}
+ result={'cases':list(versions[names[0]]),'failures':failures,'versions':versions}
  (out/'summary.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8');print(json.dumps({'cases':result['cases'],'failures':failures}),flush=True)
  if failures:raise AssertionError(failures)
 if __name__=='__main__':main()

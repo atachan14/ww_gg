@@ -37,7 +37,38 @@ class GeneratedBoard:
     history:tuple=()
     facts:object=None
 
-    def child(self,recipe,facts):return GeneratedBoard(self.origin,(*self.history,recipe),facts)
+    # Derived acceleration only; replace()/edited histories start with empty
+    # memos. The complete origin and evidence recipe remain authoritative.
+    _parent:object=field(default=None,init=False,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
+    _cacheable:object=field(default=None,init=False,compare=False,hash=False,repr=False)
+
+    def child(self,recipe,facts):
+        child=GeneratedBoard(self.origin,(*self.history,recipe),facts)
+        object.__setattr__(child,'_parent',self)
+        return child
+
+    def cacheable_evidence(self):
+        known=self._cacheable
+        if known is not None:return known
+        recipes=(ActionEvidence,PublicationEvidence,ConditionEvidence,ContextEvidence,
+                 PublicReportEvidence,PublicViewEvidence,MediumInstructionEvidence)
+        def supported(operation):
+            return (type(operation) in recipes and
+                    (not hasattr(operation,'engine') or
+                     getattr(operation.engine,'_board_evidence_snapshot',False)))
+        if type(self.history) is not tuple:known=False
+        elif self._parent is not None:
+            known=self._parent.cacheable_evidence() and supported(self.history[-1])
+        else:
+            from .board_flow import BoardData
+            from .evaluation_branch import ContinuationInputs
+            origin=self.origin
+            sealed=(type(origin) is SavedOrigin and type(origin.board_data) is BoardData or
+                    type(origin) is KernelOrigin and type(origin.state) is ContinuationInputs)
+            known=sealed and all(supported(operation) for operation in self.history)
+        object.__setattr__(self,'_cacheable',known)
+        return known
 
     @property
     def game_data(self):return self.origin.game_data
@@ -49,10 +80,32 @@ class GeneratedBoard:
     def _reconstruct(self):
         token=_rebuilding.set(True)
         try:
-            state=self.origin()
-            for operation in self.history:state=operation(state)
+            reusable=_reuse_kernels.get() and self.cacheable_evidence()
+            if reusable and self._completed:
+                from .calculation_budget import tick
+                tick(0)
+                self._completed[1]+=1
+                return self._completed[0]
+            if reusable and self._parent is not None:
+                # Only an identical immutable evidence prefix, reconstructed
+                # through 3a, can supply this value. Never seed from remember()
+                # or from a caller's filtered/physical continuation payload.
+                parent=self._parent
+                if parent._completed:
+                    from .calculation_budget import tick
+                    tick(0);parent._completed[1]+=1;state=parent._completed[0]
+                else:state=parent._reconstruct()
+                operations=self.history[-1:]
+            else:
+                state=self.origin();operations=self.history
+            for operation in operations:state=GeneratedBoard.replay_operation(operation,state)
+            from .evaluation_branch import ContinuationInputs
+            if reusable and type(state) is ContinuationInputs:self._completed[:]=(state,0)
             return state
         finally:_rebuilding.reset(token)
+
+    @staticmethod
+    def replay_operation(operation,state):return operation(state)
 
 @dataclass(frozen=True)
 class ActionEvidence:
@@ -62,7 +115,7 @@ class ActionEvidence:
     terminal_payoffs:bool=True
     observed_alive:object=None
 
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @completed_step
     def __call__(self,source):
@@ -81,7 +134,7 @@ class PublicationEvidence:
     engine:object
     observation:tuple
 
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @completed_step
     def __call__(self,source):
@@ -108,6 +161,7 @@ def kernel_snapshot(engine):
     # Freeze policy/proof configuration at this event. A later counterfactual
     # must not change the policy that generated an earlier observation.
     frozen=copy(engine)
+    frozen._board_evidence_snapshot=True
     for key,value in vars(engine).items():
         if key in ('night_kernels','night_sources','candidate_rule_cache'):
             setattr(frozen,key,value.copy())
@@ -291,7 +345,7 @@ class SavedOrigin:
     rules:object
     strategy:object
     project_public:bool=True
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @property
     def game_data(self):return self.board_data.game_data
@@ -378,7 +432,7 @@ class ConditionEvidence:
     physical_source:str='physical'
     identity:bool=False
 
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @completed_step
     def __call__(self,source):
@@ -433,7 +487,7 @@ def condition_recipe(source,target):
 class ContextEvidence:
     engine:object
 
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @completed_step
     def __call__(self,source):
@@ -489,7 +543,7 @@ class PublicReportEvidence:
     observation:tuple
     provider:str='morning'
 
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @completed_step
     def __call__(self,source):
@@ -515,7 +569,7 @@ def record_publications(engine,board,state,past,branches,provider='morning'):
 
 @dataclass(frozen=True)
 class PublicViewEvidence:
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @completed_step
     def __call__(self,source):
@@ -530,7 +584,7 @@ class MediumInstructionEvidence:
     reports:tuple
     resolved:tuple
 
-    _completed:list=field(default_factory=list,compare=False,hash=False,repr=False)
+    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
 
     @completed_step
     def __call__(self,source):

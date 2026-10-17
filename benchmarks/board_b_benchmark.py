@@ -265,6 +265,9 @@ def snapshot(destination,revision):
 def run(args):
     out=Path(args.output).resolve();out.mkdir(parents=True,exist_ok=True)
     trees=out/'snapshots';versions={'old':OLD,'new':NEW}
+    if getattr(args,'board_before_ref',None):
+        if not args.improved_ref:raise ValueError('--board-before-ref requires --improved-ref')
+        versions={'new':subprocess.check_output(['git','rev-parse','--verify',args.board_before_ref],cwd=ROOT,text=True).strip()}
     if args.improved_ref:versions['improved']=subprocess.check_output(['git','rev-parse','--verify',args.improved_ref],cwd=ROOT,text=True).strip()
     for version,revision in versions.items():snapshot(trees/version,revision)
     cases=json.loads(Path(args.cases).read_text(encoding='utf-8'))
@@ -308,7 +311,7 @@ def run(args):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__);sub=parser.add_subparsers(dest='command',required=True)
-    p=sub.add_parser('run');p.add_argument('--output',required=True);p.add_argument('--repeats',type=int,default=5);p.add_argument('--select');p.add_argument('--improved-ref');p.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'))
+    p=sub.add_parser('run');p.add_argument('--output',required=True);p.add_argument('--repeats',type=int,default=5);p.add_argument('--select');p.add_argument('--improved-ref');p.add_argument('--board-before-ref',help='Compare two BoardData revisions, labelled new/improved; requires --improved-ref');p.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'))
     p.add_argument('--diagnostic',choices=('none','counts','profile'),default='none');p.add_argument('--experiment',choices=('none','bypass-generated'),default='none')
     p=sub.add_parser('worker');p.add_argument('--tree',required=True);p.add_argument('--cases',required=True);p.add_argument('--case',required=True);p.add_argument('--version',choices=('old','new','improved'),required=True);p.add_argument('--output',required=True);p.add_argument('--iterations',type=int,default=2);p.add_argument('--diagnostic',choices=('none','counts','profile'),default='none');p.add_argument('--experiment',choices=('none','bypass-generated'),default='none')
     args=parser.parse_args();worker(args) if args.command=='worker' else run(args)
