@@ -1,0 +1,85 @@
+{
+  "created": "2026-10-17T18:24:05.475414+00:00",
+  "code_base": "03e4e31f965247da65a62386b8f38863459b5cc1",
+  "recommendation": "published baseline for structure-only changes; keep e203aac and experimental continuation grouping separate",
+  "preserved_tip": "c872d19",
+  "safety_branch": "safety/before-player-view-stage12-20261018",
+  "tracked_dirty_before": false,
+  "untracked_preserved_in_place": [
+    ".artifacts/",
+    "docs/previews/"
+  ],
+  "preview_backup": "C:/Users/user/AppData/Local/Temp/ww-player-view-stage12-20261018/previews-preserved.zip",
+  "untracked_artifacts_note": "artifacts retained in place; NOT a Git snapshot or full duplicate backup",
+  "files": {
+    "app.py": "6bc10b945c473c82328adad0eb369abd69f46a885fbe3ae62c6e6645cea7e385",
+    "werewolf/board_flow.py": "633714d6b9ab742278a4a6e0dec70b81cb881ec31db1c6b8fd0107ffcd6ea5cf",
+    "werewolf/game_runtime.py": "9eeec6038971c7fd5e04552ff41dcd2283123a857cdd417eb752797127485fa1",
+    "werewolf/board_roles.py": "3347f5f0b12998c161e12d7c386fd2cfd0cf1288db530c698d4675b359e46817",
+    "werewolf/exact.py": "6a72d4afad3049f71ec0fdf914348bb7b2feaad9856fc2a43e1429991da8c0ba",
+    "werewolf/public_log.py": "ce5271c48b97b7f5c3dd495334375bc6561a7d70c5a4da4d5f123533a6c15e4d",
+    "werewolf/public_log_changes.py": "3cf093babe652b6fb63e2efbca6a6a7da0064607a2cc0e29415963c1156d7860",
+    "werewolf/board_owned_log.py": "6707bf08a56d7f686d59d19e6e2655e7639f86c0d970861e6eb30eb5959eed3f",
+    "werewolf/private_adapter.py": "c1bef2b287c716975029873984fe34cd823407b03ef506ae141cae85500a1544",
+    "werewolf/private_view.py": "8f40d1957befcb0149bec58ef086e754f3057302ddba5fdaeb03d36974a4b332",
+    "werewolf/seer_acquisition.py": "654cd7e75e62f715cbee18a8c655fedc802a74a623d7d3ca16fbce838e4ef2a6",
+    "werewolf/seer_future_uniform.py": "af3ffcb2296b16236a8d67c3c2bd5ced0d96c828740014839c34d77c3cefd3a6",
+    "werewolf/information_weights.py": "2d864654bc20142a90b7261e4bbd67e02898ed35fffdda870549405ca008a333",
+    "werewolf/by_dawn.py": "570f58e4cd2264a88c00f51e1c585f773bd25e97df4c454035bb06ddf78e123a",
+    "templates/board_table.html": "582b9d04185c2cc2c280df3e0371e48e8dd2b81488ea991b56de604842aaf16a",
+    "templates/main.html": "4ccbeb85c14b9aea929f657a1d86eb7ede39edee8d5b3b0a872ddcf6e3e431a1",
+    "static/board_private_table.js": "aefe4248434b9815dfe2dfbc8ebd9c60454666dae99f4bf47a82241eee161583",
+    "tests/fixtures/board_replay_v051.py": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+    "tests/fixtures/board_saved_seven_observed.json": "ede34ba7b1c05aa89f34fc6e3149e7deb3c932925e5092990ee4018e27365327",
+    "tests/fixtures/large_terminal_profile.json": "a547c87354c5c31d35c23a4b6526efc8d2a918499063d52a147d2466a949e9e4"
+  },
+  "historical_checks": [
+    {
+      "label": "published-browser-qa",
+      "path": ".artifacts/browser-backend-qa/full-regression.log",
+      "sha256": "ee58630006578473a5c8172b448ffd2a8e435d9f29df5fb7e3736b3752b7eaac",
+      "tests": 728,
+      "seconds": 832.094,
+      "failures": [
+        "test_budget_pending_and_recovery_with_cache (test_seer_manual_general.SeerManualGeneralTests.test_budget_pending_and_recovery_with_cache)\r"
+      ],
+      "errors": [],
+      "note": "historical evidence; not rerun in stage1/2"
+    },
+    {
+      "label": "combined-e203aac",
+      "path": ".artifacts/browser-backend-reuse-qa/full-regression.log",
+      "sha256": "32bdfeb59b27d9fa2ee8556b761f800cbdd53b90e8b4e5247485beaa0337bcb4",
+      "tests": 740,
+      "seconds": 846.627,
+      "failures": [
+        "test_budget_pending_and_recovery_with_cache (test_seer_manual_general.SeerManualGeneralTests.test_budget_pending_and_recovery_with_cache)\r"
+      ],
+      "errors": [],
+      "note": "historical evidence; not rerun in stage1/2"
+    }
+  ],
+  "fresh_targeted_validation": {
+    "base": "03e4e31f965247da65a62386b8f38863459b5cc1",
+    "started": "2026-10-17T18:23:27.849138+00:00",
+    "finished": "2026-10-17T18:23:49.073315+00:00",
+    "seconds": 21.224800399999367,
+    "patterns": [
+      "test_board_flow.py",
+      "test_game_evaluation_cache.py",
+      "test_board_owned_log.py",
+      "test_public_log.py",
+      "test_calculation_stream.py",
+      "test_by_dawn.py"
+    ],
+    "tests": 66,
+    "failures": 0,
+    "errors": 0,
+    "successful": true
+  },
+  "preview_files_preserved": 5,
+  "untracked_artifact_initial_summary": {
+    "files": 24017,
+    "bytes": 474301636
+  }
+}
