@@ -24,6 +24,18 @@ const hidden=()=>page.waitForFunction(()=>!document.querySelector('.calculation-
 await context.request.post('/start',{form:{citizens:'3',mediums:'1',wolves:'1',day:'max',night:'max'}});
 await page.goto('/main');await gate('/main');await page.waitForSelector('[data-table-co="1"]');
 await emit('/main');await shown();assert((await page.locator('.calculation-position').textContent()).includes('進捗率ではありません'));assert(!(await page.locator('.calculation-position').textContent()).includes('%'));
+// The status survives the loading-main replacement and remains visible after scroll.
+for(const width of [1366,390,320]){
+ await page.setViewportSize({width,height:width===320?600:950});
+ for(const bottom of [false,true]){
+  await page.evaluate(bottom=>scrollTo({top:bottom?document.documentElement.scrollHeight:0,behavior:'instant'}),bottom);
+  const geometry=await page.evaluate(()=>{const e=document.querySelector('.calculation-status'),p=document.querySelector('.calculation-position'),r=e.getBoundingClientRect(),pr=p.getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,width:innerWidth,height:innerHeight,positionTop:pr.top,positionBottom:pr.bottom,sticky:getComputedStyle(e).position,pointer:getComputedStyle(e).pointerEvents,intercepts:e.contains(document.elementFromPoint(r.left+5,r.top+5)),overflow:document.documentElement.scrollWidth>innerWidth};});
+  assert.equal(geometry.sticky,'sticky');assert.equal(geometry.pointer,'none');assert(!geometry.intercepts);assert(!geometry.overflow);
+  assert(geometry.top>=0&&geometry.bottom<=geometry.height&&geometry.left>=0&&geometry.right<=geometry.width,JSON.stringify(geometry));
+  assert(geometry.positionTop>=geometry.top&&geometry.positionBottom<=geometry.bottom);
+ }
+}
+await page.setViewportSize({width:390,height:950});await page.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
 await emit('/main',{event:'position-unavailable'});await hidden();await emit('/main');await shown();
 assert(await page.locator('[data-table-co="2"]').isEnabled());assert.equal(await page.locator('main').evaluate(e=>e.inert),false);
 const sample=await page.locator('.calculation-position').getAttribute('data-sample-id');await emit('/main',{revision:999});await page.waitForTimeout(30);assert.equal(await page.locator('.calculation-position').getAttribute('data-sample-id'),sample);
@@ -40,4 +52,4 @@ await page.goto('/main');await gate('/main');await page.waitForSelector('[data-v
 await page.locator('[data-viewpoint-role="wolf"]').click();await page.locator('tr[data-player="2"]').click();await gate('/private-view');await emit('/private-view');await shown();assert((await page.locator('.calculation-position').textContent()).includes('狼本人'));
 assert.equal(await page.locator('#village-rate').getAttribute('data-fraction'),'1/3');await page.locator('[data-viewpoint-role="public"]').click();await hidden();await emit('/private-view');await page.waitForTimeout(30);await hidden();await release('/private-view');
 assert.equal(await page.evaluate(()=>window.intervalCalls),0);assert.deepEqual(errors,[]);
-console.log(JSON.stringify({nonblocking:true,positionNotPercentage:true,staleRevisionRejected:true,staleRunRejected:true,hiddenStopsDOMAndNoIntervals:true,reeditHidesOldPosition:true,failureAndCompleteClear:true,privatePublicGenerationIsolated:true,errors}));await browser.close();})().catch(e=>{console.error(e);process.exit(1)});
+console.log(JSON.stringify({nonblocking:true,statusVisibleWhileScrolling:true,positionNotPercentage:true,staleRevisionRejected:true,staleRunRejected:true,hiddenStopsDOMAndNoIntervals:true,reeditHidesOldPosition:true,failureAndCompleteClear:true,privatePublicGenerationIsolated:true,errors}));await browser.close();})().catch(e=>{console.error(e);process.exit(1)});

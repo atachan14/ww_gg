@@ -1,13 +1,16 @@
 "use strict";
 (() => {
   const nativeFetch=window.fetch, writes=[], reads=new Map();let active=null, sequence=0, nativeSubmission=false;
-  const note=document.createElement('div');note.className='calculation-wait';note.hidden=true;
+  const status=document.createElement('aside');status.className='calculation-status';status.hidden=true;
+  const note=document.createElement('div');note.className='calculation-wait';note.hidden=true;status.append(note);
+  const mountStatus=()=>{if(!status.isConnected)document.body.prepend(status);};
   note.setAttribute('role','status');note.setAttribute('aria-live','polite');
   const aborted=()=>new DOMException('Superseded client request','AbortError');
   function paint(){
-    if(!note.isConnected){const estimate=document.querySelector('.calculation-estimate');if(estimate)estimate.after(note);else document.body.append(note);}
+    mountStatus();
     const busy=nativeSubmission||!!active||writes.length>0||reads.size>0;note.hidden=!busy;
-    note.textContent=nativeSubmission?'送信済みの入力を反映中です。画面の確定をお待ちください。':active&&['/table-publish','/public-log'].includes(active.key)?'保存を確定しています。入力は保持されています。確定後に編集を続けられます。':'計算中も入力を編集できます。最新入力は進行中の応答後に計算します。1回の計算は最大約5分。通信の取消はサーバー計算の即時停止ではありません。';
+    note.textContent=nativeSubmission?'入力を送信しました。画面の更新を待っています。':active&&['/table-publish','/public-log'].includes(active.key)?'入力を保存しています。変更は保持しています。':active?.cancelled?'前の計算の終了待ちです。最新の入力は保持しています。':'計算中です。入力は編集できます。';
+    status.hidden=!busy&&position.hidden;
     if(busy)document.body.setAttribute('aria-busy','true');else document.body.removeAttribute('aria-busy');
   }
   async function pump(){
@@ -49,12 +52,13 @@
     });
   };
   const position=document.createElement('p');position.className='calculation-position';position.hidden=true;position.setAttribute('role','status');
+  status.append(position);
   let positionRun=null;
-  window.hideCalculationPosition=run=>{if(!run||run===positionRun){position.hidden=true;positionRun=null;position.textContent='';position.title='';delete position.dataset.runId;delete position.dataset.sampleId;}};
+  window.hideCalculationPosition=run=>{if(!run||run===positionRun){position.hidden=true;positionRun=null;position.textContent='';position.title='';delete position.dataset.runId;delete position.dataset.sampleId;paint();}};
   window.showCalculationPosition=event=>{
     if(document.hidden||nativeSubmission)return;
     if(!Array.isArray(event.path)||!event.path.length||event.path.length>12||!Number.isInteger(event.depth)||event.depth<event.path.length||event.path.some(step=>!Number.isInteger(step.day)||step.day<1||!['day','night'].includes(step.phase)))return;
-    if(!position.isConnected){const host=document.querySelector('.calculation-estimate')||document.querySelector('main');if(host)host.after(position);else document.body.append(position);}
+    mountStatus();status.hidden=false;
     const current=event.path?.at(-1);if(!current)return;
     const viewLabel={public:'公開',wolf:'狼本人',seer:'占い本人',hunter:'狩人本人'}[event.view];if(!viewLabel)return;
     positionRun=event.run_id;position.hidden=false;
