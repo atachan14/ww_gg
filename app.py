@@ -332,20 +332,26 @@ def create_app(test_config=None, *, deployment=False):
         # by starting a new continuation request or an external background job.
         from flask import Response,stream_with_context,copy_current_request_context
         session.setdefault('co_display_game',secrets.token_hex(8))
+        trace=request.environ.get('wwgg.lifecycle')
+        def note(event,**fields):
+            if trace is not None:trace.emit(event,**fields)
         def generate():
             reset_diagnostics()
-            acquired=False;cancelled=False;stop_kind=None
+            acquired=False;cancelled=False;stop_kind=None;completed=False
             with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                     max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS)):
                 try:
+                    note('stream_wait')
                     queue_deadline=monotonic()+(app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
                     while not acquired:
                         tick(0)
                         if monotonic()>=queue_deadline:raise CalculationBudgetExceeded('Calculation queue time limit',kind='time')
                         acquired=calculation_slot.acquire(timeout=.2)
+                    note('stream_acquired')
                     tick(0)
                     for event in events():
                         yield json.dumps(event,ensure_ascii=False)+'\n'
+                    completed=True
                 except (CalculationCancelled,GeneratorExit):
                     cancelled=True;raise
                 except CalculationBudgetExceeded as exc:
@@ -355,7 +361,9 @@ def create_app(test_config=None, *, deployment=False):
                     yield json.dumps({'event':'error','error':str(exc)},ensure_ascii=False)+'\n'
                 finally:
                     log_result(request.endpoint,200,'cancelled' if cancelled else stop_kind)
-                    if acquired:calculation_slot.release()
+                    if acquired:
+                        calculation_slot.release();note('stream_released')
+                    note('stream_exit',reason='cancelled' if cancelled else stop_kind or ('complete' if completed else 'error'))
         if app.config.get('CALCULATION_POSITION_ENABLED',True):
             from werewolf.exploration_position import position_stream
             @copy_current_request_context
@@ -364,12 +372,17 @@ def create_app(test_config=None, *, deployment=False):
                 try:
                     for chunk in source:send(chunk)
                 finally:source.close()
-            iterator=position_stream(produce,view=view)
+            iterator=position_stream(produce,view=view,diagnostic=trace)
         else:iterator=generate()
         return Response(stream_with_context(iterator),mimetype='application/x-ndjson',headers={'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'})
 
     @app.before_request
     def begin_request_budget():
+        if app.config.get('REQUEST_LIFECYCLE_DIAGNOSTICS',False) and request.endpoint in ('main','start','private_view','table_publish','table_preview','advance','comparison'):
+            from werewolf.request_diagnostics import RequestTrace
+            trace=RequestTrace(request.endpoint)
+            request.environ['wwgg.lifecycle']=trace
+            trace.emit('request_enter')
         if request.method=='POST':
             origin=request.headers.get('Origin')
             if request.headers.get('Sec-Fetch-Site')=='cross-site' or (origin and origin!=request.host_url.rstrip('/')):
@@ -381,16 +394,22 @@ def create_app(test_config=None, *, deployment=False):
                                  max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
         scope.__enter__();g.calculation_scope=scope
         if request.method=='POST' or request.path in ('/main','/comparison'):
+            trace=request.environ.get('wwgg.lifecycle')
+            if trace is not None:trace.emit('request_wait')
             acquired=calculation_slot.acquire(timeout=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
             if not acquired:
                 app.logger.warning('wwgg_budget_stop kind=time phase=request_queue')
                 raise CalculationBudgetExceeded('Calculation queue time limit',kind='time')
             g.calculation_slot=True
+            if trace is not None:trace.emit('request_acquired')
             tick(0)
 
     @app.teardown_request
     def finish_request_budget(error):
-        if g.pop('calculation_slot',False):calculation_slot.release()
+        if g.pop('calculation_slot',False):
+            calculation_slot.release()
+            trace=request.environ.get('wwgg.lifecycle')
+            if trace is not None:trace.emit('request_released')
         scope=g.pop('calculation_scope',None)
         if scope is not None:scope.__exit__(None,None,None)
 
@@ -414,6 +433,8 @@ def create_app(test_config=None, *, deployment=False):
 
     @app.after_request
     def no_stale_pages(response):
+        trace=request.environ.get('wwgg.lifecycle')
+        if trace is not None:response.headers['X-WW-Diagnostic-Request']=trace.request_id
         if not wants_calculation_stream() and request.path in ('/main','/private-view','/comparison'):log_result(request.endpoint,response.status_code,g.get('calculation_stop_kind'))
         # Reject an oversized update before Flask emits Set-Cookie. Preserve the
         # previously accepted browser cookie rather than silently losing a Board.

@@ -20,13 +20,15 @@ def current_path(thread_id):
         path.reverse();return len(path),path[-12:]
     finally:del frame,board,local
 
-def position_stream(produce,*,view='public',interval=1.0):
+def position_stream(produce,*,view='public',interval=1.0,diagnostic=None):
     """One request worker, bounded output, no persistent job registry.
 
     produce must be wrapped in a COPY of Flask's request context. It owns its
     original budget and process slot. Disconnect cooperatively cancels tick().
     """
     if interval<1:raise ValueError('Position interval must be at least one second')
+    def note(event,**fields):
+        if diagnostic is not None:diagnostic.emit(event,**fields)
     messages=Queue(maxsize=2);cancel=Event();finished=Event();run_id=secrets.token_hex(6);identity=None
     done=object();worker_id=[None]
     def put(item):
@@ -34,7 +36,7 @@ def position_stream(produce,*,view='public',interval=1.0):
             try:messages.put(item,timeout=.1);return
             except Full:tick(0)
     def work():
-        worker_id[0]=get_ident()
+        worker_id[0]=get_ident();reason='error';note('worker_enter')
         try:
             with cancellation_scope(cancel):
                 def send(chunk):
@@ -42,14 +44,17 @@ def position_stream(produce,*,view='public',interval=1.0):
                     put(chunk)
                     if cancel.is_set():raise CalculationCancelled()
                 produce(send)
-        except CalculationCancelled:pass
+                reason='complete'
+        except CalculationCancelled:reason='cancelled'
         except BaseException as error:put(error)
         finally:
+            note('worker_exit',reason=reason)
             finished.set()
             try:messages.put_nowait(done)
             except Full:pass
     worker=Thread(target=work,name='ww-calculation-stream',daemon=True);worker.start()
     next_sample=monotonic()+interval;sequence=0;sampling=True
+    exit_reason='error'
     try:
         while True:
             if finished.is_set() and messages.empty():break
@@ -81,8 +86,13 @@ def position_stream(produce,*,view='public',interval=1.0):
                 identity={key:event[key] for key in ('board_id','revision','request_id') if key in event}
             if event.get('event') in ('complete','error'):identity=None
             yield json.dumps(event,ensure_ascii=False,separators=(',',':'))+'\n'
+        exit_reason='complete'
+    except GeneratorExit:
+        exit_reason='closed';raise
     finally:
-        cancel.set();worker.join(timeout=2)
+        note('iterator_exit',reason=exit_reason)
+        cancel.set();note('cancel_set');worker.join(timeout=2)
+        note('join_done',pending=worker.is_alive())
         # Worker keeps ownership of its slot until its budget/finally ends.
         # No slot is released early to permit a duplicate concurrent calculation.
         if worker.is_alive():
