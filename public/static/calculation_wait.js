@@ -13,6 +13,15 @@
     status.hidden=!busy&&position.hidden;
     if(busy)document.body.setAttribute('aria-busy','true');else document.body.removeAttribute('aria-busy');
   }
+  // These are transport guards, not server cancellation or mathematical deadlines.
+  const TRANSPORT_DEADLINE_MS=330000, STREAM_IDLE_MS=45000, transportFailures=new WeakMap();
+  const cancelBody=body=>{if(body&&!body.locked)body.cancel().catch(()=>{});};
+  async function drainCalculationStream(response,onChunk,onLiveness){
+    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='';
+    const terminal=line=>{if(!line.trim())return false;const event=JSON.parse(line);if(['heartbeat','position','position-unavailable'].includes(event.event))onLiveness();return ['complete','error','redirect'].includes(event.event);};
+    try{while(true){const {value,done}=await reader.read();onChunk();buffer+=decoder.decode(value,{stream:!done});let pos;while((pos=buffer.indexOf('\n'))>=0){const line=buffer.slice(0,pos);buffer=buffer.slice(pos+1);if(terminal(line))return;}if(done){if(buffer.trim())terminal(buffer);return;}}}
+    finally{reader.cancel().catch(()=>{});reader.releaseLock();}
+  }
   async function pump(){
     if(active)return;
     let task=writes.shift();
@@ -20,18 +29,27 @@
     if(!task){paint();return;}
     if(task.cancelled){pump();return;}
     active=task;paint();
+    const transport=new AbortController();let failure=null,idle=null;
+    const expire=kind=>{failure=Object.assign(new Error(kind==='idle'?'計算の通信が停止しました。入力は保持しています。再計算してください。':'計算の通信が時間切れになりました。入力は保持しています。処理結果を確認してください。'),{name:'CalculationTransportTimeout'});transport.abort();};
+    const deadline=setTimeout(()=>expire('deadline'),TRANSPORT_DEADLINE_MS);
+    const armIdle=()=>{clearTimeout(idle);idle=setTimeout(()=>expire('idle'),STREAM_IDLE_MS);};
     try{
       // Caller abort invalidates its result. Keep the actual request alive and
-      // retain this slot until its body drains; Abort is not server cancellation.
-      const signal=new AbortController().signal;
+      // retain this slot until a terminal event, EOF or transport error.
+      // Abort of an obsolete caller is not server cancellation.
+      const signal=transport.signal;
       const input=task.input instanceof Request?new Request(task.input,{signal}):task.input;
       const response=await nativeFetch.call(window,input,{...task.init,signal});
       const streaming=response.headers.get('content-type')?.includes('application/x-ndjson');
-      if(streaming&&!task.cancelled)task.resolve(response);
-      await response.clone().arrayBuffer();
+      task.response=response;transportFailures.set(response,()=>failure);
+      if(streaming){
+        const copy=response.clone();
+        if(!task.cancelled)task.resolve(response);else cancelBody(response.body);
+        await drainCalculationStream(copy,()=>{if(idle!==null)armIdle();},armIdle);
+      }else await response.clone().arrayBuffer();
       if(!streaming&&!task.cancelled)task.resolve(response);
-    }catch(error){if(!task.cancelled)task.reject(error);}
-    finally{task.detach();active=null;queueMicrotask(pump);}
+    }catch(error){if(!task.cancelled)task.reject(failure||error);}
+    finally{clearTimeout(deadline);clearTimeout(idle);task.detach();active=null;queueMicrotask(pump);}
   }
   window.fetch=function(input,init={}){
     const url=new URL(input instanceof Request?input.url:String(input),location.href);
@@ -42,7 +60,7 @@
     const signal=init.signal||(input instanceof Request?input.signal:null);
     return new Promise((resolve,reject)=>{
       const task={input,init,key:url.pathname,resolve,reject,cancelled:false,sequence:++sequence,detach:()=>{}};
-      const cancel=()=>{if(task.cancelled)return;task.cancelled=true;if(reads.get(task.key)===task)reads.delete(task.key);reject(aborted());paint();};
+      const cancel=()=>{if(task.cancelled)return;task.cancelled=true;cancelBody(task.response?.body);if(reads.get(task.key)===task)reads.delete(task.key);reject(aborted());paint();};
       task.cancel=cancel;
       if(signal?.aborted){cancel();return;}
       signal?.addEventListener('abort',cancel,{once:true});task.detach=()=>signal?.removeEventListener('abort',cancel);
@@ -71,17 +89,18 @@
   window.addEventListener('pagehide',()=>window.hideCalculationPosition());
   window.readCalculationResponse=async(response,onRoles=()=>{},onPosition=()=>{})=>{
     if(!response.headers.get('content-type')?.includes('application/x-ndjson'))return response.json();
-    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',complete=null,roles=false,identity=null;
+    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',complete=null,roles=false,identity=null,redirected=false;
     const consume=line=>{if(!line.trim())return;const event=JSON.parse(line);
       if(event.event==='error')throw Error(event.error||'計算が完了しませんでした。');
-      if(event.event==='redirect'){location.assign(event.url);return;}
+      if(event.event==='redirect'){redirected=true;location.assign(event.url);return;}
       if(event.event==='roles'){if(roles||complete)throw Error('計算応答の順序が不正です。');roles=true;identity={run_id:event.run_id,board_id:event.board_id,revision:event.revision,view:event.view,request_id:event.request_id};onRoles(event);}
       else if(event.event==='position-unavailable'){if(identity&&event.run_id===identity.run_id)window.hideCalculationPosition(event.run_id);}
       else if(event.event==='position'){if(identity&&!complete&&event.run_id===identity.run_id&&event.board_id===identity.board_id&&event.revision===identity.revision&&event.view===identity.view&&event.request_id===identity.request_id)onPosition(event);}
       else if(event.event==='complete'){if(complete)throw Error('計算応答が重複しました。');complete=event;}
     };
-    try{while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let pos;while((pos=buffer.indexOf('\n'))>=0){consume(buffer.slice(0,pos));buffer=buffer.slice(pos+1);}if(done)break;}consume(buffer);}
-    finally{reader.releaseLock();if(identity?.run_id)window.hideCalculationPosition(identity.run_id);}
+    try{while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let pos;while((pos=buffer.indexOf('\n'))>=0){consume(buffer.slice(0,pos));buffer=buffer.slice(pos+1);if(complete||redirected)break;}if(done||complete||redirected)break;}if(!complete&&!redirected)consume(buffer);}
+    catch(error){throw transportFailures.get(response)?.()||error;}
+    finally{reader.cancel().catch(()=>{});reader.releaseLock();if(identity?.run_id)window.hideCalculationPosition(identity.run_id);}
     if(!complete)throw Error('計算応答が途中で終了しました。入力は保持されています。');return complete;
   };
   document.addEventListener('submit',event=>{
