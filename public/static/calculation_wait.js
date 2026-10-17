@@ -48,22 +48,41 @@
       paint();pump();
     });
   };
-  window.readCalculationResponse=async(response,onRoles=()=>{})=>{
+  const position=document.createElement('p');position.className='calculation-position';position.hidden=true;position.setAttribute('role','status');
+  let positionRun=null;
+  window.hideCalculationPosition=run=>{if(!run||run===positionRun){position.hidden=true;positionRun=null;position.textContent='';position.title='';delete position.dataset.runId;delete position.dataset.sampleId;}};
+  window.showCalculationPosition=event=>{
+    if(document.hidden||nativeSubmission)return;
+    if(!Array.isArray(event.path)||!event.path.length||event.path.length>12||!Number.isInteger(event.depth)||event.depth<event.path.length||event.path.some(step=>!Number.isInteger(step.day)||step.day<1||!['day','night'].includes(step.phase)))return;
+    if(!position.isConnected){const host=document.querySelector('.calculation-estimate')||document.querySelector('main');if(host)host.after(position);else document.body.append(position);}
+    const current=event.path?.at(-1);if(!current)return;
+    const viewLabel={public:'公開',wolf:'狼本人',seer:'占い本人',hunter:'狩人本人'}[event.view];if(!viewLabel)return;
+    positionRun=event.run_id;position.hidden=false;
+    position.textContent=`探索位置［${viewLabel}］：Day ${current.day} ${current.phase==='day'?'昼':'夜'}・呼出し深さ ${event.depth}（進捗率ではありません）`;
+    position.dataset.runId=event.run_id;position.dataset.sampleId=String(event.sample_id);
+    position.title='採取時の評価呼出し経路（保存履歴ではありません）：'+event.path.map(step=>`Day ${step.day} ${step.phase==='day'?'昼':'夜'}`).join(' → ');
+  };
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)window.hideCalculationPosition();});
+  for(const name of ['change','strategychange','viewpointchange','board-table-dirty'])document.addEventListener(name,()=>window.hideCalculationPosition(),true);
+  window.addEventListener('pagehide',()=>window.hideCalculationPosition());
+  window.readCalculationResponse=async(response,onRoles=()=>{},onPosition=()=>{})=>{
     if(!response.headers.get('content-type')?.includes('application/x-ndjson'))return response.json();
-    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',complete=null,roles=false;
+    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',complete=null,roles=false,identity=null;
     const consume=line=>{if(!line.trim())return;const event=JSON.parse(line);
       if(event.event==='error')throw Error(event.error||'計算が完了しませんでした。');
       if(event.event==='redirect'){location.assign(event.url);return;}
-      if(event.event==='roles'){if(roles||complete)throw Error('計算応答の順序が不正です。');roles=true;onRoles(event);}
+      if(event.event==='roles'){if(roles||complete)throw Error('計算応答の順序が不正です。');roles=true;identity={run_id:event.run_id,board_id:event.board_id,revision:event.revision,view:event.view,request_id:event.request_id};onRoles(event);}
+      else if(event.event==='position-unavailable'){if(identity&&event.run_id===identity.run_id)window.hideCalculationPosition(event.run_id);}
+      else if(event.event==='position'){if(identity&&!complete&&event.run_id===identity.run_id&&event.board_id===identity.board_id&&event.revision===identity.revision&&event.view===identity.view&&event.request_id===identity.request_id)onPosition(event);}
       else if(event.event==='complete'){if(complete)throw Error('計算応答が重複しました。');complete=event;}
     };
     try{while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let pos;while((pos=buffer.indexOf('\n'))>=0){consume(buffer.slice(0,pos));buffer=buffer.slice(pos+1);}if(done)break;}consume(buffer);}
-    finally{reader.releaseLock();}
+    finally{reader.releaseLock();if(identity?.run_id)window.hideCalculationPosition(identity.run_id);}
     if(!complete)throw Error('計算応答が途中で終了しました。入力は保持されています。');return complete;
   };
   document.addEventListener('submit',event=>{
     if(!event.defaultPrevented&&event.target.method?.toLowerCase()==='post'){
-      nativeSubmission=true;event.target.inert=true;paint();
+      nativeSubmission=true;window.hideCalculationPosition();event.target.inert=true;paint();
     }
   });
 })();

@@ -267,7 +267,7 @@ function initializeLiveClaims() {
             for(const cell of row.querySelectorAll('[data-value-cell]')){const next=remote?.querySelector(`[data-value-cell="${cell.dataset.valueCell}"]`);if(next)cell.innerHTML=next.innerHTML;}
           }
           attachStatus();status.textContent='役職率を表示しています。勝率を計算中です。';
-        }):{html:await response.text()};
+        },event=>{if(sentVersion===version&&form.isConnected&&!window.boardTableDraft?.isDirty())window.showCalculationPosition(event);}):{html:await response.text()};
         const html = new DOMParser().parseFromString(outcome.html, 'text/html');
         const revision = html.querySelector('#action-form input[name="revision"]');
         if (!revision) throw new Error('画面を再読込してから入力してください。');
@@ -485,7 +485,7 @@ document.addEventListener('DOMContentLoaded',async()=>{
   const response=await fetch('/main',{headers:{Accept:'application/x-ndjson'},credentials:'same-origin'});
   const result=await window.readCalculationResponse(response,event=>{
    if(!mounted.isConnected||generation)return;identity={board_id:event.board_id,revision:event.revision};install(new DOMParser().parseFromString(event.html,'text/html'));
-  });
+  },event=>{if(mounted.isConnected&&!generation&&!window.isStrategyCalculationPending?.()&&!window.boardTableDraft?.isDirty()&&(!mounted.dataset.viewpointMode||mounted.dataset.viewpointMode==='public'))window.showCalculationPosition(event);});
   if(!response.ok)throw Error(result.error||'盤面を計算できませんでした。');
   if(!mounted.isConnected||generation||window.isStrategyCalculationPending?.()||window.boardTableDraft?.isDirty()||!identity||result.board_id!==identity.board_id||result.revision!==identity.revision)return;
   const doc=new DOMParser().parseFromString(result.html,'text/html');

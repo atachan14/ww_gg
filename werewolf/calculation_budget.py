@@ -8,7 +8,16 @@ DEFAULT_MAX_WORK=4000000
 DEFAULT_MAX_SECONDS=270
 _current=ContextVar('wwgg_calculation_budget',default=None)
 _last_stop=ContextVar('wwgg_budget_stop',default=None)
+_cancelled=ContextVar('wwgg_calculation_cancelled',default=None)
 _log=logging.getLogger('wwgg.budget')
+
+class CalculationCancelled(Exception):pass
+
+@contextmanager
+def cancellation_scope(event):
+    token=_cancelled.set(event)
+    try:yield
+    finally:_cancelled.reset(token)
 
 class CalculationBudgetExceeded(Exception):
     def __init__(self,message='Exact calculation budget exceeded',*,kind=None):
@@ -36,6 +45,8 @@ def calculation_budget(max_work=None,*,max_seconds=None):
     finally:_current.reset(token)
 
 def tick(work=1):
+    cancelled=_cancelled.get()
+    if cancelled is not None and cancelled.is_set():raise CalculationCancelled()
     state=_current.get()
     if state is None:return
     now=monotonic() if state[2] is not None else None

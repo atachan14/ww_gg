@@ -46,7 +46,7 @@
       abort?.abort();
       mode='loading';paint();const revision=++version;abort=new AbortController();
       try{
-        const result=await load({role,players:[...selected],signal:abort.signal,onPartial:result=>{if(revision===version&&root.isConnected)show(result);}});
+        const result=await load({role,players:[...selected],signal:abort.signal,onPartial:result=>{if(revision===version&&root.isConnected)show(result);},onPosition:result=>{if(revision===version&&root.isConnected)window.showCalculationPosition(result);}});
         if(revision!==version||!root.isConnected)return;
         // Adapter must supply private-view values; public win rates must not be reused.
         show(result);mode='viewing';paint();

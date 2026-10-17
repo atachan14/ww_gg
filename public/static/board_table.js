@@ -87,7 +87,7 @@
       const response=await fetch('/table-preview',{method:'POST',headers:{Accept:'application/x-ndjson'},signal:controller.signal,body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,request_id:String(id),payload:JSON.stringify(draft.snapshot())})});const data=await window.readCalculationResponse(response,event=>{
         if(!main.isConnected||id!==version||!draft.isDirty()||String(event.request_id)!==String(id)||event.revision!==seed.revision||event.board_id!==seed.board_id)return;
         receivedRoles=true;apply(new DOMParser().parseFromString(event.html,'text/html'));status.textContent='役職率を表示・勝率を計算中';
-      });
+      },event=>{if(main.isConnected&&id===version&&draft.isDirty()&&event.revision===seed.revision&&event.board_id===seed.board_id&&String(event.request_id)===String(id))window.showCalculationPosition(event);});
       if(!main.isConnected||id!==version||!draft.isDirty())return;
       if(!response.ok)throw Error(data.error);if(String(data.request_id)!==String(id)||data.revision!==seed.revision||data.board_id!==seed.board_id)return;
       apply(new DOMParser().parseFromString(data.html,'text/html'));lastPreview=clone(draft.snapshot());status.textContent='プレビュー';

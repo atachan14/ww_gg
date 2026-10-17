@@ -12,6 +12,7 @@ class CalculationStreamTests(unittest.TestCase):
     def state(self):
         with self.c.session_transaction() as s:return copy.deepcopy(s['game'])
     def test_roles_are_sent_before_forecast_with_one_reconstruction(self):
+        self.app.config['CALCULATION_POSITION_ENABLED']=False
         expected=self.c.get('/main').get_data(as_text=True)
         original_forecast=RoleState.forecast
         original=BoardData.roles
@@ -45,7 +46,7 @@ class CalculationStreamTests(unittest.TestCase):
         self.assertEqual([e['event'] for e in events],['roles','complete'])
         self.assertEqual([p['probabilities'] for p in events[0]['players']],
                          [p['probabilities'] for p in legacy['players']])
-        self.assertEqual({k:v for k,v in events[1].items() if k!='event'},legacy)
+        self.assertEqual({k:v for k,v in events[1].items() if k not in ('event','run_id','view')},legacy)
         self.assertEqual(self.state(),before)
     def test_stream_keeps_budget_active_while_forecast_runs(self):
         from werewolf.calculation_budget import budget_usage

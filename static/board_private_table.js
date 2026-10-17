@@ -58,11 +58,11 @@
    }
   });
   controller=window.createBoardViewpointController({root,roles:seed.roles,restore,
-   load:async({role,players,signal,onPartial})=>{
+   load:async({role,players,signal,onPartial,onPosition})=>{
     receivedRoles=false;const results=mountSecret(role,role==='wolf'?Math.min(...players):players[0],players);
     const response=await fetch('/private-view',{method:'POST',headers:{Accept:'application/x-ndjson'},signal,body:new URLSearchParams({
      revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify({role,players,results})})});
-    const result=await window.readCalculationResponse(response,event=>{if(event.board_id===seed.board_id&&event.revision===seed.revision){receivedRoles=true;onPartial(event);}});if(!response.ok)throw Error(result.error);
+    const result=await window.readCalculationResponse(response,event=>{if(event.board_id===seed.board_id&&event.revision===seed.revision){receivedRoles=true;onPartial(event);}},event=>{if(event.view===role&&event.board_id===seed.board_id&&event.revision===seed.revision)onPosition(event);});if(!response.ok)throw Error(result.error);
     if(result.board_id!==seed.board_id||result.revision!==seed.revision)throw Error('Boardが変更されています。再読み込みしてください。');
     return result;
    },

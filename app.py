@@ -6,9 +6,10 @@ from decimal import Decimal
 from fractions import Fraction
 import secrets
 from threading import BoundedSemaphore
+from time import monotonic
 import os
 import json
-from werewolf.calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS, calculation_budget, CalculationBudgetExceeded, tick, reset_diagnostics, budget_stop, stop_message, log_result
+from werewolf.calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS, calculation_budget, CalculationBudgetExceeded, CalculationCancelled, tick, reset_diagnostics, budget_stop, stop_message, log_result
 from werewolf.dawn import FLOW as DAWN_FLOW, enabled as dawn_enabled, advance_step
 from werewolf.strategy_ui import co_editor, resolve_co_editor
 from werewolf.result_disclosure import MODEL as DISCLOSURE_MODEL, DisclosureInconsistent, condition_observed
@@ -325,31 +326,47 @@ def create_app(test_config=None, *, deployment=False):
         return (request.path in ('/main','/table-preview','/private-view') and
                 request.headers.get('Accept')=='application/x-ndjson')
 
-    def calculation_stream(events):
+    def calculation_stream(events,*,view='public'):
         # The iterator owns its budget and slot: Flask tears down the initial
         # request before the response body is consumed. Never extend that budget
         # by starting a new continuation request or an external background job.
-        from flask import Response,stream_with_context
+        from flask import Response,stream_with_context,copy_current_request_context
         session.setdefault('co_display_game',secrets.token_hex(8))
-        @stream_with_context
         def generate():
-            acquired=False
+            reset_diagnostics()
+            acquired=False;cancelled=False;stop_kind=None
             with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                     max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS)):
                 try:
-                    acquired=calculation_slot.acquire(timeout=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
-                    if not acquired:raise CalculationBudgetExceeded('Calculation queue time limit',kind='time')
+                    queue_deadline=monotonic()+(app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
+                    while not acquired:
+                        tick(0)
+                        if monotonic()>=queue_deadline:raise CalculationBudgetExceeded('Calculation queue time limit',kind='time')
+                        acquired=calculation_slot.acquire(timeout=.2)
                     tick(0)
                     for event in events():
                         yield json.dumps(event,ensure_ascii=False)+'\n'
+                except (CalculationCancelled,GeneratorExit):
+                    cancelled=True;raise
                 except CalculationBudgetExceeded as exc:
+                    stop_kind=exc.kind
                     yield json.dumps({'event':'error','error':stop_message(exc.kind),'budget_kind':exc.kind,'pending':True},ensure_ascii=False)+'\n'
                 except (ValueError,TypeError,KeyError,DisclosureInconsistent) as exc:
                     yield json.dumps({'event':'error','error':str(exc)},ensure_ascii=False)+'\n'
                 finally:
-                    log_result(request.endpoint,200)
+                    log_result(request.endpoint,200,'cancelled' if cancelled else stop_kind)
                     if acquired:calculation_slot.release()
-        return Response(generate(),mimetype='application/x-ndjson',headers={'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'})
+        if app.config.get('CALCULATION_POSITION_ENABLED',True):
+            from werewolf.exploration_position import position_stream
+            @copy_current_request_context
+            def produce(send):
+                source=generate()
+                try:
+                    for chunk in source:send(chunk)
+                finally:source.close()
+            iterator=position_stream(produce,view=view)
+        else:iterator=generate()
+        return Response(stream_with_context(iterator),mimetype='application/x-ndjson',headers={'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'})
 
     @app.before_request
     def begin_request_budget():
@@ -831,7 +848,7 @@ def create_app(test_config=None, *, deployment=False):
                         max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
                     if budget_stop() is not None:result={**result,'reason':stop_message(),'budget_kind':budget_stop()['kind']}
                     yield dict(event='complete',**result,**identity)
-                return calculation_stream(events)
+                return calculation_stream(events,view=payload['role'])
             # Replay only public evidence; the private Board is confined to this adapter.
             from werewolf.board_flow import BoardData
             private_source=board_data(state).roles()
