@@ -1,0 +1,35 @@
+{
+  "reference": "original labelled scalar/action evaluator, physical kernel cache and same retirement proof; NO new canonical reuse or fast/compact keys",
+  "original_unmodified_full_reference": false,
+  "comparison_status": "reference_pending",
+  "exact_value_and_table_equal": null,
+  "reference_result": {
+    "complete": false,
+    "reason": "information_set_budget_exceeded",
+    "seconds": 59.99905020001461,
+    "stats": {
+      "key_seconds": 0.0,
+      "key_requests": 0,
+      "key_source_hits": 0,
+      "key_supported": 0,
+      "key_value_hits": 0,
+      "key_action_hits": 0,
+      "generated_publication_branches": 29078,
+      "acquisition_states": 3761,
+      "kernel_requests": 277451,
+      "kernel_hits": 264863,
+      "kernel_computations": 12588,
+      "kernel_key_seconds": 4.967947496508714
+    },
+    "mask_stats": {},
+    "expansions": {
+      "actions": 146176,
+      "values": 47265
+    },
+    "memory": {
+      "peak_working_set_bytes": 652632064,
+      "peak_process_commit_bytes": 645615616,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  }
+}

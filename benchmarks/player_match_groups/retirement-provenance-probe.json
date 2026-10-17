@@ -1,0 +1,51 @@
+{
+  "changes_solver": false,
+  "meaning": "Local diagnostic only; no whole-value or behavior correction claimed",
+  "rows": [
+    {
+      "incoming_probability": "1/2",
+      "alive": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "initial_seers_before": 1,
+      "initial_seers_after": 0,
+      "initial_rule": "random_white",
+      "past_before": [
+        {
+          "acquired_day": 1,
+          "published_day": 1,
+          "player": 1,
+          "target": 3,
+          "color": "white"
+        },
+        {
+          "acquired_day": 1,
+          "published_day": 1,
+          "player": 2,
+          "target": 3,
+          "color": "white"
+        }
+      ],
+      "past_after": [],
+      "can_retire_before": true,
+      "can_retire_after": false,
+      "generated_branches": 48,
+      "total_probability": "1",
+      "all_role_posteriors_unchanged": true,
+      "generated_acquired_days": [
+        1,
+        2
+      ]
+    }
+  ]
+}

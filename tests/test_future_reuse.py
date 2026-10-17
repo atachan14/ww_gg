@@ -53,6 +53,8 @@ class FutureReuseTests(unittest.TestCase):
             e=FutureReuseForecast(*args,future_reuse=True,physical_reuse=True,**kwargs);engines.append(e);return e
         with patch('werewolf.model_a_public.InformationSetForecast',factory):
             trial=public_forecast(b,s,past,rules,strategy,max_seconds=10)
+        from werewolf.seer_future_uniform import FuturePending
+        self.assertNotIsInstance(original,FuturePending);self.assertNotIsInstance(trial,FuturePending)
         self.assertEqual(original,trial);self.assertEqual(engines[0].reuse_stats['key_requests'],0)
 
     def test_physical_kernel_keeps_joint_law_not_only_marginals(self):

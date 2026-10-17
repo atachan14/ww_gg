@@ -1,0 +1,36 @@
+{
+  "reference": "original labelled evaluator with ONLY retirement evidence retention; all new canonical/physical/key adapters OFF",
+  "same_retirement_proof": true,
+  "original_unmodified_full_reference": false,
+  "exact_value_and_table_equal": null,
+  "reference_result": {
+    "complete": false,
+    "reason": "information_set_budget_exceeded",
+    "seconds": 89.99340859998483,
+    "stats": {
+      "key_seconds": 0.0,
+      "key_requests": 0,
+      "key_source_hits": 0,
+      "key_supported": 0,
+      "key_value_hits": 0,
+      "key_action_hits": 0,
+      "generated_publication_branches": 33994,
+      "acquisition_states": 4695,
+      "kernel_requests": 333029,
+      "kernel_hits": 0,
+      "kernel_computations": 333029,
+      "kernel_key_seconds": 0.0
+    },
+    "mask_stats": {},
+    "expansions": {
+      "actions": 175450,
+      "values": 56824
+    },
+    "memory": {
+      "peak_working_set_bytes": 1093206016,
+      "peak_process_commit_bytes": 1088765952,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  "comparison_status": "reference_pending"
+}

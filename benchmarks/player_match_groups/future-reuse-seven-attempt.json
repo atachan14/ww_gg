@@ -1,0 +1,44 @@
+{
+  "input": "11b0c8f8b34324feeb3c7343a52e86e5f10b75c3c06d90922cd8ef6b0a04491d",
+  "frozen_engine": "052651c37b736787a4dcaa9f365c599299d1a9a1b9a247718ae38326b5ada153",
+  "old_checkpoint_input_and_core_equal": true,
+  "generated_board_joint_past_rules_strategy_equal": true,
+  "view_scope_metadata_equal": false,
+  "uses_exact_saved_game": true,
+  "reference_complete": false,
+  "reference_scope": "partial oracle/audit values only, not a complete Table",
+  "time_limit_seconds": 120,
+  "memory_limit_bytes": 1500000000,
+  "trial": {
+    "complete": false,
+    "reason": "information_set_budget_exceeded",
+    "seconds": 120.07208820001688,
+    "stats": {
+      "key_seconds": 56.805574896978214,
+      "key_requests": 144766,
+      "key_source_hits": 49009,
+      "key_supported": 144766,
+      "key_value_hits": 124605,
+      "key_action_hits": 1293,
+      "generated_publication_branches": 26434,
+      "acquisition_states": 369,
+      "kernel_requests": 26815,
+      "kernel_hits": 25489,
+      "kernel_computations": 1326,
+      "kernel_key_seconds": 0.48654100255225785
+    },
+    "mask_stats": {
+      "mask_requests": 181918,
+      "mask_hits": 181777
+    },
+    "expansions": {
+      "actions": 13919,
+      "values": 4949
+    },
+    "memory": {
+      "peak_working_set_bytes": 709701632,
+      "peak_process_commit_bytes": 701833216,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  }
+}

@@ -6,7 +6,7 @@ Completion means exact supported inputs/observations/physical transitions and co
 - [x] Full-state certificate includes joint weights, acquisitions, public history, physical base, rules/policy and targets; unknown shapes fail closed.
 - [x] Empty initial ledger and known-true single initial public white: limited uniform continuation roots through seven players.
 - [x] Uniform two-seer same-white CO mixture, five/six-player complete Table/branch checks; true/fake identities remain mixed.
-- [ ] Seven-player two-CO full independent numerical reference. Old checkpoint work preserves 98 oracle /95 audited information-group values but not a complete forecast.
+- [x] Seven-player same-white two-CO complete prototype and independent fixed-random count-law numerical reference: all Table rows and terminal payoff match. All 98 original oracle primitives also match. This does not complete an entirely unmodified old-engine full run or general seven-player support.
 - [ ] Actual heavy target: medium CO, two seer CO, initial white, configured max policies, full Table/terminal completion.
 - [ ] General multiple reports, different targets/colors, later/hidden histories, sparse/nonuniform two-CO support and edit/cancel/recompute coverage for each extended scope.
 - [ ] Medium and hunter/GJ/no-repeat support in the new sharing route, with their information histories and policy certificates.
@@ -19,3 +19,6 @@ Existing sharing: labelled scalar/action/flow memoization; single-seer reduced k
 
 
 Current prototype also covers the one remaining live claimant with more than four latent positions and projected zero-seer continuations through five living players, under the same guarded random/no-medium/no-hunter policy. It does not extend max, personal, opaque-observer or unsupported-policy numerical reuse. Pure physical kernels use the complete frozen Board, target, rules and strategy; private history is not collapsed into public history. Night public observation remains on its separate original conditioning law. Canonical construction uses bounded completed serialization/mask caches; hash collisions still require full evidence equality.
+
+
+Retirement-proof milestone: solver-only retention of the actual observed public report tuple after an already validated no-information retirement. This remains a separate OFF experiment with random/no-medium/no-hunter/private-entry guards. Unknown initial evidence is never blessed. All 98 frozen old oracle primitives were re-evaluated and matched after verifying old engine/input/plan checksums, coefficients and complete public/private/physical laws. Whole seven-player result: 8/35; claimants 3/10 each, white target 2/15, other four targets 13/60 each. These numbers are complete in the new prototype, not proof of full original-reference completion or support for medium/max/hunter/general histories.
