@@ -516,6 +516,23 @@ def create_app(test_config=None, *, deployment=False):
         if page not in ('index','v0.5.2-design') and entry is None:abort(404)
         return render_template('help_history.html',page=page,entry=entry,versions=VERSIONS)
 
+    @app.get('/help/history/materials/')
+    @app.get('/help/history/materials/<page>')
+    def help_materials(page='index'):
+        from werewolf.help_materials import MATERIALS
+        if page!='index' and page not in MATERIALS:abort(404)
+        return render_template('help_materials.html',page=page,materials=MATERIALS)
+
+    @app.get('/help/history/materials/raw/<page>')
+    def help_material_raw(page):
+        from werewolf.help_materials import MATERIALS
+        if page not in MATERIALS:abort(404)
+        response=send_from_directory(os.path.join(app.root_path,'help_assets','history'),page+'.html')
+        response.headers['Content-Type']='text/html; charset=utf-8'
+        response.headers['Content-Security-Policy']="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self'; sandbox allow-scripts allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+        response.headers['X-Content-Type-Options']='nosniff'
+        return response
+
     @app.get('/help/specs')
     def help_specs():return render_template('help_specs.html')
 

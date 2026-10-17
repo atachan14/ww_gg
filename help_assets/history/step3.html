@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>Step3｜Boardの持ち方とflowの3案</title><style>
+:root{color-scheme:light dark;--bg:#f3f6fa;--surface:#fff;--ink:#21344c;--muted:#50647c;--line:#72859d;--border:#ccd7e4;--blue:#e7f0fb;--green:#e6f3eb;--orange:#fff0d5;--red:#fbe6e8;--accent:#245d98}*{box-sizing:border-box}html{scroll-padding-top:20px}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 system-ui,"Yu Gothic",sans-serif}header,main,footer{max-width:1160px;padding:28px;margin:auto}h1{font-size:clamp(26px,4vw,38px);line-height:1.4;margin:10px 0}h2{font-size:24px;padding-top:22px;margin:30px 0 20px;border-top:1px solid var(--border);scroll-margin-top:16px}h3{font-size:19px;margin:28px 0 16px}p{margin:16px 0}li{margin:8px 0}a{color:var(--accent);text-underline-offset:4px;overflow-wrap:anywhere}code{font-size:.9em;overflow-wrap:anywhere}.eyebrow,.note{font-size:14px;color:var(--muted)}.status{padding:12px 16px;background:var(--blue);border-left:4px solid var(--accent)}nav{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0}nav a{padding:8px 13px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-decoration:none}.overview{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.overview>div{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px}.overview h2{border:0;padding:0;margin:0 0 8px;font-size:21px}.overview p{margin:6px 0}.proposal{padding:24px;background:var(--surface);border:1px solid var(--border);border-radius:12px;margin-top:30px;scroll-margin-top:20px}.proposal>h2{border:0;padding-top:0;margin-top:0}.diagram-wrap{background:var(--surface);padding:16px 4px;border-radius:8px}.diagram-title{font-size:15px;font-weight:600;padding:0 12px}.diagram{position:relative;width:100%;isolation:isolate}.diagram svg{position:absolute;inset:0;width:100%;height:100%;z-index:-1;overflow:visible}.node{position:absolute;display:flex;flex-direction:column;justify-content:center;gap:3px;text-align:center;border:1px solid var(--line);border-radius:9px;background:var(--surface);padding:8px 10px;line-height:1.45;font-size:15px;overflow-wrap:anywhere}.node .ref{font-size:12px;color:var(--muted)}.node.store,.node.input{background:var(--blue)}.node.decision{background:var(--orange);border-radius:22px}.node.output{background:var(--green)}.node.pending{background:var(--red)}.edge{fill:none;stroke:var(--line);stroke-width:1.4}.edge-label{font-size:12px;fill:var(--ink);paint-order:stroke;stroke:var(--surface);stroke-width:6px;stroke-linejoin:round}.supplement{padding:12px 16px;border:1px solid var(--border);border-radius:8px;background:var(--surface);font-size:14px;margin:18px 0}summary{cursor:pointer;color:var(--accent)}pre{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.6;font-size:13px}.table-wrap{margin:20px 0}table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.75}th,td{padding:12px 9px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border);overflow-wrap:anywhere}th{background:var(--blue)}td:first-child{font-weight:600}.back{display:block;margin:24px 0}a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}@media(max-width:700px){header,main,footer{padding:16px}.overview{grid-template-columns:1fr}.proposal{padding:16px 10px}.diagram-wrap{padding:8px 0}.node{font-size:14px}.node .ref{font-size:11px}h2{font-size:22px}h3{font-size:19px}.table-wrap table,.table-wrap tbody,.table-wrap tr,.table-wrap td{display:block}.table-wrap thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.table-wrap tr{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:12px;margin:14px 0}.table-wrap td{border:0;padding:8px 3px}.table-wrap td:before{content:attr(data-label);display:block;font-size:12px;color:var(--muted);font-weight:600}.table-wrap td:first-child{font-size:16px}.table-wrap td:first-child:before{display:none}nav a{min-height:44px}}@media(prefers-color-scheme:dark){:root{--bg:#101b2a;--surface:#18283c;--ink:#e5edf7;--muted:#b4c4d8;--line:#8fa4bd;--border:#40546c;--blue:#203c60;--orange:#514023;--red:#522e37;--green:#244839;--accent:#a0caff}}
+</style></head><body><div role="note" style="padding: 12px; margin: 12px 0px; border: 2px solid rgb(100, 116, 139); border-radius: 8px; line-height: 1.7;"><strong>当時の検討資料（後日の校正注記を含む）</strong><br>v0.5.1を土台にした検討で、ここでの「現行」は当時を指します。現在の実装仕様そのものではありません。元の図・文字図を残し、作業進行の記録と会話引用は省いています。<br><a href="/help/program/board-design" target="_top">採用後のB案フロー（現在の説明）</a> ／ <a href="/help/history/materials/" target="_top">資料一覧</a></div><header id="top"><div class="eyebrow">WW_GG · DESIGN EXPLANATION · LOCAL ONLY</div><h1>Boardの持ち方とflowを、3案で辿る</h1><p>元案の「確定／入力／計算」と加重集約を使い、情報の正本・履歴再現・計算の責任を変えた案です。</p><p class="note">設計説明資料です。製品UIの試作ではありません。全3案・内部図・同じ7例を1ページに展開しています。目次は任意の近道です。</p><nav aria-label="設計案のページ内目次"><a href="#scope">全体</a><a href="#evaluation">共通評価</a><a href="#proposal-a">A 既存を最小整理</a><a href="#proposal-b">B 盤面状態を持つ</a><a href="#proposal-c">C 記録から作る</a><a href="#tree">GameTreeとの接続</a><a href="#related">Boardの関連集合・CO内訳</a><a href="#checks">確認事項</a></nav><div class="overview"><div><h2>A｜既存を最小整理</h2><p>既存保存と計算を保ち、窓口がBoardDataへまとめる。</p><p class="note">正本：既存ゲーム・履歴</p></div><div><h2>B｜盤面状態を持つ</h2><p>各盤面の有効入力を保持し、更新と遷移が次の状態を作る。関連集合は参照・必要時取得として具体化。</p><p class="note">正本：選択盤面の入力状態</p></div><div><h2>C｜記録から作る</h2><p>入力・進行の台帳から、指定条件の盤面を必要時に投影する。</p><p class="note">正本：Game前提＋入力台帳</p></div></div></header><main>
+<p>作成：2026-10-16T09:29:49+00:00（UTC）。現行参照：v0.5.1 <code>e325a034a488ca2edb81f98dc39ca750ded680f4</code>。</p>
+<p><a href="#scope">計画・Step1</a> ／ <a href="/help/history/materials/step2" target="_top" rel="noopener">Step2の当時の閲覧ページ（GameTree要件は本ページにも記載）</a></p>
+<h2 id="scope">1. この資料で提案する範囲</h2>
+<p><strong>元案の「BoardData＝確定／入力／計算」と「分岐確率×子勝率の合計」は、3案すべてで使える。</strong> 違いは、何を正本として保持し、誰が履歴を再現し、どこが計算結果の有効性を管理するか。</p>
+<p>以下は設計案であり、実装済み機能ではない。名前や型を採用する判断はしていない。全未来木の永続保存や、UIの入れ子と計算関係の一致を前提にしない。案の短い長短は示すが、採点・優劣の結論はStep4へ残す。</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">案</th><th scope="col">正本は何か</th><th scope="col">BoardDataの役割</th><th scope="col">履歴再現と計算の責任</th></tr></thead><tbody>
+<tr><td data-label="案">A 既存を最小整理</td><td data-label="正本は何か">既存の保存ゲーム・進行履歴・所属Log</td><td data-label="BoardDataの役割">既存の確定／入力／計算をまとめて見せる、読み取り用の束</td><td data-label="履歴再現と計算の責任">統一窓口が既存再生・評価経路を呼ぶ。内部の分割を当面保つ</td></tr>
+<tr><td data-label="案">B 盤面ごとの自己完結スナップショット</td><td data-label="正本は何か">選択した各盤面の確定事実・有効入力と根拠履歴</td><td data-label="BoardDataの役割">盤面の入力と派生計算状態を保持する単位</td><td data-label="履歴再現と計算の責任">盤面更新・遷移が次の状態を作り、評価器が結果を返す</td></tr>
+<tr><td data-label="案">C 入力記録を正本にして必要時に盤面化</td><td data-label="正本は何か">Game前提と、対象地点・公開時点等を持つ入力／進行／訂正の台帳</td><td data-label="BoardDataの役割">指定地点・視点・評価条件から作る投影結果</td><td data-label="履歴再現と計算の責任">再構成担当が台帳から状態を作り、評価担当が値を返す</td></tr>
+</tbody></table></div>
+<p>Bは「その盤面の入力状態を保持して渡す」、Cは「何を入力したかを保持し、必要な盤面状態をそこから作る」という違い。Aは既存の所有先を保ったまま接続を揃える。単なるクラス名の差ではない。</p>
+<h2 id="common">2. 3案共通の意味と、選ばない未決事項</h2>
+<h3>確定済み・維持する意味</h3>
+<ul><li>公開地点・親子の進行・有効入力と、全体配役の相関を説明できる。役職候補や必要履歴を元案から排除しない。</li><li>初期COgroupの重み付けと、後続の条件付けを区別する。子ごとに初期配分し直さない。</li><li>本人の観測だけで条件付けし、他者の行動判断に閲覧者の秘密を渡さない。判断に使う想定と、実際の枝の確率の意味を保つ。</li><li>当該行動を固定した比較と、max／均等などの方針で集約した値を区別する。終局枝は止め、継続枝を評価して加重する。</li><li>当時の戦略・公開時点・取得時点を保つ。入力訂正、発言撤回、仮入力、進行は別の意味として扱う。</li><li>正規Boardは当時情報の勝率。過去BoardはCurrent情報で見直した勝率。表示基準自体は確定済み。</li><li>更新履歴のツリー表示は必須対象外とした検討です。内部履歴・undo・訂正機能は維持します。</li><li>共有戦略のタグ名称は「盤面評価・既定開示・既定行動」。具体分類・分割をこの資料で決定しない。</li></ul>
+<h3>共通して未決のまま扱うもの</h3>
+<div class="table-wrap"><table><thead><tr><th scope="col">未決</th><th scope="col">3案での扱い</th></tr></thead><tbody>
+<tr><td data-label="未決">Current条件での過去再評価式、当時方針への後知恵の作用</td><td data-label="3案での扱い">対象地点・Currentの条件・視点・方針の扱いを分けて指定する余地を示す。式・作用は選ばない</td></tr>
+<tr><td data-label="未決">過去内訳の粒度、分岐率の分母、未来枝をどの地点の情報から見るか</td><td data-label="3案での扱い">評価の起点と条件を明示できるようにする。収納item全体を勝手に合計1としない</td></tr>
+<tr><td data-label="未決">優先真偽、COgroup優先位置、underfilledのskip式、過去の未入力</td><td data-label="3案での扱い">入力解釈の規則として未決で保持。新しい規則や既定値を補わない</td></tr>
+<tr><td data-label="未決">反実仮想で以後の実観測をどこまで残すか</td><td data-label="3案での扱い">当時履歴・Current再評価・反実仮想を識別する。反実仮想の結果を正史へ保存しない</td></tr>
+<tr><td data-label="未決">内部で保持する版の範囲、結果の永続化、cacheの容量</td><td data-label="3案での扱い">計算の再現・訂正に必要な意味は守るが、保存量・保持期限は未選定</td></tr>
+</tbody></table></div>
+<p>「表示先の過去Board」と「過去の計算状態そのもの」を同一にせず、結果にはどの地点をどの情報で評価したかを付ける。必要な新規仕様が揃わない要求は「仕様待ち」として扱う案とし、値を推測しない。これは現行の通常計算へ新たな未決ゲートを足す意味ではない。既存範囲で計算できる正規Boardの値・maxを不要にPendingへ変えない。</p>
+<section id="evaluation"><h2>3案共通｜評価の内部フロー</h2><p class="note">情報の持ち方が異なっても、この意味を保ちます。実装順や再評価の未決仕様を決める図ではありません。</p><div class="diagram-wrap"><p class="diagram-title">共通の評価：情報の意味を保って加重する</p><div class="diagram" data-graph="engine" role="group" aria-label="共通の評価：情報の意味を保って加重する"></div></div></section><section class="proposal" id="proposal-a"><h2>3. A案：既存を最小整理し、表示と計算の窓口を揃える</h2>
+<h3>持ち方と責任</h3>
+<div class="diagram-wrap"><p class="diagram-title">A｜既存を保ち、窓口が組み立てる</p><div class="diagram" data-graph="a" role="group" aria-label="A｜既存を保ち、窓口が組み立てる"></div></div>
+<details class="supplement"><summary>同じ構造を文字図で確認</summary><pre>既存の保存ゲーム・history・所属Log／Board graph【正本】
+        ↓ 統一した読取・評価窓口
+既存の再生 → 計算Board＋必要な共同履歴
+        ├─ 全体候補を集計 → 役職率
+        ├─ 視点の条件 → 本人の比較
+        └─ 既存経路を選択 → 結果枝 → 再帰 → 加重勝率
+        ↓
+BoardData【表示用・読み取り専用】
+  確定＝地点・生存・所属  入力＝有効入力・設定
+  計算＝条件の付いた率・勝率・計算状態
+        ↓
+GameTree表示用itemへ接続</pre></details>
+<ul><li>保存の正本は変えない。BoardDataから元の保存へ勝手に書き戻さない。</li><li>統一窓口は「保存入力→再生→適用できる評価経路→結果の組立て」を引き受ける。元の再生・評価器の重複まで直ちに統合する案ではない。</li><li>入力更新・進行・戻るは既存の処理へ渡す。所属Log・親子・退役を保持し、変更後の窓口呼出しで新しい表示を作る。</li><li>cacheは既存のまま使える範囲を再利用する。表示結果に計算元の地点・入力条件・視点を紐づけ、古い束を別条件へ流用しない。</li><li>正規Boardはその地点までの入力で再生する。Current再評価は別の要求として受け、正規の結果を上書きしない。過去再評価の新しい計算は既存に無い部分として残る。</li></ul>
+<h3>一つの入力更新から内部へ</h3>
+<details class="supplement"><summary>同じ構造を文字図で確認</summary><pre>更新要求
+  ├─ 仮入力 → 保存せず既存再生・評価へ
+  └─ 確定 → 既存の所属／整合性確認 → 保存更新
+                                  ↓
+統一窓口：地点・正規/過去・公開/本人を確認
+  ├─ 正規 → その地点の保存入力を再生
+  └─ 過去 → Current条件を添える別の評価要求
+                                  ↓
+既存の候補再構成・初期/後続の重み規則
+  → 行動者の情報で方針を選択
+  → 結果枝ごとに終局か継続か
+  → 継続なら次を評価 → 確率×値を合計
+                                  ↓
+率・各種勝率・理由をBoardDataへまとめて表示</pre></details>
+<p>過去のCurrent再評価は表示窓口を付けるだけでは実現しない。別途、合意した再評価の意味を既存エンジンへ接続する作業が必要。「最小整理」は既存部分への変更範囲についての案で、新しいGameTree要求が安価に完成するという約束ではない。</p>
+<h3>同じ7例をAで辿る</h3>
+<div class="table-wrap"><table><thead><tr><th scope="col">ケース</th><th scope="col">保存・保持・変更</th><th scope="col">再構成→計算→表示</th></tr></thead><tbody>
+<tr><td data-label="ケース">A 基本：市4狼1、P5処刑</td><td data-label="保存・保持・変更">既存のhistoryと子ノードを追加</td><td data-label="再構成→計算→表示">既存Progressが終局1/5・継続4/5を分け、継続P1狼1/4を集計。窓口が条件付き値と累積を別に束ねる</td></tr>
+<tr><td data-label="ケース">B 公開：市3霊1狼1、P1霊CO→P2処刑→P3死亡→P2黒報告</td><td data-label="保存・保持・変更">所属Log更新。過去事実は保持</td><td data-label="再構成→計算→表示">既存の報告条件で共同候補を更新し、このカーネル例のP1狼率1を表示。初期groupの再配分はしない</td></tr>
+<tr><td data-label="ケース">C 本人：市2霊1占1狼1、D2のP1占・D1 P4白／D2 P2白</td><td data-label="保存・保持・変更">本人要求は公開保存へ入れない</td><td data-label="再構成→計算→表示">既存本人adapterで共同履歴を限定し、本人用BoardDataを返す。公開束は変えない</td></tr>
+<tr><td data-label="ケース">D GJ：市2占1狩1狼1、P5処刑→GJ→P4処刑→GJ</td><td data-label="保存・保持・変更">既存死体観測・履歴を保存</td><td data-label="再構成→計算→表示">既存秘密履歴再生で護衛・襲撃を混合。本人の前夜情報で合法先が変わる。未対応は理由付き</td></tr>
+<tr><td data-label="ケース">E 戦略：市3霊1狼1、P2処刑後に設定変更・戻る</td><td data-label="保存・保持・変更">既存スナップショットと戻る処理を使用</td><td data-label="再構成→計算→表示">当時設定の再生と現在以降の評価を分け、盤面値と固定候補値を束ねる</td></tr>
+<tr><td data-label="ケース">F 訂正：市5占1狼1、D2で遅い公開／親入力訂正</td><td data-label="保存・保持・変更">既存の所属時点・撤回・退役を使用</td><td data-label="再構成→計算→表示">Log投影と再生を呼び直し、旧子の入力・結果を新しい束へ混ぜない</td></tr>
+<tr><td data-label="ケース">G 再現・未計算：Fの下書き、予算1</td><td data-label="保存・保持・変更">確定保存を変えない</td><td data-label="再構成→計算→表示">完成値だけ再利用し、予算超過は率0でなく計算状態として束ねる</td></tr>
+</tbody></table></div>
+<h3>成立条件・短い長短</h3>
+<ul><li>成立条件：既存の保存／再生／評価の意味を変えず、窓口の責任と返す結果の意味を揃えられること。</li><li>良い点：既存回帰を維持しながら、画面や呼出し側から見た接続を整理できる。</li><li>注意：内部の重複・legacy分岐は残る。窓口が単に名前を付け替えるだけなら、保守の複雑さを十分には減らさない。</li></ul>
+</section>
+<section class="proposal" id="proposal-b"><h2>4. B案：選択した各Boardを、自己完結する盤面状態として持つ</h2>
+<h3>持ち方と責任</h3>
+<p class="note">フロー全体の前提：各処理は必要な時点で、同じGameDataの配役・ルール等を参照する。最初に値をBoardへコピー保存する工程は置かない。GameDataを共通の正本とし、一回の計算・再現で参照する版の一貫性を保つ。具体的な版管理方式は未決。現行の計算用Boardが一部の人数等を持つ実装とは区別する。</p>
+<div class="diagram-wrap"><p class="diagram-title">B｜盤面の入力状態を持ち、更新・遷移が次を作る</p><p class="note">共同状態構成から役職率集計まで3aの統一入口。子も1→2→3a→3bを通す。真偽優先・COgroup位置などの内部順は未決。詳しい階層は <a href="/help/program/board-design" target="_top" rel="noopener">採用後のB案フロー（現在の説明）</a>。</p><div class="diagram" data-graph="b" role="group" aria-label="B｜盤面の入力状態を持ち、更新・遷移が次を作る"></div></div>
+<details class="supplement"><summary>同じ構造を文字図で確認</summary><pre>全体前提：各処理が必要時に共通GameDataの同じ版を参照
+1 確定情報反映（新規・子生成・必要な再構成時）
+       ↓ 確率はまだ再計算しない
+2 有効入力・根拠・視点要求を反映、旧結果を失効扱い
+       ↓ 確率はまだ再計算しない
+3a 役職率更新の統一入口
+   初期生成／継承更新／根拠再構成を選ぶ［切替詳細は未決］
+   共同候補・必要履歴・真偽／COgroup・観測・正規化
+   公開／本人を分け、役職率を集計して対応状態へ保持
+   ［真偽優先・COgroup位置・内部適用順等は未決］
+       ↓
+3b 合法候補 → 結果枝 → 子も1→2→3a→3b → 加重合計
+   固定行動値を求め、設定済み方針で選択・集約
+       ↓
+地点・入力版・視点・評価条件に対応した結果を表示</pre></details>
+<ul><li>選択して進んだ各盤面に、有効入力を自己完結したスナップショットとして保持する。率・勝率だけに縮めず、必要な共同候補と履歴も盤面の計算状態として渡す。</li><li>計算状態と結果は入力からの派生物。入力変更時は同じ状態に古い計算を残さず、有効条件を変えて再構成する。自由なフィールド書換えを許す案ではない。</li><li>更新・遷移の担当が、入力整合性、親から継承するもの、初期groupか後続条件付けかを管理する。評価器は渡された状態から結果を返す。</li><li>親を参照できても、親を編集しただけで子の有効入力が曖昧に変わらないようにする。訂正後に使える子は再構成し、旧子の結果を使わない。</li><li>各盤面の入力には元の宣言の所属・取得／公開時点・撤回等の根拠を含める。現在のCO一覧へ平坦化するだけではケースFを満たさない。</li><li>本人計算は公開の正本入力を書き換えず、条件別の派生状態・結果として持つ。本人の秘密を公開保存へ混ぜる意味ではない。</li><li>永続保存する範囲は選択した盤面の事実・入力を中心に検討する。共同履歴・すべての結果・全未来木まで永続保存することは前提にしない。</li></ul>
+<h3>一つの入力更新から内部へ</h3>
+<details class="supplement"><summary>同じ構造を文字図で確認</summary><pre>全体前提：各処理が必要時に共通GameDataの同じ版を参照
+1 確定情報反映（新規・子生成・必要な再構成時）
+       ↓ 確率はまだ再計算しない
+2 有効入力・根拠・視点要求を反映、旧結果を失効扱い
+       ↓ 確率はまだ再計算しない
+3a 役職率更新の統一入口
+   初期生成／継承更新／根拠再構成を選ぶ［切替詳細は未決］
+   共同候補・必要履歴・真偽／COgroup・観測・正規化
+   公開／本人を分け、役職率を集計して対応状態へ保持
+   ［真偽優先・COgroup位置・内部適用順等は未決］
+       ↓
+3b 合法候補 → 結果枝 → 子も1→2→3a→3b → 加重合計
+   固定行動値を求め、設定済み方針で選択・集約
+       ↓
+地点・入力版・視点・評価条件に対応した結果を表示</pre></details>
+<p>親入力の訂正時、継承済み状態を新しい親から再構成する責任は盤面更新・遷移側に置く。少なくとも7例と指定する過去再評価に必要な情報を保持し、状態をどこまで簡約できるかは検証対象として残す。秘密履歴を捨てて現在役職率から再出発しない。初期配分の出発点が分かることも必要。</p>
+<h3>同じ7例をBで辿る</h3>
+<div class="table-wrap"><table><thead><tr><th scope="col">ケース</th><th scope="col">保存・保持・変更</th><th scope="col">状態更新→計算→表示</th></tr></thead><tbody>
+<tr><td data-label="ケース">A 基本：市4狼1、P5処刑</td><td data-label="保存・保持・変更">親状態を保ち、選択進行の子を作る</td><td data-label="状態更新→計算→表示">遷移が終局質量と継続状態を返す。子のP1狼1/4と加重勝率を計算し、条件に対応する計算欄へ付ける</td></tr>
+<tr><td data-label="ケース">B 公開：同じ霊能例</td><td data-label="保存・保持・変更">当該盤面の有効入力と所属根拠を更新</td><td data-label="状態更新→計算→表示">盤面の共同候補を条件付けし、全行の率・値を更新。報告先だけを行単位で書き換えない</td></tr>
+<tr><td data-label="ケース">C 本人：同じP1占の既知結果</td><td data-label="保存・保持・変更">公開入力は保ち、本人の派生状態を作る</td><td data-label="状態更新→計算→表示">盤面が持つ共同履歴を本人条件で限定し、条件別結果へ。公開の計算欄を本人値で上書きしない</td></tr>
+<tr><td data-label="ケース">D GJ：同じ2夜</td><td data-label="保存・保持・変更">次の盤面に必要な護衛・襲撃・取得の混合を継承</td><td data-label="状態更新→計算→表示">生存者が変わらなくても履歴・取得slotは進む。前夜の護衛に従い次の合法手を決める</td></tr>
+<tr><td data-label="ケース">E 戦略：同じ後続変更・戻る</td><td data-label="保存・保持・変更">各盤面スナップショットの当時設定を保持</td><td data-label="状態更新→計算→表示">現在盤面の設定変更は派生計算だけ無効化。戻ると対象盤面の入力状態から表示</td></tr>
+<tr><td data-label="ケース">F 訂正：同じ遅い公開／親訂正</td><td data-label="保存・保持・変更">入力根拠を持つスナップショットを変更し、影響する子を再構成</td><td data-label="状態更新→計算→表示">D1取得・D2公開を保持。親の訂正と子の撤回を区別。古い子の計算欄は新しい入力に対応しない</td></tr>
+<tr><td data-label="ケース">G 再現・未計算：同じ予算1</td><td data-label="保存・保持・変更">一時盤面と確定盤面を区別</td><td data-label="状態更新→計算→表示">未完了の派生計算を完成結果として付けない。派生状態・cacheなしの再構成でも一致させる</td></tr>
+</tbody></table></div>
+<h3>成立条件・短い長短</h3>
+<ul><li>成立条件：盤面をまたいで必要な共同履歴を失わず、入力と派生計算の整合性を一つの更新境界で管理できること。</li><li>良い点：1盤面を見ると確定・入力・計算の対応を追いやすい。子へ何を引き継ぐかを遷移の責任として説明しやすい。</li><li>注意：自己完結した入力と根拠が重複しやすく、盤面状態が大きくなり得る。既存の再生依存を置き換える範囲があり、「結果をフィールドに足すだけ」では成立しない。</li></ul>
+</section>
+<section class="proposal" id="proposal-c"><h2>5. C案：入力・進行の台帳を正本にし、盤面を要求条件で作る</h2>
+<h3>持ち方と責任</h3>
+<div class="diagram-wrap"><p class="diagram-title">C｜記録を正本にし、要求した盤面を投影する</p><div class="diagram" data-graph="c" role="group" aria-label="C｜記録を正本にし、要求した盤面を投影する"></div></div>
+<details class="supplement"><summary>同じ構造を文字図で確認</summary><pre>Game前提＋入力／進行／訂正の台帳【正本】
+  対象地点・取得/公開時点・出所・訂正/撤回の意味を保持
+                           ↓ 指定して要求
+「地点」「正規/Currentからの過去」「公開/本人」「評価条件」
+                           ↓
+再構成担当：有効な入力列を選び、計算状態を作る
+                           ↓
+BoardData【投影結果】
+  確定＋有効入力＋候補/必要履歴＋条件別計算結果
+                           ↓
+評価担当：方針 → 結果枝 → 終局/再帰 → 加重
+                           ↓
+結果cache・GameTree表示用itemへ</pre></details>
+<ul><li>永続的な正本は台帳。表示される盤面状態は、その台帳と要求条件から再現する。</li><li>選択経路は進行記録と現在位置で識別する。全ノードの完全状態を正本として重複保存する案ではない。</li><li>台帳の記録順と、ゲーム内の発生・取得・公開順は同一とは限らない。後からの入力訂正を、新しい遅いCCO発言に数えない。訂正と発言撤回を別に解釈する。</li><li>再構成担当が有効入力・過去条件・初期groupの一度だけの適用・共同履歴を扱う。評価担当は再構成された状態を受け、各行動者の情報と物理結果を分けて値を返す。</li><li>本人条件は要求に添える。閲覧するだけで公開の台帳を変更しない。本人の結果cacheは公開要求と混同しない。</li><li>再生途中の状態や完成結果はcacheできるが、それを別の正本として二重更新しない。再構成規則が変わる場合の互換性は別途必要。</li><li>内部台帳を保持する案は、更新履歴をGameTreeに表示する案とは別。利用者へ全編集履歴を見せることは必須にしない。</li></ul>
+<h3>一つの入力更新から内部へ</h3>
+<details class="supplement"><summary>同じ構造を文字図で確認</summary><pre>入力要求
+  → 対象地点・出所・操作の意味を確認
+  ├─ 仮 → 台帳を変えず仮の投影
+  └─ 確定 → 入力/訂正/進行を台帳へ記録
+                           ↓
+再構成要求
+  ├─ 正規 → 指定地点までの当時の有効入力を選択
+  └─ 過去 → 対象地点とCurrent側の条件を区別して選択
+                           ↓
+根から再生、または有効な途中cacheから再生
+  → 共同候補・必要履歴 → 役職率
+  → 視点に応じた条件 → 行動・結果枝を評価
+       ├─ 終局
+       └─ 次の状態を投影して再帰
+  → 確率×子値を合計
+                           ↓
+要求条件の付いたBoardDataを表示</pre></details>
+<p>「Currentから過去を投影できる入口を持つ」ことと、再評価式が決まっていることは別。条件を機械的に過去へ移すだけでは、当時の行動者に後知恵を漏らし得る。未決の意味は共通の指定として残す。</p>
+<h3>同じ7例をCで辿る</h3>
+<div class="table-wrap"><table><thead><tr><th scope="col">ケース</th><th scope="col">保存・保持・変更</th><th scope="col">投影→計算→表示</th></tr></thead><tbody>
+<tr><td data-label="ケース">A 基本：市4狼1、P5処刑</td><td data-label="保存・保持・変更">P5処刑の進行を記録し現在位置を進める</td><td data-label="投影→計算→表示">選択経路を投影して終局1/5・継続4/5を再構成。結果としてP1狼1/4と各種勝率を返す</td></tr>
+<tr><td data-label="ケース">B 公開：同じ霊能例</td><td data-label="保存・保持・変更">P1の報告を対象地点付きで記録</td><td data-label="投影→計算→表示">有効報告を選択し共同候補へ反映。投影時に初期重みと後続条件付けを区別する</td></tr>
+<tr><td data-label="ケース">C 本人：同じP1占の既知結果</td><td data-label="保存・保持・変更">公開台帳は不変。本人条件は評価要求に添える</td><td data-label="投影→計算→表示">同じ公開投影を本人情報で限定。本人履歴で合法先を作り、公開要求のcacheと分ける</td></tr>
+<tr><td data-label="ケース">D GJ：同じ2夜</td><td data-label="保存・保持・変更">空の死体観測も進行記録として保持</td><td data-label="投影→計算→表示">無死亡を未入力と区別して再生。護衛・襲撃の候補を共同生成・条件付けし、必要履歴を残す</td></tr>
+<tr><td data-label="ケース">E 戦略：同じ後続変更・戻る</td><td data-label="保存・保持・変更">対象地点に属する設定と、選択経路を記録</td><td data-label="投影→計算→表示">戻る要求は当該地点の有効設定を投影。現在の設定を過去全体へ塗り直さない</td></tr>
+<tr><td data-label="ケース">F 訂正：同じ遅い公開／親訂正</td><td data-label="保存・保持・変更">取得日・公開日・訂正対象・発言撤回を異なる意味で記録</td><td data-label="投影→計算→表示">有効入力列を投影し直す。旧子の入力が新しい経路へ現れないようにし、訂正を新発言の遅延扱いにしない</td></tr>
+<tr><td data-label="ケース">G 再現・未計算：同じ予算1</td><td data-label="保存・保持・変更">仮の要求で確定台帳は不変</td><td data-label="投影→計算→表示">再生・評価の未完了を完成cacheに入れない。同じ要求と台帳ならcacheなしでも同じ結果</td></tr>
+</tbody></table></div>
+<h3>成立条件・短い長短</h3>
+<ul><li>成立条件：入力・進行・訂正・撤回の意味と対象時点を記録から再現できること。正本の台帳を解釈する規則が一貫すること。</li><li>良い点：当時の入力とCurrent条件を別の投影要求として扱いやすい。表示状態を正本から作るため、再現根拠が明確になる。</li><li>注意：再生・投影の規則とcacheの管理が中心的な複雑さになる。台帳が長くなる負担もあり、実装をイベントという名前へ変えるだけでは整理にならない。</li></ul>
+</section>
+<h2 id="tree">6. GameTree要求を3案へ同じ条件で接続する</h2>
+<h3>表示itemの収納と、計算上の意味を分ける</h3>
+<details class="supplement"><summary>同じ構造を文字図で確認</summary><pre>GameTreeの表示用item
+  ├─ 正規Board → 当時の情報での結果を参照
+  ├─ 過去Board → Current情報での再評価結果を参照
+  └─ 未来Boardsなどの収納 → 対象の結果枝を並べる
+
+対応する計算要求
+  対象地点 ＋ 情報の基準地点 ＋ 視点 ＋ 評価の意味
+           ↓
+  共同候補・必要履歴 → 行動/結果 → 加重勝率</pre></details>
+<p>表示itemにすべて実体の計算Boardが必要とは決めない。収納は収納であり、固有の遷移率・勝率を勝手に作らない。異なる行動の比較枝・過去内訳・正規の履歴を、同じ分母の確率としてまとめて足さない。</p>
+<div class="table-wrap"><table><thead><tr><th scope="col">同じ表示要求</th><th scope="col">Aでの受け方</th><th scope="col">Bでの受け方</th><th scope="col">Cでの受け方</th></tr></thead><tbody>
+<tr><td data-label="同じ表示要求">正規Day1昼／夜</td><td data-label="Aでの受け方">窓口がその地点まで既存再生して当時値を束ねる</td><td data-label="Bでの受け方">保存した当該盤面の入力状態から当時値を求める</td><td data-label="Cでの受け方">台帳を当該地点まで当時条件で投影して求める</td></tr>
+<tr><td data-label="同じ表示要求">Currentから見たDay1の過去Board</td><td data-label="Aでの受け方">窓口へ対象とCurrent条件を渡す別要求。正規の結果は不変</td><td data-label="Bでの受け方">当該盤面からCurrent条件付きの派生評価を作り、当時の計算欄を上書きしない</td><td data-label="Cでの受け方">同じ台帳へ対象地点とCurrentの条件を添えた別投影・評価要求</td></tr>
+<tr><td data-label="同じ表示要求">Current以後の未来</td><td data-label="Aでの受け方">既存評価から表示に必要な枝の取出し口を追加する必要</td><td data-label="Bでの受け方">遷移で生成する一時子状態を表示へ渡す。全子を永続化しない</td><td data-label="Cでの受け方">評価途中の一時投影・結果枝を表示へ渡す。予測を入力台帳へ記録しない</td></tr>
+<tr><td data-label="同じ表示要求">当時地点から見た未来</td><td data-label="Aでの受け方">当時の再生状態を起点とする要求を区別する</td><td data-label="Bでの受け方">当時入力の状態から生成する</td><td data-label="Cでの受け方">当時条件の投影から生成する</td></tr>
+<tr><td data-label="同じ表示要求">同Phaseの編集前状態</td><td data-label="Aでの受け方">既存アーカイブ等は内部の扱い。Treeへの必須追加なし</td><td data-label="Bでの受け方">必要な内部の復元・版保持と、Tree表示を分ける</td><td data-label="Cでの受け方">内部台帳の記録と、Tree表示を分ける</td></tr>
+</tbody></table></div>
+<p>すべて案としての接続方法。現行に既に一般の過去再評価・全未来枝表示があるという意味ではない。</p>
+<h3>未決の過去再評価を隠さない共通の例</h3>
+<p>市4狼1でP5処刑後に続行しているCurrentを見ると、当時P5狼1/5だった候補はCurrent条件では0、P1狼は1/5から1/4になる。この過去内訳の変化は確認済み。一方、過去Boardの勝率をCurrent条件で評価するとき、当時の選択方針へ後知恵をどう作用させるかは未決。</p>
+<ul><li>A：当時の結果を読む要求と、Current再評価の要求を窓口で分ける。</li><li>B：元の盤面状態を保ったまま、Current条件の派生評価を作る。</li><li>C：同じ入力台帳に異なる情報基準を指定して投影・評価する。</li></ul>
+<p>どの案も、表示基準を未決へ戻さず、未決の計算式を数値に見せない。数値が必要な過去再評価機能を完成させるには、後続で式の合意・検証が必要である。</p>
+<h2 id="future">7. 将来要件と未決をどこで受け止めるか</h2>
+<div class="table-wrap"><table><thead><tr><th scope="col">論点</th><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th></tr></thead><tbody>
+<tr><td data-label="論点">タグ：盤面評価・既定開示・既定行動</td><td data-label="A">保存入力を窓口で実効条件へ整理。新しい割当ては未選定</td><td data-label="B">盤面の入力の意味として保持し、計算へ渡す条件を明示</td><td data-label="C">台帳に記録した設定を対象地点の条件へ投影</td></tr>
+<tr><td data-label="論点">優先真偽・CCO時機・underfilled</td><td data-label="A">既存の入力解釈との境界を整理する必要</td><td data-label="B">状態更新の条件付け規則が扱う。必要な入力順・定員根拠を失わない</td><td data-label="C">投影時の有効入力解釈が扱う。記録順と公開順を混同しない</td></tr>
+<tr><td data-label="論点">SystemLogはユーザー入力</td><td data-label="A">既存保存への追加接続が必要。未入力を自動生成しない</td><td data-label="B">盤面入力として出所・時点を保持。認識更新を明示</td><td data-label="C">入力台帳の観測として保持。指定地点へ投影</td></tr>
+<tr><td data-label="論点">一般同時複数max</td><td data-label="A">既存の限定経路と新規契約を窓口で区別</td><td data-label="B">評価器の方針決定に同時段階の契約を適用する余地</td><td data-label="C">投影後の評価器で同時段階の契約を扱う</td></tr>
+</tbody></table></div>
+<p>ここに接続先を書くことは、その規則を採用・実装した意味ではない。定員未充足なのに単独Aを先に真確定して固定する解釈へ戻さない。skip式や優先位置・タグの具体分類は未決。複数maxを順番に呼ぶだけで相互最大化としない。秘密のSystemLog自動生成のためだけに、認識から除いた潜伏真を残す案も採らない。</p>
+<h2 id="checks">8. 整合確認と今回の到達点</h2>
+<h3>案の記述を確認した項目</h3>
+<ul><li>3案とも初期配分・後続条件付け、共同候補、必要履歴、公開／本人を表せるか。</li><li>3案の正本・更新責任・派生結果の寿命が異なり、同じ情報を二つの正本として更新しないか。</li><li>7例の操作で、何を保持・更新し、どの結果を無効にするか説明できるか。</li><li>正規の当時値と、Currentで見直す過去値を別要求・別結果として扱えるか。</li><li>入力訂正と発言撤回、台帳記録順と発言順を混同していないか。</li><li>収納item、表示枝、計算枝、選択経路を一つの親子関係に押し込めていないか。</li><li>未決を勝手に固定せず、既存の計算可能な経路を不必要に未計算へ変えないか。</li></ul>
+<p>これは資料内の設計整合の確認であり、3案の実装や数値一致を検証した実行結果ではない。Aの既存処理や各案が維持する数値の根拠はStep2の21件・具体例を参照。3案の新しいコード・ベンチマークは存在しない。速度や保存量の優劣を実測したとは主張しない。</p>
+<h3>Step4へ渡す前に確認する点</h3>
+<ol><li>A（既存を残して窓口整理）、B（盤面状態を持つ）、C（入力記録から作る）の責任分担の違いが伝わるか。</li><li>3案とも同じ要件・7例を扱う案になっているか。案として不足する説明や、比較前に足したい方向があるか。</li><li>この3案を比較対象としてStep3を完了してよいか。未決事項は未決のまま比較条件へ明記する。</li></ol>
+
+<section class="related-proposal"><h2 id="related">9. Board中心の関連集合案：Bの具体化とCOグループへの接続</h2><h3>9.1 追加案への判断</h3><p>関連取得案：各Boardから正史の親子・未来分岐・現行と過去の内訳を辿り、COグループとの共通化も検討しました。</p><p><strong>関連をBoardから辿れる入口にする案は有力な候補として含める。ただし、すべての関連Boardを再帰的に実体所有させる案は、この候補の前提にしない。</strong> 保存すべき正本、ID等による参照、必要時に計算する結果集合を分けると、Bの盤面中心の説明と整合する。</p><p>これをBの関連取得の具体化とし、Aなら既存保存への参照を窓口が解決、Cなら台帳上の地点を投影して解決できる。関連入口が同じでも、何を正本にするかという3案の差は残る。正式な優劣・採用はStep4で行う。</p><div class="diagram-wrap"><p class="diagram-title">関連の意味：同じ種類の親子にしない</p><p class="note">この図は取得する関連の意味で、ゲーム内の処理順ではありません。</p><div class="diagram" data-graph="related" role="group" aria-label="Boardから辿る関連の種類"></div></div><details class="supplement"><summary>同じ関連を文字で確認</summary><pre>Boardを中心とした関連の入口【案】
+  ├─ 正史親・正史子 → 保存された進行地点への参照
+  ├─ 未来分岐別 → 起点と方針を指定し、結果枝を必要時に取得
+  ├─ 現行内訳別 → 同じ地点の共同候補を条件で分割して取得
+  └─ 過去内訳別 → 過去の対象地点＋Current条件で取得
+
+参照・取得できること ≠ 全集合を実体として常時保存すること</pre></details><h3>9.2 各関係の意味と、確率の階層</h3><div class="table-wrap"><table><thead><tr><th scope="col">関連</th><th scope="col">何の関係か</th><th scope="col">進行や確率の意味</th><th scope="col">候補としての保持方法</th></tr></thead><tbody><tr><td data-label="関連">正史親／正史子</td><td data-label="何の関係か">選んで進んだゲームの遷移・履歴</td><td data-label="進行や確率の意味">昼夜・死亡等が進む。親への逆参照がある</td><td data-label="候補としての保持方法">盤面IDと進行記録を参照。子が親全体を複製しない</td></tr><tr><td data-label="関連">未来分岐別Boards</td><td data-label="何の関係か">方針で選ぶ行動と、その物理的結果の候補</td><td data-label="進行や確率の意味">行動の選択率、行動後の結果率、起点からの到達率を区別</td><td data-label="候補としての保持方法">起点・方針・視点等で取得する一時集合。必要な完成結果をcacheしてよいが全木永続化は前提にしない</td></tr><tr><td data-label="関連">現行内訳別Boards</td><td data-label="何の関係か">同じ地点・同じ事実での仮説の分割</td><td data-label="進行や確率の意味">Phaseは進まない。全体の何を条件に分けた率かが必要</td><td data-label="候補としての保持方法">元の共同候補への参照＋分割条件＋重み、または必要な条件付き状態を取得</td></tr><tr><td data-label="関連">過去内訳別Boards</td><td data-label="何の関係か">過去地点をCurrent情報で見直す観測条件の変更</td><td data-label="進行や確率の意味">当時の前向き分岐率ではなく、Current条件の内訳率</td><td data-label="候補としての保持方法">過去地点とCurrentの条件をともに参照し、合意した意味で再評価</td></tr><tr><td data-label="関連">反実仮想を含む別枝</td><td data-label="何の関係か">過去に別行動・設定等を置く介入</td><td data-label="進行や確率の意味">実際の過去の事後確率ではない</td><td data-label="候補としての保持方法">正史入力と別の要求条件。どこまで実観測を残すか未決</td></tr></tbody></table></div><p>収納用の未来／過去itemはこの関連を並べるための表示であり、それ自体を新しいPhaseや確率付き遷移にしない。正規勝率は当時情報、過去勝率はCurrent情報という確定基準を保つ。Current再評価式・後知恵の当時方針への作用は未決であり、関連集合を作るだけで解決したとは扱わない。</p><h3>9.3 実体所有・参照・計算時取得の違い</h3><div class="table-wrap"><table><thead><tr><th scope="col">方法</th><th scope="col">具体的な意味</th><th scope="col">主な利点</th><th scope="col">主な注意</th></tr></thead><tbody><tr><td data-label="方法">全関連を実体所有</td><td data-label="具体的な意味">Boardが親・子・未来・内訳の全オブジェクトを抱え、さらにその関連も抱える</td><td data-label="主な利点">手元のオブジェクトだけを辿れる</td><td data-label="主な注意">親子の逆参照で循環し、全未来・全内訳の直積で重複しやすい。変更影響・シリアライズの対象が大きい。初期候補としては勧めない</td></tr><tr><td data-label="方法">参照で関連を持つ</td><td data-label="具体的な意味">IDや取得条件を保持し、同じ元盤面・共同候補を共有する</td><td data-label="主な利点">二重の正本・データ複製を避けやすい。親子の意味を残せる</td><td data-label="主な注意">対象の版・有効性を管理し、旧条件の参照を新しい結果と混ぜない必要</td></tr><tr><td data-label="方法">必要時に集合を取得</td><td data-label="具体的な意味">未来・内訳を要求に応じて生成し、必要な範囲だけ保持する</td><td data-label="主な利点">全木常時保持を避け、正規の保存と予測を分離できる</td><td data-label="主な注意">未計算・計算不能・完成済みを区別する。描画を閉じただけで計算が省けるとは限らない</td></tr></tbody></table></div><p>Bの関連集合の具体化では、保存された選択盤面と必要な入力を正本とし、正史親子は参照、未来・内訳は条件付きの取得として表せる、という候補を置く。結果cacheを持つとしても有効条件付きの派生物にする。すべての関連について同じ所有方式を強制しない。</p><p>シリアライズ時に親・子を相互に丸ごと再帰展開しない。同じ盤面を一度保存してIDで結ぶか、必要な基準状態と関係記録を保存する等の意味分離が必要。具体形式や保存先は未選定。現行の署名cookieに全木を入れられると仮定しない。</p><h3>9.4 COグループとの共通化は、どこまでできるか</h3><p><strong>「全体候補の条件付き内訳を取得する」という仕組みは共通化候補になる。しかしCOグループ一行を、そのまま完全役職割当や独立した小ゲームのBoardと見なすのは不適切。</strong></p><p>現行の <code>exact.co_group_compositions</code> は、生存者をCO種類（潜伏も含む）で分け、全体配役の各候補から、その領域にいる市・霊・占・狩・狼の人数と質量を集計する。返すものは各領域の人数内訳という周辺表示であり、完全な共同候補そのものではない。</p><ul><li>「霊COのP1・P2」という領域と、「その領域の内訳が霊1狼1」という条件は別。</li><li>ある人数内訳を選んでも、P1とP2のどちらが狼か、他の潜伏者が何かは一般に複数候補のまま。</li><li>内訳を条件付けしたBoard相当を作る場合も、元の全プレイヤー・Phase・生存・公開事実・能力履歴を保つ。P1・P2だけの2人ゲームへ切り縮めない。</li><li>霊CO領域と潜伏領域の内訳は同じ世界を異なる方向から集計したもの。各領域の表示率はそれぞれ合計1になり得るが、二つの領域を独立な枝として足したり掛けたりしない。</li><li>全CO領域を同時に分割した共同内訳、完全配役、秘密履歴まで分けた仮説は、別の粒度。粗い内訳の中に細かい候補とその相関を残せる必要がある。</li><li>初期COgroupの二段階の重み付けと、現在の内訳を集計・条件付けすることは別。内訳取得のたびに初期重みを付け直さない。</li></ul><p>確率は「内訳の質量」と「その内訳の中で正規化した共同候補」を分けて持つ意味が必要。外側の質量を内側へ再び掛けたり、内訳の候補数だけで等確率にし直したりしない。行動判断に使う想定と、物理結果側の質量が異なる場合も、どちらの内訳かを保持する。</p><h3>9.5 代表例での成立条件の確認</h3><p>既存コードを呼ぶ読み取りの計算確認であり、関連集合APIや新しいBoard実装を作った結果ではない。<a href="#related-checks">確認結果JSON</a>。</p><div class="table-wrap"><table><thead><tr><th scope="col">代表例</th><th scope="col">確認結果</th><th scope="col">関連集合案に必要なこと</th></tr></thead><tbody><tr><td data-label="代表例">9人、市5霊2狼2、P1/P2霊CO、CCOなし</td><td data-label="確認結果">CO内の狼0/1/2の質量は7/12・7/18・1/36。対応する全体配役候補数は21・84・21</td><td data-label="関連集合案に必要なこと">三つの内訳Boardを1/3ずつにしない。各内訳の中にも完全な9人候補を残す</td></tr><tr><td data-label="代表例">9人、市5霊2狼2、P1だけ霊CO、既存filled</td><td data-label="確認結果">P1霊率7/9・狼率2/9で真確定しない。定員2に対して1CO</td><td data-label="関連集合案に必要なこと">未充足で単独真候補を確定させない。新skip式を実装した確認ではない</td></tr><tr><td data-label="代表例">同じ9人の潜伏枠</td><td data-label="確認結果">CO内狼jなら潜伏狼は2−j。P1/P2両狼は1/36、各人狼率の独立積は4/81で一致しない</td><td data-label="関連集合案に必要なこと">潜伏を省かず、領域間の相関を保持。独立なCO小ゲームにしない</td></tr><tr><td data-label="代表例">市2霊1占1狩1狼1、P1占CO・P2狩CO、CCOなし</td><td data-label="確認結果">全体36候補、占CO・狩COは各2内訳、潜伏P3〜6は3内訳。各領域の表示質量は合計1</td><td data-label="関連集合案に必要なこと">複数役職を同じ全体候補から集計する。各領域の合計1を、全体の独立分岐と取り違えない</td></tr><tr><td data-label="代表例">既存7例Dの2夜GJ</td><td data-label="確認結果">公開側・物理側とも228仮説を12個の護衛履歴条件へ分割し、外質量×条件付き仮説で元の全履歴質量を正確に再合成できた</td><td data-label="関連集合案に必要なこと">同じ配役でも占い取得・護衛・襲撃の履歴を別々のまま残す。人数内訳だけでは代用できない</td></tr><tr><td data-label="代表例">市4狼1の公開評価と、真配役ごとの再最適化</td><td data-label="確認結果">現行の公開値7/15に対し、各真配役を知る盤面としてmaxを選び直して平均すると1になった</td><td data-label="関連集合案に必要なこと">内訳を見ることは、その秘密を行動者が知ることではない。内訳ごとに方針を再最適化して値を足さない</td></tr></tbody></table></div><p>9人と2夜GJの分割では、内訳の外側質量と内側の条件付き質量から元の共同分布・履歴分布を完全一致で再合成することを確認した。これは分布の分け方の整合確認。任意の分割で新しい勝率APIまで成立する、という証明ではない。</p><p>特に、同じ固定方針で利得を条件別に集計して加重することと、各内訳を新しい公開情報としてmaxを解き直すことは別。CO人数内訳や役職仮説を現行内訳Boardに見せても、その内容を意思決定へ知らせたという仕様にはしない。</p><h3>9.6 更新・無効化と7例への接続</h3><div class="table-wrap"><table><thead><tr><th scope="col">変更</th><th scope="col">保持するもの</th><th scope="col">無効化・再取得の対象</th></tr></thead><tbody><tr><td data-label="変更">親の入力訂正（例F）</td><td data-label="保持するもの">訂正前の意味を持つ内部復元情報と、影響しない別枝</td><td data-label="無効化・再取得の対象">変更された親からの子の状態・未来・現行内訳。Current条件が変わる過去内訳も更新</td></tr><tr><td data-label="変更">Currentの公開入力更新</td><td data-label="保持するもの">正規の過去地点の当時入力・当時値</td><td data-label="無効化・再取得の対象">そのCurrent条件を参照する過去再評価、Current以後の未来、現在内訳</td></tr><tr><td data-label="変更">本人視点の切替（例C）</td><td data-label="保持するもの">公開の正本と公開判断の方針</td><td data-label="無効化・再取得の対象">本人条件に依存する内訳・値。公開cacheと別人の結果を混同しない</td></tr><tr><td data-label="変更">護衛履歴／ルールの違い（例D）</td><td data-label="保持するもの">同じ見た目の人数・COだけを同一視しない</td><td data-label="無効化・再取得の対象">合法手・能力枝・値・内訳。配役率だけをcacheの同一性にしない</td></tr><tr><td data-label="変更">分割粒度の変更</td><td data-label="保持するもの">同じ基準の元共同候補と質量</td><td data-label="無効化・再取得の対象">表示する内訳集合を取り直す。ゲーム遷移や初期配分を勝手にやり直さない</td></tr></tbody></table></div><p>ケースA/Bは進行と仮説内訳の違い、C/Dは情報と履歴、Eは当時設定、Fは参照の版、Gは未計算と完成cacheの違いとして、関連集合の有効条件にも引き継ぐ。各Boardから辿れることを理由に、同じ実体を別の条件へ可変共有しない。</p><h3>9.7 この追加案の成立条件と未決</h3><ul><li>成立条件：関連の種類、起点・視点・条件、外側質量、元の共同候補への対応が分かり、同じ正本を重複更新しないこと。</li><li>主な利点：利用者がBoardを起点に正史・未来・内訳へ辿る考え方を表せる。COグループ等も「共同候補の集計・条件付き内訳」という共通の意味で扱える余地がある。</li><li>主な注意：全関連の実体所有、独立なCO小ゲーム化、秘密を知った再最適化、古いCurrent条件の結果再利用は避ける必要がある。参照・取得の管理そのものにも責任が生じる。</li><li>未決：分割粒度、内訳勝率を求めるときの固定条件、Currentによる過去再評価式、関連集合の保存範囲・取得タイミング・cache量。正規／過去の勝率表示基準は確定済みで変更しない。</li></ul><details class="supplement" id="related-checks"><summary>内訳・相関・再最適化の確認結果</summary><pre>{
+  "co_group_partition": [
+    {
+      "wolves_in_medium_CO": 0,
+      "mass": "7/12",
+      "full_worlds": 21,
+      "latent_wolves": 2
+    },
+    {
+      "wolves_in_medium_CO": 1,
+      "mass": "7/18",
+      "full_worlds": 84,
+      "latent_wolves": 1
+    },
+    {
+      "wolves_in_medium_CO": 2,
+      "mass": "1/36",
+      "full_worlds": 21,
+      "latent_wolves": 0
+    }
+  ],
+  "reconstructed_full_joint": true,
+  "correlation": {
+    "joint_both_wolves": "1/36",
+    "wrong_independent_product": "4/81"
+  },
+  "multi_role_case": {
+    "cast": "C2 M1 S1 H1 W1",
+    "worlds": 36,
+    "groups": [
+      {
+        "claim": "seer",
+        "ids": [
+          1
+        ],
+        "compositions": 2
+      },
+      {
+        "claim": "hunter",
+        "ids": [
+          2
+        ],
+        "compositions": 2
+      },
+      {
+        "claim": "latent",
+        "ids": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "compositions": 3
+      }
+    ]
+  },
+  "two_GJ_history_partition": [
+    {
+      "law": "public",
+      "hypotheses": 228,
+      "guard_history_partitions": 12,
+      "reconstructs_exactly": true
+    },
+    {
+      "law": "physical",
+      "hypotheses": 228,
+      "guard_history_partitions": 12,
+      "reconstructs_exactly": true
+    }
+  ],
+  "policy_order": {
+    "public_value": "7/15",
+    "wrong_worldwise_reoptimization_average": "1"
+  },
+  "underfilled_current_rule": {
+    "cast": "C5 M2 W2",
+    "medium_CO": [
+      1
+    ],
+    "condition": "filled",
+    "P1_medium": "7/9",
+    "P1_wolf": "2/9",
+    "P1_not_forced_true": true
+  }
+}</pre></details></section><details class="supplement" id="references"><summary>参照する現行コードと検証範囲</summary>
+<ul><li><a href="/help/history/materials/step2" target="_top" rel="noopener">Step2資料</a>：7ケースの配役・操作・根拠テスト・GameTreeの確定／未決。</li><li><a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/exact.py" target="_top" rel="noopener">exact.py</a>：初期候補、group配分、率、結果枝とProgressの加重。</li><li><a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/app.py" target="_top" rel="noopener">app.py</a>、<a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/seer_manual.py" target="_top" rel="noopener">seer_manual.py</a>：現行保存・再生・表示の接続。</li><li><a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/board_owned_log.py" target="_top" rel="noopener">board_owned_log.py</a>、<a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/public_log_changes.py" target="_top" rel="noopener">public_log_changes.py</a>：所属、投影、親子、訂正・退役。</li><li><a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/root_secret_flow.py" target="_top" rel="noopener">root_secret_flow.py</a>、<a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/private_adapter.py" target="_top" rel="noopener">private_adapter.py</a>：必要共同履歴と本人条件。</li><li><a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/action_flow.py" target="_top" rel="noopener">action_flow.py</a>、<a href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/information_set_forecast.py" target="_top" rel="noopener">information_set_forecast.py</a>：行動・物理結果・終局／再帰・完成cache。</li><li>ケースCはStep2と同じD2内部本人条件の例。公開HTTPの夜Tableをその昼地点で操作できるという意味ではない。</li></ul></details><a class="back" href="#top">このページの先頭へ ↑</a></main><footer>説明資料のみ。既存Step2・flowの閲覧ページ、計算コード、公開ナビゲーションは変更していません。</footer><script>const graphs=[{"id": "engine", "title": "共通の評価：情報の意味を保って加重する", "nodes": [{"id": "state", "text": "条件に対応した計算状態", "x": 1, "y": 0, "kind": "input", "sub": "共同候補・必要履歴"}, {"id": "rates", "text": "役職率を集計", "x": 0, "y": 1, "kind": "output", "sub": "全員分の候補から"}, {"id": "info", "text": "行動者が知る情報で条件付け", "x": 2, "y": 1, "kind": "process", "sub": "閲覧者の秘密を漏らさない"}, {"id": "legal", "text": "合法候補を継続方針で評価", "x": 1, "y": 2, "kind": "process", "sub": "max／均等を区別"}, {"id": "outcomes", "text": "行動後の結果枝", "x": 1, "y": 3, "kind": "process", "sub": "能力・死亡・公開観測"}, {"id": "end", "text": "この結果枝は終局？", "x": 1, "y": 4, "kind": "decision", "sub": ""}, {"id": "pay", "text": "村勝ち1／狼勝ち0", "x": 0, "y": 5, "kind": "output", "sub": ""}, {"id": "child", "text": "次の状態・必要履歴", "x": 2, "y": 5, "kind": "process", "sub": ""}, {"id": "sum", "text": "結果確率 × 子の値を合計", "x": 1, "y": 6, "kind": "process", "sub": "元案に含まれる加重集約"}, {"id": "result", "text": "方針を含む値・固定候補値", "x": 1, "y": 7, "kind": "output", "sub": "評価対象を付けて返す"}, {"id": "pending", "text": "未計算／仕様待ちの理由", "x": 2, "y": 3, "kind": "pending", "sub": "0%へ置き換えない"}], "edges": [{"source": "state", "target": "rates", "label": ""}, {"source": "state", "target": "info", "label": ""}, {"source": "info", "target": "legal", "label": ""}, {"source": "legal", "target": "outcomes", "label": "候補ごと"}, {"source": "outcomes", "target": "end", "label": "結果ごと"}, {"source": "end", "target": "pay", "label": "はい"}, {"source": "end", "target": "child", "label": "いいえ"}, {"source": "child", "target": "state", "label": "次の判断へ再帰"}, {"source": "pay", "target": "sum", "label": ""}, {"source": "child", "target": "sum", "label": "再帰値"}, {"source": "sum", "target": "result", "label": "方針で集約"}, {"source": "legal", "target": "pending", "label": "未定義・範囲・予算"}]}, {"id": "a", "title": "A｜既存を保ち、窓口が組み立てる", "nodes": [{"id": "input", "text": "対象地点＋入力要求", "x": 1, "y": 0, "kind": "input", "sub": ""}, {"id": "draft", "text": "仮入力？", "x": 1, "y": 1, "kind": "decision", "sub": ""}, {"id": "temp", "text": "保存を変えず仮評価", "x": 0, "y": 2, "kind": "process", "sub": ""}, {"id": "saved", "text": "既存の保存・Logを更新", "x": 2, "y": 2, "kind": "store", "sub": "正本：既存のゲームと履歴"}, {"id": "front", "text": "統一した読取・評価窓口", "x": 1, "y": 3, "kind": "process", "sub": "新しい接続の責任"}, {"id": "basis", "text": "正規／Currentからの過去", "x": 1, "y": 4, "kind": "decision", "sub": "情報基準と視点を区別"}, {"id": "regular", "text": "その地点まで既存再生", "x": 0, "y": 5, "kind": "process", "sub": "当時の有効入力"}, {"id": "past", "text": "Current条件の別評価要求", "x": 2, "y": 5, "kind": "process", "sub": "再評価の詳細は未決"}, {"id": "engine", "text": "既存の候補再構成・評価", "x": 1, "y": 6, "kind": "process", "sub": "内部の経路分割は当面維持"}, {"id": "bundle", "text": "BoardDataへ結果をまとめる", "x": 1, "y": 7, "kind": "output", "sub": "読み取り専用・派生"}, {"id": "display", "text": "表示用itemへ", "x": 1, "y": 8, "kind": "output", "sub": "正規値を本人・過去値で上書きしない"}], "edges": [{"source": "input", "target": "draft", "label": ""}, {"source": "draft", "target": "temp", "label": "はい"}, {"source": "draft", "target": "saved", "label": "確定"}, {"source": "temp", "target": "front", "label": ""}, {"source": "saved", "target": "front", "label": ""}, {"source": "front", "target": "basis", "label": ""}, {"source": "basis", "target": "regular", "label": "正規"}, {"source": "basis", "target": "past", "label": "過去"}, {"source": "regular", "target": "engine", "label": ""}, {"source": "past", "target": "engine", "label": "合意した条件が必要"}, {"source": "engine", "target": "bundle", "label": "完成／未計算"}, {"source": "bundle", "target": "display", "label": ""}, {"source": "display", "target": "input", "label": "次の変更"}]}, {"id": "b", "title": "B｜盤面の入力状態を持ち、更新・遷移が次を作る", "nodes": [{"id": "board", "text": "BoardData＋入力変更", "x": 1, "y": 0, "kind": "store", "sub": "正本：選択盤面の入力状態"}, {"id": "validate", "text": "1/2 地点・入力根拠の検査", "x": 1, "y": 1, "kind": "process", "sub": "ここでは確率を再計算しない"}, {"id": "draft", "text": "仮入力？", "x": 1, "y": 2, "kind": "decision", "sub": ""}, {"id": "temp", "text": "一時的な派生盤面", "x": 0, "y": 3, "kind": "process", "sub": ""}, {"id": "update", "text": "有効入力を更新・旧計算を無効化", "x": 2, "y": 3, "kind": "process", "sub": ""}, {"id": "initial", "text": "3aの出発点を選ぶ", "x": 1, "y": 4, "kind": "decision", "sub": "切替詳細は未決"}, {"id": "seed", "text": "3a 根の初期候補・初期配分", "x": 0, "y": 5, "kind": "process", "sub": "初期生成の場合"}, {"id": "inherit", "text": "3a 継承更新／根拠再構成", "x": 2, "y": 5, "kind": "process", "sub": "候補復活・親訂正を区別"}, {"id": "state", "text": "3a 共同状態更新→役職率集計", "x": 1, "y": 6, "kind": "process", "sub": "公開／本人別・内部順は未決"}, {"id": "engine", "text": "3b 結果枝→子評価→加重", "x": 1, "y": 7, "kind": "process", "sub": "子も1→2→3a→3b"}, {"id": "attach", "text": "条件に対応する結果を付ける", "x": 1, "y": 8, "kind": "output", "sub": ""}, {"id": "display", "text": "表示用itemへ", "x": 1, "y": 9, "kind": "output", "sub": "本人・Current過去評価は別の派生"}], "edges": [{"source": "board", "target": "validate", "label": ""}, {"source": "validate", "target": "draft", "label": ""}, {"source": "draft", "target": "temp", "label": "はい"}, {"source": "draft", "target": "update", "label": "確定"}, {"source": "temp", "target": "initial", "label": ""}, {"source": "update", "target": "initial", "label": ""}, {"source": "initial", "target": "seed", "label": "はい"}, {"source": "initial", "target": "inherit", "label": "後続"}, {"source": "seed", "target": "state", "label": ""}, {"source": "inherit", "target": "state", "label": ""}, {"source": "state", "target": "engine", "label": ""}, {"source": "engine", "target": "attach", "label": "確率×子の値"}, {"source": "attach", "target": "display", "label": ""}, {"source": "display", "target": "board", "label": "次の変更"}]}, {"id": "c", "title": "C｜記録を正本にし、要求した盤面を投影する", "nodes": [{"id": "input", "text": "対象地点＋入力要求", "x": 1, "y": 0, "kind": "input", "sub": ""}, {"id": "validate", "text": "記録とゲーム内の時点を区別", "x": 1, "y": 1, "kind": "process", "sub": "入力訂正 ≠ 遅い新発言"}, {"id": "draft", "text": "仮入力？", "x": 1, "y": 2, "kind": "decision", "sub": ""}, {"id": "temp", "text": "一時的な投影要求", "x": 0, "y": 3, "kind": "process", "sub": ""}, {"id": "ledger", "text": "入力／進行／訂正を記録", "x": 2, "y": 3, "kind": "store", "sub": "正本：Game前提＋台帳"}, {"id": "query", "text": "地点・情報基準・視点・評価条件", "x": 1, "y": 4, "kind": "input", "sub": ""}, {"id": "project", "text": "有効な入力列を投影", "x": 1, "y": 5, "kind": "process", "sub": "当時の設定・公開時点を保持"}, {"id": "replay", "text": "根／有効な途中cacheから再生", "x": 1, "y": 6, "kind": "process", "sub": "初期配分は一度だけ"}, {"id": "engine", "text": "計算状態を評価器へ", "x": 1, "y": 7, "kind": "process", "sub": "方針 → 結果枝 → 終局/再帰"}, {"id": "result", "text": "要求条件付きBoardData", "x": 1, "y": 8, "kind": "output", "sub": "投影結果・完成cache"}, {"id": "display", "text": "表示用itemへ", "x": 1, "y": 9, "kind": "output", "sub": "未来予測を入力台帳へ記録しない"}], "edges": [{"source": "input", "target": "validate", "label": ""}, {"source": "validate", "target": "draft", "label": ""}, {"source": "draft", "target": "temp", "label": "はい"}, {"source": "draft", "target": "ledger", "label": "確定"}, {"source": "temp", "target": "query", "label": ""}, {"source": "ledger", "target": "query", "label": ""}, {"source": "query", "target": "project", "label": "正規／Current過去"}, {"source": "project", "target": "replay", "label": ""}, {"source": "replay", "target": "engine", "label": ""}, {"source": "engine", "target": "result", "label": "確率×子の値"}, {"source": "result", "target": "display", "label": ""}, {"source": "display", "target": "input", "label": "次の変更"}]}, {"id": "related", "title": "Boardから辿る関連", "nodes": [{"id": "board", "text": "Boardを起点に辿る", "x": 1, "y": 0, "kind": "store", "sub": "保存状態と派生結果を区別"}, {"id": "parent", "text": "正史親", "x": 0, "y": 1, "kind": "store", "sub": "保存された進行地点への参照"}, {"id": "child", "text": "正史子", "x": 2, "y": 1, "kind": "store", "sub": "選んだ進行地点への参照"}, {"id": "future", "text": "未来分岐別Boards", "x": 1, "y": 2, "kind": "process", "sub": "行動と結果の遷移候補を取得"}, {"id": "current", "text": "現行内訳別Boards", "x": 0, "y": 3, "kind": "process", "sub": "同地点の仮説分割・CO人数内訳等"}, {"id": "past", "text": "過去内訳別Boards", "x": 2, "y": 3, "kind": "process", "sub": "過去地点＋Current条件で取得"}, {"id": "meaning", "text": "条件・外質量・元の共同候補を保持", "x": 1, "y": 4, "kind": "output", "sub": "全体の相関と行動者の情報を失わない"}], "edges": [{"source": "board", "target": "parent", "label": "親参照"}, {"source": "board", "target": "child", "label": "子参照"}, {"source": "board", "target": "future", "label": "ゲーム遷移の候補"}, {"source": "board", "target": "current", "label": "仮説内訳"}, {"source": "board", "target": "past", "label": "観測条件の変更"}, {"source": "current", "target": "meaning", "label": "全体候補の一部"}, {"source": "past", "target": "meaning", "label": "当時値は上書きしない"}]}];const ns='http://www.w3.org/2000/svg';
+function svgEl(tag,attrs){const e=document.createElementNS(ns,tag);for(const [k,v]of Object.entries(attrs))e.setAttribute(k,v);return e}
+function draw(g){const box=document.querySelector(`[data-graph="${g.id}"]`),w=box.clientWidth,mobile=w<620;box.replaceChildren();const svg=svgEl('svg',{'aria-hidden':'true'});box.append(svg);const defs=svgEl('defs',{}),marker=svgEl('marker',{id:'arrow-'+g.id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:7,markerHeight:7,orient:'auto-start-reverse'});marker.append(svgEl('path',{d:'M 0 0 L 10 5 L 0 10 z',fill:'var(--line)'}));defs.append(marker);svg.append(defs);const pos={};const pitch=mobile?152:144,h=mobile?104:92;const nw=mobile?Math.min(w-100,270):Math.min((w-100)/3,238);const gap=(w-3*nw)/4;
+g.nodes.forEach((n,i)=>{let x,y;if(mobile){x=50+(w-100-nw)/2;y=24+i*pitch}else{x=gap+n.x*(nw+gap);y=24+n.y*pitch}pos[n.id]={x,y,w:nw,h};const b=document.createElement('div');b.className='node '+n.kind;b.dataset.node=n.id;b.style.cssText=`left:${x}px;top:${y}px;width:${nw}px;min-height:${h}px;height:${h}px`;const label=document.createElement('span');label.textContent=n.text;b.append(label);const ref=document.createElement('span');ref.className='ref';ref.textContent=n.sub||'';b.append(ref);box.append(b)});
+const corridors=mobile?[12,30,w-30,w-12]:[8,gap+nw+gap/2,gap+2*nw+1.5*gap,w-8];
+function crosses(points){let hits=0;for(let i=1;i<points.length;i++){const [ax,ay]=points[i-1],[bx,by]=points[i];for(const p of Object.values(pos)){if(ax===bx&&ax>p.x+1&&ax<p.x+p.w-1&&Math.max(ay,by)>p.y+1&&Math.min(ay,by)<p.y+p.h-1)hits++;if(ay===by&&ay>p.y+1&&ay<p.y+p.h-1&&Math.max(ax,bx)>p.x+1&&Math.min(ax,bx)<p.x+p.w-1)hits++}}return hits}
+let routeIndex=0;for(const e of g.edges){const a=pos[e.source],b=pos[e.target];const ax=a.x+a.w/2,ay=a.y+a.h+1,bx=b.x+b.w/2,by=b.y-4,sy=ay+21,ty=by-20;let candidates=[[[ax,ay],[ax,sy],[bx,sy],[bx,by]],[[ax,ay],[ax,ty],[bx,ty],[bx,by]]];for(const lane of corridors)candidates.push([[ax,ay],[ax,sy],[lane,sy],[lane,ty],[bx,ty],[bx,by]]);if(ax===bx)candidates.unshift([[ax,ay],[bx,by]]);const distance=ps=>ps.slice(1).reduce((n,p,i)=>n+Math.abs(p[0]-ps[i][0])+Math.abs(p[1]-ps[i][1]),0);candidates.sort((x,y)=>crosses(x)-crosses(y)||distance(x)-distance(y));const points=candidates[0];const d=points.map((p,i)=>(i?'L':'M')+' '+p.join(' ')).join(' ');const path=svgEl('path',{d,class:'edge','marker-end':`url(#arrow-${g.id})`,'data-source':e.source,'data-target':e.target,'data-obstacle-hits':crosses(points)});svg.append(path);if(e.label){let segments=points.slice(1).map((p,i)=>({a:points[i],b:p,len:Math.abs(p[0]-points[i][0])+Math.abs(p[1]-points[i][1])}));const horizontal=segments.filter(s=>s.a[1]===s.b[1]&&s.len>35).sort((a,b)=>b.len-a.len);const seg=horizontal[0]||segments.sort((a,b)=>b.len-a.len)[0];let lx=(seg.a[0]+seg.b[0])/2,ly=(seg.a[1]+seg.b[1])/2-7;let anchor='middle';if(!horizontal.length){lx+=8;anchor='start'}if(g.id==='related'&&mobile){lx=b.x+b.w/2;ly=b.y-(e.target==='meaning'&&e.source==='past'?24:8);anchor='middle'}const half=e.label.length*6+4;if(lx-half<0){lx=4;anchor='start'}else if(lx+half>w){lx=w-4;anchor='end'}const t=svgEl('text',{x:lx,y:ly,class:'edge-label','text-anchor':anchor});t.textContent=e.label;svg.append(t)}routeIndex++}
+const maxY=Math.max(...Object.values(pos).map(p=>p.y+p.h));box.style.height=(maxY+32)+'px';svg.setAttribute('viewBox',`0 0 ${w} ${maxY+32}`)}
+
+const observer=new ResizeObserver(entries=>{for(const e of entries){const g=graphs.find(g=>g.id===e.target.dataset.graph);if(g)draw(g)}});for(const g of graphs)observer.observe(document.querySelector(`[data-graph="${g.id}"]`));</script><script>(()=>{let keepAnchor=true;for(const name of ['wheel','touchstart','pointerdown','keydown'])addEventListener(name,()=>{keepAnchor=false},{passive:true});const send=()=>{if(keepAnchor&&location.hash){let target=null;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(_){}if(target&&Math.abs(target.getBoundingClientRect().top-20)>2)scrollTo({top:target.getBoundingClientRect().top+scrollY-20,behavior:'instant'})}const blocks=[...document.body.children].filter(e=>!['SCRIPT','STYLE'].includes(e.tagName)&&getComputedStyle(e).position!=='fixed'&&e.getBoundingClientRect().height);const bottom=Math.max(600,...blocks.map(e=>e.getBoundingClientRect().bottom+scrollY));let anchor=null;try{anchor=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(_){}parent.postMessage({type:'ww-history-layout',page:"step3",height:Math.ceil(bottom+24),anchorTop:anchor?anchor.getBoundingClientRect().top:null,hash:location.hash},'*')};addEventListener('load',()=>{requestAnimationFrame(()=>{let target=null;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(_){}if(target)scrollTo({top:target.getBoundingClientRect().top+scrollY-20,behavior:'instant'});send()})});addEventListener('message',event=>{if(event.source!==parent||event.data?.type!=='ww-history-anchor')return;let target=null;try{target=document.getElementById(decodeURIComponent(event.data.hash.slice(1)))}catch(_){}if(target){scrollTo({top:target.getBoundingClientRect().top+scrollY-20,behavior:'instant'});send()}});addEventListener('resize',send);addEventListener('hashchange',send);addEventListener('scroll',()=>requestAnimationFrame(send),{passive:true});new ResizeObserver(()=>requestAnimationFrame(send)).observe(document.body)})();</script></body></html>

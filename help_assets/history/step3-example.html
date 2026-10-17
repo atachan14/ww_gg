@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="data:,"><title>Step3具体例｜5人盤面から7/15まで</title><style>
+:root{color-scheme:light dark;--bg:#f4f6fa;--panel:#fff;--ink:#20334a;--muted:#4e637b;--line:#c6d3e2;--blue:#e7f0fb;--green:#e7f4ec;--orange:#fff1db;--red:#fbe9eb;--accent:#245e9b}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 system-ui,"Yu Gothic",sans-serif}html{scroll-padding-top:18px}header,main,footer{max-width:1160px;margin:auto;padding:28px}h1{font-size:clamp(26px,4vw,38px);line-height:1.4;margin:10px 0}h2{font-size:24px;margin:0;line-height:1.5}h3{font-size:19px;line-height:1.6;margin:18px 0 10px}p{margin:14px 0}a{color:var(--accent);text-underline-offset:4px;overflow-wrap:anywhere}.eyebrow,.note{font-size:14px;color:var(--muted)}.status{border-left:4px solid var(--accent);padding:10px 16px;background:var(--blue)}.legend{display:flex;gap:10px;flex-wrap:wrap}.tag{display:inline-block;font-size:13px;padding:4px 9px;background:var(--green);border-radius:5px;margin:3px 8px 12px 0}.tag.proposal{background:var(--blue)}nav{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}nav a{padding:8px 12px;background:var(--panel);border:1px solid var(--line);border-radius:7px;text-decoration:none}.stage{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:26px;margin:0;scroll-margin-top:20px}.stage-head{display:flex;gap:12px;align-items:flex-start;margin-bottom:20px}.number{background:var(--blue);padding:3px 10px;border-radius:6px;font-size:18px;font-variant-numeric:tabular-nums}.data-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.data-grid>div{padding:16px;border:1px solid var(--line);border-radius:8px}.data-grid h3{margin-top:0}.connector{text-align:center;font-size:14px;color:var(--muted);padding:14px}.connector>span{display:block;font-size:26px;line-height:1.2}.handoff{display:flex;align-items:center;gap:18px;justify-content:space-between;padding:16px;background:var(--blue);border-radius:8px}.handoff>div{flex:1}.handoff-arrow{font-size:26px}.label{display:block;font-size:13px;color:var(--muted)}.hold{padding:15px 18px;border-left:3px solid var(--accent);background:var(--blue);font-size:14px;margin:20px 0}.branch-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.branch-grid>div{border:1px solid var(--line);border-radius:10px;padding:20px}.terminal{background:var(--green)}.terminal.wolf{background:var(--red)}.continuing{background:var(--blue)}.branch-kind{font-size:14px}.branch-grid h3{margin-top:8px}.fraction{font-size:23px;font-variant-numeric:tabular-nums;line-height:1.5}.carry{border-top:1px solid var(--line);padding-top:14px;font-size:14px}.table-wrap{margin:20px 0}table{width:100%;border-collapse:collapse;font-size:15px;line-height:1.7}th,td{text-align:left;vertical-align:top;padding:12px 10px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}th{background:var(--blue)}td:first-child{font-weight:600}small{font-size:12px;color:var(--muted)}.matrix td:not(:first-child),.matrix th:not(:first-child){text-align:center;font-variant-numeric:tabular-nums;white-space:nowrap}.illegal{color:var(--muted)}.equation{padding:16px 18px;background:var(--green);border-radius:8px;line-height:1.9;font-size:18px;font-variant-numeric:tabular-nums;margin:18px 0}.equation strong{font-size:22px}.view-note{border:1px solid var(--line);padding:16px;border-radius:8px}.future-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.future-card{border:1px solid var(--line);border-radius:9px;padding:14px;background:var(--panel);font-size:14px}.future-card h3{margin-top:0}.future-card.focus{border:2px solid var(--accent);background:var(--blue)}.future-card .fraction{font-size:20px}.verified-value{background:var(--green);padding:6px}.output{padding:12px 16px;background:var(--green);border-left:3px solid var(--accent)}.responsibility{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;margin-bottom:0}.source,details{border:1px solid var(--line);border-radius:7px;padding:10px 14px;margin:14px 0;font-size:14px}summary{cursor:pointer;color:var(--accent)}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.7 monospace}.return-chain{text-align:center}.return-chain>div:not(.return-arrow){border:1px solid var(--line);border-radius:8px;padding:16px}.return-arrow{font-size:26px;padding:4px}.return-chain .answer{background:var(--green)}.big-answer{font-size:44px;font-variant-numeric:tabular-nums;line-height:1.5}.checks{margin-top:32px;padding:24px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}@media(max-width:850px){.future-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:650px){header,main,footer{padding:16px}.stage{padding:18px 12px}h2{font-size:21px}h3{font-size:18px}.data-grid,.branch-grid,.future-grid{grid-template-columns:1fr}.handoff{flex-direction:column;align-items:stretch}.handoff-arrow{transform:rotate(90deg);align-self:center;line-height:1}.stage-head{gap:8px}.number{font-size:16px;padding:3px 7px}.equation{padding:14px 12px;font-size:16px}.equation strong{font-size:20px}nav a{min-height:44px}.matrix th,.matrix td{padding:10px 3px;font-size:14px}.matrix th:first-child,.matrix td:first-child{width:30%;font-size:13px}.matrix small{font-size:11px}.matrix th:not(:first-child){white-space:normal}.table-wrap:not(.matrix) table,.table-wrap:not(.matrix) tbody,.table-wrap:not(.matrix) tr,.table-wrap:not(.matrix) td{display:block}.table-wrap:not(.matrix) thead{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.table-wrap:not(.matrix) tr{border:1px solid var(--line);border-radius:8px;padding:10px;margin:12px 0}.table-wrap:not(.matrix) td{padding:8px 3px;border:0}.table-wrap:not(.matrix) td:before{content:attr(data-label);display:block;font-size:12px;color:var(--muted);font-weight:600}.table-wrap:not(.matrix) td:first-child:before{display:none}.table-wrap:not(.matrix) td:first-child{font-size:17px}.checks{padding:16px}.fraction{font-size:22px}}@media(prefers-color-scheme:dark){:root{--bg:#101c2b;--panel:#18283b;--ink:#e5eef8;--muted:#b5c6da;--line:#435a73;--blue:#203c60;--green:#214637;--orange:#514023;--red:#512d38;--accent:#a0caff}}
+</style></head><body><div role="note" style="padding: 12px; margin: 12px 0px; border: 2px solid rgb(100, 116, 139); border-radius: 8px; line-height: 1.7;"><strong>当時の検討資料（後日の校正注記を含む）</strong><br>v0.5.1を土台にした検討で、ここでの「現行」は当時を指します。現在の実装仕様そのものではありません。元の図・文字図を残し、作業進行の記録と会話引用は省いています。<br><a href="/help/program/board-design" target="_top">採用後のB案フロー（現在の説明）</a> ／ <a href="/help/history/materials/" target="_top">資料一覧</a></div><header id="top"><div class="eyebrow">WW_GG · STEP3 · B案の具体例</div><h1>5人盤面から、7/15が戻るまで</h1><p>P5を処刑する入力から、候補更新・夜の襲撃・翌昼の終局・親への加重合計を、途中データ付きで追います。</p><p class="status">COなし・能力結果なし ／ 市民4・狼1 ／ 昼max・夜max ／ Step3は確認待ち</p><p class="note">名前は説明用呼称。B0/B1/B2は説明用IDです。数値は現行コードで検算、BoardDataへのまとめ方は未実装のB案です。</p><nav aria-label="具体例のページ内目次"><a href="#s1">初期入力</a><a href="#s3">P5処刑</a><a href="#s4">夜の判断</a><a href="#s5">翌昼の4枝</a><a href="#s6">終局まで</a><a href="#s7">7/15へ戻す</a><a href="#s8">A/Cとの対応</a></nav></header><main><section class="stage" id="s1"><div class="stage-head"><span class="number">01</span><h2>B0を作る：初日昼、5つの全体候補</h2></div><span class="tag verified">数値・ルールは現行コードで検算</span><span class="tag proposal">BoardDataの保持場所・IDはB案</span><div class="data-grid"><div><h3>入力</h3><p>市民4・狼1<br>CO：全員潜伏<br>能力結果：なし</p></div><div><h3>計算条件</h3><p>昼 max・夜 max<br>同値最適は均等<br>自噛みなし</p></div><div><h3>生成 B0</h3><p>Day1 昼<br>生存 P1〜P5<br>狼の位置5候補、各1/5</p></div></div><div class="table-wrap "><table><thead><tr><th scope="col">全体候補</th><th scope="col">狼</th><th scope="col">市民</th><th scope="col">重み</th></tr></thead><tbody><tr><td data-label="全体候補">W1</td><td data-label="狼">P1 アオイ</td><td data-label="市民">P2 P3 P4 P5</td><td data-label="重み">1/5</td></tr><tr><td data-label="全体候補">W2</td><td data-label="狼">P2 ヒナ</td><td data-label="市民">P1 P3 P4 P5</td><td data-label="重み">1/5</td></tr><tr><td data-label="全体候補">W3</td><td data-label="狼">P3 レン</td><td data-label="市民">P1 P2 P4 P5</td><td data-label="重み">1/5</td></tr><tr><td data-label="全体候補">W4</td><td data-label="狼">P4 ソラ</td><td data-label="市民">P1 P2 P3 P5</td><td data-label="重み">1/5</td></tr><tr><td data-label="全体候補">W5</td><td data-label="狼">P5 ユイ</td><td data-label="市民">P1 P2 P3 P4</td><td data-label="重み">1/5</td></tr></tbody></table></div><p class="output">出力：各人の狼率 <strong>1/5</strong>、市民率 <strong>4/5</strong>。全体候補の集計です。</p><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/exact.py#L405">werewolf/exact.py · initial_board / Board</a></details><p class="responsibility">B案の担当：初期盤面を生成し、確定・入力・派生候補を対応付ける</p></section><div class="connector" aria-label="B0の入力だけを更新"><span>↓</span>B0の入力だけを更新</div><section class="stage" id="s2"><div class="stage-head"><span class="number">02</span><h2>P5ユイの処刑を入力する</h2></div><div class="handoff"><div><span class="label">入力データ</span><strong>B0 ＋ 処刑対象 P5</strong></div><span class="handoff-arrow">→</span><div><span class="label">この時点の出力</span><strong>選択対象がP5になったB0</strong></div></div><p>対象を選んだだけでは、役職候補・生存者は変わりません。この後、P5処刑という候補を評価します。</p><div class="hold"><strong>B0が持つもの（B案）</strong><br>確定：Day1昼・生存1〜5 ／ 入力：COなし・結果なし・戦略・P5指定 ／ 計算：5候補を保持</div><p class="note">主図はP5を手動固定した評価。方針がP5を自動選択する率は最後に区別します。</p><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/app.py#L593">app.py · change / parse_target</a></details><p class="responsibility">B案の担当：入力更新。子を作るのは次の結果生成時点</p></section><div class="connector" aria-label="P5処刑を解決し、結果ごとに子を生成"><span>↓</span>P5処刑を解決し、結果ごとに子を生成</div><section class="stage" id="s3"><div class="stage-head"><span class="number">03</span><h2>結果を二つに分ける：終局T5と継続B1</h2></div><div class="branch-grid"><div class="terminal"><span class="branch-kind">終局 T5</span><h3>P5が狼だった</h3><p class="fraction">分岐率 1/5</p><p>残狼0 → 村勝利<br>子の村勝率 <strong>1</strong></p><p class="carry">この枝は停止。<br><strong>1/5 × 1</strong>を最後の合計へ保持。</p></div><div class="continuing"><span class="branch-kind">生成 B1</span><h3>P5が市民だった</h3><p class="fraction">分岐率 4/5</p><p>Day1 夜・生存 P1〜P4<br>狼候補 P1〜P4</p><p class="carry">以下ではこの続行側を展開。</p></div></div><h3>入力候補 → 条件付き候補</h3><div class="table-wrap "><table><thead><tr><th scope="col">B1に残る狼候補</th><th scope="col">分ける前の重み</th><th scope="col">B1内の正規化後</th></tr></thead><tbody><tr><td data-label="B1に残る狼候補">P1</td><td data-label="分ける前の重み">1/5</td><td data-label="B1内の正規化後">(1/5) ÷ (4/5) = 1/4</td></tr><tr><td data-label="B1に残る狼候補">P2</td><td data-label="分ける前の重み">1/5</td><td data-label="B1内の正規化後">(1/5) ÷ (4/5) = 1/4</td></tr><tr><td data-label="B1に残る狼候補">P3</td><td data-label="分ける前の重み">1/5</td><td data-label="B1内の正規化後">(1/5) ÷ (4/5) = 1/4</td></tr><tr><td data-label="B1に残る狼候補">P4</td><td data-label="分ける前の重み">1/5</td><td data-label="B1内の正規化後">(1/5) ÷ (4/5) = 1/4</td></tr></tbody></table></div><div class="hold"><strong>B1が持つもの（B案）</strong><br>確定：Day1夜・生存1〜4・P5処刑 ／ 入力：引き継いだCOなし・結果なし・戦略 ／ 計算：4候補が各1/4、P5狼は0</div><p class="output">外側の到達質量 <strong>4/5</strong> と、B1内部の候補重み <strong>1/4</strong> は別です。</p><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/exact.py#L469">werewolf/exact.py · action_outcomes / advance / Progress</a></details><p class="responsibility">B案の担当：遷移担当が、終局結果と継続状態を生成する。全未来木を保存する意味ではない</p></section><div class="connector" aria-label="続行B1で、狼本人の情報から襲撃方針を選ぶ"><span>↓</span>続行B1で、狼本人の情報から襲撃方針を選ぶ</div><section class="stage" id="s4"><div class="stage-head"><span class="number">04</span><h2>夜の判断を開く：狼は自分を襲撃しない</h2></div><p>狼は自分の位置を知ります。この例では、各合法襲撃先の継続値が同値です。<strong>夜maxの同率均等</strong>で、合法3候補を各1/3にします。</p><div class="table-wrap matrix"><table><thead><tr><th scope="col">狼の本人条件</th><th scope="col">P1襲撃</th><th scope="col">P2襲撃</th><th scope="col">P3襲撃</th><th scope="col">P4襲撃</th></tr></thead><tbody><tr><td data-label="狼の本人条件">狼 P1<br><small>公開の重み 1/4</small></td><td data-label="P1襲撃"><span class="illegal">不可</span></td><td data-label="P2襲撃">1/3</td><td data-label="P3襲撃">1/3</td><td data-label="P4襲撃">1/3</td></tr><tr><td data-label="狼の本人条件">狼 P2<br><small>公開の重み 1/4</small></td><td data-label="P1襲撃">1/3</td><td data-label="P2襲撃"><span class="illegal">不可</span></td><td data-label="P3襲撃">1/3</td><td data-label="P4襲撃">1/3</td></tr><tr><td data-label="狼の本人条件">狼 P3<br><small>公開の重み 1/4</small></td><td data-label="P1襲撃">1/3</td><td data-label="P2襲撃">1/3</td><td data-label="P3襲撃"><span class="illegal">不可</span></td><td data-label="P4襲撃">1/3</td></tr><tr><td data-label="狼の本人条件">狼 P4<br><small>公開の重み 1/4</small></td><td data-label="P1襲撃">1/3</td><td data-label="P2襲撃">1/3</td><td data-label="P3襲撃">1/3</td><td data-label="P4襲撃"><span class="illegal">不可</span></td></tr><tr><td data-label="狼の本人条件">公開側での死体の率</td><td data-label="P1襲撃">1/4</td><td data-label="P2襲撃">1/4</td><td data-label="P3襲撃">1/4</td><td data-label="P4襲撃">1/4</td></tr></tbody></table></div><div class="equation">各死体の率 ＝ 3 × <span>(1/4 × 1/3)</span> ＝ <strong>1/4</strong></div><div class="view-note"><strong>視点の範囲</strong><br>狼P1本人なら「P1狼=1」。その行ではP1襲撃は不可、P2/P3/P4は各1/3。<br>公開B1の狼候補は各1/4のまま。本人の条件で公開盤面を上書きしません。</div><p class="note">行の1/3は本人の行動選択率。最下行の1/4は公開側でその人が死ぬ率です。</p><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/information_set_forecast.py#L296">werewolf/information_set_forecast.py · wolf_policy</a></details><p class="responsibility">B案の担当：評価担当が当人の情報で合法手・方針を決定。遷移担当が結果を集約</p></section><div class="connector" aria-label="4つの襲撃結果から、翌昼の子を生成"><span>↓</span>4つの襲撃結果から、翌昼の子を生成</div><section class="stage" id="s5"><div class="stage-head"><span class="number">05</span><h2>翌昼の4子を並べる：どの枝も3人になる</h2></div><div class="future-grid"><div class="future-card "><h3>B2-1</h3><p>死体 P1<br>Day2昼・生存 P2 P3 P4</p><p class="fraction">B1から 1/4</p><p>P5固定からの到達率 <strong>1/5</strong><br>狼候補：P2 P3 P4が各1/3</p><p class="verified-value">村勝率 <strong>1/3</strong></p></div><div class="future-card "><h3>B2-2</h3><p>死体 P2<br>Day2昼・生存 P1 P3 P4</p><p class="fraction">B1から 1/4</p><p>P5固定からの到達率 <strong>1/5</strong><br>狼候補：P1 P3 P4が各1/3</p><p class="verified-value">村勝率 <strong>1/3</strong></p></div><div class="future-card "><h3>B2-3</h3><p>死体 P3<br>Day2昼・生存 P1 P2 P4</p><p class="fraction">B1から 1/4</p><p>P5固定からの到達率 <strong>1/5</strong><br>狼候補：P1 P2 P4が各1/3</p><p class="verified-value">村勝率 <strong>1/3</strong></p></div><div class="future-card focus"><h3>B2-4</h3><p>死体 P4<br>Day2昼・生存 P1 P2 P3</p><p class="fraction">B1から 1/4</p><p>P5固定からの到達率 <strong>1/5</strong><br>狼候補：P1 P2 P3が各1/3</p><p class="verified-value">村勝率 <strong>1/3</strong></p></div></div><h3>B2-4を作る途中の数値</h3><p>P4死亡の経路は、狼P1・P2・P3の3件です。狼P4は自噛みできません。</p><div class="table-wrap "><table><thead><tr><th scope="col">残る狼候補</th><th scope="col">元の経路質量</th><th scope="col">P4死亡を条件に正規化</th></tr></thead><tbody><tr><td data-label="残る狼候補">P1</td><td data-label="元の経路質量">1/4 × 1/3 = 1/12</td><td data-label="P4死亡を条件に正規化">(1/12) ÷ (1/4) = 1/3</td></tr><tr><td data-label="残る狼候補">P2</td><td data-label="元の経路質量">1/12</td><td data-label="P4死亡を条件に正規化">1/3</td></tr><tr><td data-label="残る狼候補">P3</td><td data-label="元の経路質量">1/12</td><td data-label="P4死亡を条件に正規化">1/3</td></tr></tbody></table></div><div class="hold"><strong>B2-4が持つもの（B案）</strong><br>確定：Day2昼・生存1/2/3・P5処刑とP4夜死亡 ／ 入力：COなし・結果なし・当時戦略 ／ 計算：狼P1/P2/P3が各1/3</div><p class="output">以下でB2-4を終局まで開きます。他の3子も同じ人数・対称な候補で、全12候補を個別に検算済みです。</p><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/phase_updates.py#L40">werewolf/phase_updates.py · night_observation_outcomes</a></details><p class="responsibility">B案の担当：襲撃を解決し、結果を条件に候補を正規化して子状態を生成</p></section><div class="connector" aria-label="B2-4の処刑候補を、終局まで評価"><span>↓</span>B2-4の処刑候補を、終局まで評価</div><section class="stage" id="s6"><div class="stage-head"><span class="number">06</span><h2>翌昼の処刑 → ここで両方とも終局</h2></div><p>生存3人、村2・狼1。処刑対象が狼なら村勝ち。市民なら残りが狼1・市民1になり、狼勝ちです。</p><div class="table-wrap stack"><table><thead><tr><th scope="col">候補</th><th scope="col">同率maxでの選択率</th><th scope="col">対象が狼</th><th scope="col">対象が市民</th><th scope="col">候補の村勝率</th></tr></thead><tbody><tr><td data-label="候補">P1処刑</td><td data-label="同率maxでの選択率">1/3</td><td data-label="対象が狼">1/3 → 村勝ち 1</td><td data-label="対象が市民">2/3 → 狼勝ち 0</td><td data-label="候補の村勝率">1/3</td></tr><tr><td data-label="候補">P2処刑</td><td data-label="同率maxでの選択率">1/3</td><td data-label="対象が狼">1/3 → 村勝ち 1</td><td data-label="対象が市民">2/3 → 狼勝ち 0</td><td data-label="候補の村勝率">1/3</td></tr><tr><td data-label="候補">P3処刑</td><td data-label="同率maxでの選択率">1/3</td><td data-label="対象が狼">1/3 → 村勝ち 1</td><td data-label="対象が市民">2/3 → 狼勝ち 0</td><td data-label="候補の村勝率">1/3</td></tr></tbody></table></div><div class="branch-grid"><div class="terminal"><h3>例えばP3を固定</h3><p class="fraction">狼に当たる率 1/3</p><p>残狼0 → 村勝ち<br>終局の値 <strong>1</strong></p></div><div class="terminal wolf"><h3>同じP3固定の別結果</h3><p class="fraction">市民だった率 2/3</p><p>狼1・市民1 → 狼勝ち<br>村勝ちの終局値 <strong>0</strong></p></div></div><div class="equation">各候補の値 ＝ 1/3 × 1 ＋ 2/3 × 0 ＝ <strong>1/3</strong></div><div class="equation">V(B2-4) ＝ 3 × <span>(選択率 1/3 × 候補値 1/3)</span> ＝ <strong>1/3</strong></div><p class="output">同じ計算で B2-1 / B2-2 / B2-3 も各1/3。ここから先の夜はありません。</p><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/exact.py#L401">werewolf/exact.py · winner_for / action_outcomes</a></details><p class="responsibility">B案の担当：評価担当が候補を評価し、同値maxを集約。終局で停止</p></section><div class="connector" aria-label="子の値を、夜B1 → 元のB0へ戻す"><span>↓</span>子の値を、夜B1 → 元のB0へ戻す</div><section class="stage" id="s7"><div class="stage-head"><span class="number">07</span><h2>戻り値を加重する：7/15が得られる</h2></div><div class="return-chain"><div><span class="label">翌昼の4子</span><h3>V(B2-i) = 1/3</h3><p>全ての終局計算を上で展開済み</p></div><div class="return-arrow">↑</div><div><span class="label">夜B1へ戻す</span><h3>4 × (1/4 × 1/3) = 1/3</h3><p>4つの襲撃結果を加重</p></div><div class="return-arrow">↑</div><div class="answer"><span class="label">初日B0のP5処刑候補へ戻す</span><h3>1/5 × 1 ＋ 4/5 × 1/3</h3><p>即村勝ち ＋ 続行の質量×夜の値</p><strong class="big-answer">7/15</strong><p>村勝ち7/15 ／ 狼勝ち8/15</p></div></div><div class="hold"><strong>B0の計算情報へ対応付ける（B案）</strong><br>P5処刑の候補値：7/15 ／ 公開・Day1昼・この戦略・入力条件の結果<br>既存コードではForecast等の戻り値です。新しいBoardDataへの保存は未実装です。</div><h3>盤面値との区別</h3><p>初日P1〜P5の候補値を全て検算すると、どれも7/15。昼maxの同率選択は各1/5なので、盤面値も <strong>5×(1/5×7/15)=7/15</strong> です。</p><p class="note">主図はP5固定なので、その行動の選択率は1として評価しました。自動方針がP5を選ぶ率1/5を、主図の分岐率へもう一度掛けません。候補値と盤面値が一致するのはこの例の対称性による結果です。</p><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/action_flow.py#L63">werewolf/action_flow.py · action_flow</a></details><details class="source"><summary>既存コードの根拠</summary><a target="_top" rel="noopener" href="https://github.com/atachan14/ww_gg/blob/e325a034a488ca2edb81f98dc39ca750ded680f4/werewolf/exact.py#L772">werewolf/exact.py · Progress.total_values</a></details><p class="responsibility">B案の担当：評価担当が子値を返し、元盤面の条件付き結果へ対応付ける</p></section><section class="stage" id="s8"><div class="stage-head"><span class="number">08</span><h2>A/Cで変わる場所：数値とルールは同じ</h2></div><div class="table-wrap stack"><table><thead><tr><th scope="col">箇所</th><th scope="col">A：既存を最小整理</th><th scope="col">B：今回の主図</th><th scope="col">C：記録から投影</th></tr></thead><tbody><tr><td data-label="箇所">B0の出所</td><td data-label="A：既存を最小整理">既存保存を再生し窓口で束ねる</td><td data-label="B：今回の主図">盤面の確定・有効入力から状態を作る</td><td data-label="C：記録から投影">初期設定・入力記録から作る</td></tr><tr><td data-label="箇所">P5入力</td><td data-label="A：既存を最小整理">既存の入力処理へ渡す</td><td data-label="B：今回の主図">B0の入力に対応付ける</td><td data-label="C：記録から投影">対象地点の操作として記録</td></tr><tr><td data-label="箇所">B1/B2生成</td><td data-label="A：既存を最小整理">既存の評価経路が生成</td><td data-label="B：今回の主図">遷移担当が子状態を生成</td><td data-label="C：記録から投影">評価中の一時状態を投影</td></tr><tr><td data-label="箇所">本人P1条件</td><td data-label="A：既存を最小整理">既存adapterを呼ぶ</td><td data-label="B：今回の主図">公開B1と別の派生状態</td><td data-label="C：記録から投影">同じ記録に本人条件を添える</td></tr><tr><td data-label="箇所">7/15の受取り</td><td data-label="A：既存を最小整理">窓口で表示用にまとめる</td><td data-label="B：今回の主図">盤面の計算条件へ戻す</td><td data-label="C：記録から投影">要求条件付きの投影結果として返す</td></tr></tbody></table></div><p>この例の入力・候補・確率・勝率は3案で変えません。B0/B1/B2-iは説明用ID。計算上の子を作ることと、全未来木を永続保存することは別です。</p><p class="note">Current情報で過去を再評価する例はここには含めていません。正規／過去の表示基準は合意済みのまま、過去再評価式・後知恵の細部は未決です。</p><p class="responsibility">B案の担当：案ごとの保持・受渡しの責任だけを対応付ける。正式比較・選定はStep4</p></section><section class="checks" id="checks"><h2>検算の範囲</h2><p>4つの狼本人条件、4つの襲撃結果、全12翌昼候補、36本の細かい経路を既存コードで確認しました。</p><div class="equation">即村勝ち 1/5 ＋ 続行中の村勝ち 12/45 ＝ <strong>7/15</strong><br>狼勝ち 24/45 ＝ <strong>8/15</strong>　総和1</div><p>36経路は「狼の位置4 × 合法襲撃3 × 翌昼処刑3」。各経路の質量は1/45、村勝ち12経路・狼勝ち24経路です。</p><details><summary>全36経路を確認</summary><div class="table-wrap stack"><table><thead><tr><th scope="col">狼位置</th><th scope="col">夜の死体</th><th scope="col">翌昼処刑</th><th scope="col">P5固定からの質量</th><th scope="col">村勝ちの値</th></tr></thead><tbody><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P1</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P2</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P3</td><td data-label="夜の死体">P4</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P1</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P3</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P2</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P1</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P2</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">0</td></tr><tr><td data-label="狼位置">P4</td><td data-label="夜の死体">P3</td><td data-label="翌昼処刑">P4</td><td data-label="P5固定からの質量">1/45</td><td data-label="村勝ちの値">1</td></tr></tbody></table></div></details><details><summary>既存コードから得た検算データ</summary><pre>{
+  "cast": "C4 W1",
+  "claims": "none (all latent)",
+  "ability_reports": [],
+  "rules": {
+    "allow_self_bite": false,
+    "initial_seer": "random_white",
+    "allow_repeat_guard": true
+  },
+  "strategy": {
+    "day": "max",
+    "night": "max",
+    "include_self_bite": false,
+    "fake_reports": "max",
+    "disclosure_common": "all",
+    "seer_disclosure": "inherit",
+    "medium_disclosure": "inherit",
+    "seer_position": [
+      "unvisited",
+      "uniform"
+    ],
+    "fake_seer_policy": [
+      "noncontradictory",
+      "uniform"
+    ],
+    "guard_position": [
+      "uniform"
+    ]
+  },
+  "initial_worlds": 5,
+  "initial_wolf_mass_each": "1/5",
+  "initial_action_values": {
+    "1": "7/15",
+    "2": "7/15",
+    "3": "7/15",
+    "4": "7/15",
+    "5": "7/15"
+  },
+  "fixed_execution": 5,
+  "initial_terminal_village_mass": "1/5",
+  "continuing_mass": "4/5",
+  "continuing_world_mass_each": "1/4",
+  "continuing_village_win": "1/3",
+  "night_action_values": {
+    "1": "1/3",
+    "2": "1/3",
+    "3": "1/3",
+    "4": "1/3"
+  },
+  "night_outcomes": [
+    {
+      "victim": 1,
+      "conditional_B1_probability": "1/4",
+      "root_reach_probability": "1/5",
+      "alive": [
+        2,
+        3,
+        4
+      ],
+      "wolf_distribution": {
+        "2": "1/3",
+        "3": "1/3",
+        "4": "1/3"
+      },
+      "village_win": "1/3",
+      "execution_values": {
+        "2": "1/3",
+        "3": "1/3",
+        "4": "1/3"
+      }
+    },
+    {
+      "victim": 2,
+      "conditional_B1_probability": "1/4",
+      "root_reach_probability": "1/5",
+      "alive": [
+        1,
+        3,
+        4
+      ],
+      "wolf_distribution": {
+        "1": "1/3",
+        "3": "1/3",
+        "4": "1/3"
+      },
+      "village_win": "1/3",
+      "execution_values": {
+        "1": "1/3",
+        "3": "1/3",
+        "4": "1/3"
+      }
+    },
+    {
+      "victim": 3,
+      "conditional_B1_probability": "1/4",
+      "root_reach_probability": "1/5",
+      "alive": [
+        1,
+        2,
+        4
+      ],
+      "wolf_distribution": {
+        "1": "1/3",
+        "2": "1/3",
+        "4": "1/3"
+      },
+      "village_win": "1/3",
+      "execution_values": {
+        "1": "1/3",
+        "2": "1/3",
+        "4": "1/3"
+      }
+    },
+    {
+      "victim": 4,
+      "conditional_B1_probability": "1/4",
+      "root_reach_probability": "1/5",
+      "alive": [
+        1,
+        2,
+        3
+      ],
+      "wolf_distribution": {
+        "1": "1/3",
+        "2": "1/3",
+        "3": "1/3"
+      },
+      "village_win": "1/3",
+      "execution_values": {
+        "1": "1/3",
+        "2": "1/3",
+        "3": "1/3"
+      }
+    }
+  ],
+  "elementary_paths": [
+    {
+      "wolf": 1,
+      "victim": 2,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 1,
+      "victim": 2,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 1,
+      "victim": 2,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 1,
+      "victim": 3,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 1,
+      "victim": 3,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 1,
+      "victim": 3,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 1,
+      "victim": 4,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 1,
+      "victim": 4,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 1,
+      "victim": 4,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 2,
+      "victim": 1,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 2,
+      "victim": 1,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 2,
+      "victim": 1,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 2,
+      "victim": 3,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 2,
+      "victim": 3,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 2,
+      "victim": 3,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 2,
+      "victim": 4,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 2,
+      "victim": 4,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 2,
+      "victim": 4,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 3,
+      "victim": 1,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 3,
+      "victim": 1,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 3,
+      "victim": 1,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 3,
+      "victim": 2,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 3,
+      "victim": 2,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 3,
+      "victim": 2,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 3,
+      "victim": 4,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 3,
+      "victim": 4,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 3,
+      "victim": 4,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 4,
+      "victim": 1,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 4,
+      "victim": 1,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 4,
+      "victim": 1,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 4,
+      "victim": 2,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 4,
+      "victim": 2,
+      "day2_execution": 3,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 4,
+      "victim": 2,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    },
+    {
+      "wolf": 4,
+      "victim": 3,
+      "day2_execution": 1,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 4,
+      "victim": 3,
+      "day2_execution": 2,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 0
+    },
+    {
+      "wolf": 4,
+      "victim": 3,
+      "day2_execution": 4,
+      "conditional_B1_mass": "1/36",
+      "root_fixed_P5_mass": "1/45",
+      "village_payoff": 1
+    }
+  ],
+  "elementary_path_count": 36,
+  "continued_win": "1/3",
+  "root_village_win": "7/15",
+  "root_wolf_win": "8/15",
+  "owner_P1_wolf_rate": "1",
+  "public_P1_wolf_rate_unchanged": "1/4",
+  "scope": "Existing implementation numeric verification; B ownership diagram is a separate unimplemented design proposal.",
+  "verified_wolf_policies": [
+    {
+      "wolf": 1,
+      "public_world_mass": "1/4",
+      "policy": {
+        "2": "1/3",
+        "3": "1/3",
+        "4": "1/3"
+      }
+    },
+    {
+      "wolf": 2,
+      "public_world_mass": "1/4",
+      "policy": {
+        "1": "1/3",
+        "3": "1/3",
+        "4": "1/3"
+      }
+    },
+    {
+      "wolf": 3,
+      "public_world_mass": "1/4",
+      "policy": {
+        "1": "1/3",
+        "2": "1/3",
+        "4": "1/3"
+      }
+    },
+    {
+      "wolf": 4,
+      "public_world_mass": "1/4",
+      "policy": {
+        "1": "1/3",
+        "2": "1/3",
+        "3": "1/3"
+      }
+    }
+  ]
+}</pre></details></section><p><a href="#top">先頭へ ↑</a></p></main><footer><a href="/help/history/materials/step3" target="_top" rel="noopener">保全した3案概要版</a> ／ このページは設計説明資料です。製品計算処理・公開版は変更していません。</footer><script>(()=>{let keepAnchor=true;for(const name of ['wheel','touchstart','pointerdown','keydown'])addEventListener(name,()=>{keepAnchor=false},{passive:true});const send=()=>{if(keepAnchor&&location.hash){let target=null;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(_){}if(target&&Math.abs(target.getBoundingClientRect().top-20)>2)scrollTo({top:target.getBoundingClientRect().top+scrollY-20,behavior:'instant'})}const blocks=[...document.body.children].filter(e=>!['SCRIPT','STYLE'].includes(e.tagName)&&getComputedStyle(e).position!=='fixed'&&e.getBoundingClientRect().height);const bottom=Math.max(600,...blocks.map(e=>e.getBoundingClientRect().bottom+scrollY));let anchor=null;try{anchor=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(_){}parent.postMessage({type:'ww-history-layout',page:"step3-example",height:Math.ceil(bottom+24),anchorTop:anchor?anchor.getBoundingClientRect().top:null,hash:location.hash},'*')};addEventListener('load',()=>{requestAnimationFrame(()=>{let target=null;try{target=document.getElementById(decodeURIComponent(location.hash.slice(1)))}catch(_){}if(target)scrollTo({top:target.getBoundingClientRect().top+scrollY-20,behavior:'instant'});send()})});addEventListener('message',event=>{if(event.source!==parent||event.data?.type!=='ww-history-anchor')return;let target=null;try{target=document.getElementById(decodeURIComponent(event.data.hash.slice(1)))}catch(_){}if(target){scrollTo({top:target.getBoundingClientRect().top+scrollY-20,behavior:'instant'});send()}});addEventListener('resize',send);addEventListener('hashchange',send);addEventListener('scroll',()=>requestAnimationFrame(send),{passive:true});new ResizeObserver(()=>requestAnimationFrame(send)).observe(document.body)})();</script></body></html>
