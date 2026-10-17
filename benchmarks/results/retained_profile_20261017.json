@@ -1,0 +1,141 @@
+{
+  "baseline_ref": "79b487b",
+  "diagnostic_only": true,
+  "budget": {
+    "max_work": 250000,
+    "max_seconds": null
+  },
+  "note": "Separate instrumented profile. Wall deadline disabled for diagnostic completion only; product and formal benchmark retain250000/20sec. Inclusive times overlap and cannot be added or used as formal speed measurements.",
+  "complete": true,
+  "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+  "functions": [
+    {
+      "file": "seer_acquisition.py",
+      "line": 49,
+      "function": "__post_init__",
+      "calls": 72906,
+      "self_seconds": 0.5240441,
+      "cumulative_seconds": 1.4557169
+    },
+    {
+      "file": "seer_acquisition.py",
+      "line": 72,
+      "function": "normalize",
+      "calls": 19960,
+      "self_seconds": 0.3646556,
+      "cumulative_seconds": 1.6495121000000001
+    },
+    {
+      "file": "exact.py",
+      "line": 798,
+      "function": "__post_init__",
+      "calls": 6,
+      "self_seconds": 1.97e-05,
+      "cumulative_seconds": 0.0001533
+    },
+    {
+      "file": "exact.py",
+      "line": 226,
+      "function": "__post_init__",
+      "calls": 16356,
+      "self_seconds": 0.010290500000000001,
+      "cumulative_seconds": 0.010290500000000001
+    },
+    {
+      "file": "seer_acquisition.py",
+      "line": 35,
+      "function": "__post_init__",
+      "calls": 9638,
+      "self_seconds": 0.0095577,
+      "cumulative_seconds": 0.0527238
+    },
+    {
+      "file": "seer_acquisition.py",
+      "line": 100,
+      "function": "public_worlds",
+      "calls": 21445,
+      "self_seconds": 0.10313720000000001,
+      "cumulative_seconds": 0.3160345
+    },
+    {
+      "file": "exact.py",
+      "line": 82,
+      "function": "__post_init__",
+      "calls": 2,
+      "self_seconds": 8.3e-06,
+      "cumulative_seconds": 2.8700000000000003e-05
+    },
+    {
+      "file": "exact.py",
+      "line": 254,
+      "function": "_immutable_complete_roles",
+      "calls": 56877,
+      "self_seconds": 0.0479889,
+      "cumulative_seconds": 0.468781
+    },
+    {
+      "file": "exact.py",
+      "line": 413,
+      "function": "winner",
+      "calls": 148137,
+      "self_seconds": 0.2532933,
+      "cumulative_seconds": 0.5459174
+    },
+    {
+      "file": "exact.py",
+      "line": 386,
+      "function": "alive_mask",
+      "calls": 103580,
+      "self_seconds": 0.0638991,
+      "cumulative_seconds": 0.2487243
+    },
+    {
+      "file": "seer_future_uniform.py",
+      "line": 23,
+      "function": "__post_init__",
+      "calls": 26314,
+      "self_seconds": 0.3816082,
+      "cumulative_seconds": 1.1355823
+    },
+    {
+      "file": "belief_projection.py",
+      "line": 49,
+      "function": "project_private",
+      "calls": 8636,
+      "self_seconds": 0.06618020000000001,
+      "cumulative_seconds": 1.7226415000000002
+    },
+    {
+      "file": "exact.py",
+      "line": 282,
+      "function": "__post_init__",
+      "calls": 67412,
+      "self_seconds": 1.4628834000000002,
+      "cumulative_seconds": 5.3252274
+    },
+    {
+      "file": "exact.py",
+      "line": 390,
+      "function": "wolf_count_distribution",
+      "calls": 227994,
+      "self_seconds": 0.5915067,
+      "cumulative_seconds": 1.5153654
+    },
+    {
+      "file": "exact.py",
+      "line": 43,
+      "function": "__post_init__",
+      "calls": 2537,
+      "self_seconds": 0.006240000000000001,
+      "cumulative_seconds": 0.0080266
+    },
+    {
+      "file": "seer_acquisition.py",
+      "line": 22,
+      "function": "__post_init__",
+      "calls": 15950,
+      "self_seconds": 0.0125176,
+      "cumulative_seconds": 0.0495062
+    }
+  ]
+}
