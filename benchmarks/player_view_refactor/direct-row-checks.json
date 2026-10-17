@@ -1,0 +1,22 @@
+{
+  "base_commit": "96da610",
+  "math_base": "03e4e31f965247da65a62386b8f38863459b5cc1",
+  "related_tests": 124,
+  "seconds": 39.699,
+  "passed": true,
+  "browser": {
+    "initial": "7/15",
+    "roles_then_complete": true,
+    "edit_during_calculation_and_stale_preview_rejected": true,
+    "input_update_persisted": true,
+    "personal_public_switch": true,
+    "stale_personal_response_rejected": true,
+    "errors": []
+  },
+  "unchanged_baseline_files_excluding_ui_adapters": 18,
+  "saved_schema_changed": false,
+  "solver_laws_changed": false,
+  "full_suite_rerun": false,
+  "benchmark": "direct-row-results.json",
+  "logs": ".artifacts/player-row-direct/"
+}

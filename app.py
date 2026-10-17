@@ -14,7 +14,7 @@ from werewolf.dawn import FLOW as DAWN_FLOW, enabled as dawn_enabled, advance_st
 from werewolf.strategy_ui import co_editor, resolve_co_editor
 from werewolf.result_disclosure import MODEL as DISCLOSURE_MODEL, DisclosureInconsistent, condition_observed
 
-from werewolf.co_ui import CO_LABELS, CO_RENDERERS, medium_timeline
+from werewolf.co_ui import CO_LABELS, CO_RENDERERS
 from werewolf.setup import GameConfig, SetupDraft, setup_count, complete_rules, preset_data
 from werewolf.comparison import compare_initial
 
@@ -225,7 +225,7 @@ def create_app(test_config=None, *, deployment=False):
             disclosure_error=str(exc);role_state=structural_roles(state);rules,progress=role_state.replay_result
         strategy = Strategy(**state["policy"])
         manual = state.get("seer_mode") == "information-fixed-v1"
-        from werewolf.seer_manual import pending as manual_pending, timeline as seer_timeline
+        from werewolf.seer_manual import pending as manual_pending
         role_evidence_pending = manual_pending(state) if manual and not progress.finished else None
         seer_pending=role_evidence_pending
         if disclosure_error:
@@ -281,26 +281,6 @@ def create_app(test_config=None, *, deployment=False):
                 primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                 action_values={}
                 event_history,alive=board.history,board.alive
-        deaths = {event.target: f"D{event.day} " + ("処刑" if event.phase == "day" else "襲撃") for event in event_history}
-        players = []
-        for player in range(1, state["players"] + 1):
-            probabilities=role_state.probabilities(player)
-            wolf=probabilities['wolf'];medium=probabilities['medium']
-            players.append({"medium_probability": medium, "citizen_probability": probabilities['villager'],
-                            "extra_probabilities": {r:probabilities[r] for r in ("seer","hunter")},
-                            "claim": board.claims[player - 1], "legal": player in action_values or (guard_scope_pending and not finished and board.phase=='day' and player in board.alive),
-                            "id": player, "name": f"Player {player}", "status": deaths.get(player, "生存"),
-                            "alive": player in alive, "wolf_probability": wolf, "village_probability": 1 - wolf,
-                            "action": action_values.get(player), "by_dawn": by_dawn_values.get(player) if player in action_values else None})
-        for player in players:
-            if manual:
-                player['seer_timeline']=seer_timeline(state,board,player['id'],finished)
-                player['has_seer_evidence']=any(row['target'] is not None or row['color'] is not None for row in player['seer_timeline'])
-            if role_evidence_pending or disclosure_error:
-                for key in ('medium_probability','citizen_probability','wolf_probability','village_probability'):player[key]=seer_pending
-                player['extra_probabilities']={k:seer_pending for k in player['extra_probabilities']}
-            player['medium_timeline'] = medium_timeline(board, player['id'], finished)
-            player['co_pending'] = player['claim'] == 'medium' and any(entry['editable'] and not entry['color'] for entry in player['medium_timeline'])
         if roles_only and night_context:night_context={**night_context,'pending':True}
         display_selection = (night_context['observation']['deaths'][0] if night_context and night_context['observation'] and len(night_context['observation']['deaths'])==1 else None) if night_context else state['selection']
         if not night_context and not finished and not seer_pending and display_selection is None and getattr(strategy, board.phase) == 'max':
@@ -318,11 +298,14 @@ def create_app(test_config=None, *, deployment=False):
                               'guard_slots': {str(p): private_slots(board,p,rules,role='hunter') for p in board.alive},
                               'attack_slots': private_slots(board,1,rules,role='wolf'), 'allow_self_bite':rules.allow_self_bite,
                               'public_attacks': [{'day':e.day,'target':e.target,'color':None} for e in board.history if e.phase=='night']}
-        from werewolf.player_view import ViewScope,ResultFrame,public_view
+        from werewolf.player_view import ViewScope,ResultFrame,build_public_view
         view_source=board_data(state)
         view_stage='invalid'if disclosure_error else 'roles'if roles_only else 'pending'if seer_pending else 'complete'
-        player_view=public_view(view_source,players,ResultFrame(ViewScope.public(view_source),view_stage,
-            str(request.form.get('request_id','')),str(seer_pending.reason)if seer_pending else None))
+        player_view=build_public_view(view_source,role_state,board,ResultFrame(ViewScope.public(view_source),view_stage,
+            str(request.form.get('request_id','')),str(seer_pending.reason)if seer_pending else None),
+            state=state,event_history=event_history,alive=alive,action_values=action_values,by_dawn_values=by_dawn_values,
+            finished=finished,manual=manual,guard_scope_pending=guard_scope_pending,
+            probability_pending=seer_pending if role_evidence_pending or disclosure_error else None)
         players=player_view.players
         return render_template("main.html", guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
@@ -857,18 +840,6 @@ def create_app(test_config=None, *, deployment=False):
         batch={'mode':'simultaneous','events':events}
         return transaction_changes(state,p.last_board if p.finished else p.board,batch,finished=p.finished),batch
 
-    def private_read_result(source,payload,result,stage):
-        if not result.get('players'):
-            return result  # Existing unsupported/Pending envelope has no rows.
-        from werewolf.player_view import ViewScope,ResultFrame,personal_view
-        scope=ViewScope.public(source.owner).personal(payload['role'],payload['players'],payload['results'])
-        if stage!='roles'and result.get('budget_kind'):stage='pending'
-        # Preserve the existing transport contract, including partial None rows
-        # and top-level reason/acquisitions. UI generation checks stay in JS.
-        view=personal_view(source.owner,result['players'],ResultFrame(scope,stage,
-            str(request.form.get('request_id','')),result.get('reason')))
-        return {**result,'players':[p.to_legacy_row()for p in view.players]}
-
     @app.post('/private-view')
     def private_view():
         from flask import jsonify
@@ -898,12 +869,12 @@ def create_app(test_config=None, *, deployment=False):
                         max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                         max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
                     identity={'board_id':state['public_log']['board_id'],'revision':state['revision']}
-                    yield dict(event='roles',**private_read_result(source,payload,prepared_private_role_rows(source.board,payload['role'],payload['players'],prepared),'roles'),**identity)
+                    yield dict(event='roles',**prepared_private_role_rows(source.board,payload['role'],payload['players'],prepared),**identity)
                     result=source.private(payload['role'],payload['players'],payload['results'],_prepared=prepared,
                         max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                         max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
                     if budget_stop() is not None:result={**result,'reason':stop_message(),'budget_kind':budget_stop()['kind']}
-                    yield dict(event='complete',**private_read_result(source,payload,result,'complete'),**identity)
+                    yield dict(event='complete',**result,**identity)
                 return calculation_stream(events,view=payload['role'])
             # Replay only public evidence; the private Board is confined to this adapter.
             from werewolf.board_flow import BoardData
@@ -915,7 +886,7 @@ def create_app(test_config=None, *, deployment=False):
                                             max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                             max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
             if budget_stop() is not None:result={**result,'reason':stop_message(),'budget_kind':budget_stop()['kind']}
-            return jsonify(**private_read_result(private_source,payload,result,'complete'), board_id=state['public_log']['board_id'], revision=state['revision'])
+            return jsonify(**result, board_id=state['public_log']['board_id'], revision=state['revision'])
         except (ValueError, TypeError, KeyError, DisclosureInconsistent) as exc:
             return jsonify(error=str(exc)), 400
 

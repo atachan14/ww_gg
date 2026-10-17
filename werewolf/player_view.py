@@ -1,7 +1,7 @@
 """Request-local immutable player read views. No persistence, solver or UI hook.
 
-Rows come from existing public/private adapters; this module never calculates or
-conditions probability laws. Public declarations are indexed from existing log
+Rows use prepared role/forecast outputs or explicit compatibility adapters; this
+module never calculates or conditions probability laws. Public declarations are indexed from existing log
 projection. No view is attached to generated future Boards or global caches.
 """
 from collections.abc import Mapping,Sequence
@@ -224,3 +224,49 @@ def personal_view(public,rows,frame):
         name,alive=metadata[i-1]
         players.append(PlayerData(i,freeze(row),frame,index.by_player[i-1],index.received[i-1],index.current_co[i-1],name,alive))
     return PlayerBoardView(scope,tuple(players),index)
+
+
+def build_public_view(board_data,role_state,board,frame,*,state,event_history,alive,action_values,by_dawn_values,finished=False,manual=False,guard_scope_pending=False,probability_pending=None):
+    """Build immutable UI rows directly; no temporary legacy row dict/list."""
+    from .co_ui import medium_timeline
+    from .seer_manual import timeline as seer_timeline
+    scope=ViewScope.public(board_data)
+    if frame.scope!=scope:raise ValueError('Stale or personal public frame')
+    index=PublicIndex.from_board(board_data)
+    deaths={e.target:f"D{e.day} "+("処刑"if e.phase=='day'else "襲撃")for e in event_history}
+    players=[]
+    for i in range(1,board_data.game_data.players+1):
+        probabilities=role_state.probabilities(i);wolf=probabilities['wolf']
+        claim=board.claims[i-1]
+        if claim!=index.current_co[i-1]:raise ValueError('Row CO differs from effective public declarations')
+        medium=medium_timeline(board,i,finished)
+        extra=ReadMap(tuple((r,probability_pending if probability_pending is not None else probabilities[r])for r in ('seer','hunter')))
+        values=(('medium_probability',probability_pending if probability_pending is not None else probabilities['medium']),
+            ('citizen_probability',probability_pending if probability_pending is not None else probabilities['villager']),
+            ('extra_probabilities',extra),('claim',claim),
+            ('legal',i in action_values or(guard_scope_pending and not finished and board.phase=='day'and i in board.alive)),
+            ('id',i),('name',f"Player {i}"),('status',deaths.get(i,"生存")),('alive',i in alive),
+            ('wolf_probability',probability_pending if probability_pending is not None else wolf),
+            ('village_probability',probability_pending if probability_pending is not None else 1-wolf),
+            ('action',action_values.get(i)),('by_dawn',by_dawn_values.get(i)if i in action_values else None))
+        if manual:
+            timeline=seer_timeline(state,board,i,finished)
+            values+=(('seer_timeline',freeze(timeline)),('has_seer_evidence',any(r['target']is not None or r['color']is not None for r in timeline)))
+        values+=(('medium_timeline',freeze(medium)),('co_pending',claim=='medium'and any(r['editable']and not r['color']for r in medium)))
+        players.append(PlayerData(i,ReadMap(values),frame,index.by_player[i-1],index.received[i-1],claim,f"Player {i}",i in alive))
+    return PlayerBoardView(scope,tuple(players),index)
+
+
+def private_api_rows(marginals,*,targets=(),final_values=None,dawn_for=None):
+    """Single private-row formatter. The mutable JSON boundary is intentional."""
+    final_values={}if final_values is None else final_values
+    rows=[]
+    for i,marginal in enumerate(marginals,1):
+        probabilities={r:str(v)for r,v in marginal.items()}
+        probabilities['citizen']=probabilities.pop('villager');probabilities['village']=str(1-marginal['wolf'])
+        dawn=dawn_for(i)if dawn_for is not None else None
+        rows.append({'id':i,'probabilities':probabilities,
+            'dawn':{'village':str(dawn.village_win),'wolf':str(dawn.wolf_win)}if dawn else None,
+            'final':{'village':str(final_values[i]),'wolf':str(1-final_values[i])}if i in final_values else None,
+            'legal':i in targets})
+    return rows

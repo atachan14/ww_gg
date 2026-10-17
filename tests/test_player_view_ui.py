@@ -4,6 +4,7 @@ from unittest.mock import patch
 from flask import template_rendered
 from app import create_app
 from werewolf.player_view import PlayerData
+from tests.fixtures.player_rows_96da610 import build_rows as frozen_rows
 from werewolf.seer_future_uniform import FuturePending
 
 class PlayerViewUIReadTests(unittest.TestCase):
@@ -13,8 +14,10 @@ class PlayerViewUIReadTests(unittest.TestCase):
     def game(self):
         with self.c.session_transaction()as s:return copy.deepcopy(s['game'])
     def assert_html_same(self):
-        legacy=lambda source,rows,frame:SimpleNamespace(players=rows)
-        with patch('werewolf.player_view.public_view',side_effect=legacy):old=self.c.get('/main').data
+        def legacy(source,role_state,board,frame,**kwargs):
+            pending=kwargs.pop('probability_pending')
+            return SimpleNamespace(players=frozen_rows(role_state=role_state,board=board,**kwargs,role_evidence_pending=pending,seer_pending=pending))
+        with patch('werewolf.player_view.build_public_view',side_effect=legacy):old=self.c.get('/main').data
         seen=[]
         def capture(sender,template,context,**kwargs):
             if 'players'in context:seen.extend(context['players'])
@@ -27,10 +30,12 @@ class PlayerViewUIReadTests(unittest.TestCase):
         self.assert_html_same()
     def test_pending_html_and_roles_complete_stream_match_legacy_rows(self):
         with patch('werewolf.board_flow.RoleState.forecast',return_value=FuturePending('information_set_budget_exceeded')):self.assert_html_same()
-        legacy=lambda source,rows,frame:SimpleNamespace(players=rows)
+        def legacy(source,role_state,board,frame,**kwargs):
+            pending=kwargs.pop('probability_pending')
+            return SimpleNamespace(players=frozen_rows(role_state=role_state,board=board,**kwargs,role_evidence_pending=pending,seer_pending=pending))
         def events():
             r=self.c.get('/main',headers={'Accept':'application/x-ndjson'},buffered=False);value=[json.loads(x)for x in r.response];r.close();return value
-        with patch('werewolf.player_view.public_view',side_effect=legacy):old=events()
+        with patch('werewolf.player_view.build_public_view',side_effect=legacy):old=events()
         new=events();self.assertEqual([x['event']for x in new],['roles','complete'])
         self.assertEqual([x['html']for x in old],[x['html']for x in new])
     def test_private_roles_pending_empty_envelope_is_preserved(self):
@@ -41,6 +46,14 @@ class PlayerViewUIReadTests(unittest.TestCase):
             events=[json.loads(x)for x in r.response];r.close()
         self.assertEqual([x['event']for x in events],['roles','complete'])
         self.assertEqual(events[0]['players'],[]);self.assertEqual(events[0]['reason'],'pending role support')
+    def test_runtime_does_not_round_trip_old_public_or_private_rows(self):
+        with patch('werewolf.player_view.public_view',side_effect=AssertionError('old public adapter used')):
+            self.assertEqual(self.c.get('/main').status_code,200)
+        g=self.game();self.c.post('/advance',data={'revision':g['revision'],'target':'1','day':'random','night':'random'});g=self.game()
+        form={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps({'role':'wolf','players':[2],'results':[]})}
+        with patch('werewolf.player_view.personal_view',side_effect=AssertionError('private row round trip')),patch('werewolf.player_view.PublicIndex.from_board',side_effect=AssertionError('unused private index')):
+            response=self.c.post('/private-view',data=form)
+        self.assertEqual(response.status_code,200,response.data);self.assertEqual(len(response.json['players']),5)
     def test_preview_edit_uses_new_view_but_does_not_save(self):
         g=self.game();seen=[]
         def capture(sender,template,context,**kwargs):

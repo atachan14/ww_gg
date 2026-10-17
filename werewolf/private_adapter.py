@@ -54,12 +54,8 @@ def prepared_private_role_rows(public,role,players,prepared):
     if isinstance(branch,FuturePending) or isinstance(actor,FuturePending):
         return {'players':[],'reason':'本人の条件に基づく役職率をまだ計算できません。'}
     private=getattr(prepared,'role_board',private)
-    rows=[]
-    for player,marginal in enumerate(private_role_rates(private),1):
-        probabilities={r:str(value) for r,value in marginal.items()}
-        probabilities['citizen']=probabilities.pop('villager')
-        probabilities['village']=str(1-marginal['wolf'])
-        rows.append({'id':player,'probabilities':probabilities,'dawn':None,'final':None,'legal':False})
+    from .player_view import private_api_rows
+    rows=private_api_rows(private_role_rates(private))
     return {'players':rows,'reason':'本人の役職率を表示しています。勝率を計算中です。'}
 
 
@@ -193,17 +189,9 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
 
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
     from .board_roles import private_role_rates
-    marginal=private_role_rates(private)
-    rows = []
-    for p in range(1, public.player_count + 1):
-        probabilities = {r:str(value) for r,value in marginal[p-1].items()}
-        probabilities['citizen'] = probabilities.pop('villager')
-        probabilities['village'] = str(1-marginal[p-1]['wolf'])
-        dawn = immediate(private, p, rules, strategy) if role == 'wolf' and p in targets and not public.initial_hunter_count else guard_dawn.get(p)
-        rows.append({'id': p, 'probabilities': probabilities,
-                     'dawn': {'village': str(dawn.village_win), 'wolf': str(dawn.wolf_win)} if dawn else None,
-                     'final': {'village': str(final_values[p]), 'wolf': str(1-final_values[p])} if p in final_values else None,
-                     'legal': p in targets})
+    from .player_view import private_api_rows
+    rows=private_api_rows(private_role_rates(private),targets=targets,final_values=final_values,
+        dawn_for=lambda p:immediate(private,p,rules,strategy)if role=='wolf'and p in targets and not public.initial_hunter_count else guard_dawn.get(p))
     return {'players': rows, 'reason': reason,
             'acquisitions': [{'day': a.day, 'player': a.player, 'target': a.target, 'color': a.color}
                              for a in view.acquisitions]}
