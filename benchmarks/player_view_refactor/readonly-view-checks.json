@@ -1,0 +1,20 @@
+{
+  "base_commit": "02a51fd",
+  "math_base": "03e4e31f965247da65a62386b8f38863459b5cc1",
+  "new_tests": {
+    "count": 11,
+    "seconds": 1.94,
+    "passed": true
+  },
+  "existing_related_tests": {
+    "count": 94,
+    "seconds": 30.844,
+    "passed": true
+  },
+  "baseline_hashed_files_unchanged": 20,
+  "ui_connected": false,
+  "persistent_schema_changed": false,
+  "shared_solver_changed": false,
+  "full_suite_rerun": false,
+  "logs": ".artifacts/player-view-stage3a/"
+}
