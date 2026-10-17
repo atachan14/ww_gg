@@ -242,7 +242,28 @@ def worker(args):
         destination=Path(args.output).with_suffix('.prof');profile.dump_stats(str(destination))
         stats=pstats.Stats(profile)
         record['profile']={'file':str(destination),'functions':sorted([{'file':key[0],'line':key[1],'function':key[2],'primitive_calls':v[0],'calls':v[1],'self_seconds':v[2],'cumulative_seconds':v[3]} for key,v in stats.stats.items()],key=lambda v:v['self_seconds'],reverse=True)}
+    record['process_memory_peak']=process_memory_peak()
     Path(args.output).write_text(json.dumps(record,ensure_ascii=False,indent=2),encoding='utf-8')
+
+
+def process_memory_peak():
+    """Native process high-water marks, sampled after request timing."""
+    if os.name!='nt':return None
+    import ctypes
+    from ctypes import wintypes
+    class Counters(ctypes.Structure):
+        _fields_=[('cb',wintypes.DWORD),('PageFaultCount',wintypes.DWORD),
+            *[(name,ctypes.c_size_t) for name in ('PeakWorkingSetSize','WorkingSetSize',
+            'QuotaPeakPagedPoolUsage','QuotaPagedPoolUsage','QuotaPeakNonPagedPoolUsage',
+            'QuotaNonPagedPoolUsage','PagefileUsage','PeakPagefileUsage','PrivateUsage')]]
+    counters=Counters();counters.cb=ctypes.sizeof(counters)
+    current=ctypes.windll.kernel32.GetCurrentProcess;current.restype=wintypes.HANDLE
+    query=ctypes.windll.psapi.GetProcessMemoryInfo
+    query.argtypes=[wintypes.HANDLE,ctypes.POINTER(Counters),wintypes.DWORD]
+    if not query(current(),ctypes.byref(counters),counters.cb):return None
+    return {'peak_working_set_bytes':counters.PeakWorkingSetSize,
+            'peak_process_commit_bytes':counters.PeakPagefileUsage,
+            'scope':'Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count.'}
 
 
 def system_cpu():

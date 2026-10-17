@@ -1,0 +1,85 @@
+{
+  "product_revision_unchanged": "03e341c (HEAD 2c2a584 diagnostics)",
+  "normal_full_suite": {
+    "tests": 681,
+    "seconds": 425.209,
+    "failures": 1,
+    "failed": "test_saved_seven_player_observed_model_completes_the_http_request_budget"
+  },
+  "discarded_hash_trial_full_suite": {
+    "tests": 686,
+    "seconds": 414.836,
+    "failures": 1,
+    "same_http_failure": true
+  },
+  "boundary_diagnostics": {
+    "physical_trial": {
+      "success": true,
+      "tests": 35,
+      "observed_http": [
+        {
+          "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+          "phase": "evaluate_prepared_public",
+          "wall": 19.19848729998921,
+          "cpu": 18.828125,
+          "type": "Forecast",
+          "reason": null
+        },
+        {
+          "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+          "phase": "origin_cleanup",
+          "wall": 0.16859260000637732
+        },
+        {
+          "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+          "phase": "forecast",
+          "wall": 19.368968300012057,
+          "cpu": 19.0,
+          "type": "Forecast",
+          "reason": null
+        }
+      ],
+      "budget_exceptions": []
+    },
+    "hash_trial": {
+      "success": true,
+      "tests": 35,
+      "observed_http": [
+        {
+          "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+          "phase": "evaluate_prepared_public",
+          "wall": 19.913496599998325,
+          "cpu": 19.6875,
+          "type": "Forecast",
+          "reason": null
+        },
+        {
+          "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+          "phase": "origin_cleanup",
+          "wall": 0.16774050000822172
+        },
+        {
+          "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+          "phase": "forecast",
+          "wall": 20.083181199996034,
+          "cpu": 19.875,
+          "type": "Forecast",
+          "reason": null
+        }
+      ],
+      "budget_exceptions": []
+    }
+  },
+  "formal_benchmark": "Not started; HTTP default-budget failure is unresolved.",
+  "discarded_trials": [
+    "Scoped identical physical reconstruction cache: no CPU improvement established.",
+    "Complete immutable hash cache: no CPU improvement established; removed."
+  ],
+  "retained_change": "Windows native worker peak working set and peak committed-memory measurement, outside timed requests.",
+  "remaining": [
+    "Resolve default 20-second HTTP completion under full-suite sequence",
+    "Final ordinary full 681 tests",
+    "Default-budget HTTP/UI",
+    "Fixed-commit before/after cold/warm and memory comparison"
+  ]
+}
