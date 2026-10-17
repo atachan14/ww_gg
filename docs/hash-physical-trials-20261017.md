@@ -29,3 +29,11 @@ replace_worldsで完全worldからroleを先に射影し、能力ありBoardのc
 導入済みPythonのFraction.__hash__は内部_hash_algorithmを16384件LRUで既に再利用していた。次は新しいhash/cacheを足さず、既存cacheの「key in cache→cache[key]」をsentinel付きgetで1回にする候補。完全キー・値・公開/本人境界・ヒット時tick・失敗時非保存・FIFO/容量は変更しない。対象はcached_flow/public_support/values/policies/既存action hit。falsey値・無効化・失敗・予算tickを含む5回帰0.000秒成功。最初の予算テストはAPIが受け付けない0を指定したため、合法な1を先に消費して同じ既存tickを検証する形へ修正した。
 
 単発は候補13.180秒/CPU12.922、基準13.090秒/CPU13.016、peak約0.43MiB減で、採用判断には反復が必要。最初の置換スクリプトがassertで未適用だった2probeはinvalid-no-editとして隔離し、改善の証拠に数えない。現在は正しく適用した候補だけを反復・全回帰で評価する。
+
+## 約30分checkpoint（単一lookupは採用未確定）
+
+固定f3a12bd対23124bfの交互5反復40リクエストは全件完成・厳密結果一致。公開報告あり7人はcold中央値13.396→13.072秒、CPU13.094→12.922秒、native全worker peak187.703→187.426MiB。9人CO-group/seer-noneは4.293→4.154秒、CPU4.203→4.125秒、63.371→63.484MiB。warmは7人約0.015秒、9人約0.065秒で維持。背景負荷が揺れたため全試行を残し、低負荷群を別表示。低負荷wall中央値は7人13.148→13.061秒、9人4.270→4.150秒。効果は小さく、全ケース一般化はしない。
+
+採用の最終条件はcache混在・joint・全692回帰・実HTTP。これらを通常予算で直列実行中。現在の専用18801は前回検証済みf3a12bdのPID20328のままで、未検証候補を反映していない。進行と終了コードは.artifacts/integration-validation/single-lookup-run-state.json、全体ログはsingle-lookup-full-tests.log。結果が確定するまで成功・採用完了とは扱わない。
+
+次の調査候補は、同じ完全joint入力に対する再構築/正規化/検証の重複。既存profileでHypothesis constructor86700回/cumulative約1.647秒、TrueScanState constructor31416回/約1.340秒。型や履歴の検証を省略するのではなく、同一不変入力の証明を安全に再利用できるかを調べる段階で、まだ実装しない。大きな意味変更が必要なら提案に留める。
