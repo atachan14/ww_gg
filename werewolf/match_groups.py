@@ -6,12 +6,12 @@ Group complete post-observation continuation inputs, not role marginals. Origina
 labelled histories are still generated; only recursive scalar evaluation stays
 compressed. No new observation, strategy or multi-fake law is supplied.
 """
-from dataclasses import dataclass
 from math import comb
 from fractions import Fraction as F
 from time import perf_counter
 from .information_set_forecast import InformationSetForecast,InformationSetActionPolicy
-from .exact_renaming import canonical_key,state_signature,board_signature,record
+from .exact_renaming import state_signature,board_signature,record
+from .matching_comparison import PublicRelations,ComparisonContext
 from .evaluation_branch import physical_board
 from .board_future import reconstruct_publication,publication_key
 
@@ -29,17 +29,16 @@ def group_inputs(engine,weighted,*,audit=False):
     for probability,payload in weighted:
         b,s,past,private,observer=payload
         start=perf_counter()
-        keyed=None if observer is not None else canonical_key(b,s,past,private,observer,engine.rules,engine.strategy,physical=payload.physical,max_mappings=120,return_mapping=True)
+        certificate=engine.comparison.certify(payload)
         engine.stats['proof_seconds']+=perf_counter()-start
-        if keyed is None:
+        if certificate is None:
             fallback+=1;key=('unproved',fallback)
             ids=tuple(range(1,b.player_count+1))
         else:
-            key,ids=keyed
-            if engine.relations is not None:key=(key,engine.relations.signature(ids))
+            key,ids=certificate.key,certificate.mapping
         if key not in groups:groups[key]=[F(),payload,ids,[]]
         row=groups[key];row[0]+=probability
-        if audit and keyed is not None:
+        if audit and certificate is not None:
             # Independent full transport equality, not scalar value equality.
             assert signature(payload,ids)==signature(row[1],row[2])
             from .exact import legal_targets,ROLES
@@ -91,6 +90,7 @@ class MatchingForecast(InformationSetForecast):
         super().__init__(*args,**kwargs)
         self.grouping=grouping;self.audit=audit;self.public_entry=True;self.audits=[];self.relations=relations
         self.stats=dict(proof_seconds=0.,unproved_branches=0,raw_continuations=0,representative_continuations=0,solve_calls=0,act_calls=0,uncached_act_calls=0,generated_publication_branches=0,generated_acquisition_rows=0,generated_acquisition_states=0)
+        self.comparison=ComparisonContext(self.rules,self.strategy,relations)
         self.action_policy=GroupPolicy(self)
         if audit:self.audit_oracle=MatchingForecast(*args,grouping=False,audit=False,**kwargs)
     def supported(self,b,observer=None):
@@ -125,36 +125,6 @@ class MatchingForecast(InformationSetForecast):
         previous=self.public_entry;self.public_entry=False
         try:return super().evaluate(*args,**kwargs)
         finally:self.public_entry=previous
-
-
-@dataclass(frozen=True)
-class PublicRelations:
-    claims: tuple
-    alive: tuple
-    reports: tuple
-    @classmethod
-    def from_view(cls,view):
-        if view is None or view.scope.kind!='public':return None
-        # Read the same derived incoming-claim index exposed by PlayerData.
-        declarations=tuple(d for p in view.players for d in p.co_history if d.active)+tuple(d for p in view.players for d in p.received_claims)
-        reports=tuple((d.event['kind'],d.player,d.target,d.event.get('role'),d.acquired_day,
-            d.event.get('color'),d.slot,d.published_day,d.published_phase,d.mode,d.order)
-            for d in declarations)
-        return cls(tuple(p.co for p in view.players),tuple(p.id for p in view.players if p.alive),reports)
-    def signature(self,ids):
-        return (tuple(sorted((ids[p-1],c)for p,c in enumerate(self.claims,1))),
-            tuple(sorted(ids[p-1]for p in self.alive)),
-            tuple(sorted(((kind,ids[p-1],None if t is None else ids[t-1],role,day,color,slot,pubday,phase,mode,order)
-                for kind,p,t,role,day,color,slot,pubday,phase,mode,order in self.reports),key=repr)))
-    def candidate_groups(self):
-        n=len(self.claims);identity=tuple(range(1,n+1));original=self.signature(identity);groups=[]
-        for p in identity:
-            for group in groups:
-                q=group[0];ids=list(identity);ids[p-1],ids[q-1]=ids[q-1],ids[p-1]
-                if self.signature(tuple(ids))==original:group.append(p);break
-            else:groups.append([p])
-        return tuple(tuple(g)for g in groups)
-
 
 def make_engine(board,state,past,rules,strategy,*,enabled=False,view=None,audit=False,max_work=4000000):
     relations=PublicRelations.from_view(view)
