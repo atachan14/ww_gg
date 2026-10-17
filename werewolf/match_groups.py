@@ -160,7 +160,7 @@ def make_engine(board,state,past,rules,strategy,*,enabled=False,view=None,audit=
     relations=PublicRelations.from_view(view)
     n=board.player_count;claimants=tuple(p for p in board.alive if board.claims[p-1]=='seer')
     supported=(enabled and relations is not None and relations.claims==board.claims and relations.alive==board.alive
-        and (n,board.wolf_count)in((5,1),(6,1),(6,2),(7,1)) and board.day==1 and board.phase=='day'
+        and (n,board.wolf_count)in((5,1),(6,1),(6,2),(7,1),(7,2)) and board.day==1 and board.phase=='day'
         and board.alive==tuple(range(1,n+1)) and not board.history and not past
         and not board.initial_hunter_count and not board.initial_medium_count and board.initial_seer_count==1
         and len(claimants)==1 and board.role_probability(claimants[0],'seer')==1

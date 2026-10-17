@@ -12,7 +12,7 @@ import werewolf.match_groups as matching
 from benchmarks.board_b_benchmark import process_memory_peak
 from werewolf.calculation_budget import budget_stop
 source=Path(matching.__file__).read_text(encoding='utf-8')
-assert '((5,1),(6,1),(6,2))' in source or '((5,1),(6,1),(6,2),(7,1))' in source
+assert 'and (n,board.wolf_count)in(' in source
 exec(compile(source.replace('((5,1),(6,1),(6,2))','((5,1),(6,1),(6,2),(7,1))'),matching.__file__,'exec'),matching.__dict__)
 engines=[];original=matching.make_engine
 

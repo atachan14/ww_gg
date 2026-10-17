@@ -60,3 +60,31 @@ The corrected run completed in 34.614 seconds (34.630 seconds including source/m
 The repeat retained a second serialization issue: dataclass Values/HorizonValues were stringified instead of asdict. Because the complete result had already been saved, these exact repr strings were decoded using a whitelist AST (only Values, HorizonValues and integer Fraction calls), and every Table field plus final value matched the stored baseline. No third solve was performed. Future runs use the original benchmark's dataclass-aware serializer. This was solely a record-format correction; no numeric tolerance or changed expected result was used.
 
 The (7,1) root gate is now retained as explicit opt-in, while recursive survivors remain <=5. Seven/two-wolf, medium, competing CO, initial-result histories, nonuniform conditioned joint laws, max policies, personal scopes and hunter/GJ remain fallback. The actual heavy target is still unsupported by this optimization. Default remains OFF.
+
+## Three different costs and a sufficient Player comparison contract
+
+1. Development audit: the independent ungrouped oracle expands every original member to terminal and checks transport, branch mass and weighted value. The 34.614-second run is this test cost; runtime default has audit=False.
+2. Runtime grouping certificate: canonical_key transports the complete continuation payload, then also checks the root public relation signature. The unaudited seven/one-wolf run spent 3.074 seconds in the canonical-key timer; its total solve took 12.995 seconds. The timer stops before PublicRelations.signature, so it is not a complete breakdown of every comparison cost. Total worker wall time includes comparison work.
+3. Player-derived comparison input: PublicRelations.from_view reads CO/received claims and makes the public relation signature. Source/view preparation occurs before the run's solve timer; the whole-worker wall time includes it. No isolated cost measurement was claimed. Current PlayerData equality alone is not a sufficient continuation equivalence contract.
+
+A sufficient signature must preserve joint role distribution and weights; secret-acquisition/publication/guard/attack histories and their correlations; public and actor-visible conditioning; physical branch support and mass; legal moves, configured rules and policies; fixed IDs/targets and observer scope. Equal per-player role rates or displayed Table rows do not preserve these facts (the cycle-versus-two-triangles joint counterexample remains tested).
+
+A future design could expose a dedicated immutable comparison contract: each player contributes only its local role/claim/history/target relation fields, while a Board-owned immutable joint-law reference plus rule/policy/scope references and an exact renaming map supply shared context. Never duplicate the joint law into every PlayerData. Equality of the complete contract can serve as a sufficient runtime certificate, avoiding a second heavy terminal audit in normal evaluation. The development audit remains a finite acceptance test for changes to that contract. This is a design proposal only; no PlayerData/schema rewrite was authorized or performed here.
+
+### Next boundary relevance
+
+For the current seven-player daytime root without hunter/GJ, a nonterminal day execution and night attack each remove one survivor before morning grouping: 7 -> 6 -> 5 (or terminal). Therefore raising the morning-grouping survivor cap from five to six would not enable additional continuations for either seven-player fixture. It would address a different reachable scope (for example eight-player roots, or a separately proved GJ transition), not the user's seven-player target under current guards. Do not spend a separate benchmark stage claiming that cap increase advances this target.
+
+## Stage 2: seven players, two wolves
+
+Separately changed only the root cast pair to (7,2), keeping every other root guard and the <=5-survivor recursive boundary. Initial 20-second baseline was pending; the next finite stage shared a total 300-second ceiling across baseline, grouped evaluation and independent audit. All three completed (including worker wall overhead, 157.461 seconds total).
+
+| Mode | Solve seconds | Final value | Action expansions | Peak working set bytes |
+|---|---:|---|---:|---:|
+| Ungrouped | 37.710 | 8/35 | 81,697 | 552,091,648 |
+| Grouped, audit OFF | 30.850 | 8/35 | 49,357 | 360,026,112 |
+| Grouped, development audit ON | 78.360 | 8/35 | 49,357 plus oracle | 879,337,472 |
+
+Every complete Table field matched exactly. All 4,620 audit batches passed, 12,180 original continuations -> 11,580 representatives, zero unproved branches. The audit uses the same independent full transport/terminal checks as stage 1. The unaudited canonical-key timer was 7.995 seconds, included within the grouped total; no separate Player-signature cost claim. These are single finite comparisons, not repeated performance estimates. No new mathematical/cache algorithm or cap increase was introduced.
+
+Retained current cast pairs: (5,1), (6,1), (6,2), (7,1), (7,2). Default OFF; other conditions unchanged. The user's actual seven-player target still falls back because of medium, competing CO/reports, initial random-white secret history/conditioned joint distribution, and max policies. No further role/history/policy guard was relaxed. Evidence: probe_seven_two.py, seven-two-probe.json; the short pending record is seven-two-short-pending.json.
