@@ -1,0 +1,126 @@
+{
+  "recorded_at_utc": "2026-10-17T02:24:46.528300+00:00",
+  "evaluated_product_head": "45d0df353c38d85aa50ff8369887fccf5c5a6039",
+  "product_python_unchanged_since_03e341c": true,
+  "full_suite": {
+    "tests": 681,
+    "seconds": 413.637,
+    "result": "OK",
+    "process_exit_code": 0,
+    "log": ".artifacts\\integration-validation\\b-prefix-final-full-tests.log",
+    "log_sha256": "72b6e962eb63d2bf431fa527602aa5bbdd9cd011f2d90b81d78bd65dad883283"
+  },
+  "http": {
+    "screens": {
+      "at": "2026-10-17T02:22:00.840Z",
+      "rows": [
+        {
+          "width": 1366,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 320,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "dark",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        }
+      ]
+    },
+    "private": {
+      "at": "2026-10-17T02:22:02.589Z",
+      "status": 200,
+      "rows": [
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        },
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        }
+      ],
+      "sessionUnchanged": true
+    },
+    "seven_observed": {
+      "at": "2026-10-17T02:24:28.274Z",
+      "status": 200,
+      "publicRate": "113/504",
+      "seconds": 17.38,
+      "errors": []
+    }
+  },
+  "help_latest_681_text_http_status": 200,
+  "owned_18801_restarts": [
+    {
+      "old_pid": 4892,
+      "new_pid": 13136,
+      "ownership_rechecked_before_stop": true
+    },
+    {
+      "old_pid": 13136,
+      "new_pid": 22740,
+      "ownership_rechecked_before_stop": true,
+      "reason": "HELP returned cached older content after template update; latest HELP and fresh seven-player HTTP rechecked."
+    }
+  ],
+  "normal_budget": {
+    "max_seconds": 20,
+    "max_work": 250000
+  },
+  "interpretation": "Current stable-window full suite and HTTP passed. Previous default-budget HTTP failure did not reproduce; no product speed fix was added and permanent resolution is not established. Prefix performance adoption is not supported by ordinary timings. Prefix rollback was not performed. Keep exact editing-memo safety fixes if removing prefix.",
+  "remaining": [
+    "Decide whether to remove prefix-only acceleration while retaining replace() memo invalidation; revalidate any resulting product change.",
+    "Cross-load 20-second robustness is not established."
+  ],
+  "prohibited_actions_performed": []
+}
