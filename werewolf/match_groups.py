@@ -140,7 +140,7 @@ def make_engine(board,state,past,rules,strategy,*,enabled=False,view=None,audit=
         and not any(h.acquisitions or h.guards or h.attacks for h in state.hypotheses)
         and len(state.hypotheses)==comb(n-1,board.wolf_count)
         and len({h.roles for h in state.hypotheses})==len(state.hypotheses)
-        and all(h.mass==F(1,len(state.hypotheses))for h in state.hypotheses)
+        and state.public_roles==tuple(sorted(board.worlds))
         and strategy.day=='random'and strategy.night=='random'and strategy.fake_reports=='random'
         and tuple(strategy.seer_position)==('unvisited','uniform'))
     engine=MatchingForecast(rules,strategy,grouping=bool(supported),audit=audit and bool(supported),relations=relations,max_work=max_work)

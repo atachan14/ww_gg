@@ -1,0 +1,249 @@
+{
+  "complete": true,
+  "players": 6,
+  "wolves": 2,
+  "enabled": true,
+  "audit": false,
+  "seconds": 1.4825642999785487,
+  "value": "1/12",
+  "table": [
+    {
+      "medium_probability": "0",
+      "citizen_probability": "0",
+      "extra_probabilities": {
+        "seer": "1",
+        "hunter": "0"
+      },
+      "claim": "seer",
+      "legal": true,
+      "id": 1,
+      "name": "Player 1",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "0",
+      "village_probability": "1",
+      "action": {
+        "village_win": "0",
+        "wolf_win": "1"
+      },
+      "by_dawn": {
+        "village_win": "0",
+        "wolf_win": "1"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "3/5",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 2,
+      "name": "Player 2",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "2/5",
+      "village_probability": "3/5",
+      "action": {
+        "village_win": "1/10",
+        "wolf_win": "9/10"
+      },
+      "by_dawn": {
+        "village_win": "0",
+        "wolf_win": "3/5"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "3/5",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 3,
+      "name": "Player 3",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "2/5",
+      "village_probability": "3/5",
+      "action": {
+        "village_win": "1/10",
+        "wolf_win": "9/10"
+      },
+      "by_dawn": {
+        "village_win": "0",
+        "wolf_win": "3/5"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "3/5",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 4,
+      "name": "Player 4",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "2/5",
+      "village_probability": "3/5",
+      "action": {
+        "village_win": "1/10",
+        "wolf_win": "9/10"
+      },
+      "by_dawn": {
+        "village_win": "0",
+        "wolf_win": "3/5"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "3/5",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 5,
+      "name": "Player 5",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "2/5",
+      "village_probability": "3/5",
+      "action": {
+        "village_win": "1/10",
+        "wolf_win": "9/10"
+      },
+      "by_dawn": {
+        "village_win": "0",
+        "wolf_win": "3/5"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    },
+    {
+      "medium_probability": "0",
+      "citizen_probability": "3/5",
+      "extra_probabilities": {
+        "seer": "0",
+        "hunter": "0"
+      },
+      "claim": "latent",
+      "legal": true,
+      "id": 6,
+      "name": "Player 6",
+      "status": "\u751f\u5b58",
+      "alive": true,
+      "wolf_probability": "2/5",
+      "village_probability": "3/5",
+      "action": {
+        "village_win": "1/10",
+        "wolf_win": "9/10"
+      },
+      "by_dawn": {
+        "village_win": "0",
+        "wolf_win": "3/5"
+      },
+      "medium_timeline": [
+        {
+          "day": 1,
+          "target": null,
+          "color": "",
+          "editable": false,
+          "state": "none"
+        }
+      ],
+      "co_pending": false
+    }
+  ],
+  "stats": {
+    "proof_seconds": 0.0924679002200719,
+    "unproved_branches": 0,
+    "raw_continuations": 240,
+    "representative_continuations": 220,
+    "solve_calls": 967,
+    "act_calls": 2612,
+    "uncached_act_calls": 2606,
+    "generated_publication_branches": 145,
+    "generated_acquisition_rows": 2100,
+    "generated_acquisition_states": 1017,
+    "requested": true,
+    "active": true,
+    "root_candidates": [
+      [
+        1
+      ],
+      [
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    ],
+    "actual_action_expansions": 2606,
+    "actual_value_expansions": 967,
+    "audited_batches": 0
+  },
+  "memory": {
+    "peak_working_set_bytes": 43315200,
+    "peak_process_commit_bytes": 35147776,
+    "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+  }
+}

@@ -20,8 +20,8 @@ def source(n=6,wolves=1):
     view=build_public_view(data,roles,b,ResultFrame(ViewScope.public(data),'roles'),state=g,event_history=b.history,alive=b.alive,action_values={},by_dawn_values={})
     return data,roles,b,s,past,rules,strategy,view
 
-def run(n=6,wolves=1,enabled=False,audit=False,*,max_seconds=20,max_work=1000000):
-    data,roles,b,s,past,rules,strategy,view=source(n,wolves);stats={};start=time.perf_counter()
+def run(n=6,wolves=1,enabled=False,audit=False,*,max_seconds=20,max_work=1000000,prepared=None):
+    data,roles,b,s,past,rules,strategy,view=source(n,wolves)if prepared is None else prepared;stats={};start=time.perf_counter()
     result=public_forecast(b,s,past,rules,strategy,max_work=max_work,max_seconds=max_seconds,match_groups=enabled,match_view=view,match_audit=audit,diagnostics=stats)
     elapsed=time.perf_counter()-start
     from werewolf.seer_future_uniform import FuturePending

@@ -30,6 +30,23 @@ class PlayerMatchGroupTests(unittest.TestCase):
         self.assertTrue(engine.grouping)
         self.assertFalse(engine.supported(b,None))
 
+    def test_nonuniform_full_support_joint_preserves_correlations_and_terminal_table(self):
+        from benchmarks.player_match_groups.weighted_joint import weighted_source
+        prepared=weighted_source(6,2,'cycle')
+        _,_,b,state,past,rules,strategy,view=prepared
+        self.assertEqual({b.role_probability(p,'wolf')for p in range(2,7)},{F(2,5)})
+        self.assertEqual(b.joint_wolf_probability((2,3)),F(2,15))
+        self.assertEqual(b.joint_wolf_probability((2,4)),F(1,15))
+        old=run(6,2,prepared=prepared);new=run(6,2,True,True,prepared=prepared)
+        self.assertTrue(old['complete']);self.assertTrue(new['complete'])
+        self.assertEqual((old['value'],old['table']),(new['value'],new['table']))
+        self.assertTrue(new['stats']['active']);self.assertGreater(new['stats']['audited_batches'],0)
+        engine=make_engine(b,state,past,rules,strategy,enabled=True,view=view)
+        self.assertTrue(engine.grouping);self.assertFalse(hasattr(engine,'audit_oracle'))
+        # A different public joint law cannot borrow this weighted secret prior.
+        _,_,uniform,_,_,_,_,_=source(6,2)
+        self.assertFalse(make_engine(uniform,state,past,rules,strategy,enabled=True,view=view).grouping)
+
     def test_default_entry_never_selects_experimental_engine(self):
         from werewolf.model_a_public import public_forecast
         data,roles,b,s,past,rules,strategy,view=source(5,1)
