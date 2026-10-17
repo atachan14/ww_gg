@@ -1,0 +1,211 @@
+{
+  "tested_runtime_commit": "68bf2f98b3eb2460fd784f904f517ee234a12644",
+  "full_regression": {
+    "tests": 754,
+    "seconds": 843.314,
+    "passed": 753,
+    "known_failures": [
+      "test_budget_pending_and_recovery_with_cache (test_seer_manual_general.SeerManualGeneralTests.test_budget_pending_and_recovery_with_cache)"
+    ],
+    "new_failures": [],
+    "errors": [],
+    "clean_pass": false,
+    "known_reason_matches_baseline": true,
+    "log_sha256": "49059df84c8f4beeb3dbaf106eeaa75fc6fe8503c6eae5ad749969402bb2e43d"
+  },
+  "seven_short": [
+    {
+      "mode": "frozen03",
+      "roles": [
+        {
+          "villager": "0",
+          "medium": "0",
+          "seer": "1/2",
+          "hunter": "0",
+          "wolf": "1/2"
+        },
+        {
+          "villager": "0",
+          "medium": "0",
+          "seer": "1/2",
+          "hunter": "0",
+          "wolf": "1/2"
+        },
+        {
+          "villager": "0",
+          "medium": "1",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "0"
+        },
+        {
+          "villager": "1",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "0"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        }
+      ],
+      "status": "pending",
+      "reason": "information_set_budget_exceeded",
+      "budget_kind": "work",
+      "group_active": false,
+      "limits": {
+        "max_work": 1000,
+        "max_seconds": 2
+      },
+      "note": "exact frozen03 entrypoint with unchanged numerical kernels; no full win calculation"
+    },
+    {
+      "mode": "off",
+      "roles": [
+        {
+          "villager": "0",
+          "medium": "0",
+          "seer": "1/2",
+          "hunter": "0",
+          "wolf": "1/2"
+        },
+        {
+          "villager": "0",
+          "medium": "0",
+          "seer": "1/2",
+          "hunter": "0",
+          "wolf": "1/2"
+        },
+        {
+          "villager": "0",
+          "medium": "1",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "0"
+        },
+        {
+          "villager": "1",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "0"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        }
+      ],
+      "status": "pending",
+      "reason": "information_set_budget_exceeded",
+      "budget_kind": "work",
+      "group_active": false,
+      "limits": {
+        "max_work": 1000,
+        "max_seconds": 2
+      },
+      "note": "exact frozen03 entrypoint with unchanged numerical kernels; no full win calculation"
+    },
+    {
+      "mode": "requested",
+      "roles": [
+        {
+          "villager": "0",
+          "medium": "0",
+          "seer": "1/2",
+          "hunter": "0",
+          "wolf": "1/2"
+        },
+        {
+          "villager": "0",
+          "medium": "0",
+          "seer": "1/2",
+          "hunter": "0",
+          "wolf": "1/2"
+        },
+        {
+          "villager": "0",
+          "medium": "1",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "0"
+        },
+        {
+          "villager": "1",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "0"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        },
+        {
+          "villager": "2/3",
+          "medium": "0",
+          "seer": "0",
+          "hunter": "0",
+          "wolf": "1/3"
+        }
+      ],
+      "status": "pending",
+      "reason": "information_set_budget_exceeded",
+      "budget_kind": "work",
+      "group_active": false,
+      "limits": {
+        "max_work": 1000,
+        "max_seconds": 2
+      },
+      "note": "exact frozen03 entrypoint with unchanged numerical kernels; no full win calculation"
+    }
+  ],
+  "default_matching_groups_enabled": false,
+  "nine_win_verified": false,
+  "persistent_player_row_schema_added": false,
+  "legacy_read_adapters_retained": true
+}
