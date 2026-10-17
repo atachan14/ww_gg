@@ -46,3 +46,7 @@ Unit (3,4)'s oracle completed, but its audit reached the chunk deadline. Three o
 Committed export: checkpoint-seven-assessment.json includes fingerprints, unit values/coefficients, checksums, completion states, exact completed root values and partial primitive matches. checkpoint-seven-input.json preserves the original actual-input snapshot. Exporting verifies already computed checksums/prefix equalities only; it does not run further continuation evaluation after the ceiling.
 
 A safe next numerical unit is the individual original wolf-information group inside a pending (root,bite) unit. The complete 14 pairs and the three completed primitive matches must be retained; a subsequent authorized refinement should evaluate only missing primitives and preserve the same coefficients/full conditioning. No further numerical run was started here. The seven-player dual-CO runtime guard remains fallback. Medium/max scopes were not expanded during this checkpoint task, keeping the cached engine version stable.
+
+## Original-information-group refinement
+
+The separately authorized follow-up is documented in docs/player-match-primitive-audit.md. It reused the old confirmed work, added 24 exact values within one new 600-second window, and reached 95/240 verified primitive expectations. Full seven-player win/Table remain pending and no same-form extension was automatically repeated.

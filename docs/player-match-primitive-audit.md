@@ -21,3 +21,22 @@ Imported original seven-player work: 14 complete unit pairs, 86 complete oracle 
 ## New seven-player window
 
 There are 240 original information-group primitives per mode. Only missing mode/group values will run. Each worker retains the existing 120-second/four-million-work and 1.5GB high-water cancellation limits, plus the parent watchdog. The new cumulative window is at most 600 seconds including planning/validation/aggregation. No failed/pending primitive is automatically retried and no limit is automatically extended. A completed full seven-player win/Table will be claimed only if every required primitive and both aggregates are complete and equal. Runtime remains default OFF with >6 dual-CO fallback throughout an incomplete audit.
+
+## New window stopped; no repeated extension
+
+The new window stopped at 600.063 seconds including final watchdog/record work. Each completed worker was below 120 seconds (largest measured chunk wall time 40.194s); the last pending primitive used only the remaining 1.865s before the global deadline. Worker peak was 203,571,200 bytes, below the 1.5GB cap. No memory threshold was hit, no automatic retry/extension followed, and no calculation process remained after the trial.
+
+Twenty-four new exact values completed: 12 ungrouped oracle expectations and 12 matching-plus-independent-audit expectations. All 12 pairs matched. Including imports, 98/240 oracle values and 95/240 audited values are complete, so 95 original information-group expectations are independently checked (up from 83). Old 14 complete coarse unit pairs and the three verified prefix values were reused without recalculation. The coarse unit-pair count is still 14/42 and complete root interventions remain P1/P2 at 3/10 each. The global seven-player win and full Table remain None/pending; no complete seven-player equivalence is claimed.
+
+The scheduler follows the original information-group order, not coarse-unit order. New values therefore advanced partial groups across several bite units rather than completing the old (3,4) coarse unit first. At the ceiling the pending item was (root=3,bite=4,index=3,audit); its oracle value had already been imported, but its new audit did not complete. It was not filled from the known oracle or by a guessed value.
+
+| New completed work | Count | Median seconds | Observed range |
+|---|---:|---:|---|
+| Ungrouped oracle primitive | 12 | 9.149 | 9.103–9.183 |
+| Matching + independent internal audit primitive | 12 | 38.824 | 38.646–39.189 |
+
+Remaining exact computations: 142 oracle values and 145 audited values (287 mode/group values), including the pending audit. Cost varies across uncomputed groups, so no complete-runtime ETA is inferred from these samples. Completed new audit workers alone recorded up to 1,404 generated publication branches per primitive and 1,572 audit batches in total. Partitioning preserved expectation semantics and reduced per-worker memory/restart loss, but did not reduce the original future acquisition/publication/conditioning tree or its repeated independent terminal audit. The complete-key construction cost also remains.
+
+This is limited progress toward a full Table; repeating the same 600-second extension is not the next automatic action. The established result is an exact, bounded, reusable expectation decomposition. A further performance step needs a distinct examination of common-flow branch generation/sharing and audit duplication, while preserving support, physical mass, actor information and configured policies. No such numerical shortcut, model or specification change was implemented in this task.
+
+Evidence: primitive-seven-assessment.json contains core/adapter/input fingerprints, imported producer checksums, exact completed values, remaining counts, timings, raw expansion diagnostics and pending states. Cache namespace: .artifacts/player-match-checkpoints/d581a1daeb4d72bad140e647ce3c143e16f73a31465d1848af5ebfb876ad04aa. Frozen old core source files have no diff from e8b8d42. Runtime default OFF and seven-player dual-CO fallback remain unchanged; medium and max were not expanded.
