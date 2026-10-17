@@ -205,12 +205,22 @@ def public_view(board_data,rows,frame):
 
 
 def personal_view(public,rows,frame):
-    source=public.scope;scope=frame.scope
+    # A private API already owns validated public Board evidence; do not render
+    # or calculate a public table just to construct personal read metadata.
+    if isinstance(public,PlayerBoardView):
+        source=public.scope;index=public.public_index
+        metadata=tuple((p.name,p.alive)for p in public.players)
+    else:
+        from .board_flow import BoardData
+        if not isinstance(public,BoardData):raise TypeError('Public Board source required')
+        source=ViewScope.public(public);index=PublicIndex.from_board(public)
+        metadata=tuple((f"Player {i}",i in public.facts.alive)for i in range(1,public.game_data.players+1))
+    scope=frame.scope
     if source.kind!='public'or scope.kind not in ('seer','wolf','hunter','medium')or not scope.owners or not scope.evidence_digest or(scope.runtime,scope.board_id,scope.revision,scope.input_digest)!=(source.runtime,source.board_id,source.revision,source.input_digest):raise ValueError('Matching Board and explicit personal frame required')
-    if len(rows)!=len(public.players)or any(p>len(public.players)for p in scope.owners):raise ValueError('Complete player rows and valid owners required')
+    if len(rows)!=len(metadata)or any(p>len(metadata)for p in scope.owners):raise ValueError('Complete player rows and valid owners required')
     players=[]
     for i,row in enumerate(rows,1):
         if set(row)!=_PRIVATE_FIELDS or row['id']!=i:raise ValueError('Existing private row schema required')
-        base=public.by_id(i)
-        players.append(PlayerData(i,freeze(row),frame,base.declarations,base.received_claims,base.current_co,base.name,base.alive))
-    return PlayerBoardView(scope,tuple(players),public.public_index)
+        name,alive=metadata[i-1]
+        players.append(PlayerData(i,freeze(row),frame,index.by_player[i-1],index.received[i-1],index.current_co[i-1],name,alive))
+    return PlayerBoardView(scope,tuple(players),index)

@@ -17,7 +17,7 @@ class PlayerViewTests(unittest.TestCase):
     def rows(self,**kwargs):
         seen=[]
         def capture(sender,template,context,**extra):
-            if 'players'in context:seen.append(copy.deepcopy(context['players']))
+            if 'players'in context:seen.append([p.to_legacy_row()if hasattr(p,'to_legacy_row')else copy.deepcopy(p)for p in context['players']])
         with template_rendered.connected_to(capture,self.app):
             r=self.c.get('/main',**kwargs)
             self.assertEqual(r.status_code,200)
@@ -108,7 +108,7 @@ class PlayerViewTests(unittest.TestCase):
     def test_roles_stream_rows_preserve_pending_values_without_zero_fill(self):
         rows=[]
         def capture(sender,template,context,**extra):
-            if 'players'in context:rows.append(copy.deepcopy(context['players']))
+            if 'players'in context:rows.append([p.to_legacy_row()if hasattr(p,'to_legacy_row')else copy.deepcopy(p)for p in context['players']])
         with template_rendered.connected_to(capture,self.app):
             r=self.c.get('/main',headers={'Accept':'application/x-ndjson'},buffered=False);events=[json.loads(x)for x in r.response];r.close()
         self.assertEqual(events[0]['event'],'roles')

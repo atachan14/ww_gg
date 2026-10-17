@@ -1,0 +1,22 @@
+{
+  "base_commit": "8d415cd",
+  "math_base": "03e4e31f965247da65a62386b8f38863459b5cc1",
+  "related_tests": 120,
+  "seconds": 37.822,
+  "passed": true,
+  "unchanged_baseline_files_excluding_app": 19,
+  "browser": {
+    "initial": "7/15",
+    "roles_then_complete": true,
+    "edit_during_calculation_and_stale_preview_rejected": true,
+    "input_update_persisted": true,
+    "personal_public_switch": true,
+    "stale_personal_response_rejected": true,
+    "errors": []
+  },
+  "ui_connected": true,
+  "saved_schema_changed": false,
+  "solver_changed": false,
+  "full_suite_rerun": false,
+  "logs": ".artifacts/player-view-ui/"
+}
