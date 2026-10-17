@@ -126,19 +126,42 @@ class MatchingForecast(InformationSetForecast):
         try:return super().evaluate(*args,**kwargs)
         finally:self.public_entry=previous
 
+def _root_ledger_supported(board,state,past,rules,claimants,relations):
+    """Only empty initial ledger or one observed known-true initial white."""
+    from .seer_acquisition import Acquisition,SeerReport
+    if any(h.guards or h.attacks for h in state.hypotheses):return False
+    if rules.initial_seer=='none':
+        return (state.initial_rule=='none'and not past
+            and not any(h.acquisitions for h in state.hypotheses)
+            and len(state.hypotheses)==comb(board.player_count-1,board.wolf_count))
+    if (rules.initial_seer!='random_white'or state.initial_rule!='random_white'
+        or len(claimants)!=1 or len(past)!=1 or type(past[0])is not SeerReport
+        or state.tracked!=claimants or state.observed_prefix!=1):return False
+    report=past[0];actor=claimants[0]
+    if (report.player!=actor or report.acquired_day!=1 or report.published_day!=1
+        or report.color!='white'or report.target not in board.alive
+        or report.target==actor or board.role_probability(report.target,'wolf')!=0):return False
+    whites=tuple(r for r in relations.reports if r[0]=='seer')
+    if (len(whites)!=1 or any(r[0]not in ('co','seer')for r in relations.reports)
+        or (whites[0][1],whites[0][2],whites[0][4],whites[0][5],whites[0][6],whites[0][7],whites[0][8])
+           !=(actor,report.target,1,'white',0,1,'day')):return False
+    acquisition=Acquisition(1,actor,report.target,'white')
+    return (len(state.hypotheses)==comb(board.player_count-2,board.wolf_count)
+        and all(h.acquisitions==(acquisition,)for h in state.hypotheses))
+
+
 def make_engine(board,state,past,rules,strategy,*,enabled=False,view=None,audit=False,max_work=4000000):
     relations=PublicRelations.from_view(view)
     n=board.player_count;claimants=tuple(p for p in board.alive if board.claims[p-1]=='seer')
     supported=(enabled and relations is not None and relations.claims==board.claims and relations.alive==board.alive
         and (n,board.wolf_count)in((5,1),(6,1),(6,2),(7,1),(7,2)) and board.day==1 and board.phase=='day'
-        and board.alive==tuple(range(1,n+1)) and not board.history and not past
+        and board.alive==tuple(range(1,n+1)) and not board.history
         and not board.initial_hunter_count and not board.initial_medium_count and board.initial_seer_count==1
         and len(claimants)==1 and board.role_probability(claimants[0],'seer')==1
         and all(c in ('seer','latent')for c in board.claims)
-        and rules.initial_seer=='none'and not rules.allow_self_bite and not strategy.include_self_bite
-        and state.initial_rule=='none'and state.rosters==(board.alive,)
-        and not any(h.acquisitions or h.guards or h.attacks for h in state.hypotheses)
-        and len(state.hypotheses)==comb(n-1,board.wolf_count)
+        and not rules.allow_self_bite and not strategy.include_self_bite
+        and state.rosters==(board.alive,)
+        and _root_ledger_supported(board,state,past,rules,claimants,relations)
         and len({h.roles for h in state.hypotheses})==len(state.hypotheses)
         and state.public_roles==tuple(sorted(board.worlds))
         and strategy.day=='random'and strategy.night=='random'and strategy.fake_reports=='random'

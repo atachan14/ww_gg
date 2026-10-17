@@ -47,6 +47,46 @@ class PlayerMatchGroupTests(unittest.TestCase):
         _,_,uniform,_,_,_,_,_=source(6,2)
         self.assertFalse(make_engine(uniform,state,past,rules,strategy,enabled=True,view=view).grouping)
 
+    def test_actual_initial_white_joint_and_report_correction_withdrawal(self):
+        from benchmarks.player_match_groups.initial_white import initial_white_source,publish,prepare
+        from werewolf.public_prior import prepare_public_prior
+        import json
+        prepared,client=initial_white_source(return_client=True)
+        _,_,b,state,past,rules,strategy,view=prepared
+        self.assertEqual(len(state.hypotheses),3)
+        self.assertEqual(b.role_probability(3,'wolf'),0)
+        self.assertTrue(all(h.acquisitions[0].target==3 for h in state.hypotheses))
+        old=run(5,1,prepared=prepared);new=run(5,1,True,True,prepared=prepared)
+        self.assertEqual((old['value'],old['table']),(new['value'],new['table']))
+        self.assertTrue(new['stats']['active']);self.assertGreater(new['stats']['audited_batches'],0)
+        with client.session_transaction()as session:g=copy.deepcopy(session['game'])
+        self.assertEqual(prepare_public_prior(g,b,rules),(state,past))
+        publish(client,4);corrected=prepare(client)
+        self.assertEqual(corrected[2].role_probability(4,'wolf'),0)
+        self.assertNotEqual(state.public_roles,corrected[3].public_roles)
+        self.assertEqual(state.hypotheses[0].acquisitions[0].target,3)
+        self.assertTrue(make_engine(*corrected[2:7],enabled=True,view=corrected[7]).grouping)
+        # A stale ledger cannot be paired with a corrected public relation.
+        self.assertFalse(make_engine(b,state,past,rules,strategy,enabled=True,view=corrected[7]).grouping)
+        self.assertFalse(make_engine(b,state,past+past,rules,strategy,enabled=True,view=view).grouping)
+        self.assertFalse(make_engine(b,state,past,rules,replace(strategy,day='max'),enabled=True,view=view).grouping)
+        with client.session_transaction()as session:g=copy.deepcopy(session['game'])
+        self.assertEqual(prepare_public_prior(g,corrected[2],rules),corrected[3:5])
+        payload={'claims':['latent']*5,'seers':[],'mediums':[]}
+        response=client.post('/table-publish',data={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps(payload)})
+        self.assertEqual(response.status_code,200)
+        with client.session_transaction()as session:g=copy.deepcopy(session['game'])
+        from werewolf.board_flow import BoardData
+        data=BoardData.from_game(g);roles=data.roles()
+        self.assertFalse(make_engine(roles.board,state,past,rules,strategy,enabled=True,view=view).grouping)
+        self.assertEqual(view.by_id(3).received_claims[0].target,3)
+        with client.session_transaction()as session:g=copy.deepcopy(session['game'])
+        payload={'claims':['seer','seer']+['latent']*3,'seers':[{'day':1,'reporter':p,'target':3,'color':'white'}for p in (1,2)],'mediums':[]}
+        response=client.post('/table-publish',data={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps(payload)})
+        self.assertEqual(response.status_code,200)
+        competing=prepare(client)
+        self.assertFalse(make_engine(*competing[2:7],enabled=True,view=competing[7]).grouping)
+
     def test_default_entry_never_selects_experimental_engine(self):
         from werewolf.model_a_public import public_forecast
         data,roles,b,s,past,rules,strategy,view=source(5,1)

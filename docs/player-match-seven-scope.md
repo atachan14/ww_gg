@@ -116,3 +116,29 @@ The full ComparisonCertificate is not a simple Player signature derived solely f
 A separate unaudited 6/2 cycle-joint run completed in 1.483s with 0.0925s spent constructing complete comparison certificates, 240 -> 220 continuations, 2,806 -> 2,606 action expansions against the archived ungrouped baseline. Audit batches=0. Peak working set 43,315,200 bytes. The archived baseline solve was 1.558s: these are individual measurements (not a repeated statistical speed claim). Independent audit of the same case cost 2.876s and is not on the normal runtime path. Evidence: weighted-runtime.json; seven progress JSONL and weighted-seven-results.json preserve progress and complete outputs.
 
 Final relevant regression: 40 tests passed in 23.623s, including complete Tables/branch audits, exact renaming, hidden-joint counterexamples, view corrections/withdrawals, row builders and HELP. Default OFF and all role/history/policy guards are unchanged. No production input format or prior-reconstruction semantics were expanded: this extension consumes valid already prepared positive full-support weighted laws only. General conditioned secret/public-history support remains a separate next stage.
+
+## Stage 4: one actual first-day public white from a known true seer
+
+The next logical condition is an observed initial-result ledger, tested through real /start and /table-publish requests, BoardData.roles(), and prepare_evaluation(). No custom prior weights are injected. With initial_seer=random_white, one certain true seer and one day-1 white report to another living player, replay removes role allocations in which that target is wolf. prepare_evaluation returns the existing prior route with exact Hypothesis Acquisition and SeerReport records. We consume those outputs without changing reconstruction or report likelihood semantics.
+
+The extension is deliberately one complete observation case, rather than blanket removal of individual ledger guards. Sufficient entry conditions: day 1 daytime, all alive, no physical death/action history; exactly one certain true seer; no medium/hunter; only seer/latent CO; random day/night/fake-medium and existing scan selectors; exactly one initial white published on day 1 at slot 0; tracked seer matches that actor, observed_prefix=1; every hypothesis has exactly the matching initial Acquisition and no guard/attack records; unique role allocations count comb(n-2,wolves); public Board joint equals prepared joint. Active public relation metadata must match the report. The empty-initial-ledger scope remains unchanged. Missing, extra, stale, later or unmatched ledgers and different initial rules fail closed. No support is filled or resurrected.
+
+This removes candidate worlds rather than merely reweighting complete unconditional support: 5/1 has 4 -> 3 allocations; 6/2 has 10 -> 6; 7/2 has 15 -> 10. The white target is nonwolf in every surviving allocation, while secret acquisition and public publication are distinct retained records. Model A public role weights, within-world secret histories and physical branch masses retain their existing meanings; target-choice frequency is not introduced as a new public role weight.
+
+Reference comparison before extension: actual input fixtures 5/1 and 6/2 requested grouping but remained inactive, with final values 7/15 and 1/12. Full original Tables are saved in initial-white-before.json. The acceptance unit uses these references, then a new actual-input 7/2 baseline plus independent grouped audit, under a shared 300-second/four-million-work ceiling. It checks complete Tables, joint support and records, legal-target transport, exact branch mass, every original terminal value and weighted representatives. Progress and process memory are recorded every ten seconds. No normal runtime oracle or default ON is added.
+
+### Actual-input acceptance completed
+
+Shared validation unit completed in 63.558 seconds, below the 300-second ceiling. Exact complete Tables and final values match in all cases:
+
+| Cast | Independent audit seconds | Audit batches | Final value |
+|---|---:|---:|---|
+| 5/1 | 0.062 | 3 | 7/15 |
+| 6/2 | 1.221 | 36 | 1/12 |
+| 7/2 | 42.047 | 2,840 | 8/35 |
+
+The 7/2 ungrouped actual-input baseline took 20.081s. Audit process peak working set at final checkpoint: 474,832,896 bytes (includes preparation/baseline/monitor and validation; not a per-request isolated allocation). The 7/2 grouped audit checked 5,790 original continuations -> 5,510 representatives, zero unproved branches. Certificate construction total was 5.070s within the audited run; it remains real runtime work, not a simple free Player signature. No unaudited speed improvement is claimed from audit-versus-baseline timings.
+
+Relevant suite: 58 tests passed in 25.917s, including real input-path publication, correction 3 -> 4, withdrawal, retained-old-view, public-prior cached/uncached equality, stale/multiple ledger/max fallbacks, exact renaming, complete Tables and full-disclosure observed semantics. The added real competing-CO check is run separately after the suite; it must remain fallback. No counterexample to the exact full-state grouping certificate was observed. No new mathematical specification was needed; existing input/replay semantics are unchanged. Current supported initial-ledger cases are empty/none and this one known-true initial public white only. Default OFF; multiple CO, medium/hunter, additional/later/hidden reports and max stay outside this extension.
+
+Final competing-CO/correction/withdrawal plus HELP follow-up: 5 tests passed in 1.055s.

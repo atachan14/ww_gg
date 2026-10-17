@@ -1,0 +1,350 @@
+[
+  {
+    "phase": "5/1 independent audit",
+    "seconds": 0.12641769999754615,
+    "memory": {
+      "peak_working_set_bytes": 40173568,
+      "peak_process_commit_bytes": 29810688,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 0.0016973000310827047,
+      "unproved_branches": 0,
+      "raw_continuations": 7,
+      "representative_continuations": 7,
+      "solve_calls": 22,
+      "act_calls": 76,
+      "uncached_act_calls": 71,
+      "generated_publication_branches": 17,
+      "generated_acquisition_rows": 54,
+      "generated_acquisition_states": 21,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 3
+  },
+  {
+    "phase": "6/2 independent audit",
+    "seconds": 1.3794366999936756,
+    "memory": {
+      "peak_working_set_bytes": 53956608,
+      "peak_process_commit_bytes": 43651072,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 0.048957299935864285,
+      "unproved_branches": 0,
+      "raw_continuations": 108,
+      "representative_continuations": 96,
+      "solve_calls": 439,
+      "act_calls": 1140,
+      "uncached_act_calls": 1134,
+      "generated_publication_branches": 88,
+      "generated_acquisition_rows": 708,
+      "generated_acquisition_states": 389,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 36
+  },
+  {
+    "phase": "7/2 baseline",
+    "seconds": 10.027376699988963,
+    "memory": {
+      "peak_working_set_bytes": 158437376,
+      "peak_process_commit_bytes": 148668416,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 0.0,
+      "unproved_branches": 0,
+      "raw_continuations": 0,
+      "representative_continuations": 0,
+      "solve_calls": 6514,
+      "act_calls": 18984,
+      "uncached_act_calls": 18984,
+      "generated_publication_branches": 3666,
+      "generated_acquisition_rows": 4163,
+      "generated_acquisition_states": 1529,
+      "requested": false,
+      "active": false,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 0
+  },
+  {
+    "phase": "7/2 baseline",
+    "seconds": 20.190647799987346,
+    "memory": {
+      "peak_working_set_bytes": 286904320,
+      "peak_process_commit_bytes": 277528576,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 0.0,
+      "unproved_branches": 0,
+      "raw_continuations": 0,
+      "representative_continuations": 0,
+      "solve_calls": 13471,
+      "act_calls": 39316,
+      "uncached_act_calls": 39316,
+      "generated_publication_branches": 6935,
+      "generated_acquisition_rows": 8405,
+      "generated_acquisition_states": 3261,
+      "requested": false,
+      "active": false,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 0
+  },
+  {
+    "phase": "7/2 independent audit",
+    "seconds": 30.50796149999951,
+    "memory": {
+      "peak_working_set_bytes": 346038272,
+      "peak_process_commit_bytes": 336642048,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 2.1068102997960523,
+      "unproved_branches": 0,
+      "raw_continuations": 1023,
+      "representative_continuations": 973,
+      "solve_calls": 2021,
+      "act_calls": 5845,
+      "uncached_act_calls": 5845,
+      "generated_publication_branches": 1086,
+      "generated_acquisition_rows": 1388,
+      "generated_acquisition_states": 553,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 516
+  },
+  {
+    "phase": "7/2 independent audit",
+    "seconds": 40.61058989999583,
+    "memory": {
+      "peak_working_set_bytes": 346038272,
+      "peak_process_commit_bytes": 336642048,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 3.500296498881653,
+      "unproved_branches": 0,
+      "raw_continuations": 2641,
+      "representative_continuations": 2507,
+      "solve_calls": 4418,
+      "act_calls": 12880,
+      "uncached_act_calls": 12880,
+      "generated_publication_branches": 2721,
+      "generated_acquisition_rows": 3134,
+      "generated_acquisition_states": 1118,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 1208
+  },
+  {
+    "phase": "7/2 independent audit",
+    "seconds": 50.71712670000852,
+    "memory": {
+      "peak_working_set_bytes": 346038272,
+      "peak_process_commit_bytes": 336642048,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 4.211198199249338,
+      "unproved_branches": 0,
+      "raw_continuations": 4075,
+      "representative_continuations": 3871,
+      "solve_calls": 6865,
+      "act_calls": 20127,
+      "uncached_act_calls": 20127,
+      "generated_publication_branches": 4003,
+      "generated_acquisition_rows": 4791,
+      "generated_acquisition_states": 1767,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 1954
+  },
+  {
+    "phase": "7/2 independent audit",
+    "seconds": 60.84570559998974,
+    "memory": {
+      "peak_working_set_bytes": 444710912,
+      "peak_process_commit_bytes": 437116928,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 4.866367299167905,
+      "unproved_branches": 0,
+      "raw_continuations": 5386,
+      "representative_continuations": 5120,
+      "solve_calls": 9136,
+      "act_calls": 26819,
+      "uncached_act_calls": 26819,
+      "generated_publication_branches": 5202,
+      "generated_acquisition_rows": 6296,
+      "generated_acquisition_states": 2375,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 2633
+  },
+  {
+    "phase": "7/2 independent audit",
+    "seconds": 63.55671760000405,
+    "memory": {
+      "peak_working_set_bytes": 474832896,
+      "peak_process_commit_bytes": 466460672,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    },
+    "stats": {
+      "proof_seconds": 5.070008499256801,
+      "unproved_branches": 0,
+      "raw_continuations": 5790,
+      "representative_continuations": 5510,
+      "solve_calls": 9878,
+      "act_calls": 28964,
+      "uncached_act_calls": 28957,
+      "generated_publication_branches": 5472,
+      "generated_acquisition_rows": 6650,
+      "generated_acquisition_states": 2558,
+      "requested": true,
+      "active": true,
+      "root_candidates": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          3
+        ]
+      ]
+    },
+    "audited_batches": 2840
+  }
+]

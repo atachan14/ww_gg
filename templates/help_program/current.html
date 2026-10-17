@@ -1,4 +1,4 @@
-<p class="program-state">現在実装 · v0.5.1</p><p>公開matching圧縮は明示指定の検証経路のみです。7人・狼1人または2人・真占1人確定・初日結果なし・均等方針では、生存5人以下の継続を独立全枝監査済みです。正の非均等重みを持つ完全支持の準備済み共同分布にも限定対応しています。通常はOFFです。霊媒、複数占いCO、初日白結果、秘密・報告履歴を含む一般の条件付き共同分布、max方針、本人視点、狩人/GJへの拡張はこの限定対応に含みません。検証記録は <code>docs/player-match-seven-scope.md</code> です。</p>
+<p class="program-state">現在実装 · v0.5.1</p><p>公開matching圧縮は明示指定の検証経路のみです。7人・狼1人または2人・真占1人確定・初日結果なし・均等方針では、生存5人以下の継続を独立全枝監査済みです。正の非均等重みを持つ完全支持の準備済み共同分布にも限定対応しています。初日昼の既知真占いによる公開白1件は、取得・公開履歴と候補除外後の共同分布を保持する限定条件で対応しています。通常はOFFです。霊媒、複数占いCO、複数・後日の報告、一般の条件付き共同分布、max方針、本人視点、狩人/GJへの拡張はこの限定対応に含みません。検証記録は <code>docs/player-match-seven-scope.md</code> です。</p>
 <h2>公開状態と物理分岐を別の役割で読む</h2>
 <p><code>Board</code>は公開の候補、<code>Hypothesis</code>は役職と私有記録を持つ仮説です。現在は公開・物理の両分布が同じ状態型を使い、政策採点では公開分布が物理評価へ再投入されます。二つの変数があるだけで完全な分離とは言えません。</p>
 <ul><li><a href="{{ url_for('help_program',page='model') }}">確率モデルと情報集合</a></li><li><a href="{{ url_for('help_program',page='flow') }}">処理フローと評価アルゴリズム</a></li><li><a href="{{ url_for('help_program',page='reference') }}">型・関数リファレンス</a></li><li><a href="{{ url_for('help_program',page='verification') }}">再現例と検証</a></li></ul>
