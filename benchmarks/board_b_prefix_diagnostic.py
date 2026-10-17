@@ -5,10 +5,16 @@ from types import SimpleNamespace
 from board_b_benchmark import ROOT,worker
 
 def main():
- p=argparse.ArgumentParser(description=__doc__);p.add_argument('--tree',required=True);p.add_argument('--case',default='seven');p.add_argument('--output',required=True);p.add_argument('--version',default='improved');p.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'));a=p.parse_args()
+ p=argparse.ArgumentParser(description=__doc__);p.add_argument('--tree',required=True);p.add_argument('--case',default='seven');p.add_argument('--output',required=True);p.add_argument('--version',default='improved');p.add_argument('--cases',default=str(ROOT/'benchmarks/board_b_cases.json'));p.add_argument('--no-wall-limit',action='store_true',help='Count-only correctness diagnostic: keep max_work, disable wall deadline equally for both revisions');p.add_argument('--reference-full-history',action='store_true',help='Disable only GeneratedBoard prefix reuse; retain pre-existing step/kernel memoization');a=p.parse_args()
  import sys
  tree=Path(a.tree).resolve();sys.path.insert(0,str(tree))
  from werewolf import board_future as flow
+ if a.no_wall_limit:
+  import board_b_benchmark as benchmark
+  benchmark.BUDGET={**benchmark.BUDGET,'max_seconds':None}
+ if a.reference_full_history:
+  if not hasattr(flow.GeneratedBoard,'cacheable_evidence'):raise ValueError('Reference switch requires prefix implementation')
+  flow.GeneratedBoard.cacheable_evidence=lambda self:False
  counts={'reconstruct_calls':0,'completed_request_hits':0,'completed_prefix_hits':0,'actual_recipe_applications':0}
  original=flow.GeneratedBoard._reconstruct
  def reconstruct(request):
@@ -28,6 +34,8 @@ def main():
  if not hasattr(flow.GeneratedBoard,'replay_operation'):
   counts['actual_recipe_applications']=result['instrumentation']['input_elements']['GeneratedBoard._reconstruct']
  result['prefix_replay_counts']=counts
+ result['prefix_only_reference']=a.reference_full_history
+ result['diagnostic_wall_limit_disabled']=a.no_wall_limit
  result['prefix_replay_note']='Before path actual recipe count is the sum of every complete history loop; after path counts executed replay_operation calls. _reconstruct call count includes internal prefix materialization, not necessarily a full origin replay. Pending is censored, never compared as a completed improvement. Diagnostic wall time is not formal performance evidence.'
  Path(a.output).write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
  print(json.dumps({'complete':result['rows'][0]['complete'],'pending':result['rows'][0]['pending'],'prefix':counts,'digest':result['rows'][0]['semantic_digest']}))

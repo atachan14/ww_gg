@@ -100,3 +100,20 @@ class EvidencePrefixTests(unittest.TestCase):
   a=weakref.ref(root);b=weakref.ref(child);del root
   self.assertIsNotNone(a());del child
   self.assertIsNone(a());self.assertIsNone(b())
+
+ def test_long_prefix_branch_edit_and_full_reference_keep_the_same_evidence(self):
+  root,state=self.fixture();nodes=[root]
+  for _ in range(64):nodes.append(nodes[-1].child(flow.PublicViewEvidence(),None))
+  original=flow.GeneratedBoard.replay_operation
+  with patch.object(flow.GeneratedBoard,'replay_operation',side_effect=original) as replay:
+   self.assertEqual(nodes[-1].roles(),state)
+   self.assertEqual(replay.call_count,64)
+   branch=nodes[32].child(flow.PublicViewEvidence(),None)
+   self.assertEqual(branch.roles(),state);self.assertEqual(replay.call_count,65)
+   edited=replace(nodes[-1],history=nodes[-1].history[:17])
+   self.assertIsNone(edited._parent);self.assertFalse(edited._completed)
+   self.assertEqual(edited.roles(),state);self.assertEqual(replay.call_count,82)
+   with flow.reconstruction_kernel_reuse(False):self.assertEqual(nodes[-1].roles(),state)
+   self.assertEqual(replay.call_count,146)
+  self.assertEqual(len(nodes[-1].history),64)
+  self.assertEqual(len(edited.history),17)

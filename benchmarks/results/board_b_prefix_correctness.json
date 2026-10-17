@@ -1,0 +1,312 @@
+{
+  "product_revision": "03e341c582ba570c30441572e7985a9087410536",
+  "product_sha256": "28c7894b9aaa18b13d7294ab9f81ac261012062cde96290731fe97ece35c0e50",
+  "before_revision": "899b45316249b8c3ed5fdacbcada039b693dc95e",
+  "diagnostic_budget": {
+    "max_work": 250000,
+    "max_seconds": null
+  },
+  "formal_time_measurement": "Deferred. No wall-time improvement is asserted. Product defaults remain max_work=250000/max_seconds=20.",
+  "reference_definition": "Only the introduced GeneratedBoard prefix reuse is disabled. Full origin/history traversal and pre-existing full-input step/kernel memoization remain. Unit reference mode also disables reconstruction reuse on small/long recipe cases.",
+  "cases": {
+    "seven": {
+      "complete_versions": 3,
+      "digests": {
+        "before": "1966f4d8e7c260f42e47acede3ac2c095453f2c82c92ccea598ef03bc4fbd487",
+        "after": "1966f4d8e7c260f42e47acede3ac2c095453f2c82c92ccea598ef03bc4fbd487",
+        "reference": "1966f4d8e7c260f42e47acede3ac2c095453f2c82c92ccea598ef03bc4fbd487"
+      },
+      "village_win": "149/324",
+      "prefix_counts": {
+        "before": {
+          "reconstruct_calls": 7945,
+          "completed_request_hits": 0,
+          "completed_prefix_hits": 0,
+          "actual_recipe_applications": 80773
+        },
+        "after": {
+          "reconstruct_calls": 9196,
+          "completed_request_hits": 0,
+          "completed_prefix_hits": 7944,
+          "actual_recipe_applications": 9195
+        },
+        "reference": {
+          "reconstruct_calls": 7945,
+          "completed_request_hits": 0,
+          "completed_prefix_hits": 0,
+          "actual_recipe_applications": 80773
+        }
+      },
+      "other_counters": {
+        "before": {
+          "Board.__post_init__": 71043,
+          "Hypothesis.__post_init__": 90573,
+          "cached_flow.action": 18792,
+          "cached_flow.action.hit": 3902,
+          "werewolf.board_roles.prepare_evaluation": 2
+        },
+        "after": {
+          "Board.__post_init__": 71043,
+          "Hypothesis.__post_init__": 90573,
+          "cached_flow.action": 18792,
+          "cached_flow.action.hit": 3902,
+          "werewolf.board_roles.prepare_evaluation": 2
+        },
+        "reference": {
+          "Board.__post_init__": 71043,
+          "Hypothesis.__post_init__": 90573,
+          "cached_flow.action": 18792,
+          "cached_flow.action.hit": 3902,
+          "werewolf.board_roles.prepare_evaluation": 2
+        }
+      },
+      "note": "Recipe applications include pre-existing completed_step memo checks, not just pure-kernel recomputation. Internal prefix materialization may increase _reconstruct calls."
+    },
+    "seven-observed": {
+      "complete_versions": 3,
+      "digests": {
+        "before": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+        "after": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+        "reference": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee"
+      },
+      "village_win": "113/504",
+      "prefix_counts": {
+        "before": {
+          "reconstruct_calls": 7724,
+          "completed_request_hits": 0,
+          "completed_prefix_hits": 0,
+          "actual_recipe_applications": 78594
+        },
+        "after": {
+          "reconstruct_calls": 8867,
+          "completed_request_hits": 0,
+          "completed_prefix_hits": 7723,
+          "actual_recipe_applications": 8866
+        },
+        "reference": {
+          "reconstruct_calls": 7724,
+          "completed_request_hits": 0,
+          "completed_prefix_hits": 0,
+          "actual_recipe_applications": 78594
+        }
+      },
+      "other_counters": {
+        "before": {
+          "Board.__post_init__": 67412,
+          "Hypothesis.__post_init__": 86700,
+          "cached_flow.action": 18478,
+          "cached_flow.action.hit": 3588,
+          "werewolf.board_roles.prepare_evaluation": 2
+        },
+        "after": {
+          "Board.__post_init__": 67412,
+          "Hypothesis.__post_init__": 86700,
+          "cached_flow.action": 18478,
+          "cached_flow.action.hit": 3588,
+          "werewolf.board_roles.prepare_evaluation": 2
+        },
+        "reference": {
+          "Board.__post_init__": 67412,
+          "Hypothesis.__post_init__": 86700,
+          "cached_flow.action": 18478,
+          "cached_flow.action.hit": 3588,
+          "werewolf.board_roles.prepare_evaluation": 2
+        }
+      },
+      "note": "Recipe applications include pre-existing completed_step memo checks, not just pure-kernel recomputation. Internal prefix materialization may increase _reconstruct calls."
+    }
+  },
+  "cache_audit": {
+    "cases": [
+      "base",
+      "input",
+      "history",
+      "strategy",
+      "rule",
+      "view-wolf4",
+      "view-wolf5",
+      "pending-latent-seer",
+      "strategy-night",
+      "rule-initial-scan",
+      "completed-seer-history",
+      "root-wolf4-partial",
+      "root-wolf5-partial",
+      "night-wolf3",
+      "night-wolf4"
+    ],
+    "versions": [
+      "before",
+      "after",
+      "reference"
+    ],
+    "mixed_requests_per_version": 29,
+    "fresh_requests_per_version": 15,
+    "total_requests": 132,
+    "failures": [],
+    "digests": {
+      "before": {
+        "base": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "input": "5869a0dee84f78ff3aaf79b4375bde7dcb26284e0caf3af2f23e33db493b90f4",
+        "history": "063027c4624e119032c1748e2ba5db39d797aadad65a6b79068e04b32c523692",
+        "strategy": "e6e1876c45ab9ac47e295fc9a8541976680935fdb76756a95f08dd9d739b84c0",
+        "rule": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "view-wolf4": "2e3d60304bbc09df472ec64de071d2dc331aab10b0242ef4cd46b304d607d5a7",
+        "view-wolf5": "3f34c7b1d4f65d7a2723c29f9ebb9eacc22bad1f295f342b2f4c163c1e50d8d3",
+        "pending-latent-seer": "13020f1235dc3bd7be084ec01b423361c706ee55513e510dcf2bddad32f9919d",
+        "strategy-night": "06f910ecab5f49f1e40bf8a8071f1af8a58885627d493c721c7ff37e2e807ce5",
+        "rule-initial-scan": "55b51a83f2da86650c11b425731c5a03b0a778856a8940b4753fcfdfcdc3c632",
+        "completed-seer-history": "cb4e89777b321fa93305d8348c2a7063a889a6a2ca1509ff376f52bae92070f2",
+        "root-wolf4-partial": "68f04df9e97d0b6425fe1d2672bea9e271ada4ca547b8357e667fdba68084d82",
+        "root-wolf5-partial": "3954bc109c7e5554852b64eb1d68594ded96d7b56b96619e44ff0e4da6ce638e",
+        "night-wolf3": "b6b23e49f297889d20a591ce8335402b82ed9f21ccb1798fa60ff5b011b74ff1",
+        "night-wolf4": "e7c8c9badb38c8a0bead5e290031415806ec3151d2bb35c631eda633a226ebaa"
+      },
+      "after": {
+        "base": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "input": "5869a0dee84f78ff3aaf79b4375bde7dcb26284e0caf3af2f23e33db493b90f4",
+        "history": "063027c4624e119032c1748e2ba5db39d797aadad65a6b79068e04b32c523692",
+        "strategy": "e6e1876c45ab9ac47e295fc9a8541976680935fdb76756a95f08dd9d739b84c0",
+        "rule": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "view-wolf4": "2e3d60304bbc09df472ec64de071d2dc331aab10b0242ef4cd46b304d607d5a7",
+        "view-wolf5": "3f34c7b1d4f65d7a2723c29f9ebb9eacc22bad1f295f342b2f4c163c1e50d8d3",
+        "pending-latent-seer": "13020f1235dc3bd7be084ec01b423361c706ee55513e510dcf2bddad32f9919d",
+        "strategy-night": "06f910ecab5f49f1e40bf8a8071f1af8a58885627d493c721c7ff37e2e807ce5",
+        "rule-initial-scan": "55b51a83f2da86650c11b425731c5a03b0a778856a8940b4753fcfdfcdc3c632",
+        "completed-seer-history": "cb4e89777b321fa93305d8348c2a7063a889a6a2ca1509ff376f52bae92070f2",
+        "root-wolf4-partial": "68f04df9e97d0b6425fe1d2672bea9e271ada4ca547b8357e667fdba68084d82",
+        "root-wolf5-partial": "3954bc109c7e5554852b64eb1d68594ded96d7b56b96619e44ff0e4da6ce638e",
+        "night-wolf3": "b6b23e49f297889d20a591ce8335402b82ed9f21ccb1798fa60ff5b011b74ff1",
+        "night-wolf4": "e7c8c9badb38c8a0bead5e290031415806ec3151d2bb35c631eda633a226ebaa"
+      },
+      "reference": {
+        "base": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "input": "5869a0dee84f78ff3aaf79b4375bde7dcb26284e0caf3af2f23e33db493b90f4",
+        "history": "063027c4624e119032c1748e2ba5db39d797aadad65a6b79068e04b32c523692",
+        "strategy": "e6e1876c45ab9ac47e295fc9a8541976680935fdb76756a95f08dd9d739b84c0",
+        "rule": "8a695bebe9f6218fd7632fcbb95fe2a57d4c8bf37d93a3fa5ae4bfa4ad43480f",
+        "view-wolf4": "2e3d60304bbc09df472ec64de071d2dc331aab10b0242ef4cd46b304d607d5a7",
+        "view-wolf5": "3f34c7b1d4f65d7a2723c29f9ebb9eacc22bad1f295f342b2f4c163c1e50d8d3",
+        "pending-latent-seer": "13020f1235dc3bd7be084ec01b423361c706ee55513e510dcf2bddad32f9919d",
+        "strategy-night": "06f910ecab5f49f1e40bf8a8071f1af8a58885627d493c721c7ff37e2e807ce5",
+        "rule-initial-scan": "55b51a83f2da86650c11b425731c5a03b0a778856a8940b4753fcfdfcdc3c632",
+        "completed-seer-history": "cb4e89777b321fa93305d8348c2a7063a889a6a2ca1509ff376f52bae92070f2",
+        "root-wolf4-partial": "68f04df9e97d0b6425fe1d2672bea9e271ada4ca547b8357e667fdba68084d82",
+        "root-wolf5-partial": "3954bc109c7e5554852b64eb1d68594ded96d7b56b96619e44ff0e4da6ce638e",
+        "night-wolf3": "b6b23e49f297889d20a591ce8335402b82ed9f21ccb1798fa60ff5b011b74ff1",
+        "night-wolf4": "e7c8c9badb38c8a0bead5e290031415806ec3151d2bb35c631eda633a226ebaa"
+      }
+    },
+    "pending_or_partial_preserved": {
+      "before": {
+        "view-wolf4": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "view-wolf5": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "pending-latent-seer": [
+          "潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。"
+        ],
+        "rule-initial-scan": [
+          "full_disclosure_truth_not_conditioned"
+        ],
+        "root-wolf4-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "root-wolf5-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ]
+      },
+      "after": {
+        "view-wolf4": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "view-wolf5": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "pending-latent-seer": [
+          "潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。"
+        ],
+        "rule-initial-scan": [
+          "full_disclosure_truth_not_conditioned"
+        ],
+        "root-wolf4-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "root-wolf5-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ]
+      },
+      "reference": {
+        "view-wolf4": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "view-wolf5": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "pending-latent-seer": [
+          "潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。"
+        ],
+        "rule-initial-scan": [
+          "full_disclosure_truth_not_conditioned"
+        ],
+        "root-wolf4-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ],
+        "root-wolf5-partial": [
+          "仲間の情報集合で設定済みの襲撃戦略を評価した最終勝率です。同値の最適候補は均等、仲間への襲撃は除外します。 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。 公開側の全仮説で合法にならない襲撃先は未対応です。"
+        ]
+      }
+    }
+  },
+  "joint_audit": {
+    "cases": [
+      "basic",
+      "seven",
+      "seven-observed",
+      "private-history"
+    ],
+    "digests": {
+      "before": {
+        "basic": "d88d65f1ea0bad8c9f3080b205e70b6c9e378526d5177366b2d9f5caa1101dac",
+        "seven": "e2468af03559300537a2571f341e322cd0eed9af9e05d9330222da67c153e6ea",
+        "seven-observed": "0174df2e01a12fe8bcfbaef1d2da562c44a9de13585c6064105a2d9492df4161",
+        "private-history": "dfb53515f6b3245a7fc89a0ab192e10238c81809e36246b903f6bc5cae6c4ec5"
+      },
+      "after": {
+        "basic": "d88d65f1ea0bad8c9f3080b205e70b6c9e378526d5177366b2d9f5caa1101dac",
+        "seven": "e2468af03559300537a2571f341e322cd0eed9af9e05d9330222da67c153e6ea",
+        "seven-observed": "0174df2e01a12fe8bcfbaef1d2da562c44a9de13585c6064105a2d9492df4161",
+        "private-history": "dfb53515f6b3245a7fc89a0ab192e10238c81809e36246b903f6bc5cae6c4ec5"
+      },
+      "reference": {
+        "basic": "d88d65f1ea0bad8c9f3080b205e70b6c9e378526d5177366b2d9f5caa1101dac",
+        "seven": "e2468af03559300537a2571f341e322cd0eed9af9e05d9330222da67c153e6ea",
+        "seven-observed": "0174df2e01a12fe8bcfbaef1d2da562c44a9de13585c6064105a2d9492df4161",
+        "private-history": "dfb53515f6b3245a7fc89a0ab192e10238c81809e36246b903f6bc5cae6c4ec5"
+      }
+    },
+    "failures": []
+  },
+  "units": {
+    "tests": 31,
+    "seconds": 0.788,
+    "result": "OK",
+    "new_long_chain": "64 recipe chain; branch at depth32; edited prefix17; full-replay equality; not a 64-night game"
+  },
+  "remaining": [
+    "Ordinary final full suite (681 tests) in stable window",
+    "Formal fixed-commit cold/warm benchmark in exclusive stable window",
+    "Seven-player latest HTTP within default deadline in stable window"
+  ],
+  "selected_existing_history_regressions": {
+    "passed": 4,
+    "tests": [
+      "test_original_i_acceptance.OriginalIAcceptanceTests.test_two_gj_saved_policies_owned_records_and_unfiltered_replay",
+      "test_uniform_fixed_backup.UniformFixedBackupTests.test_no_repeat_six_player_two_gj_replay_matches_inactive_role_reference",
+      "test_board_flow.BoardFlowTests.test_changed_evidence_restores_worlds_without_using_parent_weights",
+      "test_board_owned_future.BoardOwnedFutureTests.test_owner_log_correction_and_delete_commit_retire_child_generations"
+    ],
+    "conditions": "Ordinary selected tests, no clock override. First three passed; last test initially could not import a bare tests dependency in a namespace run. Rerun with the same tests search path as discover passed. Initial error log retained."
+  }
+}
