@@ -21,6 +21,9 @@ class HistoryHelpTests(unittest.TestCase):
         positions=[overview.index('<h2><a href="/help/history/'+v['id']+'">') for v in VERSIONS]
         self.assertEqual(positions,sorted(positions))
         self.assertIn('個別の公開日は確認できていません',overview)
+        release=c.get('/help/history/v0.5.2').get_data(as_text=True)
+        self.assertIn('役職率を先に表示し',release)
+        self.assertNotIn('役職率先行表示と計算中の枝位置表示は',release)
         design=c.get(paths[-1]).get_data(as_text=True)
         self.assertIn('現在の基準ではありません',design)
         self.assertIn('C案',design)
