@@ -88,4 +88,4 @@ ww_gg/
     streamlit_proto/            以前の試作（既存位置を維持）
 ```
 
-[v0.5.1の変更記録](docs/v0.5.1.md)、[v0.5の仕様・確認記録](docs/v0.5.md)、[v0.4記録](docs/v0.4.md)、[9人実測](docs/v0.4-benchmark.json)、[v0.3記録](docs/v0.3.md)、[v0.4計画](docs/v0.4-plan.md)、[v0.2記録](docs/v0.2.md)、[v0.1の確認記録](docs/v0.1-board-checks.md)、[旧World版の確認記録](docs/v0.1-checks.md)、[旧3人版の確認記録](docs/minimal-checks.md) を参照。
+[v0.5.2の変更記録](docs/v0.5.2.md)、[v0.5.1の変更記録](docs/v0.5.1.md)、[v0.5の仕様・確認記録](docs/v0.5.md)、[v0.4記録](docs/v0.4.md)、[9人実測](docs/v0.4-benchmark.json)、[v0.3記録](docs/v0.3.md)、[v0.4計画](docs/v0.4-plan.md)、[v0.2記録](docs/v0.2.md)、[v0.1の確認記録](docs/v0.1-board-checks.md)、[旧World版の確認記録](docs/v0.1-checks.md)、[旧3人版の確認記録](docs/minimal-checks.md) を参照。
