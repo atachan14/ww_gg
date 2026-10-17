@@ -470,6 +470,14 @@ def create_app(test_config=None, *, deployment=False):
                                references=REFERENCES,fixture=FIVE_FIXTURE,audit_version=AUDIT_VERSION,
                                review_version=REVIEW_VERSION,public_sha=PUBLIC_SHA)
 
+    @app.get('/help/history/')
+    @app.get('/help/history/<page>')
+    def help_history(page='index'):
+        from werewolf.help_history import VERSIONS
+        entry=next((item for item in VERSIONS if item['id']==page),None)
+        if page not in ('index','v0.5.2-design') and entry is None:abort(404)
+        return render_template('help_history.html',page=page,entry=entry,versions=VERSIONS)
+
     @app.get('/help/specs')
     def help_specs():return render_template('help_specs.html')
 

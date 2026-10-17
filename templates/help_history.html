@@ -1,0 +1,8 @@
+{% extends 'help_base.html' %}{% set help_page='history-'+page %}
+{% block title %}開発履歴{% if entry %} {{ entry.version }}{% endif %}{% endblock %}
+{% block help_content %}<article class="help-panel">
+{% if page=='index' %}<h1>開発履歴</h1><p>各版で追加・改善した内容を、新しい版から紹介します。v0.1〜v0.4の日付は実装記録の日付です。個別の公開日は確認できていません。</p>
+{% for version in versions %}<section><h2><a href="{{ url_for('help_history',page=version.id) }}">{{ version.version }}</a></h2><p>{{ version.date }}</p><p>{{ version.summary }}</p></section>{% endfor %}
+{% elif page=='v0.5.2-design' %}{% include 'help_history_design.html' %}
+{% else %}<h1>{{ entry.version }}</h1><p>{{ entry.date }}</p>{% if entry.version in ['v0.1','v0.2','v0.3','v0.4'] %}<p>実装記録として紹介しています。この版を個別に公開した日は確認できていません。</p>{% endif %}<h2>主な変更</h2><ul>{% for change in entry.changes %}<li>{{ change }}</li>{% endfor %}</ul>{% for note in entry.notes %}<p>{{ note }}</p>{% endfor %}{% for heading,detail in entry.details %}<h2>{{ heading }}</h2><p>{{ detail }}</p>{% endfor %}{% if entry.id=='v0.5.2' %}<h2>当時の検討資料</h2><p><a href="{{ url_for('help_history',page='v0.5.2-design') }}">A・B・C案の比較と採用した構成</a></p>{% endif %}<p><a href="{{ url_for('help_history') }}">全版の概要へ</a></p>{% endif %}
+</article>{% endblock %}
