@@ -1,0 +1,45 @@
+{
+  "cases": [
+    {
+      "players": 5,
+      "wolves": 1,
+      "complete": true,
+      "value": "7/15",
+      "imports": {
+        "source_checksum": "f0f1068eca2780373cb8f902dbbfce9e072fe5a197ee2cbcb272678f0c98694a",
+        "complete_unit_pairs": 18,
+        "verified_prefix_terms": 0,
+        "oracle_terms": 24,
+        "audit_terms": 24
+      },
+      "fresh_calls": 2,
+      "verified_primitives": 24,
+      "seconds": 1.06335680000484
+    },
+    {
+      "players": 6,
+      "wolves": 2,
+      "complete": true,
+      "value": "1/12",
+      "imports": {
+        "source_checksum": "8087a7c753e69064a75bde4cd6eb5b1beb6c74622330165c0fcd3922381e1d2e",
+        "complete_unit_pairs": 30,
+        "verified_prefix_terms": 0,
+        "oracle_terms": 120,
+        "audit_terms": 120
+      },
+      "fresh_calls": 2,
+      "verified_primitives": 120,
+      "seconds": 1.1193227999901865
+    }
+  ],
+  "seven_imports": {
+    "source_checksum": "d946aa77df428e05472d553c8d2b5670ddfe307391d7bf758a5aebc662576070",
+    "complete_unit_pairs": 14,
+    "verified_prefix_terms": 3,
+    "oracle_terms": 86,
+    "audit_terms": 83
+  },
+  "core_engine": "052651c37b736787a4dcaa9f365c599299d1a9a1b9a247718ae38326b5ada153",
+  "adapter": "17f18fa9d15956739af280c791a6c84e12f94123fbe55676cfeb00e55281cabf"
+}
