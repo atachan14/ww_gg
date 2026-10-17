@@ -4,7 +4,7 @@
 {% block content %}
 <main data-screen="top">
   <p class="eyebrow">TOP</p>
-  <p class="hint calculation-estimate">計算時間は配役・履歴で変わります。通常は短時間ですが、複雑な条件では最大約5分かかります。結果が出るまで再操作をお待ちください。</p>
+  <p class="hint calculation-estimate">計算時間は配役・履歴で変わり、1回の計算は最大約5分です。計算中も編集でき、変更が続いた場合は最後の入力を順番に反映します。</p>
   <script type="application/json" id="setup-presets">{{ setup_presets|tojson }}</script>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" action="{{ url_for('start') }}" data-submit-once>

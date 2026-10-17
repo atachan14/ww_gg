@@ -6,7 +6,7 @@
   const normalize=value=>{const next=JSON.parse(JSON.stringify(value));for(const key of ['seers','mediums'])next[key].sort((a,b)=>a.day-b.day||a.reporter-b.reporter||(a.target??0)-(b.target??0));return next;};
   const baseline=normalize({claims:seed.claims,seers:seed.seers,mediums:seed.mediums});
   const baseDocument=new DOMParser().parseFromString(document.documentElement.outerHTML,'text/html');
-  const conflicts=document.querySelectorAll('[data-public-open],[data-public-edit],[data-public-delete],[data-legacy-open],#advance-button,#back-button,#strategy-button,[data-settings-pane="strategy"] input,[data-settings-pane="strategy"] select');
+  const conflicts=document.querySelectorAll('[data-public-open],[data-public-edit],[data-public-delete],[data-legacy-open],#advance-button,#back-button');
   const draft=window.createBoardDeclarationDraft(baseline,{update,cancel:document.querySelector('[data-table-cancel]'),conflictingButtons:conflicts});
   let version=0,timer,controller,lastPreview=null,rendering=false,navigating=false,clearedSavedDraft=false,clearSavedPromise=Promise.resolve();
   const labels={latent:'--',villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'};
@@ -85,23 +85,33 @@
   const preview=async id=>{
     controller=new AbortController();try{
       const response=await fetch('/table-preview',{method:'POST',signal:controller.signal,body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,request_id:String(id),payload:JSON.stringify(draft.snapshot())})});const data=await response.json();
-      if(id!==version||!draft.isDirty())return;
+      if(!main.isConnected||id!==version||!draft.isDirty())return;
       if(!response.ok)throw Error(data.error);if(String(data.request_id)!==String(id)||data.revision!==seed.revision||data.board_id!==seed.board_id)return;
       apply(new DOMParser().parseFromString(data.html,'text/html'));lastPreview=clone(draft.snapshot());status.textContent='プレビュー';
     }catch(e){if(id===version&&e.name!=='AbortError'){const inconsistent=e.message.includes('全開示')||e.message.includes('整合する配役');showWaiting(inconsistent?'不整合':'入力待ち');status.textContent=`${inconsistent?'不整合':'プレビュー・入力待ち'}: ${e.message}`;}}
   };
   if(seed.finished){render();window.boardTableDraft=draft;return;}
+  let commitControls=null;
   draft.onChange(({dirty,busy})=>{
+    if(busy&&!commitControls){commitControls=new Map([...document.querySelectorAll('[data-table-co],[data-table-details] select,#strategy-editor button,#strategy-editor input,#strategy-editor select')].map(e=>[e,e.disabled]));commitControls.forEach((_,e)=>e.disabled=true);}
+    if(!busy&&commitControls){commitControls.forEach((disabled,e)=>{if(e.isConnected)e.disabled=disabled;});commitControls=null;}
     if(navigating)return;
     version++;clearTimeout(timer);controller?.abort();lastPreview=null;
     if(busy)return;
-    if(!dirty){try{sessionStorage.removeItem(storageKey);}catch(_){}apply(baseDocument);status.textContent='';return;}
+    if(!dirty){try{sessionStorage.removeItem(storageKey);}catch(_){}if(window.isStrategyCalculationPending?.()){showWaiting(window.strategyCalculationState?.()==='failed'?'未計算':'計算中');}else apply(baseDocument);status.textContent='';return;}
     try{sessionStorage.setItem(storageKey,JSON.stringify({revision:seed.revision,board_id:seed.board_id,inherited_revision:seed.inherited_revision,snapshot:draft.snapshot()}));}catch(_){}
     document.dispatchEvent(new CustomEvent('board-table-dirty'));
     if(seed.draft&&!clearedSavedDraft){clearedSavedDraft=true;clearSavedPromise=fetch('/public-log',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,operation:'cancel',payload:'{}'})}).then(async r=>{if(!r.ok)throw Error((await r.json()).error);});clearSavedPromise.catch(e=>{status.textContent=e.message;});}
-    showWaiting('計算中');status.textContent='プレビュー・計算中';const id=version;timer=setTimeout(()=>preview(id),180);
+    showWaiting('計算中');status.textContent='プレビュー・計算中';if(window.isStrategyCalculationPending?.()){if(window.strategyCalculationState?.()==='failed'){showWaiting('未計算');status.textContent='戦略の更新が未完了です。入力は保持されています。';}return;}const id=version;timer=setTimeout(()=>preview(id),180);
   });
+  let publishWaiting=false;
   update.addEventListener('click',async()=>{
+    if(publishWaiting)return;
+    if(window.whenStrategySettled){
+      publishWaiting=true;
+      try{await window.whenStrategySettled();}catch(e){status.textContent=e.message;return;}finally{publishWaiting=false;}
+      if(!main.isConnected){document.querySelector('[data-table-update]')?.click();return;}
+    }
     try{await draft.submit(async(current)=>{
       clearTimeout(timer);controller?.abort();await clearSavedPromise;const response=await fetch('/table-publish',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify(current)})});const data=await response.json();if(!response.ok)throw Error(data.error);try{sessionStorage.removeItem(storageKey);}catch(_){}navigating=true;location.reload();return current;
     });}catch(e){status.textContent=`保存できません: ${e.message}`;}
@@ -109,6 +119,9 @@
   document.querySelector('#action-form').addEventListener('submit',event=>{if(draft.isDirty()){event.preventDefault();event.stopImmediatePropagation();status.textContent='先に更新またはキャンセルしてください。';}},true);
   document.querySelectorAll('form[action="/back"]').forEach(form=>form.addEventListener('submit',event=>{if(draft.isDirty()){event.preventDefault();event.stopImmediatePropagation();}},true));
   document.querySelector('[data-table-cancel]').addEventListener('click',()=>{roleStash.clear();render();});
+  draft.restore=next=>{draft.edit(normalize(next));render();};
+  draft.pausePreview=()=>{version++;clearTimeout(timer);controller?.abort();showWaiting('計算中');};
+  draft.suspend=()=>{navigating=true;clearTimeout(timer);controller?.abort();};
   render();if(recovered){draft.edit(normalize(recovered));render();}window.boardTableDraft=draft;
  };
  window.initializeBoardTable=initialize;

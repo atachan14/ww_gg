@@ -1,0 +1,29 @@
+# 役職率先行・計算中位置表示：読み取り調査
+
+## 優先：役職率を先に表示
+
+公開視点はapp.render_mainが最初にBoardData.roles()を呼び、RoleState.rates/role_summaryを取得した後にRoleState.forecast()を呼ぶ。現在の役職率は3b勝率前に取り出せる。ただしRoleState.forecast内に3a所有のprepare_evaluation（必要共同履歴の準備）もあり、3a全処理が既に別HTTP段階として完了しているわけではない。過去GJ/護衛や方針依存の履歴再構築は役職率取得側でも重くなることがあり、役職率が必ず瞬時という保証ではない。
+
+現在のHTTPは3bとHTML構築が終わるまで返さないので、ブラウザには途中のratesが届かない。UIのroleセルとwinセルを別々に更新し、勝率は未計算表示で待つ入口が必要。
+
+本人視点は一律には先出しできない。private_adapterのroot狼経路はroot_wolf_forecastの戻りbeliefからprivate Boardを作り、占い/狩人もroot_actor_viewの条件付けを含む。単にcondition_privateの初期Boardや公開ratesを先出しすると、本人の役職/取得結果/行動履歴・共同混合による最終条件と違う場合がある。共通3aに本人条件付け済みの正規結果を取り出すhelperを分離し、同じprepared状態を3bへ渡す必要がある。
+
+最も二重実行を避けやすい案は1 HTTPでrolesイベントとfinal勝率イベントを返し、同じ不変入力snapshot/RoleState/preparedを使い続ける方式。現在のfetch調停は全bodyをdrainしてから返すのでstream専用の受信処理が必要。Flaskのrequest/session/budget/context lifetime、保存確定とSet-Cookieを先に済ませる段階、切断後の計算終了、旧応答の無効化も明示する。新依存は必須ではないが、単なる表示1行の変更ではない。
+
+別案のroles短HTTP→win HTTPは表示を早めやすいが、共通計算の再実行を避けるにはprepared保持が必要。既存GameRuntimeはprocess内の完了結果cacheであり、serverlessの次要求が別instanceへ届くため、module内cacheだけでは同一preparedの継承を保証できない。共有storeを増やさずに二重実行を避けるなら単一streamの検討が先。
+
+応答にはBoard ID・保存revisionだけでなく、未保存draftの世代/入力snapshot識別子・rules/policy・公開/本人と本人条件を結びつける。同じrevisionでも編集中のCO/結果は異なるため、最新世代と一致したroleだけを表示し、古いwinで上書きしない。不整合/支持なしは確定率として出さず、公開と本人のrateを取り違えない。役職率先行を優先し、探索位置は後順位とする。今回は配信基盤/API/個人条件付けの追加実装や公開は行っていない。
+
+## 後順位：探索位置
+
+現在のFlaskは計算後にHTML/JSONを返す同期HTTPで、進捗stream/pollのAPIはない。今回のfetch調停も応答bodyの完了を待つため、進捗streamには別の明示的経路が必要。
+
+board_owned_logのgame:board:Nは保存/操作されたBoardのIDで、評価器内の仮想探索全枝のIDではない。InformationSetForecastにはactions/valuesの展開数や任意traceはあるが、B1-8-14-1-11のような安定した探索位置IDはない。memo/対称性再利用により評価が飛ぶため、現在の探索位置と進捗率/残り時間は別物である。
+
+低変更なら、ブラウザが既に知る要求種類（公開プレビュー/本人視点/戦略反映/保存待ち）を表示でき、追加通信は不要。ただし実際のサーバー内の探索位置ではない。今回その表示機能は追加していない。
+
+探索位置を出すなら、公開可能な経路の定義と、1秒程度のサンプル通知を設計する。毎枝の文字列生成・全tree保存を避け、既存tick時刻を利用して低頻度に整形する案があるが、経路push/popやsamplingチェックもゼロ負荷ではない。秘密の役職/他人の結果/別観測者の枝を表示しない設計が必要。
+
+SSE/streamなら、計算のproducerと通知generator/context/取消/最終保存を分ける設計が必要で、関数300秒制限も継続する。pollならrequest IDと所有者・revisionの照合、状態保存が必要。serverlessの別instanceへpollが届くため単純なmodule内dictだけでは保証できず、共有storeまたは配信方式の検討が必要。今回は新しい基盤/依存/公開を実装しない。
+
+誤差程度かは未測定。案を絞って、非通知/1Hz通知を同一7人・対応済9人で直列AB比較し、全値digest、CPU/wall/peak、通知件数/byte数、キャンセル・再接続・旧結果混入を測る。位置は進捗%とは表示しない。

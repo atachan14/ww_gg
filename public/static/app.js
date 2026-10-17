@@ -212,6 +212,10 @@ function initializeLiveClaims() {
   let pending = false;
   let version = 0;
   let blocked = false;
+  const settled=[];
+  window.isStrategyCalculationPending=()=>running||pending||blocked;
+  window.strategyCalculationState=()=>running||pending?'running':blocked?'failed':'ready';
+  window.whenStrategySettled=()=>running?new Promise((resolve,reject)=>settled.push({resolve,reject})):blocked?Promise.reject(Error('戦略の更新が未完了です。再計算を確認してください。')):Promise.resolve();
   form.addEventListener('submit', event => {
     if (blocked) { event.preventDefault(); event.stopImmediatePropagation(); }
   }, true);
@@ -219,9 +223,11 @@ function initializeLiveClaims() {
   status.className = 'hint';
   status.setAttribute('role', 'status');
   document.querySelector('#information-panel').append(status);
+  const attachStatus=()=>{if(form.isConnected&&!status.isConnected)document.querySelector('#information-panel')?.append(status);};
   const disableProgress = () => {
+    attachStatus();
     blocked = true;
-    document.querySelectorAll('#advance-button, #strategy-button, #back-button,[data-table-co],[data-table-details] select,[data-table-update],[data-table-cancel],[data-public-open],[data-public-edit],[data-public-delete]').forEach(b => b.disabled = true);
+    document.querySelectorAll('#advance-button, #back-button,[data-public-open],[data-public-edit],[data-public-delete]').forEach(b => b.disabled = true);
     document.querySelectorAll('.probability').forEach(p => {
       p.textContent = '—';
       delete p.dataset.fraction;
@@ -230,6 +236,7 @@ function initializeLiveClaims() {
     document.querySelectorAll('input[name="probability-format"]').forEach(p => p.disabled = true);
   };
   const update = async () => {
+    window.boardTableDraft?.pausePreview?.();
     pending = true;
     version += 1;
     disableProgress();
@@ -239,6 +246,9 @@ function initializeLiveClaims() {
     if (running) return;
     running = true;
     while (pending) {
+      const waitingVersion=version;
+      await new Promise(resolve=>setTimeout(resolve,180));
+      if(waitingVersion!==version)continue;
       pending = false;
       const sentVersion = version;
       try {
@@ -252,6 +262,7 @@ function initializeLiveClaims() {
         document.querySelectorAll('input[name="revision"]').forEach(input => input.value = revision.value);
         if (sentVersion !== version) continue;
         if (!response.ok) {
+          attachStatus();
           status.className = 'error';
           status.setAttribute('role', 'alert');
           status.textContent = html.querySelector('[role="alert"]')?.textContent || 'COを確認してください。';
@@ -275,10 +286,15 @@ function initializeLiveClaims() {
           if (replacement) replacement.open = details.open;
         });
         main.dataset.roleDetails = document.querySelector('main').dataset.roleDetails || 'true';
+        const tableDraft=window.boardTableDraft;
+        const carry=tableDraft?.isDirty()?tableDraft.snapshot():null;
+        tableDraft?.suspend?.();
         document.querySelector('main').replaceWith(main);
         initializeUI();
+        if(carry)window.boardTableDraft?.restore?.(carry);
       } catch (error) {
         if (sentVersion === version) {
+          attachStatus();
           status.className = 'error';
           status.setAttribute('role', 'alert');
           status.textContent = '再計算できませんでした。「再計算」で再試行するか、画面を再読込してください。';
@@ -286,6 +302,7 @@ function initializeLiveClaims() {
       }
     }
     running = false;
+    settled.splice(0).forEach(({resolve,reject})=>form.isConnected&&blocked?reject(Error('戦略の更新が未完了です。入力は保持されています。')):resolve());
     if (form.isConnected) document.querySelector('#strategy-button').disabled = false;
   };
   form.querySelectorAll('.co-select:not(:disabled), .report-select:not(:disabled), #day-strategy:not(:disabled), #night-strategy:not(:disabled), #include-self-bite:not(:disabled), #fake-reports:not(:disabled), .co-conditions input[type=checkbox]:not(:disabled)').forEach(input => {

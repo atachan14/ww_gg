@@ -7,7 +7,7 @@
 <main data-seer-future="{{ 'all' if future_active else 'none' }}" {% if config.get("HYBRID_TABLE_PREVIEW") and not night_context %}data-hybrid-table{% endif %} data-screen="{{ 'result' if finished else 'main' }}" data-co-game="{{ co_game }}" {% if night_context %}data-night-board data-night-report-url="{{ url_for('dawn_report') }}" data-board-id="{{ state.public_log.board_id }}"{% endif %}>
   <p class="cast-line" role="group" aria-labelledby="game-cast-label" id="game-cast"><span id="game-cast-label">配役</span> {{ state.players }}人村:{% for label,count,note in [('市民',state.players-state.get('wolves',1)-state.get('mediums',0)-state.get('seers',0)-state.get('hunters',0),''),('霊能',state.get('mediums',0),''),('占い師',state.get('seers',0),''),('狩人',state.get('hunters',0),'（護衛：均等化）'),('狼',state.get('wolves',1),'')] if count>0 %}{{ label }}{{ count }}{{ note }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
   <form id="display-options-form"></form>
-  <p class="hint calculation-estimate">計算時間は配役・履歴で変わります。通常は短時間ですが、複雑な条件では最大約5分かかります。結果が出るまで再操作をお待ちください。</p>
+  <p class="hint calculation-estimate">計算時間は配役・履歴で変わり、1回の計算は最大約5分です。計算中も編集でき、変更が続いた場合は最後の入力を順番に反映します。</p>
   <form id="public-log-draft-form"></form>
   {% if night_context %}{% include 'dawn_observation_forms.html' %}{% endif %}
   <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none else 'false' }}">
