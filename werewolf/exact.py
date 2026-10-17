@@ -228,6 +228,34 @@ class MediumReport:
             raise ValueError('Invalid medium report')
 
 
+@lru_cache(maxsize=256)
+def _validated_complete_roles(player_count,mediums,seers,hunters,worlds):
+    """Pure validation/projection of exact immutable complete role laws only.
+
+    Public facts, histories, counts of surviving wolves and guard provenance
+    remain validated by Board. No policy, observer or hidden-history inputs
+    are inferred here. Mutable/subclass compatibility inputs never enter.
+    """
+    seen=set();projection={}
+    for world in worlds:
+        w,m,seer,hunter,q=world
+        if any(not 0<=mask<1<<player_count for mask in world[:-1]):raise ValueError('Invalid role masks')
+        if any(x&y for j,x in enumerate(world[:-1]) for y in world[j+1:-1]):raise ValueError('Role masks must not overlap')
+        if (m.bit_count(),seer.bit_count(),hunter.bit_count())!=(mediums,seers,hunters):raise ValueError('Role counts disagree')
+        if world[:-1] in seen or q<=0:raise ValueError('Invalid complete role mass')
+        seen.add(world[:-1]);projection[w,m]=projection.get((w,m),Fraction(0))+q
+    if sum((x[-1] for x in worlds),Fraction(0))!=1:raise ValueError('Complete role mass must conserve one')
+    role=tuple((w,m,q) for (w,m),q in sorted(projection.items()))
+    marginal={}
+    for w,m,q in role:marginal[w]=marginal.get(w,Fraction(0))+q
+    return role,tuple(sorted(marginal.items()))
+
+
+def _immutable_complete_roles(worlds):
+    return (type(worlds)is tuple and all(type(row)is tuple and len(row)==5 and
+            all(type(mask)is int for mask in row[:4]) and type(row[-1])is Fraction for row in worlds))
+
+
 @dataclass(frozen=True)
 class Board:
     """Public history and count constraints; no player has an assigned true role."""
@@ -283,27 +311,39 @@ class Board:
         for count in (self.initial_seer_count,self.initial_hunter_count):
             if type(count) is not int or not 0<=count<=self.player_count:
                 raise ValueError('Invalid ability-free role count')
+        validated_worlds=False
         if self.world_belief:
-            seen=set();projection={}
-            for world in self.world_belief:
-                if not isinstance(world,tuple) or len(world)!=5:raise ValueError('Invalid complete role distribution')
-                w,m,seer,hunter,q=world
-                if any(type(mask) is not int or not 0<=mask<1<<self.player_count for mask in world[:-1]):raise ValueError('Invalid role masks')
-                if any(x&y for j,x in enumerate(world[:-1]) for y in world[j+1:-1]):raise ValueError('Role masks must not overlap')
-                if (m.bit_count(),seer.bit_count(),hunter.bit_count())!=(self.initial_medium_count,self.initial_seer_count,self.initial_hunter_count):raise ValueError('Role counts disagree')
-                if world[:-1] in seen or not isinstance(q,Fraction) or q<=0:raise ValueError('Invalid complete role mass')
-                seen.add(world[:-1]);projection[w,m]=projection.get((w,m),Fraction(0))+q
-            if sum((x[-1] for x in self.world_belief),Fraction(0))!=1:raise ValueError('Complete role mass must conserve one')
+            if _immutable_complete_roles(self.world_belief):
+                # Bound retention by both entry count and law length. Large
+                # exact laws use the identical pure validation without caching.
+                project=(_validated_complete_roles if len(self.world_belief)<=64
+                         else _validated_complete_roles.__wrapped__)
+                role,belief=project(self.player_count,self.initial_medium_count,
+                    self.initial_seer_count,self.initial_hunter_count,self.world_belief)
+                object.__setattr__(self,'role_belief',role)
+                object.__setattr__(self,'belief',belief)
+                validated_worlds=True
+            else:
+                seen=set();projection={}
+                for world in self.world_belief:
+                    if not isinstance(world,tuple) or len(world)!=5:raise ValueError('Invalid complete role distribution')
+                    w,m,seer,hunter,q=world
+                    if any(type(mask) is not int or not 0<=mask<1<<self.player_count for mask in world[:-1]):raise ValueError('Invalid role masks')
+                    if any(x&y for j,x in enumerate(world[:-1]) for y in world[j+1:-1]):raise ValueError('Role masks must not overlap')
+                    if (m.bit_count(),seer.bit_count(),hunter.bit_count())!=(self.initial_medium_count,self.initial_seer_count,self.initial_hunter_count):raise ValueError('Role counts disagree')
+                    if world[:-1] in seen or not isinstance(q,Fraction) or q<=0:raise ValueError('Invalid complete role mass')
+                    seen.add(world[:-1]);projection[w,m]=projection.get((w,m),Fraction(0))+q
+                if sum((x[-1] for x in self.world_belief),Fraction(0))!=1:raise ValueError('Complete role mass must conserve one')
+                object.__setattr__(self,'role_belief',tuple((w,m,q) for (w,m),q in sorted(projection.items())))
             if self.guard_prior_roster is not None:
                 night,roster=self.guard_prior_roster
                 before=set(range(1,self.player_count+1))-{e.target for e in self.history if e.day<night or e.day==night and e.phase=='day'}
                 mask=sum(1<<(p-1) for p in roster)
                 if set(roster)!=before or self.initial_hunter_count!=1 or any((w[0]&mask).bit_count()!=1 or not w[3]&mask for w in self.world_belief):
                     raise ValueError('Public guard-history provenance conflicts with role/history facts')
-            object.__setattr__(self,'role_belief',tuple((w,m,q) for (w,m),q in sorted(projection.items())))
         elif self.initial_seer_count or self.initial_hunter_count:
             raise ValueError('Extra roles require complete role distribution')
-        if self.role_belief:
+        if self.role_belief and not validated_worlds:
             if (len({(w, m) for w, m, _ in self.role_belief}) != len(self.role_belief)
                     or any(type(w) is not int or type(m) is not int or w < 0 or m < 0
                            or w >= 1 << self.player_count or m >= 1 << self.player_count
@@ -323,7 +363,7 @@ class Board:
             if self.wolf_count == 0 and self.history:
                 masks = [1 << (self.history[-1].target - 1)]
             object.__setattr__(self, 'belief', tuple((mask, Fraction(1, len(masks))) for mask in masks))
-        if (len({m for m, _ in self.belief}) != len(self.belief)
+        if not validated_worlds and (len({m for m, _ in self.belief}) != len(self.belief)
                 or any(type(m) is not int or not 0 <= m < 1 << self.player_count
                        or not isinstance(q, Fraction) or q <= 0 for m, q in self.belief)
                 or sum((q for _, q in self.belief), Fraction(0)) != 1):
