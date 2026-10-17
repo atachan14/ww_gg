@@ -37,38 +37,7 @@ class GeneratedBoard:
     history:tuple=()
     facts:object=None
 
-    # Derived acceleration only; replace()/edited histories start with empty
-    # memos. The complete origin and evidence recipe remain authoritative.
-    _parent:object=field(default=None,init=False,compare=False,hash=False,repr=False)
-    _completed:list=field(default_factory=list,init=False,compare=False,hash=False,repr=False)
-    _cacheable:object=field(default=None,init=False,compare=False,hash=False,repr=False)
-
-    def child(self,recipe,facts):
-        child=GeneratedBoard(self.origin,(*self.history,recipe),facts)
-        object.__setattr__(child,'_parent',self)
-        return child
-
-    def cacheable_evidence(self):
-        known=self._cacheable
-        if known is not None:return known
-        recipes=(ActionEvidence,PublicationEvidence,ConditionEvidence,ContextEvidence,
-                 PublicReportEvidence,PublicViewEvidence,MediumInstructionEvidence)
-        def supported(operation):
-            return (type(operation) in recipes and
-                    (not hasattr(operation,'engine') or
-                     getattr(operation.engine,'_board_evidence_snapshot',False)))
-        if type(self.history) is not tuple:known=False
-        elif self._parent is not None:
-            known=self._parent.cacheable_evidence() and supported(self.history[-1])
-        else:
-            from .board_flow import BoardData
-            from .evaluation_branch import ContinuationInputs
-            origin=self.origin
-            sealed=(type(origin) is SavedOrigin and type(origin.board_data) is BoardData or
-                    type(origin) is KernelOrigin and type(origin.state) is ContinuationInputs)
-            known=sealed and all(supported(operation) for operation in self.history)
-        object.__setattr__(self,'_cacheable',known)
-        return known
+    def child(self,recipe,facts):return GeneratedBoard(self.origin,(*self.history,recipe),facts)
 
     @property
     def game_data(self):return self.origin.game_data
@@ -78,29 +47,12 @@ class GeneratedBoard:
         return reconstruct_roles(self)
 
     def _reconstruct(self):
+        from .calculation_budget import tick
+        tick(0)
         token=_rebuilding.set(True)
         try:
-            reusable=_reuse_kernels.get() and self.cacheable_evidence()
-            if reusable and self._completed:
-                from .calculation_budget import tick
-                tick(0)
-                self._completed[1]+=1
-                return self._completed[0]
-            if reusable and self._parent is not None:
-                # Only an identical immutable evidence prefix, reconstructed
-                # through 3a, can supply this value. Never seed from remember()
-                # or from a caller's filtered/physical continuation payload.
-                parent=self._parent
-                if parent._completed:
-                    from .calculation_budget import tick
-                    tick(0);parent._completed[1]+=1;state=parent._completed[0]
-                else:state=parent._reconstruct()
-                operations=self.history[-1:]
-            else:
-                state=self.origin();operations=self.history
-            for operation in operations:state=GeneratedBoard.replay_operation(operation,state)
-            from .evaluation_branch import ContinuationInputs
-            if reusable and type(state) is ContinuationInputs:self._completed[:]=(state,0)
+            state=self.origin()
+            for operation in self.history:state=GeneratedBoard.replay_operation(operation,state)
             return state
         finally:_rebuilding.reset(token)
 

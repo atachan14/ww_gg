@@ -12,22 +12,22 @@ from werewolf.seer_future_uniform import TrueScanState
 from werewolf.actor_information import condition_actor_state
 from werewolf.information_set_forecast import InformationSetForecast
 
-class EvidencePrefixTests(unittest.TestCase):
+class EvidenceReplayTests(unittest.TestCase):
  def fixture(self):
   data=BoardData.from_game(game())
   board=initial_board(5,1);law=TrueScanState(from_board(board),initial_rule='none',tracked=())
   state=ContinuationInputs(board,law,(),law,None,board)
   root=flow.GeneratedBoard(flow.KernelOrigin(state,data.game_data))
   return root,state
- def test_verified_prefix_runs_only_new_recipe_and_reference_replays_all(self):
+ def test_every_request_replays_complete_evidence_with_exact_step_reuse(self):
   root,state=self.fixture();a=root.child(flow.PublicViewEvidence(),None);b=a.child(flow.PublicViewEvidence(),None)
   original=flow.GeneratedBoard.replay_operation
   with patch.object(flow.GeneratedBoard,'replay_operation',side_effect=original) as replay:
    self.assertEqual(a.roles(),state);self.assertEqual(replay.call_count,1)
-   self.assertEqual(b.roles(),state);self.assertEqual(replay.call_count,2)
-   self.assertEqual(b.roles(),state);self.assertEqual(replay.call_count,2)
+   self.assertEqual(b.roles(),state);self.assertEqual(replay.call_count,3)
+   self.assertEqual(b.roles(),state);self.assertEqual(replay.call_count,5)
    with flow.reconstruction_kernel_reuse(False):self.assertEqual(b.roles(),state)
-   self.assertEqual(replay.call_count,4)
+   self.assertEqual(replay.call_count,7)
   self.assertIs(b.game_data,root.game_data)
  def test_private_siblings_and_public_view_keep_full_public_support(self):
   root,state=self.fixture();left=condition_actor_state(state.public_state,lambda h:h.roles[0]==1)
@@ -40,10 +40,10 @@ class EvidencePrefixTests(unittest.TestCase):
   self.assertEqual(public.private,state.public_state)
   self.assertGreater(len(public.private.hypotheses),len(left.hypotheses))
   with flow.reconstruction_kernel_reuse(False):self.assertEqual(b.roles(),own(right))
- def test_replace_history_and_origin_clear_prefix_and_completed_values(self):
+ def test_replace_history_and_origin_reconstruct_the_new_evidence(self):
   root,state=self.fixture();a=root.child(flow.PublicViewEvidence(),None);a.roles()
   changed=replace(a,history=())
-  self.assertIsNone(changed._parent);self.assertFalse(changed._completed)
+  self.assertFalse(hasattr(changed,"_parent"));self.assertFalse(hasattr(changed,"_completed"))
   own=condition_actor_state(state.public_state,lambda h:h.roles[0]==1)
   target=replace(state,private=own,physical=physical_board(state.public,own))
   changed=replace(a,history=(flow.condition_recipe(state,target),))
@@ -57,24 +57,24 @@ class EvidencePrefixTests(unittest.TestCase):
    def __init__(self):self.calls=0
    def __call__(self):self.calls+=1;return state
   origin=MutableOrigin();request=flow.GeneratedBoard(origin)
-  request.roles();request.roles();self.assertEqual(origin.calls,2);self.assertFalse(request._completed)
+  request.roles();request.roles();self.assertEqual(origin.calls,2);self.assertFalse(hasattr(request,"_completed"))
   from types import SimpleNamespace
   unknown=flow.GeneratedBoard(flow.KernelOrigin(SimpleNamespace(value=1),root.game_data))
-  unknown.roles();self.assertFalse(unknown._completed)
+  unknown.roles();self.assertFalse(hasattr(unknown,"_completed"))
   mutable=flow.GeneratedBoard(root.origin,[flow.PublicViewEvidence()])
-  mutable.roles();self.assertFalse(mutable._completed)
+  mutable.roles();self.assertFalse(hasattr(mutable,"_completed"))
   engine=InformationSetForecast(Rules(),Strategy())
   unsnapshotted=root.child(flow.ContextEvidence(engine),None)
-  unsnapshotted.roles();self.assertFalse(unsnapshotted._completed)
+  unsnapshotted.roles();self.assertFalse(hasattr(unsnapshotted,"_completed"))
  def test_failed_step_is_not_cached_and_hit_still_enforces_deadline(self):
   root,state=self.fixture();a=root.child(flow.PublicViewEvidence(),None)
   with patch.object(flow.PublicViewEvidence,'__call__',side_effect=ValueError('no support')):
    with self.assertRaisesRegex(ValueError,'no support'):a.roles()
-  self.assertFalse(a._completed)
+  self.assertFalse(hasattr(a,"_completed"))
   from werewolf.seer_future_uniform import FuturePending
   with patch.object(flow.PublicViewEvidence,'__call__',return_value=FuturePending('not complete')):
    self.assertIsInstance(a.roles(),FuturePending)
-  self.assertFalse(a._completed);self.assertEqual(a.roles(),state)
+  self.assertFalse(hasattr(a,"_completed"));self.assertEqual(a.roles(),state)
   from werewolf.calculation_budget import calculation_budget,CalculationBudgetExceeded
   with calculation_budget(10,max_seconds=20),patch('werewolf.calculation_budget.monotonic',return_value=float('inf')):
    with self.assertRaises(CalculationBudgetExceeded):a.roles()
@@ -95,13 +95,13 @@ class EvidencePrefixTests(unittest.TestCase):
   self.assertFalse(changed._completed)
   self.assertNotEqual(origin().public.claims,changed().public.claims)
   self.assertEqual(changed(),flow.SavedOrigin(changed.board_data,changed.rules,changed.strategy)())
- def test_prefix_ownership_has_no_completed_result_cycle(self):
+ def test_child_keeps_complete_evidence_without_retaining_parent(self):
   root,state=self.fixture();child=root.child(flow.PublicViewEvidence(),None);child.roles()
   a=weakref.ref(root);b=weakref.ref(child);del root
-  self.assertIsNotNone(a());del child
+  self.assertIsNone(a());self.assertEqual(child.roles(),state);del child
   self.assertIsNone(a());self.assertIsNone(b())
 
- def test_long_prefix_branch_edit_and_full_reference_keep_the_same_evidence(self):
+ def test_long_history_branch_edit_and_full_reference_keep_the_same_evidence(self):
   root,state=self.fixture();nodes=[root]
   for _ in range(64):nodes.append(nodes[-1].child(flow.PublicViewEvidence(),None))
   original=flow.GeneratedBoard.replay_operation
@@ -109,11 +109,11 @@ class EvidencePrefixTests(unittest.TestCase):
    self.assertEqual(nodes[-1].roles(),state)
    self.assertEqual(replay.call_count,64)
    branch=nodes[32].child(flow.PublicViewEvidence(),None)
-   self.assertEqual(branch.roles(),state);self.assertEqual(replay.call_count,65)
+   self.assertEqual(branch.roles(),state);self.assertEqual(replay.call_count,97)
    edited=replace(nodes[-1],history=nodes[-1].history[:17])
-   self.assertIsNone(edited._parent);self.assertFalse(edited._completed)
-   self.assertEqual(edited.roles(),state);self.assertEqual(replay.call_count,82)
+   self.assertFalse(hasattr(edited,"_parent"));self.assertFalse(hasattr(edited,"_completed"))
+   self.assertEqual(edited.roles(),state);self.assertEqual(replay.call_count,114)
    with flow.reconstruction_kernel_reuse(False):self.assertEqual(nodes[-1].roles(),state)
-   self.assertEqual(replay.call_count,146)
+   self.assertEqual(replay.call_count,178)
   self.assertEqual(len(nodes[-1].history),64)
   self.assertEqual(len(edited.history),17)
