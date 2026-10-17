@@ -75,7 +75,12 @@ def normalize(entries):
     grouped={};originals={}
     for h in entries:
         key=(h.roles,h.acquisitions,h.guards,h.attacks)
-        grouped[key]=grouped.get(key,Fraction())+h.mass;originals.setdefault(key,h)
+        if key in grouped:grouped[key]+=h.mass
+        else:
+            # Exact Fraction needs no artificial zero addition. Compatibility
+            # inputs retain the original arithmetic and validation behavior.
+            grouped[key]=h.mass if type(h.mass)is Fraction else Fraction()+h.mass
+        originals.setdefault(key,h)
     total=sum(grouped.values(),Fraction())
     if not total:raise ValueError('No compatible acquisition/report hypothesis')
     result=[]
