@@ -1,9 +1,10 @@
 """Public Board calculations for 1–9 players, wolves, medium disclosures and ability-free seers/hunters, using exact fractions."""
 
 from .calculation_budget import tick
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, replace, fields, field
 from fractions import Fraction
-from functools import lru_cache
+from functools import lru_cache, wraps
+from operator import attrgetter
 from itertools import combinations, product
 from math import comb
 from typing import Literal
@@ -228,6 +229,45 @@ class MediumReport:
             raise ValueError('Invalid medium report')
 
 
+@dataclass(frozen=True)
+class _FieldHash:
+    value:int
+    def __hash__(self):return self.value
+
+
+@dataclass(frozen=True)
+class _RoleHashSource:
+    worlds:tuple
+    role:tuple
+    belief:tuple
+    _parts:object=field(default=None,init=False,compare=False,hash=False,repr=False)
+    def parts(self):
+        value=self._parts
+        if value is None:
+            value=tuple(_FieldHash(hash(x)) for x in (self.worlds,self.role,self.belief))
+            object.__setattr__(self,'_parts',value)
+        return value
+
+
+def _prehashed_role_fields(cls):
+    original=cls.__hash__
+    names=tuple(f.name for f in fields(cls) if (f.compare if f.hash is None else f.hash))
+    get=attrgetter(*names)
+    slots=tuple((names.index(name),i) for i,name in enumerate(('world_belief','role_belief','belief')) if name in names)
+    @wraps(original)
+    def complete_hash(self):
+        source=getattr(self,'_role_hash_source',None) if type(self)is cls else None
+        if source is None:return original(self)
+        # Every dataclass hash input is still present, in its original order.
+        # Replace only three already immutable fields by equal hash values;
+        # all other fields are hashed afresh, including unknown caller values.
+        values=list(get(self));parts=source.parts()
+        for position,index in slots:values[position]=parts[index]
+        return hash(tuple(values))
+    cls.__hash__=complete_hash
+    return cls
+
+
 @lru_cache(maxsize=256)
 def _validated_complete_roles(player_count,mediums,seers,hunters,worlds):
     """Pure validation/projection of exact immutable complete role laws only.
@@ -248,7 +288,8 @@ def _validated_complete_roles(player_count,mediums,seers,hunters,worlds):
     role=tuple((w,m,q) for (w,m),q in sorted(projection.items()))
     marginal={}
     for w,m,q in role:marginal[w]=marginal.get(w,Fraction(0))+q
-    return role,tuple(sorted(marginal.items()))
+    belief=tuple(sorted(marginal.items()))
+    return role,belief,_RoleHashSource(worlds,role,belief)
 
 
 def _immutable_complete_roles(worlds):
@@ -256,6 +297,7 @@ def _immutable_complete_roles(worlds):
             all(type(mask)is int for mask in row[:4]) and type(row[-1])is Fraction for row in worlds))
 
 
+@_prehashed_role_fields
 @dataclass(frozen=True)
 class Board:
     """Public history and count constraints; no player has an assigned true role."""
@@ -318,11 +360,12 @@ class Board:
                 # exact laws use the identical pure validation without caching.
                 project=(_validated_complete_roles if len(self.world_belief)<=64
                          else _validated_complete_roles.__wrapped__)
-                role,belief=project(self.player_count,self.initial_medium_count,
+                role,belief,hash_source=project(self.player_count,self.initial_medium_count,
                     self.initial_seer_count,self.initial_hunter_count,self.world_belief)
                 object.__setattr__(self,'role_belief',role)
                 object.__setattr__(self,'belief',belief)
                 validated_worlds=True
+                object.__setattr__(self,'_role_hash_source',hash_source)
             else:
                 seen=set();projection={}
                 for world in self.world_belief:
