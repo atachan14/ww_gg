@@ -37,3 +37,13 @@ replace_worldsで完全worldからroleを先に射影し、能力ありBoardのc
 採用の最終条件はcache混在・joint・全692回帰・実HTTP。これらを通常予算で直列実行中。現在の専用18801は前回検証済みf3a12bdのPID20328のままで、未検証候補を反映していない。進行と終了コードは.artifacts/integration-validation/single-lookup-run-state.json、全体ログはsingle-lookup-full-tests.log。結果が確定するまで成功・採用完了とは扱わない。
 
 次の調査候補は、同じ完全joint入力に対する再構築/正規化/検証の重複。既存profileでHypothesis constructor86700回/cumulative約1.647秒、TrueScanState constructor31416回/約1.340秒。型や履歴の検証を省略するのではなく、同一不変入力の証明を安全に再利用できるかを調べる段階で、まだ実装しない。大きな意味変更が必要なら提案に留める。
+
+## 最終判定: 単一lookupは今回は不採用、f3a12bdへ復元
+
+全692回帰は396.449秒、691成功・1失敗。失敗はtest_saved_seven_player_observed_model_completes_the_http_request_budgetで、HTMLに「計算予算に達したためモデルAの評価はPending」と表示され、113/504を返せなかった。既定20秒/250000 workを維持。完成した数値の不一致は確認していない。同じ予算失敗は候補前にも存在したため、候補や背景負荷が原因と断定しない。小改善はあったが必須の全回帰を通過しなかったので、重い再試行をせず採用を見送った。
+
+候補23124bfを所有確認済み18801/PID21052で実HTTP確認した。4画面のroot/進行/本人/HELPは200、公開不変・overflowなし・JS例外なし。本人5/6・1/6、session不変。7人113/504を16.028秒、9人CO-group/seer-none503/1620を5.353秒で表示した。実HTTP成功で全692失敗を取り消さない。
+
+候補と5試行テストを撤去し、製品Python/既存testsがf3a12bdと一致することをgit diff --quietで確認。復元後の全687は再実行せず、f3の既存687成功384.492秒の記録を維持する。全692成功とは主張しない。18801は所有元を再確認しPID21052から8984の復元f3へ再起動、root/最新HELPのHTTP200と不採用の明記を確認した。新しい重い実験・profile取得は実施していない。全回帰とブラウザーの重い処理は終了し、専用18801だけが待機中。
+
+joint調査は既存profileの閲覧のみ。normalize25062回/cumulative約1.978秒、project_private8636回/約2.472秒、Hypothesis constructor86700回/約1.647秒、TrueScanState constructor31416回/約1.340秒。inclusive時間は重なるので加算しない。同一入力の重複自体は未特定であり、検証省略や新cache実装には進めていない。残課題は通常予算の全suite安定性と、同じ完全入力の再構築/正規化/検証の重複確認である。

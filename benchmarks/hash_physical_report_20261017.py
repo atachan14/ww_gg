@@ -31,5 +31,9 @@ def main():
  for name in ['physical-projection-probe','physical-projection-baseline-probe','hypothesis-hash-probe','hypothesis-hash-baseline-probe','verified-hash-nine-probe']:
   p=ROOT/f'.artifacts/b-benchmark/{name}.json';d=json.loads(p.read_text(encoding='utf-8'));out['single_probes'][name]={'rows':[{k:row[k] for k in ['cache','seconds','cpu_seconds','complete','pending','semantic_digest']} for row in d['rows']],'memory':d['process_memory_peak'],'scope':'Single normal-budget probe; never formal performance evidence.'}
  out['scope']={'baseline':'f3a12bdb150f0a6edde520314b561a1778ecac3c','normal_budget':{'max_work':250000,'max_seconds':20},'nine_player':'CO-group seer-none only, no future seer acquisition; not an all-abilities standard nine-player village. Equal-model Pending retained separately.','native_memory':'Whole-worker high-water mark including startup and cold/warm results, not per-request allocation totals.','no_edit_probes':'The first single-lookup edit script failed before writing. Both probes are named invalid-no-edit and excluded.'}
+ validation=ROOT/'benchmarks/results/hash_physical_trials_20261017_validation.json'
+ if validation.exists():
+  out['validation']=json.loads(validation.read_text(encoding='utf-8'))
+  out['single_lookup']['decision']=out['validation']['decision']
  (ROOT/'benchmarks/results/hash_physical_trials_20261017.json').write_text(json.dumps(out,indent=2),encoding='utf-8');print(json.dumps({k:v.get('exact_complete_results_checked') for k,v in out.items() if 'summaries' in v}))
 if __name__=='__main__':main()

@@ -1,0 +1,139 @@
+{
+  "recorded_at_utc": "2026-10-17T03:52:04.517820+00:00",
+  "candidate_ref": "23124bf037651635625d8adf2a144ac49dfed283",
+  "baseline_ref": "f3a12bdb150f0a6edde520314b561a1778ecac3c",
+  "full_suite": {
+    "tests": 692,
+    "seconds": 396.449,
+    "passed": 691,
+    "failures": 1,
+    "errors": 0,
+    "exit_code": 1,
+    "failed_test": "test_saved_seven_player_observed_model_completes_the_http_request_budget",
+    "observed_failure": "Model A budget Pending; requested 113/504 absent. No completed numeric mismatch established.",
+    "normal_budget": {
+      "max_work": 250000,
+      "max_seconds": 20
+    },
+    "source": ".artifacts\\integration-validation\\single-lookup-full-tests.log",
+    "sha256": "b5cbc2047ca06d5e5392e4eae3c431f1010df851dbfdd7b8df74f103acf6d62c"
+  },
+  "candidate_http": {
+    "screens": {
+      "at": "2026-10-17T03:50:17.992Z",
+      "rows": [
+        {
+          "width": 1366,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 320,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "dark",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        }
+      ]
+    },
+    "private": {
+      "at": "2026-10-17T03:50:19.988Z",
+      "status": 200,
+      "rows": [
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        },
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        }
+      ],
+      "sessionUnchanged": true
+    },
+    "seven": {
+      "at": "2026-10-17T03:50:37.802Z",
+      "status": 200,
+      "publicRate": "113/504",
+      "seconds": 16.028,
+      "errors": []
+    },
+    "nine": {
+      "scope": "Existing CO-group seer-none, no future seer acquisition; not an all-abilities nine-player village",
+      "at": "2026-10-17T03:50:46.735Z",
+      "status": 200,
+      "publicRate": "503/1620",
+      "seconds": 5.353,
+      "errors": []
+    }
+  },
+  "decision": "not adopted: small timing improvement, but required full regression did not pass; candidate removed and baseline restored",
+  "causality": "Same budget failure occurred before this candidate; no assertion that candidate caused it or that background load caused it.",
+  "restored_baseline_python_and_tests_identical": true,
+  "baseline_full_suite_reference": "687 tests, 384.492 seconds, OK in existing f3a12bd validation; not rerun after byte-equivalent restoration.",
+  "followup": "Only existing profile was read: normalize 25062 calls/cumulative 1.978s; project_private 8636/cumulative 2.472s; Hypothesis constructor 86700/1.647s; TrueScanState constructor31416/1.340s. Inclusive times overlap. Same-input duplication is not proven. No new heavy experiment.",
+  "baseline_http_root_and_help_status": 200,
+  "baseline_server_restart": {
+    "product_ref": "f3a12bd",
+    "old_pid": 21052,
+    "at_utc": "2026-10-17T03:52:05.6402497Z",
+    "new_pid": 8984,
+    "owner_checked": true
+  },
+  "cache_audit": {
+    "cases": 15,
+    "failures": []
+  },
+  "joint_audit": {
+    "cases": 4,
+    "failures": []
+  }
+}

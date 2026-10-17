@@ -25,8 +25,6 @@ from .actor_information import WolfInformation,wolf_information_groups,condition
 from .policy_choice import optimal_targets,uniform_policy
 
 
-_CACHE_MISS=object()
-
 class Pending(Exception):
     def __init__(self, reason): self.reason=reason
 
@@ -82,11 +80,10 @@ class InformationSetForecast:
         if self.trace is not None:
             stats=self.trace.setdefault('flow_memo',{})
             stats[kind+'_calls']=stats.get(kind+'_calls',0)+1
-        cached=cache.get(key,_CACHE_MISS) if self.memoize_flows else _CACHE_MISS
-        if cached is not _CACHE_MISS:
+        if self.memoize_flows and key in cache:
             tick()
             if self.trace is not None:stats[kind+'_hits']=stats.get(kind+'_hits',0)+1
-            return cached
+            return cache[key]
         result=compute()  # Exceptions/Pending never install an incomplete value.
         if self.memoize_flows:cache[key]=result
         return result
@@ -94,10 +91,9 @@ class InformationSetForecast:
     def public_support(self,key,compute):
         """Reuse completed full public laws, independently of scalar shortcuts."""
         self.public_support_stats['calls']+=1
-        cached=self.public_support_values.get(key,_CACHE_MISS)
-        if cached is not _CACHE_MISS:
+        if key in self.public_support_values:
             self.public_support_stats['hits']+=1
-            return cached
+            return self.public_support_values[key]
         value=compute()
         if len(self.public_support_values)>=16:self.public_support_values.pop(next(iter(self.public_support_values)))
         self.public_support_values[key]=value
@@ -288,17 +284,15 @@ class InformationSetForecast:
         if observer is None:
             if self.memoize_flows:
                 action_key=self.renamed_value_key(b,s,past,private,target)
-                cached=self.action_values.get(action_key,_CACHE_MISS) if action_key is not None else _CACHE_MISS
-                if cached is not _CACHE_MISS:
-                    tick();return cached
+                if action_key is not None and action_key in self.action_values:
+                    tick();return self.action_values[action_key]
             from .medium_value_key import public_descriptor,private_action_key
             source=(b,s)
             if source not in self.reduced_descriptors:
                 self.reduced_descriptors[source]=public_descriptor(b,s,self.rules,self.strategy)
             if action_key is None:action_key=private_action_key(self.reduced_descriptors[source],private,target)
-            cached=self.action_values.get(action_key,_CACHE_MISS) if action_key is not None else _CACHE_MISS
-            if cached is not _CACHE_MISS:
-                tick();return cached
+            if action_key is not None and action_key in self.action_values:
+                tick();return self.action_values[action_key]
         tick(len(s.hypotheses)+len(private.hypotheses))
         private_board=physical_board(b,private,physical)
         if target not in legal_targets(private_board,self.rules,self.strategy):
@@ -313,8 +307,7 @@ class InformationSetForecast:
             raise ValueError('Wolf policy requires the public role prior')
         info=WolfInformation(mask,history)
         key=(b,s,past,info)
-        cached=self.policies.get(key,_CACHE_MISS)
-        if cached is not _CACHE_MISS:return cached
+        if key in self.policies:return self.policies[key]
         # This conditional law starts from the PUBLIC joint prior, never the viewer.
         try:group=info.condition_public(s)
         except ValueError:raise Pending('information_set_roster_missing')
@@ -392,8 +385,7 @@ class InformationSetForecast:
             reduced=self.renamed_value_key(b,s,past,private) if self.memoize_flows else None
             if reduced is None:reduced=private_value_key(self.reduced_descriptors[source],private)
             if reduced is not None:key=reduced
-        cached=self.values.get(key,_CACHE_MISS)
-        if cached is not _CACHE_MISS:return cached
+        if key in self.values:return self.values[key]
         self.expansions["values"]+=1
         tick(len(private.hypotheses))
         if b.winner is not None:return F(b.winner=='village')
