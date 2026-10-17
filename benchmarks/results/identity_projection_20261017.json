@@ -1,0 +1,6220 @@
+{
+  "recorded_at_utc": "2026-10-17T04:08:40.301033+00:00",
+  "baseline_ref": "f3a12bdb150f0a6edde520314b561a1778ecac3c",
+  "candidate_ref": "1354022ed7fdfa8bbb1d5ab52b5a9ef63c3458e8",
+  "budget": {
+    "max_work": 250000,
+    "max_seconds": 20
+  },
+  "method": "Fresh child process per version/case/repetition; serial alternating AB/BA and reversed case order. One cold and one identical warm request. Startup separate. All werewolf modules preloaded before evaluation. System busy minus worker CPU estimates background; >10% flagged and separate low-background subset reported, never silently dropped. Timeouts/Pending are censored. Diagnostics separate.",
+  "complete_comparisons": 40,
+  "mismatches": [],
+  "timing": [
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 13.97758310000063,
+      "min_seconds": 13.446727300004568,
+      "max_seconds": 14.724726899992675,
+      "iqr_seconds": 0.5790814000065438,
+      "raw_seconds": [
+        13.97758310000063,
+        13.503123200003756,
+        14.724726899992675,
+        14.0822046000103,
+        13.446727300004568
+      ],
+      "low_background_completed_seconds": [
+        13.446727300004568
+      ],
+      "low_background_median_seconds": 13.446727300004568,
+      "median_cpu_seconds": 13.46875
+    },
+    {
+      "case": "seven-observed",
+      "version": "new",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.015998400005628355,
+      "min_seconds": 0.01523299999826122,
+      "max_seconds": 0.03442400001222268,
+      "iqr_seconds": 0.0007452999998349696,
+      "raw_seconds": [
+        0.015469899997697212,
+        0.015998400005628355,
+        0.01621519999753218,
+        0.03442400001222268,
+        0.01523299999826122
+      ],
+      "low_background_completed_seconds": [
+        0.01523299999826122
+      ],
+      "low_background_median_seconds": 0.01523299999826122,
+      "median_cpu_seconds": 0.015625
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 13.16233619999548,
+      "min_seconds": 12.805986099992879,
+      "max_seconds": 13.750101999990875,
+      "iqr_seconds": 0.37645419999898877,
+      "raw_seconds": [
+        13.750101999990875,
+        12.969339899995248,
+        13.16233619999548,
+        13.345794099994237,
+        12.805986099992879
+      ],
+      "low_background_completed_seconds": [
+        12.969339899995248,
+        12.805986099992879
+      ],
+      "low_background_median_seconds": 12.887662999994063,
+      "median_cpu_seconds": 12.9375
+    },
+    {
+      "case": "seven-observed",
+      "version": "improved",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.015270799995050766,
+      "min_seconds": 0.014990499999839813,
+      "max_seconds": 0.01632199999585282,
+      "iqr_seconds": 0.0012036999978590757,
+      "raw_seconds": [
+        0.014990499999839813,
+        0.01632199999585282,
+        0.016303399999742396,
+        0.01509970000188332,
+        0.015270799995050766
+      ],
+      "low_background_completed_seconds": [
+        0.01632199999585282,
+        0.015270799995050766
+      ],
+      "low_background_median_seconds": 0.015796399995451793,
+      "median_cpu_seconds": 0.015625
+    },
+    {
+      "case": "nine-seer-none",
+      "version": "new",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 4.309975000011036,
+      "min_seconds": 4.272600700001931,
+      "max_seconds": 4.528843100008089,
+      "iqr_seconds": 0.07466170001134742,
+      "raw_seconds": [
+        4.528843100008089,
+        4.272600700001931,
+        4.309975000011036,
+        4.3676439999981085,
+        4.292982299986761
+      ],
+      "low_background_completed_seconds": [
+        4.272600700001931,
+        4.309975000011036,
+        4.3676439999981085,
+        4.292982299986761
+      ],
+      "low_background_median_seconds": 4.301478649998899,
+      "median_cpu_seconds": 4.234375
+    },
+    {
+      "case": "nine-seer-none",
+      "version": "new",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.06532530000549741,
+      "min_seconds": 0.06420390000857878,
+      "max_seconds": 0.06773249999969266,
+      "iqr_seconds": 0.001982499990845099,
+      "raw_seconds": [
+        0.0666876999894157,
+        0.06532530000549741,
+        0.06420390000857878,
+        0.06773249999969266,
+        0.0647051999985706
+      ],
+      "low_background_completed_seconds": [
+        0.06532530000549741,
+        0.06420390000857878,
+        0.06773249999969266,
+        0.0647051999985706
+      ],
+      "low_background_median_seconds": 0.06501525000203401,
+      "median_cpu_seconds": 0.0625
+    },
+    {
+      "case": "nine-seer-none",
+      "version": "improved",
+      "cache": "cold",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 4.196670699995593,
+      "min_seconds": 4.122520600009011,
+      "max_seconds": 4.2396598999912385,
+      "iqr_seconds": 0.04714129999047145,
+      "raw_seconds": [
+        4.196670699995593,
+        4.228006899997126,
+        4.2396598999912385,
+        4.180865600006655,
+        4.122520600009011
+      ],
+      "low_background_completed_seconds": [
+        4.228006899997126,
+        4.2396598999912385,
+        4.180865600006655,
+        4.122520600009011
+      ],
+      "low_background_median_seconds": 4.204436250001891,
+      "median_cpu_seconds": 4.15625
+    },
+    {
+      "case": "nine-seer-none",
+      "version": "improved",
+      "cache": "warm",
+      "trials": 5,
+      "completed": 5,
+      "censored": 0,
+      "eligible_completed": 5,
+      "median_seconds": 0.06489190000866074,
+      "min_seconds": 0.06433670000114944,
+      "max_seconds": 0.06935920000250917,
+      "iqr_seconds": 0.001789899994037114,
+      "raw_seconds": [
+        0.06489190000866074,
+        0.06935920000250917,
+        0.06635130000358913,
+        0.06456140000955202,
+        0.06433670000114944
+      ],
+      "low_background_completed_seconds": [
+        0.06935920000250917,
+        0.06635130000358913,
+        0.06456140000955202,
+        0.06433670000114944
+      ],
+      "low_background_median_seconds": 0.06545635000657057,
+      "median_cpu_seconds": 0.0625
+    }
+  ],
+  "memory": {
+    "seven-observed/new": {
+      "peak_working_set_bytes": 187.80859375,
+      "peak_process_commit_bytes": 180.93359375
+    },
+    "seven-observed/improved": {
+      "peak_working_set_bytes": 182.16796875,
+      "peak_process_commit_bytes": 174.92578125
+    },
+    "nine-seer-none/new": {
+      "peak_working_set_bytes": 63.46875,
+      "peak_process_commit_bytes": 55.82421875
+    },
+    "nine-seer-none/improved": {
+      "peak_working_set_bytes": 61.79296875,
+      "peak_process_commit_bytes": 54.21875
+    }
+  },
+  "records": [
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "new",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.46324269998876844,
+      "worker_cpu_total": 13.90625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 13.97758310000063,
+          "cpu_seconds": 13.46875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.015469899997697212,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 197287936,
+        "peak_process_commit_bytes": 190177280,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 0,
+      "subprocess_wall_seconds": 14.661707799998112,
+      "estimated_background_cpu_percent": 19.250577162138164
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.38800809999520425,
+      "worker_cpu_total": 13.171875,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 13.750101999990875,
+          "cpu_seconds": 12.9375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.014990499999839813,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 191315968,
+        "peak_process_commit_bytes": 183422976,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 0,
+      "subprocess_wall_seconds": 14.368740899997647,
+      "estimated_background_cpu_percent": 22.083333333333332
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "new",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.19738329999381676,
+      "worker_cpu_total": 4.734375,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.528843100008089,
+          "cpu_seconds": 4.375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0666876999894157,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 66523136,
+        "peak_process_commit_bytes": 58351616,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 0,
+      "subprocess_wall_seconds": 5.009557600002154,
+      "estimated_background_cpu_percent": 21.517671517671516
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.188024500006577,
+      "worker_cpu_total": 4.546875,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.196670699995593,
+          "cpu_seconds": 4.171875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06489190000866074,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 64765952,
+        "peak_process_commit_bytes": 56455168,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 0,
+      "subprocess_wall_seconds": 4.642642599996179,
+      "estimated_background_cpu_percent": 10.112359550561798
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.18467460000829305,
+      "worker_cpu_total": 4.515625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.228006899997126,
+          "cpu_seconds": 4.15625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06935920000250917,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 64794624,
+        "peak_process_commit_bytes": 56762368,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 1,
+      "subprocess_wall_seconds": 4.67019769999024,
+      "estimated_background_cpu_percent": 7.748049052396879
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "new",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.18291709999903105,
+      "worker_cpu_total": 4.5625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.272600700001931,
+          "cpu_seconds": 4.21875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06532530000549741,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 66895872,
+        "peak_process_commit_bytes": 58650624,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 1,
+      "subprocess_wall_seconds": 4.709083200010355,
+      "estimated_background_cpu_percent": 6.843267108167771
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.19207400000595953,
+      "worker_cpu_total": 12.84375,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 12.969339899995248,
+          "cpu_seconds": 12.5,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.01632199999585282,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 191078400,
+        "peak_process_commit_bytes": 183521280,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 1,
+      "subprocess_wall_seconds": 13.38405999999668,
+      "estimated_background_cpu_percent": 9.70439517697394
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "new",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.18223330000182614,
+      "worker_cpu_total": 13.703125,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 13.503123200003756,
+          "cpu_seconds": 13.375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.015998400005628355,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 197046272,
+        "peak_process_commit_bytes": 189722624,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 1,
+      "subprocess_wall_seconds": 13.905507500006934,
+      "estimated_background_cpu_percent": 12.104178377365562
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "new",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.19973579999350477,
+      "worker_cpu_total": 13.96875,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.724726899992675,
+          "cpu_seconds": 13.671875,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.01621519999753218,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 196866048,
+        "peak_process_commit_bytes": 189763584,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 2,
+      "subprocess_wall_seconds": 15.161427099999855,
+      "estimated_background_cpu_percent": 26.570545829042224
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.19885400000202935,
+      "worker_cpu_total": 13.390625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 13.16233619999548,
+          "cpu_seconds": 13.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.016303399999742396,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 191016960,
+        "peak_process_commit_bytes": 183062528,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 2,
+      "subprocess_wall_seconds": 13.603571899991948,
+      "estimated_background_cpu_percent": 13.831417624521073
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "new",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.19241649999457877,
+      "worker_cpu_total": 4.609375,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.309975000011036,
+          "cpu_seconds": 4.234375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06420390000857878,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 66551808,
+        "peak_process_commit_bytes": 58564608,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 2,
+      "subprocess_wall_seconds": 4.766102500012494,
+      "estimated_background_cpu_percent": 8.907103825136613
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.1872801999998046,
+      "worker_cpu_total": 4.640625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.2396598999912385,
+          "cpu_seconds": 4.234375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06635130000358913,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 64933888,
+        "peak_process_commit_bytes": 57036800,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 2,
+      "subprocess_wall_seconds": 4.683199899998726,
+      "estimated_background_cpu_percent": 6.729699666295884
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.18767980000120588,
+      "worker_cpu_total": 4.453125,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.180865600006655,
+          "cpu_seconds": 4.109375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06456140000955202,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 64765952,
+        "peak_process_commit_bytes": 56852480,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 3,
+      "subprocess_wall_seconds": 4.624787400010973,
+      "estimated_background_cpu_percent": 7.713963963963964
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "new",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.1887810000043828,
+      "worker_cpu_total": 4.5625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.3676439999981085,
+          "cpu_seconds": 4.203125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06773249999969266,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 66506752,
+        "peak_process_commit_bytes": 58372096,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 3,
+      "subprocess_wall_seconds": 4.811930900003063,
+      "estimated_background_cpu_percent": 7.792207792207792
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.18172310000227299,
+      "worker_cpu_total": 13.3125,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 13.345794099994237,
+          "cpu_seconds": 13.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.01509970000188332,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 190853120,
+        "peak_process_commit_bytes": 183365632,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 3,
+      "subprocess_wall_seconds": 13.738424399998621,
+      "estimated_background_cpu_percent": 18.24042472506636
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "new",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.1945004000008339,
+      "worker_cpu_total": 13.96875,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 14.0822046000103,
+          "cpu_seconds": 13.625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.03442400001222268,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": true
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 196788224,
+        "peak_process_commit_bytes": 189583360,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 3,
+      "subprocess_wall_seconds": 14.519695599999977,
+      "estimated_background_cpu_percent": 16.21815572299964
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "new",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.2070397000061348,
+      "worker_cpu_total": 13.515625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 13.446727300004568,
+          "cpu_seconds": 13.125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.01523299999826122,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 196931584,
+        "peak_process_commit_bytes": 189698048,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 4,
+      "subprocess_wall_seconds": 13.882088099999237,
+      "estimated_background_cpu_percent": 9.984984984984985
+    },
+    {
+      "case": "seven-observed",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "3346bcd56f476e819dde6282b266857528e536efb6990cabc3d8550dd3e1976a",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.1804855999944266,
+      "worker_cpu_total": 13.078125,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 12.805986099992879,
+          "cpu_seconds": 12.734375,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.015270799995050766,
+          "cpu_seconds": 0.015625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "ea72e7a1f7f8a8bb8c23db925a13d37b079b0b7cc5807311b713473665bf49ee",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 190943232,
+        "peak_process_commit_bytes": 183615488,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 4,
+      "subprocess_wall_seconds": 13.194664599999669,
+      "estimated_background_cpu_percent": 6.924442690866049
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "new",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.18548280000686646,
+      "worker_cpu_total": 4.5625,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.292982299986761,
+          "cpu_seconds": 4.25,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.0647051999985706,
+          "cpu_seconds": 0.0625,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 66662400,
+        "peak_process_commit_bytes": 58535936,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 4,
+      "subprocess_wall_seconds": 4.733386099993368,
+      "estimated_background_cpu_percent": 7.645764576457646
+    },
+    {
+      "case": "nine-seer-none",
+      "view": "public",
+      "version": "improved",
+      "input_digest": "fe895308ce8625b3be9601a95eac134880eec45433f5e6811729953fa63af32e",
+      "budget": {
+        "max_work": 250000,
+        "max_seconds": 20
+      },
+      "diagnostic": "none",
+      "experiment": "none",
+      "harness_sha256": "d2988fa0308b81965233bdb1ff472fecb2acbf78b396d3e08bfb563db374d171",
+      "oracle_sha256": "168106461e1db39b82e85860f3a00e5eebf04c94b26948ae015fcc59db369cf4",
+      "setup_seconds": 0.18583679999574088,
+      "worker_cpu_total": 4.375,
+      "rows": [
+        {
+          "cache": "cold",
+          "seconds": 4.122520600009011,
+          "cpu_seconds": 4.03125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 0,
+              "stores": 0,
+              "entries": 0
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        },
+        {
+          "cache": "warm",
+          "seconds": 0.06433670000114944,
+          "cpu_seconds": 0.078125,
+          "complete": true,
+          "pending": [],
+          "cache_before": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 0,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "cache_after": {
+            "complete_public": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "public_prior": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "seer_replay": {
+              "hits": 0,
+              "misses": 0,
+              "currsize": 0
+            },
+            "game_completed": {
+              "hits": 1,
+              "misses": 1,
+              "stores": 1,
+              "entries": 1
+            }
+          },
+          "semantic_digest": "d4b78b513fe1c426b00ff1422c84d89c38872c9335afd0694afd84785241e7c9",
+          "high_background_load": false
+        }
+      ],
+      "process_memory_peak": {
+        "peak_working_set_bytes": 64847872,
+        "peak_process_commit_bytes": 56864768,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      },
+      "repetition": 4,
+      "subprocess_wall_seconds": 4.558472500008065,
+      "estimated_background_cpu_percent": 6.8493150684931505
+    }
+  ],
+  "status": "adopted; full suite and owned 18801 HTTP passed",
+  "semantic_reference": {
+    "seven-observed": {
+      "co_groups": [
+        {
+          "claim": "medium",
+          "compositions": [
+            [
+              0,
+              0,
+              0,
+              2,
+              {
+                "fraction": "1/21"
+              }
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              {
+                "fraction": "10/21"
+              }
+            ],
+            [
+              0,
+              2,
+              0,
+              0,
+              {
+                "fraction": "10/21"
+              }
+            ]
+          ],
+          "ids": [
+            2,
+            3
+          ],
+          "roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ],
+          "visible_roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ]
+        },
+        {
+          "claim": "seer",
+          "compositions": [
+            [
+              0,
+              0,
+              0,
+              1,
+              {
+                "fraction": "2/7"
+              }
+            ],
+            [
+              0,
+              0,
+              1,
+              0,
+              {
+                "fraction": "5/7"
+              }
+            ]
+          ],
+          "ids": [
+            1
+          ],
+          "roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ],
+          "visible_roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ]
+        },
+        {
+          "claim": "latent",
+          "compositions": [
+            [
+              2,
+              0,
+              0,
+              2,
+              {
+                "fraction": "2/7"
+              }
+            ],
+            [
+              2,
+              0,
+              1,
+              1,
+              {
+                "fraction": "4/21"
+              }
+            ],
+            [
+              2,
+              1,
+              0,
+              1,
+              {
+                "fraction": "8/21"
+              }
+            ],
+            [
+              2,
+              1,
+              1,
+              0,
+              {
+                "fraction": "2/21"
+              }
+            ],
+            [
+              2,
+              2,
+              0,
+              0,
+              {
+                "fraction": "1/21"
+              }
+            ]
+          ],
+          "ids": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ],
+          "visible_roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ]
+        }
+      ],
+      "legal_targets": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "pending": [],
+      "public_day_policy": [
+        [
+          2,
+          {
+            "fraction": "1/2"
+          }
+        ],
+        [
+          3,
+          {
+            "fraction": "1/2"
+          }
+        ]
+      ],
+      "public_roles": [
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "0/1"
+          },
+          "seer": {
+            "fraction": "5/7"
+          },
+          "villager": {
+            "fraction": "0/1"
+          },
+          "wolf": {
+            "fraction": "2/7"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "5/7"
+          },
+          "seer": {
+            "fraction": "0/1"
+          },
+          "villager": {
+            "fraction": "0/1"
+          },
+          "wolf": {
+            "fraction": "2/7"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "5/7"
+          },
+          "seer": {
+            "fraction": "0/1"
+          },
+          "villager": {
+            "fraction": "0/1"
+          },
+          "wolf": {
+            "fraction": "2/7"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "1/7"
+          },
+          "seer": {
+            "fraction": "1/14"
+          },
+          "villager": {
+            "fraction": "1/2"
+          },
+          "wolf": {
+            "fraction": "2/7"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "1/7"
+          },
+          "seer": {
+            "fraction": "1/14"
+          },
+          "villager": {
+            "fraction": "1/2"
+          },
+          "wolf": {
+            "fraction": "2/7"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "1/7"
+          },
+          "seer": {
+            "fraction": "1/14"
+          },
+          "villager": {
+            "fraction": "1/2"
+          },
+          "wolf": {
+            "fraction": "2/7"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "1/7"
+          },
+          "seer": {
+            "fraction": "1/14"
+          },
+          "villager": {
+            "fraction": "1/2"
+          },
+          "wolf": {
+            "fraction": "2/7"
+          }
+        }
+      ],
+      "public_row_tie_groups": {
+        "113/504": [
+          2,
+          3
+        ],
+        "4/21": [
+          1
+        ],
+        "57/280": [
+          4,
+          5,
+          6,
+          7
+        ]
+      },
+      "public_worlds": [
+        [
+          3,
+          12,
+          16,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          12,
+          32,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          12,
+          64,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          20,
+          8,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          20,
+          32,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          20,
+          64,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          36,
+          8,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          36,
+          16,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          36,
+          64,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          68,
+          8,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          68,
+          16,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          3,
+          68,
+          32,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          10,
+          16,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          10,
+          32,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          10,
+          64,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          18,
+          8,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          18,
+          32,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          18,
+          64,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          34,
+          8,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          34,
+          16,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          34,
+          64,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          66,
+          8,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          66,
+          16,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          5,
+          66,
+          32,
+          0,
+          {
+            "fraction": "1/252"
+          }
+        ],
+        [
+          6,
+          24,
+          1,
+          0,
+          {
+            "fraction": "1/126"
+          }
+        ],
+        [
+          6,
+          40,
+          1,
+          0,
+          {
+            "fraction": "1/126"
+          }
+        ],
+        [
+          6,
+          48,
+          1,
+          0,
+          {
+            "fraction": "1/126"
+          }
+        ],
+        [
+          6,
+          72,
+          1,
+          0,
+          {
+            "fraction": "1/126"
+          }
+        ],
+        [
+          6,
+          80,
+          1,
+          0,
+          {
+            "fraction": "1/126"
+          }
+        ],
+        [
+          6,
+          96,
+          1,
+          0,
+          {
+            "fraction": "1/126"
+          }
+        ],
+        [
+          9,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          9,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          9,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          10,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          10,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          10,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          12,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          12,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          12,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          17,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          17,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          17,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          18,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          18,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          18,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          20,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          20,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          20,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          24,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/21"
+          }
+        ],
+        [
+          33,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          33,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          33,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          34,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          34,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          34,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          36,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          36,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          36,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          40,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/21"
+          }
+        ],
+        [
+          48,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/21"
+          }
+        ],
+        [
+          65,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          65,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          65,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          66,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          66,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          66,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          68,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          68,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          68,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/63"
+          }
+        ],
+        [
+          72,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/21"
+          }
+        ],
+        [
+          80,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/21"
+          }
+        ],
+        [
+          96,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/21"
+          }
+        ]
+      ],
+      "result": {
+        "village_win": {
+          "fraction": "113/504"
+        },
+        "action_values": [
+          [
+            1,
+            {
+              "fraction": "4/21"
+            }
+          ],
+          [
+            2,
+            {
+              "fraction": "113/504"
+            }
+          ],
+          [
+            3,
+            {
+              "fraction": "113/504"
+            }
+          ],
+          [
+            4,
+            {
+              "fraction": "57/280"
+            }
+          ],
+          [
+            5,
+            {
+              "fraction": "57/280"
+            }
+          ],
+          [
+            6,
+            {
+              "fraction": "57/280"
+            }
+          ],
+          [
+            7,
+            {
+              "fraction": "57/280"
+            }
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            6,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            7,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "wolf_counts": {
+        "2": {
+          "fraction": "1/1"
+        }
+      }
+    },
+    "nine-seer-none": {
+      "co_groups": [
+        {
+          "claim": "medium",
+          "compositions": [
+            [
+              0,
+              0,
+              0,
+              2,
+              {
+                "fraction": "1/36"
+              }
+            ],
+            [
+              0,
+              1,
+              0,
+              1,
+              {
+                "fraction": "7/18"
+              }
+            ],
+            [
+              0,
+              2,
+              0,
+              0,
+              {
+                "fraction": "7/12"
+              }
+            ]
+          ],
+          "ids": [
+            2,
+            3
+          ],
+          "roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ],
+          "visible_roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ]
+        },
+        {
+          "claim": "seer",
+          "compositions": [
+            [
+              0,
+              0,
+              0,
+              1,
+              {
+                "fraction": "2/9"
+              }
+            ],
+            [
+              0,
+              0,
+              1,
+              0,
+              {
+                "fraction": "7/9"
+              }
+            ]
+          ],
+          "ids": [
+            1
+          ],
+          "roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ],
+          "visible_roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ]
+        },
+        {
+          "claim": "latent",
+          "compositions": [
+            [
+              4,
+              0,
+              0,
+              2,
+              {
+                "fraction": "5/12"
+              }
+            ],
+            [
+              4,
+              0,
+              1,
+              1,
+              {
+                "fraction": "1/6"
+              }
+            ],
+            [
+              4,
+              1,
+              0,
+              1,
+              {
+                "fraction": "1/3"
+              }
+            ],
+            [
+              4,
+              1,
+              1,
+              0,
+              {
+                "fraction": "1/18"
+              }
+            ],
+            [
+              4,
+              2,
+              0,
+              0,
+              {
+                "fraction": "1/36"
+              }
+            ]
+          ],
+          "ids": [
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ],
+          "visible_roles": [
+            "villager",
+            "medium",
+            "seer",
+            "wolf"
+          ]
+        }
+      ],
+      "legal_targets": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "pending": [],
+      "public_day_policy": [
+        [
+          2,
+          {
+            "fraction": "1/2"
+          }
+        ],
+        [
+          3,
+          {
+            "fraction": "1/2"
+          }
+        ]
+      ],
+      "public_roles": [
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "0/1"
+          },
+          "seer": {
+            "fraction": "7/9"
+          },
+          "villager": {
+            "fraction": "0/1"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "7/9"
+          },
+          "seer": {
+            "fraction": "0/1"
+          },
+          "villager": {
+            "fraction": "0/1"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "7/9"
+          },
+          "seer": {
+            "fraction": "0/1"
+          },
+          "villager": {
+            "fraction": "0/1"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "2/27"
+          },
+          "seer": {
+            "fraction": "1/27"
+          },
+          "villager": {
+            "fraction": "2/3"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "2/27"
+          },
+          "seer": {
+            "fraction": "1/27"
+          },
+          "villager": {
+            "fraction": "2/3"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "2/27"
+          },
+          "seer": {
+            "fraction": "1/27"
+          },
+          "villager": {
+            "fraction": "2/3"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "2/27"
+          },
+          "seer": {
+            "fraction": "1/27"
+          },
+          "villager": {
+            "fraction": "2/3"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "2/27"
+          },
+          "seer": {
+            "fraction": "1/27"
+          },
+          "villager": {
+            "fraction": "2/3"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        },
+        {
+          "hunter": {
+            "fraction": "0/1"
+          },
+          "medium": {
+            "fraction": "2/27"
+          },
+          "seer": {
+            "fraction": "1/27"
+          },
+          "villager": {
+            "fraction": "2/3"
+          },
+          "wolf": {
+            "fraction": "2/9"
+          }
+        }
+      ],
+      "public_row_tie_groups": {
+        "167/540": [
+          1,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "503/1620": [
+          2,
+          3
+        ]
+      },
+      "public_worlds": [
+        [
+          3,
+          12,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          12,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          12,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          12,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          12,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          20,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          20,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          20,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          20,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          20,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          36,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          36,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          36,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          36,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          36,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          68,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          68,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          68,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          68,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          68,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          132,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          132,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          132,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          132,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          132,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          260,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          260,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          260,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          260,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          3,
+          260,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          10,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          10,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          10,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          10,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          10,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          18,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          18,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          18,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          18,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          18,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          34,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          34,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          34,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          34,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          34,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          66,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          66,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          66,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          66,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          66,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          130,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          130,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          130,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          130,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          130,
+          256,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          258,
+          8,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          258,
+          16,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          258,
+          32,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          258,
+          64,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          5,
+          258,
+          128,
+          0,
+          {
+            "fraction": "1/1080"
+          }
+        ],
+        [
+          6,
+          24,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          40,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          48,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          72,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          80,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          96,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          136,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          144,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          160,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          192,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          264,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          272,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          288,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          320,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          6,
+          384,
+          1,
+          0,
+          {
+            "fraction": "1/540"
+          }
+        ],
+        [
+          9,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          9,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          9,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          9,
+          6,
+          128,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          9,
+          6,
+          256,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          10,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          10,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          10,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          10,
+          132,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          10,
+          260,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          12,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          12,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          12,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          12,
+          130,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          12,
+          258,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          17,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          17,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          17,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          17,
+          6,
+          128,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          17,
+          6,
+          256,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          18,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          18,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          18,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          18,
+          132,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          18,
+          260,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          20,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          20,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          20,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          20,
+          130,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          20,
+          258,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          24,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          33,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          33,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          33,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          33,
+          6,
+          128,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          33,
+          6,
+          256,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          34,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          34,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          34,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          34,
+          132,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          34,
+          260,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          36,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          36,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          36,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          36,
+          130,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          36,
+          258,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          40,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          48,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          65,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          65,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          65,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          65,
+          6,
+          128,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          65,
+          6,
+          256,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          66,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          66,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          66,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          66,
+          132,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          66,
+          260,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          68,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          68,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          68,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          68,
+          130,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          68,
+          258,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          72,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          80,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          96,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          129,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          129,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          129,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          129,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          129,
+          6,
+          256,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          130,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          130,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          130,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          130,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          130,
+          260,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          132,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          132,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          132,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          132,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          132,
+          258,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          136,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          144,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          160,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          192,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          257,
+          6,
+          8,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          257,
+          6,
+          16,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          257,
+          6,
+          32,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          257,
+          6,
+          64,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          257,
+          6,
+          128,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          258,
+          12,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          258,
+          20,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          258,
+          36,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          258,
+          68,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          258,
+          132,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          260,
+          10,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          260,
+          18,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          260,
+          34,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          260,
+          66,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          260,
+          130,
+          1,
+          0,
+          {
+            "fraction": "1/180"
+          }
+        ],
+        [
+          264,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          272,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          288,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          320,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ],
+        [
+          384,
+          6,
+          1,
+          0,
+          {
+            "fraction": "1/36"
+          }
+        ]
+      ],
+      "result": {
+        "village_win": {
+          "fraction": "503/1620"
+        },
+        "action_values": [
+          [
+            1,
+            {
+              "fraction": "167/540"
+            }
+          ],
+          [
+            2,
+            {
+              "fraction": "503/1620"
+            }
+          ],
+          [
+            3,
+            {
+              "fraction": "503/1620"
+            }
+          ],
+          [
+            4,
+            {
+              "fraction": "167/540"
+            }
+          ],
+          [
+            5,
+            {
+              "fraction": "167/540"
+            }
+          ],
+          [
+            6,
+            {
+              "fraction": "167/540"
+            }
+          ],
+          [
+            7,
+            {
+              "fraction": "167/540"
+            }
+          ],
+          [
+            8,
+            {
+              "fraction": "167/540"
+            }
+          ],
+          [
+            9,
+            {
+              "fraction": "167/540"
+            }
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            6,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            7,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            8,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ],
+          [
+            9,
+            {
+              "village_win": {
+                "fraction": "0/1"
+              },
+              "wolf_win": {
+                "fraction": "0/1"
+              }
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "wolf_counts": {
+        "2": {
+          "fraction": "1/1"
+        }
+      }
+    }
+  },
+  "raw_summary_sha256": "444a9c161c74095b603821e9db3ffda01a36a7f03ccb3ac4be1599806a7be89c"
+}

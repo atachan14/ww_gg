@@ -1,0 +1,156 @@
+{
+  "recorded_at_utc": "2026-10-17T04:16:41.993523+00:00",
+  "candidate_ref": "1354022ed7fdfa8bbb1d5ab52b5a9ef63c3458e8",
+  "baseline_ref": "f3a12bdb150f0a6edde520314b561a1778ecac3c",
+  "normal_budget": {
+    "max_work": 250000,
+    "max_seconds": 20
+  },
+  "full_suite": {
+    "tests": 694,
+    "seconds": 379.41,
+    "exit_code": 0,
+    "result": "OK",
+    "source": ".artifacts\\integration-validation\\identity-projection-full-tests.log",
+    "sha256": "636ceb0659ade6be3931d99f816670d97494a1951dda40b27ac435f84a8fd8b0"
+  },
+  "http": {
+    "screens": {
+      "at": "2026-10-17T04:15:52.209Z",
+      "rows": [
+        {
+          "width": 1366,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 320,
+          "scheme": "light",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        },
+        {
+          "width": 390,
+          "scheme": "dark",
+          "rootStatus": 200,
+          "rootRate": "7/15",
+          "overflow": false,
+          "header": true,
+          "screen": "main",
+          "advanceStatus": 200,
+          "privateStatus": 200,
+          "privateWolf": "1",
+          "publicUnchanged": true,
+          "helpStatus": 200,
+          "errors": []
+        }
+      ]
+    },
+    "private": {
+      "at": "2026-10-17T04:15:54.052Z",
+      "status": 200,
+      "rows": [
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        },
+        {
+          "village": "5/6",
+          "wolf": "1/6"
+        }
+      ],
+      "sessionUnchanged": true
+    },
+    "seven": {
+      "at": "2026-10-17T04:16:10.946Z",
+      "status": 200,
+      "publicRate": "113/504",
+      "seconds": 15.183,
+      "errors": []
+    },
+    "nine_limited": {
+      "scope": "Existing CO-group seer-none, no future seer acquisition; not an all-abilities nine-player village",
+      "at": "2026-10-17T04:16:20.192Z",
+      "status": 200,
+      "publicRate": "503/1620",
+      "seconds": 5.371,
+      "errors": []
+    }
+  },
+  "cache_audit": {
+    "cases": [
+      "base",
+      "input",
+      "history",
+      "strategy",
+      "rule",
+      "view-wolf4",
+      "view-wolf5",
+      "pending-latent-seer",
+      "strategy-night",
+      "rule-initial-scan",
+      "completed-seer-history",
+      "root-wolf4-partial",
+      "root-wolf5-partial",
+      "night-wolf3",
+      "night-wolf4"
+    ],
+    "failures": [],
+    "sha256": "eca308f09139d4949378aba9e9b58326a5fad089e897acfd6609e831b600618a",
+    "source": ".artifacts/b-benchmark/identity-projection-cache/summary.json"
+  },
+  "joint_audit": {
+    "cases": [
+      "basic",
+      "seven",
+      "seven-observed",
+      "private-history"
+    ],
+    "failures": [],
+    "sha256": "6cf20016c98936de169c95a14eabeade6eb5db3a3c2b31885ab27099fc649f39",
+    "source": ".artifacts/b-benchmark/identity-projection-joint/summary.json"
+  },
+  "server": {
+    "port": 18801,
+    "pid": 22836,
+    "root_status": 200,
+    "help_status": 200,
+    "owner_verified_before_restart": true
+  },
+  "adopted": true,
+  "push_deploy": false
+}
