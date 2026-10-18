@@ -83,14 +83,17 @@ def late_seven_admitted(board,rules,strategy):
     # Performance admission using PUBLIC input only. Complete-key equality,
     # record/observer validation and the 120-mapping cap still decide reuse.
     if (board.player_count!=7 or len(board.alive)!=5 or board.day!=2 or board.phase!='day'
-        or board.initial_hunter_count or board.initial_medium_count
+        or board.initial_hunter_count or board.initial_medium_count not in(0,1)
         or board.initial_seer_count!=1 or board.initial_role_counts['wolf']!=1 or rules.initial_seer!='none'
         or (strategy.day,strategy.night,strategy.fake_reports)!=('random','random','max')
         or strategy.disclosure_for('seer')!='all' or rules.allow_self_bite or strategy.include_self_bite
         or tuple(strategy.seer_position)!=('unvisited','uniform')
         or tuple(strategy.fake_seer_policy)!=('noncontradictory','uniform')):return False
     worlds=board.worlds
-    return (len(worlds)==4 and len({w[-1]for w in worlds})==1
+    medium=board.initial_medium_count
+    fixed_medium=(not medium or len({w[1]for w in worlds})==1
+                  and worlds[0][1].bit_count()==1 and bool(worlds[0][1]&board.alive_mask))
+    return (fixed_medium and len(worlds)==4-medium and len({w[-1]for w in worlds})==1
             and len({w[2]for w in worlds})==1
             and worlds[0][2].bit_count()==1 and bool(worlds[0][2]&board.alive_mask)
             and all(w[0]&board.alive_mask==w[0]for w in worlds))

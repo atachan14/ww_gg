@@ -1,0 +1,534 @@
+[
+  {
+    "deaths": [
+      7,
+      6
+    ],
+    "repeat": 0,
+    "enabled": false,
+    "seconds": 0.15023830000427552,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": null,
+    "memory": {
+      "peak_working_set_bytes": 27402240,
+      "peak_process_commit_bytes": 18169856,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  {
+    "deaths": [
+      7,
+      6
+    ],
+    "repeat": 0,
+    "enabled": true,
+    "seconds": 0.04856509997625835,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": {
+      "key_seconds": 0.020137400133535266,
+      "key_requests": 134,
+      "key_source_hits": 11,
+      "key_supported": 134,
+      "key_value_hits": 6,
+      "key_action_hits": 26,
+      "generated_publication_branches": 26,
+      "acquisition_states": 6,
+      "kernel_requests": 146,
+      "kernel_hits": 0,
+      "kernel_computations": 146,
+      "kernel_key_seconds": 0.0
+    },
+    "memory": {
+      "peak_working_set_bytes": 29310976,
+      "peak_process_commit_bytes": 20942848,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  {
+    "deaths": [
+      7,
+      6
+    ],
+    "repeat": 1,
+    "enabled": true,
+    "seconds": 0.04813300000387244,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": {
+      "key_seconds": 0.019994199828943238,
+      "key_requests": 134,
+      "key_source_hits": 11,
+      "key_supported": 134,
+      "key_value_hits": 6,
+      "key_action_hits": 26,
+      "generated_publication_branches": 26,
+      "acquisition_states": 6,
+      "kernel_requests": 146,
+      "kernel_hits": 0,
+      "kernel_computations": 146,
+      "kernel_key_seconds": 0.0
+    },
+    "memory": {
+      "peak_working_set_bytes": 31035392,
+      "peak_process_commit_bytes": 22573056,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  {
+    "deaths": [
+      7,
+      6
+    ],
+    "repeat": 1,
+    "enabled": false,
+    "seconds": 0.1434026999922935,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": null,
+    "memory": {
+      "peak_working_set_bytes": 31490048,
+      "peak_process_commit_bytes": 22708224,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  {
+    "deaths": [
+      6,
+      7
+    ],
+    "repeat": 0,
+    "enabled": false,
+    "seconds": 0.13564369999221526,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": null,
+    "memory": {
+      "peak_working_set_bytes": 31768576,
+      "peak_process_commit_bytes": 22978560,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  {
+    "deaths": [
+      6,
+      7
+    ],
+    "repeat": 0,
+    "enabled": true,
+    "seconds": 0.04837890001363121,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": {
+      "key_seconds": 0.020393800077727064,
+      "key_requests": 134,
+      "key_source_hits": 11,
+      "key_supported": 134,
+      "key_value_hits": 6,
+      "key_action_hits": 26,
+      "generated_publication_branches": 26,
+      "acquisition_states": 6,
+      "kernel_requests": 146,
+      "kernel_hits": 0,
+      "kernel_computations": 146,
+      "kernel_key_seconds": 0.0
+    },
+    "memory": {
+      "peak_working_set_bytes": 32616448,
+      "peak_process_commit_bytes": 24027136,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  {
+    "deaths": [
+      6,
+      7
+    ],
+    "repeat": 1,
+    "enabled": true,
+    "seconds": 0.047389899991685525,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": {
+      "key_seconds": 0.019562399975256994,
+      "key_requests": 134,
+      "key_source_hits": 11,
+      "key_supported": 134,
+      "key_value_hits": 6,
+      "key_action_hits": 26,
+      "generated_publication_branches": 26,
+      "acquisition_states": 6,
+      "kernel_requests": 146,
+      "kernel_hits": 0,
+      "kernel_computations": 146,
+      "kernel_key_seconds": 0.0
+    },
+    "memory": {
+      "peak_working_set_bytes": 33955840,
+      "peak_process_commit_bytes": 25079808,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  {
+    "deaths": [
+      6,
+      7
+    ],
+    "repeat": 1,
+    "enabled": false,
+    "seconds": 0.15253870000015013,
+    "value": "7/15",
+    "table": [
+      [
+        1,
+        "1/3"
+      ],
+      [
+        2,
+        "5/9"
+      ],
+      [
+        3,
+        "5/9"
+      ],
+      [
+        4,
+        "5/9"
+      ],
+      [
+        5,
+        "1/3"
+      ]
+    ],
+    "branch_mass": [
+      [
+        1,
+        "1"
+      ],
+      [
+        2,
+        "1"
+      ],
+      [
+        3,
+        "1"
+      ],
+      [
+        4,
+        "1"
+      ],
+      [
+        5,
+        "1"
+      ]
+    ],
+    "stats": null,
+    "memory": {
+      "peak_working_set_bytes": 34435072,
+      "peak_process_commit_bytes": 25079808,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  }
+]

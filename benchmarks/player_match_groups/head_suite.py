@@ -11,8 +11,8 @@ def main():
    else:yield t.id()
  ids=list(dict.fromkeys(flatten(unittest.defaultTestLoader.discover('tests'))))
  head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
- logs=Path('.artifacts/head-suite');logs.mkdir(exist_ok=True)
- out=Path('benchmarks/player_match_groups/head-suite-results.json')
+ out=Path(sys.argv[1])if len(sys.argv)>1 else Path('benchmarks/player_match_groups/head-suite-results.json')
+ logs=Path('.artifacts')/out.stem;logs.mkdir(exist_ok=True)
  rows=[];started=time.perf_counter()
  env={**os.environ,'PYTHONPATH':str(Path('tests').resolve())+os.pathsep+str(Path.cwd())}
  memory=ctypes.windll.psapi.GetProcessMemoryInfo
