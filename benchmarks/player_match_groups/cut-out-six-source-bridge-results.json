@@ -1,0 +1,98 @@
+{
+  "cases": [
+    {
+      "case": "source",
+      "public_physical_separate": true,
+      "issued_replay_contexts": 7,
+      "both_carrier_swaps": 16,
+      "complete_Table_joint_mass_old_two_modes_equal": true,
+      "public_and_own_cold_branch_equal": true,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "initial_current_group_rebuild_calls": 0,
+      "worker_seconds": 0.7660000000032596,
+      "peak_working_set_bytes": 36192256
+    },
+    {
+      "case": "edits",
+      "changed_cancel_redo_refreshed": 3,
+      "old_witness_reuse_refused": true,
+      "old_snapshot_immutable": true,
+      "redo_equal_requires_new_origin": true,
+      "old_actor_frame_stale": true,
+      "worker_seconds": 1.4059999999881256,
+      "peak_working_set_bytes": 39419904
+    },
+    {
+      "case": "rejections",
+      "rejected": [
+        "unbound",
+        "unissued_copy",
+        "P_or_physical_substitution",
+        "revision_-1",
+        "revision_True",
+        "revision_1.0",
+        "revision_'1'",
+        "revision_None",
+        "revision_99",
+        "other_public_model",
+        "owner_path_mismatch",
+        "same_content_other_origin",
+        "CO_withdrawal"
+      ],
+      "worker_seconds": 0.235000000015134,
+      "peak_working_set_bytes": 36802560
+    },
+    {
+      "case": "medium",
+      "both_saved_medium_reports_preserved": true,
+      "old_Table_joint_equal": true,
+      "worker_seconds": 0.15599999998812564,
+      "peak_working_set_bytes": 35991552
+    }
+  ],
+  "light_regression_requests": [
+    [
+      "pattern",
+      "test_cut_out_six_source_bridge.py"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
+    ],
+    [
+      "pattern",
+      "test_cut_out_six_inherited.py"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending"
+    ]
+  ],
+  "overall_seconds": 12.46799999999348,
+  "heavy_comparison_executed": false,
+  "speed_measurement_executed": false,
+  "ordinary_UI_connected": false,
+  "limits": {
+    "per_worker_seconds": 60,
+    "overall_seconds": 120,
+    "peak_working_set_bytes": 1500000000
+  },
+  "recorded_utc": "2026-10-18T13:50:20.583676+00:00",
+  "tested_parent_commit": "2182e94ef5eed265eea78bf6c561dc158fb0b130",
+  "light_regression_tests": 8,
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_six_source_bridge.py": "d1c021cecd062b4e172cfe5e055f04172419f786a4d7b25d379eb90be9e19106",
+    "benchmarks/player_match_groups/cut_out_six_source_bridge_fixture.py": "520e8e25f15bbbbec261999d878920747c6843305c97ce43935d3e6e3f1e6d35",
+    "benchmarks/player_match_groups/cut_out_six_registry.py": "e0aa2bccb8ee0c64d36b3d72f3ff0474c8fe439bc81dd6a33367c2130f8e6414",
+    "benchmarks/player_match_groups/cut_out_six_inherited.py": "0b6359995638610b20f3aaaa651fd4951481d726fa61ceef49c5434e442870ef",
+    "werewolf/root_secret_flow.py": "4f70cc455c0eed3964cf546ba298e5989eeb591b714e2863c9419fc9fc25b913",
+    "tests/test_cut_out_six_source_bridge.py": "10aa182dbe671861a4dc53820164fe503b0379df2675640f1f5143ddf87d9c98"
+  },
+  "scope": "fixed CO, existing6 W1 S1 H0 uniform two minimal shapes, saved Day1 execution + first-night death, currentDay2/day only",
+  "previous_performance_fact": "initial6 inherited route was7-8% slower than old-root; current source bridge speed not measured"
+}

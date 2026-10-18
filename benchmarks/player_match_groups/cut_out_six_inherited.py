@@ -12,8 +12,13 @@ from werewolf.seer_acquisition import SeerReport
 def scope_reason(source):
     if type(source)is not SavedCutOutGraph or type(source.engine)is not ModelAInitialGroups:
         return 'six_inherited_initial_saved_root_witness_required'
-    spec=source.engine.baseline.spec;reason=_reason(spec,six=True)
-    if source.engine.baseline.players!=6 or reason:return 'six_inherited_uniform_scope_unproved:'+str(reason)
+    if source.engine.baseline.players!=6:return 'six_inherited_uniform_scope_unproved:initial_player_count'
+    return initial_shape_reason(source.engine.baseline.spec)
+
+
+def initial_shape_reason(spec):
+    reason=_reason(spec,six=True)
+    if reason or spec.players!=6:return 'six_inherited_uniform_scope_unproved:'+str(reason)
     # Only the two existing3240ad1 input shapes. Other uniform6 shapes can
     # have complete data, but have not passed this incremental comparison gate.
     shape=(spec.mediums,spec.claims,spec.reports)

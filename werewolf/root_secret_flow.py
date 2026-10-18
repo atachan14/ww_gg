@@ -544,7 +544,7 @@ def observe_root_snapshot(branch,game,index,rules,*,guard_priors=None):
         lambda h:(h.roles,h.acquisitions,h.guards,h.attacks) in signatures,past=reports)
 
 
-def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_collect_guard_priors=False,_historical_disclosure_proof=True):
+def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_collect_guard_priors=False,_historical_disclosure_proof=True,_group_observer=None):
     """Recreate actual joint histories; observed bites use the configured policy.
 
     Q is restored from the existing public replay only after P is conditioned.
@@ -566,9 +566,11 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,ma
             guard_priors={}
             branch=prepare_root_secrets(seed,rules,max_work=max_work)
             if isinstance(branch,FuturePending):return branch
+            if _group_observer is not None:_group_observer.record('initial',branch,None)
             for index,step in enumerate(game['history']):
                 branch=observe_root_snapshot(branch,game,index,rules,guard_priors=guard_priors)
                 if isinstance(branch,FuturePending):return branch
+                if _group_observer is not None:_group_observer.record('snapshot',branch,index)
                 policy=Strategy(**step['policy']);target=step['target']
                 known_publications=()
                 if _historical_disclosure_proof and step.get('result_disclosure_model')=='full-observed-v1':
@@ -613,15 +615,19 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,ma
                 branch=observe_root_public(RootSecretBranch(physical,own,physical,own,template.past),
                                            template.public,lambda h:True)
                 if isinstance(branch,FuturePending):return branch
+                if _group_observer is not None:_group_observer.record('observed-action',branch,(index,target))
             branch=observe_root_snapshot(branch,game,len(game['history']),rules,guard_priors=guard_priors)
             if isinstance(branch,FuturePending):return branch
+            if _group_observer is not None:_group_observer.record('snapshot',branch,len(game['history']))
             if _collect_guard_priors:
                 if branch.public.phase=='night':guard_priors[len(game['history'])]=branch.public_law
                 return guard_priors
             facts=('alive','day','phase','history')
             if any(getattr(branch.public,k)!=getattr(board,k) for k in facts):
                 return FuturePending('root_secret_replay_board_mismatch')
-            return observe_root_public(branch,board,lambda h:True)
+            result=observe_root_public(branch,board,lambda h:True)
+            if _group_observer is not None and not isinstance(result,FuturePending):_group_observer.record('finished',result,None)
+            return result
     except CalculationBudgetExceeded:return FuturePending('root_secret_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)
 

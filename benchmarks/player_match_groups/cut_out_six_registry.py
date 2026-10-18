@@ -227,11 +227,11 @@ class CurrentScreen:
         return sum((h.mass for h in law.hypotheses if has(h,left,left_role) and has(h,right,right_role)),F())
 
 
-def current_screen(registry,*,view=None,official_reference=False):
+def current_screen(registry,*,view=None,official_reference=False,_engine_class=None):
     from .cut_out_uniform_game import evaluate
     from werewolf.player_view import build_public_view,ViewScope,ResultFrame,private_api_rows
     from werewolf.exact import replace_worlds,Values
-    started=perf_counter();evaluated=evaluate(registry,view=view,official_reference=official_reference)
+    started=perf_counter();evaluated=evaluate(registry,view=view,official_reference=official_reference,engine_class=_engine_class)
     if isinstance(evaluated,UnsupportedPartition):return evaluated
     forecast,engine=evaluated;eval_seconds=perf_counter()-started
     root=registry.origin();belief=root.public_state;physical=root.private

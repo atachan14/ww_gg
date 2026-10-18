@@ -34,3 +34,5 @@ cacheはorigin identity、入力内容digestとrevision、rules/全step strategy
 - 各worker60秒/RSS1.5GB・全体有限予算を維持し、正しさを通してから別の速度測定へ進む。
 
 反復計測では、新増分群方式は旧root群方式より約7〜8%遅かった。橋渡しの正当性と高速化を分ける。完全sourceの繰返し索引・重複する完了済みイベントの群維持は今後の計測候補だが、どの内部処理が支配的かは今回の大括りタイマーだけでは断定しない。hashを省いて不完全なキーへ変える変更や、P/Qの同一視でコストを削る変更は採用しない。
+
+後続の限定実装は [cut-out-six-source-bridge.md](cut-out-six-source-bridge.md) を参照。固定CO・第一夜後のみの明示入口で、通常UI公開・重い比較は未実施。
