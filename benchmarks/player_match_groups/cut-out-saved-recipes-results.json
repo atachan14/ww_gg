@@ -1,0 +1,38 @@
+{
+  "recorded_utc": "2026-10-18T08:30:23.151788+00:00",
+  "head_before_commit": "e7ac0b6092c61b1d2b702c5e273915161463d20a",
+  "labelled_saved_branches": 291,
+  "tests": [
+    {
+      "pattern": "test_cut_out_saved_recipes.py",
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_saved_recipes-saved-final.log",
+      "timeout_seconds": 30
+    },
+    {
+      "pattern": "test_board_flow.py",
+      "exit": 0,
+      "log": ".artifacts\\test_board_flow-saved-final.log",
+      "timeout_seconds": 30
+    },
+    {
+      "pattern": "test_cut_out_morning.py",
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_morning-saved-final.log",
+      "timeout_seconds": 30
+    }
+  ],
+  "full_suite": false,
+  "heavy_worker": false,
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_saved_recipes.py": "ee068c3be06e5439a1261b0f6e9d3e1a78e1fcbd8e4da193b3f0dd90a16e2402",
+    "tests/test_cut_out_saved_recipes.py": "d2aba79827ccc4c3d124283e88b73f10b01b3d38fa6b208c9d6a0efcb183ef63"
+  },
+  "scope": "4/5 players, W1 H0, uniform, first execution/night/morning, public role stage",
+  "unsupported": [
+    "all CO cancelled: SavedOrigin secret support 180 vs formal adapter 60",
+    "whole-win loop",
+    "private view",
+    "arbitrary owned-graph editing"
+  ]
+}
