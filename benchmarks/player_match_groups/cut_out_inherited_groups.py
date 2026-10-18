@@ -18,11 +18,15 @@ class InheritedGroups:
 
 
 class InheritedGroupRegistry:
-    def __init__(self,graph):
+    def __init__(self,graph,*,six=False):
         from .cut_out_model_a import ModelAInitialGroups
         if type(graph.engine) is not ModelAInitialGroups:raise Pending('inherited_initial_group_witness_required')
+        if six:
+            from .cut_out_model_a import _reason
+            reason=_reason(graph.engine.baseline.spec,six=True)
+            if graph.engine.baseline.players!=6 or reason:raise Pending('inherited_six_uniform_scope_unproved:'+str(reason))
         root=graph.origin();b=root.public
-        if b.player_count not in (4,5) or b.initial_hunter_count or b.history or b.day!=1 or b.phase!='day':
+        if b.player_count not in ((6,) if six else (4,5)) or b.initial_hunter_count or b.history or b.day!=1 or b.phase!='day':
             raise Pending('inherited_initial_group_scope_unproved')
         self.contexts={};self.by_board={};self.stats=Counter(root_group_reads=1)
         self.install(InheritedGroups(b,root.public_state,root.past,graph.engine.start().groups))

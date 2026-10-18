@@ -35,3 +35,5 @@ Table、公開/本人joint、物理枝と質量、候補分布・報告の同点
 初期jointの列挙、必要な候補値の厳密評価（fresh評価器を含む）、白jointの全支持検証は残る。群の保証は継続方針の値比較を不要にするものではない。通常UI接続・本来の広い入力/編集フローへの採用・専用サーバー確認・全project検証は別工程。今回の数値コードを一区切りとして保持し、次の重い測定や公開には進めていない。
 
 計画: `benchmarks/player_match_groups/integration-review-plan.json`。実測・各selectorの監視値・段階別時間・ソースSHA256: `benchmarks/player_match_groups/integration-checkpoint-results.json`。詳細log: `.artifacts/integration-checkpoint-final.log`。
+
+後続の明示6人・均等・二夜の局所移植は [cut-out-six-inherited.md](cut-out-six-inherited.md) を参照。既定6人経路と通常UIは変更していない。

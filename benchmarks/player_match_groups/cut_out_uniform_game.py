@@ -67,11 +67,14 @@ class CutOutUniformEngine(InformationSetForecast):
         self.graph=graph;self.representatives=representatives;self.view=view
         self.costs=Counter();self.scalar_actions={};self.group_cache={};self.branch_records=[];self.projected=[];self.capture_terminal=False;self.terminal_records=[]
         self.action_policy=RecordedPolicy(self)
-        from .cut_out_inherited_groups import InheritedGroupRegistry
-        self.inherited_groups=(InheritedGroupRegistry(graph) if self.use_inherited_groups and graph.engine.baseline.players in (4,5) else None)
+        self.inherited_groups=self.make_group_registry(graph)
         from .cut_out_candidate_context import initial_candidate_context
         root_context=initial_candidate_context(graph)
         self.public_candidate_contexts={} if root_context is None else {(root_context.board,root_context.state,root_context.past):root_context}
+
+    def make_group_registry(self,graph):
+        from .cut_out_inherited_groups import InheritedGroupRegistry
+        return InheritedGroupRegistry(graph) if self.use_inherited_groups and graph.engine.baseline.players in (4,5) else None
 
     def record_candidate_transition(self,b,payload,child,target):
         if not self.public_candidate_contexts:return

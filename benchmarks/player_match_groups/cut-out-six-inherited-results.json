@@ -1,0 +1,233 @@
+{
+  "cases": [
+    {
+      "case": "public",
+      "village_win": "3/8",
+      "Table_forecast_joint_mass_equal_both_old_modes": true,
+      "scalar_and_old_group_checks": 438,
+      "recursive_contexts": 507,
+      "inheritance_stats": {
+        "root_group_reads": 1,
+        "initial-CO/report": 1,
+        "max_depth": 7,
+        "private_context_splits": 220,
+        "new_endpoint_positions": 894,
+        "death-day": 161,
+        "symmetric-acquisition": 102,
+        "death-night": 211,
+        "publication-seer": 33
+      },
+      "private_law_swaps": 174,
+      "public_law_swaps": 296,
+      "second_night_terminal_counts": {
+        "terminal_recipes": 286,
+        "second_night_terminal_recipes": 227,
+        "killed_after_scan_witnesses": 477,
+        "executed_owner_old_record_witnesses": 219,
+        "corpse_scan_witnesses": 459,
+        "restore_seconds": 0.23637300002155825
+      },
+      "all_labelled_reference_terminal_counts": {
+        "terminal_recipes": 1572,
+        "second_night_terminal_recipes": 1344,
+        "killed_after_scan_witnesses": 2736,
+        "executed_owner_old_record_witnesses": 1208,
+        "corpse_scan_witnesses": 2736,
+        "restore_seconds": 1.2501200000115205
+      },
+      "true_cold_second_night_replay_equal": true,
+      "missing_child_witness_refused": true,
+      "actual_canonical_calls": 0,
+      "actual_CandidateRules_calls": 0,
+      "actual_initial_group_rebuild_calls": 0,
+      "actual_child_prior_rebuild_calls": 0,
+      "default_six_route_unchanged": true,
+      "ordinary_UI_connected": false,
+      "worker_seconds": 3.375,
+      "peak_working_set_bytes": 70639616
+    },
+    {
+      "case": "own-seer",
+      "village_win": "3/8",
+      "Table_forecast_joint_mass_equal_both_old_modes": true,
+      "scalar_and_old_group_checks": 438,
+      "recursive_contexts": 507,
+      "inheritance_stats": {
+        "root_group_reads": 1,
+        "initial-CO/report": 1,
+        "max_depth": 7,
+        "private_context_splits": 220,
+        "new_endpoint_positions": 814,
+        "death-day": 161,
+        "symmetric-acquisition": 102,
+        "death-night": 211,
+        "publication-seer": 33
+      },
+      "private_law_swaps": 174,
+      "public_law_swaps": 296,
+      "second_night_terminal_counts": {
+        "terminal_recipes": 286,
+        "second_night_terminal_recipes": 227,
+        "killed_after_scan_witnesses": 477,
+        "executed_owner_old_record_witnesses": 219,
+        "corpse_scan_witnesses": 459,
+        "restore_seconds": 0.24914470000658184
+      },
+      "all_labelled_reference_terminal_counts": {
+        "terminal_recipes": 1572,
+        "second_night_terminal_recipes": 1344,
+        "killed_after_scan_witnesses": 2736,
+        "executed_owner_old_record_witnesses": 1208,
+        "corpse_scan_witnesses": 2736,
+        "restore_seconds": 1.336021900002379
+      },
+      "true_cold_second_night_replay_equal": true,
+      "missing_child_witness_refused": true,
+      "actual_canonical_calls": 0,
+      "actual_CandidateRules_calls": 0,
+      "actual_initial_group_rebuild_calls": 0,
+      "actual_child_prior_rebuild_calls": 0,
+      "default_six_route_unchanged": true,
+      "ordinary_UI_connected": false,
+      "worker_seconds": 3.5780000000086147,
+      "peak_working_set_bytes": 72720384
+    },
+    {
+      "case": "own-wolf",
+      "village_win": "3/8",
+      "Table_forecast_joint_mass_equal_both_old_modes": true,
+      "scalar_and_old_group_checks": 133,
+      "recursive_contexts": 198,
+      "inheritance_stats": {
+        "root_group_reads": 1,
+        "initial-CO/report": 1,
+        "max_depth": 7,
+        "private_context_splits": 64,
+        "new_endpoint_positions": 275,
+        "death-day": 60,
+        "symmetric-acquisition": 43,
+        "death-night": 75,
+        "publication-seer": 20
+      },
+      "private_law_swaps": 53,
+      "public_law_swaps": 154,
+      "second_night_terminal_counts": {
+        "terminal_recipes": 85,
+        "second_night_terminal_recipes": 68,
+        "killed_after_scan_witnesses": 144,
+        "executed_owner_old_record_witnesses": 63,
+        "corpse_scan_witnesses": 140,
+        "restore_seconds": 0.07197930000256747
+      },
+      "all_labelled_reference_terminal_counts": {
+        "terminal_recipes": 393,
+        "second_night_terminal_recipes": 336,
+        "killed_after_scan_witnesses": 684,
+        "executed_owner_old_record_witnesses": 302,
+        "corpse_scan_witnesses": 684,
+        "restore_seconds": 0.317466999986209
+      },
+      "true_cold_second_night_replay_equal": true,
+      "missing_child_witness_refused": true,
+      "actual_canonical_calls": 0,
+      "actual_CandidateRules_calls": 0,
+      "actual_initial_group_rebuild_calls": 0,
+      "actual_child_prior_rebuild_calls": 0,
+      "default_six_route_unchanged": true,
+      "ordinary_UI_connected": false,
+      "worker_seconds": 1.0310000000172295,
+      "peak_working_set_bytes": 43417600
+    },
+    {
+      "case": "medium",
+      "village_win": "3/8",
+      "Table_forecast_joint_mass_equal_both_old_modes": true,
+      "scalar_and_old_group_checks": 1103,
+      "recursive_contexts": 1509,
+      "inheritance_stats": {
+        "root_group_reads": 1,
+        "initial-CO/report": 1,
+        "max_depth": 8,
+        "private_context_splits": 510,
+        "new_endpoint_positions": 3491,
+        "death-day": 436,
+        "symmetric-acquisition": 316,
+        "death-night": 628,
+        "publication-medium": 39,
+        "publication-seer": 90
+      },
+      "private_law_swaps": 127,
+      "public_law_swaps": 143,
+      "second_night_terminal_counts": {
+        "terminal_recipes": 750,
+        "second_night_terminal_recipes": 630,
+        "killed_after_scan_witnesses": 1116,
+        "executed_owner_old_record_witnesses": 498,
+        "corpse_scan_witnesses": 1212,
+        "restore_seconds": 0.5705043999769259
+      },
+      "all_labelled_reference_terminal_counts": {
+        "terminal_recipes": 1570,
+        "second_night_terminal_recipes": 1344,
+        "killed_after_scan_witnesses": 2376,
+        "executed_owner_old_record_witnesses": 1028,
+        "corpse_scan_witnesses": 2616,
+        "restore_seconds": 1.1275416999997105
+      },
+      "true_cold_second_night_replay_equal": true,
+      "missing_child_witness_refused": true,
+      "actual_canonical_calls": 0,
+      "actual_CandidateRules_calls": 0,
+      "actual_initial_group_rebuild_calls": 0,
+      "actual_child_prior_rebuild_calls": 0,
+      "default_six_route_unchanged": true,
+      "ordinary_UI_connected": false,
+      "worker_seconds": 4.10999999998603,
+      "peak_working_set_bytes": 82169856
+    },
+    {
+      "six_max_refused": true,
+      "four_and_seven_refused": true,
+      "other_uniform_shapes_conservatively_refused": true,
+      "current_Board_registry_refused": "six_inherited_initial_saved_root_witness_required",
+      "classification": "initial6 player-number guard was conservative; current registry has complete saved data but lacks an issued incremental current-source witness",
+      "worker_seconds": 0.1870000000053551,
+      "peak_working_set_bytes": 35397632
+    }
+  ],
+  "overall_seconds": 24.905999999988126,
+  "scope": "explicit6 uniform initial ModelA W1 S1 H0 M0/1, existing two-night cases",
+  "speed_measurement_executed": false,
+  "heavy_aggregate_executed": false,
+  "limits": {
+    "per_worker_seconds": 60,
+    "overall_seconds": 270,
+    "peak_working_set_bytes": 1500000000
+  },
+  "recorded_utc": "2026-10-18T13:15:26.810052+00:00",
+  "tested_parent_commit": "bbfd442a723b8a3ce300b73c84e1ac28019c5a20",
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_six_inherited.py": "a6959af073d878a1dab3afe1ac97589d0c77a586c5679e76da366ef2eba9d86e",
+    "benchmarks/player_match_groups/cut_out_six_inherited_fixture.py": "adfe2c11eec9157bbdac8f9b6f8469db38851826e714a12ec1fbeb8ed10c1775",
+    "benchmarks/player_match_groups/cut_out_inherited_groups.py": "f09820c1540cb698780ec80878cee61fbeef0d2df20463d025d2dd813c5e0311",
+    "benchmarks/player_match_groups/cut_out_uniform_game.py": "5d01d9d61bd9b6c23f7945e8aa55cab8aab7e36335418386ef27d6484e5cfe40",
+    "benchmarks/player_match_groups/cut_out_two_nights.py": "aee16bf7313ab435e4eb48fd370cec48f094b46805b424bbc8b4dfaddf546138",
+    "tests/test_cut_out_six_inherited.py": "25cb70aa5899da04ab9a5d717374075634e5fed8c68fa797c9d166ef19e668bd",
+    "tests/test_cut_out_two_nights.py": "5506210dc1bb4517b09d1a5116fcbfbb76e4f6f89e86f00258ee8bed32de5d91",
+    "tests/test_cut_out_inherited_groups.py": "e39ca60041f1b4f30293770e6bf0a4f661b578599bbe5b991e630b00901cfe93",
+    "tests/test_cut_out_max_game.py": "0248db5be6aaa81303687ded7ec7b3fd695445e4d3ef1706ccd330f2b256c786"
+  },
+  "focused_regression_tests": 9,
+  "totals": {
+    "recursive_contexts": 2721,
+    "scalar_old_group_checks": 2112,
+    "public_law_invariance_swaps": 889,
+    "private_law_invariance_swaps": 528
+  },
+  "scope_classification": {
+    "initial_six_player_guard": "conservative4/5 restriction, locally lifted using existing complete ModelA prior and common equivariant transitions",
+    "current_Board_registry": "saved information exists; binding its current source to an issued incremental group witness is not implemented",
+    "other_uniform_initial_shapes": "conservative minimal comparison gate, not missing-history repair",
+    "six_max_seven_hunter_multiple_seers": "outside the existing uniform adapter/proof scope"
+  }
+}
