@@ -25,9 +25,9 @@ class ReportOrbit:
     representative: GeneratedPublication
 
 
-def prepublication():
+def prepublication(*, receipt=False, kernel_class=InformationSetForecast):
     first=initial_night(1);r=first.registry;w=first.witness
-    e=InformationSetForecast(r.engine.baseline.rules,r.engine.baseline.strategy,
+    e=kernel_class(r.engine.baseline.rules,r.engine.baseline.strategy,
         exact_renaming=False,retire_uninformative_scans=False)
     e.retain_joint_guard_history=True
     root=r.origin()
@@ -35,7 +35,9 @@ def prepublication():
     request=r.root.child(ActionEvidence(kernel_snapshot(e),1,outcome_key(outs[0]),False),None)
     before=request.roles()
     op=choice_step(r,w,before,4,kernel_snapshot(e))
-    return e,request.child(op,None).roles(),op.likelihood(before)
+    request=request.child(op,None);source=request.roles()
+    result=(e,source,op.likelihood(before))
+    return result+(r,w,request) if receipt else result
 
 
 def single_truth_orbits(board,state,past,groups):
