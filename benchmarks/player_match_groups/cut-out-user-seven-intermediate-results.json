@@ -1,0 +1,83 @@
+{
+  "cases": [
+    {
+      "status": "verified",
+      "alive": 3,
+      "village_win": "1/3",
+      "actions": {
+        "1": "1/2",
+        "2": "1/2",
+        "3": "0"
+      },
+      "complete_Table_joint_equal": true,
+      "branch_mass_comparisons": 5,
+      "terminal_readbacks": 5,
+      "both_carrier_swaps": 17,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "legacy_root_calls": 0,
+      "initial_seven_refused": true,
+      "private_entry_refused": true,
+      "group_stats": {
+        "seven_issued_source": 1,
+        "root_group_reads": 0,
+        "seven-initial": 1,
+        "max_depth": 10,
+        "seven-snapshot-shared-batch": 3,
+        "seven-observed-action": 4,
+        "private_context_splits": 10,
+        "new_endpoint_positions": 5,
+        "death-day": 5
+      },
+      "seconds": 0.3120000000053551,
+      "peak_working_set_bytes": 36052992,
+      "case": "tiny"
+    },
+    {
+      "status": "verified",
+      "alive": 5,
+      "village_win": "2/15",
+      "actions": {
+        "1": "1/6",
+        "2": "1/6",
+        "3": "0",
+        "4": "0",
+        "5": "1/3"
+      },
+      "complete_Table_joint_equal": true,
+      "branch_mass_comparisons": 297,
+      "terminal_readbacks": 271,
+      "both_carrier_swaps": 13,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "legacy_root_calls": 0,
+      "initial_seven_refused": true,
+      "private_entry_refused": true,
+      "group_stats": {
+        "seven_issued_source": 1,
+        "root_group_reads": 0,
+        "seven-initial": 1,
+        "max_depth": 11,
+        "seven-snapshot-shared-batch": 2,
+        "seven-observed-action": 2,
+        "private_context_splits": 127,
+        "new_endpoint_positions": 791,
+        "death-day": 242,
+        "symmetric-acquisition": 3,
+        "death-night": 7,
+        "publication-medium": 5,
+        "publication-seer": 56
+      },
+      "seconds": 0.6559999999881256,
+      "peak_working_set_bytes": 40480768,
+      "case": "five"
+    }
+  ],
+  "initial_full_forecast_executed": false,
+  "speed_measurement_executed": false,
+  "limits": {
+    "evaluation_seconds": 5,
+    "worker_seconds": 15,
+    "peak_working_set_bytes": 1500000000
+  }
+}

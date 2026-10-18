@@ -1,4 +1,4 @@
-"""Typed7/W2 uniform adapter + issued sources; evaluation only at <=3 alive."""
+"""Typed7/W2 uniform adapter and issued sources with explicit bounded entries."""
 from dataclasses import dataclass
 from types import SimpleNamespace
 from collections import Counter
@@ -274,13 +274,14 @@ class _IssuedGroups(InheritedGroupRegistry):
 
 
 class SevenSourceEngine(CutOutUniformEngine):
+    max_alive=3
     def __init__(self,graph,*,witness,**kwargs):self.source_witness=witness;super().__init__(graph,**kwargs)
     def make_group_registry(self,graph):return _IssuedGroups(require_bound(graph,self.source_witness))
     def solve(self,b,*args,**kwargs):
-        if not b.winner and len(b.alive)>3:raise Pending('seven_full_forecast_not_enabled')
+        if not b.winner and len(b.alive)>self.max_alive:raise Pending('seven_full_forecast_not_enabled')
         return super().solve(b,*args,**kwargs)
     def act(self,b,*args,**kwargs):
-        if not b.winner and len(b.alive)>3:raise Pending('seven_full_action_value_not_enabled')
+        if not b.winner and len(b.alive)>self.max_alive:raise Pending('seven_full_action_value_not_enabled')
         return super().act(b,*args,**kwargs)
     def groups(self,*args,**kwargs):
         if self.inherited_groups is None:raise Pending('seven_missing_group_no_fallback')
@@ -317,4 +318,39 @@ def read_action(registry,*,witness=None,target,view=None,winner=None):
         with calculation_budget(300000,max_seconds=10):child=request.roles()
         return child,o.probability,request
     except CalculationBudgetExceeded:return UnsupportedPartition('seven_bridge_budget_exhausted')
+    except (Pending,ValueError,KeyError,TypeError) as error:return _unsupported(error)
+
+
+class SevenIntermediateEngine(SevenSourceEngine):
+    max_alive=5
+
+
+def evaluate_intermediate(registry,*,witness=None,view=None,official_reference=False,max_seconds=5):
+    """Explicit bounded public/uniform <=5-live entry; never initial seven."""
+    try:
+        w=require_bound(registry,witness)
+        if view is not None:return UnsupportedPartition('seven_intermediate_public_only')
+        if len(w.source.public.alive)>5:return UnsupportedPartition('seven_initial_forecast_checkpoint_required')
+        return common_evaluate(registry,official_reference=official_reference,max_seconds=max_seconds,capture_terminal=True,
+            engine_class=None if official_reference else partial(SevenIntermediateEngine,witness=w))
+    except (Pending,ValueError,KeyError,TypeError) as error:return _unsupported(error)
+
+
+class SevenInitialEngine(SevenSourceEngine):
+    max_alive=7
+
+
+def evaluate_initial(registry,*,witness=None,official_reference=False,max_seconds=5):
+    """Explicit public/uniform initial entry. Run only after load coordination.
+
+    Dispatch is locally tested without executing an initial Forecast. This entry
+    does not alter the small/intermediate gates or the ordinary factory/UI.
+    """
+    try:
+        w=require_bound(registry,witness)
+        b=w.source.public
+        if b.day!=1 or b.phase!='day' or b.history or len(b.alive)!=7:
+            return UnsupportedPartition('seven_initial_source_required')
+        return common_evaluate(registry,official_reference=official_reference,max_seconds=max_seconds,capture_terminal=True,
+            engine_class=None if official_reference else partial(SevenInitialEngine,witness=w))
     except (Pending,ValueError,KeyError,TypeError) as error:return _unsupported(error)
