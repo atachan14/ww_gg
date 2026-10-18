@@ -1,0 +1,152 @@
+{
+  "cases": [
+    {
+      "executed": 3,
+      "status": "exact_local_equal",
+      "representative_flow_generations": 3,
+      "old_labelled_flow_generations": 24,
+      "saved_flow_generations": 21,
+      "existing_grouped_flow_calls": 18,
+      "saved_vs_existing_grouped": 15,
+      "representative_leaf_generations": 85,
+      "labelled_pairs_restored": 24,
+      "labelled_joint_leaves": 720,
+      "Q_P_different": false,
+      "Table_probability_rows_equal": true,
+      "labelled_action_probability_rows": {
+        "1": [
+          "1/8",
+          "1/8"
+        ],
+        "2": [
+          "1/8",
+          "1/8"
+        ],
+        "4": [
+          "1/4",
+          "1/4"
+        ],
+        "5": [
+          "1/6",
+          "1/6"
+        ],
+        "6": [
+          "1/6",
+          "1/6"
+        ],
+        "7": [
+          "1/6",
+          "1/6"
+        ]
+      },
+      "complete_role_scan_attack_report_joint_equal": true,
+      "physical_branch_mass_equal": true,
+      "corpse_scan_leaf_cases": 276,
+      "orbit_multiplicities": [
+        6,
+        6,
+        12
+      ],
+      "Q_orbit_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ],
+      "P_orbit_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ],
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "full_forecast_values_tested": false
+    },
+    {
+      "executed": 1,
+      "status": "exact_local_equal",
+      "representative_flow_generations": 7,
+      "old_labelled_flow_generations": 27,
+      "saved_flow_generations": 20,
+      "existing_grouped_flow_calls": 21,
+      "saved_vs_existing_grouped": 14,
+      "representative_leaf_generations": 44,
+      "labelled_pairs_restored": 27,
+      "labelled_joint_leaves": 177,
+      "Q_P_different": true,
+      "Table_probability_rows_equal": true,
+      "labelled_action_probability_rows": {
+        "2": [
+          "1/10",
+          "2/15"
+        ],
+        "3": [
+          "9/40",
+          "13/60"
+        ],
+        "4": [
+          "9/40",
+          "13/60"
+        ],
+        "5": [
+          "3/20",
+          "13/90"
+        ],
+        "6": [
+          "3/20",
+          "13/90"
+        ],
+        "7": [
+          "3/20",
+          "13/90"
+        ]
+      },
+      "complete_role_scan_attack_report_joint_equal": true,
+      "physical_branch_mass_equal": true,
+      "corpse_scan_leaf_cases": 24,
+      "orbit_multiplicities": [
+        3,
+        3,
+        3,
+        6,
+        3,
+        3,
+        6
+      ],
+      "Q_orbit_masses": [
+        "1/10",
+        "1/10",
+        "1/10",
+        "1/5",
+        "1/8",
+        "1/8",
+        "1/4"
+      ],
+      "P_orbit_masses": [
+        "2/15",
+        "2/15",
+        "2/15",
+        "4/15",
+        "1/12",
+        "1/12",
+        "1/6"
+      ],
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "full_forecast_values_tested": false
+    }
+  ],
+  "rejected": [
+    "copied_certificate",
+    "one_sided_public_state",
+    "one_sided_private",
+    "asymmetric_P_pair_weight",
+    "nonexact_weights",
+    "unsupported_history",
+    "max",
+    "illegal_self_or_teammate_bite",
+    "dead_bite_target",
+    "unknown_roster",
+    "boolean_prefix"
+  ],
+  "scope": "standalone first-night uniform transition/probability Table only; no Forecast/UI route"
+}
