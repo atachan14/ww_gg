@@ -1,0 +1,1723 @@
+{
+  "status": "verified",
+  "recorded_utc": "2026-10-18T19:56:14.861438+00:00",
+  "runs": [
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "eager",
+      "repeat": 1,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.35942930000601336,
+        "preprocessing": 0.011879099998623133,
+        "Forecast": 0.01644129998749122,
+        "Table": 0.0028669000021182,
+        "representative_cold": 0.008789299987256527,
+        "first_diagnostic_open": 0.02744249999523163,
+        "repeated_diagnostic_open": 0.02713120001135394
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.39940589998150244,
+      "through_first_open_seconds": 0.42684839997673407,
+      "through_repeated_open_seconds": 0.453979599988088,
+      "peak_through_result_and_cold_bytes": 32641024,
+      "peak_through_first_open_bytes": 32722944,
+      "peak_through_repeated_open_bytes": 32727040,
+      "post_fingerprint_peak_bytes": 32739328,
+      "worker_seconds": 0.4557278999709524,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 16,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.5128276000032201
+    },
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "deferred",
+      "repeat": 1,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.32986409997101873,
+        "preprocessing": 0.010795600013807416,
+        "Forecast": 0.016331500024534762,
+        "Table": 0.0030905999592505395,
+        "representative_cold": 0.008601500012446195,
+        "first_diagnostic_open": 0.04231280001113191,
+        "repeated_diagnostic_open": 0.040993899980094284
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.36868329998105764,
+      "through_first_open_seconds": 0.41099609999218956,
+      "through_repeated_open_seconds": 0.45198999997228384,
+      "peak_through_result_and_cold_bytes": 32735232,
+      "peak_through_first_open_bytes": 32837632,
+      "peak_through_repeated_open_bytes": 32948224,
+      "post_fingerprint_peak_bytes": 32972800,
+      "worker_seconds": 0.45374999998603016,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 4,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.5136777000152506
+    },
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "deferred",
+      "repeat": 2,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.33680659998208284,
+        "preprocessing": 0.010820899973623455,
+        "Forecast": 0.016842500015627593,
+        "Table": 0.00302539998665452,
+        "representative_cold": 0.00874010002007708,
+        "first_diagnostic_open": 0.04220650001661852,
+        "repeated_diagnostic_open": 0.041675399988889694
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.3762354999780655,
+      "through_first_open_seconds": 0.418441999994684,
+      "through_repeated_open_seconds": 0.4601173999835737,
+      "peak_through_result_and_cold_bytes": 32468992,
+      "peak_through_first_open_bytes": 32632832,
+      "peak_through_repeated_open_bytes": 32743424,
+      "post_fingerprint_peak_bytes": 32763904,
+      "worker_seconds": 0.4618180999532342,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 4,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.5204775000456721
+    },
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "eager",
+      "repeat": 2,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.34072980005294085,
+        "preprocessing": 0.010406199959106743,
+        "Forecast": 0.016355900035705417,
+        "Table": 0.002831399964634329,
+        "representative_cold": 0.007984900032170117,
+        "first_diagnostic_open": 0.02767629997106269,
+        "repeated_diagnostic_open": 0.02721109997946769
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.37830820004455745,
+      "through_first_open_seconds": 0.40598450001562014,
+      "through_repeated_open_seconds": 0.43319559999508783,
+      "peak_through_result_and_cold_bytes": 32690176,
+      "peak_through_first_open_bytes": 32841728,
+      "peak_through_repeated_open_bytes": 32907264,
+      "post_fingerprint_peak_bytes": 32923648,
+      "worker_seconds": 0.43490690004546195,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 16,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.4939998000045307
+    },
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "eager",
+      "repeat": 3,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3313309000222944,
+        "preprocessing": 0.010477299976628274,
+        "Forecast": 0.0165123000042513,
+        "Table": 0.0027759000076912344,
+        "representative_cold": 0.008276699983980507,
+        "first_diagnostic_open": 0.027884499984793365,
+        "repeated_diagnostic_open": 0.027944100031163543
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.3693730999948457,
+      "through_first_open_seconds": 0.39725759997963905,
+      "through_repeated_open_seconds": 0.4252017000108026,
+      "peak_through_result_and_cold_bytes": 32833536,
+      "peak_through_first_open_bytes": 33042432,
+      "peak_through_repeated_open_bytes": 33079296,
+      "post_fingerprint_peak_bytes": 33091584,
+      "worker_seconds": 0.4268543000216596,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 16,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.4907567999907769
+    },
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "deferred",
+      "repeat": 3,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3323425999842584,
+        "preprocessing": 0.010490100015886128,
+        "Forecast": 0.01588099997024983,
+        "Table": 0.0027035000384785235,
+        "representative_cold": 0.008110800001304597,
+        "first_diagnostic_open": 0.04061369999544695,
+        "repeated_diagnostic_open": 0.04086249996908009
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.3695280000101775,
+      "through_first_open_seconds": 0.41014170000562444,
+      "through_repeated_open_seconds": 0.45100419997470453,
+      "peak_through_result_and_cold_bytes": 32780288,
+      "peak_through_first_open_bytes": 32862208,
+      "peak_through_repeated_open_bytes": 32940032,
+      "post_fingerprint_peak_bytes": 32960512,
+      "worker_seconds": 0.45261469995602965,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 4,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.5129772999789566
+    },
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "deferred",
+      "repeat": 4,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.32840469997609034,
+        "preprocessing": 0.01050319999922067,
+        "Forecast": 0.01600880001205951,
+        "Table": 0.002751199994236231,
+        "representative_cold": 0.008133499999530613,
+        "first_diagnostic_open": 0.041149299999233335,
+        "repeated_diagnostic_open": 0.040463500015903264
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.36580139998113737,
+      "through_first_open_seconds": 0.4069506999803707,
+      "through_repeated_open_seconds": 0.44741419999627396,
+      "peak_through_result_and_cold_bytes": 32673792,
+      "peak_through_first_open_bytes": 32751616,
+      "peak_through_repeated_open_bytes": 32829440,
+      "post_fingerprint_peak_bytes": 32854016,
+      "worker_seconds": 0.4490730999968946,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 4,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.5103744000080042
+    },
+    {
+      "status": "verified",
+      "case": "four",
+      "mode": "eager",
+      "repeat": 4,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "a482f72e364b325b3350692dee5c0201da3e3d2c249a89dcb5b89dccdf9550d1"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "3d709ba7f7cddbb935398de738b33f590217dd005e37ac5fa65769ff79c83e5e"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "106ef186e2da28156227d47ff7c4721ed704cf3b8b4fff915c6c6a2ccb6b1246"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "c605cbbc080142cba5da359516b79603a111d4be71280870e840959d23505e01"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 29,
+            "sha256": "dbde8d6cdcc049ca75e1a1e707ea626ff0d61cc3212adca4b3720b214db0600c"
+          },
+          "terminal_records": {
+            "rows": 25,
+            "sha256": "58e82174aa27b27dd92f3bd3f736af9adaf4fa317a00e44745d8e0066ad47714"
+          },
+          "branch_records": {
+            "rows": 29,
+            "sha256": "dcdbaec9b4eb8ff465a97a3e317274071cae5e943027b25cf5673e7e84e37ea1"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.33446540002478287,
+        "preprocessing": 0.01031639997381717,
+        "Forecast": 0.01590509997913614,
+        "Table": 0.002722600009292364,
+        "representative_cold": 0.008043800015002489,
+        "first_diagnostic_open": 0.027414700016379356,
+        "repeated_diagnostic_open": 0.026847900007851422
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.37145330000203103,
+      "through_first_open_seconds": 0.3988680000184104,
+      "through_repeated_open_seconds": 0.4257159000262618,
+      "peak_through_result_and_cold_bytes": 32874496,
+      "peak_through_first_open_bytes": 33026048,
+      "peak_through_repeated_open_bytes": 33030144,
+      "post_fingerprint_peak_bytes": 33042432,
+      "worker_seconds": 0.42731860000640154,
+      "values": 4,
+      "actions": 13,
+      "sources": 15,
+      "retained_resolutions": 16,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 0.48610999999800697
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "eager",
+      "repeat": 1,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3255904999678023,
+        "preprocessing": 0.01134320005076006,
+        "Forecast": 0.140036600001622,
+        "Table": 0.003395399951841682,
+        "representative_cold": 0.012968200026080012,
+        "first_diagnostic_open": 0.24514559999806806,
+        "repeated_diagnostic_open": 0.24138530000345781
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.49333389999810606,
+      "through_first_open_seconds": 0.7384794999961741,
+      "through_repeated_open_seconds": 0.9798647999996319,
+      "peak_through_result_and_cold_bytes": 34713600,
+      "peak_through_first_open_bytes": 35213312,
+      "peak_through_repeated_open_bytes": 35229696,
+      "post_fingerprint_peak_bytes": 35274752,
+      "worker_seconds": 0.9815514999791048,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 275,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.0494398000300862
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "deferred",
+      "repeat": 1,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3257715000072494,
+        "preprocessing": 0.010949599964078516,
+        "Forecast": 0.13808220002101734,
+        "Table": 0.003333300002850592,
+        "representative_cold": 0.012329499993938953,
+        "first_diagnostic_open": 0.32298669998999685,
+        "repeated_diagnostic_open": 0.32128279999597
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.4904660999891348,
+      "through_first_open_seconds": 0.8134527999791317,
+      "through_repeated_open_seconds": 1.1347355999751016,
+      "peak_through_result_and_cold_bytes": 34250752,
+      "peak_through_first_open_bytes": 34742272,
+      "peak_through_repeated_open_bytes": 34779136,
+      "post_fingerprint_peak_bytes": 34820096,
+      "worker_seconds": 1.136404599994421,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 29,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.1967278000083752
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "deferred",
+      "repeat": 2,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.32774589996552095,
+        "preprocessing": 0.011893399991095066,
+        "Forecast": 0.13908050005557016,
+        "Table": 0.0036158000002615154,
+        "representative_cold": 0.013364199956413358,
+        "first_diagnostic_open": 0.326849700009916,
+        "repeated_diagnostic_open": 0.3200949000311084
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.49569979996886104,
+      "through_first_open_seconds": 0.822549499978777,
+      "through_repeated_open_seconds": 1.1426444000098854,
+      "peak_through_result_and_cold_bytes": 34172928,
+      "peak_through_first_open_bytes": 34762752,
+      "peak_through_repeated_open_bytes": 34811904,
+      "post_fingerprint_peak_bytes": 34856960,
+      "worker_seconds": 1.144319099956192,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 29,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.2076192000531591
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "eager",
+      "repeat": 2,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.33244120003655553,
+        "preprocessing": 0.010961399995721877,
+        "Forecast": 0.14006940001854673,
+        "Table": 0.003415499988477677,
+        "representative_cold": 0.013129699975252151,
+        "first_diagnostic_open": 0.24638409999897704,
+        "repeated_diagnostic_open": 0.24339770001824945
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.500017200014554,
+      "through_first_open_seconds": 0.746401300013531,
+      "through_repeated_open_seconds": 0.9897990000317805,
+      "peak_through_result_and_cold_bytes": 34820096,
+      "peak_through_first_open_bytes": 35078144,
+      "peak_through_repeated_open_bytes": 35086336,
+      "post_fingerprint_peak_bytes": 35127296,
+      "worker_seconds": 0.9916378000052646,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 275,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.0567936999723315
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "eager",
+      "repeat": 3,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3525255999993533,
+        "preprocessing": 0.011241999978665262,
+        "Forecast": 0.14048630004981533,
+        "Table": 0.003545899991877377,
+        "representative_cold": 0.013029699970502406,
+        "first_diagnostic_open": 0.24698649998754263,
+        "repeated_diagnostic_open": 0.2433372000232339
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.5208294999902137,
+      "through_first_open_seconds": 0.7678159999777563,
+      "through_repeated_open_seconds": 1.0111532000009902,
+      "peak_through_result_and_cold_bytes": 34721792,
+      "peak_through_first_open_bytes": 35110912,
+      "peak_through_repeated_open_bytes": 35438592,
+      "post_fingerprint_peak_bytes": 35479552,
+      "worker_seconds": 1.0129876999999397,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 275,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.0849911000113934
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "deferred",
+      "repeat": 3,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.34876649995567277,
+        "preprocessing": 0.011626899999100715,
+        "Forecast": 0.14257520000683144,
+        "Table": 0.003596800030209124,
+        "representative_cold": 0.01294329995289445,
+        "first_diagnostic_open": 0.32196950004436076,
+        "repeated_diagnostic_open": 0.3213588999933563
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.5195086999447085,
+      "through_first_open_seconds": 0.8414781999890693,
+      "through_repeated_open_seconds": 1.1628370999824256,
+      "peak_through_result_and_cold_bytes": 34091008,
+      "peak_through_first_open_bytes": 34836480,
+      "peak_through_repeated_open_bytes": 34861056,
+      "post_fingerprint_peak_bytes": 34885632,
+      "worker_seconds": 1.1645392999635078,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 29,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.2290906000416726
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "deferred",
+      "repeat": 4,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.32871920004254207,
+        "preprocessing": 0.01214629999594763,
+        "Forecast": 0.1403342999983579,
+        "Table": 0.00336759997298941,
+        "representative_cold": 0.012541600037366152,
+        "first_diagnostic_open": 0.32017319998703897,
+        "repeated_diagnostic_open": 0.32097020000219345
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.49710900004720315,
+      "through_first_open_seconds": 0.8172822000342421,
+      "through_repeated_open_seconds": 1.1382524000364356,
+      "peak_through_result_and_cold_bytes": 33947648,
+      "peak_through_first_open_bytes": 34484224,
+      "peak_through_repeated_open_bytes": 34516992,
+      "post_fingerprint_peak_bytes": 34549760,
+      "worker_seconds": 1.1399852000176907,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 29,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.2050900000031106
+    },
+    {
+      "status": "verified",
+      "case": "five-medium",
+      "mode": "eager",
+      "repeat": 4,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "e6d424ce627ff296084241676f6e27ca99c063831d0ff6ff926d8cca712e8807"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "2d8d461d71231023faa270ebaadf78100fdfaf94aebe862c3f70b0eb04faf8b2"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "f8de7d139dc66668cb8c035abbf460c5150e027a4a6cd0d97b00d9b267cddc40"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "7fef93abf01427a7e78d875395fc09d770a641193e541a6d161769f58e1ca10d"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 300,
+            "sha256": "2ef376b35a8129edfaf50b13382785038d5cccd32c6707c05b6faff5f69a9e3e"
+          },
+          "terminal_records": {
+            "rows": 249,
+            "sha256": "77290f8c759f514ae6fb09bbb3a41989e2cc2cc4907bb3d0410800ef1f3ba04c"
+          },
+          "branch_records": {
+            "rows": 300,
+            "sha256": "b6c31ab3785b2e78c14cf4d6d54d70deb5f9ef49b304eb97a188771ab4690577"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3318466999917291,
+        "preprocessing": 0.011016500007826835,
+        "Forecast": 0.14002910000272095,
+        "Table": 0.0034968999680131674,
+        "representative_cold": 0.013124000048264861,
+        "first_diagnostic_open": 0.24722799996379763,
+        "repeated_diagnostic_open": 0.24259879998862743
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.4995132000185549,
+      "through_first_open_seconds": 0.7467411999823526,
+      "through_repeated_open_seconds": 0.98933999997098,
+      "peak_through_result_and_cold_bytes": 34766848,
+      "peak_through_first_open_bytes": 35221504,
+      "peak_through_repeated_open_bytes": 35229696,
+      "post_fingerprint_peak_bytes": 35278848,
+      "worker_seconds": 0.9911008999915794,
+      "values": 87,
+      "actions": 271,
+      "sources": 153,
+      "retained_resolutions": 275,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 1.0547237999853678
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "eager",
+      "repeat": 1,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3349222000106238,
+        "preprocessing": 0.013170099991839379,
+        "Forecast": 0.4853919000015594,
+        "Table": 0.00466999999480322,
+        "representative_cold": 0.029015400039497763,
+        "first_diagnostic_open": 1.0548575999564491,
+        "repeated_diagnostic_open": 1.0583858000463806
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.8671696000383236,
+      "through_first_open_seconds": 1.9220271999947727,
+      "through_repeated_open_seconds": 2.9804130000411533,
+      "peak_through_result_and_cold_bytes": 41132032,
+      "peak_through_first_open_bytes": 41832448,
+      "peak_through_repeated_open_bytes": 42287104,
+      "post_fingerprint_peak_bytes": 42328064,
+      "worker_seconds": 2.9823704000446014,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 1122,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.06722849997459
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "deferred",
+      "repeat": 1,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.33492389996536076,
+        "preprocessing": 0.013164500007405877,
+        "Forecast": 0.4850649000145495,
+        "Table": 0.004658399964682758,
+        "representative_cold": 0.028848000045400113,
+        "first_diagnostic_open": 1.4544426999636926,
+        "repeated_diagnostic_open": 1.4467439000145532
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.866659699997399,
+      "through_first_open_seconds": 2.3211023999610916,
+      "through_repeated_open_seconds": 3.767846299975645,
+      "peak_through_result_and_cold_bytes": 38780928,
+      "peak_through_first_open_bytes": 39809024,
+      "peak_through_repeated_open_bytes": 40071168,
+      "post_fingerprint_peak_bytes": 40099840,
+      "worker_seconds": 3.7698101999703795,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 374,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.844794299977366
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "deferred",
+      "repeat": 2,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3277932000346482,
+        "preprocessing": 0.013038899982348084,
+        "Forecast": 0.4867515999940224,
+        "Table": 0.004675599979236722,
+        "representative_cold": 0.028819900006055832,
+        "first_diagnostic_open": 1.4511072000022978,
+        "repeated_diagnostic_open": 1.439839700004086
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.8610791999963112,
+      "through_first_open_seconds": 2.312186399998609,
+      "through_repeated_open_seconds": 3.752026100002695,
+      "peak_through_result_and_cold_bytes": 38625280,
+      "peak_through_first_open_bytes": 39989248,
+      "peak_through_repeated_open_bytes": 40140800,
+      "post_fingerprint_peak_bytes": 40169472,
+      "worker_seconds": 3.753865900042001,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 374,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.834677400009241
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "eager",
+      "repeat": 2,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.32633299997542053,
+        "preprocessing": 0.0128456000238657,
+        "Forecast": 0.48445669998181984,
+        "Table": 0.004860699991695583,
+        "representative_cold": 0.02992400003131479,
+        "first_diagnostic_open": 1.0563568000216037,
+        "repeated_diagnostic_open": 1.08410019997973
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.8584200000041164,
+      "through_first_open_seconds": 1.9147768000257201,
+      "through_repeated_open_seconds": 2.99887700000545,
+      "peak_through_result_and_cold_bytes": 41185280,
+      "peak_through_first_open_bytes": 42029056,
+      "peak_through_repeated_open_bytes": 42106880,
+      "post_fingerprint_peak_bytes": 42139648,
+      "worker_seconds": 3.0007434000144713,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 1122,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.078325300011784
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "eager",
+      "repeat": 3,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.325415899977088,
+        "preprocessing": 0.013222300040069968,
+        "Forecast": 0.48656089999713004,
+        "Table": 0.0045807999558746815,
+        "representative_cold": 0.029354400001466274,
+        "first_diagnostic_open": 1.0566951000364497,
+        "repeated_diagnostic_open": 1.048251000000164
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.8591342999716289,
+      "through_first_open_seconds": 1.9158294000080787,
+      "through_repeated_open_seconds": 2.9640804000082426,
+      "peak_through_result_and_cold_bytes": 41193472,
+      "peak_through_first_open_bytes": 42123264,
+      "peak_through_repeated_open_bytes": 42168320,
+      "post_fingerprint_peak_bytes": 42209280,
+      "worker_seconds": 2.966001899971161,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 1122,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.044579900044482
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "deferred",
+      "repeat": 3,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.326183500001207,
+        "preprocessing": 0.01330039999447763,
+        "Forecast": 0.47695919999387115,
+        "Table": 0.004650600021705031,
+        "representative_cold": 0.02965739998035133,
+        "first_diagnostic_open": 1.4421119000180624,
+        "repeated_diagnostic_open": 1.441255200013984
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.8507510999916121,
+      "through_first_open_seconds": 2.2928630000096746,
+      "through_repeated_open_seconds": 3.7341182000236586,
+      "peak_through_result_and_cold_bytes": 38912000,
+      "peak_through_first_open_bytes": 39804928,
+      "peak_through_repeated_open_bytes": 40214528,
+      "post_fingerprint_peak_bytes": 40243200,
+      "worker_seconds": 3.735958400007803,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 374,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.80533890001243
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "deferred",
+      "repeat": 4,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3266299000242725,
+        "preprocessing": 0.013801999972201884,
+        "Forecast": 0.47770849999506027,
+        "Table": 0.0050475000170990825,
+        "representative_cold": 0.04576810001162812,
+        "first_diagnostic_open": 1.4735385000240058,
+        "repeated_diagnostic_open": 1.44769359997008
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.8689560000202619,
+      "through_first_open_seconds": 2.3424945000442676,
+      "through_repeated_open_seconds": 3.7901881000143476,
+      "peak_through_result_and_cold_bytes": 38825984,
+      "peak_through_first_open_bytes": 39854080,
+      "peak_through_repeated_open_bytes": 40247296,
+      "post_fingerprint_peak_bytes": 40271872,
+      "worker_seconds": 3.792016400024295,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 374,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.8614688999950886
+    },
+    {
+      "status": "verified",
+      "case": "six-medium",
+      "mode": "eager",
+      "repeat": 4,
+      "signatures": {
+        "root": {
+          "rows": 1,
+          "sha256": "d98f356de8b8e5a4bca2b9f980c8742278f59a1e599c15a1c93b0e696e280de6"
+        },
+        "forecast": {
+          "rows": 1,
+          "sha256": "b4a1901aa88f7dee360cb54b99cdd141eea8c0628cedd166da3680691db260b1"
+        },
+        "table": {
+          "rows": 1,
+          "sha256": "3cf0d580e2577e57b7992a618990b6e38d590fd76cf1f2ab86d40741a55869f1"
+        },
+        "cold": {
+          "rows": 3,
+          "sha256": "1a72a8bd99e67730b2b5308cc57c1a8e28619aa5f64130681158339287c10ab2"
+        },
+        "diagnostics": {
+          "full_branch_records": {
+            "rows": 1149,
+            "sha256": "72f1339048f31b3103be765a626321a714cdd173dd73d5d25ff5e3a58012a503"
+          },
+          "terminal_records": {
+            "rows": 751,
+            "sha256": "f9e8ac62b186dd74824741a0aa8cfb6a51069b21d7df06c8dda562ff750eb1f9"
+          },
+          "branch_records": {
+            "rows": 1149,
+            "sha256": "4a32dd7470ff7d2f82b2a187f430317bd7a7773a19de4912699e4f74628fba99"
+          }
+        }
+      },
+      "phases": {
+        "imports": 0.3239143999526277,
+        "preprocessing": 0.01289460004772991,
+        "Forecast": 0.4820291000069119,
+        "Table": 0.005614299967419356,
+        "representative_cold": 0.030820999993011355,
+        "first_diagnostic_open": 1.0551518999855034,
+        "repeated_diagnostic_open": 1.0490806000307202
+      },
+      "preprocessing_through_full_result_and_cold_seconds": 0.8552733999677002,
+      "through_first_open_seconds": 1.9104252999532036,
+      "through_repeated_open_seconds": 2.959505899983924,
+      "peak_through_result_and_cold_bytes": 41046016,
+      "peak_through_first_open_bytes": 41869312,
+      "peak_through_repeated_open_bytes": 41975808,
+      "post_fingerprint_peak_bytes": 42004480,
+      "worker_seconds": 2.96138749999227,
+      "values": 451,
+      "actions": 1103,
+      "sources": 860,
+      "retained_resolutions": 1122,
+      "representative_cold_reads": 3,
+      "diagnostic_first_repeat_equal": true,
+      "full_initial7_search": false,
+      "scope": "one engine per fresh worker; complete Forecast/Table/3 representative cold then first/repeated diagnostic opens",
+      "process_wall_seconds": 3.034882200008724
+    }
+  ],
+  "worker_calculation_limit_seconds": 30,
+  "worker_wall_limit_seconds": 120,
+  "worker_memory_limit_bytes": 1500000000,
+  "order": "four rounds per case: eager/deferred, deferred/eager, eager/deferred, deferred/eager",
+  "cases": [
+    "four",
+    "five-medium",
+    "six-medium"
+  ],
+  "summary": {
+    "four": {
+      "eager": {
+        "preprocessing_through_full_result_and_cold_seconds": {
+          "median": 0.37488075002329424,
+          "min": 0.3693730999948457,
+          "max": 0.39940589998150244
+        },
+        "through_first_open_seconds": {
+          "median": 0.40242625001701526,
+          "min": 0.39725759997963905,
+          "max": 0.42684839997673407
+        },
+        "through_repeated_open_seconds": {
+          "median": 0.4294557500106748,
+          "min": 0.4252017000108026,
+          "max": 0.453979599988088
+        },
+        "peak_through_result_and_cold_bytes": {
+          "median": 32761856.0,
+          "min": 32641024,
+          "max": 32874496
+        },
+        "peak_through_repeated_open_bytes": {
+          "median": 32968704.0,
+          "min": 32727040,
+          "max": 33079296
+        }
+      },
+      "deferred": {
+        "preprocessing_through_full_result_and_cold_seconds": {
+          "median": 0.36910564999561757,
+          "min": 0.36580139998113737,
+          "max": 0.3762354999780655
+        },
+        "through_first_open_seconds": {
+          "median": 0.410568899998907,
+          "min": 0.4069506999803707,
+          "max": 0.418441999994684
+        },
+        "through_repeated_open_seconds": {
+          "median": 0.4514970999734942,
+          "min": 0.44741419999627396,
+          "max": 0.4601173999835737
+        },
+        "peak_through_result_and_cold_bytes": {
+          "median": 32704512.0,
+          "min": 32468992,
+          "max": 32780288
+        },
+        "peak_through_repeated_open_bytes": {
+          "median": 32884736.0,
+          "min": 32743424,
+          "max": 32948224
+        }
+      }
+    },
+    "five-medium": {
+      "eager": {
+        "preprocessing_through_full_result_and_cold_seconds": {
+          "median": 0.49976520001655445,
+          "min": 0.49333389999810606,
+          "max": 0.5208294999902137
+        },
+        "through_first_open_seconds": {
+          "median": 0.7465712499979418,
+          "min": 0.7384794999961741,
+          "max": 0.7678159999777563
+        },
+        "through_repeated_open_seconds": {
+          "median": 0.9895695000013802,
+          "min": 0.9798647999996319,
+          "max": 1.0111532000009902
+        },
+        "peak_through_result_and_cold_bytes": {
+          "median": 34744320.0,
+          "min": 34713600,
+          "max": 34820096
+        },
+        "peak_through_repeated_open_bytes": {
+          "median": 35229696.0,
+          "min": 35086336,
+          "max": 35438592
+        }
+      },
+      "deferred": {
+        "preprocessing_through_full_result_and_cold_seconds": {
+          "median": 0.4964044000080321,
+          "min": 0.4904660999891348,
+          "max": 0.5195086999447085
+        },
+        "through_first_open_seconds": {
+          "median": 0.8199158500065096,
+          "min": 0.8134527999791317,
+          "max": 0.8414781999890693
+        },
+        "through_repeated_open_seconds": {
+          "median": 1.1404484000231605,
+          "min": 1.1347355999751016,
+          "max": 1.1628370999824256
+        },
+        "peak_through_result_and_cold_bytes": {
+          "median": 34131968.0,
+          "min": 33947648,
+          "max": 34250752
+        },
+        "peak_through_repeated_open_bytes": {
+          "median": 34795520.0,
+          "min": 34516992,
+          "max": 34861056
+        }
+      }
+    },
+    "six-medium": {
+      "eager": {
+        "preprocessing_through_full_result_and_cold_seconds": {
+          "median": 0.8587771499878727,
+          "min": 0.8552733999677002,
+          "max": 0.8671696000383236
+        },
+        "through_first_open_seconds": {
+          "median": 1.9153031000168994,
+          "min": 1.9104252999532036,
+          "max": 1.9220271999947727
+        },
+        "through_repeated_open_seconds": {
+          "median": 2.972246700024698,
+          "min": 2.959505899983924,
+          "max": 2.99887700000545
+        },
+        "peak_through_result_and_cold_bytes": {
+          "median": 41158656.0,
+          "min": 41046016,
+          "max": 41193472
+        },
+        "peak_through_repeated_open_bytes": {
+          "median": 42137600.0,
+          "min": 41975808,
+          "max": 42287104
+        }
+      },
+      "deferred": {
+        "preprocessing_through_full_result_and_cold_seconds": {
+          "median": 0.8638694499968551,
+          "min": 0.8507510999916121,
+          "max": 0.8689560000202619
+        },
+        "through_first_open_seconds": {
+          "median": 2.3166443999798503,
+          "min": 2.2928630000096746,
+          "max": 2.3424945000442676
+        },
+        "through_repeated_open_seconds": {
+          "median": 3.75993619998917,
+          "min": 3.7341182000236586,
+          "max": 3.7901881000143476
+        },
+        "peak_through_result_and_cold_bytes": {
+          "median": 38803456.0,
+          "min": 38625280,
+          "max": 38912000
+        },
+        "peak_through_repeated_open_bytes": {
+          "median": 40177664.0,
+          "min": 40071168,
+          "max": 40247296
+        }
+      }
+    }
+  },
+  "all_mode_repeat_outputs_equal": true,
+  "total_workers": 24
+}

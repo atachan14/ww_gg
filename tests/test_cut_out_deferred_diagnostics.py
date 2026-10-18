@@ -39,3 +39,17 @@ class DeferredDiagnosticTests(unittest.TestCase):
             lazy.strategy=replace(lazy.strategy,night='max')
             self.assertEqual(list(lazy.full_branch_records),rows)
             self.assertGreater(lazy.board_action_kernels.terminal_not_retained,0)
+
+    def test_explicit_trial_memory_option_has_no_value_search_or_reference_fallback(self):
+        from benchmarks.player_match_groups.cut_out_initial_publications import base,trial_engine,InitialReferenceEngine
+        graph,w=base()
+        eager=trial_engine(graph,w);lazy=trial_engine(graph,w,diagnostics='deferred')
+        self.assertIs(type(eager),InitialPublicationEngine)
+        self.assertIs(type(lazy),DeferredInitialEngine)
+        self.assertEqual(eager.values,{})
+        self.assertEqual(lazy.values,{})
+        self.assertEqual(lazy.deferred_ledger.inputs,[])
+        self.assertIs(type(trial_engine(graph,w,kind='reference')),InitialReferenceEngine)
+        with self.assertRaises(ValueError):trial_engine(graph,w,kind='reference',diagnostics='deferred')
+        with self.assertRaises(ValueError):trial_engine(graph,w,diagnostics='typo')
+        with self.assertRaises(ValueError):trial_engine(graph,w,kind='typo')

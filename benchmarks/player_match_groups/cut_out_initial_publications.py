@@ -186,14 +186,30 @@ def completed_evidence(engine,graph):
                 cold_rows.append(dict(history=clean(expected.public.history),winner=expected.public.winner))
     return dict(branches=branches,terminals=terminals,joint=joint,representative_cold=cold_rows)
 
-def run(kind='new',path=None):
+def trial_engine(graph,witness,*,kind='new',diagnostics='eager'):
+    """Explicit memory choice; reference and default behavior stay independent."""
+    if kind not in ('new','reference') or diagnostics not in ('eager','deferred'):
+        raise ValueError('choose new/reference and eager/deferred explicitly')
+    if kind=='reference':
+        if diagnostics!='eager':raise ValueError('independent reference uses eager diagnostics')
+        return InitialReferenceEngine(graph)
+    if diagnostics=='deferred':
+        from .cut_out_deferred_diagnostics import DeferredInitialEngine
+        return DeferredInitialEngine(graph,witness=witness)
+    return InitialPublicationEngine(graph,witness=witness)
+
+
+def run(kind='new',path=None,*,diagnostics='eager'):
     import os,time,threading
     from .cut_out_uniform_game_fixture import peak_bytes
     start=perf_counter();engine=None;graph=None;lock=threading.Lock()
-    output=Path(path or ('benchmarks/player_match_groups/initial-publications-'+kind+'-trial.json'))
+    if kind not in ('new','reference') or diagnostics not in ('eager','deferred') or kind=='reference' and diagnostics!='eager':
+        raise ValueError('unsupported trial kind or diagnostic mode')
+    suffix='-deferred' if diagnostics=='deferred' else ''
+    output=Path(path or ('benchmarks/player_match_groups/initial-publications-'+kind+suffix+'-trial.json'))
     def save(row):
         with lock:
-            row.update(kind=kind,elapsed_seconds=perf_counter()-start,peak_working_set_bytes=peak_bytes(),stats=stats(engine))
+            row.update(kind=kind,diagnostics=diagnostics,elapsed_seconds=perf_counter()-start,peak_working_set_bytes=peak_bytes(),stats=stats(engine))
             tmp=output.with_suffix('.tmp');tmp.write_text(json.dumps(row,indent=2)+'\n',encoding='utf-8');tmp.replace(output)
     def watch():
         while True:
@@ -207,7 +223,7 @@ def run(kind='new',path=None):
     try:
         with calculation_budget(None,max_seconds=60):
             graph,witness=base();source=scope(graph,witness)
-            engine=InitialPublicationEngine(graph,witness=witness) if kind=='new' else InitialReferenceEngine(graph)
+            engine=trial_engine(graph,witness,kind=kind,diagnostics=diagnostics)
             engine.capture_terminal=True
             with calculation_origin(graph.data):
                 remember(engine,graph.root,source)
@@ -235,5 +251,5 @@ def run(kind='new',path=None):
 
 if __name__=='__main__':
     import sys
-    result=run(sys.argv[1] if len(sys.argv)>1 else 'new')
+    result=run(sys.argv[1] if len(sys.argv)>1 else 'new',diagnostics=sys.argv[2] if len(sys.argv)>2 else 'eager')
     print(json.dumps({k:result[k] for k in ('kind','status','reason','elapsed_seconds','peak_working_set_bytes') if k in result}),flush=True)
