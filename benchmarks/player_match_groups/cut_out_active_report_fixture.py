@@ -18,7 +18,7 @@ def white_prior_dependency():
     c=e.action_policy.project(b,payload,outcome,1)
     restricted,_=certify_night(c.public,c.public_state,c.past,rules,strategy)
     assert restricted.selected is None and restricted.reason=='five_player_no_read_structure_unproved'
-    proof,diagnostics=guarded_profile_probe(c.public,c.public_state,c.past,rules,strategy)
+    proof,diagnostics=guarded_profile_probe(c.public,c.public_state,c.past,rules,strategy,legacy_reference=True)
     assert proof.selected is not None and diagnostics['profile_reads']==0 and diagnostics['complete_candidate_scores']==12
     assert all(v==F(1,3) for info,row in proof.selected.scores for target,v in row)
     return dict(case='M1-white-dependency',initial_hypotheses=len(root.public_law.hypotheses),night_hypotheses=len(c.public_state.hypotheses),

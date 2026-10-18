@@ -1,0 +1,765 @@
+{
+  "cases": [
+    {
+      "players": 4,
+      "initial": "random_white",
+      "private": true,
+      "village_win": "1/2",
+      "report_frames": 0,
+      "four_candidate_witnesses": 0,
+      "two_candidate_uniform_tie_witnesses": 0,
+      "candidate_outcome_joint_checks": 0,
+      "all_candidate_instruction_cold_readbacks": 0,
+      "medium_instruction_cold_readbacks": 0,
+      "private_report_posterior_witnesses": 0,
+      "complete_table_action_joint_history_physical_equal": true,
+      "own_scan_targets": [
+        2,
+        4
+      ],
+      "initial_public_policy": [
+        1,
+        2
+      ],
+      "night_proofs": 4,
+      "report_choice_evidence": [],
+      "case": "active4",
+      "legacy_canonical_calls_actual": 0,
+      "legacy_candidate_constructor_calls_actual": 0,
+      "old_full_candidate_values_retained": true,
+      "candidate_oracle": {
+        "public_contexts_compared": 5,
+        "full_candidate_profiles_compared": 120,
+        "candidate_equivalence_matches_old": true,
+        "comparison_uses_explicit_old_oracle_only": true,
+        "active_report_contexts": {
+          "public_contexts_compared": 4,
+          "full_candidate_profiles_compared": 24,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        }
+      },
+      "worker_seconds": 1.0,
+      "peak_working_set_bytes": 35700736
+    },
+    {
+      "players": 5,
+      "initial": "random_white",
+      "private": true,
+      "village_win": "1",
+      "report_frames": 7,
+      "four_candidate_witnesses": 3,
+      "two_candidate_uniform_tie_witnesses": 4,
+      "candidate_outcome_joint_checks": 29,
+      "all_candidate_instruction_cold_readbacks": 29,
+      "medium_instruction_cold_readbacks": 12,
+      "private_report_posterior_witnesses": 6,
+      "complete_table_action_joint_history_physical_equal": true,
+      "own_scan_targets": [
+        2,
+        4,
+        5
+      ],
+      "initial_public_policy": [
+        1,
+        2
+      ],
+      "night_proofs": 5,
+      "report_choice_evidence": [
+        {
+          "history": [
+            [
+              1,
+              "day",
+              1
+            ],
+            [
+              1,
+              "night",
+              3
+            ]
+          ],
+          "alive": [
+            2,
+            4,
+            5
+          ],
+          "public_hypotheses": 27,
+          "scores": [
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            }
+          ],
+          "chosen": [
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "weight": "1/2"
+            },
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        {
+          "history": [
+            [
+              1,
+              "day",
+              1
+            ],
+            [
+              1,
+              "night",
+              4
+            ]
+          ],
+          "alive": [
+            2,
+            3,
+            5
+          ],
+          "public_hypotheses": 27,
+          "scores": [
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            }
+          ],
+          "chosen": [
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "weight": "1/2"
+            },
+            {
+              "fake_colors": [
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        {
+          "history": [
+            [
+              1,
+              "day",
+              2
+            ],
+            [
+              1,
+              "night",
+              3
+            ]
+          ],
+          "alive": [
+            1,
+            4,
+            5
+          ],
+          "public_hypotheses": 27,
+          "scores": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            }
+          ],
+          "chosen": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ]
+              ],
+              "weight": "1/2"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ]
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        {
+          "history": [
+            [
+              1,
+              "day",
+              2
+            ],
+            [
+              1,
+              "night",
+              4
+            ]
+          ],
+          "alive": [
+            1,
+            3,
+            5
+          ],
+          "public_hypotheses": 27,
+          "scores": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            }
+          ],
+          "chosen": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ]
+              ],
+              "weight": "1/2"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ]
+              ],
+              "weight": "1/2"
+            }
+          ]
+        },
+        {
+          "history": [
+            [
+              1,
+              "day",
+              3
+            ],
+            [
+              1,
+              "night",
+              4
+            ]
+          ],
+          "alive": [
+            1,
+            2,
+            5
+          ],
+          "public_hypotheses": 42,
+          "scores": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1/2"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ],
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            }
+          ],
+          "chosen": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "weight": "1"
+            }
+          ]
+        },
+        {
+          "history": [
+            [
+              1,
+              "day",
+              4
+            ],
+            [
+              1,
+              "night",
+              3
+            ]
+          ],
+          "alive": [
+            1,
+            2,
+            5
+          ],
+          "public_hypotheses": 42,
+          "scores": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1/2"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ],
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            }
+          ],
+          "chosen": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "weight": "1"
+            }
+          ]
+        },
+        {
+          "history": [
+            [
+              1,
+              "day",
+              4
+            ],
+            [
+              1,
+              "night",
+              5
+            ]
+          ],
+          "alive": [
+            1,
+            2,
+            3
+          ],
+          "public_hypotheses": 42,
+          "scores": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1/2"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "value": "1"
+            },
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "black"
+                ],
+                [
+                  2,
+                  "black"
+                ]
+              ],
+              "value": "1"
+            }
+          ],
+          "chosen": [
+            {
+              "fake_colors": [
+                [
+                  1,
+                  "white"
+                ],
+                [
+                  2,
+                  "white"
+                ]
+              ],
+              "weight": "1"
+            }
+          ]
+        }
+      ],
+      "case": "active5",
+      "legacy_canonical_calls_actual": 0,
+      "legacy_candidate_constructor_calls_actual": 0,
+      "old_full_candidate_values_retained": true,
+      "candidate_oracle": {
+        "public_contexts_compared": 5,
+        "full_candidate_profiles_compared": 120,
+        "candidate_equivalence_matches_old": true,
+        "comparison_uses_explicit_old_oracle_only": true,
+        "active_report_contexts": {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 48,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        }
+      },
+      "worker_seconds": 3.7660000000032596,
+      "peak_working_set_bytes": 45391872
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "initial": "none",
+      "view": "role",
+      "white_target": null,
+      "medium_co": false,
+      "initial_hypotheses": 20,
+      "own_initial_hypotheses": 4,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 68,
+      "scalar_context_comparisons": 80,
+      "own_scan_targets": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "private_intervention_contexts": 56,
+      "public_unforced_scan_contexts": 56,
+      "own_scan_group_swap_audits": 226,
+      "grouped": {
+        "cut_out_builds": 10,
+        "cut_out_seconds": 0.0006945999921299517,
+        "key_seconds": 0.006960999977309257,
+        "action_requests": 138,
+        "action_evaluations": 80,
+        "law_seconds": 0.07384299981640652,
+        "acquisition_calls": 138,
+        "morning_calls": 21,
+        "inclusive_action_seconds": 0.46902279995265417,
+        "representative_hits": 58,
+        "label_scalar_restores": 56,
+        "label_restore_seconds": 0.0015582000778522342,
+        "total_seconds": 0.6988454000093043,
+        "evaluation_other_seconds": 0.6157886001456063,
+        "saved_origins": 1,
+        "generated_boards": 83,
+        "law_hypotheses_retained": 903
+      },
+      "labelled": {
+        "action_requests": 647,
+        "action_evaluations": 571,
+        "law_seconds": 0.4489986003318336,
+        "acquisition_calls": 432,
+        "morning_calls": 168,
+        "total_seconds": 0.7972875999985263,
+        "evaluation_other_seconds": 0.3498385996790603,
+        "saved_origins": 1,
+        "generated_boards": 212,
+        "law_hypotheses_retained": 4392
+      },
+      "seconds": 5.275922200002242,
+      "case": "basic5",
+      "legacy_canonical_calls_actual": 0,
+      "legacy_candidate_constructor_calls_actual": 0,
+      "old_full_candidate_values_retained": true,
+      "candidate_oracle": {
+        "public_contexts_compared": 5,
+        "full_candidate_profiles_compared": 120,
+        "candidate_equivalence_matches_old": true,
+        "comparison_uses_explicit_old_oracle_only": true
+      },
+      "worker_seconds": 6.046999999991385,
+      "peak_working_set_bytes": 65671168
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "white",
+      "white_target": 3,
+      "medium_co": false,
+      "initial_hypotheses": 180,
+      "own_initial_hypotheses": 9,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 156,
+      "scalar_context_comparisons": 178,
+      "own_scan_targets": [],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 0,
+      "grouped": {
+        "cut_out_builds": 7,
+        "cut_out_seconds": 0.0018699997453950346,
+        "key_seconds": 0.09923150003305636,
+        "action_requests": 231,
+        "action_evaluations": 178,
+        "law_seconds": 0.8655358000250999,
+        "acquisition_calls": 156,
+        "morning_calls": 42,
+        "inclusive_action_seconds": 4.605657099833479,
+        "representative_hits": 53,
+        "label_scalar_restores": 50,
+        "label_restore_seconds": 0.011334199807606637,
+        "total_seconds": 4.625850599986734,
+        "evaluation_other_seconds": 3.647879100375576,
+        "saved_origins": 1,
+        "generated_boards": 110,
+        "law_hypotheses_retained": 12384
+      },
+      "labelled": {
+        "action_requests": 697,
+        "action_evaluations": 537,
+        "law_seconds": 2.899355400208151,
+        "acquisition_calls": 384,
+        "morning_calls": 156,
+        "total_seconds": 4.291199100000085,
+        "evaluation_other_seconds": 1.4096240998187568,
+        "saved_origins": 1,
+        "generated_boards": 192,
+        "law_hypotheses_retained": 27540
+      },
+      "seconds": 17.681188299990026,
+      "case": "white5",
+      "legacy_canonical_calls_actual": 0,
+      "legacy_candidate_constructor_calls_actual": 0,
+      "old_full_candidate_values_retained": true,
+      "candidate_oracle": {
+        "public_contexts_compared": 5,
+        "full_candidate_profiles_compared": 120,
+        "candidate_equivalence_matches_old": true,
+        "comparison_uses_explicit_old_oracle_only": true,
+        "white_joint_contexts": {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 120,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        }
+      },
+      "worker_seconds": 22.485000000015134,
+      "peak_working_set_bytes": 101343232
+    },
+    {
+      "missing_context_refused": true,
+      "no_legacy_fallback": true,
+      "private_future_target_point_fixed": true,
+      "public_candidate_context_not_conditioned_on_other_private_target": true,
+      "legacy_match_calls": 0,
+      "worker_seconds": 3.8589999999967404,
+      "peak_working_set_bytes": 40341504
+    }
+  ],
+  "focused_patterns": [
+    "test_cut_out_candidate_context.py",
+    "test_cut_out_max_game.py",
+    "test_cut_out_triple_max.py"
+  ],
+  "aggregate_executed": false,
+  "overall_seconds": 54.59399999998277,
+  "timing_interpretation": "correctness and zero-call instrumentation, not a speed comparison"
+}

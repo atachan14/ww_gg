@@ -43,6 +43,7 @@ class RecordedPolicy(InformationSetActionPolicy):
 
     def project(self,b,payload,outcome,target):
         start=perf_counter();result=super().project(b,payload,outcome,target)
+        self.engine.record_candidate_transition(b,payload,result,target)
         if not getattr(self.engine,'_board_evidence_snapshot',False):
             self.engine.costs['law_seconds']+=perf_counter()-start
             self.engine.projected.append(result)
@@ -57,6 +58,18 @@ class CutOutUniformEngine(InformationSetForecast):
         self.graph=graph;self.representatives=representatives;self.view=view
         self.costs=Counter();self.scalar_actions={};self.group_cache={};self.branch_records=[];self.projected=[];self.capture_terminal=False;self.terminal_records=[]
         self.action_policy=RecordedPolicy(self)
+        from .cut_out_candidate_context import initial_candidate_context
+        root_context=initial_candidate_context(graph)
+        self.public_candidate_contexts={} if root_context is None else {(root_context.board,root_context.state,root_context.past):root_context}
+
+    def record_candidate_transition(self,b,payload,child,target):
+        if not self.public_candidate_contexts:return
+        parent=self.public_candidate_contexts.get((b,payload.public_state,payload.past))
+        if parent is None:return
+        context=parent.day_child(b,payload,child,target)
+        if context is not None:self.public_candidate_contexts[context.board,context.state,context.past]=context
+
+    def candidate_context(self,b,s,past):return self.public_candidate_contexts.get((b,s,past))
 
     def acquire(self,b,state):
         start=perf_counter();result=super().acquire(b,state)

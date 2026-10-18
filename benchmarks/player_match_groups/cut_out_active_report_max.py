@@ -41,7 +41,7 @@ class ActiveReportMaxEngine(CutOutMaxEngine):
                 or b.claims!=('medium','medium')+('latent',)*(b.player_count-2)
                 or b.wolf_count_distribution!={1:F(1)} or len(b.history)!=1 or past or len(s.rosters)!=1):
                 raise Pending('active_report_night_structure_unproved')
-            result,diagnostics=guarded_profile_probe(b,s,past,self.rules,self.strategy)
+            result,diagnostics=guarded_profile_probe(b,s,past,self.rules,self.strategy,candidate_context=self.candidate_context(b,s,past))
             self.report_diagnostics[key]=(result,diagnostics)
             if result.selected is None:raise Pending('active_report_night_'+str(result.reason))
             self.report_certificates[key]=result.selected

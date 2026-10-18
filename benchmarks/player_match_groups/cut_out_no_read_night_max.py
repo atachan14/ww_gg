@@ -12,11 +12,10 @@ from werewolf.information_set_forecast import Pending
 from werewolf.policy_certificates import ProfileSearch,ProfileCertificate,best_response_profile
 
 
-def guarded_profile_probe(b,s,past,rules,strategy,*,max_seconds=12):
+def guarded_profile_probe(b,s,past,rules,strategy,*,max_seconds=12,candidate_context=None,legacy_reference=False):
     """Fresh exact evaluators; first actual profile read invalidates ALL rows."""
     from werewolf.actor_information import wolf_information_groups
     from werewolf.policy_choice import uniform_policy
-    from werewolf.candidate_policy import CandidateRules
     from werewolf.wolf_profile_certificate import FixedPublicWolfProfile,_PolicyRead
     from werewolf.calculation_budget import calculation_budget,CalculationBudgetExceeded
     from werewolf.board_future import evidence_reconstruction
@@ -30,7 +29,16 @@ def guarded_profile_probe(b,s,past,rules,strategy,*,max_seconds=12):
     scores={}
     try:
         with calculation_budget(100000,max_seconds=max_seconds),evidence_reconstruction():
-            candidate_rules=CandidateRules(b,s,past,rules,strategy)
+            if legacy_reference:
+                from werewolf.candidate_policy import CandidateRules
+                candidate_rules=CandidateRules(b,s,past,rules,strategy)
+                diagnostics['grouping']='explicit_legacy_reference'
+            else:
+                from .cut_out_candidate_context import CutOutCandidateRules
+                if candidate_context is None:
+                    return ProfileSearch('dependency_unfinished',total,0,reason='cut_out_candidate_context_required'),diagnostics
+                candidate_rules=CutOutCandidateRules(candidate_context,b,s,past,groups)
+                diagnostics.update(candidate_rules.stats,grouping='inherited_block_pair_orbits')
             for info,mass,group in groups:
                 row=[]
                 for target in dict(legal)[info]:
@@ -70,7 +78,7 @@ def white_joint_support(b,s):
     return len(supported)==144
 
 
-def certify_night(b,s,past,rules,strategy,*,white_joint=False):
+def certify_night(b,s,past,rules,strategy,*,white_joint=False,candidate_context=None):
     # Exactly one current night; every subsequent 3-player execution terminates.
     # No guardian and no active public abilities can read an anchor kernel.
     if (b.player_count!=5 or len(b.alive)!=4 or b.phase!='night' or b.day!=1 or b.winner
@@ -81,7 +89,7 @@ def certify_night(b,s,past,rules,strategy,*,white_joint=False):
         return ProfileSearch('dependency_unfinished',0,0,reason='five_player_no_read_structure_unproved'),{}
     if white_joint and (b.history[0].day!=1 or b.alive!=tuple(p for p in range(1,6) if p!=b.history[0].target) or b.reports or b.medium_opportunities or b.report_resolved or not white_joint_support(b,s)):
         return ProfileSearch('dependency_unfinished',0,0,reason='white_joint_complete_support_unproved'),{}
-    return guarded_profile_probe(b,s,past,rules,strategy)
+    return guarded_profile_probe(b,s,past,rules,strategy,candidate_context=candidate_context)
 
 
 class NoReadNightMaxEngine(CutOutMaxEngine):
@@ -92,7 +100,7 @@ class NoReadNightMaxEngine(CutOutMaxEngine):
         from werewolf.actor_information import WolfInformation
         key=(self.rules,self.strategy,b,s,past)
         if key not in self.no_read_certificates:
-            result,diagnostics=certify_night(b,s,past,self.rules,self.strategy,white_joint=self.white_joint)
+            result,diagnostics=certify_night(b,s,past,self.rules,self.strategy,white_joint=self.white_joint,candidate_context=self.candidate_context(b,s,past))
             self.no_read_diagnostics[key]=(result,diagnostics)
             if result.selected is None:raise Pending('no_read_night_'+str(result.reason))
             self.no_read_certificates[key]=result.selected

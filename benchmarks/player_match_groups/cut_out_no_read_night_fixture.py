@@ -14,7 +14,7 @@ def read_control():
     root=prepare_root_secrets(seed,rules);b=replace(seed,phase='night')
     structural,_=certify_night(b,root.public_law,(),rules,strategy)
     assert structural.selected is None and structural.reason=='five_player_no_read_structure_unproved'
-    guarded,diagnostics=guarded_profile_probe(b,root.public_law,(),rules,strategy)
+    guarded,diagnostics=guarded_profile_probe(b,root.public_law,(),rules,strategy,legacy_reference=True)
     assert guarded.selected is None and guarded.reason=='fixed_public_profile_read' and diagnostics['profile_reads']==1
     return dict(structural_refusal=structural.reason,guarded_refusal=guarded.reason,diagnostics=diagnostics,numeric_certificate=False)
 

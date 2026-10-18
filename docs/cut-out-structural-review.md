@@ -97,3 +97,8 @@ fake_reports=maxは現行の霊報告選択。fake_seer_policyは別の非矛盾
 | 全project suite | UI採用前の別window | 過去の旧commit実績約1033秒。現HEAD未計測、5分内と約束しない。別枠1800秒案 |
 
 最初はsmoke＋代表統合（合計270秒cap）か、既存62単独のどちらかを選ぶ。全driverを足し合わせるaggregateはまだ走らせない。5分枠の各案はworker60秒・WorkingSet1.5GB、計画全体300秒を継承する。全projectはこのworker60秒の枠では実行できず、別の時間/RSS監視を持つ別予算・別枠の案であり、このreviewでは実行しない。
+
+
+## Subsequent focused change: inherited candidate context
+
+The legacy canonical candidate-matching finding above describes the reviewed commit. The subsequent comparison-only change is documented in [cut-out-candidate-context.md](cut-out-candidate-context.md): initial product-group witness -> genuine common day-death child -> inherited pair orbits. Runtime candidate matching no longer reconstructs canonical groups in the covered first-night probes; full candidate-value evaluations and white-support validation remain. This does not complete the wider incremental-group/integration plan.
