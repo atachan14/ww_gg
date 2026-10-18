@@ -102,3 +102,8 @@ fake_reports=maxは現行の霊報告選択。fake_seer_policyは別の非矛盾
 ## Subsequent focused change: inherited candidate context
 
 The legacy canonical candidate-matching finding above describes the reviewed commit. The subsequent comparison-only change is documented in [cut-out-candidate-context.md](cut-out-candidate-context.md): initial product-group witness -> genuine common day-death child -> inherited pair orbits. Runtime candidate matching no longer reconstructs canonical groups in the covered first-night probes; full candidate-value evaluations and white-support validation remain. This does not complete the wider incremental-group/integration plan.
+
+
+## Subsequent recursive-group checkpoint
+
+The four/five-player root/history group-rebuild finding above is addressed by [cut-out-inherited-groups.md](cut-out-inherited-groups.md): public and private groups inherit parent splits through completed common death/acquisition/report events. The broader production/UI integration plan and candidate-value proof cost remain separate. Six/seven-player behavior is explicitly unchanged.

@@ -15,6 +15,8 @@ def report_flow(outcomes, source, past, policy, *, source_board=None, fake_color
     for outcome in outcomes:
         state = policy.project(source, outcome.board)
         if source_board is not None:
+            hook=getattr(policy,'record_group_publication',None)
+            if hook is not None:hook(source_board,source,past,outcome.board,state,past,'medium')
             from .board_future import record_medium_instruction
             record_medium_instruction(policy,source_board,source,past,outcome,fake_colors,law=state)
         for probability, board, joint, reports in policy.publications(outcome.board, state, past):

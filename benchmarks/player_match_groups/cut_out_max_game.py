@@ -13,15 +13,6 @@ class CutOutMaxEngine(CutOutUniformEngine):
     # Only action evaluation uses cut-out representatives. Never rank per world.
     def solve(self,*args,**kwargs):return InformationSetForecast.solve(self,*args,**kwargs)
 
-    def groups(self,b,past,private,observer=None):
-        from werewolf.seer_intervention import SeerObserver
-        from .cut_out_day_night import point_fix
-        groups=super().groups(b,past,private,observer)
-        if isinstance(observer,SeerObserver):
-            fixed={observer.actor,observer.target}
-            fixed.update(x for a in observer.acquisitions for x in (a.player,a.target))
-            groups=point_fix(groups,*sorted(fixed))
-        return groups
 
 
 def graph(players=5,mediums=0,night='random',fake_reports='random'):

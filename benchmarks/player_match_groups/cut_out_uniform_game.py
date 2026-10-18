@@ -31,6 +31,12 @@ class OwnView:
 
 
 class RecordedPolicy(InformationSetActionPolicy):
+    def acquire(self,b,payload):
+        result=super().acquire(b,payload)
+        registry=getattr(self.engine,'inherited_groups',None)
+        if registry is not None:registry.acquisition(b,payload.public_state,result.public_state,payload.past)
+        return result
+
     def outcomes(self,b,payload,target):
         outcomes=super().outcomes(b,payload,target)
         if not getattr(self.engine,'_board_evidence_snapshot',False):
@@ -43,6 +49,8 @@ class RecordedPolicy(InformationSetActionPolicy):
 
     def project(self,b,payload,outcome,target):
         start=perf_counter();result=super().project(b,payload,outcome,target)
+        registry=getattr(self.engine,'inherited_groups',None)
+        if registry is not None:registry.action(b,payload,result,target)
         self.engine.record_candidate_transition(b,payload,result,target)
         if not getattr(self.engine,'_board_evidence_snapshot',False):
             self.engine.costs['law_seconds']+=perf_counter()-start
@@ -52,12 +60,15 @@ class RecordedPolicy(InformationSetActionPolicy):
 
 class CutOutUniformEngine(InformationSetForecast):
     retain_joint_guard_history=True
+    use_inherited_groups=True
     def __init__(self,graph,*,representatives=True,view=None):
         super().__init__(graph.engine.baseline.rules,graph.engine.baseline.strategy,
             max_work=1000000,exact_renaming=False,memoize_flows=True,retire_uninformative_scans=False)
         self.graph=graph;self.representatives=representatives;self.view=view
         self.costs=Counter();self.scalar_actions={};self.group_cache={};self.branch_records=[];self.projected=[];self.capture_terminal=False;self.terminal_records=[]
         self.action_policy=RecordedPolicy(self)
+        from .cut_out_inherited_groups import InheritedGroupRegistry
+        self.inherited_groups=(InheritedGroupRegistry(graph) if self.use_inherited_groups and graph.engine.baseline.players in (4,5) else None)
         from .cut_out_candidate_context import initial_candidate_context
         root_context=initial_candidate_context(graph)
         self.public_candidate_contexts={} if root_context is None else {(root_context.board,root_context.state,root_context.past):root_context}
@@ -78,8 +89,12 @@ class CutOutUniformEngine(InformationSetForecast):
             self.costs['acquisition_calls']+=1
         return result
 
+    def record_group_publication(self,b,s,past,child,law,history,kind):
+        if self.inherited_groups is not None:self.inherited_groups.publication(b,s,past,child,law,history,kind)
+
     def morning(self,b,s,past):
         start=perf_counter();result=super().morning(b,s,past)
+        for q,child,law,history in result:self.record_group_publication(b,s,past,child,law,history,'morning')
         if not getattr(self,'_board_evidence_snapshot',False):
             self.costs['law_seconds']+=perf_counter()-start
             self.costs['morning_calls']+=1
@@ -92,7 +107,34 @@ class CutOutUniformEngine(InformationSetForecast):
     def equivalent_targets(self,*args,**kwargs):return False
     def actor_equivalent_targets(self,*args,**kwargs):return False
 
-    def groups(self,b,past,private,observer=None):
+    def groups(self,b,past,private,observer=None,*,public_state=None):
+        if self.inherited_groups is not None:return self.inherited_value_groups(b,past,private,observer,public_state)
+        return self.legacy_large_groups(b,past,private,observer)
+
+    def inherited_value_groups(self,b,past,private,observer,public_state):
+        from werewolf.seer_intervention import SeerObserver
+        started=perf_counter();context=self.inherited_groups.for_value(b,past,public_state)
+        fixed=set()
+        if self.view is not None:
+            fixed.add(self.view.player)
+            fixed.update(x for a in self.view.acquisitions for x in (a.player,a.target))
+        if isinstance(observer,SeerObserver):
+            fixed.update((observer.actor,observer.target))
+            fixed.update(x for a in observer.acquisitions for x in (a.player,a.target))
+        elif observer is not None and (not isinstance(observer,OwnView) or observer!=self.view):
+            raise Pending('inherited_private_observer_unproved')
+        masks={h.roles[0] for h in private.hypotheses}
+        if len(masks)==1:fixed.update(p for p in range(1,b.player_count+1) if next(iter(masks))&(1<<(p-1)))
+        key=(context,tuple(sorted(fixed)))
+        if key not in self.group_cache:self.costs['cut_out_builds']+=1
+        groups=self.inherited_groups.private_groups(context,fixed,self.group_cache)
+        self.costs['cut_out_seconds']+=perf_counter()-started
+        self.costs['inherited_group_requests']+=1
+        return groups
+
+    def legacy_large_groups(self,b,past,private,observer=None):
+        # Explicit unchanged 6/7-player path, outside this 4/5-player change.
+        if b.player_count in (4,5):raise Pending('legacy_root_group_rebuild_forbidden')
         started=perf_counter()
         # Only previously proved groups and explicit observations are used.
         # Private branch law is NOT inspected for inferred secret endpoints.
@@ -114,7 +156,7 @@ class CutOutUniformEngine(InformationSetForecast):
 
     def act(self,b,s,past,target,private,observer,*,physical=None):
         physical=physical_board(b,private,physical)
-        groups=self.groups(b,past,private,observer=observer)
+        groups=self.groups(b,past,private,observer=observer,public_state=s)
         group=next(g for g in groups if target in g)
         representative=group[0] if self.representatives else target
         key_started=perf_counter()
@@ -146,14 +188,14 @@ class CutOutUniformEngine(InformationSetForecast):
         self.costs['key_seconds']+=perf_counter()-key_started
         if cached is not None:return cached
         if b.phase=='day':
-            groups=self.groups(b,past,private,observer=observer)
+            groups=self.groups(b,past,private,observer=observer,public_state=s)
             choices=tuple(tuple(p for p in g if p in b.alive) for g in groups) if self.representatives else tuple((p,) for p in b.alive)
             value=sum((F(len(g),len(b.alive))*self.act(b,s,past,g[0],private,observer,physical=physical) for g in choices if g),F())
         elif b.phase=='night':
             value=F()
             for info,mass,own in wolf_information_groups(private):
                 policy=dict(self.wolf_policy(b,s,past,info.initial_roster,info.attacks))
-                groups=self.groups(b,past,own)
+                groups=self.groups(b,past,own,public_state=s)
                 choices=tuple(tuple(p for p in g if p in policy) for g in groups) if self.representatives else tuple((p,) for p in policy)
                 for g in choices:
                     if g:value+=mass*sum((policy[p] for p in g),F())*self.act(b,s,past,g[0],own,observer,physical=physical_board(b,own,physical))
@@ -164,6 +206,7 @@ class CutOutUniformEngine(InformationSetForecast):
 
 
 class OfficialLabelledEngine(CutOutUniformEngine):
+    use_inherited_groups=False
     # Independent OLD common recursion, with every target explicitly evaluated.
     # Avoid both exact-renaming and the experimental solve/group path.
     def groups(self,*args):raise AssertionError('reference cannot use cut-out groups')

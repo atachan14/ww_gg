@@ -208,11 +208,17 @@ class InformationSetForecast:
         except ValueError:
             raise Pending('information_set_public_corpse_inconsistent')
 
+    def record_group_publication(self,b,s,past,child,law,history,kind):
+        """Optional constructed-group witness; never changes a branch or policy."""
+        pass
+
     def publications(self,b,s,past):
         # Public law only: never key or generate this cache with viewer evidence.
         from .board_future import record_publications
         branches=self.cached_flow(self.publication_values,(b,s,past),
                                   lambda:self.generate_publications(b,s,past),'publication')
+        for q,child,law,history in branches:
+            self.record_group_publication(b,s,past,child,law,history,'seer')
         return record_publications(self,b,s,past,branches,provider='publications')
 
     def generate_publications(self,b,s,past):

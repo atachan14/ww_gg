@@ -1,0 +1,995 @@
+{
+  "cases": [
+    {
+      "case": "uniform4",
+      "case_result": {
+        "village_win": "1/4",
+        "complete_table_joint_branch_mass_equal": true
+      },
+      "registry_count": 2,
+      "contexts": 10,
+      "recursive_contexts": 8,
+      "max_depth": 2,
+      "event_counts": {
+        "initial-CO/report": 2,
+        "death-day": 4,
+        "symmetric-acquisition": 4
+      },
+      "full_public_law_invariance_swaps": 8,
+      "private_groups_equal_old_root_oracle": 23,
+      "canonical_calls_all_recursive_children": 0,
+      "legacy_candidate_constructors_all_children": 0,
+      "legacy_root_rebuilds_all_children": 0,
+      "boundaries": {
+        "unconfigured_CO_refused": true,
+        "missing_context_refused": true,
+        "unknown_private_observer_refused": true
+      },
+      "candidate_oracles": [],
+      "worker_seconds": 0.09400000001187436,
+      "peak_working_set_bytes": 35782656
+    },
+    {
+      "case": "seer5",
+      "case_result": {
+        "players": 5,
+        "mediums": 1,
+        "night": "max",
+        "view": "public",
+        "village_win": "2/3",
+        "public_policy": [
+          2,
+          4,
+          5
+        ],
+        "private_best": "2/3",
+        "scalar_context_comparisons": 195,
+        "terminal_readbacks": 177,
+        "unknown_medium_wolf_information_sets": 12,
+        "complete_table_action_horizon_joint_physical_history_equal": true,
+        "grouped": {
+          "cut_out_builds": 85,
+          "cut_out_seconds": 0.004377000383101404,
+          "inherited_group_requests": 239,
+          "key_seconds": 0.0071864002966322005,
+          "action_requests": 239,
+          "action_evaluations": 195,
+          "law_seconds": 0.06892269998206757,
+          "acquisition_calls": 84,
+          "morning_calls": 30,
+          "inclusive_action_seconds": 0.2549117000598926,
+          "representative_hits": 44,
+          "label_scalar_restores": 32,
+          "label_restore_seconds": 0.000725600024452433,
+          "total_seconds": 0.15884780001943,
+          "evaluation_other_seconds": 0.07763609933317639,
+          "saved_origins": 1,
+          "generated_boards": 124,
+          "law_hypotheses_retained": 429
+        },
+        "labelled": {
+          "action_requests": 472,
+          "action_evaluations": 406,
+          "law_seconds": 0.09951479939627461,
+          "acquisition_calls": 156,
+          "morning_calls": 66,
+          "total_seconds": 0.18818050000118092,
+          "evaluation_other_seconds": 0.10799140032031573,
+          "saved_origins": 1,
+          "generated_boards": 140,
+          "law_hypotheses_retained": 495
+        },
+        "seconds": 0.7176851999829523
+      },
+      "registry_count": 2,
+      "contexts": 226,
+      "recursive_contexts": 224,
+      "max_depth": 5,
+      "event_counts": {
+        "initial-CO/report": 2,
+        "death-day": 158,
+        "symmetric-acquisition": 5,
+        "death-night": 18,
+        "publication-seer": 43
+      },
+      "full_public_law_invariance_swaps": 61,
+      "private_groups_equal_old_root_oracle": 239,
+      "canonical_calls_all_recursive_children": 0,
+      "legacy_candidate_constructors_all_children": 0,
+      "legacy_root_rebuilds_all_children": 0,
+      "boundaries": {
+        "unconfigured_CO_refused": true,
+        "missing_context_refused": true,
+        "unknown_private_observer_refused": true
+      },
+      "candidate_oracles": [],
+      "worker_seconds": 0.7660000000032596,
+      "peak_working_set_bytes": 41385984
+    },
+    {
+      "case": "active4",
+      "case_result": {
+        "players": 4,
+        "initial": "random_white",
+        "private": true,
+        "village_win": "1/2",
+        "report_frames": 0,
+        "four_candidate_witnesses": 0,
+        "two_candidate_uniform_tie_witnesses": 0,
+        "candidate_outcome_joint_checks": 0,
+        "all_candidate_instruction_cold_readbacks": 0,
+        "medium_instruction_cold_readbacks": 0,
+        "private_report_posterior_witnesses": 0,
+        "complete_table_action_joint_history_physical_equal": true,
+        "own_scan_targets": [
+          2,
+          4
+        ],
+        "initial_public_policy": [
+          1,
+          2
+        ],
+        "night_proofs": 4,
+        "report_choice_evidence": [],
+        "case": "active4",
+        "legacy_canonical_calls_actual": 0,
+        "legacy_candidate_constructor_calls_actual": 0,
+        "old_full_candidate_values_retained": true,
+        "candidate_oracle": {
+          "deferred_explicit_oracle": true,
+          "active_report_contexts": {
+            "deferred_explicit_oracle": true
+          }
+        }
+      },
+      "registry_count": 5,
+      "contexts": 53,
+      "recursive_contexts": 48,
+      "max_depth": 3,
+      "event_counts": {
+        "initial-CO/report": 5,
+        "death-day": 19,
+        "symmetric-acquisition": 17,
+        "death-night": 12
+      },
+      "full_public_law_invariance_swaps": 75,
+      "private_groups_equal_old_root_oracle": 113,
+      "canonical_calls_all_recursive_children": 0,
+      "legacy_candidate_constructors_all_children": 0,
+      "legacy_root_rebuilds_all_children": 0,
+      "boundaries": {
+        "unconfigured_CO_refused": true,
+        "missing_context_refused": true,
+        "unknown_private_observer_refused": true
+      },
+      "candidate_oracles": [
+        {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 120,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        },
+        {
+          "public_contexts_compared": 4,
+          "full_candidate_profiles_compared": 24,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        }
+      ],
+      "worker_seconds": 0.9529999999795109,
+      "peak_working_set_bytes": 36012032
+    },
+    {
+      "case": "active5",
+      "case_result": {
+        "players": 5,
+        "initial": "random_white",
+        "private": true,
+        "village_win": "1",
+        "report_frames": 7,
+        "four_candidate_witnesses": 3,
+        "two_candidate_uniform_tie_witnesses": 4,
+        "candidate_outcome_joint_checks": 29,
+        "all_candidate_instruction_cold_readbacks": 29,
+        "medium_instruction_cold_readbacks": 12,
+        "private_report_posterior_witnesses": 6,
+        "complete_table_action_joint_history_physical_equal": true,
+        "own_scan_targets": [
+          2,
+          4,
+          5
+        ],
+        "initial_public_policy": [
+          1,
+          2
+        ],
+        "night_proofs": 5,
+        "report_choice_evidence": [
+          {
+            "history": [
+              [
+                1,
+                "day",
+                1
+              ],
+              [
+                1,
+                "night",
+                3
+              ]
+            ],
+            "alive": [
+              2,
+              4,
+              5
+            ],
+            "public_hypotheses": 27,
+            "scores": [
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              }
+            ],
+            "chosen": [
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "weight": "1/2"
+              },
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "weight": "1/2"
+              }
+            ]
+          },
+          {
+            "history": [
+              [
+                1,
+                "day",
+                1
+              ],
+              [
+                1,
+                "night",
+                4
+              ]
+            ],
+            "alive": [
+              2,
+              3,
+              5
+            ],
+            "public_hypotheses": 27,
+            "scores": [
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              }
+            ],
+            "chosen": [
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "weight": "1/2"
+              },
+              {
+                "fake_colors": [
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "weight": "1/2"
+              }
+            ]
+          },
+          {
+            "history": [
+              [
+                1,
+                "day",
+                2
+              ],
+              [
+                1,
+                "night",
+                3
+              ]
+            ],
+            "alive": [
+              1,
+              4,
+              5
+            ],
+            "public_hypotheses": 27,
+            "scores": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              }
+            ],
+            "chosen": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ]
+                ],
+                "weight": "1/2"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ]
+                ],
+                "weight": "1/2"
+              }
+            ]
+          },
+          {
+            "history": [
+              [
+                1,
+                "day",
+                2
+              ],
+              [
+                1,
+                "night",
+                4
+              ]
+            ],
+            "alive": [
+              1,
+              3,
+              5
+            ],
+            "public_hypotheses": 27,
+            "scores": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              }
+            ],
+            "chosen": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ]
+                ],
+                "weight": "1/2"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ]
+                ],
+                "weight": "1/2"
+              }
+            ]
+          },
+          {
+            "history": [
+              [
+                1,
+                "day",
+                3
+              ],
+              [
+                1,
+                "night",
+                4
+              ]
+            ],
+            "alive": [
+              1,
+              2,
+              5
+            ],
+            "public_hypotheses": 42,
+            "scores": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1/2"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ],
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              }
+            ],
+            "chosen": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "weight": "1"
+              }
+            ]
+          },
+          {
+            "history": [
+              [
+                1,
+                "day",
+                4
+              ],
+              [
+                1,
+                "night",
+                3
+              ]
+            ],
+            "alive": [
+              1,
+              2,
+              5
+            ],
+            "public_hypotheses": 42,
+            "scores": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1/2"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ],
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              }
+            ],
+            "chosen": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "weight": "1"
+              }
+            ]
+          },
+          {
+            "history": [
+              [
+                1,
+                "day",
+                4
+              ],
+              [
+                1,
+                "night",
+                5
+              ]
+            ],
+            "alive": [
+              1,
+              2,
+              3
+            ],
+            "public_hypotheses": 42,
+            "scores": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1/2"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "value": "1"
+              },
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "black"
+                  ],
+                  [
+                    2,
+                    "black"
+                  ]
+                ],
+                "value": "1"
+              }
+            ],
+            "chosen": [
+              {
+                "fake_colors": [
+                  [
+                    1,
+                    "white"
+                  ],
+                  [
+                    2,
+                    "white"
+                  ]
+                ],
+                "weight": "1"
+              }
+            ]
+          }
+        ],
+        "case": "active5",
+        "legacy_canonical_calls_actual": 0,
+        "legacy_candidate_constructor_calls_actual": 0,
+        "old_full_candidate_values_retained": true,
+        "candidate_oracle": {
+          "deferred_explicit_oracle": true,
+          "active_report_contexts": {
+            "deferred_explicit_oracle": true
+          }
+        }
+      },
+      "registry_count": 5,
+      "contexts": 157,
+      "recursive_contexts": 152,
+      "max_depth": 5,
+      "event_counts": {
+        "initial-CO/report": 5,
+        "death-day": 59,
+        "symmetric-acquisition": 19,
+        "death-night": 19,
+        "publication-medium": 55
+      },
+      "full_public_law_invariance_swaps": 155,
+      "private_groups_equal_old_root_oracle": 327,
+      "canonical_calls_all_recursive_children": 0,
+      "legacy_candidate_constructors_all_children": 0,
+      "legacy_root_rebuilds_all_children": 0,
+      "boundaries": {
+        "unconfigured_CO_refused": true,
+        "missing_context_refused": true,
+        "unknown_private_observer_refused": true
+      },
+      "candidate_oracles": [
+        {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 120,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        },
+        {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 48,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        }
+      ],
+      "worker_seconds": 3.89000000001397,
+      "peak_working_set_bytes": 45953024
+    },
+    {
+      "case": "basic5",
+      "case_result": {
+        "players": 5,
+        "mediums": 0,
+        "initial": "none",
+        "view": "role",
+        "white_target": null,
+        "medium_co": false,
+        "initial_hypotheses": 20,
+        "own_initial_hypotheses": 4,
+        "village_win": "7/15",
+        "public_policy": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "complete_table_action_joint_physical_history_branch_equal": true,
+        "independently_generated_initial_and_terminal_joint_equal": true,
+        "terminal_readbacks": 68,
+        "scalar_context_comparisons": 80,
+        "own_scan_targets": [
+          2,
+          3,
+          4,
+          5
+        ],
+        "private_intervention_contexts": 56,
+        "public_unforced_scan_contexts": 56,
+        "own_scan_group_swap_audits": 226,
+        "grouped": {
+          "cut_out_builds": 24,
+          "cut_out_seconds": 0.006364100147038698,
+          "inherited_group_requests": 138,
+          "key_seconds": 0.007077900081640109,
+          "action_requests": 138,
+          "action_evaluations": 80,
+          "law_seconds": 0.08256389989401214,
+          "acquisition_calls": 138,
+          "morning_calls": 21,
+          "inclusive_action_seconds": 0.5108210999751464,
+          "representative_hits": 58,
+          "label_scalar_restores": 56,
+          "label_restore_seconds": 0.0020062998519279063,
+          "total_seconds": 0.7381514000007883,
+          "evaluation_other_seconds": 0.6401392000261694,
+          "saved_origins": 1,
+          "generated_boards": 83,
+          "law_hypotheses_retained": 903
+        },
+        "labelled": {
+          "action_requests": 647,
+          "action_evaluations": 571,
+          "law_seconds": 0.4694236002396792,
+          "acquisition_calls": 432,
+          "morning_calls": 168,
+          "total_seconds": 0.8244717999768909,
+          "evaluation_other_seconds": 0.35656599974026904,
+          "saved_origins": 1,
+          "generated_boards": 212,
+          "law_hypotheses_retained": 4392
+        },
+        "seconds": 5.401720599998953,
+        "case": "basic5",
+        "legacy_canonical_calls_actual": 0,
+        "legacy_candidate_constructor_calls_actual": 0,
+        "old_full_candidate_values_retained": true,
+        "candidate_oracle": {
+          "deferred_explicit_oracle": true
+        }
+      },
+      "registry_count": 4,
+      "contexts": 88,
+      "recursive_contexts": 84,
+      "max_depth": 4,
+      "event_counts": {
+        "initial-CO/report": 4,
+        "death-day": 44,
+        "symmetric-acquisition": 15,
+        "death-night": 25
+      },
+      "full_public_law_invariance_swaps": 194,
+      "private_groups_equal_old_root_oracle": 1073,
+      "canonical_calls_all_recursive_children": 0,
+      "legacy_candidate_constructors_all_children": 0,
+      "legacy_root_rebuilds_all_children": 0,
+      "boundaries": {
+        "unconfigured_CO_refused": true,
+        "missing_context_refused": true,
+        "unknown_private_observer_refused": true
+      },
+      "candidate_oracles": [
+        {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 120,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        }
+      ],
+      "worker_seconds": 6.23399999999674,
+      "peak_working_set_bytes": 66400256
+    },
+    {
+      "case": "white5",
+      "case_result": {
+        "players": 5,
+        "mediums": 1,
+        "initial": "random_white",
+        "view": "white",
+        "white_target": 3,
+        "medium_co": false,
+        "initial_hypotheses": 180,
+        "own_initial_hypotheses": 9,
+        "village_win": "7/15",
+        "public_policy": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ],
+        "complete_table_action_joint_physical_history_branch_equal": true,
+        "independently_generated_initial_and_terminal_joint_equal": true,
+        "terminal_readbacks": 156,
+        "scalar_context_comparisons": 178,
+        "own_scan_targets": [],
+        "private_intervention_contexts": 0,
+        "public_unforced_scan_contexts": 0,
+        "own_scan_group_swap_audits": 0,
+        "grouped": {
+          "cut_out_builds": 39,
+          "cut_out_seconds": 0.0698891999782063,
+          "inherited_group_requests": 231,
+          "key_seconds": 0.09992049998254515,
+          "action_requests": 231,
+          "action_evaluations": 178,
+          "law_seconds": 0.9681073002575431,
+          "acquisition_calls": 156,
+          "morning_calls": 42,
+          "inclusive_action_seconds": 4.994444499956444,
+          "representative_hits": 53,
+          "label_scalar_restores": 50,
+          "label_restore_seconds": 0.011411699932068586,
+          "total_seconds": 4.873718100017868,
+          "evaluation_other_seconds": 3.724389399867505,
+          "saved_origins": 1,
+          "generated_boards": 110,
+          "law_hypotheses_retained": 12384
+        },
+        "labelled": {
+          "action_requests": 697,
+          "action_evaluations": 537,
+          "law_seconds": 2.8900151998677757,
+          "acquisition_calls": 384,
+          "morning_calls": 156,
+          "total_seconds": 4.344419500004733,
+          "evaluation_other_seconds": 1.4720023001427762,
+          "saved_origins": 1,
+          "generated_boards": 192,
+          "law_hypotheses_retained": 27540
+        },
+        "seconds": 18.14789200000814,
+        "case": "white5",
+        "legacy_canonical_calls_actual": 0,
+        "legacy_candidate_constructor_calls_actual": 0,
+        "old_full_candidate_values_retained": true,
+        "candidate_oracle": {
+          "deferred_explicit_oracle": true,
+          "white_joint_contexts": {
+            "deferred_explicit_oracle": true
+          }
+        }
+      },
+      "registry_count": 4,
+      "contexts": 109,
+      "recursive_contexts": 105,
+      "max_depth": 4,
+      "event_counts": {
+        "initial-CO/report": 4,
+        "death-day": 76,
+        "symmetric-acquisition": 15,
+        "death-night": 14
+      },
+      "full_public_law_invariance_swaps": 204,
+      "private_groups_equal_old_root_oracle": 321,
+      "canonical_calls_all_recursive_children": 0,
+      "legacy_candidate_constructors_all_children": 0,
+      "legacy_root_rebuilds_all_children": 0,
+      "boundaries": {
+        "unconfigured_CO_refused": true,
+        "missing_context_refused": true,
+        "unknown_private_observer_refused": true
+      },
+      "candidate_oracles": [
+        {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 120,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        },
+        {
+          "public_contexts_compared": 5,
+          "full_candidate_profiles_compared": 120,
+          "candidate_equivalence_matches_old": true,
+          "comparison_uses_explicit_old_oracle_only": true
+        }
+      ],
+      "worker_seconds": 23.89100000000326,
+      "peak_working_set_bytes": 101306368
+    }
+  ],
+  "overall_seconds": 45.421999999991385,
+  "aggregate_executed": false,
+  "timing_interpretation": "finite correctness checkpoint only; no heavy speed measurement",
+  "additional_common_regressions": {
+    "patterns": [
+      "test_cut_out_inherited_groups.py",
+      "test_morning_flow.py",
+      "test_action_flow.py",
+      "test_information_set_model_a.py"
+    ],
+    "tests": 19,
+    "seconds": 15.781,
+    "all_passed": true,
+    "includes_three_repeated_inherited_tests": true,
+    "final_unbound_observer_refusal_verified": true
+  },
+  "distinct_unit_regressions_including_additional": 24
+}
