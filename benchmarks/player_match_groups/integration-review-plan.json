@@ -1,0 +1,293 @@
+{
+  "review_baseline": "ffadaa4a22cc537b678617eb2de7967ae168ccb1",
+  "executed": false,
+  "numerical_code_changed": false,
+  "validation": "AST selector existence and source inspection only",
+  "limits": {
+    "per_worker_seconds": 60,
+    "overall_seconds": 300,
+    "working_set_bytes": 1500000000
+  },
+  "worker_command": [
+    "python",
+    "-B",
+    "-m",
+    "benchmarks.player_match_groups.withdraw_prefix_diagnostic_fixture",
+    "<kind>",
+    "<target>"
+  ],
+  "alternatives": [
+    [
+      "gate_smoke",
+      "integration_core"
+    ],
+    [
+      "existing62_only"
+    ]
+  ],
+  "suites": [
+    {
+      "id": "gate_smoke",
+      "requests": [
+        [
+          "named",
+          "tests.test_cut_out_white_joint_max.WhiteJointMaxTests.test_public_CO_and_secret_support_neighbors_are_refused"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_white_joint_max.WhiteJointMaxTests.test_unknown_or_impossible_own_initial_white_is_not_filled"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_no_read_night_max.NoReadNightMaxTests.test_actual_profile_read_is_never_an_independence_certificate"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_no_read_night_max.NoReadNightMaxTests.test_proof_scope_is_five_player_none_no_public_abilities"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_triple_max.TripleMaxTests.test_three_max_settings_are_preserved_without_inventing_fake_seer_max"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_active_report_max.ActiveReportMaxTests.test_entry_preserves_two_medium_co_and_existing_rules"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_saved_recipes.CutOutSavedRecipeTests.test_unreachable_observation_invalidates_instead_of_filling_or_reusing"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_max_game.MaxCutOutTests.test_scope_is_sealed_and_uniform_entry_stays_uniform"
+        ]
+      ],
+      "test_count": 8,
+      "overall_cap_seconds": 90,
+      "estimate_seconds": "5-25; planning estimate, not a new measurement"
+    },
+    {
+      "id": "integration_core",
+      "requests": [
+        [
+          "named",
+          "tests.test_cut_out_saved_recipes.CutOutSavedRecipeTests.test_all_labelled_branches_have_saved_origin_recipes_roles_and_mass"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_six_registry.SixInputRegistryTests.test_current_result_and_root_co_roundtrip_restore_joint_and_invalidate_old_actor"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_six_registry.SixInputRegistryTests.test_standard_historical_withdraw_resolves_legacy_pending_and_can_be_undone"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_latent_max.LatentMaxTests.test_nontrivial_public_max_and_private_scan_share_policy"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_max_game.MaxCutOutTests.test_private_medium_does_not_select_private_best_or_reveal_role_to_wolf"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_active_report_max.ActiveReportMaxTests.test_candidate_identity_ties_and_private_posterior_recipes"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_white_joint_max.WhiteJointMaxTests.test_complete_private_white_contexts_and_current_scan_match"
+        ],
+        [
+          "named",
+          "tests.test_cut_out_seven_minimal.SevenMinimalTests.test_conditional_private_table_joint_mass_and_history_match_labelled_reference"
+        ]
+      ],
+      "test_count": 8,
+      "overall_cap_seconds": 180,
+      "estimate_seconds": "60-120; includes one heavy white-joint test; planning estimate"
+    },
+    {
+      "id": "existing62_only",
+      "requests": [
+        [
+          "pattern",
+          "test_withdraw_prefix_diagnostic.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_six_registry.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_saved_recipes.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_two_nights.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_uniform_game.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_model_a.py"
+        ],
+        [
+          "named",
+          "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal"
+        ],
+        [
+          "named",
+          "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization"
+        ],
+        [
+          "named",
+          "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max"
+        ],
+        [
+          "named",
+          "tests.test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation"
+        ],
+        [
+          "pattern",
+          "test_cut_out_seven_minimal.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_max_game.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_latent_max.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_terminal_night_max.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_no_read_night_max.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_triple_max.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_active_report_max.py"
+        ],
+        [
+          "pattern",
+          "test_cut_out_white_joint_max.py"
+        ]
+      ],
+      "test_count": 62,
+      "overall_cap_seconds": 240,
+      "estimate_seconds": "90-150; archived unit-only76.705s plus worker startup, not a guarantee"
+    },
+    {
+      "id": "optional_white_target_matrix",
+      "worker_module": "benchmarks.player_match_groups.cut_out_white_joint_fixture",
+      "cases": [
+        [
+          "white",
+          2,
+          false
+        ],
+        [
+          "white",
+          4,
+          false
+        ],
+        [
+          "white",
+          5,
+          false
+        ]
+      ],
+      "overall_cap_seconds": 120,
+      "estimate_seconds": "prior case sum68.266s; not rerun",
+      "separate_window": true
+    },
+    {
+      "id": "whole_project",
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests"
+      ],
+      "separate_window": true,
+      "proposed_cap_seconds": 1800,
+      "estimate_seconds": "historical full-suite run about1033s on an older commit; current HEAD unknown",
+      "requires_budget_coordination": true,
+      "current_60s_worker_plan_applies": false,
+      "external_time_and_rss_watch_required": true
+    }
+  ],
+  "no_stacking": "Do not run core + existing62 + all eight-case fixture mains together. One plan-wide300s deadline, with per-worker60s and RSS watch.",
+  "archived_evidence": {
+    "source": "benchmarks/player_match_groups/cut-out-white-joint-max-results.json",
+    "eight_cases_plus62_seconds": 247.063,
+    "unit_runner_seconds_sum": 76.705
+  },
+  "instrumentation_needed_before_speed_claims": [
+    "support-validation seconds/hypotheses",
+    "CandidateRules canonical calls/mappings/classes",
+    "guarded candidate root calls and nested value time",
+    "certificate cache hits/misses",
+    "main grouped flow separate from certificate engines",
+    "test-only reference/readback/independent-ground time"
+  ],
+  "source_sha256": {
+    "benchmarks/player_match_groups/constructive_cut_out.py": "77f23a041e64f55fb6288523630764070349b0ab427d28d3597e130d71197011",
+    "benchmarks/player_match_groups/cut_out_model_a.py": "5afd3330b75d48b031ece242e224086e1fc994c00d241a5b1d31f571f08626c1",
+    "benchmarks/player_match_groups/cut_out_uniform_game.py": "cf560769b7da6a35b0452780271a385e057d2c6f97a01ab28456f2edb3785f5b",
+    "benchmarks/player_match_groups/cut_out_max_game.py": "f9cf0c1bea01fbf3fb90fd5e8d78014244b3ac7447d3d8352c68c1fcb8194f06",
+    "benchmarks/player_match_groups/cut_out_no_read_night_max.py": "ba78c5f3aa3a391dd423289838b0499d579d531e5b81d7e40e8d71691f635248",
+    "benchmarks/player_match_groups/cut_out_active_report_max.py": "f12049c63ca7e34afbba9565bb81326650c78fe588692e725c98bf8f54a71ec4",
+    "benchmarks/player_match_groups/cut_out_white_joint_max.py": "a0029b29d9a63f1c3fcc1f7e838117ee0fb00c810434eb3466d1f402312f6187",
+    "benchmarks/player_match_groups/cut_out_saved_recipes.py": "3de675512c2980249cef438dbdeb3e32208c82d3b8619cdc2154b6ffca8f1d12",
+    "benchmarks/player_match_groups/cut_out_six_registry.py": "daeba2cfacc22cf3fc0ef45c23de48dfe731361633d44357d04f3e1c4f4d0b6d",
+    "werewolf/candidate_policy.py": "6b741f315069920cb326a7bff62f930e51b183f51e09eac13aa2d8aa57de11e2",
+    "werewolf/exact_renaming.py": "51fc8d9a161035294cce9d24e64131a4bda0ab423d1e7438baa235052100b2e7",
+    "werewolf/wolf_profile_certificate.py": "38cb000eec63bcf017e3799d926b618553d775e256cf4b41221ba63772908d9c",
+    "werewolf/information_set_forecast.py": "d7ac940c015ee5c9b2a16ceb59617e79358c9382a6eefd97f89781f34deec244"
+  }
+}
