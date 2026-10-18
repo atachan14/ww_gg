@@ -7,7 +7,7 @@ from hashlib import sha256
 from math import comb,prod
 from types import SimpleNamespace
 from time import perf_counter
-from .cut_out_model_a import InitialModelASpec,adapt_model_a
+from .cut_out_model_a import InitialModelASpec,adapt_model_a,adapt_six_model_a
 from .cut_out_saved_recipes import SavedCutOutGraph
 from .cut_out_uniform_game import CutOutUniformEngine,OfficialLabelledEngine,RecordedPolicy,OwnView
 from .cut_out_inherited_groups import InheritedGroupRegistry,InheritedGroups
@@ -36,16 +36,19 @@ class ForecastCertificate:
  request:object
  groups:tuple
  preprocessing_seconds:float
+ night_limit:int=1
 
 
-def make_case(players=5):
+def make_case(players=5,*,night_limit=1,known_wolf=False):
  start=perf_counter()
- if type(players)is not int or players not in (4,5,7):raise Pending('joint_forecast_fixed_cases_only')
+ if type(known_wolf)is not bool or known_wolf and players!=6:raise Pending('joint_forecast_known_wolf_six_only')
+ if type(night_limit)is not int or night_limit not in (1,2) or type(players)is not int or (night_limit==1 and players not in (4,5,7)) or (night_limit==2 and players!=6):raise Pending('joint_forecast_fixed_cases_only')
  if players==7:
   r=ok(synthetic_registry());w=ok(issue(r));root_groups=w.contexts[-1].groups;target=5
  else:
-  spec=InitialModelASpec(players,('seer',)+('latent',)*(players-1),True,mediums=0,rules=Rules(initial_seer='random_white'),reports=(SeerReport(1,1,1,3,'white'),))
-  r=SavedCutOutGraph(adapt_model_a(spec));w=None;root_groups=r.engine.start().groups;target=3
+  claims=('seer','wolf')+('latent',)*(players-2) if known_wolf else ('seer',)+('latent',)*(players-1)
+  spec=InitialModelASpec(players,claims,True,mediums=0,rules=Rules(initial_seer='random_white'),reports=(SeerReport(1,1,1,3,'white'),))
+  r=SavedCutOutGraph(adapt_six_model_a(spec) if players==6 else adapt_model_a(spec));w=None;root_groups=r.engine.start().groups;target=3
  source=r.origin();source=replace(source,physical=physical_board(source.public,source.private,source.physical))
  e=InformationSetForecast(r.engine.baseline.rules,r.engine.baseline.strategy,exact_renaming=False,retire_uninformative_scans=False);e.retain_joint_guard_history=True
  with calculation_budget(200000,max_seconds=3),calculation_origin(r.data):
@@ -56,19 +59,20 @@ def make_case(players=5):
   child=e.action_policy.project(source.public,acquired,outcomes[0],target)
   request=r.root.child(ActionEvidence(kernel_snapshot(e),target,outcome_key(outcomes[0]),False),None)
   if request.roles()!=child:raise Pending('joint_forecast_saved_prefix_mismatch')
- cap=ForecastCertificate(r,w,child,request,point_fix(root_groups,target),perf_counter()-start)
- _issued[cap]=(r,r.data,r.engine,r.origin,r.root,r.data.inputs,r.data.to_game().get('revision',0),child,request,cap.groups,repr((r.engine.baseline.rules,r.engine.baseline.strategy)))
+ cap=ForecastCertificate(r,w,child,request,point_fix(root_groups,target),perf_counter()-start,night_limit)
+ _issued[cap]=(r,r.data,r.engine,r.origin,r.root,r.data.inputs,r.data.to_game().get('revision',0),child,request,cap.groups,repr((r.engine.baseline.rules,r.engine.baseline.strategy)),night_limit)
  return cap
 
 
 def require(cap,*,source=None):
  if type(cap)is not ForecastCertificate or cap not in _issued:raise Pending('joint_forecast_issued_receipt_required')
- r,data,engine,origin,root,inputs,rev,s,request,groups,settings=_issued[cap]
+ r,data,engine,origin,root,inputs,rev,s,request,groups,settings,night_limit=_issued[cap]
  if cap.registry is not r or r.data is not data or r.engine is not engine or r.origin is not origin or r.root is not root or data.inputs!=inputs or data.to_game().get('revision',0)!=rev or cap.source is not s or cap.request is not request or cap.groups!=groups:raise Pending('joint_forecast_owner_revision_source_changed')
+ if cap.night_limit!=night_limit:raise Pending('joint_forecast_night_scope_changed')
  if repr((engine.baseline.rules,engine.baseline.strategy))!=settings:raise Pending('joint_forecast_settings_changed')
  if cap.witness is not None:require_seven(r,cap.witness)
  if source is not None and source!=s:raise Pending('joint_forecast_one_sided_carrier_change')
- if s.public.phase!='night' or len(s.public.alive)>4:raise Pending('joint_forecast_small_night_only')
+ if s.public.phase!='night' or len(s.public.alive)>(5 if night_limit==2 else 4):raise Pending('joint_forecast_small_night_only')
  strategy=r.engine.baseline.strategy
  if (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3 or strategy.include_self_bite or s.public.initial_hunter_count:raise Pending('joint_forecast_uniform_H0_only')
  return s

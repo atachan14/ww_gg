@@ -62,13 +62,13 @@ def mapping_options(cap,engine,b,payload,target,parent,root_cache):
  return tuple(dict.fromkeys(tuple(g[l[p-1]-1] for p in range(1,n+1)) for l in local for g in global_maps))
 
 
-def full_readback(cap,engine):
- start=perf_counter();branches={};terminals={};cache={};cold=0;fully_cold=0
- with calculation_budget(1000000,max_seconds=10):
+def full_readback(cap,engine,*,max_seconds=10,mapping_fn=None):
+ start=perf_counter();branches={};terminals={};cache={};cold=0;fully_cold=0;mapper=mapping_fn or mapping_options
+ with calculation_budget(1000000,max_seconds=max_seconds):
   for b,payload,target,outcomes in engine.full_branch_records:
    parent=engine.board_sources[source_key(b,payload,engine)]
    source=ContinuationInputs(b,payload.public_state,payload.past,payload.private,payload.observer,payload.physical)
-   for mapping in mapping_options(cap,engine,b,payload,target,parent,cache):
+   for mapping in mapper(cap,engine,b,payload,target,parent,cache):
     moved=moved_source(source,mapping);mt=mapping[target-1]
     outs=tuple((o.probability,moved_board(o.board,mapping),None if o.context is None else moved_board(o.context,mapping)) for o in outcomes)
     branches[moved,mt]=outs
@@ -77,7 +77,7 @@ def full_readback(cap,engine):
    for outcome in outcomes:
     request=parent.child(ActionEvidence(kernel_snapshot(engine),target,outcome_key(outcome),False),None)
     expected=engine.action_policy._project_roles(b,payload,outcome,target)
-    for mapping in mapping_options(cap,engine,b,payload,target,parent,cache):
+    for mapping in mapper(cap,engine,b,payload,target,parent,cache):
      expected_moved=moved_source(expected,mapping)
      parent_source=ContinuationInputs(b,payload.public_state,payload.past,payload.private,payload.observer,payload.physical)
      terminal_key=(moved_source(parent_source,mapping),mapping[target-1],expected_moved)

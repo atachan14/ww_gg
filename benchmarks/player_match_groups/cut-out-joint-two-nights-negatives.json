@@ -1,0 +1,18 @@
+{
+  "status": "verified",
+  "small_max_nights": {
+    "4/W1": 1,
+    "5/W1": 1,
+    "5/W2": 1
+  },
+  "minimum_W1_six_nights": 2,
+  "rejected": [
+    "copied_node",
+    "secret_only_skew_public_state",
+    "secret_only_skew_private",
+    "one_sided_view",
+    "unowned_fake_recipe",
+    "stale_revision_node",
+    "third_generated_night"
+  ]
+}

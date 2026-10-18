@@ -1,0 +1,215 @@
+{
+  "cases": [
+    {
+      "status": "verified",
+      "players": 6,
+      "known_wolf": true,
+      "view": "public",
+      "village_win": "1/4",
+      "Forecast_Table_joint_equal": true,
+      "all_joint_selection_contexts_equal": 40,
+      "all_joint_selection_pairs_equal": 82,
+      "all_labelled_branches_equal": 134,
+      "all_terminal_transitions_equal": 91,
+      "joint_nodes": 12,
+      "QP_different_nodes": 0,
+      "live_group_shapes": {
+        "1": [
+          [
+            1,
+            1,
+            3
+          ]
+        ],
+        "2": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "joint_calls": {
+        "joint_nodes_night1": 1,
+        "joint_calls_night1": 2,
+        "joint_literal_night1": 4,
+        "joint_nodes_night2": 11,
+        "joint_calls_night2": 19,
+        "joint_literal_night2": 22
+      },
+      "prototype_action_generations": 37,
+      "reference_action_generations": 134,
+      "preprocessing_seconds": 0.02002379999612458,
+      "prototype_forecast_seconds": 0.02853989999857731,
+      "reference_forecast_seconds": 0.05562070000451058,
+      "prototype_restore_seconds": 0.1992362999881152,
+      "reference_restore_seconds": 0.23419640000793152,
+      "second_night_independent_cold": {
+        "seconds": 0.0038366000226233155,
+        "fresh_engine": true,
+        "fresh_SavedOrigin": true,
+        "completed_step_reuse": false,
+        "night_events": 2,
+        "QP_different_before": false,
+        "QP_different_after": false,
+        "third_slot_scan_records": 3,
+        "dead_scan_records": 2
+      },
+      "prototype_preprocessing_restore_cold_seconds": 0.2516366000054404,
+      "total_comparison_seconds": 0.5637100000167266,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "initial_seven_executed": false,
+      "peak_working_set_bytes": 39833600
+    },
+    {
+      "status": "verified",
+      "players": 6,
+      "known_wolf": false,
+      "view": "public",
+      "village_win": "1/4",
+      "Forecast_Table_joint_equal": true,
+      "all_joint_selection_contexts_equal": 201,
+      "all_joint_selection_pairs_equal": 520,
+      "all_labelled_branches_equal": 609,
+      "all_terminal_transitions_equal": 404,
+      "joint_nodes": 30,
+      "QP_different_nodes": 7,
+      "live_group_shapes": {
+        "1": [
+          [
+            1,
+            4
+          ]
+        ],
+        "2": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ]
+        ]
+      },
+      "joint_calls": {
+        "joint_nodes_night1": 1,
+        "joint_calls_night1": 2,
+        "joint_literal_night1": 16,
+        "joint_nodes_night2": 29,
+        "joint_calls_night2": 50,
+        "joint_literal_night2": 80
+      },
+      "prototype_action_generations": 91,
+      "reference_action_generations": 609,
+      "preprocessing_seconds": 0.02056919998722151,
+      "prototype_forecast_seconds": 0.07228730001952499,
+      "reference_forecast_seconds": 0.34258969998336397,
+      "prototype_restore_seconds": 1.4878607999999076,
+      "reference_restore_seconds": 1.2879124000028241,
+      "second_night_independent_cold": {
+        "seconds": 0.006452600006014109,
+        "fresh_engine": true,
+        "fresh_SavedOrigin": true,
+        "completed_step_reuse": false,
+        "night_events": 2,
+        "QP_different_before": true,
+        "QP_different_after": true,
+        "third_slot_scan_records": 3,
+        "dead_scan_records": 1
+      },
+      "prototype_preprocessing_restore_cold_seconds": 1.5871699000126682,
+      "total_comparison_seconds": 3.368929799995385,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "initial_seven_executed": false,
+      "peak_working_set_bytes": 66662400
+    },
+    {
+      "status": "verified",
+      "players": 6,
+      "known_wolf": false,
+      "view": "wolf",
+      "village_win": "1/4",
+      "Forecast_Table_joint_equal": true,
+      "all_joint_selection_contexts_equal": 40,
+      "all_joint_selection_pairs_equal": 82,
+      "all_labelled_branches_equal": 134,
+      "all_terminal_transitions_equal": 91,
+      "joint_nodes": 12,
+      "QP_different_nodes": 8,
+      "live_group_shapes": {
+        "1": [
+          [
+            1,
+            1,
+            3
+          ]
+        ],
+        "2": [
+          [
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ]
+        ]
+      },
+      "joint_calls": {
+        "joint_nodes_night1": 1,
+        "joint_calls_night1": 2,
+        "joint_literal_night1": 4,
+        "joint_nodes_night2": 11,
+        "joint_calls_night2": 19,
+        "joint_literal_night2": 22
+      },
+      "prototype_action_generations": 37,
+      "reference_action_generations": 134,
+      "preprocessing_seconds": 0.02056179998908192,
+      "prototype_forecast_seconds": 0.054402299982029945,
+      "reference_forecast_seconds": 0.07565650000469759,
+      "prototype_restore_seconds": 0.2417014999955427,
+      "reference_restore_seconds": 0.27304969998658635,
+      "second_night_independent_cold": {
+        "seconds": 0.006287999975029379,
+        "fresh_engine": true,
+        "fresh_SavedOrigin": true,
+        "completed_step_reuse": false,
+        "night_events": 2,
+        "QP_different_before": true,
+        "QP_different_after": true,
+        "third_slot_scan_records": 3,
+        "dead_scan_records": 1
+      },
+      "prototype_preprocessing_restore_cold_seconds": 0.32295359994168393,
+      "total_comparison_seconds": 0.6976231999869924,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "initial_seven_executed": false,
+      "peak_working_set_bytes": 41021440
+    }
+  ],
+  "unreachable_small": {
+    "4": 1,
+    "5": 1
+  },
+  "limits": {
+    "comparison_seconds": 30,
+    "worker_seconds": 120,
+    "peak_working_set_bytes": 1500000000
+  },
+  "scope": "opt-in six-player W1 H0; two generated nights; heavy seven not executed",
+  "cold_policy": "one second-night representative on fresh engine and fresh SavedOrigin, reuse disabled; all-label restoration uses exact completed-step reuse"
+}
