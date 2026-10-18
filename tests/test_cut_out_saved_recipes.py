@@ -101,8 +101,8 @@ class CutOutSavedRecipeTests(unittest.TestCase):
         self.assertIsInstance(invalid.rows(),InvalidatedBranch)
         self.assertEqual(old.read().inputs.public_state,expected.law)
         cancelled=graph.corrected(replace(spec,claims=('latent',)*5,reports=()))
-        self.assertIsInstance(cancelled,UnsupportedPartition)
-        self.assertIn('SavedOrigin',cancelled.reason)
+        self.assertIsInstance(cancelled,SavedCutOutGraph)
+        self.assertEqual(len(cancelled.engine.baseline.state.hypotheses),180)
         self.assertIsInstance(graph.corrected(replace(spec,strategy=cases.Strategy())),UnsupportedPartition)
 
     def test_reference_reconstruction_and_real_playerdata_board_context_scope(self):

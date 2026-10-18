@@ -19,7 +19,7 @@ def main():
         labelled_saved_branches=291,tests=runs,full_suite=False,heavy_worker=False,
         source_sha256={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths},
         scope='4/5 players, W1 H0, uniform, first execution/night/morning, public role stage',
-        unsupported=['all CO cancelled: SavedOrigin secret support 180 vs formal adapter 60','whole-win loop','private view','arbitrary owned-graph editing'])
+        unsupported=['whole-win loop','private view','arbitrary owned-graph editing'])
     Path('benchmarks/player_match_groups/cut-out-saved-recipes-results.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 if __name__=='__main__':main()

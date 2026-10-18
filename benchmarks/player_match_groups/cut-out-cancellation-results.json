@@ -1,0 +1,60 @@
+{
+  "recorded_utc": "2026-10-18T08:34:56.576740+00:00",
+  "head_before_commit": "888915d409575f2abb0ad6094bf9f47f01b0195b",
+  "cancellation_roundtrip_branches": 295,
+  "previous_saved_branches": 291,
+  "total_tests": 20,
+  "tests": [
+    {
+      "pattern": "test_cut_out_cancellation.py",
+      "count": 2,
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_cancellation-cancellation-final.log"
+    },
+    {
+      "pattern": "test_cut_out_saved_recipes.py",
+      "count": 4,
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_saved_recipes-cancellation-final.log"
+    },
+    {
+      "pattern": "test_cut_out_model_a.py",
+      "count": 6,
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_model_a-cancellation-final.log"
+    },
+    {
+      "pattern": "test_cut_out_day_night.py",
+      "count": 4,
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_day_night-cancellation-final.log"
+    },
+    {
+      "pattern": "test_cut_out_morning.py",
+      "count": 4,
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_morning-cancellation-final.log"
+    }
+  ],
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_model_a.py": "fc7430880fa60b33d9d33abd3d7002714241e7188206f2f63c3d31708025f5c8",
+    "tests/test_cut_out_cancellation.py": "4574ea66c396f9f4b6422b7072ae292f17ee0faecdfbbd4e8cebcdd4475a2cd9",
+    "tests/test_cut_out_saved_recipes.py": "bbd1cffe8510980aadd41d530828aeebe505149cae0d18c9b16892edccf039b8"
+  },
+  "root_cause": "fixed CO prior tracked=() omitted latent first acquisitions; official no-CO root tracked=None retains them",
+  "independent_root_counts": {
+    "4": {
+      "roles": 24,
+      "secrets": 48
+    },
+    "5": {
+      "roles": 60,
+      "secrets": 180
+    }
+  },
+  "ordinary_flow_changed": false,
+  "full_suite": false,
+  "heavy_worker": false,
+  "win_loop": false,
+  "post_test_change": "comment line formatting only; runtime statements unchanged"
+}

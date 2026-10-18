@@ -17,7 +17,7 @@ from .cut_out_one_step import OneStepExecution
 from werewolf.exact import Rules,Strategy,ClaimPolicy
 from werewolf.seer_acquisition import SeerReport
 from werewolf.seer_future_uniform import FuturePending
-from werewolf.board_roles import reconstruct_saved
+from werewolf.board_roles import reconstruct_saved,prepare_joint
 from werewolf.public_prior import prepare_public_prior
 from werewolf.public_log import migrate
 from werewolf.public_log_changes import upgrade
@@ -89,12 +89,25 @@ class ModelAInitialGroups(ConstructiveCutOutGroups):
         reason=_reason(spec)
         if reason:raise ValueError(reason)
         self.stats=Counter(generator_checks=0,symmetry_history_rows_read=0,full_permutation_searches=0,
-                           upstream_permutation_checks=0,comparisons=0,official_board_builds=1,official_prior_builds=1)
+                           upstream_permutation_checks=0,comparisons=0,official_board_builds=1,official_prior_builds=0,official_root_checks=1)
         started=perf_counter();game=source_game(spec)
         rules,progress=reconstruct_saved(game)
         self.stats['official_board_seconds']=perf_counter()-started
         if progress.finished:raise ValueError('terminal snapshot outside initial one-step scope')
-        started=perf_counter();prior=prepare_public_prior(game,progress.board,rules,max_work=100000)
+        started=perf_counter()
+        # Match the official entry selector BEFORE considering the fixed-CO
+        # public prior. A no-seer-CO root owns latent initial acquisitions;
+        # the fixed-CO prior intentionally omits those records.
+        root=prepare_joint(game,progress.board,rules,spec.strategy,max_work=100000)
+        if isinstance(root,FuturePending):raise ValueError(root.reason)
+        self.stats['official_root_entry']=int(root is not None)
+        if root is not None:
+            if root.public!=progress.board or root.physical!=progress.board or root.public_law!=root.physical_law:
+                raise ValueError('initial public/physical root mismatch')
+            prior=(root.public_law,root.past)
+        else:
+            self.stats['official_prior_builds']=1
+            prior=prepare_public_prior(game,progress.board,rules,max_work=100000)
         self.stats['official_prior_seconds']=perf_counter()-started
         if isinstance(prior,FuturePending):raise ValueError(prior.reason)
         state,past=prior
