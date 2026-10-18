@@ -658,7 +658,8 @@ def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFA
     day=branch.public.day+1;values=[]
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
-            engine=RootSecretEngine(rules,strategy,max_work=max_work)
+            from .local_reuse import make_root_engine
+            engine=make_root_engine(RootSecretEngine,branch.public,rules,strategy,max_work=max_work)
             from .fixed_actor_continuation import fixed_uniform_action_value
             invariant=fixed_uniform_action_value(branch.public,branch.public_law,actor.physical_law,
                 engine,None,physical=physical_board(branch.public,actor.physical_law,branch.physical),past=branch.past)
@@ -668,8 +669,13 @@ def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFA
                 # reads the scan; its unit-mass kernel cannot change this value.
                 return tuple((target,invariant) for target in next(iter(choices)))
             for target in next(iter(choices)):
-                def observer(h,state,target=target):
-                    return compatible(h) and scan_intervention_matches(h,state,player,day,target)
+                from .local_reuse import enabled
+                if enabled():
+                    from .seer_intervention import SeerObserver
+                    observer=SeerObserver(player,tuple(acquisitions),day,target)
+                else:
+                    def observer(h,state,target=target):
+                        return compatible(h) and scan_intervention_matches(h,state,player,day,target)
                 value=engine.solve(branch.public,branch.public_law,branch.past,actor.physical_law,
                     observer,physical=physical_board(branch.public,actor.physical_law,branch.physical))
                 values.append((target,value))
@@ -701,7 +707,8 @@ def root_wolf_forecast(branch,players,attacks,rules,strategy,*,max_work=DEFAULT_
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
             from .model_a_public import horizon_for_action
-            engine=RootSecretEngine(rules,strategy,max_work=max_work)
+            from .local_reuse import make_root_engine
+            engine=make_root_engine(RootSecretEngine,branch.public,rules,strategy,max_work=max_work)
             own=actor.physical_law;b=branch.public;state=branch.public_law;past=branch.past
             physical=physical_board(b,own,branch.physical)
             targets=legal_targets(physical,rules,strategy)

@@ -1,0 +1,46 @@
+{
+  "exit": 1,
+  "seconds": 300.05236450000666,
+  "peak_bytes": 390643712,
+  "stop": "time_limit",
+  "log": ".artifacts\\general-full-regression.log",
+  "started": 439,
+  "passed": 431,
+  "failures": [
+    {
+      "test": "test_saved_seven_player_mixed_board_preserves_previous_complete_table (test_board_future.GeneratedBoardTests.test_saved_seven_player_mixed_board_preserves_previous_complete_table)",
+      "status": "FAIL"
+    },
+    {
+      "test": "test_saved_seven_player_observed_model_completes_the_http_request_budget (test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget)",
+      "status": "FAIL"
+    },
+    {
+      "test": "test_public_assets_exist_before_build_and_match_source (test_deployment.DeploymentTests.test_public_assets_exist_before_build_and_match_source)",
+      "status": "FAIL"
+    },
+    {
+      "test": "test_true_fake_backlog_same_days_and_no_report_count_truth_leak (test_full_disclosure_observed.FullDisclosureObservedTests.test_true_fake_backlog_same_days_and_no_report_count_truth_leak)",
+      "status": "FAIL"
+    },
+    {
+      "test": "test_private_guardian_deduction_keeps_scan_law_and_public_secrecy (test_guard_max_history.GuardMaxHistoryTests.test_private_guardian_deduction_keeps_scan_law_and_public_secrecy)",
+      "status": "FAIL"
+    },
+    {
+      "test": "test_legacy_public_forecast_is_unchanged_and_model_a_difference_is_explicit (test_information_set_model_a.ModelATests.test_legacy_public_forecast_is_unchanged_and_model_a_difference_is_explicit)",
+      "status": "FAIL"
+    },
+    {
+      "test": "test_new_private_black_holder_does_not_change_wolf_information_policy (test_information_set_model_a.ModelATests.test_new_private_black_holder_does_not_change_wolf_information_policy)",
+      "status": "FAIL"
+    }
+  ],
+  "unfinished": [
+    {
+      "test": "test_conditional_value_equals_unreduced_public_flow_with_live_hidden_seer (test_owned_roster_value_cut.OwnedRosterValueCutTests.test_conditional_value_equals_unreduced_public_flow_with_live_hidden_seer)",
+      "status": "running"
+    }
+  ],
+  "note": "Bounded partial run before final root-personal wiring follow-up; not complete regression success. Static-copy and corpse-roster expectations have follow-up fixes awaiting focused recheck."
+}

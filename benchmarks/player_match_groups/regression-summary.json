@@ -1,0 +1,23 @@
+{
+  "current_unique_tests": 814,
+  "counts": {
+    "passed": 811,
+    "time_limit": 3
+  },
+  "unresolved": [
+    {
+      "test": "test_owned_roster_value_cut.OwnedRosterValueCutTests.test_conditional_value_equals_unreduced_public_flow_with_live_hidden_seer",
+      "status": "time_limit"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_five_six_candidate_search_does_not_misclassify_legal_alternatives",
+      "status": "time_limit"
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_high_player_ids_dynamic_fields_cache_and_terminal",
+      "status": "time_limit"
+    }
+  ],
+  "method": "Combined bounded full-discovery prefix, isolated remainder, cancellable tail, long-case followup, and final targeted rerun after hooks/expectation maintenance. Not a single uninterrupted final-HEAD full-suite run.",
+  "no_unresolved_assertion_failures": true
+}

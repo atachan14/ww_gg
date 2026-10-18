@@ -9,7 +9,7 @@ from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from fractions import Fraction as F
 from .seer_future_uniform import FuturePending, candidates, scan_target_players
 from .information_set_forecast import InformationSetForecast, Pending
-from .seer_intervention import scan_intervention_matches
+from .seer_intervention import scan_intervention_matches, SeerObserver
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
 
 
@@ -32,13 +32,17 @@ def seer_forecast(public, player, acquisitions, rules, strategy, *, scan_state, 
     if len(choices) != 1:
         return FuturePending('seer_view_target_generation_support_unresolved')
     targets = next(iter(choices)); day = public.day + 1; values = []
-    engine=InformationSetForecast(rules,strategy,max_work=max_work,trace=trace)
+    from .local_reuse import make_view_engine
+    engine=make_view_engine(InformationSetForecast,public,rules,strategy,max_work=max_work,trace=trace)
     try:
         with calculation_budget(max_work, max_seconds=max_seconds):
             for target in targets:
                 tick()
-                def observer(h, state, target=target):
-                    return compatible(h) and scan_intervention_matches(h,state,player,day,target)
+                from .local_reuse import enabled
+                if enabled():observer=SeerObserver(player,acquisitions,day,target)
+                else:
+                    def observer(h,state,target=target):
+                        return compatible(h) and scan_intervention_matches(h,state,player,day,target)
                 # Keep the existing per-target work limit and shared outer time
                 # deadline; reuse PUBLIC rankings across private interventions.
                 try:

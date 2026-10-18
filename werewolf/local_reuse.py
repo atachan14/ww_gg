@@ -59,7 +59,13 @@ def eligible(board,state,past,rules,strategy):
     except (AttributeError,TypeError,ValueError,IndexError):return False
 
 def make_public_engine(original,board,state,past,rules,strategy,**kwargs):
-    if not enabled()or not eligible(board,state,past,rules,strategy):return original(rules,strategy,**kwargs)
+    if not enabled():return original(rules,strategy,**kwargs)
+    if not eligible(board,state,past,rules,strategy):
+        try:
+            from .exact_renaming import record,Unsupported
+            for r in past:record(r,tuple(range(1,board.player_count+1)))
+        except (Unsupported,TypeError,AttributeError):return original(rules,strategy,**kwargs)
+        return make_view_engine(original,board,rules,strategy,**kwargs)
     # The local prototype remains isolated until broader production acceptance.
     from benchmarks.player_match_groups.extension_reuse import ExtensionForecast
     return ExtensionForecast(rules,strategy,future_reuse=True,physical_reuse=True,
@@ -67,6 +73,13 @@ def make_public_engine(original,board,state,past,rules,strategy,**kwargs):
         medium_reuse=True,max_reuse=True,combined_reuse=True,extended_retirement=True,**kwargs)
 
 def make_root_engine(original,board,rules,strategy,**kwargs):
-    if not enabled()or board.player_count>6 or board.initial_hunter_count>1:return original(rules,strategy,**kwargs)
+    if (not enabled()or board.player_count>6 or board.initial_hunter_count>1
+        or getattr(original,'__name__',None)!='RootSecretEngine'):return original(rules,strategy,**kwargs)
     from benchmarks.player_match_groups.local_root import LocalRootEngine
     return LocalRootEngine(rules,strategy,**kwargs)
+
+
+def make_view_engine(original,board,rules,strategy,**kwargs):
+    if not enabled() or board.player_count>6:return original(rules,strategy,**kwargs)
+    from benchmarks.player_match_groups.general_reuse import GeneralReuseForecast
+    return GeneralReuseForecast(rules,strategy,future_reuse=True,compact_keys=True,fast_parts=True,**kwargs)

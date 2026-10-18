@@ -19,7 +19,15 @@ def guard_forecast(board,actor,private_board,state,past,rules,strategy,*,guards=
     if reason:return FuturePending(reason)
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
-            engine=engine_factory(rules,strategy,max_work=max_work)
+            if engine_factory is InformationSetForecast:
+                from .local_reuse import make_view_engine
+                engine=make_view_engine(engine_factory,board,rules,strategy,max_work=max_work)
+            else:
+                from .root_secret_flow import RootSecretEngine
+                if engine_factory is RootSecretEngine:
+                    from .local_reuse import make_root_engine
+                    engine=make_root_engine(engine_factory,board,rules,strategy,max_work=max_work)
+                else:engine=engine_factory(rules,strategy,max_work=max_work)
             allowed=tuple(w[:-1] for w in private_board.worlds)
             own=condition_actor_state(state if private_state is None else private_state,lambda h:h.roles in allowed and guard_matches(h.guards,guards),guards=guards)
             choices={tuple(p for p,q in guard_choices(board,actor,rules,strategy.guard_position,guards=h.guards)) for h in own.hypotheses}

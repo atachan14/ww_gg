@@ -1,0 +1,10 @@
+{
+  "reference": "Corrected corpse rule; canonical grouping OFF; retirement and exact physical caches ON. Not entirely original evaluator.",
+  "seconds_limit": 300,
+  "memory_limit_bytes": 1500000000,
+  "result": {
+    "complete": false,
+    "reason": "memory_limit"
+  },
+  "equal": null
+}

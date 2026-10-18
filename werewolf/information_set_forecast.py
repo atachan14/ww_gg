@@ -503,7 +503,8 @@ def information_forecast(b,s,past,rules,strategy,*,observer=None,mask=None,priva
         if trace is not None:trace['evaluation_projection']=(before,len(s.hypotheses))
     try:
         with calculation_budget(max_work,max_seconds=max_seconds):
-            engine=InformationSetForecast(rules,strategy,max_work=max_work,trace=trace)
+            from .local_reuse import make_view_engine
+            engine=make_view_engine(InformationSetForecast,b,rules,strategy,max_work=max_work,trace=trace)
             return engine.evaluate(b,s,past,observer=observer,mask=mask,private_board=private_board,private_attacks=private_attacks)
     except CalculationBudgetExceeded:return FuturePending('information_set_budget_exceeded')
     except Pending as error:return FuturePending(error.reason)

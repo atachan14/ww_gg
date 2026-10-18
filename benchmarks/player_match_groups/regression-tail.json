@@ -1,0 +1,1009 @@
+{
+  "per_test_seconds": 20,
+  "global_seconds_limit": 280,
+  "planned": 165,
+  "attempted": 165,
+  "results": [
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_legacy_selected_rule_and_history_snapshots_preserved",
+      "status": "passed",
+      "seconds": 0.16970210001454689,
+      "failures": []
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_legacy_unselected_and_unset_mode_migrate_without_inventing_reports",
+      "status": "passed",
+      "seconds": 0.150998700002674,
+      "failures": []
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_nonseer_games_keep_ordinary_route_and_value",
+      "status": "passed",
+      "seconds": 0.16030819999286905,
+      "failures": []
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_preset_independent_and_saved_rule_survives_definition_changes",
+      "status": "passed",
+      "seconds": 0.012729300011415035,
+      "failures": []
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_rule_cannot_be_changed_from_main_even_before_action",
+      "status": "passed",
+      "seconds": 0.13235880000866018,
+      "failures": []
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_three_choices_snapshot_and_main_readonly_top_editable",
+      "status": "passed",
+      "seconds": 0.17079150001518428,
+      "failures": []
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_unknown_saved_model_is_not_silently_migrated",
+      "status": "passed",
+      "seconds": 0.014177000004565343,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_back_discards_future_reports_and_cookie_cold_restore",
+      "status": "passed",
+      "seconds": 0.20535529998596758,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_conditioning_cache_change_and_probabilities_not_win_rate",
+      "status": "passed",
+      "seconds": 0.02281829999992624,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_dead_reporter_evidence_is_retained_and_replay_edits_from_origin",
+      "status": "passed",
+      "seconds": 0.18305160000454634,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_each_day_results_and_dead_target_at_scan_roster",
+      "status": "passed",
+      "seconds": 0.19477920001372695,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_fixed_defaults_calculate_without_unselected_gate",
+      "status": "passed",
+      "seconds": 0.13116880002780817,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_fixed_handling_and_game_rule_readonly_in_main",
+      "status": "passed",
+      "seconds": 0.13585869999951683,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_general_cast_allowed_invalid_cast_and_legacy_unchanged",
+      "status": "passed",
+      "seconds": 0.1520996000035666,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_independent_enumeration_all_targets_colors_and_future_modes",
+      "status": "passed",
+      "seconds": 0.041336300026159734,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_initial_white_likelihood_and_none_allow_later_days",
+      "status": "passed",
+      "seconds": 0.060155600018333644,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_invalid_and_contradictory_inputs_atomic_and_stale_revision_rejected",
+      "status": "passed",
+      "seconds": 0.4367889999994077,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_no_future_seer_components_called_and_reaches_terminal",
+      "status": "passed",
+      "seconds": 0.16434570000274107,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_partial_fields_are_saved_as_draft_and_pending",
+      "status": "passed",
+      "seconds": 0.14255530000082217,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual.SeerManualTests.test_rules_and_co_locked_after_progress",
+      "status": "passed",
+      "seconds": 0.1705968999885954,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_compatibility.HandCompatibilityTests.test_day2_dead_and_live_seer_candidates_half_with_preview_and_co_table",
+      "status": "passed",
+      "seconds": 0.1935689999954775,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_compatibility.HandCompatibilityTests.test_nonuniform_prior_is_preserved_without_true_fake_asymmetry",
+      "status": "passed",
+      "seconds": 0.0006192000000737607,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_compatibility.HandCompatibilityTests.test_random_white_true_black_and_illegal_white_still_excluded",
+      "status": "passed",
+      "seconds": 0.0005129000055603683,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_ability_scope_is_in_help_not_permanent_main_prose",
+      "status": "passed",
+      "seconds": 0.32173530000727624,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_budget_pending_and_recovery_with_cache",
+      "status": "passed",
+      "seconds": 0.249996700003976,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_high_player_ids_dynamic_fields_cache_and_terminal",
+      "status": "time_limit",
+      "seconds": 20.078856100008124,
+      "failures": [
+        "forecast.py\", line 283, in act\n    return self.cached_flow(self.action_values,key,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\information_set_forecast.py\", line 88, in cached_flow\n    result=compute()  # Exceptions/Pending never install an incomplete value.\n           ^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\information_set_forecast.py\", line 284, in <lambda>\n    lambda:self.uncached_act(b,s,past,target,private,observer,physical=physical),'action')\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\information_set_forecast.py\", line 301, in uncached_act\n    tick(len(s.hypotheses)+len(private.hypotheses))\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\calculation_budget.py\", line 49, in tick\n    if cancelled is not None and cancelled.is_set():raise CalculationCancelled()\n                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nwerewolf.calculation_budget.CalculationCancelled\n"
+      ]
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_later_co_uses_current_day_and_old_co_reports_survive_removal",
+      "status": "passed",
+      "seconds": 0.7856991000007838,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_many_co_and_multiple_wolves_preserve_joint_support",
+      "status": "passed",
+      "seconds": 0.019866100017679855,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_medium_and_seer_reports_condition_same_joint_history",
+      "status": "passed",
+      "seconds": 0.4376825999934226,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_medium_correction_replays_from_origin_and_keeps_actions",
+      "status": "passed",
+      "seconds": 0.2995679999876302,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_mixed_report_back_and_cold_cookie_restore",
+      "status": "passed",
+      "seconds": 0.4951698000077158,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_mixed_roles_uncertain_hunter_explicit_and_unmodified_prior",
+      "status": "passed",
+      "seconds": 0.5715605999866966,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_multiple_true_seers_coupled_reports_and_contradiction_atomic",
+      "status": "passed",
+      "seconds": 0.20917470002314076,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_no_wolves_or_initial_wolf_majority_are_defined_terminal_casts",
+      "status": "passed",
+      "seconds": 0.2560044999991078,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_one_co_true_report_and_latent_true_seers_allowed",
+      "status": "passed",
+      "seconds": 0.024767399998381734,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_one_through_nine_initial_casts_and_zero_co",
+      "status": "passed",
+      "seconds": 0.2868933000136167,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_random_white_joint_likelihood_literal_two_true_seers",
+      "status": "passed",
+      "seconds": 0.009060899988980964,
+      "failures": []
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_zero_seers_manual_matches_ordinary_role_prior",
+      "status": "passed",
+      "seconds": 0.015613499999744818,
+      "failures": []
+    },
+    {
+      "test": "test_seer_multiple_wolves.MultipleWolfSeerTests.test_private_count_prior_is_preserved_and_illegal_public_instruction_is_pending",
+      "status": "passed",
+      "seconds": 1.4531294000044,
+      "failures": []
+    },
+    {
+      "test": "test_seer_multiple_wolves.MultipleWolfSeerTests.test_requested_five_player_same_white_co_example_and_terminal_branch",
+      "status": "passed",
+      "seconds": 0.22625959999277256,
+      "failures": []
+    },
+    {
+      "test": "test_seer_multiple_wolves.MultipleWolfSeerTests.test_two_live_wolves_and_mixed_counts_are_not_blanket_pending",
+      "status": "passed",
+      "seconds": 2.901366899983259,
+      "failures": []
+    },
+    {
+      "test": "test_seer_noncontradictory.NoncontradictoryFakeTests.test_already_exposed_fake_retains_complete_noise_not_pending",
+      "status": "passed",
+      "seconds": 0.0012792999914381653,
+      "failures": []
+    },
+    {
+      "test": "test_seer_noncontradictory.NoncontradictoryFakeTests.test_candidate_support_does_not_weight_by_true_history_mass",
+      "status": "passed",
+      "seconds": 0.0014071999758016318,
+      "failures": []
+    },
+    {
+      "test": "test_seer_noncontradictory.NoncontradictoryFakeTests.test_morning_vectors_keep_both_true_owners_and_total_mass",
+      "status": "passed",
+      "seconds": 0.0019246999872848392,
+      "failures": []
+    },
+    {
+      "test": "test_seer_noncontradictory.NoncontradictoryFakeTests.test_multiple_fake_policy_still_unselected",
+      "status": "passed",
+      "seconds": 0.0009553999989293516,
+      "failures": []
+    },
+    {
+      "test": "test_seer_noncontradictory.NoncontradictoryFakeTests.test_same_white_example_all_four_uncertain_executions_are_quarter",
+      "status": "passed",
+      "seconds": 0.032536599988816306,
+      "failures": []
+    },
+    {
+      "test": "test_seer_noncontradictory.NoncontradictoryFakeTests.test_uniform_only_restores_old_three_eighths",
+      "status": "passed",
+      "seconds": 0.04392230001394637,
+      "failures": []
+    },
+    {
+      "test": "test_seer_view_forecast.SeerForecastTests.test_none_disclosure_and_latent_co_remain_explicit_pending",
+      "status": "passed",
+      "seconds": 0.0006500000017695129,
+      "failures": []
+    },
+    {
+      "test": "test_seer_view_forecast.SeerForecastTests.test_private_scan_choice_never_changes_public_scores",
+      "status": "passed",
+      "seconds": 0.26353779999772087,
+      "failures": []
+    },
+    {
+      "test": "test_seer_view_forecast.SeerForecastTests.test_relabeling_of_asymmetric_public_prior_and_seer_is_invariant",
+      "status": "passed",
+      "seconds": 1.6072199000045657,
+      "failures": []
+    },
+    {
+      "test": "test_seer_view_forecast.SeerForecastTests.test_secret_past_results_are_truth_and_acquisition_days_are_distinct",
+      "status": "passed",
+      "seconds": 0.028318700002273545,
+      "failures": []
+    },
+    {
+      "test": "test_seer_view_forecast.SeerForecastTests.test_symmetric_targets_and_max_ties_are_equal",
+      "status": "passed",
+      "seconds": 0.01700419999542646,
+      "failures": []
+    },
+    {
+      "test": "test_seer_view_forecast.SeerForecastTests.test_target_information_values_are_computed_not_constant",
+      "status": "passed",
+      "seconds": 0.05493330000899732,
+      "failures": []
+    },
+    {
+      "test": "test_seer_view_forecast.SeerRouteTests.test_public_co_scope_secret_history_none_and_public_cookie_identity",
+      "status": "passed",
+      "seconds": 0.14087040000595152,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupModelTests.test_default_config_excludes_strategy_and_draft_edits_do_not_mutate_game",
+      "status": "passed",
+      "seconds": 0.0003197000187356025,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupModelTests.test_rule_schema_defaults_and_invalid_values_are_not_silently_repaired",
+      "status": "passed",
+      "seconds": 0.00021510000806301832,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_error_preserves_draft_and_running_game_reload_returns_game",
+      "status": "passed",
+      "seconds": 0.06258440000237897,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_first_visit_and_invalid_session_use_samples_without_repairing_game",
+      "status": "passed",
+      "seconds": 0.05618129999493249,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_logo_and_settings_return_restore_initial_config_not_current_board",
+      "status": "passed",
+      "seconds": 5.017392999987351,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_one_two_initial_results_restore_real_config",
+      "status": "passed",
+      "seconds": 0.14838319999398664,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_presets_are_independent_and_numeric_values_are_normalized",
+      "status": "passed",
+      "seconds": 0.07403109999722801,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_sample_three_cast_and_top_restore",
+      "status": "passed",
+      "seconds": 0.044720099976984784,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_saved_actual_values_survive_preset_definition_change",
+      "status": "passed",
+      "seconds": 0.04531799998949282,
+      "failures": []
+    },
+    {
+      "test": "test_setup.SetupWebTests.test_success_replaces_game_and_presets_never_include_board_strategy",
+      "status": "passed",
+      "seconds": 0.133631200005766,
+      "failures": []
+    },
+    {
+      "test": "test_strategy_ui.StrategyEditorTests.test_adapter_does_not_change_exact_values_or_legacy_model",
+      "status": "passed",
+      "seconds": 0.1470444000151474,
+      "failures": []
+    },
+    {
+      "test": "test_strategy_ui.StrategyEditorTests.test_common_and_individual_exception_history_and_back",
+      "status": "passed",
+      "seconds": 0.033880600007250905,
+      "failures": []
+    },
+    {
+      "test": "test_strategy_ui.StrategyEditorTests.test_legacy_adapter_preserves_every_condition_combination",
+      "status": "passed",
+      "seconds": 0.00874289998319,
+      "failures": []
+    },
+    {
+      "test": "test_strategy_ui.StrategyEditorTests.test_model_switch_only_before_history_and_policy_roundtrip",
+      "status": "passed",
+      "seconds": 0.13582110000425018,
+      "failures": []
+    },
+    {
+      "test": "test_strategy_ui.StrategyEditorTests.test_unsupported_and_duplicate_configuration_rejected_atomically",
+      "status": "passed",
+      "seconds": 0.14833279998856597,
+      "failures": []
+    },
+    {
+      "test": "test_support_partition.SupportPartitionTests.test_all_local_options_are_required_and_state_budget_never_selects",
+      "status": "passed",
+      "seconds": 0.0004529999860096723,
+      "failures": []
+    },
+    {
+      "test": "test_support_partition.SupportPartitionTests.test_full_classification_matches_exhaustive_including_nonwitness_best_response",
+      "status": "passed",
+      "seconds": 0.007480900007067248,
+      "failures": []
+    },
+    {
+      "test": "test_support_partition.SupportPartitionTests.test_real_387_million_profile_context_matches_all_common_candidate_values",
+      "status": "passed",
+      "seconds": 0.29293049999978393,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_back_trims_later_change_and_cold_cookie_restores_projection",
+      "status": "passed",
+      "seconds": 0.20293530001072213,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_co_withdraw_cascades_reports_and_no_revival",
+      "status": "passed",
+      "seconds": 0.20560610000393353,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_deleting_referenced_item_is_atomic_rejection",
+      "status": "passed",
+      "seconds": 0.0417590000142809,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_ephemeral_same_batch_and_value_on_commit",
+      "status": "passed",
+      "seconds": 0.5297613999864552,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_old_cookie_migration_and_past_item_correction_preserve_followup_reference",
+      "status": "passed",
+      "seconds": 0.07659280000370927,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_partial_and_stale_do_not_save_or_return_old_numeric",
+      "status": "passed",
+      "seconds": 0.018132500001229346,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_result_change_uses_only_new_target_not_old_constraint",
+      "status": "passed",
+      "seconds": 0.33138810002128594,
+      "failures": []
+    },
+    {
+      "test": "test_table_preview.TablePreviewTests.test_roundtrip_cookie_and_default_not_exposed",
+      "status": "passed",
+      "seconds": 0.20939000000362284,
+      "failures": []
+    },
+    {
+      "test": "test_terminal_followup.TerminalPhysicalMeasureTests.test_complete_scan_expansion_and_terminal_measure_have_identical_physical_law",
+      "status": "passed",
+      "seconds": 0.7521649999835063,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_completed_day_horizon_matches_full_common_flow_without_new_scan_expansion",
+      "status": "passed",
+      "seconds": 0.366786200000206,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_correlated_unknown_roles_and_separate_q_p_match_unreduced_common_flow",
+      "status": "passed",
+      "seconds": 1.0688104000000749,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_no_repeat_six_player_two_gj_replay_matches_inactive_role_reference",
+      "status": "time_limit",
+      "seconds": 21.032587099995,
+      "failures": [
+        "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\dawn.py\", line 99, in observe\n    board=replace(condition_guard_observation(progress.board,(),rules,state=guard_state),day=progress.board.day+1,phase='day')\n                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\guard_model.py\", line 87, in condition_guard_observation\n    return condition_joint_guard_observation(board,deaths,rules,state)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\guard_model.py\", line 111, in condition_joint_guard_observation\n    tick();totals[h.roles]=totals.get(h.roles,F())+h.mass\n    ^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\calculation_budget.py\", line 49, in tick\n    if cancelled is not None and cancelled.is_set():raise CalculationCancelled()\n                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nwerewolf.calculation_budget.CalculationCancelled\n"
+      ]
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_own_scan_candidates_match_complete_controlled_scan_reference",
+      "status": "failed",
+      "seconds": 0.3024589999986347,
+      "failures": [
+        "Traceback (most recent call last):\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\tests\\test_uniform_fixed_backup.py\", line 148, in test_own_scan_candidates_match_complete_controlled_scan_reference\n    self.assertEqual({t for t,v in actual},{1,4})\nAssertionError: Items in the first set but not the second:\n5\n"
+      ]
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_saved_observation_filter_equals_complete_children_with_original_mass",
+      "status": "passed",
+      "seconds": 0.16916439999477006,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_six_player_latent_abilities_match_full_common_inactive_role_reference",
+      "status": "passed",
+      "seconds": 9.699684699997306,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_unsupported_secret_support_reports_observers_and_max_do_not_use_cut",
+      "status": "passed",
+      "seconds": 0.0023941000108607113,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_terminal_cut.UniformTerminalCutTests.test_reporting_observer_and_max_night_keep_the_ordinary_path",
+      "status": "passed",
+      "seconds": 0.2027597000123933,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_terminal_cut.UniformTerminalCutTests.test_terminal_day_full_observation_history_matches_unreduced_execution",
+      "status": "passed",
+      "seconds": 0.8103558000002522,
+      "failures": []
+    },
+    {
+      "test": "test_uniform_terminal_cut.UniformTerminalCutTests.test_uniform_night_complete_common_flow_matches_with_full_public_and_owned_histories",
+      "status": "passed",
+      "seconds": 3.2701647999929264,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultiWolfWebTests.test_nine_complete_web_history_and_tampered_cast",
+      "status": "passed",
+      "seconds": 0.6259609000117052,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultiWolfWebTests.test_seven_two_wolves_ui_back_history_and_strategy",
+      "status": "passed",
+      "seconds": 0.17418269999325275,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultipleWolfTests.test_all_counts_full_manual_histories_mass_and_terminal_rules",
+      "status": "passed",
+      "seconds": 0.10791859999881126,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultipleWolfTests.test_explicit_unshared_complete_tree_agrees_with_cached_evaluation",
+      "status": "passed",
+      "seconds": 0.34127279999665916,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultipleWolfTests.test_initial_joint_counts_and_symmetry",
+      "status": "passed",
+      "seconds": 0.11635669998941012,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultipleWolfTests.test_public_optimization_precedes_hidden_assignment",
+      "status": "passed",
+      "seconds": 0.0013673999928869307,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultipleWolfTests.test_seven_two_wolves_next_morning_and_correlations",
+      "status": "passed",
+      "seconds": 0.0009422999864909798,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultipleWolfTests.test_small_multiwolf_exact_reference_values",
+      "status": "passed",
+      "seconds": 0.002712700021220371,
+      "failures": []
+    },
+    {
+      "test": "test_v02.MultipleWolfTests.test_validation_and_terminal",
+      "status": "passed",
+      "seconds": 0.0002347000117879361,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_all_hidden_and_zero_medium_v02_values",
+      "status": "passed",
+      "seconds": 0.11137769999913871,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_all_small_claim_patterns_have_exact_mass_or_conflict",
+      "status": "passed",
+      "seconds": 0.0822881999774836,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_co_history_and_no_new_ability_information",
+      "status": "passed",
+      "seconds": 0.0027523000026121736,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_filled_default_capacity_and_immediate_counter",
+      "status": "passed",
+      "seconds": 0.006178800016641617,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_impossible_claim_count_and_role_constraint",
+      "status": "passed",
+      "seconds": 0.001030800020089373,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_multiple_mediums_unrestricted_counts_and_ccos",
+      "status": "passed",
+      "seconds": 0.002516599983209744,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_one_claim_default_counter_and_no_counter",
+      "status": "passed",
+      "seconds": 0.0013215999933890998,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimTests.test_two_claims_correlations_and_public_strategy",
+      "status": "passed",
+      "seconds": 0.06679170002462342,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimWebTests.test_back_restores_claims_and_conditions_and_new_targets",
+      "status": "passed",
+      "seconds": 0.033163299987791106,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimWebTests.test_co_changes_probability_and_comparing_ccos",
+      "status": "passed",
+      "seconds": 0.2687026000057813,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimWebTests.test_conflicting_co_does_not_mutate_state",
+      "status": "passed",
+      "seconds": 0.15902449999703094,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimWebTests.test_filled_top_default_and_current_phase_condition_changes",
+      "status": "passed",
+      "seconds": 0.28767289998359047,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimWebTests.test_stale_claim_apply_and_result_injection_rejected",
+      "status": "passed",
+      "seconds": 0.18151989998295903,
+      "failures": []
+    },
+    {
+      "test": "test_v03.ClaimWebTests.test_top_role_counts_and_fixed_calculation_options",
+      "status": "passed",
+      "seconds": 0.04784519999520853,
+      "failures": []
+    },
+    {
+      "test": "test_v04_future.FutureReportTests.test_current_blank_not_regenerated_dead_reporter_and_empty_vector",
+      "status": "passed",
+      "seconds": 0.0024868000182323158,
+      "failures": []
+    },
+    {
+      "test": "test_v04_future.FutureReportTests.test_exact_solver_matches_independent_unshared_report_tree",
+      "status": "passed",
+      "seconds": 0.8319772999966517,
+      "failures": []
+    },
+    {
+      "test": "test_v04_future.FutureReportTests.test_extra_ability_free_roles_share_the_same_exact_future_kernel",
+      "status": "passed",
+      "seconds": 0.07204890000866726,
+      "failures": []
+    },
+    {
+      "test": "test_v04_future.FutureReportTests.test_hand_support_and_random_event_probabilities_differ",
+      "status": "passed",
+      "seconds": 0.0013135999906808138,
+      "failures": []
+    },
+    {
+      "test": "test_v04_future.FutureReportTests.test_six_world_kernel_recovers_prior_and_approved_posterior",
+      "status": "passed",
+      "seconds": 0.002462900010868907,
+      "failures": []
+    },
+    {
+      "test": "test_v04_future.FutureReportTests.test_terminal_mass_stops_before_report_and_no_worldwise_max",
+      "status": "passed",
+      "seconds": 0.0005798999918624759,
+      "failures": []
+    },
+    {
+      "test": "test_v04_future.FutureReportTests.test_two_true_reports_are_correlated",
+      "status": "passed",
+      "seconds": 0.0005332000146154314,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.ExtraRoleTests.test_ability_free_counts_do_not_change_no_co_win_values",
+      "status": "passed",
+      "seconds": 0.023085799999535084,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.ExtraRoleTests.test_complete_counts_joint_mass_and_group_permutation",
+      "status": "passed",
+      "seconds": 0.04162750000250526,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.ExtraRoleTests.test_extra_ccos_and_absent_roles",
+      "status": "passed",
+      "seconds": 0.0061812000058125705,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.MediumInputTests.test_joint_reports_are_not_independent_probabilities",
+      "status": "passed",
+      "seconds": 0.004315800004405901,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.MediumInputTests.test_known_true_conflict_and_no_pre_co_or_dead_report",
+      "status": "passed",
+      "seconds": 0.002276599989272654,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.MediumInputTests.test_report_evidence_survives_reporter_death",
+      "status": "passed",
+      "seconds": 0.004105900006834418,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.MediumInputTests.test_truth_is_joint_constraint_and_fake_can_lie",
+      "status": "passed",
+      "seconds": 0.0012868000194430351,
+      "failures": []
+    },
+    {
+      "test": "test_v04_input.MediumWebTests.test_report_snapshot_add_remove_back_and_extra_roles",
+      "status": "passed",
+      "seconds": 0.36929639999289066,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_back_restores_policy_target_and_discards_suffix",
+      "status": "passed",
+      "seconds": 0.04697770002530888,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_cast_summary_uses_actual_total_and_compact_role_counts",
+      "status": "passed",
+      "seconds": 2.3247699000057764,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_exact_display_rounding_only",
+      "status": "passed",
+      "seconds": 0.008776800008490682,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_five_player_day_night_day_conditional_and_cumulative",
+      "status": "passed",
+      "seconds": 0.16819999998551793,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_footer_phase_destinations_target_labels_and_terminal",
+      "status": "passed",
+      "seconds": 0.20829870001762174,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_four_player_terminal_night",
+      "status": "passed",
+      "seconds": 0.12521070000366308,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_history_snapshots_do_not_change_when_strategy_changes",
+      "status": "passed",
+      "seconds": 0.14189740002620965,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_missing_duplicate_invalid_and_dead_targets",
+      "status": "passed",
+      "seconds": 0.15366640000138432,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_navigation_and_no_store",
+      "status": "passed",
+      "seconds": 0.12559810001403093,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_no_role_state_and_malformed_session_returns_top",
+      "status": "passed",
+      "seconds": 0.01218459999654442,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_one_two_player_initial_results_all_role_compositions",
+      "status": "passed",
+      "seconds": 0.35279679999803193,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_rule_allowed_strategy_excluded_then_included",
+      "status": "passed",
+      "seconds": 0.15418869999120943,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_rule_forbidden_tampered_inclusion_rejected",
+      "status": "passed",
+      "seconds": 0.13149840000551194,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_self_bite_select_retains_boolean_and_legacy_form_contract",
+      "status": "passed",
+      "seconds": 0.15313869999954477,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_stale_and_rapid_repeated_posts_cannot_advance_twice",
+      "status": "passed",
+      "seconds": 0.13863549998495728,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_strategy_apply_without_target_does_not_advance",
+      "status": "passed",
+      "seconds": 0.0209307000041008,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_three_player_terminal_both_chances_retained",
+      "status": "passed",
+      "seconds": 0.12010749999899417,
+      "failures": []
+    },
+    {
+      "test": "test_web.WebTests.test_top_default_five_rule_and_strategy_defaults",
+      "status": "passed",
+      "seconds": 0.13188000000081956,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_information_set_characterization.WolfInformationSetCharacterizationTests.test_action_selection_likelihood_is_a_distinct_public_update_choice",
+      "status": "passed",
+      "seconds": 0.0006932000105734915,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_information_set_characterization.WolfInformationSetCharacterizationTests.test_minimal_three_alive_counterexample_is_resolved",
+      "status": "failed",
+      "seconds": 0.0038904999964870512,
+      "failures": [
+        "Traceback (most recent call last):\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\tests\\test_wolf_information_set_characterization.py\", line 30, in test_minimal_three_alive_counterexample_is_resolved\n    self.assertEqual(dict(result),{2:F(0),3:F(0)})\nAssertionError: {2: Fraction(0, 1), 3: Fraction(0, 1), 4: Fraction(0, 1)} != {2: Fraction(0, 1), 3: Fraction(0, 1)}\n- {2: Fraction(0, 1), 3: Fraction(0, 1), 4: Fraction(0, 1)}\n?                                    -------------------\n\n+ {2: Fraction(0, 1), 3: Fraction(0, 1)}\n"
+      ]
+    },
+    {
+      "test": "test_wolf_information_set_characterization.WolfInformationSetCharacterizationTests.test_same_roster_uniform_kernel_cannot_read_hidden_true_seer",
+      "status": "passed",
+      "seconds": 0.00037799999699927866,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_target_choice.WolfTargetChoiceTests.test_night_filters_owned_wolf_before_min_and_preserves_all_ties",
+      "status": "passed",
+      "seconds": 0.01736269998946227,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_target_choice.WolfTargetChoiceTests.test_observer_illegal_public_instruction_stays_pending_without_reselection",
+      "status": "passed",
+      "seconds": 0.9054800000158139,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_target_choice.WolfTargetChoiceTests.test_observer_private_payoffs_keep_public_ranking_and_complete_values",
+      "status": "passed",
+      "seconds": 0.041604300000471994,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_target_choice.WolfTargetChoiceTests.test_random_legal_candidates_are_not_replaced_by_public_max_selection",
+      "status": "passed",
+      "seconds": 0.03122610002174042,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_budget_and_unsupported_prior_return_no_partial_values",
+      "status": "passed",
+      "seconds": 0.0008633000252302736,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_dead_initial_teammates_and_self_bite_rules",
+      "status": "passed",
+      "seconds": 0.09986399998888373,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_existing_medium_random_and_max_instructions_remain_public",
+      "status": "passed",
+      "seconds": 0.009915100003127009,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_future_seer_signals_use_public_joint_ledger_and_public_policy",
+      "status": "failed",
+      "seconds": 0.008963200001744553,
+      "failures": [
+        "Traceback (most recent call last):\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\tests\\test_wolf_view_forecast.py\", line 137, in test_future_seer_signals_use_public_joint_ledger_and_public_policy\n    self.assertEqual(dict(result)[3],1)\nAssertionError: Fraction(5, 6) != 1\n"
+      ]
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_multiple_fake_future_model_stays_pending_without_partial_table",
+      "status": "passed",
+      "seconds": 0.0018486999906599522,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_no_secret_leak_to_execution_even_when_naive_solver_would_win",
+      "status": "passed",
+      "seconds": 0.0095621999935247,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_player_relabeling_preserves_max_conditional_values",
+      "status": "passed",
+      "seconds": 0.05162230000132695,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_random_continuation_matches_independent_actual_roster_enumeration",
+      "status": "passed",
+      "seconds": 0.14462649999768473,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_random_day_averages_without_truth_optimization",
+      "status": "passed",
+      "seconds": 0.012130899995099753,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_symmetric_max_ties_are_uniform_for_every_roster_and_target",
+      "status": "passed",
+      "seconds": 0.010894899984123185,
+      "failures": []
+    },
+    {
+      "test": "test_wolf_view_forecast.WolfConditionalForecastTests.test_uniform_private_values_recombine_to_existing_public_max_value",
+      "status": "passed",
+      "seconds": 0.017897200013976544,
+      "failures": []
+    }
+  ],
+  "not_run": []
+}

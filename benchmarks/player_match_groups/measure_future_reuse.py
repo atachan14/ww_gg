@@ -35,7 +35,7 @@ def run(n=6,w=2,enabled=False,profile=False,max_seconds=30,physical_reuse=False,
             if profile:profiler.enable()
             result=public_forecast(b,state,past,rules,strategy,max_work=max_work,max_seconds=max_seconds)
             if profile:profiler.disable()
-    except CalculationCancelled:return dict(complete=False,reason='memory_limit')
+    except CalculationCancelled:return dict(complete=False,reason='memory_limit',seconds=perf_counter()-started,memory=process_memory_peak())
     finally:done.set();watcher.join()
     elapsed=time.perf_counter()-started;e=engines[0]
     if profile:

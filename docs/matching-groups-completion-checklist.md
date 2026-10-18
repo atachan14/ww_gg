@@ -1,34 +1,48 @@
-# Matching-group completion checklist
+# Matching-group acceptance status
 
-Completion means exact supported inputs/observations/physical transitions and configured actor policies are preserved, whole requested Tables/terminal values are established, cache invalidation and personal/public separation hold, and measured total cost improves. A passing limited fixture is not global completion. Normal UI remains OFF; no push/deploy.
+Current numerical semantics include the user-specified corpse scan rule (c3d3163). Values from older engines are historical, not targets to fit. No push/deploy; normal startup remains OFF.
 
-- [x] Immutable public Player relation input separated from shared joint/private/physical laws.
-- [x] Full-state certificate includes joint weights, acquisitions, public history, physical base, rules/policy and targets; unknown shapes fail closed.
-- [x] Empty initial ledger and known-true single initial public white: limited uniform continuation roots through seven players.
-- [x] Uniform two-seer same-white CO mixture, five/six-player complete Table/branch checks; true/fake identities remain mixed.
-- [x] Seven-player same-white two-CO complete prototype and independent fixed-random count-law numerical reference: all Table rows and terminal payoff match. All 98 original oracle primitives also match. This does not complete an entirely unmodified old-engine full run or general seven-player support.
-- [x] Supplied seven-player case (citizens3/medium1/seer1/wolves2; P1/P2 white P4, P3 medium; default max) completes in the OFF prototype: 17/36, 19.519 seconds. Complete labelled reference with same retirement/physical caching matches all rows in 34.203 seconds; 128 untouched-original nontrivial conditional values also match. Entirely untouched original full run remains uncompleted.
-- [ ] General multiple reports, different targets/colors, later/hidden histories, sparse/nonuniform two-CO support and edit/cancel/recompute coverage for each extended scope.
-- [ ] Medium and hunter/GJ/no-repeat support in the new sharing route, with their information histories and policy certificates.
-- [ ] Max: actor information, complete legal score vectors and tie-distribution transport; existing max stays unchanged, never replaced by random.
-- [ ] Personal views and opaque observers, including private-support/owner distinctions.
-- [x] Local default-OFF scalar/action prototype before repeated subtree generation: exact complete five/six-player uniform examples verified. Normal UI is not connected; seven-player completion remains open.
-- [ ] All relevant regression and bounded cost comparisons for every adopted scope; errors/undefined support remain explicit.
+## Reference hierarchy
 
-Existing sharing: labelled scalar/action/flow memoization; single-seer reduced keys; hunter full renaming; optional post-publication continuation groups. Previously unshared gap: exact-renamed scalar/action states with two live seer claimants and no hunter. The local future_reuse prototype enables the existing complete canonical key only for that guarded random/no-medium/no-hunter gap. It is not a public-only Player signature, and its key construction cost remains measured.
+1. Completely old code: retains the wrong corpse/owner acquisition semantics. Historical 17/36 cannot validate the corrected game.
+2. Corrected semantics, additional matching optimizations OFF: OriginalForecastAdapter inherits original numerical methods without overrides and disables all new optimization flags. This is the primary small-case numerical reference.
+3. Corrected semantics, canonical grouping OFF but retirement proof and exact physical caches ON: labelled seven-player reference. A 75-second attempt was incomplete; the single permitted 300-second attempt stopped at the 1.5GB memory threshold before completion. No full match is claimed. No further simple extension is planned.
+4. Corrected local optimized seven-player example: 3487/7200, prototype49.755s/peak768,892,928bytes; Flask NDJSON57.452s/all Table rows equal. Four small complete reference Tables and128 completed seven-player conditional values match. These do not prove a full seven-player original-reference run.
 
+## Calculation foundation versus optional backend/UI
 
-Current prototype also covers the one remaining live claimant with more than four latent positions and projected zero-seer continuations through five living players, under the same guarded random/no-medium/no-hunter policy. It does not extend max, personal, opaque-observer or unsupported-policy numerical reuse. Pure physical kernels use the complete frozen Board, target, rules and strategy; private history is not collapsed into public history. Night public observation remains on its separate original conditioning law. Canonical construction uses bounded completed serialization/mask caches; hash collisions still require full evidence equality.
+- Complete keys retain public and private joint hypotheses and masses, acquisitions, guards, attacks, all rosters, observed public reports, physical Board, rules/configured policy, observer and target.
+- Canonical keys share completed scalar/action payoffs only. Labelled policy scores, legal targets, tie multiplicities, candidate actor profiles and probability masses retain their original algorithms.
+- Existing root certificates retain actor verification mask, candidate profiles and proof namespace. Root replay/hunter history is not compressed into marginal role counts.
+- Browser numerical backend selection/Pyodide is a separate feature, unimplemented/unverified. Edge tests use the Python server.
 
+## Local factory scope and fallback
 
-Retirement-proof milestone: solver-only retention of the actual observed public report tuple after an already validated no-information retirement. This remains a separate OFF experiment with random/no-medium/no-hunter/private-entry guards. Unknown initial evidence is never blessed. All 98 frozen old oracle primitives were re-evaluated and matched after verifying old engine/input/plan checksums, coefficients and complete public/private/physical laws. Whole seven-player result: 8/35; claimants 3/10 each, white target 2/15, other four targets 13/60 each. These numbers are complete in the new prototype, not proof of full original-reference completion or support for medium/max/hunter/general histories.
+- OFF: original factories. Hosted mode rejects the preview flag.
+- Existing validated initial same-white two-CO casts5/1wolf,6/2wolf,7/2wolf: guarded ExtensionForecast with its original retirement proof and physical caches. Medium/max guards are explicit in local_reuse. The seven-player medium example requires all three existing selectors max; no-medium seven requires all random.
+- General public and personal evaluation up to6 original players: GeneralReuseForecast attempts complete canonical scalar/action equality, including different reports/nonuniform laws/later history. Additional retirement-proof retention and new physical kernel caching are OFF for this path; original evaluator retirement remains unchanged.
+- Supported personal observers: exact immutable GuardObserver and structured SeerObserver. An opaque closure, unsupported record/shape/configuration, or more than120 admissible mappings declines the new key and returns to the original constructor/memoization, including existing hunter canonical sharing. No public-only replacement of a private law occurs.
+- Root up to6 players and at most1 hunter: existing complete root sharing with faster construction only. Root7 tests match but show no material gain, so the factory guard remains6. Larger root inputs continue through the original implementation.
+- Underlying unimplemented game policies, unpublished latent-seer actions, unresolved private history, unsupported multi-hunter policies, zero support and missing attack/guard history retain their existing explicit Pending/error. Canonical grouping does not invent a policy or posterior to remove these boundaries.
 
+## Work packages and evidence
 
-Extended scope is local and guarded: medium/random, no-medium/max and combined medium/max have independent OFF switches. Five/six-player complete original comparisons and labelled actor-vector/tie tests cover these examples. Corrections/withdrawal/death/back and public/private/public controls match; root-replay and personal observers deliberately fall back. Hunters remain on the existing path, not newly supported. General arbitrary history coverage, fresh max vector transport, root-route integration and normal app wiring are still open; the actual seven-player milestone is not completion of the whole checklist. See player-match-extensions.md.
+- [x] Corpse scans/owner chronology, public/private target validation and retained evidence; corpse-scan-rule-fix.md.
+- [x] Budget UI expectation maintenance independently committed7f369a2; work-limit pending and recovery pass.
+- [x] General complete-key constructor and structured own-seer observer implemented for local bounded scope.
+- [x] Different public targets and medium cases: complete original/reference Tables match.
+- [x] Personal seer next-scan actions match corrected original; owner/history/target identity is in the key; opaque observer falls back.
+- [x] Two-night GJ/repeat rules: complete keys retain attack/guard ledgers; existing root public/private controls match.
+- [x] Local lifecycle10 stages all agree (general-integration-results.json); weighted personal controls and GJ histories pass focused tests. Initial uniform0.827s ->0.106s; root/GJ microcases have no material total gain.
+- [x] Every current unique test ID has a bounded outcome:814 collected,811 passed,3 time-limited; no unresolved assertion failures after maintenance. Final targeted32 pass in10.69s.
+- [ ] Three long tests remain unverified after60s: live-hidden-seer owned-roster reference,5/6-player candidate-profile alternatives, and9-player manual-view rendering. No further simple extension was attempted. This is segmented evidence, not one uninterrupted final-HEAD full-suite run. See regression-summary.json and long-regression.json.
+- [ ] Full seven-player corrected original-reference completion: memory-limited, not proven.
+- [ ] Broad arbitrary7+ inputs and every supported private/root scope have positive performance evidence; no universal completion claim yet.
 
+Any further widening needs complete value/Table equality and measured total benefit; equality-only examples do not justify unbounded rollout.
 
-Current local pilot: explicit --exact-future-reuse only; default OFF and hosted rejected. Checked initial same-white scopes, mode-separated caches, ordinary rendering and legacy fallback are tested. Earlier seven-player 17/36 and UI timing records are historical before the corpse-scan correction.
+Saved seven-player fixtures (two mediums and an observed public ledger): additional-optimization-OFF inherited original methods and generic complete-key trial match every row, values61/132 and157/693. Trial totals25.98/26.43s are slower than original20.88/22.59s; this is why generic factory stays<=6 even though the constructor is independently testable through7. See saved-corpse-comparisons.json.
 
-The user resolved the personal scan semantics: dead targets remain scannable; only an owner dead before acquisition requires no new result. Shared fixed/root handling, acquisition/public/private input and target selectors now implement this rule. Already acquired/published records survive later death. See corpse-scan-rule-fix.md for current 3487/7200 result and bounded evidence. Full seven-player original reference remains pending; four small complete original comparisons and 128 completed seven-player conditional values match.
+Final owner-guard and wolf/seer private Table factories are connected to the same explicit local setting, preserving root factory attributes and custom reference engines. The new key cap falls back through the original constructor, retaining pre-existing hunter sharing. The6-player/no-repeat/two-GJ inactive-role reference finishes in39.67s at peak123,297,792bytes.
 
-Root seven-player history/GJ examples match but key construction has no material total benefit; the <=6 factory guard remains. Broad private/general-history compression and hunter/GJ sharing remain open. Edge is the Python-server UI client, not a browser numerical backend. Pyodide switching is unimplemented/unverified. This milestone does not complete the whole integration checklist.
+Full completion is not claimed: the3 long references above and the3487/7200 seven-player whole original reference remain unverified. Future work must use bounded decomposition/checkpoints or smaller exact controls, not repeat unproductive time extensions. Browser numerical backend selection remains a separate unimplemented feature.

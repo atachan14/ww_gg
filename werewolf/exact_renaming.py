@@ -73,7 +73,11 @@ def state_signature(s,ids,masks,record_cache=None):
 
 def observer_signature(observer,ids,masks,record_cache=None):
     if observer is None:return ('none',)
-    if type(observer).__name__!='GuardObserver':raise Unsupported()
+    if type(observer).__name__=='SeerObserver':
+        from .seer_intervention import SeerObserver
+        if type(observer)is not SeerObserver:raise Unsupported()
+        return ('seer',ids[observer.actor-1],tuple(record(a,ids,record_cache)for a in observer.acquisitions),observer.day,ids[observer.target-1])
+    if type(observer).__name__ not in ('GuardObserver','SeerObserver'):raise Unsupported()
     return ('guard',board_signature(observer.board,ids,masks,record_cache),ids[observer.actor-1],
             ids[observer.target-1],tuple(sorted(tuple(masks[m] for m in role) for role in observer.allowed_roles)))
 
@@ -108,7 +112,7 @@ def colors(b,s,private,target,*,marginal_cache=None):
 
 def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physical=None,max_mappings=10000,prune_automorphisms=True,marginal_cache=None,wolf_profiles=(),actor_mask=None,serialization_cache=None,return_mapping=False):
     """Return an exact payoff key, or None when safe search exceeds its cap."""
-    if observer is not None and type(observer).__name__!='GuardObserver':return None
+    if observer is not None and type(observer).__name__ not in ('GuardObserver','SeerObserver'):return None
     groups={}
     for p,color in enumerate(colors(b,s,private,target,marginal_cache=marginal_cache),1):groups.setdefault(color,[]).append(p)
     blocks=tuple(tuple(groups[c]) for c in sorted(groups))

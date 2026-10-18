@@ -1,0 +1,35 @@
+{
+  "per_test_seconds": 60,
+  "memory_limit_bytes": 1500000000,
+  "results": [
+    {
+      "test": "test_owned_roster_value_cut.OwnedRosterValueCutTests.test_conditional_value_equals_unreduced_public_flow_with_live_hidden_seer",
+      "status": "time_limit",
+      "seconds": 60.168762000015704,
+      "peak_bytes": 64012288,
+      "log": ".artifacts\\long-regression-0.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_five_six_candidate_search_does_not_misclassify_legal_alternatives",
+      "status": "time_limit",
+      "seconds": 60.012860500020906,
+      "peak_bytes": 64544768,
+      "log": ".artifacts\\long-regression-1.log"
+    },
+    {
+      "test": "test_seer_manual_general.SeerManualGeneralTests.test_high_player_ids_dynamic_fields_cache_and_terminal",
+      "status": "time_limit",
+      "seconds": 60.249448999995366,
+      "peak_bytes": 738455552,
+      "log": ".artifacts\\long-regression-2.log"
+    },
+    {
+      "test": "test_uniform_fixed_backup.UniformFixedBackupTests.test_no_repeat_six_player_two_gj_replay_matches_inactive_role_reference",
+      "status": "passed",
+      "seconds": 39.67482249997556,
+      "peak_bytes": 123297792,
+      "log": ".artifacts\\long-regression-3.log"
+    }
+  ],
+  "not_run": []
+}

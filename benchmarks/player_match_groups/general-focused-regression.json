@@ -1,0 +1,33 @@
+{
+  "tests": 29,
+  "seconds": 66.12011709998478,
+  "failures": [
+    {
+      "test": "tests.test_guard_max_history.GuardMaxHistoryTests.test_private_guardian_deduction_keeps_scan_law_and_public_secrecy",
+      "kind": "failure",
+      "message": "Fraction(7, 12) != Fraction(11, 18)"
+    },
+    {
+      "test": "tests.test_information_set_model_a.ModelATests.test_legacy_public_forecast_is_unchanged_and_model_a_difference_is_explicit",
+      "kind": "failure",
+      "message": "Fraction(5, 6) != Fraction(7, 8)"
+    },
+    {
+      "test": "tests.test_information_set_model_a.ModelATests.test_new_private_black_holder_does_not_change_wolf_information_policy",
+      "kind": "failure",
+      "message": "Fraction(2, 3) != Fraction(7, 10)"
+    },
+    {
+      "test": "tests.test_board_future.GeneratedBoardTests.test_saved_seven_player_mixed_board_preserves_previous_complete_table",
+      "kind": "failure",
+      "message": "Fraction(61, 132) != Fraction(149, 324)"
+    },
+    {
+      "test": "tests.test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+      "kind": "failure",
+      "message": "'data-fraction=\"113/504\"' not found in '<!doctype html>\\n<html lang=\"ja\">\\n<head>\\n  <meta charset=\"utf-8\">\\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\\n  <title>Day 1 \u663c | ww_gg</title>\\n  <link rel=\"stylesheet\" href=\"/static/styles.css\">\\n  <script src=\"/static/parallel.js\" defer></script>\\n  <script src=\"/static/strategy.js\" defer></script>\\n  <script src=\"/static/calculation_wait.js\" defer></script>\\n  <script src=\"/static/app.js\" defer></script>\\n<script src=\"/sta"
+    }
+  ],
+  "successful": false,
+  "historical_followup": "All listed assertion failures are superseded by maintained corpse-rule expectations and successful final-group-regression.json / regression-summary.json"
+}

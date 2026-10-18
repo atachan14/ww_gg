@@ -1,0 +1,1696 @@
+{
+  "per_test_seconds": 20,
+  "saved_seven_player_seconds": 45,
+  "total_seconds_limit": 300,
+  "previously_passed": 431,
+  "planned": 382,
+  "attempted": 217,
+  "results": [
+    {
+      "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_mixed_board_preserves_previous_complete_table",
+      "status": "passed",
+      "seconds": 25.794205800018972,
+      "peak_bytes": 345583616,
+      "log": ".artifacts\\remaining-tests\\0000.log"
+    },
+    {
+      "test": "test_board_future.GeneratedBoardTests.test_saved_seven_player_observed_model_completes_the_http_request_budget",
+      "status": "passed",
+      "seconds": 31.878631400002632,
+      "peak_bytes": 344104960,
+      "log": ".artifacts\\remaining-tests\\0001.log"
+    },
+    {
+      "test": "test_deployment.DeploymentTests.test_public_assets_exist_before_build_and_match_source",
+      "status": "passed",
+      "seconds": 0.7083832999924198,
+      "peak_bytes": 39030784,
+      "log": ".artifacts\\remaining-tests\\0002.log"
+    },
+    {
+      "test": "test_full_disclosure_observed.FullDisclosureObservedTests.test_true_fake_backlog_same_days_and_no_report_count_truth_leak",
+      "status": "passed",
+      "seconds": 0.7104399999952875,
+      "peak_bytes": 37728256,
+      "log": ".artifacts\\remaining-tests\\0003.log"
+    },
+    {
+      "test": "test_general_reuse.GeneralReuseTests.test_nonuniform_history_private_actions_match",
+      "status": "passed",
+      "seconds": 0.9089621000166517,
+      "peak_bytes": 43970560,
+      "log": ".artifacts\\remaining-tests\\0004.log"
+    },
+    {
+      "test": "test_guard_max_history.GuardMaxHistoryTests.test_private_guardian_deduction_keeps_scan_law_and_public_secrecy",
+      "status": "passed",
+      "seconds": 1.113236599980155,
+      "peak_bytes": 48009216,
+      "log": ".artifacts\\remaining-tests\\0005.log"
+    },
+    {
+      "test": "test_information_set_model_a.ModelATests.test_corrected_corpse_targets_preserve_explicit_model_difference",
+      "status": "passed",
+      "seconds": 0.30708460000460036,
+      "peak_bytes": 22228992,
+      "log": ".artifacts\\remaining-tests\\0006.log"
+    },
+    {
+      "test": "test_information_set_model_a.ModelATests.test_new_private_black_holder_does_not_change_wolf_information_policy",
+      "status": "passed",
+      "seconds": 11.150146900006803,
+      "peak_bytes": 118112256,
+      "log": ".artifacts\\remaining-tests\\0007.log"
+    },
+    {
+      "test": "test_owned_roster_value_cut.OwnedRosterValueCutTests.test_conditional_value_equals_unreduced_public_flow_with_live_hidden_seer",
+      "status": "time_limit",
+      "seconds": 20.014264899975387,
+      "peak_bytes": 51863552,
+      "log": ".artifacts\\remaining-tests\\0008.log"
+    },
+    {
+      "test": "test_phase_updates.PhaseBoundaryTests.test_acquire_before_casualty_publish_only_survivor_without_redating",
+      "status": "passed",
+      "seconds": 0.3076033999968786,
+      "peak_bytes": 21794816,
+      "log": ".artifacts\\remaining-tests\\0009.log"
+    },
+    {
+      "test": "test_phase_updates.PhaseBoundaryTests.test_legacy_export_uses_shared_morning_generator",
+      "status": "passed",
+      "seconds": 0.30724470000131987,
+      "peak_bytes": 21909504,
+      "log": ".artifacts\\remaining-tests\\0010.log"
+    },
+    {
+      "test": "test_phase_updates.PhaseBoundaryTests.test_observed_update_matches_progress_for_both_self_bite_rules",
+      "status": "passed",
+      "seconds": 0.3075751999858767,
+      "peak_bytes": 21884928,
+      "log": ".artifacts\\remaining-tests\\0011.log"
+    },
+    {
+      "test": "test_phase_updates.PhaseBoundaryTests.test_shared_roster_excludes_execution_but_keeps_night_casualty",
+      "status": "failed",
+      "seconds": 0.3073039000155404,
+      "peak_bytes": 22102016,
+      "log": ".artifacts\\remaining-tests\\0012.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_actual_initial_white_joint_and_report_correction_withdrawal",
+      "status": "passed",
+      "seconds": 1.0094435999926645,
+      "peak_bytes": 46739456,
+      "log": ".artifacts\\remaining-tests\\0013.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_actual_two_co_same_white_keeps_true_fake_secret_mixture",
+      "status": "passed",
+      "seconds": 3.1164926000055857,
+      "peak_bytes": 67145728,
+      "log": ".artifacts\\remaining-tests\\0014.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_candidate_information_ignores_names_and_display_rates",
+      "status": "passed",
+      "seconds": 0.8184096000040881,
+      "peak_bytes": 40517632,
+      "log": ".artifacts\\remaining-tests\\0015.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_complete_public_table_and_every_audited_branch",
+      "status": "passed",
+      "seconds": 10.547529900009977,
+      "peak_bytes": 81989632,
+      "log": ".artifacts\\remaining-tests\\0016.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_default_entry_never_selects_experimental_engine",
+      "status": "passed",
+      "seconds": 0.8093640999868512,
+      "peak_bytes": 45649920,
+      "log": ".artifacts\\remaining-tests\\0017.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_joint_counterexample_same_rates_remains_different",
+      "status": "passed",
+      "seconds": 0.9085667000035755,
+      "peak_bytes": 41717760,
+      "log": ".artifacts\\remaining-tests\\0018.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_max_private_hunter_and_nine_are_fallback",
+      "status": "passed",
+      "seconds": 0.7080275999906007,
+      "peak_bytes": 40259584,
+      "log": ".artifacts\\remaining-tests\\0019.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_nonuniform_full_support_joint_preserves_correlations_and_terminal_table",
+      "status": "passed",
+      "seconds": 6.05352459999267,
+      "peak_bytes": 83480576,
+      "log": ".artifacts\\remaining-tests\\0020.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_received_claim_correction_and_withdraw_regenerate_relations",
+      "status": "passed",
+      "seconds": 1.1084479999844916,
+      "peak_bytes": 46665728,
+      "log": ".artifacts\\remaining-tests\\0021.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_secret_candidates_are_joint_distributions_not_independent_players",
+      "status": "passed",
+      "seconds": 0.707587799988687,
+      "peak_bytes": 40116224,
+      "log": ".artifacts\\remaining-tests\\0022.log"
+    },
+    {
+      "test": "test_player_match_groups.PlayerMatchGroupTests.test_seven_roots_keep_recursive_survivor_boundary",
+      "status": "passed",
+      "seconds": 0.7081912999856286,
+      "peak_bytes": 40333312,
+      "log": ".artifacts\\remaining-tests\\0023.log"
+    },
+    {
+      "test": "test_player_row_builders.DirectPlayerRowTests.test_all_fields_equal_frozen_assembly_manual_pending_and_legal_rows",
+      "status": "passed",
+      "seconds": 0.30722590000368655,
+      "peak_bytes": 23183360,
+      "log": ".artifacts\\remaining-tests\\0024.log"
+    },
+    {
+      "test": "test_player_row_builders.DirectPlayerRowTests.test_direct_path_does_not_freeze_old_full_row_dicts",
+      "status": "passed",
+      "seconds": 0.3074019000050612,
+      "peak_bytes": 23015424,
+      "log": ".artifacts\\remaining-tests\\0025.log"
+    },
+    {
+      "test": "test_player_row_builders.DirectPlayerRowTests.test_private_boundary_keeps_zero_values_none_and_existing_fields",
+      "status": "passed",
+      "seconds": 0.3069042000279296,
+      "peak_bytes": 23027712,
+      "log": ".artifacts\\remaining-tests\\0026.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_actual_seer_secret_is_not_a_received_public_claim",
+      "status": "passed",
+      "seconds": 0.9097188000159804,
+      "peak_bytes": 46243840,
+      "log": ".artifacts\\remaining-tests\\0027.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_back_past_edit_regenerates_index_without_child_leak",
+      "status": "passed",
+      "seconds": 1.2105545999947935,
+      "peak_bytes": 46948352,
+      "log": ".artifacts\\remaining-tests\\0028.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_every_existing_public_field_and_readonly_snapshot",
+      "status": "passed",
+      "seconds": 0.8077882000070531,
+      "peak_bytes": 45563904,
+      "log": ".artifacts\\remaining-tests\\0029.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_legacy_index_preserves_unknown_order_and_does_not_mutate_input",
+      "status": "passed",
+      "seconds": 0.7080412000068463,
+      "peak_bytes": 40361984,
+      "log": ".artifacts\\remaining-tests\\0030.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_manual_pending_and_missing_are_not_zero_or_unsupported",
+      "status": "passed",
+      "seconds": 0.8088770000031218,
+      "peak_bytes": 46399488,
+      "log": ".artifacts\\remaining-tests\\0031.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_old_results_request_generation_and_pending_are_distinct",
+      "status": "passed",
+      "seconds": 0.8081732999999076,
+      "peak_bytes": 46256128,
+      "log": ".artifacts\\remaining-tests\\0032.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_personal_evidence_digest_and_new_game_lifetime",
+      "status": "passed",
+      "seconds": 0.80800150000141,
+      "peak_bytes": 45629440,
+      "log": ".artifacts\\remaining-tests\\0033.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_private_rows_round_trip_and_switch_without_public_mutation",
+      "status": "passed",
+      "seconds": 0.8091605000081472,
+      "peak_bytes": 46788608,
+      "log": ".artifacts\\remaining-tests\\0034.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_publication_reverse_index_correction_withdraw_and_order",
+      "status": "passed",
+      "seconds": 1.0085949999920558,
+      "peak_bytes": 46149632,
+      "log": ".artifacts\\remaining-tests\\0035.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_roles_stream_rows_preserve_pending_values_without_zero_fill",
+      "status": "passed",
+      "seconds": 0.8097955000121146,
+      "peak_bytes": 45101056,
+      "log": ".artifacts\\remaining-tests\\0036.log"
+    },
+    {
+      "test": "test_player_view.PlayerViewTests.test_view_construction_does_not_recalculate_or_persist",
+      "status": "passed",
+      "seconds": 0.8084130000206642,
+      "peak_bytes": 45932544,
+      "log": ".artifacts\\remaining-tests\\0037.log"
+    },
+    {
+      "test": "test_player_view_ui.PlayerViewUIReadTests.test_pending_html_and_roles_complete_stream_match_legacy_rows",
+      "status": "passed",
+      "seconds": 0.8113186999980826,
+      "peak_bytes": 44527616,
+      "log": ".artifacts\\remaining-tests\\0038.log"
+    },
+    {
+      "test": "test_player_view_ui.PlayerViewUIReadTests.test_preview_edit_uses_new_view_but_does_not_save",
+      "status": "passed",
+      "seconds": 0.809009699994931,
+      "peak_bytes": 45953024,
+      "log": ".artifacts\\remaining-tests\\0039.log"
+    },
+    {
+      "test": "test_player_view_ui.PlayerViewUIReadTests.test_private_roles_pending_empty_envelope_is_preserved",
+      "status": "passed",
+      "seconds": 0.7083556999859866,
+      "peak_bytes": 42971136,
+      "log": ".artifacts\\remaining-tests\\0040.log"
+    },
+    {
+      "test": "test_player_view_ui.PlayerViewUIReadTests.test_public_day_and_night_html_exact_and_input_cookie_unchanged",
+      "status": "passed",
+      "seconds": 0.9091079999925569,
+      "peak_bytes": 45760512,
+      "log": ".artifacts\\remaining-tests\\0041.log"
+    },
+    {
+      "test": "test_player_view_ui.PlayerViewUIReadTests.test_runtime_does_not_round_trip_old_public_or_private_rows",
+      "status": "passed",
+      "seconds": 0.8076892000099178,
+      "peak_bytes": 46075904,
+      "log": ".artifacts\\remaining-tests\\0042.log"
+    },
+    {
+      "test": "test_policy_certificates.PolicyDependencyTests.test_cached_request_records_cycle_without_recomputing_or_leaking_stack",
+      "status": "passed",
+      "seconds": 0.206237099977443,
+      "peak_bytes": 15245312,
+      "log": ".artifacts\\remaining-tests\\0043.log"
+    },
+    {
+      "test": "test_policy_certificates.PolicyDependencyTests.test_contexts_remain_distinct",
+      "status": "passed",
+      "seconds": 0.20654129999456927,
+      "peak_bytes": 15237120,
+      "log": ".artifacts\\remaining-tests\\0044.log"
+    },
+    {
+      "test": "test_policy_certificates.PolicyDependencyTests.test_undefined_witness_refuses_without_claiming_complete_search",
+      "status": "passed",
+      "seconds": 0.30680790002224967,
+      "peak_bytes": 20672512,
+      "log": ".artifacts\\remaining-tests\\0045.log"
+    },
+    {
+      "test": "test_policy_certificates.UniformProfileTests.test_complete_unique_certificate_keeps_all_ties",
+      "status": "passed",
+      "seconds": 0.3072070000052918,
+      "peak_bytes": 20545536,
+      "log": ".artifacts\\remaining-tests\\0046.log"
+    },
+    {
+      "test": "test_policy_certificates.UniformProfileTests.test_multiple_no_admissible_and_budget_are_distinct",
+      "status": "passed",
+      "seconds": 0.32402460000594147,
+      "peak_bytes": 18128896,
+      "log": ".artifacts\\remaining-tests\\0047.log"
+    },
+    {
+      "test": "test_policy_certificates.UniformProfileTests.test_nonuniform_equilibrium_is_not_invented_under_existing_tie_rule",
+      "status": "passed",
+      "seconds": 0.20712239999556914,
+      "peak_bytes": 15425536,
+      "log": ".artifacts\\remaining-tests\\0048.log"
+    },
+    {
+      "test": "test_policy_certificates.UniformProfileTests.test_undefined_observation_and_dependency_never_become_scores",
+      "status": "passed",
+      "seconds": 0.20710659999167547,
+      "peak_bytes": 15552512,
+      "log": ".artifacts\\remaining-tests\\0049.log"
+    },
+    {
+      "test": "test_policy_certificates.WolfCommonCertificateTests.test_continuing_gj_zero_support_remains_undefined_without_belief_fill",
+      "status": "passed",
+      "seconds": 0.30741219999617897,
+      "peak_bytes": 21200896,
+      "log": ".artifacts\\remaining-tests\\0050.log"
+    },
+    {
+      "test": "test_policy_certificates.WolfCommonCertificateTests.test_four_player_day_max_complete_exact_profile",
+      "status": "passed",
+      "seconds": 0.4076688000059221,
+      "peak_bytes": 24100864,
+      "log": ".artifacts\\remaining-tests\\0051.log"
+    },
+    {
+      "test": "test_policy_certificates.WolfCommonCertificateTests.test_terminal_payoff_skips_belief_but_state_resolution_still_validates_support",
+      "status": "passed",
+      "seconds": 0.30785770001239143,
+      "peak_bytes": 20926464,
+      "log": ".artifacts\\remaining-tests\\0052.log"
+    },
+    {
+      "test": "test_primitive_checkpoint.PrimitiveCheckpointTests.test_old_committed_results_are_rejected_after_routing_fingerprint_changes",
+      "status": "passed",
+      "seconds": 0.709205799998017,
+      "peak_bytes": 34009088,
+      "log": ".artifacts\\remaining-tests\\0053.log"
+    },
+    {
+      "test": "test_primitive_checkpoint.PrimitiveCheckpointTests.test_selector_rejects_changed_conditioning_signature",
+      "status": "passed",
+      "seconds": 0.3109464000153821,
+      "peak_bytes": 23273472,
+      "log": ".artifacts\\remaining-tests\\0054.log"
+    },
+    {
+      "test": "test_primitive_checkpoint.PrimitiveCheckpointTests.test_selector_retains_whole_information_group_and_original_weight",
+      "status": "passed",
+      "seconds": 0.30726179998600855,
+      "peak_bytes": 23252992,
+      "log": ".artifacts\\remaining-tests\\0055.log"
+    },
+    {
+      "test": "test_private_adapter.PrivateAdapterTests.test_dead_wolf_combinations_and_acquisition_roster",
+      "status": "passed",
+      "seconds": 0.6077465000271332,
+      "peak_bytes": 39755776,
+      "log": ".artifacts\\remaining-tests\\0056.log"
+    },
+    {
+      "test": "test_private_adapter.PrivateAdapterTests.test_secrets_filter_roles_but_never_generate_ability_values",
+      "status": "passed",
+      "seconds": 0.608086699998239,
+      "peak_bytes": 39673856,
+      "log": ".artifacts\\remaining-tests\\0057.log"
+    },
+    {
+      "test": "test_private_adapter.PrivateAdapterTests.test_wolf_budget_does_not_replace_missing_final_with_public_rate",
+      "status": "passed",
+      "seconds": 0.6108576999977231,
+      "peak_bytes": 39784448,
+      "log": ".artifacts\\remaining-tests\\0058.log"
+    },
+    {
+      "test": "test_private_adapter.PrivateAdapterTests.test_wolf_horizon_and_final_are_exact_without_public_mutation",
+      "status": "passed",
+      "seconds": 0.6069293999753427,
+      "peak_bytes": 39825408,
+      "log": ".artifacts\\remaining-tests\\0059.log"
+    },
+    {
+      "test": "test_private_adapter.PrivateRouteTests.test_invalid_secrets_stale_board_and_return_to_day",
+      "status": "passed",
+      "seconds": 1.0104423000011593,
+      "peak_bytes": 44949504,
+      "log": ".artifacts\\remaining-tests\\0060.log"
+    },
+    {
+      "test": "test_private_adapter.PrivateRouteTests.test_night_mount_private_edit_and_public_state_identity",
+      "status": "passed",
+      "seconds": 1.4102874000091106,
+      "peak_bytes": 44843008,
+      "log": ".artifacts\\remaining-tests\\0061.log"
+    },
+    {
+      "test": "test_private_adapter.PrivateRouteTests.test_wolf_roster_uniform_finals_without_changing_public_cookie",
+      "status": "passed",
+      "seconds": 0.708159900008468,
+      "peak_bytes": 43298816,
+      "log": ".artifacts\\remaining-tests\\0062.log"
+    },
+    {
+      "test": "test_private_view.PrivateViewTests.test_corpse_scan_allowed_and_future_result_rejected",
+      "status": "passed",
+      "seconds": 0.2063866000098642,
+      "peak_bytes": 15544320,
+      "log": ".artifacts\\remaining-tests\\0063.log"
+    },
+    {
+      "test": "test_private_view.PrivateViewTests.test_dead_wolf_roster_and_impossible_combo",
+      "status": "passed",
+      "seconds": 0.2069449000118766,
+      "peak_bytes": 15400960,
+      "log": ".artifacts\\remaining-tests\\0064.log"
+    },
+    {
+      "test": "test_private_view.PrivateViewTests.test_partial_input_is_unknown_not_white",
+      "status": "passed",
+      "seconds": 0.20624120000866242,
+      "peak_bytes": 15343616,
+      "log": ".artifacts\\remaining-tests\\0065.log"
+    },
+    {
+      "test": "test_private_view.PrivateViewTests.test_secret_black_rule_and_conflicts",
+      "status": "passed",
+      "seconds": 0.2067107000038959,
+      "peak_bytes": 15548416,
+      "log": ".artifacts\\remaining-tests\\0066.log"
+    },
+    {
+      "test": "test_private_view.PrivateViewTests.test_true_secret_filters_without_publication",
+      "status": "passed",
+      "seconds": 0.20673559998976998,
+      "peak_bytes": 14663680,
+      "log": ".artifacts\\remaining-tests\\0067.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_atomic_batch_matches_direct_manual_model_and_order_invariance",
+      "status": "passed",
+      "seconds": 0.7090514000155963,
+      "peak_bytes": 39768064,
+      "log": ".artifacts\\remaining-tests\\0068.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_back_removes_future_batches_and_draft",
+      "status": "passed",
+      "seconds": 0.8104133999731857,
+      "peak_bytes": 40947712,
+      "log": ".artifacts\\remaining-tests\\0069.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_cookie_restore_of_committed_log",
+      "status": "passed",
+      "seconds": 1.110779000009643,
+      "peak_bytes": 47521792,
+      "log": ".artifacts\\remaining-tests\\0070.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_correction_delete_dependencies_and_duplicate_result",
+      "status": "passed",
+      "seconds": 0.7090334000240546,
+      "peak_bytes": 40423424,
+      "log": ".artifacts\\remaining-tests\\0071.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_dead_reporter_past_correction_new_disclosure_rejected",
+      "status": "passed",
+      "seconds": 0.707923199981451,
+      "peak_bytes": 40452096,
+      "log": ".artifacts\\remaining-tests\\0072.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_delayed_and_retraction_rejected_explicitly",
+      "status": "passed",
+      "seconds": 0.7088317000016104,
+      "peak_bytes": 40570880,
+      "log": ".artifacts\\remaining-tests\\0073.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_direct_inputs_cannot_bypass_log",
+      "status": "passed",
+      "seconds": 0.9090243999962695,
+      "peak_bytes": 45785088,
+      "log": ".artifacts\\remaining-tests\\0074.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_draft_cancel_restore_no_probability_calculation",
+      "status": "passed",
+      "seconds": 0.9154991999967024,
+      "peak_bytes": 46059520,
+      "log": ".artifacts\\remaining-tests\\0075.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_finished_new_events_rejected_existing_batch_can_be_corrected",
+      "status": "passed",
+      "seconds": 0.9097203999990597,
+      "peak_bytes": 40833024,
+      "log": ".artifacts\\remaining-tests\\0076.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_invalid_batch_has_no_partial_claims_or_revision",
+      "status": "passed",
+      "seconds": 0.808744400012074,
+      "peak_bytes": 40304640,
+      "log": ".artifacts\\remaining-tests\\0077.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_invalid_draft_structure_not_saved",
+      "status": "passed",
+      "seconds": 0.7095050000061747,
+      "peak_bytes": 39964672,
+      "log": ".artifacts\\remaining-tests\\0078.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_large_or_invalid_publication_preserves_cookie",
+      "status": "passed",
+      "seconds": 0.7085128000180703,
+      "peak_bytes": 40517632,
+      "log": ".artifacts\\remaining-tests\\0079.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_latent_true_seer_and_nine_player_batch",
+      "status": "passed",
+      "seconds": 0.7087590000010096,
+      "peak_bytes": 40316928,
+      "log": ".artifacts\\remaining-tests\\0080.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_legacy_migration_preserves_progress_and_unknown_order",
+      "status": "passed",
+      "seconds": 0.8089041000057478,
+      "peak_bytes": 45776896,
+      "log": ".artifacts\\remaining-tests\\0081.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_legacy_result_correction_and_deletion_do_not_invent_batches",
+      "status": "passed",
+      "seconds": 0.7078373999975156,
+      "peak_bytes": 40488960,
+      "log": ".artifacts\\remaining-tests\\0082.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_medium_and_mixed_cast_existing_opportunity",
+      "status": "passed",
+      "seconds": 1.0092606999969576,
+      "peak_bytes": 41336832,
+      "log": ".artifacts\\remaining-tests\\0083.log"
+    },
+    {
+      "test": "test_public_log.PublicLogTests.test_order_recorded_and_duplicate_submission_rejected",
+      "status": "passed",
+      "seconds": 0.7094352999993134,
+      "peak_bytes": 40378368,
+      "log": ".artifacts\\remaining-tests\\0084.log"
+    },
+    {
+      "test": "test_public_model_a_ui.PublicModelAUiTests.test_independent_cast_comparison_does_not_call_legacy_solver",
+      "status": "passed",
+      "seconds": 0.8095758999988902,
+      "peak_bytes": 44482560,
+      "log": ".artifacts\\remaining-tests\\0085.log"
+    },
+    {
+      "test": "test_public_model_a_ui.PublicModelAUiTests.test_roster_overview_and_fixed_target_horizon_have_distinct_meanings",
+      "status": "passed",
+      "seconds": 0.8087561999855097,
+      "peak_bytes": 45572096,
+      "log": ".artifacts\\remaining-tests\\0086.log"
+    },
+    {
+      "test": "test_public_night_row_normalization.PublicNightNormalizationTests.test_old_row_is_absent_if_a_count_group_has_no_legal_assignment",
+      "status": "passed",
+      "seconds": 0.708592699986184,
+      "peak_bytes": 38580224,
+      "log": ".artifacts\\remaining-tests\\0087.log"
+    },
+    {
+      "test": "test_public_night_row_normalization.PublicNightNormalizationTests.test_reachable_six_player_row_preserves_count_prior_only_in_old_law",
+      "status": "passed",
+      "seconds": 0.6086788999964483,
+      "peak_bytes": 37023744,
+      "log": ".artifacts\\remaining-tests\\0088.log"
+    },
+    {
+      "test": "test_public_night_row_normalization.PublicNightNormalizationTests.test_single_count_conditioning_is_identical",
+      "status": "passed",
+      "seconds": 0.30733670000336133,
+      "peak_bytes": 21979136,
+      "log": ".artifacts\\remaining-tests\\0089.log"
+    },
+    {
+      "test": "test_public_physical_continuation.PublicPhysicalContinuationTests.test_continuation_observation_has_zero_public_support",
+      "status": "passed",
+      "seconds": 0.40705000000889413,
+      "peak_bytes": 30359552,
+      "log": ".artifacts\\remaining-tests\\0090.log"
+    },
+    {
+      "test": "test_public_physical_continuation.PublicPhysicalContinuationTests.test_physical_terminal_payoff_and_known_actor_suffix_need_no_new_belief",
+      "status": "passed",
+      "seconds": 0.5126296000089496,
+      "peak_bytes": 30953472,
+      "log": ".artifacts\\remaining-tests\\0091.log"
+    },
+    {
+      "test": "test_public_prior_ownership.PublicPriorOwnershipTests.test_incomplete_public_ledger_is_not_cached",
+      "status": "passed",
+      "seconds": 0.30825599998934194,
+      "peak_bytes": 21991424,
+      "log": ".artifacts\\remaining-tests\\0092.log"
+    },
+    {
+      "test": "test_public_prior_ownership.PublicPriorOwnershipTests.test_only_public_evidence_and_publication_time_change_history_key",
+      "status": "passed",
+      "seconds": 0.3072851999895647,
+      "peak_bytes": 21942272,
+      "log": ".artifacts\\remaining-tests\\0093.log"
+    },
+    {
+      "test": "test_public_prior_ownership.PublicPriorOwnershipTests.test_public_prior_cache_excludes_viewer_and_invalidates_on_board_and_initial_rule",
+      "status": "passed",
+      "seconds": 0.307270499994047,
+      "peak_bytes": 22155264,
+      "log": ".artifacts\\remaining-tests\\0094.log"
+    },
+    {
+      "test": "test_public_prior_ownership.PublicPriorOwnershipTests.test_shared_engine_does_not_alias_different_private_observers",
+      "status": "passed",
+      "seconds": 0.3077495999750681,
+      "peak_bytes": 21860352,
+      "log": ".artifacts\\remaining-tests\\0095.log"
+    },
+    {
+      "test": "test_public_support_cache.PublicSupportCacheTests.test_configured_uniform_generation_reuses_complete_law_without_a_profile_resolver",
+      "status": "passed",
+      "seconds": 0.4072431000240613,
+      "peak_bytes": 29880320,
+      "log": ".artifacts\\remaining-tests\\0096.log"
+    },
+    {
+      "test": "test_public_support_cache.PublicSupportCacheTests.test_gj_hidden_bite_reuses_full_joint_law_but_changed_policy_does_not",
+      "status": "passed",
+      "seconds": 0.4072139000054449,
+      "peak_bytes": 29868032,
+      "log": ".artifacts\\remaining-tests\\0097.log"
+    },
+    {
+      "test": "test_public_support_cache.PublicSupportCacheTests.test_observed_independent_product_matches_original_cartesian_generation",
+      "status": "passed",
+      "seconds": 1.1099143000028562,
+      "peak_bytes": 31748096,
+      "log": ".artifacts\\remaining-tests\\0098.log"
+    },
+    {
+      "test": "test_public_support_cache.PublicSupportCacheTests.test_same_role_marginal_does_not_merge_different_secret_history_mixtures",
+      "status": "passed",
+      "seconds": 0.6077941000112332,
+      "peak_bytes": 29925376,
+      "log": ".artifacts\\remaining-tests\\0099.log"
+    },
+    {
+      "test": "test_random_report_count_merge.RandomReportCountMergeTests.test_same_public_vector_merges_single_and_mixed_live_wolf_counts",
+      "status": "passed",
+      "seconds": 0.20653259998653084,
+      "peak_bytes": 15204352,
+      "log": ".artifacts\\remaining-tests\\0100.log"
+    },
+    {
+      "test": "test_report_max_choice.ReportMaxChoiceTests.test_all_ties_keep_original_instruction_mass_and_merge_public_vectors",
+      "status": "passed",
+      "seconds": 0.3074771999963559,
+      "peak_bytes": 21786624,
+      "log": ".artifacts\\remaining-tests\\0101.log"
+    },
+    {
+      "test": "test_report_max_choice.ReportMaxChoiceTests.test_incomplete_report_evaluation_is_not_selected_or_cached",
+      "status": "passed",
+      "seconds": 0.3073908000078518,
+      "peak_bytes": 21979136,
+      "log": ".artifacts\\remaining-tests\\0102.log"
+    },
+    {
+      "test": "test_report_max_choice.ReportMaxChoiceTests.test_legacy_wolf_owner_keeps_public_report_ranking_and_all_rows",
+      "status": "passed",
+      "seconds": 0.3069242999772541,
+      "peak_bytes": 21839872,
+      "log": ".artifacts\\remaining-tests\\0103.log"
+    },
+    {
+      "test": "test_report_max_choice.ReportMaxChoiceTests.test_unique_min_uses_whole_instruction_expectation_before_selection",
+      "status": "passed",
+      "seconds": 0.30679780000355095,
+      "peak_bytes": 21692416,
+      "log": ".artifacts\\remaining-tests\\0104.log"
+    },
+    {
+      "test": "test_request_diagnostics.RequestDiagnosticsTests.test_close_traces_cancel_and_releases_slot",
+      "status": "passed",
+      "seconds": 0.8090435000194702,
+      "peak_bytes": 44990464,
+      "log": ".artifacts\\remaining-tests\\0105.log"
+    },
+    {
+      "test": "test_request_diagnostics.RequestDiagnosticsTests.test_complete_correlates_without_recording_inputs",
+      "status": "passed",
+      "seconds": 0.8087036999932025,
+      "peak_bytes": 45166592,
+      "log": ".artifacts\\remaining-tests\\0106.log"
+    },
+    {
+      "test": "test_request_diagnostics.RequestDiagnosticsTests.test_disabled_has_no_header_or_lifecycle_logs",
+      "status": "passed",
+      "seconds": 0.6082261000119615,
+      "peak_bytes": 37965824,
+      "log": ".artifacts\\remaining-tests\\0107.log"
+    },
+    {
+      "test": "test_request_diagnostics.RequestDiagnosticsTests.test_logging_failure_does_not_raise",
+      "status": "passed",
+      "seconds": 0.6078983999905176,
+      "peak_bytes": 37384192,
+      "log": ".artifacts\\remaining-tests\\0108.log"
+    },
+    {
+      "test": "test_retirement_proof.RetirementProofTests.test_completed_seven_matches_independent_count_reference",
+      "status": "passed",
+      "seconds": 0.7089865000161808,
+      "peak_bytes": 42831872,
+      "log": ".artifacts\\remaining-tests\\0109.log"
+    },
+    {
+      "test": "test_retirement_proof.RetirementProofTests.test_diagnostic_role_independent_noise",
+      "status": "passed",
+      "seconds": 0.708378499984974,
+      "peak_bytes": 43692032,
+      "log": ".artifacts\\remaining-tests\\0110.log"
+    },
+    {
+      "test": "test_retirement_proof.RetirementProofTests.test_external_private_max_and_disabled_fall_back",
+      "status": "passed",
+      "seconds": 0.7075929999991786,
+      "peak_bytes": 44130304,
+      "log": ".artifacts\\remaining-tests\\0111.log"
+    },
+    {
+      "test": "test_retirement_proof.RetirementProofTests.test_retains_only_actual_observed_history",
+      "status": "passed",
+      "seconds": 0.7087670000037178,
+      "peak_bytes": 43556864,
+      "log": ".artifacts\\remaining-tests\\0112.log"
+    },
+    {
+      "test": "test_retirement_proof.RetirementProofTests.test_unknown_initial_history_is_not_blessed",
+      "status": "passed",
+      "seconds": 0.7088227999920491,
+      "peak_bytes": 40321024,
+      "log": ".artifacts\\remaining-tests\\0113.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxRouteTests.test_unknown_wolf_normal_routes_reentry_and_back",
+      "status": "passed",
+      "seconds": 1.8104229999880772,
+      "peak_bytes": 46665728,
+      "log": ".artifacts\\remaining-tests\\0114.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_all_latent_six_player_initial_and_night_fit_existing_budget",
+      "status": "passed",
+      "seconds": 18.91421950000222,
+      "peak_bytes": 74743808,
+      "log": ".artifacts\\remaining-tests\\0115.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_guard_owner_secret_does_not_change_public_wolf_kernel",
+      "status": "passed",
+      "seconds": 0.4073521999816876,
+      "peak_bytes": 24408064,
+      "log": ".artifacts\\remaining-tests\\0116.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_known_public_hunter_six_player_rows_do_not_need_off_path_public_updates",
+      "status": "passed",
+      "seconds": 1.5209628000156954,
+      "peak_bytes": 40660992,
+      "log": ".artifacts\\remaining-tests\\0117.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_root_payoff_cache_separates_certificate_mode_and_identity_fallback",
+      "status": "passed",
+      "seconds": 0.40792379999766126,
+      "peak_bytes": 25186304,
+      "log": ".artifacts\\remaining-tests\\0118.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_saved_max_and_uniform_gj_two_night_actor_support",
+      "status": "passed",
+      "seconds": 13.48786670001573,
+      "peak_bytes": 53243904,
+      "log": ".artifacts\\remaining-tests\\0119.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_saved_max_observation_children_match_full_unfiltered_joint_laws",
+      "status": "passed",
+      "seconds": 1.7147878000105266,
+      "peak_bytes": 32026624,
+      "log": ".artifacts\\remaining-tests\\0120.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_saved_policy_support_and_past_uniform_are_distinct",
+      "status": "passed",
+      "seconds": 0.6092151000048034,
+      "peak_bytes": 23228416,
+      "log": ".artifacts\\remaining-tests\\0121.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_six_player_unknown_actor_requires_complete_common_flow_certificate",
+      "status": "passed",
+      "seconds": 6.728390699980082,
+      "peak_bytes": 58740736,
+      "log": ".artifacts\\remaining-tests\\0122.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_unknown_actor_proposal_divergence_is_never_returned_or_cached",
+      "status": "passed",
+      "seconds": 0.7095381999970414,
+      "peak_bytes": 28844032,
+      "log": ".artifacts\\remaining-tests\\0123.log"
+    },
+    {
+      "test": "test_root_guard_max.RootGuardMaxTests.test_unknown_wolf_kernel_public_and_owner_payoff",
+      "status": "passed",
+      "seconds": 0.921581700007664,
+      "peak_bytes": 39387136,
+      "log": ".artifacts\\remaining-tests\\0124.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_actual_later_night_reuses_a_complete_policy_independence_proof",
+      "status": "passed",
+      "seconds": 0.4085281000006944,
+      "peak_bytes": 30167040,
+      "log": ".artifacts\\remaining-tests\\0125.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_candidate_profiles_share_only_exact_branch_inputs",
+      "status": "passed",
+      "seconds": 0.40784139998140745,
+      "peak_bytes": 30076928,
+      "log": ".artifacts\\remaining-tests\\0126.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_failed_profile_classes_never_install_a_kernel",
+      "status": "passed",
+      "seconds": 0.5084689999930561,
+      "peak_bytes": 29876224,
+      "log": ".artifacts\\remaining-tests\\0127.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_five_six_candidate_search_does_not_misclassify_legal_alternatives",
+      "status": "time_limit",
+      "seconds": 20.090363099996466,
+      "peak_bytes": 46702592,
+      "log": ".artifacts\\remaining-tests\\0128.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_fixed_known_hunter_legacy_entry_is_preserved",
+      "status": "passed",
+      "seconds": 0.40700820001075044,
+      "peak_bytes": 30224384,
+      "log": ".artifacts\\remaining-tests\\0129.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_later_2187_profiles_use_exact_terminal_public_classes",
+      "status": "passed",
+      "seconds": 1.1095574000210036,
+      "peak_bytes": 29888512,
+      "log": ".artifacts\\remaining-tests\\0130.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_normal_public_owner_and_cache_both_rules",
+      "status": "passed",
+      "seconds": 0.9111682000220753,
+      "peak_bytes": 42254336,
+      "log": ".artifacts\\remaining-tests\\0131.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_profile_dependent_over_limit_context_stays_pending_and_uncached",
+      "status": "passed",
+      "seconds": 0.4076807000092231,
+      "peak_bytes": 30035968,
+      "log": ".artifacts\\remaining-tests\\0132.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_public_known_live_hunter_legal_candidates_are_not_off_path",
+      "status": "passed",
+      "seconds": 0.4065415000077337,
+      "peak_bytes": 30007296,
+      "log": ".artifacts\\remaining-tests\\0133.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_saved_day_max_gj_replays_its_original_profile",
+      "status": "passed",
+      "seconds": 0.8091146999795455,
+      "peak_bytes": 41357312,
+      "log": ".artifacts\\remaining-tests\\0134.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileEntryTests.test_unpublished_seer_medium_later_rows_match_full_joint_common_flow",
+      "status": "passed",
+      "seconds": 2.6150851999991573,
+      "peak_bytes": 41443328,
+      "log": ".artifacts\\remaining-tests\\0135.log"
+    },
+    {
+      "test": "test_root_profile_entry.RootProfileRouteTests.test_normal_routes_day_max_saved_gj_reload_and_back_both_rules",
+      "status": "passed",
+      "seconds": 1.8122365000017453,
+      "peak_bytes": 48152576,
+      "log": ".artifacts\\remaining-tests\\0136.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_dead_latent_seer_retains_past_secrets_without_new_acquisition",
+      "status": "passed",
+      "seconds": 0.30673250000108965,
+      "peak_bytes": 23752704,
+      "log": ".artifacts\\remaining-tests\\0137.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_latent_seer_multiple_nights_keep_owner_records_and_predeath_rosters",
+      "status": "passed",
+      "seconds": 0.31054750000475906,
+      "peak_bytes": 23822336,
+      "log": ".artifacts\\remaining-tests\\0138.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_model_a_world_weights_do_not_become_physical_mass",
+      "status": "passed",
+      "seconds": 0.3067186000116635,
+      "peak_bytes": 23465984,
+      "log": ".artifacts\\remaining-tests\\0139.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_new_max_and_unknown_midgame_are_explicitly_pending",
+      "status": "passed",
+      "seconds": 0.307523499999661,
+      "peak_bytes": 23420928,
+      "log": ".artifacts\\remaining-tests\\0140.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_public_observation_connects_existing_full_disclosure_without_rescuing_omissions",
+      "status": "passed",
+      "seconds": 0.40844440000364557,
+      "peak_bytes": 23371776,
+      "log": ".artifacts\\remaining-tests\\0141.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_random_continuation_public_and_actor_values_are_exact",
+      "status": "passed",
+      "seconds": 0.3075361000082921,
+      "peak_bytes": 23384064,
+      "log": ".artifacts\\remaining-tests\\0142.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_shared_selector_keeps_objective_and_complete_uniform_ties",
+      "status": "passed",
+      "seconds": 0.308551099995384,
+      "peak_bytes": 23760896,
+      "log": ".artifacts\\remaining-tests\\0143.log"
+    },
+    {
+      "test": "test_root_secret_flow.RootSecretTests.test_user_initial_white_example_and_actor_condition",
+      "status": "passed",
+      "seconds": 0.40846410000813194,
+      "peak_bytes": 23355392,
+      "log": ".artifacts\\remaining-tests\\0144.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_day_guard_intervention_keeps_pre_guard_death_branches",
+      "status": "passed",
+      "seconds": 0.5086082999769133,
+      "peak_bytes": 29913088,
+      "log": ".artifacts\\remaining-tests\\0145.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_gj_owner_tables_share_public_flow_without_mutation",
+      "status": "passed",
+      "seconds": 3.316191899997648,
+      "peak_bytes": 46112768,
+      "log": ".artifacts\\remaining-tests\\0146.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_guard_and_wolf_owner_views_condition_same_joint_law",
+      "status": "passed",
+      "seconds": 0.7084388999792282,
+      "peak_bytes": 29962240,
+      "log": ".artifacts\\remaining-tests\\0147.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_guard_branch_public_ledger_does_not_reveal_fixed_bite",
+      "status": "passed",
+      "seconds": 0.5077084000222385,
+      "peak_bytes": 29503488,
+      "log": ".artifacts\\remaining-tests\\0148.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_initial_latent_scan_comparison_keeps_pre_scan_death_branches",
+      "status": "passed",
+      "seconds": 0.7083529999945313,
+      "peak_bytes": 39981056,
+      "log": ".artifacts\\remaining-tests\\0149.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_latent_private_table_conditions_joint_history_without_public_mutation",
+      "status": "passed",
+      "seconds": 1.0085438000096474,
+      "peak_bytes": 42770432,
+      "log": ".artifacts\\remaining-tests\\0150.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a",
+      "status": "passed",
+      "seconds": 0.407417299982626,
+      "peak_bytes": 29724672,
+      "log": ".artifacts\\remaining-tests\\0151.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only",
+      "status": "passed",
+      "seconds": 0.9089460000104737,
+      "peak_bytes": 32321536,
+      "log": ".artifacts\\remaining-tests\\0152.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot",
+      "status": "passed",
+      "seconds": 0.7078242000134196,
+      "peak_bytes": 40042496,
+      "log": ".artifacts\\remaining-tests\\0153.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max",
+      "status": "passed",
+      "seconds": 0.40744949999498203,
+      "peak_bytes": 29925376,
+      "log": ".artifacts\\remaining-tests\\0154.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending",
+      "status": "passed",
+      "seconds": 0.4070181999995839,
+      "peak_bytes": 29638656,
+      "log": ".artifacts\\remaining-tests\\0155.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks",
+      "status": "passed",
+      "seconds": 0.508231000014348,
+      "peak_bytes": 30007296,
+      "log": ".artifacts\\remaining-tests\\0156.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law",
+      "status": "passed",
+      "seconds": 0.8092519999772776,
+      "peak_bytes": 41496576,
+      "log": ".artifacts\\remaining-tests\\0157.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation",
+      "status": "passed",
+      "seconds": 1.1245627999887802,
+      "peak_bytes": 42528768,
+      "log": ".artifacts\\remaining-tests\\0158.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_two_gj_nights_keep_guard_attack_scan_joint_histories",
+      "status": "passed",
+      "seconds": 1.0102411999832839,
+      "peak_bytes": 31580160,
+      "log": ".artifacts\\remaining-tests\\0159.log"
+    },
+    {
+      "test": "test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation",
+      "status": "passed",
+      "seconds": 0.5083210000011604,
+      "peak_bytes": 29646848,
+      "log": ".artifacts\\remaining-tests\\0160.log"
+    },
+    {
+      "test": "test_root_secret_screen.RootSecretScreenTests.test_existing_screen_entry_generates_full_latent_state_and_all_metrics",
+      "status": "passed",
+      "seconds": 0.8086085999966599,
+      "peak_bytes": 44318720,
+      "log": ".artifacts\\remaining-tests\\0161.log"
+    },
+    {
+      "test": "test_root_secret_screen.RootSecretScreenTests.test_generation_budget_pending_is_not_replaced_or_cached",
+      "status": "passed",
+      "seconds": 0.7087716000096407,
+      "peak_bytes": 44048384,
+      "log": ".artifacts\\remaining-tests\\0162.log"
+    },
+    {
+      "test": "test_root_secret_screen.RootSecretScreenTests.test_max_fixed_co_and_unknown_midgame_keep_existing_entry",
+      "status": "passed",
+      "seconds": 0.7091252999962308,
+      "peak_bytes": 44036096,
+      "log": ".artifacts\\remaining-tests\\0163.log"
+    },
+    {
+      "test": "test_root_secret_screen.RootSecretScreenTests.test_uniform_guard_screen_uses_joint_entry_and_existing_rules",
+      "status": "passed",
+      "seconds": 0.7081552999734413,
+      "peak_bytes": 43536384,
+      "log": ".artifacts\\remaining-tests\\0164.log"
+    },
+    {
+      "test": "test_root_secret_screen.RootSecretScreenTests.test_web_main_uses_new_entry_without_saving_secrets_or_changing_game",
+      "status": "passed",
+      "seconds": 0.9096790999756195,
+      "peak_bytes": 45780992,
+      "log": ".artifacts\\remaining-tests\\0165.log"
+    },
+    {
+      "test": "test_seer_fake_uniform.FakeUniformTests.test_first_none_has_no_true_initial_scan_but_next_night_scans",
+      "status": "passed",
+      "seconds": 0.30692800000542775,
+      "peak_bytes": 18997248,
+      "log": ".artifacts\\remaining-tests\\0166.log"
+    },
+    {
+      "test": "test_seer_fake_uniform.FakeUniformTests.test_initial_normal_uniform_truth_can_be_black",
+      "status": "passed",
+      "seconds": 0.2069962000241503,
+      "peak_bytes": 15216640,
+      "log": ".artifacts\\remaining-tests\\0167.log"
+    },
+    {
+      "test": "test_seer_fake_uniform.FakeUniformTests.test_multiple_fake_joint_correlation_not_assumed",
+      "status": "passed",
+      "seconds": 0.20816609999747016,
+      "peak_bytes": 15130624,
+      "log": ".artifacts\\remaining-tests\\0168.log"
+    },
+    {
+      "test": "test_seer_fake_uniform.FakeUniformTests.test_only_own_public_history_affects_target_priority",
+      "status": "passed",
+      "seconds": 0.20712220002315007,
+      "peak_bytes": 15388672,
+      "log": ".artifacts\\remaining-tests\\0169.log"
+    },
+    {
+      "test": "test_seer_fake_uniform.FakeUniformTests.test_revisit_fallback_retains_literal_uniform_colors",
+      "status": "passed",
+      "seconds": 0.20667490002233535,
+      "peak_bytes": 14929920,
+      "log": ".artifacts\\remaining-tests\\0170.log"
+    },
+    {
+      "test": "test_seer_fake_uniform.FakeUniformTests.test_single_fake_and_no_fake_joint_law_complete",
+      "status": "passed",
+      "seconds": 0.2079449000011664,
+      "peak_bytes": 15593472,
+      "log": ".artifacts\\remaining-tests\\0171.log"
+    },
+    {
+      "test": "test_seer_fake_uniform.FakeUniformTests.test_unreported_priority_target_then_color_equal_probability",
+      "status": "passed",
+      "seconds": 0.20707239999319427,
+      "peak_bytes": 15433728,
+      "log": ".artifacts\\remaining-tests\\0172.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_current_morning_missing_excludes_truth_and_keeps_dead_truth",
+      "status": "passed",
+      "seconds": 0.7096434000122827,
+      "peak_bytes": 38694912,
+      "log": ".artifacts\\remaining-tests\\0173.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_dead_report_correction_changes_cumulative_not_discarded",
+      "status": "passed",
+      "seconds": 0.9091989000153262,
+      "peak_bytes": 43954176,
+      "log": ".artifacts\\remaining-tests\\0174.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_developer_preview_flag_does_not_switch_model_a_display",
+      "status": "passed",
+      "seconds": 0.8098437000007834,
+      "peak_bytes": 43290624,
+      "log": ".artifacts\\remaining-tests\\0175.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_incomplete_all_open_day1_is_inconsistent_not_pending",
+      "status": "passed",
+      "seconds": 0.607362299982924,
+      "peak_bytes": 36712448,
+      "log": ".artifacts\\remaining-tests\\0176.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_local_preview_reaches_night_day2_and_terminal",
+      "status": "passed",
+      "seconds": 1.1091831999947317,
+      "peak_bytes": 45092864,
+      "log": ".artifacts\\remaining-tests\\0177.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_no_initial_rule_allows_no_true_initial_publication",
+      "status": "passed",
+      "seconds": 0.8083186000003479,
+      "peak_bytes": 43806720,
+      "log": ".artifacts\\remaining-tests\\0178.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_seven_player_known_fake_family_evaluates_without_five_player_gate",
+      "status": "passed",
+      "seconds": 2.815196500014281,
+      "peak_bytes": 50229248,
+      "log": ".artifacts\\remaining-tests\\0179.log"
+    },
+    {
+      "test": "test_seer_future_bridge.FutureBridgeTests.test_two_surviving_co_unknown_truth_joint_vectors_and_pending",
+      "status": "failed",
+      "seconds": 0.8196295999805443,
+      "peak_bytes": 38756352,
+      "log": ".artifacts\\remaining-tests\\0180.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_budget_returns_pending_and_never_cache_partial_zero",
+      "status": "passed",
+      "seconds": 0.2063534000189975,
+      "peak_bytes": 15495168,
+      "log": ".artifacts\\remaining-tests\\0181.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_complete_true_single_fake_vectors_use_generation_likelihood",
+      "status": "passed",
+      "seconds": 0.2064959999988787,
+      "peak_bytes": 15560704,
+      "log": ".artifacts\\remaining-tests\\0182.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_dead_private_history_marginalization_matches_full_ledger",
+      "status": "passed",
+      "seconds": 0.3067577999900095,
+      "peak_bytes": 19513344,
+      "log": ".artifacts\\remaining-tests\\0183.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_five_player_manual_prior_future_terminal_values_literal",
+      "status": "passed",
+      "seconds": 0.30702859998564236,
+      "peak_bytes": 19447808,
+      "log": ".artifacts\\remaining-tests\\0184.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_generated_morning_includes_dead_wolf_signal",
+      "status": "passed",
+      "seconds": 0.3071845999802463,
+      "peak_bytes": 19181568,
+      "log": ".artifacts\\remaining-tests\\0185.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_initial_terminal_one_and_two_players_need_no_private_acquisition",
+      "status": "passed",
+      "seconds": 0.20625249997829087,
+      "peak_bytes": 15355904,
+      "log": ".artifacts\\remaining-tests\\0186.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_known_fake_noise_equivalence_through_multiple_mornings",
+      "status": "passed",
+      "seconds": 5.5465129999793135,
+      "peak_bytes": 56840192,
+      "log": ".artifacts\\remaining-tests\\0187.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_known_single_fake_noise_marginalization_matches_full_vectors",
+      "status": "passed",
+      "seconds": 0.3086590000020806,
+      "peak_bytes": 19337216,
+      "log": ".artifacts\\remaining-tests\\0188.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_known_true_scan_forecast_reaches_terminal_exactly",
+      "status": "passed",
+      "seconds": 0.3080747999774758,
+      "peak_bytes": 19419136,
+      "log": ".artifacts\\remaining-tests\\0189.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_medium_max_and_random_law_preserved_after_seer_death",
+      "status": "passed",
+      "seconds": 0.3079643000091892,
+      "peak_bytes": 18800640,
+      "log": ".artifacts\\remaining-tests\\0190.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_mixed_medium_scope_preserves_existing_model_without_seer_co",
+      "status": "passed",
+      "seconds": 0.3071445999958087,
+      "peak_bytes": 19275776,
+      "log": ".artifacts\\remaining-tests\\0191.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_multiple_fake_pending_no_partial_outcomes",
+      "status": "passed",
+      "seconds": 0.30768619998707436,
+      "peak_bytes": 18714624,
+      "log": ".artifacts\\remaining-tests\\0192.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_night_signal_includes_uninformative_corpse_scan",
+      "status": "passed",
+      "seconds": 0.3077594000205863,
+      "peak_bytes": 18694144,
+      "log": ".artifacts\\remaining-tests\\0193.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_no_seer_co_matches_existing_solver_for_broad_casts",
+      "status": "passed",
+      "seconds": 0.30751769998460077,
+      "peak_bytes": 19496960,
+      "log": ".artifacts\\remaining-tests\\0194.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_private_projection_keeps_joint_role_masks_and_living_own_history",
+      "status": "passed",
+      "seconds": 0.20737609997740947,
+      "peak_bytes": 15216640,
+      "log": ".artifacts\\remaining-tests\\0195.log"
+    },
+    {
+      "test": "test_seer_future_forecast.SeerFutureForecastTests.test_random_public_actions_do_not_optimize_inside_truth_worlds",
+      "status": "passed",
+      "seconds": 0.30698260001372546,
+      "peak_bytes": 19390464,
+      "log": ".artifacts\\remaining-tests\\0196.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_budget_returns_pending_never_partial_probability",
+      "status": "passed",
+      "seconds": 0.3074866999813821,
+      "peak_bytes": 19369984,
+      "log": ".artifacts\\remaining-tests\\0197.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_dead_past_fake_does_not_block_given_conditioned_prior",
+      "status": "passed",
+      "seconds": 0.20977190000121482,
+      "peak_bytes": 14934016,
+      "log": ".artifacts\\remaining-tests\\0198.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_initial_joint_draw_preserves_role_marginals_and_is_white",
+      "status": "passed",
+      "seconds": 0.40765949999331497,
+      "peak_bytes": 21909504,
+      "log": ".artifacts\\remaining-tests\\0199.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_missing_history_and_resurrection_are_rejected",
+      "status": "passed",
+      "seconds": 0.3078289999975823,
+      "peak_bytes": 19058688,
+      "log": ".artifacts\\remaining-tests\\0200.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_morning_dead_scanned_target_can_still_be_reported",
+      "status": "passed",
+      "seconds": 0.3094857999822125,
+      "peak_bytes": 18837504,
+      "log": ".artifacts\\remaining-tests\\0201.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_multiple_wolf_identity_masks_are_retained_without_fake_policy",
+      "status": "passed",
+      "seconds": 0.3071306999772787,
+      "peak_bytes": 19050496,
+      "log": ".artifacts\\remaining-tests\\0202.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_no_possible_white_target_is_explicit_pending",
+      "status": "passed",
+      "seconds": 0.30958440000540577,
+      "peak_bytes": 18722816,
+      "log": ".artifacts\\remaining-tests\\0203.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_no_seers_and_one_through_nine_rosters",
+      "status": "passed",
+      "seconds": 0.20699770000646822,
+      "peak_bytes": 14929920,
+      "log": ".artifacts\\remaining-tests\\0204.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_own_history_unvisited_priority_not_other_seer_history",
+      "status": "passed",
+      "seconds": 0.2066486999974586,
+      "peak_bytes": 15028224,
+      "log": ".artifacts\\remaining-tests\\0205.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_past_true_report_requires_conditioned_posterior",
+      "status": "passed",
+      "seconds": 0.20727449998958036,
+      "peak_bytes": 15261696,
+      "log": ".artifacts\\remaining-tests\\0206.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_possible_fake_two_wolves_stays_pending_without_policy_guess",
+      "status": "passed",
+      "seconds": 0.2070030000177212,
+      "peak_bytes": 15036416,
+      "log": ".artifacts\\remaining-tests\\0207.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_revisit_fallback_when_all_legal_targets_visited",
+      "status": "passed",
+      "seconds": 0.20716300001367927,
+      "peak_bytes": 14794752,
+      "log": ".artifacts\\remaining-tests\\0208.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_scan_before_night_casualty_and_only_surviving_co_publication",
+      "status": "passed",
+      "seconds": 0.2067838000075426,
+      "peak_bytes": 15007744,
+      "log": ".artifacts\\remaining-tests\\0209.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_true_only_public_report_groups_normalize",
+      "status": "passed",
+      "seconds": 0.20693129999563098,
+      "peak_bytes": 14950400,
+      "log": ".artifacts\\remaining-tests\\0210.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_truth_publication_budget_exceeded_stays_pending",
+      "status": "passed",
+      "seconds": 0.20724339998560026,
+      "peak_bytes": 14123008,
+      "log": ".artifacts\\remaining-tests\\0211.log"
+    },
+    {
+      "test": "test_seer_future_uniform.TrueFutureUniformTests.test_uniform_future_targets_and_exact_truth",
+      "status": "passed",
+      "seconds": 0.20702870000968687,
+      "peak_bytes": 14999552,
+      "log": ".artifacts\\remaining-tests\\0212.log"
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_black_report_is_allowed_but_random_white_true_assignment_eliminated",
+      "status": "passed",
+      "seconds": 1.1293127000099048,
+      "peak_bytes": 46428160,
+      "log": ".artifacts\\remaining-tests\\0213.log"
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_draft_controls_belong_to_separate_inert_form",
+      "status": "passed",
+      "seconds": 1.0123637999931816,
+      "peak_bytes": 45826048,
+      "log": ".artifacts\\remaining-tests\\0214.log"
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_invalid_and_duplicate_rule_preserves_existing_game",
+      "status": "passed",
+      "seconds": 0.708614499977557,
+      "peak_bytes": 40771584,
+      "log": ".artifacts\\remaining-tests\\0215.log"
+    },
+    {
+      "test": "test_seer_game_rule.SeerGameRuleTests.test_legacy_abilityless_seer_progress_projection_unchanged_without_reports",
+      "status": "passed",
+      "seconds": 0.8085909999790601,
+      "peak_bytes": 45285376,
+      "log": ".artifacts\\remaining-tests\\0216.log"
+    }
+  ],
+  "not_run": [
+    "test_seer_game_rule.SeerGameRuleTests.test_legacy_selected_rule_and_history_snapshots_preserved",
+    "test_seer_game_rule.SeerGameRuleTests.test_legacy_unselected_and_unset_mode_migrate_without_inventing_reports",
+    "test_seer_game_rule.SeerGameRuleTests.test_nonseer_games_keep_ordinary_route_and_value",
+    "test_seer_game_rule.SeerGameRuleTests.test_preset_independent_and_saved_rule_survives_definition_changes",
+    "test_seer_game_rule.SeerGameRuleTests.test_rule_cannot_be_changed_from_main_even_before_action",
+    "test_seer_game_rule.SeerGameRuleTests.test_three_choices_snapshot_and_main_readonly_top_editable",
+    "test_seer_game_rule.SeerGameRuleTests.test_unknown_saved_model_is_not_silently_migrated",
+    "test_seer_manual.SeerManualTests.test_back_discards_future_reports_and_cookie_cold_restore",
+    "test_seer_manual.SeerManualTests.test_conditioning_cache_change_and_probabilities_not_win_rate",
+    "test_seer_manual.SeerManualTests.test_dead_reporter_evidence_is_retained_and_replay_edits_from_origin",
+    "test_seer_manual.SeerManualTests.test_each_day_results_and_dead_target_at_scan_roster",
+    "test_seer_manual.SeerManualTests.test_fixed_defaults_calculate_without_unselected_gate",
+    "test_seer_manual.SeerManualTests.test_fixed_handling_and_game_rule_readonly_in_main",
+    "test_seer_manual.SeerManualTests.test_general_cast_allowed_invalid_cast_and_legacy_unchanged",
+    "test_seer_manual.SeerManualTests.test_independent_enumeration_all_targets_colors_and_future_modes",
+    "test_seer_manual.SeerManualTests.test_initial_white_likelihood_and_none_allow_later_days",
+    "test_seer_manual.SeerManualTests.test_invalid_and_contradictory_inputs_atomic_and_stale_revision_rejected",
+    "test_seer_manual.SeerManualTests.test_no_future_seer_components_called_and_reaches_terminal",
+    "test_seer_manual.SeerManualTests.test_partial_fields_are_saved_as_draft_and_pending",
+    "test_seer_manual.SeerManualTests.test_rules_and_co_locked_after_progress",
+    "test_seer_manual_compatibility.HandCompatibilityTests.test_day2_dead_and_live_seer_candidates_half_with_preview_and_co_table",
+    "test_seer_manual_compatibility.HandCompatibilityTests.test_nonuniform_prior_is_preserved_without_true_fake_asymmetry",
+    "test_seer_manual_compatibility.HandCompatibilityTests.test_random_white_true_black_and_illegal_white_still_excluded",
+    "test_seer_manual_general.SeerManualGeneralTests.test_ability_scope_is_in_help_not_permanent_main_prose",
+    "test_seer_manual_general.SeerManualGeneralTests.test_budget_pending_and_recovery_with_cache",
+    "test_seer_manual_general.SeerManualGeneralTests.test_high_player_ids_dynamic_fields_cache_and_terminal",
+    "test_seer_manual_general.SeerManualGeneralTests.test_later_co_uses_current_day_and_old_co_reports_survive_removal",
+    "test_seer_manual_general.SeerManualGeneralTests.test_many_co_and_multiple_wolves_preserve_joint_support",
+    "test_seer_manual_general.SeerManualGeneralTests.test_medium_and_seer_reports_condition_same_joint_history",
+    "test_seer_manual_general.SeerManualGeneralTests.test_medium_correction_replays_from_origin_and_keeps_actions",
+    "test_seer_manual_general.SeerManualGeneralTests.test_mixed_report_back_and_cold_cookie_restore",
+    "test_seer_manual_general.SeerManualGeneralTests.test_mixed_roles_uncertain_hunter_explicit_and_unmodified_prior",
+    "test_seer_manual_general.SeerManualGeneralTests.test_multiple_true_seers_coupled_reports_and_contradiction_atomic",
+    "test_seer_manual_general.SeerManualGeneralTests.test_no_wolves_or_initial_wolf_majority_are_defined_terminal_casts",
+    "test_seer_manual_general.SeerManualGeneralTests.test_one_co_true_report_and_latent_true_seers_allowed",
+    "test_seer_manual_general.SeerManualGeneralTests.test_one_through_nine_initial_casts_and_zero_co",
+    "test_seer_manual_general.SeerManualGeneralTests.test_random_white_joint_likelihood_literal_two_true_seers",
+    "test_seer_manual_general.SeerManualGeneralTests.test_zero_seers_manual_matches_ordinary_role_prior",
+    "test_seer_multiple_wolves.MultipleWolfSeerTests.test_private_count_prior_is_preserved_and_illegal_public_instruction_is_pending",
+    "test_seer_multiple_wolves.MultipleWolfSeerTests.test_requested_five_player_same_white_co_example_and_terminal_branch",
+    "test_seer_multiple_wolves.MultipleWolfSeerTests.test_two_live_wolves_and_mixed_counts_are_not_blanket_pending",
+    "test_seer_noncontradictory.NoncontradictoryFakeTests.test_already_exposed_fake_retains_complete_noise_not_pending",
+    "test_seer_noncontradictory.NoncontradictoryFakeTests.test_candidate_support_does_not_weight_by_true_history_mass",
+    "test_seer_noncontradictory.NoncontradictoryFakeTests.test_morning_vectors_keep_both_true_owners_and_total_mass",
+    "test_seer_noncontradictory.NoncontradictoryFakeTests.test_multiple_fake_policy_still_unselected",
+    "test_seer_noncontradictory.NoncontradictoryFakeTests.test_same_white_example_all_four_uncertain_executions_are_quarter",
+    "test_seer_noncontradictory.NoncontradictoryFakeTests.test_uniform_only_restores_old_three_eighths",
+    "test_seer_view_forecast.SeerForecastTests.test_none_disclosure_and_latent_co_remain_explicit_pending",
+    "test_seer_view_forecast.SeerForecastTests.test_private_scan_choice_never_changes_public_scores",
+    "test_seer_view_forecast.SeerForecastTests.test_relabeling_of_asymmetric_public_prior_and_seer_is_invariant",
+    "test_seer_view_forecast.SeerForecastTests.test_secret_past_results_are_truth_and_acquisition_days_are_distinct",
+    "test_seer_view_forecast.SeerForecastTests.test_symmetric_targets_and_max_ties_are_equal",
+    "test_seer_view_forecast.SeerForecastTests.test_target_information_values_are_computed_not_constant",
+    "test_seer_view_forecast.SeerRouteTests.test_public_co_scope_secret_history_none_and_public_cookie_identity",
+    "test_setup.SetupModelTests.test_default_config_excludes_strategy_and_draft_edits_do_not_mutate_game",
+    "test_setup.SetupModelTests.test_rule_schema_defaults_and_invalid_values_are_not_silently_repaired",
+    "test_setup.SetupWebTests.test_error_preserves_draft_and_running_game_reload_returns_game",
+    "test_setup.SetupWebTests.test_first_visit_and_invalid_session_use_samples_without_repairing_game",
+    "test_setup.SetupWebTests.test_logo_and_settings_return_restore_initial_config_not_current_board",
+    "test_setup.SetupWebTests.test_one_two_initial_results_restore_real_config",
+    "test_setup.SetupWebTests.test_presets_are_independent_and_numeric_values_are_normalized",
+    "test_setup.SetupWebTests.test_sample_three_cast_and_top_restore",
+    "test_setup.SetupWebTests.test_saved_actual_values_survive_preset_definition_change",
+    "test_setup.SetupWebTests.test_success_replaces_game_and_presets_never_include_board_strategy",
+    "test_strategy_ui.StrategyEditorTests.test_adapter_does_not_change_exact_values_or_legacy_model",
+    "test_strategy_ui.StrategyEditorTests.test_common_and_individual_exception_history_and_back",
+    "test_strategy_ui.StrategyEditorTests.test_legacy_adapter_preserves_every_condition_combination",
+    "test_strategy_ui.StrategyEditorTests.test_model_switch_only_before_history_and_policy_roundtrip",
+    "test_strategy_ui.StrategyEditorTests.test_unsupported_and_duplicate_configuration_rejected_atomically",
+    "test_support_partition.SupportPartitionTests.test_all_local_options_are_required_and_state_budget_never_selects",
+    "test_support_partition.SupportPartitionTests.test_full_classification_matches_exhaustive_including_nonwitness_best_response",
+    "test_support_partition.SupportPartitionTests.test_real_387_million_profile_context_matches_all_common_candidate_values",
+    "test_table_preview.TablePreviewTests.test_back_trims_later_change_and_cold_cookie_restores_projection",
+    "test_table_preview.TablePreviewTests.test_co_withdraw_cascades_reports_and_no_revival",
+    "test_table_preview.TablePreviewTests.test_deleting_referenced_item_is_atomic_rejection",
+    "test_table_preview.TablePreviewTests.test_ephemeral_same_batch_and_value_on_commit",
+    "test_table_preview.TablePreviewTests.test_old_cookie_migration_and_past_item_correction_preserve_followup_reference",
+    "test_table_preview.TablePreviewTests.test_partial_and_stale_do_not_save_or_return_old_numeric",
+    "test_table_preview.TablePreviewTests.test_result_change_uses_only_new_target_not_old_constraint",
+    "test_table_preview.TablePreviewTests.test_roundtrip_cookie_and_default_not_exposed",
+    "test_terminal_followup.TerminalPhysicalMeasureTests.test_complete_scan_expansion_and_terminal_measure_have_identical_physical_law",
+    "test_uniform_fixed_backup.UniformFixedBackupTests.test_completed_day_horizon_matches_full_common_flow_without_new_scan_expansion",
+    "test_uniform_fixed_backup.UniformFixedBackupTests.test_correlated_unknown_roles_and_separate_q_p_match_unreduced_common_flow",
+    "test_uniform_fixed_backup.UniformFixedBackupTests.test_no_repeat_six_player_two_gj_replay_matches_inactive_role_reference",
+    "test_uniform_fixed_backup.UniformFixedBackupTests.test_own_scan_candidates_match_complete_controlled_scan_reference",
+    "test_uniform_fixed_backup.UniformFixedBackupTests.test_saved_observation_filter_equals_complete_children_with_original_mass",
+    "test_uniform_fixed_backup.UniformFixedBackupTests.test_six_player_latent_abilities_match_full_common_inactive_role_reference",
+    "test_uniform_fixed_backup.UniformFixedBackupTests.test_unsupported_secret_support_reports_observers_and_max_do_not_use_cut",
+    "test_uniform_terminal_cut.UniformTerminalCutTests.test_reporting_observer_and_max_night_keep_the_ordinary_path",
+    "test_uniform_terminal_cut.UniformTerminalCutTests.test_terminal_day_full_observation_history_matches_unreduced_execution",
+    "test_uniform_terminal_cut.UniformTerminalCutTests.test_uniform_night_complete_common_flow_matches_with_full_public_and_owned_histories",
+    "test_v02.MultiWolfWebTests.test_nine_complete_web_history_and_tampered_cast",
+    "test_v02.MultiWolfWebTests.test_seven_two_wolves_ui_back_history_and_strategy",
+    "test_v02.MultipleWolfTests.test_all_counts_full_manual_histories_mass_and_terminal_rules",
+    "test_v02.MultipleWolfTests.test_explicit_unshared_complete_tree_agrees_with_cached_evaluation",
+    "test_v02.MultipleWolfTests.test_initial_joint_counts_and_symmetry",
+    "test_v02.MultipleWolfTests.test_public_optimization_precedes_hidden_assignment",
+    "test_v02.MultipleWolfTests.test_seven_two_wolves_next_morning_and_correlations",
+    "test_v02.MultipleWolfTests.test_small_multiwolf_exact_reference_values",
+    "test_v02.MultipleWolfTests.test_validation_and_terminal",
+    "test_v03.ClaimTests.test_all_hidden_and_zero_medium_v02_values",
+    "test_v03.ClaimTests.test_all_small_claim_patterns_have_exact_mass_or_conflict",
+    "test_v03.ClaimTests.test_co_history_and_no_new_ability_information",
+    "test_v03.ClaimTests.test_filled_default_capacity_and_immediate_counter",
+    "test_v03.ClaimTests.test_impossible_claim_count_and_role_constraint",
+    "test_v03.ClaimTests.test_multiple_mediums_unrestricted_counts_and_ccos",
+    "test_v03.ClaimTests.test_one_claim_default_counter_and_no_counter",
+    "test_v03.ClaimTests.test_two_claims_correlations_and_public_strategy",
+    "test_v03.ClaimWebTests.test_back_restores_claims_and_conditions_and_new_targets",
+    "test_v03.ClaimWebTests.test_co_changes_probability_and_comparing_ccos",
+    "test_v03.ClaimWebTests.test_conflicting_co_does_not_mutate_state",
+    "test_v03.ClaimWebTests.test_filled_top_default_and_current_phase_condition_changes",
+    "test_v03.ClaimWebTests.test_stale_claim_apply_and_result_injection_rejected",
+    "test_v03.ClaimWebTests.test_top_role_counts_and_fixed_calculation_options",
+    "test_v04_future.FutureReportTests.test_current_blank_not_regenerated_dead_reporter_and_empty_vector",
+    "test_v04_future.FutureReportTests.test_exact_solver_matches_independent_unshared_report_tree",
+    "test_v04_future.FutureReportTests.test_extra_ability_free_roles_share_the_same_exact_future_kernel",
+    "test_v04_future.FutureReportTests.test_hand_support_and_random_event_probabilities_differ",
+    "test_v04_future.FutureReportTests.test_six_world_kernel_recovers_prior_and_approved_posterior",
+    "test_v04_future.FutureReportTests.test_terminal_mass_stops_before_report_and_no_worldwise_max",
+    "test_v04_future.FutureReportTests.test_two_true_reports_are_correlated",
+    "test_v04_input.ExtraRoleTests.test_ability_free_counts_do_not_change_no_co_win_values",
+    "test_v04_input.ExtraRoleTests.test_complete_counts_joint_mass_and_group_permutation",
+    "test_v04_input.ExtraRoleTests.test_extra_ccos_and_absent_roles",
+    "test_v04_input.MediumInputTests.test_joint_reports_are_not_independent_probabilities",
+    "test_v04_input.MediumInputTests.test_known_true_conflict_and_no_pre_co_or_dead_report",
+    "test_v04_input.MediumInputTests.test_report_evidence_survives_reporter_death",
+    "test_v04_input.MediumInputTests.test_truth_is_joint_constraint_and_fake_can_lie",
+    "test_v04_input.MediumWebTests.test_report_snapshot_add_remove_back_and_extra_roles",
+    "test_web.WebTests.test_back_restores_policy_target_and_discards_suffix",
+    "test_web.WebTests.test_cast_summary_uses_actual_total_and_compact_role_counts",
+    "test_web.WebTests.test_exact_display_rounding_only",
+    "test_web.WebTests.test_five_player_day_night_day_conditional_and_cumulative",
+    "test_web.WebTests.test_footer_phase_destinations_target_labels_and_terminal",
+    "test_web.WebTests.test_four_player_terminal_night",
+    "test_web.WebTests.test_history_snapshots_do_not_change_when_strategy_changes",
+    "test_web.WebTests.test_missing_duplicate_invalid_and_dead_targets",
+    "test_web.WebTests.test_navigation_and_no_store",
+    "test_web.WebTests.test_no_role_state_and_malformed_session_returns_top",
+    "test_web.WebTests.test_one_two_player_initial_results_all_role_compositions",
+    "test_web.WebTests.test_rule_allowed_strategy_excluded_then_included",
+    "test_web.WebTests.test_rule_forbidden_tampered_inclusion_rejected",
+    "test_web.WebTests.test_self_bite_select_retains_boolean_and_legacy_form_contract",
+    "test_web.WebTests.test_stale_and_rapid_repeated_posts_cannot_advance_twice",
+    "test_web.WebTests.test_strategy_apply_without_target_does_not_advance",
+    "test_web.WebTests.test_three_player_terminal_both_chances_retained",
+    "test_web.WebTests.test_top_default_five_rule_and_strategy_defaults",
+    "test_wolf_information_set_characterization.WolfInformationSetCharacterizationTests.test_action_selection_likelihood_is_a_distinct_public_update_choice",
+    "test_wolf_information_set_characterization.WolfInformationSetCharacterizationTests.test_minimal_three_alive_counterexample_is_resolved",
+    "test_wolf_information_set_characterization.WolfInformationSetCharacterizationTests.test_same_roster_uniform_kernel_cannot_read_hidden_true_seer",
+    "test_wolf_target_choice.WolfTargetChoiceTests.test_night_filters_owned_wolf_before_min_and_preserves_all_ties",
+    "test_wolf_target_choice.WolfTargetChoiceTests.test_observer_illegal_public_instruction_stays_pending_without_reselection",
+    "test_wolf_target_choice.WolfTargetChoiceTests.test_observer_private_payoffs_keep_public_ranking_and_complete_values",
+    "test_wolf_target_choice.WolfTargetChoiceTests.test_random_legal_candidates_are_not_replaced_by_public_max_selection",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_budget_and_unsupported_prior_return_no_partial_values",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_dead_initial_teammates_and_self_bite_rules",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_existing_medium_random_and_max_instructions_remain_public",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_future_seer_signals_use_public_joint_ledger_and_public_policy",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_multiple_fake_future_model_stays_pending_without_partial_table",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_no_secret_leak_to_execution_even_when_naive_solver_would_win",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_player_relabeling_preserves_max_conditional_values",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_random_continuation_matches_independent_actual_roster_enumeration",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_random_day_averages_without_truth_optimization",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_symmetric_max_ties_are_uniform_for_every_roster_and_target",
+    "test_wolf_view_forecast.WolfConditionalForecastTests.test_uniform_private_values_recombine_to_existing_public_max_value"
+  ]
+}

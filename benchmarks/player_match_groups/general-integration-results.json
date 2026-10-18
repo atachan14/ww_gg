@@ -1,0 +1,614 @@
+{
+  "rule": "corpse scans; owner-only pre-acquisition exemption",
+  "reference": "same corrected semantics; local mode OFF, original factories; not pre-fix engine",
+  "cases": [
+    {
+      "case": "initial-uniform-five",
+      "equal": true,
+      "original_seconds": 0.8270893999724649,
+      "local_seconds": 0.10563350000302307,
+      "result": {
+        "village_win": "7/15",
+        "action_values": [
+          [
+            1,
+            "2/3"
+          ],
+          [
+            2,
+            "2/3"
+          ],
+          [
+            3,
+            "1/3"
+          ],
+          [
+            4,
+            "1/3"
+          ],
+          [
+            5,
+            "1/3"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "75517056f459b138a391ea4bdbca7096140beee36dc748e033d73ef431f053c4"
+    },
+    {
+      "case": "correct-white-target",
+      "equal": true,
+      "original_seconds": 0.8330270000151359,
+      "local_seconds": 0.14651749999029562,
+      "result": {
+        "village_win": "7/15",
+        "action_values": [
+          [
+            1,
+            "2/3"
+          ],
+          [
+            2,
+            "2/3"
+          ],
+          [
+            3,
+            "1/3"
+          ],
+          [
+            4,
+            "1/3"
+          ],
+          [
+            5,
+            "1/3"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "c3f48141ccd616beb1e9d3c3d45e92133e509fe301a22990e7f1393b00127bad"
+    },
+    {
+      "case": "withdraw-root",
+      "equal": true,
+      "original_seconds": 0.023133299982873723,
+      "local_seconds": 0.023650600021937862,
+      "result": {
+        "village_win": "7/15",
+        "action_values": [
+          [
+            1,
+            "7/15"
+          ],
+          [
+            2,
+            "7/15"
+          ],
+          [
+            3,
+            "7/15"
+          ],
+          [
+            4,
+            "7/15"
+          ],
+          [
+            5,
+            "7/15"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "1/5",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "1/5",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "1/5",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "1/5",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "1/5",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "891402cd6bf9bb4c4f307b190fe5c1b52f1b90de3aeaace762cfc28f2a3d1f96"
+    },
+    {
+      "case": "restore",
+      "equal": true,
+      "original_seconds": 0.7823169000039343,
+      "local_seconds": 0.10082459999830462,
+      "result": {
+        "village_win": "7/15",
+        "action_values": [
+          [
+            1,
+            "2/3"
+          ],
+          [
+            2,
+            "2/3"
+          ],
+          [
+            3,
+            "1/3"
+          ],
+          [
+            4,
+            "1/3"
+          ],
+          [
+            5,
+            "1/3"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "9d51b0035515643b7892e186d36ff51b9eb599b89024a64d10dbad7857ccbcd0"
+    },
+    {
+      "case": "owner-death-root",
+      "equal": true,
+      "original_seconds": 0.0337166000099387,
+      "local_seconds": 0.02784210001118481,
+      "result": {
+        "village_win": "1/3",
+        "action_values": [
+          [
+            3,
+            "1/3"
+          ],
+          [
+            4,
+            "1/3"
+          ],
+          [
+            5,
+            "1/3"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "f38fa8877c42d76567b4bd6eb7a6f6a3a62ccf5313221673863371fc453ce8bf"
+    },
+    {
+      "case": "back",
+      "equal": true,
+      "original_seconds": 0.9489026000082958,
+      "local_seconds": 0.17459199999575503,
+      "result": {
+        "village_win": "7/15",
+        "action_values": [
+          [
+            1,
+            "2/3"
+          ],
+          [
+            2,
+            "2/3"
+          ],
+          [
+            3,
+            "1/3"
+          ],
+          [
+            4,
+            "1/3"
+          ],
+          [
+            5,
+            "1/3"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "1/2",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "de19be08087f9a3463fc0ea77879219337c6fc747c5fa1fdf4dda8d29c9a8d54"
+    },
+    {
+      "case": "two-GJ-repeat-False",
+      "equal": true,
+      "original_seconds": 0.04712500001187436,
+      "local_seconds": 0.04926479997811839,
+      "result": {
+        "village_win": "1/3",
+        "action_values": [
+          [
+            1,
+            "1/3"
+          ],
+          [
+            2,
+            "1/3"
+          ],
+          [
+            3,
+            "1/3"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "1/3",
+              "wolf_win": "2/3"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "1/3",
+              "wolf_win": "2/3"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "1/3",
+              "wolf_win": "2/3"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "95fb2fb8a3f030dcffc9323b25e7e945fb6c7fc85e2d009762dc0311201973ae"
+    },
+    {
+      "case": "root-hunter-max-repeat-False",
+      "equal": true,
+      "original_seconds": 0.02971940001589246,
+      "local_seconds": 0.027912300021853298,
+      "result": {
+        "village_win": "1/30",
+        "action_values": [
+          [
+            1,
+            "0"
+          ],
+          [
+            2,
+            "1/12"
+          ],
+          [
+            3,
+            "1/12"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "0",
+              "wolf_win": "1"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "0",
+              "wolf_win": "3/4"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "3/4"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "33cdab683fd3ecc323509dc2f519fa67cab21f5754739da7a92de420b1b8a03f"
+    },
+    {
+      "case": "two-GJ-repeat-True",
+      "equal": true,
+      "original_seconds": 0.045637200004421175,
+      "local_seconds": 0.04904820001684129,
+      "result": {
+        "village_win": "1/3",
+        "action_values": [
+          [
+            1,
+            "1/3"
+          ],
+          [
+            2,
+            "1/3"
+          ],
+          [
+            3,
+            "1/3"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "1/3",
+              "wolf_win": "2/3"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "1/3",
+              "wolf_win": "2/3"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "1/3",
+              "wolf_win": "2/3"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "ab02ae070377d4f446c6ec19673443d7fb3e2dc47dc0a2ed7111a968f6c85c2d"
+    },
+    {
+      "case": "root-hunter-max-repeat-True",
+      "equal": true,
+      "original_seconds": 0.024256300006527454,
+      "local_seconds": 0.02791919998708181,
+      "result": {
+        "village_win": "1/30",
+        "action_values": [
+          [
+            1,
+            "0"
+          ],
+          [
+            2,
+            "1/12"
+          ],
+          [
+            3,
+            "1/12"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "0",
+              "wolf_win": "1"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "0",
+              "wolf_win": "3/4"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "3/4"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "input_digest": "48e59bf42469279aafc3fda6aead5fc38075d885d5e597420f113ea409fbd53e"
+    }
+  ],
+  "public_private_public_stable": true,
+  "private_values_match": true,
+  "private_new_retirement_proof_disabled": true,
+  "private_key_stats": {
+    "key_seconds": 0.14429900064715184,
+    "key_requests": 815,
+    "key_source_hits": 8,
+    "key_supported": 815,
+    "key_value_hits": 243,
+    "key_action_hits": 44,
+    "generated_publication_branches": 347,
+    "acquisition_states": 7,
+    "kernel_requests": 765,
+    "kernel_hits": 0,
+    "kernel_computations": 765,
+    "kernel_key_seconds": 0.0
+  },
+  "all_equal": true
+}

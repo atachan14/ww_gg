@@ -178,7 +178,8 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 mask=sum(1<<(p-1) for p in players)
                 try:
                     with calculation_budget(max_work,max_seconds=max_seconds):
-                        engine=InformationSetForecast(rules,strategy,max_work=max_work)
+                        from .local_reuse import make_view_engine
+                        engine=make_view_engine(InformationSetForecast,public,rules,strategy,max_work=max_work)
                         from .guard_history_prior import matches
                         own=condition_actor_state(state,lambda h:h.roles[0]==mask and h.roles in {w[:-1] for w in private.worlds} and matches(h.attacks,view.attacks),attacks=view.attacks)
                         guard_dawn={p:horizon_for_action(engine,public,state,past,p,own) for p in final_values}
