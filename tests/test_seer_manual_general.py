@@ -119,7 +119,7 @@ class SeerManualGeneralTests(unittest.TestCase):
         self.start(5,w=1,s=1,m=1,initial='none');self.configure(co_1='seer',co_2='medium')
         self.assertIn(b'id="village-rate"',self.client.get('/main',follow_redirects=True).data)
         self.app.config['MANUAL_CALC_MAX_WORK']=1
-        html=self.client.get('/main',follow_redirects=True).data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html);self.assertIn('計算予算'.encode(),html)
+        html=self.client.get('/main',follow_redirects=True).data;self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html);self.assertIn('計算作業量の上限'.encode(),html)
         self.app.config['MANUAL_CALC_MAX_WORK']=250000
         self.assertIn(b'id="village-rate"',self.client.get('/main',follow_redirects=True).data)
 
