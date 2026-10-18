@@ -36,10 +36,10 @@ class InitialModelASpec:
     claim_policy: ClaimPolicy = ClaimPolicy()
 
 
-def _reason(spec):
+def _reason(spec,*,six=False):
     if type(spec) is not InitialModelASpec:return 'constructed InitialModelASpec only; no Board/law/game/callable input'
-    if (type(spec.players) is not int or spec.players not in (4,5) or type(spec.mediums) is not int or spec.mediums not in (0,1)
-        or type(spec.seers) is not int or spec.seers not in (1,2) or 1+spec.mediums+spec.seers>spec.players):return '4/5 original players W1 H0 M0/1 S1/2 only'
+    if (type(spec.players) is not int or spec.players not in ((6,) if six else (4,5)) or type(spec.mediums) is not int or spec.mediums not in (0,1)
+        or type(spec.seers) is not int or spec.seers not in ((1,) if six else (1,2)) or 1+spec.mediums+spec.seers>spec.players):return '6-player comparison W1 H0 M0/1 S1 only' if six else '4/5 original players W1 H0 M0/1 S1/2 only'
     if spec.simultaneous_snapshot is not True:return 'explicit simultaneous initial snapshot required; no inferred CCO timing'
     if (type(spec.rules) is not Rules or spec.rules.allow_self_bite or type(spec.strategy) is not Strategy
         or (spec.strategy.day,spec.strategy.night,spec.strategy.fake_reports)!=('random',)*3
@@ -55,9 +55,9 @@ def _reason(spec):
     return None
 
 
-def source_game(spec):
+def source_game(spec,*,six=False):
     """Build a NEW narrow snapshot, never reinterpret an existing game/log."""
-    reason=_reason(spec)
+    reason=_reason(spec,six=six)
     if reason:raise ValueError(reason)
     game=dict(players=spec.players,wolves=1,mediums=spec.mediums,seers=spec.seers,hunters=0,
         model='group',history=[],claims=list(spec.claims),claim_policy=asdict(spec.claim_policy),
@@ -85,12 +85,12 @@ class ModelAReference:
 
 
 class ModelAInitialGroups(ConstructiveCutOutGroups):
-    def __init__(self,spec):
-        reason=_reason(spec)
+    def __init__(self,spec,*,six=False):
+        reason=_reason(spec,six=six)
         if reason:raise ValueError(reason)
         self.stats=Counter(generator_checks=0,symmetry_history_rows_read=0,full_permutation_searches=0,
                            upstream_permutation_checks=0,comparisons=0,official_board_builds=1,official_prior_builds=0,official_root_checks=1)
-        started=perf_counter();game=source_game(spec)
+        started=perf_counter();game=source_game(spec,six=six)
         rules,progress=reconstruct_saved(game)
         self.stats['official_board_seconds']=perf_counter()-started
         if progress.finished:raise ValueError('terminal snapshot outside initial one-step scope')
@@ -159,3 +159,10 @@ class ModelAOneStepExecution(OneStepExecution):
         if context is not self.engine.start() or view!='public':
             return UnsupportedPartition('issued formal initial public context only; no arbitrary or private law')
         return super().evaluate(context,view=view,law_semantics=law_semantics,representatives=representatives)
+
+def adapt_six_model_a(spec):
+    """Explicit six-player two-night comparison; default adapter stays 4/5."""
+    reason=_reason(spec,six=True)
+    if reason:return UnsupportedPartition('six-player comparison: '+reason)
+    try:return ModelAInitialGroups(spec,six=True)
+    except ValueError as error:return UnsupportedPartition('official six-player prior: '+str(error))

@@ -204,6 +204,7 @@ class SavedCutOutGraph:
         self._days={};self._nights={};self._bindings={}
 
     def bind(self,observation):
+        if self.engine.baseline.players==6:raise ValueError('six-player first-morning binding registry is outside the full-game comparison entry')
         if type(observation) is not PathObservation:raise TypeError('closed labelled observation descriptor required')
         if type(observation.seers) is not tuple or any(type(r) is not SeerReport or r.published_day!=2 for r in observation.seers):
             raise ValueError('only generated first-morning seer deltas accepted')

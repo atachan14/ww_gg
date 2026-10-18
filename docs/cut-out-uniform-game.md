@@ -35,3 +35,5 @@ JSONには `cut_out_seconds`（証明済み群の細分・検索、本人roster�
 max・狩人・7人・複数夜・新たなCO/報告方針・任意の途中Boardからの開始は対象外。入力は既存の限定SavedCutOutGraphに限る。本人情報の支持ゼロ、共通kernelのPending、評価予算切れは明示的なUnsupportedPartitionを返す。途中までのTableや黙った均等置換は返さない。既存の全CO取消→再CO→結果訂正の初期snapshot再構築は前段を使用する。
 
 通常のBoard編集/取消UIへの接続、一般人数・複数夜の切り出し規則、maxの相互最適化は残件。公開していない。証拠は `cut-out-uniform-game-results.json` と `test_cut_out_uniform_game.py`。
+
+6人・二夜については、別の明示入口による[継承検証と総費用](cut-out-two-nights.md)を追加した。一般人数/複数夜への通常接続を意味しない。
