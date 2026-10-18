@@ -1,0 +1,543 @@
+{
+  "status": "partial_search",
+  "mode": "eager",
+  "repeat": 2,
+  "search_budget_seconds": 8,
+  "worker_wall_limit_seconds": 10,
+  "memory_limit_bytes": 1500000000,
+  "fixed_completed_actions": 3000,
+  "preparation_seconds": 0.42740869999397546,
+  "stop": {
+    "kind": "time",
+    "work": 7058,
+    "max_work": null,
+    "elapsed_seconds": 8.0
+  },
+  "search_seconds": 7.941885500040371,
+  "search_and_preparation_seconds": 8.369294200034346,
+  "peak_at_search_stop_bytes": 120991744,
+  "stats": {
+    "values": 3659,
+    "actions": 10905,
+    "generated": 5493,
+    "branch_records": 10908,
+    "terminal_records": 9565,
+    "policies": 365,
+    "costs": {
+      "key_seconds": 0.3517113047419116,
+      "cut_out_builds": 3667,
+      "cut_out_seconds": 0.3520061996532604,
+      "inherited_group_requests": 14575,
+      "action_requests": 10908,
+      "action_evaluations": 10908,
+      "law_seconds": 3.88455959840212,
+      "acquisition_calls": 1964,
+      "morning_calls": 982,
+      "inclusive_action_seconds": 31.419992998417
+    },
+    "publication_laws": 735,
+    "pattern_representatives": 2732,
+    "named_public_vectors": 2894,
+    "group_stats": {
+      "seven_issued_source": 1,
+      "root_group_reads": 0,
+      "seven-initial-shared-batch": 1,
+      "max_depth": 10,
+      "private_context_splits": 4897,
+      "new_endpoint_positions": 17013,
+      "death-day": 238,
+      "symmetric-acquisition": 238,
+      "death-night": 732,
+      "publication-medium": 329,
+      "publication-seer": 2570
+    },
+    "last_board": {
+      "player_count": 7,
+      "alive": [
+        4,
+        5,
+        6
+      ],
+      "wolf_count": 1,
+      "day": 3,
+      "phase": "day",
+      "history": [
+        {
+          "day": 1,
+          "phase": "day",
+          "target": 3
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "target": 2
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "target": 1
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "target": 7
+        }
+      ],
+      "belief": [
+        [
+          17,
+          "1/2"
+        ],
+        [
+          33,
+          "1/2"
+        ]
+      ],
+      "initial_medium_count": 1,
+      "claims": [
+        "seer",
+        "seer",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "role_belief": [
+        [
+          17,
+          4,
+          "1/2"
+        ],
+        [
+          33,
+          4,
+          "1/2"
+        ]
+      ],
+      "initial_seer_count": 1,
+      "initial_hunter_count": 0,
+      "world_belief": [
+        [
+          17,
+          4,
+          2,
+          0,
+          "1/2"
+        ],
+        [
+          33,
+          4,
+          2,
+          0,
+          "1/2"
+        ]
+      ],
+      "medium_opportunities": [],
+      "reports": [],
+      "report_resolved": [],
+      "guard_prior_roster": null
+    },
+    "last_budget_usage": {
+      "work": 7058,
+      "max_work": null,
+      "elapsed_seconds": 7.984
+    }
+  },
+  "retained_at_stop": {
+    "scope": "identity census of hash/source keys, resolution and diagnostic outcomes, and source evidence histories; not entire heap",
+    "tracked_Board_objects": 26267,
+    "tracked_joint_law_objects": 8553,
+    "tracked_joint_hypothesis_objects": 16213,
+    "retained_resolution_entries": 10908,
+    "retained_full_outcome_objects": 10908,
+    "retained_diagnostic_outcome_references": 10908,
+    "deferred_recipe_inputs": 0,
+    "deferred_materializations": null,
+    "identity_hash_entries": 30518,
+    "source_keys": 5493,
+    "unique_saved_request_objects": 5128,
+    "unique_evidence_operations": 5136,
+    "frozen_kernel_objects": 4965
+  },
+  "fixed_point": {
+    "completed_unique_scalar_actions": 3000,
+    "search_seconds": 2.3409590999945067,
+    "startup_to_fixed_seconds": 2.768367799988482,
+    "peak_working_set_bytes": 58548224,
+    "context": [
+      {
+        "player_count": 7,
+        "alive": [
+          2,
+          4,
+          7
+        ],
+        "wolf_count": 1,
+        "day": 3,
+        "phase": "day",
+        "history": [
+          {
+            "day": 1,
+            "phase": "day",
+            "target": 1
+          },
+          {
+            "day": 1,
+            "phase": "night",
+            "target": 6
+          },
+          {
+            "day": 2,
+            "phase": "day",
+            "target": 5
+          },
+          {
+            "day": 2,
+            "phase": "night",
+            "target": 3
+          }
+        ],
+        "belief": [
+          [
+            18,
+            "1"
+          ]
+        ],
+        "initial_medium_count": 1,
+        "claims": [
+          "seer",
+          "seer",
+          "medium",
+          "latent",
+          "latent",
+          "latent",
+          "latent"
+        ],
+        "role_belief": [
+          [
+            18,
+            4,
+            "1"
+          ]
+        ],
+        "initial_seer_count": 1,
+        "initial_hunter_count": 0,
+        "world_belief": [
+          [
+            18,
+            4,
+            1,
+            0,
+            "1"
+          ]
+        ],
+        "medium_opportunities": [
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            3,
+            3,
+            5
+          ]
+        ],
+        "reports": [
+          {
+            "day": 2,
+            "reporter": 3,
+            "target": 1,
+            "color": "white"
+          }
+        ],
+        "report_resolved": [
+          [
+            2,
+            3,
+            1
+          ]
+        ],
+        "guard_prior_roster": null
+      },
+      {
+        "hypotheses": [
+          {
+            "roles": [
+              18,
+              4,
+              1,
+              0
+            ],
+            "acquisitions": [
+              {
+                "day": 1,
+                "player": 1,
+                "target": 4,
+                "color": "white"
+              }
+            ],
+            "mass": "1",
+            "guards": [],
+            "attacks": [
+              {
+                "night": 1,
+                "target": 6
+              },
+              {
+                "night": 2,
+                "target": 3
+              }
+            ]
+          }
+        ],
+        "rosters": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            2,
+            3,
+            4,
+            7
+          ]
+        ],
+        "initial_rule": "random_white",
+        "tracked": [
+          1,
+          2
+        ],
+        "observed_prefix": 1
+      },
+      [
+        {
+          "acquired_day": 1,
+          "published_day": 1,
+          "player": 1,
+          "target": 4,
+          "color": "white"
+        },
+        {
+          "acquired_day": 1,
+          "published_day": 1,
+          "player": 2,
+          "target": 4,
+          "color": "white"
+        },
+        {
+          "acquired_day": 2,
+          "published_day": 2,
+          "player": 2,
+          "target": 7,
+          "color": "black"
+        },
+        {
+          "acquired_day": 3,
+          "published_day": 3,
+          "player": 2,
+          "target": 6,
+          "color": "white"
+        }
+      ],
+      {
+        "hypotheses": [
+          {
+            "roles": [
+              18,
+              4,
+              1,
+              0
+            ],
+            "acquisitions": [
+              {
+                "day": 1,
+                "player": 1,
+                "target": 4,
+                "color": "white"
+              }
+            ],
+            "mass": "1",
+            "guards": [],
+            "attacks": [
+              {
+                "night": 1,
+                "target": 6
+              },
+              {
+                "night": 2,
+                "target": 3
+              }
+            ]
+          }
+        ],
+        "rosters": [
+          [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          [
+            2,
+            3,
+            4,
+            7
+          ]
+        ],
+        "initial_rule": "random_white",
+        "tracked": [
+          1,
+          2
+        ],
+        "observed_prefix": 1
+      },
+      null,
+      {
+        "player_count": 7,
+        "alive": [
+          2,
+          4,
+          7
+        ],
+        "wolf_count": 1,
+        "day": 3,
+        "phase": "day",
+        "history": [
+          {
+            "day": 1,
+            "phase": "day",
+            "target": 1
+          },
+          {
+            "day": 1,
+            "phase": "night",
+            "target": 6
+          },
+          {
+            "day": 2,
+            "phase": "day",
+            "target": 5
+          },
+          {
+            "day": 2,
+            "phase": "night",
+            "target": 3
+          }
+        ],
+        "belief": [
+          [
+            18,
+            "1"
+          ]
+        ],
+        "initial_medium_count": 1,
+        "claims": [
+          "seer",
+          "seer",
+          "medium",
+          "latent",
+          "latent",
+          "latent",
+          "latent"
+        ],
+        "role_belief": [
+          [
+            18,
+            4,
+            "1"
+          ]
+        ],
+        "initial_seer_count": 1,
+        "initial_hunter_count": 0,
+        "world_belief": [
+          [
+            18,
+            4,
+            1,
+            0,
+            "1"
+          ]
+        ],
+        "medium_opportunities": [
+          [
+            2,
+            3,
+            1
+          ],
+          [
+            3,
+            3,
+            5
+          ]
+        ],
+        "reports": [
+          {
+            "day": 2,
+            "reporter": 3,
+            "target": 1,
+            "color": "white"
+          }
+        ],
+        "report_resolved": [
+          [
+            2,
+            3,
+            1
+          ]
+        ],
+        "guard_prior_roster": null
+      },
+      2
+    ],
+    "context_sha256": "84cc6b215c9ef57b52ed70d07605e720d20194ef6355a1332314d6b79929062b",
+    "values": 1007,
+    "generated_sources": 1729,
+    "retained": {
+      "scope": "identity census of hash/source keys, resolution and diagnostic outcomes, and source evidence histories; not entire heap",
+      "tracked_Board_objects": 7358,
+      "tracked_joint_law_objects": 2547,
+      "tracked_joint_hypothesis_objects": 4737,
+      "retained_resolution_entries": 3004,
+      "retained_full_outcome_objects": 3004,
+      "retained_diagnostic_outcome_references": 3004,
+      "deferred_recipe_inputs": 0,
+      "deferred_materializations": null,
+      "identity_hash_entries": 8892,
+      "source_keys": 1729,
+      "unique_saved_request_objects": 1622,
+      "unique_evidence_operations": 1624,
+      "frozen_kernel_objects": 1536
+    },
+    "capture_seconds": 0.01533610001206398
+  },
+  "semantic_outputs_complete": false,
+  "Forecast_Table_joint_branch_mass_representative_cold_complete": false,
+  "worker_seconds": 8.427681700035464,
+  "peak_at_worker_end_bytes": 126947328
+}
