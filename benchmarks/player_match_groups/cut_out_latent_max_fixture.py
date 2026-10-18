@@ -49,12 +49,16 @@ def independent_terminal(initial,state,view=None,wolf_mask=None):
     return normalize(rows)
 
 
-def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_terminal_night_max=False,_no_read_night_max=False,_fake_reports='random'):
+def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_terminal_night_max=False,_no_read_night_max=False,_fake_reports='random',_white_joint=False,_white_target=3,_scan_interventions=True):
     from .cut_out_two_nights import restore_terminals
     from werewolf.board_future import same_role_board
     from werewolf.information_set_forecast import optimal_targets
     start=time.perf_counter()
-    if _no_read_night_max:
+    if _white_joint:
+        if n!=5 or mediums!=1 or initial!='random_white' or medium_co:raise ValueError('white joint closed scope')
+        from .cut_out_white_joint_max import graph as build,evaluate as calculate
+        source=build(fake_reports=_fake_reports)
+    elif _no_read_night_max:
         if n!=5 or mediums or initial!='none' or medium_co:raise ValueError('five-player no-read closed scope')
         from .cut_out_no_read_night_max import graph as build,evaluate as calculate
         source=build(fake_reports=_fake_reports)
@@ -65,7 +69,7 @@ def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_te
     else:source=graph(n,mediums,initial,medium_co,fake_reports=_fake_reports);calculate=evaluate
     root=source.origin()
     owner=2 if medium_co else 1
-    view=None if kind=='public' else OwnView(owner,'seer',() if kind=='role' else (Acquisition(1,owner,3,'white'),))
+    view=None if kind=='public' else OwnView(owner,kind) if kind in ('medium','wolf') else OwnView(owner,'seer',() if kind=='role' else (Acquisition(1,owner,_white_target,'white'),))
     independent=independent_initial(n,mediums,initial)
     if medium_co:independent=normalize(h for h in independent if h.roles[1]==1)
     assert root.public_state.hypotheses==independent
@@ -82,7 +86,7 @@ def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_te
     if _no_read_night_max and kind=='role':
         assert dict(forecast.action_values)=={p:F(1,3) if p==1 else F(1,2) for p in root.public.alive}
     if kind=='white' and not medium_co:
-        assert dict(forecast.action_values)=={p:(F(0) if n==4 else F(1,3)) if p in (1,3) else F(1,2) if n==4 else F(5,9) for p in root.public.alive}
+        assert dict(forecast.action_values)=={p:(F(0) if n==4 else F(1,3)) if p in (owner,_white_target) else F(1,2) if n==4 else F(5,9) for p in root.public.alive}
         assert max(v for p,v in forecast.action_values)>value
     for key,v in engine.scalar_actions.items():
         b,s,past,own,observer,physical,target=key
@@ -98,8 +102,9 @@ def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_te
         mask=next(iter(masks)) if len(masks)==1 else None
         assert state.private.hypotheses==independent_terminal(independent,state,view if key[1].observer==view else None,mask)
     scan_targets=[];scan_private_contexts=scan_public_alternatives=scan_group_swaps=0
-    if kind=='white' or _no_read_night_max and kind=='role':
-        if _no_read_night_max:from .cut_out_no_read_night_max import scan_values
+    if _scan_interventions and (kind=='white' or _no_read_night_max and kind=='role'):
+        if _white_joint:from .cut_out_white_joint_max import scan_values
+        elif _no_read_night_max:from .cut_out_no_read_night_max import scan_values
         elif _terminal_night_max:from .cut_out_terminal_night_max import scan_values
         else:from .cut_out_latent_max import scan_values
         from werewolf.player_view import private_api_rows
@@ -131,7 +136,7 @@ def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_te
         assert all(request.origin is source.origin for request in scan_engine.board_sources.values())
         assert all(v==value for target,v in scans)
         scan_targets=[p for p,v in scans]
-        assert scan_targets==[p for p in root.public.alive if p!=owner and (initial=='none' or p!=3)]
+        assert scan_targets==[p for p in root.public.alive if p!=owner and (initial=='none' or p!=_white_target)]
         from werewolf.actor_information import condition_actor_state
         from werewolf.exact import replace_worlds
         own_board=replace_worlds(root.public,condition_actor_state(root.public_state,view.accepts).public_roles)
@@ -145,7 +150,7 @@ def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_te
     # A fixed latent scan policy cannot change public choices without a report.
     # Do not optimize it under the unrelated public day-max setting.
     owned=sum(1 for h in independent if view is not None and view.accepts(h))
-    return dict(players=n,mediums=mediums,initial=initial,view=kind,medium_co=medium_co,initial_hypotheses=len(independent),own_initial_hypotheses=owned,
+    return dict(players=n,mediums=mediums,initial=initial,view=kind,white_target=_white_target if kind=='white' else None,medium_co=medium_co,initial_hypotheses=len(independent),own_initial_hypotheses=owned,
         village_win=str(value),public_policy=list(policy),complete_table_action_joint_physical_history_branch_equal=True,
         independently_generated_initial_and_terminal_joint_equal=True,terminal_readbacks=len(small),
         scalar_context_comparisons=len(engine.scalar_actions),own_scan_targets=scan_targets,private_intervention_contexts=scan_private_contexts,public_unforced_scan_contexts=scan_public_alternatives,own_scan_group_swap_audits=scan_group_swaps,grouped=dict(engine.costs),labelled=dict(full.costs),seconds=time.perf_counter()-start)

@@ -54,3 +54,5 @@ c8437cc時点の比較用 `_reason` は `fake_reports=random` に固定され、
 証拠は `benchmarks/player_match_groups/cut-out-triple-max-results.json`、ログは `.artifacts/triple-max-regressions-final.log`。公開・push・通常UI・サーバー変更なし。全project suiteは実行していない。
 
 後続の限定接続: 実報告のある2霊COについては新しい明示entryを追加した。上記の旧独立entryの拒否と、通常rootの未対応判定は残る。現在の詳細と59回帰・候補/事後jointの照合は [cut-out-active-report-max.md](cut-out-active-report-max.md) を参照。
+
+後続の白joint接続: 全潜伏5人M1・初日白には、従来のM0/初日なし入口とは別に `adapt_white_joint_night_max_model_a` を追加した。全支持検証・全到達sourceの候補読取証明と近傍拒否の詳細は [cut-out-white-joint-max.md](cut-out-white-joint-max.md) を参照。

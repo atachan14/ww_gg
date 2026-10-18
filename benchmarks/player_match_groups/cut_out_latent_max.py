@@ -20,7 +20,7 @@ class LatentMaxOrigin(SavedOrigin):
             or b.initial_medium_count not in (0,1) or b.claims not in (('latent',)*b.player_count,('medium',)+('latent',)*(b.player_count-1))
             or self.strategy.fake_reports=='max' and 'medium' in b.claims
             or not (self.strategy==Strategy(day='max',night='random',fake_reports=self.strategy.fake_reports) or
-                (b.player_count==4 and b.claims==('latent',)*4 or b.player_count==5 and not b.initial_medium_count and self.rules.initial_seer=='none' and b.claims==('latent',)*5) and self.strategy==Strategy(day='max',night='max',fake_reports=self.strategy.fake_reports))
+                (b.player_count==4 and b.claims==('latent',)*4 or b.player_count==5 and (b.initial_medium_count,self.rules.initial_seer) in ((0,'none'),(1,'random_white')) and b.claims==('latent',)*5) and self.strategy==Strategy(day='max',night='max',fake_reports=self.strategy.fake_reports))
             or self.rules not in (Rules(initial_seer='none'),Rules(initial_seer='random_white'))):
             raise Pending('latent_max_initial_comparison_scope')
         root=prepare_root_secrets(b,self.rules,max_work=100000)
@@ -45,7 +45,7 @@ def evaluate(source,**kwargs):
     return evaluate_common(source,engine_class=CutOutMaxEngine,**kwargs)
 
 
-def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_night_max=False,_no_read_night_max=False,_active_report_max=False):
+def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_night_max=False,_no_read_night_max=False,_active_report_max=False,_white_joint=False):
     """Existing configured scan interventions; no new max scan/CO strategy."""
     from .cut_out_uniform_game import OwnView,OfficialLabelledEngine
     from werewolf.actor_information import condition_actor_state
@@ -57,7 +57,7 @@ def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_
     from werewolf.information_set_forecast import Pending
     if not isinstance(source,SavedCutOutGraph) or type(view) is not OwnView or view.role!='seer':
         return UnsupportedPartition('explicit latent own seer history required')
-    reason=_reason(source.engine.baseline.spec,max_trial=True,latent_max=True,terminal_night_max=_terminal_night_max,no_read_night_max=_no_read_night_max,active_report_max=_active_report_max)
+    reason=_reason(source.engine.baseline.spec,max_trial=True,latent_max=True,terminal_night_max=_terminal_night_max,no_read_night_max=_no_read_night_max,active_report_max=_active_report_max,white_joint=_white_joint)
     if reason:return UnsupportedPartition(reason)
     if type(max_seconds) not in (int,float) or not 0<max_seconds<=25:
         return UnsupportedPartition('positive <=25s comparison budget required')
@@ -70,9 +70,9 @@ def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_
     choices={candidates(h,view.player,scan_target_players(root.public_state,root.public.alive)) for h in own.hypotheses}
     if len(choices)!=1:return UnsupportedPartition('seer_view_target_generation_support_unresolved')
     from .cut_out_terminal_night_max import TerminalNightMaxEngine
-    from .cut_out_no_read_night_max import NoReadNightMaxEngine
+    from .cut_out_no_read_night_max import NoReadNightMaxEngine,WhiteJointNightMaxEngine
     from .cut_out_active_report_max import ActiveReportMaxEngine
-    engine=(OfficialLabelledEngine if official_reference else ActiveReportMaxEngine if _active_report_max else NoReadNightMaxEngine if _no_read_night_max else TerminalNightMaxEngine if _terminal_night_max else CutOutMaxEngine)(source,view=view)
+    engine=(OfficialLabelledEngine if official_reference else ActiveReportMaxEngine if _active_report_max else WhiteJointNightMaxEngine if _white_joint else NoReadNightMaxEngine if _no_read_night_max else TerminalNightMaxEngine if _terminal_night_max else CutOutMaxEngine)(source,view=view)
     values=[]
     try:
         with calculation_budget(1000000,max_seconds=max_seconds),calculation_origin(source.data):

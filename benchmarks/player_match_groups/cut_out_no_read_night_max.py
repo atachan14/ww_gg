@@ -49,26 +49,50 @@ def guarded_profile_probe(b,s,past,rules,strategy,*,max_seconds=12):
         return ProfileSearch('dependency_unfinished',total,0,reason=getattr(error,'reason',str(error)),proof='no_partial_certificate'),diagnostics
 
 
-def certify_night(b,s,past,rules,strategy):
+def white_joint_support(b,s):
+    """Closed support proof, not a reconstruction or missing-mass repair."""
+    from werewolf.seer_acquisition import Acquisition
+    if (s.public_roles!=tuple(sorted(b.worlds)) or s.rosters!=(tuple(range(1,6)),)
+        or s.initial_rule!='random_white' or s.tracked is not None or s.observed_prefix!=0):return False
+    expected={(1<<(w-1),1<<(m-1),1<<(seer-1),0)
+        for w in b.alive for m in range(1,6) for seer in range(1,6) if len({w,m,seer})==3}
+    if {world[:-1] for world in b.worlds}!=expected or len(b.worlds)!=48:return False
+    if any(world[-1]!=F(1,48) for world in b.worlds):return False
+    supported={}
+    for h in s.hypotheses:
+        if h.roles not in expected or h.guards or h.attacks or len(h.acquisitions)!=1:return False
+        owner=h.roles[2].bit_length();wolf=h.roles[0].bit_length()
+        legal={Acquisition(1,owner,p,'white') for p in range(1,6) if p not in (owner,wolf)}
+        if h.acquisitions[0] not in legal or h.mass!=F(1,144):return False
+        key=(h.roles,h.acquisitions)
+        if key in supported:return False
+        supported[key]=h.mass
+    return len(supported)==144
+
+
+def certify_night(b,s,past,rules,strategy,*,white_joint=False):
     # Exactly one current night; every subsequent 3-player execution terminates.
     # No guardian and no active public abilities can read an anchor kernel.
     if (b.player_count!=5 or len(b.alive)!=4 or b.phase!='night' or b.day!=1 or b.winner
-        or b.initial_hunter_count or b.initial_medium_count or b.initial_seer_count!=1
+        or b.initial_hunter_count or b.initial_medium_count!=(1 if white_joint else 0) or b.initial_seer_count!=1
         or b.claims!=('latent',)*5 or b.wolf_count_distribution!={1:F(1)}
-        or rules!=Rules(initial_seer='none') or strategy!=Strategy(day='max',night='max',fake_reports=strategy.fake_reports)
+        or rules!=Rules(initial_seer='random_white' if white_joint else 'none') or strategy!=Strategy(day='max',night='max',fake_reports=strategy.fake_reports)
         or len(b.history)!=1 or b.history[0].phase!='day' or past or len(s.rosters)!=1):
         return ProfileSearch('dependency_unfinished',0,0,reason='five_player_no_read_structure_unproved'),{}
+    if white_joint and (b.history[0].day!=1 or b.alive!=tuple(p for p in range(1,6) if p!=b.history[0].target) or b.reports or b.medium_opportunities or b.report_resolved or not white_joint_support(b,s)):
+        return ProfileSearch('dependency_unfinished',0,0,reason='white_joint_complete_support_unproved'),{}
     return guarded_profile_probe(b,s,past,rules,strategy)
 
 
 class NoReadNightMaxEngine(CutOutMaxEngine):
+    white_joint=False
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs);self.no_read_certificates={};self.no_read_diagnostics={}
     def wolf_policy(self,b,s,past,mask,history=()):
         from werewolf.actor_information import WolfInformation
         key=(self.rules,self.strategy,b,s,past)
         if key not in self.no_read_certificates:
-            result,diagnostics=certify_night(b,s,past,self.rules,self.strategy)
+            result,diagnostics=certify_night(b,s,past,self.rules,self.strategy,white_joint=self.white_joint)
             self.no_read_diagnostics[key]=(result,diagnostics)
             if result.selected is None:raise Pending('no_read_night_'+str(result.reason))
             self.no_read_certificates[key]=result.selected
@@ -94,3 +118,7 @@ def evaluate(source,**kwargs):
 
 
 def scan_values(source,view,**kwargs):return latent_scans(source,view,_no_read_night_max=True,**kwargs)
+
+
+class WhiteJointNightMaxEngine(NoReadNightMaxEngine):
+    white_joint=True
