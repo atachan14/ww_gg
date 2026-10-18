@@ -179,7 +179,7 @@ class SavedBinding:
 
 
 class SavedCutOutGraph:
-    def __init__(self,engine,*,data=None):
+    def __init__(self,engine,*,data=None,origin_factory=SavedOrigin):
         if type(engine) is not ModelAInitialGroups:raise TypeError('constructed formal adapter required')
         self.engine=engine
         self.data=BoardData.from_game(json.loads(engine.baseline.game_json)) if data is None else data
@@ -188,7 +188,7 @@ class SavedCutOutGraph:
             raise ValueError('saved data is not the constructed initial semantic snapshot')
         if any(actual.get('public_log',{}).get(k)!=expected['public_log'].get(k) for k in ('version','base_claims','base_seer','base_medium','batches')):
             raise ValueError('arbitrary saved log is not an explicit initial snapshot')
-        self.origin=SavedOrigin(self.data,engine.baseline.rules,engine.baseline.strategy,project_public=False)
+        self.origin=origin_factory(self.data,engine.baseline.rules,engine.baseline.strategy,project_public=False)
         self.stats=Counter(roles_reads=0,invalidated_reads=0,recipe_branches=0,generator_checks=0,
             child_prior_reallocations=0,origin_gates=1)
         started=perf_counter();root=self.origin()

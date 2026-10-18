@@ -1,0 +1,560 @@
+{
+  "cases": [
+    {
+      "players": 4,
+      "mediums": 0,
+      "initial": "none",
+      "view": "public",
+      "medium_co": false,
+      "initial_hypotheses": 12,
+      "own_initial_hypotheses": 0,
+      "village_win": "1/4",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 28,
+      "scalar_context_comparisons": 4,
+      "own_scan_targets": [],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 0,
+      "grouped": {
+        "cut_out_builds": 4,
+        "cut_out_seconds": 8.369993884116411e-05,
+        "key_seconds": 0.0003403000009711832,
+        "action_requests": 18,
+        "action_evaluations": 4,
+        "law_seconds": 0.007717799860984087,
+        "acquisition_calls": 54,
+        "inclusive_action_seconds": 0.00838310003746301,
+        "representative_hits": 14,
+        "label_scalar_restores": 12,
+        "label_restore_seconds": 0.00019530000281520188,
+        "total_seconds": 0.02768219998688437,
+        "evaluation_other_seconds": 0.019345100183272734,
+        "saved_origins": 1,
+        "generated_boards": 29,
+        "law_hypotheses_retained": 21
+      },
+      "labelled": {
+        "action_requests": 40,
+        "action_evaluations": 32,
+        "law_seconds": 0.012886100099422038,
+        "acquisition_calls": 96,
+        "total_seconds": 0.04307649997645058,
+        "evaluation_other_seconds": 0.03019039987702854,
+        "saved_origins": 1,
+        "generated_boards": 29,
+        "law_hypotheses_retained": 48
+      },
+      "seconds": 0.23244409999460913,
+      "peak_working_set_bytes": 29667328
+    },
+    {
+      "players": 4,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "white",
+      "medium_co": false,
+      "initial_hypotheses": 48,
+      "own_initial_hypotheses": 4,
+      "village_win": "1/4",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 33,
+      "scalar_context_comparisons": 32,
+      "own_scan_targets": [
+        2,
+        4
+      ],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 5,
+      "grouped": {
+        "cut_out_builds": 4,
+        "cut_out_seconds": 0.0002447000879328698,
+        "key_seconds": 0.0027041000430472195,
+        "action_requests": 40,
+        "action_evaluations": 32,
+        "law_seconds": 0.028200499975355342,
+        "acquisition_calls": 76,
+        "inclusive_action_seconds": 0.09224059991538525,
+        "representative_hits": 8,
+        "label_scalar_restores": 5,
+        "label_restore_seconds": 0.00021410000044852495,
+        "total_seconds": 0.07608940001227893,
+        "evaluation_other_seconds": 0.04472599990549497,
+        "saved_origins": 1,
+        "generated_boards": 37,
+        "law_hypotheses_retained": 264
+      },
+      "labelled": {
+        "action_requests": 80,
+        "action_evaluations": 47,
+        "law_seconds": 0.03847079997649416,
+        "acquisition_calls": 96,
+        "total_seconds": 0.08952489998773672,
+        "evaluation_other_seconds": 0.055420300021069124,
+        "saved_origins": 1,
+        "generated_boards": 44,
+        "law_hypotheses_retained": 336
+      },
+      "seconds": 0.8264386000228114,
+      "peak_working_set_bytes": 30937088
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "initial": "none",
+      "view": "public",
+      "medium_co": false,
+      "initial_hypotheses": 20,
+      "own_initial_hypotheses": 0,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 17,
+      "scalar_context_comparisons": 15,
+      "own_scan_targets": [],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 0,
+      "grouped": {
+        "cut_out_builds": 8,
+        "cut_out_seconds": 0.00022909996914677322,
+        "key_seconds": 0.00224429985973984,
+        "action_requests": 45,
+        "action_evaluations": 15,
+        "law_seconds": 0.0325400999863632,
+        "acquisition_calls": 128,
+        "morning_calls": 4,
+        "inclusive_action_seconds": 0.06724410003516823,
+        "representative_hits": 30,
+        "label_scalar_restores": 28,
+        "label_restore_seconds": 0.0008550999045837671,
+        "total_seconds": 0.08858310000505298,
+        "evaluation_other_seconds": 0.0527145002852194,
+        "saved_origins": 1,
+        "generated_boards": 52,
+        "law_hypotheses_retained": 192
+      },
+      "labelled": {
+        "action_requests": 330,
+        "action_evaluations": 312,
+        "law_seconds": 0.1917586003546603,
+        "acquisition_calls": 240,
+        "morning_calls": 60,
+        "total_seconds": 0.4237408999761101,
+        "evaluation_other_seconds": 0.23198229962144978,
+        "saved_origins": 1,
+        "generated_boards": 126,
+        "law_hypotheses_retained": 2440
+      },
+      "seconds": 1.1407392999972217,
+      "peak_working_set_bytes": 35504128
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "public",
+      "medium_co": false,
+      "initial_hypotheses": 180,
+      "own_initial_hypotheses": 0,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 17,
+      "scalar_context_comparisons": 15,
+      "own_scan_targets": [],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 0,
+      "grouped": {
+        "cut_out_builds": 8,
+        "cut_out_seconds": 0.00046760006807744503,
+        "key_seconds": 0.01514220010722056,
+        "action_requests": 45,
+        "action_evaluations": 15,
+        "law_seconds": 0.23156630009179935,
+        "acquisition_calls": 128,
+        "morning_calls": 4,
+        "inclusive_action_seconds": 0.3951014999765903,
+        "representative_hits": 30,
+        "label_scalar_restores": 28,
+        "label_restore_seconds": 0.00666569999884814,
+        "total_seconds": 0.4650831999897491,
+        "evaluation_other_seconds": 0.21124139972380362,
+        "saved_origins": 1,
+        "generated_boards": 52,
+        "law_hypotheses_retained": 1404
+      },
+      "labelled": {
+        "action_requests": 330,
+        "action_evaluations": 312,
+        "law_seconds": 1.3539227000146639,
+        "acquisition_calls": 240,
+        "morning_calls": 60,
+        "total_seconds": 2.420516599988332,
+        "evaluation_other_seconds": 1.0665938999736682,
+        "saved_origins": 1,
+        "generated_boards": 126,
+        "law_hypotheses_retained": 17100
+      },
+      "seconds": 6.84064209999633,
+      "peak_working_set_bytes": 64385024
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "role",
+      "medium_co": false,
+      "initial_hypotheses": 180,
+      "own_initial_hypotheses": 36,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 68,
+      "scalar_context_comparisons": 80,
+      "own_scan_targets": [],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 0,
+      "grouped": {
+        "cut_out_builds": 10,
+        "cut_out_seconds": 0.0016301002178806812,
+        "key_seconds": 0.051662700047018006,
+        "action_requests": 138,
+        "action_evaluations": 80,
+        "law_seconds": 0.5213693000259809,
+        "acquisition_calls": 138,
+        "morning_calls": 21,
+        "inclusive_action_seconds": 1.4832030999823473,
+        "representative_hits": 58,
+        "label_scalar_restores": 56,
+        "label_restore_seconds": 0.012115700024878606,
+        "total_seconds": 0.9064102999982424,
+        "evaluation_other_seconds": 0.3196324996824842,
+        "saved_origins": 1,
+        "generated_boards": 83,
+        "law_hypotheses_retained": 6426
+      },
+      "labelled": {
+        "action_requests": 587,
+        "action_evaluations": 511,
+        "law_seconds": 2.253898700204445,
+        "acquisition_calls": 312,
+        "morning_calls": 108,
+        "total_seconds": 3.7278039999946486,
+        "evaluation_other_seconds": 1.495793699810747,
+        "saved_origins": 1,
+        "generated_boards": 212,
+        "law_hypotheses_retained": 30780
+      },
+      "seconds": 11.824325299996417,
+      "peak_working_set_bytes": 81620992
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "white",
+      "medium_co": false,
+      "initial_hypotheses": 180,
+      "own_initial_hypotheses": 9,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 156,
+      "scalar_context_comparisons": 178,
+      "own_scan_targets": [
+        2,
+        4,
+        5
+      ],
+      "private_intervention_contexts": 60,
+      "public_unforced_scan_contexts": 60,
+      "own_scan_group_swap_audits": 110,
+      "grouped": {
+        "cut_out_builds": 7,
+        "cut_out_seconds": 0.002206400007707998,
+        "key_seconds": 0.10689329961314797,
+        "action_requests": 231,
+        "action_evaluations": 178,
+        "law_seconds": 0.8996892997820396,
+        "acquisition_calls": 156,
+        "morning_calls": 42,
+        "inclusive_action_seconds": 2.8467043999698944,
+        "representative_hits": 53,
+        "label_scalar_restores": 50,
+        "label_restore_seconds": 0.012346400006208569,
+        "total_seconds": 1.4982606999983545,
+        "evaluation_other_seconds": 0.4771253005892504,
+        "saved_origins": 1,
+        "generated_boards": 110,
+        "law_hypotheses_retained": 12384
+      },
+      "labelled": {
+        "action_requests": 637,
+        "action_evaluations": 477,
+        "law_seconds": 2.0112841998343356,
+        "acquisition_calls": 264,
+        "morning_calls": 96,
+        "total_seconds": 3.3300088999967556,
+        "evaluation_other_seconds": 1.3364965001528617,
+        "saved_origins": 1,
+        "generated_boards": 192,
+        "law_hypotheses_retained": 27540
+      },
+      "seconds": 23.139116000005743,
+      "peak_working_set_bytes": 133816320
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "public",
+      "medium_co": true,
+      "initial_hypotheses": 36,
+      "own_initial_hypotheses": 0,
+      "village_win": "7/12",
+      "public_policy": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 36,
+      "scalar_context_comparisons": 39,
+      "own_scan_targets": [],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 0,
+      "grouped": {
+        "cut_out_builds": 13,
+        "cut_out_seconds": 0.0004719000426121056,
+        "key_seconds": 0.0077068999817129225,
+        "action_requests": 77,
+        "action_evaluations": 39,
+        "law_seconds": 0.08514079995802604,
+        "acquisition_calls": 116,
+        "morning_calls": 10,
+        "inclusive_action_seconds": 0.24559109995607287,
+        "representative_hits": 38,
+        "label_scalar_restores": 35,
+        "label_restore_seconds": 0.0022329000348690897,
+        "total_seconds": 0.17352760001085699,
+        "evaluation_other_seconds": 0.07797509999363683,
+        "saved_origins": 1,
+        "generated_boards": 58,
+        "law_hypotheses_retained": 738
+      },
+      "labelled": {
+        "action_requests": 281,
+        "action_evaluations": 245,
+        "law_seconds": 0.2874648002034519,
+        "acquisition_calls": 192,
+        "morning_calls": 48,
+        "total_seconds": 0.5491787999926601,
+        "evaluation_other_seconds": 0.2617139997892082,
+        "saved_origins": 1,
+        "generated_boards": 142,
+        "law_hypotheses_retained": 2916
+      },
+      "seconds": 1.6174409000086598,
+      "peak_working_set_bytes": 35819520
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "white",
+      "medium_co": true,
+      "initial_hypotheses": 36,
+      "own_initial_hypotheses": 2,
+      "village_win": "7/12",
+      "public_policy": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 218,
+      "scalar_context_comparisons": 244,
+      "own_scan_targets": [
+        1,
+        4,
+        5
+      ],
+      "private_intervention_contexts": 33,
+      "public_unforced_scan_contexts": 33,
+      "own_scan_group_swap_audits": 35,
+      "grouped": {
+        "cut_out_builds": 8,
+        "cut_out_seconds": 0.0016902998322620988,
+        "key_seconds": 0.03178050045971759,
+        "action_requests": 264,
+        "action_evaluations": 244,
+        "law_seconds": 0.27222420019097626,
+        "acquisition_calls": 160,
+        "morning_calls": 56,
+        "inclusive_action_seconds": 0.9518644999770913,
+        "representative_hits": 20,
+        "label_scalar_restores": 17,
+        "label_restore_seconds": 0.0011699999158736318,
+        "total_seconds": 0.47948329997598194,
+        "evaluation_other_seconds": 0.17261829957715236,
+        "saved_origins": 1,
+        "generated_boards": 158,
+        "law_hypotheses_retained": 3540
+      },
+      "labelled": {
+        "action_requests": 570,
+        "action_evaluations": 368,
+        "law_seconds": 0.3412397998617962,
+        "acquisition_calls": 192,
+        "morning_calls": 72,
+        "total_seconds": 0.6131523000076413,
+        "evaluation_other_seconds": 0.2758500001800712,
+        "saved_origins": 1,
+        "generated_boards": 198,
+        "law_hypotheses_retained": 4428
+      },
+      "seconds": 4.919230500003323,
+      "peak_working_set_bytes": 53493760
+    }
+  ],
+  "regression_checks": [
+    [
+      "pattern",
+      "test_withdraw_prefix_diagnostic.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_six_registry.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_saved_recipes.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_two_nights.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_uniform_game.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_model_a.py"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization"
+    ],
+    [
+      "named",
+      "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation"
+    ],
+    [
+      "pattern",
+      "test_cut_out_seven_minimal.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_max_game.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_latent_max.py"
+    ]
+  ],
+  "existing44_preserved": true,
+  "regression_tests": 47,
+  "overall_seconds": 90.25
+}

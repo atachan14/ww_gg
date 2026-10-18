@@ -79,7 +79,7 @@ class CutOutUniformEngine(InformationSetForecast):
     def equivalent_targets(self,*args,**kwargs):return False
     def actor_equivalent_targets(self,*args,**kwargs):return False
 
-    def groups(self,b,past,private):
+    def groups(self,b,past,private,observer=None):
         started=perf_counter()
         # Only previously proved groups and explicit observations are used.
         # Private branch law is NOT inspected for inferred secret endpoints.
@@ -101,7 +101,7 @@ class CutOutUniformEngine(InformationSetForecast):
 
     def act(self,b,s,past,target,private,observer,*,physical=None):
         physical=physical_board(b,private,physical)
-        groups=self.groups(b,past,private)
+        groups=self.groups(b,past,private,observer=observer)
         group=next(g for g in groups if target in g)
         representative=group[0] if self.representatives else target
         key_started=perf_counter()
@@ -133,7 +133,7 @@ class CutOutUniformEngine(InformationSetForecast):
         self.costs['key_seconds']+=perf_counter()-key_started
         if cached is not None:return cached
         if b.phase=='day':
-            groups=self.groups(b,past,private)
+            groups=self.groups(b,past,private,observer=observer)
             choices=tuple(tuple(p for p in g if p in b.alive) for g in groups) if self.representatives else tuple((p,) for p in b.alive)
             value=sum((F(len(g),len(b.alive))*self.act(b,s,past,g[0],private,observer,physical=physical) for g in choices if g),F())
         elif b.phase=='night':
