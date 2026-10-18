@@ -79,8 +79,26 @@ def make_root_engine(original,board,rules,strategy,**kwargs):
     return LocalRootEngine(rules,strategy,**kwargs)
 
 
+def late_seven_admitted(board,rules,strategy):
+    # Performance admission using PUBLIC input only. Complete-key equality,
+    # record/observer validation and the 120-mapping cap still decide reuse.
+    if (board.player_count!=7 or len(board.alive)!=5 or board.day!=2 or board.phase!='day'
+        or board.initial_hunter_count or board.initial_medium_count
+        or board.initial_seer_count!=1 or rules.initial_seer!='none'
+        or (strategy.day,strategy.night,strategy.fake_reports)!=('random','random','max')
+        or strategy.disclosure_for('seer')!='all' or rules.allow_self_bite or strategy.include_self_bite
+        or tuple(strategy.seer_position)!=('unvisited','uniform')
+        or tuple(strategy.fake_seer_policy)!=('noncontradictory','uniform')):return False
+    worlds=board.worlds
+    return (len(worlds)==4 and len({w[-1]for w in worlds})==1
+            and len({w[2]for w in worlds})==1
+            and worlds[0][2].bit_count()==1)
+
+
 def make_view_engine(original,board,rules,strategy,**kwargs):
-    if not enabled() or board.player_count>6:return original(rules,strategy,**kwargs)
+    if not enabled():return original(rules,strategy,**kwargs)
+    if board.player_count>6 and not late_seven_admitted(board,rules,strategy):
+        return original(rules,strategy,**kwargs)
     # Complete-key construction dominates measured tiny private inputs.
     # This selects the same original evaluator, never another policy/model.
     tiny=(len(board.alive)<=4 and len(board.worlds)<=3 and not board.initial_hunter_count)

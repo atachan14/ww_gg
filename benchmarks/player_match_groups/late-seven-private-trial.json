@@ -1,0 +1,22 @@
+[
+  {
+    "enabled": false,
+    "seconds": 0.7797102000040468,
+    "result": "((2, Fraction(7, 15)), (3, Fraction(7, 15)), (4, Fraction(7, 15)), (5, Fraction(7, 15)), (6, Fraction(7, 15)), (7, Fraction(7, 15)))"
+  },
+  {
+    "enabled": true,
+    "seconds": 0.08962910002446733,
+    "result": "((2, Fraction(7, 15)), (3, Fraction(7, 15)), (4, Fraction(7, 15)), (5, Fraction(7, 15)), (6, Fraction(7, 15)), (7, Fraction(7, 15)))"
+  },
+  {
+    "enabled": true,
+    "seconds": 0.08835299999918789,
+    "result": "((2, Fraction(7, 15)), (3, Fraction(7, 15)), (4, Fraction(7, 15)), (5, Fraction(7, 15)), (6, Fraction(7, 15)), (7, Fraction(7, 15)))"
+  },
+  {
+    "enabled": false,
+    "seconds": 0.8065946999995504,
+    "result": "((2, Fraction(7, 15)), (3, Fraction(7, 15)), (4, Fraction(7, 15)), (5, Fraction(7, 15)), (6, Fraction(7, 15)), (7, Fraction(7, 15)))"
+  }
+]
