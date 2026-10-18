@@ -1,0 +1,194 @@
+{
+  "status": "verified_local_counter",
+  "literal_deaths": [
+    3,
+    4
+  ],
+  "traces": [
+    {
+      "phase": "day",
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "live_targets": 7,
+      "representatives": 4
+    },
+    {
+      "phase": "night",
+      "alive": [
+        1,
+        2,
+        4,
+        5,
+        6,
+        7
+      ],
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "live_targets": 6,
+      "representatives": 3
+    }
+  ],
+  "pre_publication_groups": [
+    [
+      1,
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5,
+      6,
+      7
+    ]
+  ],
+  "night_actor_choices": [
+    {
+      "roster": 17,
+      "info_mass": "1/6",
+      "legal_targets": 4,
+      "representatives": 3,
+      "group_policy_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ]
+    },
+    {
+      "roster": 18,
+      "info_mass": "1/6",
+      "legal_targets": 4,
+      "representatives": 3,
+      "group_policy_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ]
+    },
+    {
+      "roster": 33,
+      "info_mass": "1/6",
+      "legal_targets": 4,
+      "representatives": 3,
+      "group_policy_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ]
+    },
+    {
+      "roster": 34,
+      "info_mass": "1/6",
+      "legal_targets": 4,
+      "representatives": 3,
+      "group_policy_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ]
+    },
+    {
+      "roster": 65,
+      "info_mass": "1/6",
+      "legal_targets": 4,
+      "representatives": 3,
+      "group_policy_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ]
+    },
+    {
+      "roster": 66,
+      "info_mass": "1/6",
+      "legal_targets": 4,
+      "representatives": 3,
+      "group_policy_masses": [
+        "1/4",
+        "1/4",
+        "1/2"
+      ]
+    }
+  ],
+  "night_current_representative_calls": 18,
+  "night_joint_info_action_orbits_test_only": 3,
+  "night_joint_orbit_masses": [
+    "1/4",
+    "1/4",
+    "1/2"
+  ],
+  "acquired_hypotheses": 30,
+  "distinct_public_role_laws": 49,
+  "distinct_full_public_histories": 64,
+  "raw_complete_report_vectors": 64,
+  "report_vector_orbits_test_only": 13,
+  "symmetric_pair_unnecessarily_split_vectors": 7,
+  "postpublication_live_choice_histogram": {
+    "3": 4,
+    "4": 36,
+    "5": 24
+  },
+  "live_representative_choices_sum": 276,
+  "choices_if_only_symmetric_pair_preserved": 269,
+  "report_orbit_masses_test_only": [
+    "1/40",
+    "1/20",
+    "1/10",
+    "1/8",
+    "1/40",
+    "1/10",
+    "1/8",
+    "1/40",
+    "3/40",
+    "1/20",
+    "3/20",
+    "1/20",
+    "1/10"
+  ],
+  "report_mass_permutation_checks": 768,
+  "canonical_calls": 0,
+  "CandidateRules_calls": 0,
+  "full_initial_forecast": false
+}
