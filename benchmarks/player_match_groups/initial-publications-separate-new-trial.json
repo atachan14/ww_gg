@@ -1,0 +1,133 @@
+{
+  "status": "unverified",
+  "reason": "comparison_budget",
+  "budget_stop": {
+    "kind": "time",
+    "work": 69334,
+    "max_work": null,
+    "elapsed_seconds": 60.0
+  },
+  "forecast": null,
+  "table": null,
+  "kind": "new",
+  "elapsed_seconds": 60.039165800000774,
+  "peak_working_set_bytes": 884477952,
+  "stats": {
+    "values": 37074,
+    "actions": 111322,
+    "generated": 50908,
+    "branch_records": 111326,
+    "terminal_records": 105337,
+    "policies": 1595,
+    "costs": {
+      "key_seconds": 3.2131863029499073,
+      "cut_out_builds": 37089,
+      "cut_out_seconds": 2.747516495495802,
+      "inherited_group_requests": 148415,
+      "action_requests": 111326,
+      "action_evaluations": 111326,
+      "law_seconds": 24.830188801599434,
+      "acquisition_calls": 8810,
+      "morning_calls": 4405,
+      "inclusive_action_seconds": 244.1387225042272
+    },
+    "publication_laws": 3484,
+    "pattern_representatives": 29079,
+    "named_public_vectors": 29998,
+    "group_stats": {
+      "seven_issued_source": 1,
+      "root_group_reads": 0,
+      "seven-initial-shared-batch": 1,
+      "max_depth": 10,
+      "private_context_splits": 42461,
+      "new_endpoint_positions": 202997,
+      "death-day": 1107,
+      "symmetric-acquisition": 1107,
+      "death-night": 3481,
+      "publication-medium": 528,
+      "publication-seer": 29191
+    },
+    "last_board": {
+      "player_count": 7,
+      "alive": [
+        1,
+        2,
+        7
+      ],
+      "wolf_count": 1,
+      "day": 3,
+      "phase": "day",
+      "history": [
+        {
+          "day": 1,
+          "phase": "day",
+          "target": 4
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "target": 5
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "target": 6
+        }
+      ],
+      "belief": [
+        [
+          18,
+          "1"
+        ]
+      ],
+      "initial_medium_count": 1,
+      "claims": [
+        "seer",
+        "seer",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "role_belief": [
+        [
+          18,
+          4,
+          "1"
+        ]
+      ],
+      "initial_seer_count": 1,
+      "initial_hunter_count": 0,
+      "world_belief": [
+        [
+          18,
+          4,
+          1,
+          0,
+          "1"
+        ]
+      ],
+      "medium_opportunities": [
+        [
+          2,
+          3,
+          4
+        ]
+      ],
+      "reports": [],
+      "report_resolved": [],
+      "guard_prior_roster": null
+    },
+    "last_budget_usage": {
+      "work": 69294,
+      "max_work": null,
+      "elapsed_seconds": 59.984
+    }
+  }
+}
