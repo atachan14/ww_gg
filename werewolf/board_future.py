@@ -575,7 +575,7 @@ def resolution_key(policy,board,payload,target,terminal_payoffs,observed_alive):
     selected=kernels.get((board,before,payload.past)) if kernels is not None else None
     kernel=None if selected is None else frozenset(selected.items())
     functions=[]
-    for owner,names in ((policy,('acquire','outcomes','night_outcomes')),
+    for owner,names in ((policy,('acquire','outcomes','night_outcomes','terminal_outcomes')),
                          (e,('public_children','physical_children','acquire','project','public_night_policies'))):
         for name in names:
             method=getattr(owner,name,None);functions.append(getattr(method,'__func__',method))

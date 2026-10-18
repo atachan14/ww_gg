@@ -1,0 +1,22 @@
+{
+  "status": "verified",
+  "case": "five",
+  "Board_validations_for_complete_Forecast_Table": {
+    "ordinary": 863,
+    "deferred": 552,
+    "compact": 340
+  },
+  "compact_terminal_actions": 90,
+  "values": 36,
+  "actions": 111,
+  "full_branches": 152,
+  "terminal_records": 94,
+  "terminal_tables_compared": 12,
+  "independent_source_and_terminal_cold_reads": 12,
+  "full_Forecast_Table_QP_branches_and_deferred_diagnostics_equal": true,
+  "repeated_diagnostic_equal": true,
+  "early_winner_rules_unchanged": true,
+  "full_initial7_search": false,
+  "seconds": 1.1089999999967404,
+  "peak_working_set_bytes": 38490112
+}

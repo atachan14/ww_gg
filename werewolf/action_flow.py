@@ -45,6 +45,9 @@ def resolve_action(board,state,target,policy,*,terminal_payoffs=False,observed_a
     callers keep the default and validate every retained public/secret law.
     Saved observation replay may restrict resulting alive rosters, after action
     selection/acquisition. Retained branch probabilities are never renormalized.
+    An opt-in terminal_outcomes hook runs only for scalar/horizon requests,
+    after the same acquisition contract. It must decline with None if any
+    physical branch continues; ordinary history requests always use full laws.
     """
     from .board_future import before_action,after_acquisition,reuse_resolution,remember_resolution
     role_source=before_action(policy,board,state)
@@ -56,9 +59,14 @@ def resolve_action(board,state,target,policy,*,terminal_payoffs=False,observed_a
         prepared = policy.outcomes(board,state,target) if policy.terminal_preflight_safe else None
         if prepared is None or any(o.board.winner is None for o in prepared):
             acquired = policy.acquire(board,state)
-        outcomes = policy.night_outcomes(NightFrame(board,target,state,acquired,terminal_payoffs,observed_alive),prepared)
+        terminal = getattr(policy,'terminal_outcomes',None) if terminal_payoffs else None
+        outcomes = terminal(board,acquired,target) if terminal is not None else None
+        if outcomes is None:
+            outcomes = policy.night_outcomes(NightFrame(board,target,state,acquired,terminal_payoffs,observed_alive),prepared)
     else:
-        outcomes = policy.outcomes(board,state,target)
+        terminal = getattr(policy,'terminal_outcomes',None) if terminal_payoffs else None
+        outcomes = terminal(board,state,target) if terminal is not None else None
+        if outcomes is None:outcomes = policy.outcomes(board,state,target)
     after_acquisition(policy,board,acquired,role_source,target=target,
                       terminal_payoffs=terminal_payoffs,observed_alive=observed_alive)
     if observed_alive is not None:

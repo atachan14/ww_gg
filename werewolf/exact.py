@@ -517,7 +517,8 @@ def forced_action_worlds(board, target, rules, strategy):
                  for world in board.worlds if not world[0]&bit)
 
 
-def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy) -> tuple[BoardOutcome, ...]:
+def action_world_groups(board: Board, target: int, rules: Rules, strategy: Strategy):
+    """Existing exact death partition, before constructing any child Board."""
     validate_strategy(rules, strategy)
     if board.winner is not None:
         raise ValueError("A terminal Board cannot advance")
@@ -531,6 +532,11 @@ def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy)
         w = (mask & (alive_mask ^ bit)).bit_count()
         winner = winner_for(len(alive), w)
         groups.setdefault(winner, []).append((mask, medium, seer, hunter, q))
+    return alive, groups
+
+
+def action_outcomes(board: Board, target: int, rules: Rules, strategy: Strategy) -> tuple[BoardOutcome, ...]:
+    alive, groups = action_world_groups(board,target,rules,strategy)
     event = PublicEvent(board.day, board.phase, target)
     outcomes = []
     for winner in ('village', 'wolf', None):
