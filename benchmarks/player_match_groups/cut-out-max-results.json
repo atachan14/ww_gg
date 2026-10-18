@@ -1,0 +1,381 @@
+{
+  "cases": [
+    {
+      "players": 4,
+      "mediums": 0,
+      "night": "random",
+      "view": "public",
+      "village_win": "1/2",
+      "public_policy": [
+        2,
+        4
+      ],
+      "private_best": "1/2",
+      "scalar_context_comparisons": 13,
+      "terminal_readbacks": 14,
+      "unknown_medium_wolf_information_sets": 0,
+      "complete_table_action_horizon_joint_physical_history_equal": true,
+      "grouped": {
+        "cut_out_builds": 4,
+        "cut_out_seconds": 0.00010600010864436626,
+        "key_seconds": 0.00023269999655894935,
+        "action_requests": 20,
+        "action_evaluations": 13,
+        "law_seconds": 0.0021566001523751765,
+        "acquisition_calls": 44,
+        "inclusive_action_seconds": 0.009175100014545023,
+        "representative_hits": 7,
+        "label_scalar_restores": 3,
+        "label_restore_seconds": 2.139998832717538e-05,
+        "total_seconds": 0.011612400005105883,
+        "evaluation_other_seconds": 0.009095699759200215,
+        "saved_origins": 1,
+        "generated_boards": 15,
+        "law_hypotheses_retained": 7
+      },
+      "labelled": {
+        "action_requests": 35,
+        "action_evaluations": 20,
+        "law_seconds": 0.0028454999555833638,
+        "acquisition_calls": 48,
+        "total_seconds": 0.012523099983809516,
+        "evaluation_other_seconds": 0.009677600028226152,
+        "saved_origins": 1,
+        "generated_boards": 15,
+        "law_hypotheses_retained": 8
+      },
+      "seconds": 0.0642220999870915,
+      "peak_working_set_bytes": 29388800
+    },
+    {
+      "players": 4,
+      "mediums": 1,
+      "night": "max",
+      "view": "medium2",
+      "village_win": "1/2",
+      "public_policy": [
+        2,
+        4
+      ],
+      "private_best": "1",
+      "scalar_context_comparisons": 26,
+      "terminal_readbacks": 21,
+      "unknown_medium_wolf_information_sets": 6,
+      "complete_table_action_horizon_joint_physical_history_equal": true,
+      "grouped": {
+        "cut_out_builds": 2,
+        "cut_out_seconds": 0.00021319999359548092,
+        "key_seconds": 0.0006628997798543423,
+        "action_requests": 40,
+        "action_evaluations": 26,
+        "law_seconds": 0.003942900104448199,
+        "acquisition_calls": 48,
+        "inclusive_action_seconds": 0.02162720009800978,
+        "representative_hits": 14,
+        "total_seconds": 0.018037800007732585,
+        "evaluation_other_seconds": 0.013218800129834563,
+        "saved_origins": 1,
+        "generated_boards": 22,
+        "law_hypotheses_retained": 26
+      },
+      "labelled": {
+        "action_requests": 66,
+        "action_evaluations": 42,
+        "law_seconds": 0.0049602999642957,
+        "acquisition_calls": 72,
+        "total_seconds": 0.01877190000959672,
+        "evaluation_other_seconds": 0.014668500021798536,
+        "saved_origins": 1,
+        "generated_boards": 22,
+        "law_hypotheses_retained": 26
+      },
+      "seconds": 0.09514739998849109,
+      "peak_working_set_bytes": 29200384
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "night": "random",
+      "view": "public",
+      "village_win": "23/27",
+      "public_policy": [
+        2,
+        4,
+        5
+      ],
+      "private_best": "23/27",
+      "scalar_context_comparisons": 109,
+      "terminal_readbacks": 99,
+      "unknown_medium_wolf_information_sets": 0,
+      "complete_table_action_horizon_joint_physical_history_equal": true,
+      "grouped": {
+        "cut_out_builds": 7,
+        "cut_out_seconds": 0.0006294999329838902,
+        "key_seconds": 0.0022084001102484763,
+        "action_requests": 141,
+        "action_evaluations": 109,
+        "law_seconds": 0.019020500098122284,
+        "acquisition_calls": 108,
+        "morning_calls": 18,
+        "inclusive_action_seconds": 0.10323269997024909,
+        "representative_hits": 32,
+        "label_scalar_restores": 28,
+        "label_restore_seconds": 0.00028660002863034606,
+        "total_seconds": 0.06209150000358932,
+        "evaluation_other_seconds": 0.03994649983360432,
+        "saved_origins": 1,
+        "generated_boards": 82,
+        "law_hypotheses_retained": 91
+      },
+      "labelled": {
+        "action_requests": 374,
+        "action_evaluations": 318,
+        "law_seconds": 0.03556740013300441,
+        "acquisition_calls": 144,
+        "morning_calls": 36,
+        "total_seconds": 0.10998169999220408,
+        "evaluation_other_seconds": 0.07441429985919967,
+        "saved_origins": 1,
+        "generated_boards": 140,
+        "law_hypotheses_retained": 165
+      },
+      "seconds": 0.3312029000080656,
+      "peak_working_set_bytes": 30838784
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "night": "random",
+      "view": "medium2",
+      "village_win": "23/27",
+      "public_policy": [
+        2,
+        4,
+        5
+      ],
+      "private_best": "8/9",
+      "scalar_context_comparisons": 285,
+      "terminal_readbacks": 252,
+      "unknown_medium_wolf_information_sets": 11,
+      "complete_table_action_horizon_joint_physical_history_equal": true,
+      "grouped": {
+        "cut_out_builds": 4,
+        "cut_out_seconds": 0.001832899870350957,
+        "key_seconds": 0.009929300140356645,
+        "action_requests": 365,
+        "action_evaluations": 285,
+        "law_seconds": 0.07717939987196587,
+        "acquisition_calls": 146,
+        "morning_calls": 49,
+        "inclusive_action_seconds": 0.3818300003767945,
+        "representative_hits": 80,
+        "label_scalar_restores": 13,
+        "label_restore_seconds": 0.0002928999892901629,
+        "total_seconds": 0.19146790000377223,
+        "evaluation_other_seconds": 0.1022334001318086,
+        "saved_origins": 1,
+        "generated_boards": 182,
+        "law_hypotheses_retained": 684
+      },
+      "labelled": {
+        "action_requests": 730,
+        "action_evaluations": 479,
+        "law_seconds": 0.09470360007253475,
+        "acquisition_calls": 168,
+        "morning_calls": 60,
+        "total_seconds": 0.2324607000045944,
+        "evaluation_other_seconds": 0.13889489995199256,
+        "saved_origins": 1,
+        "generated_boards": 220,
+        "law_hypotheses_retained": 831
+      },
+      "seconds": 0.8269518000015523,
+      "peak_working_set_bytes": 36499456
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "night": "max",
+      "view": "public",
+      "village_win": "2/3",
+      "public_policy": [
+        2,
+        4,
+        5
+      ],
+      "private_best": "2/3",
+      "scalar_context_comparisons": 195,
+      "terminal_readbacks": 177,
+      "unknown_medium_wolf_information_sets": 12,
+      "complete_table_action_horizon_joint_physical_history_equal": true,
+      "grouped": {
+        "cut_out_builds": 8,
+        "cut_out_seconds": 0.0011503003188408911,
+        "key_seconds": 0.007366700505372137,
+        "action_requests": 239,
+        "action_evaluations": 195,
+        "law_seconds": 0.05775150004774332,
+        "acquisition_calls": 84,
+        "morning_calls": 30,
+        "inclusive_action_seconds": 0.23068060018704273,
+        "representative_hits": 44,
+        "label_scalar_restores": 32,
+        "label_restore_seconds": 0.0007411000551655889,
+        "total_seconds": 0.14241400000173599,
+        "evaluation_other_seconds": 0.07540439907461405,
+        "saved_origins": 1,
+        "generated_boards": 124,
+        "law_hypotheses_retained": 429
+      },
+      "labelled": {
+        "action_requests": 472,
+        "action_evaluations": 406,
+        "law_seconds": 0.10050699993735179,
+        "acquisition_calls": 156,
+        "morning_calls": 66,
+        "total_seconds": 0.18903609999688342,
+        "evaluation_other_seconds": 0.10844100022222847,
+        "saved_origins": 1,
+        "generated_boards": 140,
+        "law_hypotheses_retained": 495
+      },
+      "seconds": 0.6877511000202503,
+      "peak_working_set_bytes": 33984512
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "night": "max",
+      "view": "medium2",
+      "village_win": "2/3",
+      "public_policy": [
+        2,
+        4,
+        5
+      ],
+      "private_best": "3/4",
+      "scalar_context_comparisons": 250,
+      "terminal_readbacks": 232,
+      "unknown_medium_wolf_information_sets": 11,
+      "complete_table_action_horizon_joint_physical_history_equal": true,
+      "grouped": {
+        "cut_out_builds": 4,
+        "cut_out_seconds": 0.0015149000682868063,
+        "key_seconds": 0.008867099648341537,
+        "action_requests": 275,
+        "action_evaluations": 250,
+        "law_seconds": 0.0695082998718135,
+        "acquisition_calls": 92,
+        "morning_calls": 38,
+        "inclusive_action_seconds": 0.33141299994895235,
+        "representative_hits": 25,
+        "label_scalar_restores": 13,
+        "label_restore_seconds": 0.0002877999795600772,
+        "total_seconds": 0.16947849999996834,
+        "evaluation_other_seconds": 0.08930040043196641,
+        "saved_origins": 1,
+        "generated_boards": 154,
+        "law_hypotheses_retained": 588
+      },
+      "labelled": {
+        "action_requests": 555,
+        "action_evaluations": 456,
+        "law_seconds": 0.11165519978385419,
+        "acquisition_calls": 168,
+        "morning_calls": 76,
+        "total_seconds": 0.2071494999981951,
+        "evaluation_other_seconds": 0.11887430027127266,
+        "saved_origins": 1,
+        "generated_boards": 168,
+        "law_hypotheses_retained": 675
+      },
+      "seconds": 0.8070414999965578,
+      "peak_working_set_bytes": 35180544
+    }
+  ],
+  "regression_checks": [
+    [
+      "pattern",
+      "test_withdraw_prefix_diagnostic.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_six_registry.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_saved_recipes.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_two_nights.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_uniform_game.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_model_a.py"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization"
+    ],
+    [
+      "named",
+      "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation"
+    ],
+    [
+      "pattern",
+      "test_cut_out_seven_minimal.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_max_game.py"
+    ]
+  ],
+  "existing42_preserved": true,
+  "regression_tests": 44,
+  "overall_seconds": 34.42200000002049
+}

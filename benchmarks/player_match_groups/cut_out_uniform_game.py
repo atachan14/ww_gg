@@ -165,13 +165,15 @@ class OfficialLabelledEngine(CutOutUniformEngine):
         return self.scalar_actions[key]
 
 
-def _evaluate(graph,*,representatives=True,view=None,max_seconds=25,official_reference=False,capture_terminal=False):
+def _evaluate(graph,*,representatives=True,view=None,max_seconds=25,official_reference=False,capture_terminal=False,engine_class=None):
     if not isinstance(graph,SavedCutOutGraph):return UnsupportedPartition('saved constructed graph required')
+    if engine_class is None and not official_reference and graph.engine.baseline.strategy.day!='random':
+        return UnsupportedPartition('max comparison requires its explicit entry; no uniform fallback')
     if getattr(graph,'problem',None):return UnsupportedPartition('saved input invalid: '+graph.problem.reason)
     if view is not None and (type(view) is not OwnView or view.role not in ('wolf','medium','seer','villager') or
         not 1<=view.player<=graph.engine.baseline.players or any(a.player!=view.player for a in view.acquisitions)):
         return UnsupportedPartition('explicit own role/results only')
-    engine=(OfficialLabelledEngine if official_reference else CutOutUniformEngine)(graph,representatives=representatives,view=view)
+    engine=(engine_class or (OfficialLabelledEngine if official_reference else CutOutUniformEngine))(graph,representatives=representatives,view=view)
     engine.capture_terminal=capture_terminal
     root=graph.origin();own=root.private
     if view is not None:
@@ -197,10 +199,10 @@ def _evaluate(graph,*,representatives=True,view=None,max_seconds=25,official_ref
     return Forecast(value,actions,dawn),engine
 
 
-def evaluate(graph,*,representatives=True,view=None,max_seconds=25,official_reference=False,capture_terminal=False):
+def evaluate(graph,*,representatives=True,view=None,max_seconds=25,official_reference=False,capture_terminal=False,engine_class=None):
     if type(max_seconds) not in (int,float) or not 0<max_seconds<=25:
         return UnsupportedPartition('comparison entry requires a positive <=25s evaluation budget')
     try:
-        return _evaluate(graph,representatives=representatives,view=view,max_seconds=max_seconds,official_reference=official_reference,capture_terminal=capture_terminal)
+        return _evaluate(graph,representatives=representatives,view=view,max_seconds=max_seconds,official_reference=official_reference,capture_terminal=capture_terminal,engine_class=engine_class)
     except Pending as error:return UnsupportedPartition('common flow pending: '+error.reason)
     except CalculationBudgetExceeded:return UnsupportedPartition('comparison evaluation budget exhausted')

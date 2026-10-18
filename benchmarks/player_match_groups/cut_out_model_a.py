@@ -36,14 +36,16 @@ class InitialModelASpec:
     claim_policy: ClaimPolicy = ClaimPolicy()
 
 
-def _reason(spec,*,six=False,seven=False):
+def _reason(spec,*,six=False,seven=False,max_trial=False):
+    if max_trial and (six or seven):return 'max comparison is 4/5 only'
     if six and seven:return 'choose exactly one comparison scope'
     if type(spec) is not InitialModelASpec:return 'constructed InitialModelASpec only; no Board/law/game/callable input'
     if (type(spec.players) is not int or spec.players not in ((7,) if seven else (6,) if six else (4,5)) or type(spec.mediums) is not int or spec.mediums not in (0,1)
         or type(spec.seers) is not int or spec.seers not in ((1,) if six or seven else (1,2)) or 1+spec.mediums+spec.seers>spec.players):return '7-player minimal comparison only' if seven else '6-player comparison W1 H0 M0/1 S1 only' if six else '4/5 original players W1 H0 M0/1 S1/2 only'
     if spec.simultaneous_snapshot is not True:return 'explicit simultaneous initial snapshot required; no inferred CCO timing'
     if (type(spec.rules) is not Rules or spec.rules.allow_self_bite or type(spec.strategy) is not Strategy
-        or (spec.strategy.day,spec.strategy.night,spec.strategy.fake_reports)!=('random',)*3
+        or (not max_trial and (spec.strategy.day,spec.strategy.night,spec.strategy.fake_reports)!=('random',)*3)
+        or (max_trial and (spec.strategy.day!='max' or spec.strategy.night not in ('random','max') or spec.strategy.fake_reports!='random'))
         or spec.strategy.include_self_bite or spec.strategy.disclosure_for('seer')!='all'
         or spec.strategy.disclosure_for('medium')!='all' or type(spec.claim_policy) is not ClaimPolicy):return 'fixed supported uniform/full-disclosure configuration only'
     if type(spec.claims) is not tuple or len(spec.claims)!=spec.players or any(type(c) is not str or c not in ('latent','villager','seer','medium','wolf') for c in spec.claims):return 'explicit original-player CO snapshot required'
@@ -53,12 +55,18 @@ def _reason(spec,*,six=False,seven=False):
         if (r.acquired_day!=1 or r.published_day!=1 or not 1<=r.player<=spec.players or not 1<=r.target<=spec.players
             or spec.claims[r.player-1]!='seer'):return 'Day1 same-frame reports by declared seers only'
     if spec.rules.initial_seer=='none' and spec.reports:return 'no initial result when initial acquisition is none'
+    if max_trial and (spec.seers!=1 or spec.rules!=Rules(initial_seer='random_white')
+        or spec.claim_policy!=ClaimPolicy()
+        or spec.strategy!=Strategy(day='max',night=spec.strategy.night,fake_reports='random')
+        or spec.claims!=('seer',)+('latent',)*(spec.players-1)
+        or len(spec.reports)!=1 or spec.reports[0]!=SeerReport(1,1,1,3,'white')):
+        return 'max trial requires true seer1 CO, initial white3, other players latent'
     return None
 
 
-def source_game(spec,*,six=False,seven=False):
+def source_game(spec,*,six=False,seven=False,max_trial=False):
     """Build a NEW narrow snapshot, never reinterpret an existing game/log."""
-    reason=_reason(spec,six=six,seven=seven)
+    reason=_reason(spec,six=six,seven=seven,max_trial=max_trial)
     if reason:raise ValueError(reason)
     game=dict(players=spec.players,wolves=1,mediums=spec.mediums,seers=spec.seers,hunters=0,
         model='group',history=[],claims=list(spec.claims),claim_policy=asdict(spec.claim_policy),
@@ -86,12 +94,12 @@ class ModelAReference:
 
 
 class ModelAInitialGroups(ConstructiveCutOutGroups):
-    def __init__(self,spec,*,six=False,seven=False):
-        reason=_reason(spec,six=six,seven=seven)
+    def __init__(self,spec,*,six=False,seven=False,max_trial=False):
+        reason=_reason(spec,six=six,seven=seven,max_trial=max_trial)
         if reason:raise ValueError(reason)
         self.stats=Counter(generator_checks=0,symmetry_history_rows_read=0,full_permutation_searches=0,
                            upstream_permutation_checks=0,comparisons=0,official_board_builds=1,official_prior_builds=0,official_root_checks=1)
-        started=perf_counter();game=source_game(spec,six=six,seven=seven)
+        started=perf_counter();game=source_game(spec,six=six,seven=seven,max_trial=max_trial)
         rules,progress=reconstruct_saved(game)
         self.stats['official_board_seconds']=perf_counter()-started
         if progress.finished:raise ValueError('terminal snapshot outside initial one-step scope')
@@ -181,3 +189,15 @@ def adapt_seven_model_a(spec):
         if len(engine.baseline.state.hypotheses)>6:return UnsupportedPartition('seven initial public joint support limit6')
         return engine
     except ValueError as error:return UnsupportedPartition('official seven-player prior: '+str(error))
+
+
+def adapt_max_model_a(spec):
+    """Sealed 4/5 public-day-max comparison; existing sequential night convention."""
+    reason=_reason(spec,max_trial=True)
+    if reason:return UnsupportedPartition(reason)
+    try:
+        engine=ModelAInitialGroups(spec,max_trial=True)
+        if engine.baseline.board.role_probability(1,'seer')!=1 or len(engine.baseline.state.hypotheses)>9:
+            return UnsupportedPartition('true seer/support gate')
+        return engine
+    except ValueError as error:return UnsupportedPartition(str(error))
