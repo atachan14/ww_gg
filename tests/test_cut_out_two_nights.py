@@ -13,9 +13,8 @@ class CutOutTwoNightTests(unittest.TestCase):
         source=spec()
         self.assertIsInstance(adapt_model_a(source),UnsupportedPartition)
         saved=graph();original=saved.data.inputs
-        with self.assertRaisesRegex(ValueError,'six-player first-morning'):
-            saved.bind(None)
-        self.assertIsInstance(saved.corrected(source),UnsupportedPartition)
+        from benchmarks.player_match_groups.cut_out_saved_recipes import SavedCutOutGraph
+        self.assertIsInstance(saved.corrected(source),SavedCutOutGraph)
         self.assertEqual(saved.data.inputs,original)
         self.assertIsInstance(adapt_six_model_a(replace(source,seers=2)),UnsupportedPartition)
         self.assertIsInstance(adapt_six_model_a(replace(source,players=7,claims=source.claims+('latent',))),UnsupportedPartition)

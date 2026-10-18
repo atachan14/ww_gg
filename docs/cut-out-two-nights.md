@@ -40,3 +40,5 @@ JSONはimport/startup、正式初期adapter、SavedOrigin一致gate、群維持 
 6人SavedCutOutGraphの初期生成から決着までの比較は対応したが、旧第一朝専用 `SavedBinding.bind/corrected` の6人訂正registryは未対応。一般の途中Board編集・取消UI、任意のCO変更・再CO方針、占い2人、7人、max、狩人、三夜目以降は対象外。正式kernelのPendingを均等化や情報省略で補完しない。
 
 最小二夜ケースで既存仕様の未対応による停止は発生しなかった。通常/公開接続なし。証拠: `cut-out-two-nights-results.json`、2本の新規回帰＋既存11本（計13本）の成功ログ `.artifacts/test-cut-out-two-nights-final.log`。
+
+6人の訂正registryと現在表示/個人枝の遅延復元は、[次段階の検証](cut-out-six-registry.md)を参照。初期・所有元の途中訂正を接続したが、過去COを後日withdrawする既存Pendingは残る。

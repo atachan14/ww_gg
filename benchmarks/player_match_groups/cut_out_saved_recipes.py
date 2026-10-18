@@ -10,7 +10,7 @@ from fractions import Fraction as F
 from hashlib import sha256
 import json
 from time import perf_counter
-from .cut_out_model_a import adapt_model_a,ModelAInitialGroups,InitialModelASpec,source_game
+from .cut_out_model_a import adapt_model_a,adapt_six_model_a,ModelAInitialGroups,InitialModelASpec,source_game
 from .cut_out_morning import CutOutMorning,MorningResult
 from .cut_out_day_night import point_fix
 from .partitioned_match_groups import UnsupportedPartition
@@ -204,7 +204,6 @@ class SavedCutOutGraph:
         self._days={};self._nights={};self._bindings={}
 
     def bind(self,observation):
-        if self.engine.baseline.players==6:raise ValueError('six-player first-morning binding registry is outside the full-game comparison entry')
         if type(observation) is not PathObservation:raise TypeError('closed labelled observation descriptor required')
         if type(observation.seers) is not tuple or any(type(r) is not SeerReport or r.published_day!=2 for r in observation.seers):
             raise ValueError('only generated first-morning seer deltas accepted')
@@ -262,9 +261,9 @@ class SavedCutOutGraph:
         previous=self.engine.baseline.spec
         if any(getattr(previous,k)!=getattr(spec,k) for k in ('players','mediums','seers','rules','strategy','claim_policy')):
             return UnsupportedPartition('cast/rule/policy change requires a new graph, not retargeted history')
-        engine=adapt_model_a(spec)
+        engine=(adapt_six_model_a if spec.players==6 else adapt_model_a)(spec)
         if isinstance(engine,UnsupportedPartition):return engine
-        game=source_game(spec)
+        game=source_game(spec,six=spec.players==6)
         changes={k:v for k,v in game.items() if k not in ('players','wolves','mediums','seers','hunters','rules')}
         changes['revision']=self.data.to_game().get('revision',0)+1
         data=self.data.updated(**changes) # existing immutable B-flow update API

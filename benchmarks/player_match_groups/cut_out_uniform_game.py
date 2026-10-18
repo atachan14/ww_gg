@@ -166,7 +166,8 @@ class OfficialLabelledEngine(CutOutUniformEngine):
 
 
 def _evaluate(graph,*,representatives=True,view=None,max_seconds=25,official_reference=False,capture_terminal=False):
-    if type(graph) is not SavedCutOutGraph:return UnsupportedPartition('saved constructed graph required')
+    if not isinstance(graph,SavedCutOutGraph):return UnsupportedPartition('saved constructed graph required')
+    if getattr(graph,'problem',None):return UnsupportedPartition('saved input invalid: '+graph.problem.reason)
     if view is not None and (type(view) is not OwnView or view.role not in ('wolf','medium','seer','villager') or
         not 1<=view.player<=graph.engine.baseline.players or any(a.player!=view.player for a in view.acquisitions)):
         return UnsupportedPartition('explicit own role/results only')
