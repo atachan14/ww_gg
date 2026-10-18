@@ -1,7 +1,8 @@
 """One owned publication boundary: P-stable orbits, scalar recursion, lazy labels.
 
 Uniform/H0 only. Public generation remains Q-owned; chance coefficients and
-conditional Q/P laws are separate. No ordinary factory or recursive dispatch.
+conditional Q/P laws are separate. Default: one boundary. Explicit recursive
+benchmark extension below; no ordinary factory dispatch.
 """
 from dataclasses import dataclass,replace
 from fractions import Fraction as F
@@ -113,12 +114,17 @@ class Representative:
     forecast:object=None
 
 
+def prepare(scope):
+    groups,splits=private_stabilizer(scope);src=scope.source
+    patterns=produce(src.public,src.public_state,src.past,groups,fake_policy=scope.builder.strategy.fake_seer_policy)
+    return groups,splits,patterns
+
+
 class PublicationOrbitValue:
-    def __init__(self,scope):
-        self.scope=scope;self.engine=OrbitOracle(scope);self.representatives=[];self.label_restorations=0
-        self.groups,self.private_splits=private_stabilizer(scope)
+    def __init__(self,scope,*,engine=None,prepared=None):
+        self.scope=scope;self.engine=engine if engine is not None else OrbitOracle(scope);self.representatives=[];self.label_restorations=0
+        self.groups,self.private_splits,patterns=prepare(scope) if prepared is None else prepared
         src=scope.source
-        patterns=produce(src.public,src.public_state,src.past,self.groups,fake_policy=self.engine.strategy.fake_seer_policy)
         rows=[];by_observation={};self.public_representatives={}
         for pattern in patterns:
             q,b,s,past=public_report_branches(src.public,src.past,(pattern.branch,))[0]
@@ -131,6 +137,7 @@ class PublicationOrbitValue:
         remember(self.engine,scope.request,src)
         for p_mass,b,q_law,past,own in weighted:
             pattern=by_observation[publication_key(b,past)]
+            self.engine.record_group_publication(src.public,src.public_state,src.past,b,q_law,past,'orbit')
             physical=physical_board(b,own,src.physical)
             child=reconstruct_publication(self.engine,src,b,q_law,past,own,physical,replay_unique=True)
             self.representatives.append(Representative(pattern,pattern.branch.probability,pattern.branch.probability*pattern.multiplicity,p_mass,child,child.board_data))
@@ -186,3 +193,116 @@ def named_value(scope):
         child=reconstruct_publication(engine,source,b,s,past,own,physical_board(b,own,source.physical),replay_unique=True)
         value=engine.solve(*child,physical=child.physical);result+=mass*value;children.append((mass,child))
     return result,engine,public,weighted,children
+
+
+# The recursive extension reuses the same proof, mass transfer and lazy detail
+# implementation. Only the common morning policy hook is replaced.
+from .cut_out_joint_night_forecast import FullRecordedPolicy
+from .cut_out_inherited_groups import InheritedGroupRegistry,InheritedGroups
+from werewolf.information_set_forecast import InformationSetForecast,InformationSetActionPolicy
+from werewolf.board_future import register_origin
+
+
+class RecursivePublicationPolicy(FullRecordedPolicy):
+    def acquire(self,b,payload):
+        if getattr(self.engine,'_board_evidence_snapshot',False):return InformationSetActionPolicy.acquire(self,b,payload)
+        result=InformationSetActionPolicy.acquire(self,b,payload)
+        self.engine.carry_proof('acquisition',b,payload.public_state,result.public_state,payload.past)
+        return result
+    def project(self,b,payload,outcome,target):
+        if getattr(self.engine,'_board_evidence_snapshot',False):return InformationSetActionPolicy.project(self,b,payload,outcome,target)
+        result=InformationSetActionPolicy.project(self,b,payload,outcome,target)
+        self.engine.carry_proof('action',b,payload,result,target)
+        return result
+    def morning_value(self,payload):
+        e=self.engine
+        if getattr(e,'_board_evidence_snapshot',False):
+            return super().morning_value(payload)
+        return e.publication_value(payload)
+
+
+class RecursivePublicationOracle(OrbitOracle):
+    """Owned intermediate source only; ordinary targets, certified mornings.
+
+    No canonical global state cache. A label frame persists along each
+    representative path; later maps compose only on explicit detail readback.
+    """
+    def __init__(self,scope):
+        super().__init__(scope)
+        self.action_policy=RecursivePublicationPolicy(self)
+        tracker=InheritedGroupRegistry.__new__(InheritedGroupRegistry)
+        tracker.contexts={};tracker.by_board={};tracker.stats=Counter()
+        src=check_scope(scope)
+        tracker.install(InheritedGroups(src.public,src.public_state,src.past,scope.groups,event='owned-orbit-boundary'))
+        self.inherited_groups=tracker
+        self.plans=[];self.refusals=Counter();self.proof_losses=Counter();self.boundary_counts=Counter()
+
+    def valid_owner(self):check_scope(self.scope)
+
+    def record_group_publication(self,b,s,past,c,ns,history,kind):
+        if getattr(self,'_board_evidence_snapshot',False):return
+        self.carry_proof('publication',b,s,past,c,ns,history,kind)
+
+    def carry_proof(self,kind,*args):
+        try:return getattr(self.inherited_groups,kind)(*args)
+        except Pending as error:
+            # Only optional certificate propagation fails here. The completed
+            # common transition is unchanged; later proof lookup will decline.
+            self.proof_losses[error.reason]+=1
+            return None
+
+    def generate_publications(self,b,s,past):
+        rows=InformationSetForecast.generate_publications(self,b,s,past)
+        if not getattr(self,'_board_evidence_snapshot',False):self.audit['fallback_named_Boards']+=len(rows)
+        return rows
+
+    def publication_value(self,source):
+        self.valid_owner()
+        # Build a receipt for this exact private/physical continuation. Neither
+        # missing inherited proof nor an unsupported policy authorizes merging.
+        try:
+            request=source.board_data or register_origin(self,source.public,source)
+            cap=issue_scope(self.graph,self,request,source)
+            prepared=prepare(cap)
+        except Pending as error:
+            # Preflight only: no mass transfer/continuation has occurred. Errors
+            # in P support or later evaluation are never converted to fallback.
+            self.refusals[error.reason]+=1
+            return InformationSetActionPolicy.morning_value(self.action_policy,source)
+        plan=PublicationOrbitValue(cap,engine=self,prepared=prepared)
+        self.plans.append(plan)
+        day=source.public.day
+        self.boundary_counts[day,'boundaries']+=1
+        self.boundary_counts[day,'named_Q']+=plan.named_Q_vectors
+        self.boundary_counts[day,'representative_Q']+=plan.representative_Boards
+        self.boundary_counts[day,'named_positive_P']+=sum(r.pattern.multiplicity for r in plan.representatives)
+        self.boundary_counts[day,'representative_positive_P']+=len(plan.representatives)
+        return plan.value()
+
+
+def labelled_descendant(root_plan,root_row,mapping,request):
+    """Compose a certified outer label frame with a requested descendant path.
+
+    Ordinary Action/Publication evidence only. Unknown conditioning operations
+    are explicitly refused; no synthetic transport evidence or hidden solve.
+    """
+    from .cut_out_joint_night_forecast_fixture import moved_source
+    from werewolf.board_future import ActionEvidence,outcome_key
+    from types import SimpleNamespace
+    root_plan.check()
+    if request.origin is not root_row.request.origin or request.history[:len(root_row.request.history)]!=root_row.request.history:
+        raise Pending('orbit_value_descendant_prefix_required')
+    suffix=request.history[len(root_row.request.history):]
+    if any(type(op) not in (ActionEvidence,PublicationEvidence) for op in suffix):
+        raise Pending('orbit_value_descendant_operation_transport_unproved')
+    _,_,_,_,restored=root_plan.labelled(root_row,mapping)
+    ordinary=InitialReferenceEngine(root_plan.scope.graph)
+    prefix=root_row.request
+    for op in suffix:
+        prefix=prefix.child(op,None);expected=moved_source(prefix.roles(),mapping)
+        if type(op)is ActionEvidence:
+            alive=None if op.observed_alive is None else tuple(sorted(mapping[p-1] for p in op.observed_alive))
+            moved=ActionEvidence(kernel_snapshot(ordinary),mapping[op.target-1],outcome_key(SimpleNamespace(board=expected.physical)),op.terminal_payoffs,alive)
+        else:moved=PublicationEvidence(kernel_snapshot(ordinary),publication_key(expected.public,expected.past))
+        restored=restored.child(moved,None)
+    return restored

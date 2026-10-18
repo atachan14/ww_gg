@@ -96,3 +96,59 @@ class PublicationOrbitValueTests(unittest.TestCase):
                 self.assertEqual(len(selected),2)
                 self.assertNotEqual(dict(selected[0].action_values)[1],dict(selected[1].action_values)[1])
                 self.assertEqual(selected[0].village_win,selected[1].village_win)
+
+
+class RecursivePublicationTests(unittest.TestCase):
+    def test_two_boundaries_full_private_history_no_false_merge(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import RecursivePublicationOracle
+        scope,cold=make_scope('asymmetric-scan')
+        with calculation_budget(4000000,max_seconds=20),calculation_origin(scope.graph.data):
+            e=RecursivePublicationOracle(scope);remember(e,scope.request,scope.source)
+            self.assertEqual(e.publication_value(scope.source),F(2,15))
+            self.assertGreater(e.boundary_counts[3,'boundaries'],0)
+            self.assertEqual(e.boundary_counts[2,'named_positive_P'],e.boundary_counts[2,'representative_positive_P'])
+            self.assertEqual(e.boundary_counts[3,'named_positive_P'],e.boundary_counts[3,'representative_positive_P'])
+            self.assertEqual(dict(e.refusals),{})
+
+    def test_missing_certificate_falls_back_to_ordinary_value(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import RecursivePublicationOracle
+        scope,cold=make_scope('five')
+        with calculation_budget(4000000,max_seconds=10),calculation_origin(scope.graph.data):
+            e=RecursivePublicationOracle(scope);e.inherited_groups.contexts.clear()
+            remember(e,scope.request,scope.source)
+            self.assertEqual(e.publication_value(scope.source),F(1,3))
+            self.assertEqual(e.plans,[])
+            self.assertIn('inherited_group_context_required',e.refusals)
+
+    def test_unsupported_strategy_uses_same_ordinary_policy_without_replacement(self):
+        from unittest.mock import patch
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import RecursivePublicationOracle,InformationSetActionPolicy
+        scope,cold=make_scope('five');e=RecursivePublicationOracle(scope)
+        e.strategy=replace(e.strategy,night='max');configured=e.strategy
+        remember(e,scope.request,scope.source)
+        with patch.object(InformationSetActionPolicy,'morning_value',return_value='ordinary') as ordinary:
+            self.assertEqual(e.publication_value(scope.source),'ordinary')
+            ordinary.assert_called_once_with(e.action_policy,scope.source)
+        self.assertIs(e.strategy,configured)
+        self.assertEqual(e.plans,[])
+        self.assertIn('orbit_value_uniform_H0_only',e.refusals)
+
+
+    def test_likelihood_error_after_preflight_is_not_hidden_by_fallback(self):
+        from unittest.mock import patch
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import RecursivePublicationOracle
+        scope,cold=make_scope('five');e=RecursivePublicationOracle(scope)
+        with calculation_origin(scope.graph.data):
+            remember(e,scope.request,scope.source)
+            with patch.object(e,'push',side_effect=Pending('information_set_report_likelihood_incomplete')):
+                with self.assertRaises(Pending) as error:e.publication_value(scope.source)
+        self.assertEqual(error.exception.reason,'information_set_report_likelihood_incomplete')
+        self.assertEqual(dict(e.refusals),{})
+
+    def test_unknown_descendant_operation_is_refused_before_transport(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import labelled_descendant
+        scope,cold=make_scope('five')
+        with calculation_origin(scope.graph.data):plan=PublicationOrbitValue(scope)
+        row=plan.representatives[0];mapping=next(mappings(row.pattern,5))
+        with self.assertRaises(Pending) as error:labelled_descendant(plan,row,mapping,row.request.child(object(),None))
+        self.assertEqual(error.exception.reason,'orbit_value_descendant_operation_transport_unproved')

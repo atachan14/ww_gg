@@ -1,0 +1,60 @@
+{
+  "status": "verified",
+  "case": "observer-sampled",
+  "village_win": "2/15",
+  "seconds_by_phase": {
+    "named": 7.434758800023701,
+    "one_boundary": 5.544132300012279,
+    "recursive": 9.504988300031982,
+    "detail_validation": 2.599269500002265
+  },
+  "value_only": {
+    "named": {
+      "values": 1520,
+      "actions": 4616
+    },
+    "one_boundary": {
+      "values": 1116,
+      "actions": 3390
+    },
+    "recursive": {
+      "values": 1108,
+      "actions": 3366
+    }
+  },
+  "boundaries": {
+    "2": {
+      "boundaries": 1,
+      "named_Q": 64,
+      "representative_Q": 40,
+      "named_positive_P": 16,
+      "representative_positive_P": 12
+    },
+    "3": {
+      "boundaries": 108,
+      "named_Q": 1098,
+      "representative_Q": 1090,
+      "named_positive_P": 1074,
+      "representative_positive_P": 1066
+    }
+  },
+  "refusals": {},
+  "selected_boundary_named_QP_mass_Forecast_Table_checks": {
+    "2": 16,
+    "3": 17
+  },
+  "computed_boundaries": 109,
+  "validated_boundaries": 5,
+  "independent_cold_reads": {
+    "2": 16,
+    "3": 4
+  },
+  "composed_two_boundary_cold_paths": 8,
+  "nonidentity_outer_composed_paths": 4,
+  "full_initial7_search": false,
+  "public64_aggregate_retried": false,
+  "immutable_sharing": false,
+  "scope": "recursive certified publication backup; ordinary labelled actions; unsupported preflight returns to ordinary morning",
+  "seconds": 25.155999999959022,
+  "peak_working_set_bytes": 133718016
+}

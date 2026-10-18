@@ -112,4 +112,85 @@ def worker(case):
     Path('benchmarks/player_match_groups/publication-orbit-value-'+case+'-results.json').write_text(json.dumps(row,indent=2)+'\n')
     print(json.dumps(row),flush=True)
 
-if __name__=='__main__':worker(sys.argv[1] if len(sys.argv)>1 else 'five')
+def recursive_audit(case):
+    from .cut_out_publication_orbit_value import RecursivePublicationOracle,labelled_descendant
+    from .cut_out_joint_night_forecast_fixture import moved_source
+    scope,cold=make_scope(case.removesuffix('-sampled'));src=scope.source;timings={}
+    with calculation_origin(scope.graph.data):
+        with calculation_budget(4000000,max_seconds=25):
+            start=time.perf_counter();baseline,old,public,weighted,children=named_value(scope);timings['named']=time.perf_counter()-start
+        with calculation_budget(4000000,max_seconds=25):
+            start=time.perf_counter();single=PublicationOrbitValue(scope);assert single.value()==baseline;timings['one_boundary']=time.perf_counter()-start
+        with calculation_budget(4000000,max_seconds=25):
+            e=RecursivePublicationOracle(scope);remember(e,scope.request,src)
+            start=time.perf_counter();assert e.publication_value(src)==baseline;timings['recursive']=time.perf_counter()-start
+        plans=tuple(e.plans);root=plans[0]
+        counts=dict(named=dict(values=len(old.values),actions=len(old.scalar_actions)),one_boundary=dict(values=len(single.engine.values),actions=len(single.engine.scalar_actions)),recursive=dict(values=len(e.values),actions=len(e.scalar_actions)))
+        boundaries={str(day):{k:n for (d,k),n in e.boundary_counts.items() if d==day} for day in sorted({d for d,k in e.boundary_counts})}
+        labels=Counter();cold_reads=Counter();composed=0;nonidentity=0
+        selected_plans=plans if not case.endswith('-sampled') else (root,)+tuple(p for p in plans[1:] if p.representatives)[:4]
+        with calculation_budget(4000000,max_seconds=25):
+            start=time.perf_counter()
+            for plan in selected_plans:
+                source=plan.scope.source;day=source.public.day
+                rows=old.morning(source.public,source.public_state,source.past)
+                own=old.push(source.public_state,source.private,rows)
+                lookup={publication_key(b,p):(mass,ContinuationInputs(b,q,p,priv,source.observer,physical_board(b,priv,source.physical))) for mass,b,q,p,priv in own}
+                qs={publication_key(b,p):q for q,b,law,p in rows}
+                restored={}
+                for row in plan.representatives:
+                    for mapping in mappings(row.pattern,source.public.player_count):
+                        q,mass,child,result,request=plan.labelled(row,mapping)
+                        key=publication_key(child.public,child.past);expected_mass,expected=lookup[key]
+                        assert q==qs[key] and mass==expected_mass and child==expected
+                        expected_result=forecast(old,expected)
+                        assert result==expected_result and tables(child,result)==tables(expected,expected_result)
+                        assert key not in restored;restored[key]=child;labels[day]+=1
+                        if plan is root or cold_reads[day]<4:
+                            assert cold(request)==child;cold_reads[day]+=1
+                assert len(restored)==len(own)
+            # Compose an outer report-label map with later action and report
+            # evidence. Never solve each outer label on the optimized engine.
+            for root_row in root.representatives:
+                options=list(mappings(root_row.pattern,src.public.player_count))
+                if len(options)<2:continue
+                descendants=[p for p in plans[1:] if p.scope.request.history[:len(root_row.request.history)]==root_row.request.history]
+                if not descendants:continue
+                later=next((p for p in descendants if p.representatives),None)
+                if later is None:continue
+                leaf=later.representatives[0];local=next(mappings(leaf.pattern,src.public.player_count))
+                _,_,leaf_source,leaf_forecast,leaf_request=later.labelled(leaf,local)
+                for outer in (options[0],options[-1]):
+                    request=labelled_descendant(root,root_row,outer,leaf_request)
+                    expected=moved_source(leaf_source,outer);actual=cold(request)
+                    assert actual==expected
+                    mapped=Forecast(leaf_forecast.village_win,tuple(sorted((outer[p-1],v) for p,v in leaf_forecast.action_values)),tuple(sorted((outer[p-1],v) for p,v in leaf_forecast.by_dawn_values)))
+                    independent=forecast(old,expected)
+                    assert mapped==independent and tables(expected,mapped)==tables(actual,independent)
+                    composed+=1;nonidentity+=outer!=tuple(range(1,len(outer)+1))
+                if composed>=8:break
+            timings['detail_validation']=time.perf_counter()-start
+        return dict(status='verified',case=case,village_win=str(baseline),seconds_by_phase=timings,value_only=counts,boundaries=boundaries,refusals=dict(e.refusals),
+            selected_boundary_named_QP_mass_Forecast_Table_checks=dict(labels),computed_boundaries=len(plans),validated_boundaries=len(selected_plans),independent_cold_reads=dict(cold_reads),composed_two_boundary_cold_paths=composed,nonidentity_outer_composed_paths=nonidentity,
+            full_initial7_search=False,public64_aggregate_retried=False,immutable_sharing=False,
+            scope='recursive certified publication backup; ordinary labelled actions; unsupported preflight returns to ordinary morning')
+
+
+def recursive_worker(case):
+    start=time.monotonic()
+    def watch():
+        while True:
+            if time.monotonic()-start>120 or peak_bytes()>1500000000:os._exit(124)
+            time.sleep(.05)
+    threading.Thread(target=watch,daemon=True).start()
+    try:
+        with independent_joint_values():row=recursive_audit(case)
+    except CalculationBudgetExceeded:row=dict(status='unverified',case=case,reason='bounded_phase_budget',budget_stop=budget_stop())
+    row.update(seconds=time.monotonic()-start,peak_working_set_bytes=peak_bytes())
+    Path('benchmarks/player_match_groups/publication-orbit-recursive-'+case+'-results.json').write_text(json.dumps(row,indent=2)+'\n')
+    print(json.dumps(row),flush=True)
+
+
+if __name__=='__main__':
+    if len(sys.argv)>1 and sys.argv[1]=='recursive':recursive_worker(sys.argv[2])
+    else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

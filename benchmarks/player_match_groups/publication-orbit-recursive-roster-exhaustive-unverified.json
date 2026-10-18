@@ -1,0 +1,13 @@
+{
+  "status": "unverified",
+  "case": "roster",
+  "reason": "bounded_phase_budget",
+  "budget_stop": {
+    "kind": "time",
+    "work": 47167,
+    "max_work": 4000000,
+    "elapsed_seconds": 25.0
+  },
+  "seconds": 57.10899999999674,
+  "peak_working_set_bytes": 220913664
+}
