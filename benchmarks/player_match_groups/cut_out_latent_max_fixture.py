@@ -49,17 +49,23 @@ def independent_terminal(initial,state,view=None,wolf_mask=None):
     return normalize(rows)
 
 
-def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False):
+def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_terminal_night_max=False):
     from .cut_out_two_nights import restore_terminals
     from werewolf.board_future import same_role_board
     from werewolf.information_set_forecast import optimal_targets
-    start=time.perf_counter();source=graph(n,mediums,initial,medium_co);root=source.origin()
+    start=time.perf_counter()
+    if _terminal_night_max:
+        if n!=4 or medium_co:raise ValueError('terminal-night comparison is four-player all-latent only')
+        from .cut_out_terminal_night_max import graph as build,evaluate as calculate
+        source=build(mediums,initial)
+    else:source=graph(n,mediums,initial,medium_co);calculate=evaluate
+    root=source.origin()
     owner=2 if medium_co else 1
     view=None if kind=='public' else OwnView(owner,'seer',() if kind=='role' else (Acquisition(1,owner,3,'white'),))
     independent=independent_initial(n,mediums,initial)
     if medium_co:independent=normalize(h for h in independent if h.roles[1]==1)
     assert root.public_state.hypotheses==independent
-    actual=evaluate(source,view=view,capture_terminal=True);expected=evaluate(source,view=view,official_reference=True,capture_terminal=True)
+    actual=calculate(source,view=view,capture_terminal=True);expected=calculate(source,view=view,official_reference=True,capture_terminal=True)
     if isinstance(actual,UnsupportedPartition) or isinstance(expected,UnsupportedPartition):raise AssertionError((actual,expected))
     forecast,engine=actual;reference,full=expected
     assert forecast==reference and complete_table(source,forecast,view)==complete_table(source,reference,view)
@@ -87,7 +93,8 @@ def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False):
         assert state.private.hypotheses==independent_terminal(independent,state,view if key[1].observer==view else None,mask)
     scan_targets=[];scan_private_contexts=scan_public_alternatives=scan_group_swaps=0
     if kind=='white':
-        from .cut_out_latent_max import scan_values
+        if _terminal_night_max:from .cut_out_terminal_night_max import scan_values
+        else:from .cut_out_latent_max import scan_values
         from werewolf.player_view import private_api_rows
         scans,scan_engine=scan_values(source,view)
         labelled_scans,labelled_engine=scan_values(source,view,official_reference=True)

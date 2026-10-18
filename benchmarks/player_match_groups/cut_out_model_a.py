@@ -36,7 +36,8 @@ class InitialModelASpec:
     claim_policy: ClaimPolicy = ClaimPolicy()
 
 
-def _reason(spec,*,six=False,seven=False,max_trial=False,latent_max=False):
+def _reason(spec,*,six=False,seven=False,max_trial=False,latent_max=False,terminal_night_max=False):
+    if terminal_night_max and not latent_max:return 'terminal night max requires explicit latent max comparison'
     if latent_max and not max_trial:return 'latent max requires the explicit max comparison flag'
     if max_trial and (six or seven):return 'max comparison is 4/5 only'
     if six and seven:return 'choose exactly one comparison scope'
@@ -66,14 +67,15 @@ def _reason(spec,*,six=False,seven=False,max_trial=False,latent_max=False):
     if spec.mediums==1:latent_claims+=(('medium',)+('latent',)*(spec.players-1),)
     if latent_max and (spec.seers!=1 or spec.rules not in (Rules(initial_seer='none'),Rules(initial_seer='random_white'))
         or spec.claim_policy!=ClaimPolicy() or spec.claims not in latent_claims or spec.reports
-        or spec.strategy!=Strategy(day='max',night='random',fake_reports='random')):
+        or spec.strategy!=Strategy(day='max',night='max' if terminal_night_max else 'random',fake_reports='random')
+        or terminal_night_max and (spec.players!=4 or spec.claims!=('latent',)*4)):
         return 'latent max comparison requires 4/5 W1 S1 H0 M0/1, latent seer/no reports, optional medium1 CO, initial none/white, public day max/random night'
     return None
 
 
-def source_game(spec,*,six=False,seven=False,max_trial=False,latent_max=False):
+def source_game(spec,*,six=False,seven=False,max_trial=False,latent_max=False,terminal_night_max=False):
     """Build a NEW narrow snapshot, never reinterpret an existing game/log."""
-    reason=_reason(spec,six=six,seven=seven,max_trial=max_trial,latent_max=latent_max)
+    reason=_reason(spec,six=six,seven=seven,max_trial=max_trial,latent_max=latent_max,terminal_night_max=terminal_night_max)
     if reason:raise ValueError(reason)
     game=dict(players=spec.players,wolves=1,mediums=spec.mediums,seers=spec.seers,hunters=0,
         model='group',history=[],claims=list(spec.claims),claim_policy=asdict(spec.claim_policy),
@@ -101,12 +103,12 @@ class ModelAReference:
 
 
 class ModelAInitialGroups(ConstructiveCutOutGroups):
-    def __init__(self,spec,*,six=False,seven=False,max_trial=False,latent_max=False):
-        reason=_reason(spec,six=six,seven=seven,max_trial=max_trial,latent_max=latent_max)
+    def __init__(self,spec,*,six=False,seven=False,max_trial=False,latent_max=False,terminal_night_max=False):
+        reason=_reason(spec,six=six,seven=seven,max_trial=max_trial,latent_max=latent_max,terminal_night_max=terminal_night_max)
         if reason:raise ValueError(reason)
         self.stats=Counter(generator_checks=0,symmetry_history_rows_read=0,full_permutation_searches=0,
                            upstream_permutation_checks=0,comparisons=0,official_board_builds=1,official_prior_builds=0,official_root_checks=1)
-        started=perf_counter();game=source_game(spec,six=six,seven=seven,max_trial=max_trial,latent_max=latent_max)
+        started=perf_counter();game=source_game(spec,six=six,seven=seven,max_trial=max_trial,latent_max=latent_max,terminal_night_max=terminal_night_max)
         rules,progress=reconstruct_saved(game)
         self.stats['official_board_seconds']=perf_counter()-started
         if progress.finished:raise ValueError('terminal snapshot outside initial one-step scope')
@@ -220,4 +222,12 @@ def adapt_latent_max_model_a(spec):
     reason=_reason(spec,max_trial=True,latent_max=True)
     if reason:return UnsupportedPartition(reason)
     try:return ModelAInitialGroups(spec,max_trial=True,latent_max=True)
+    except ValueError as error:return UnsupportedPartition(str(error))
+
+
+def adapt_terminal_night_max_model_a(spec):
+    """Four-player latent no-hunter terminal-night boundary only."""
+    reason=_reason(spec,max_trial=True,latent_max=True,terminal_night_max=True)
+    if reason:return UnsupportedPartition(reason)
+    try:return ModelAInitialGroups(spec,max_trial=True,latent_max=True,terminal_night_max=True)
     except ValueError as error:return UnsupportedPartition(str(error))

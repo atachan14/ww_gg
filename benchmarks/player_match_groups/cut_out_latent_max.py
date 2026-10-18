@@ -18,7 +18,8 @@ class LatentMaxOrigin(SavedOrigin):
         if (game.get('history') or b.history or b.day!=1 or b.phase!='day'
             or b.player_count not in (4,5) or b.initial_hunter_count or b.initial_seer_count!=1
             or b.initial_medium_count not in (0,1) or b.claims not in (('latent',)*b.player_count,('medium',)+('latent',)*(b.player_count-1))
-            or self.strategy!=Strategy(day='max',night='random',fake_reports='random')
+            or not (self.strategy==Strategy(day='max',night='random',fake_reports='random') or
+                b.player_count==4 and b.claims==('latent',)*4 and self.strategy==Strategy(day='max',night='max',fake_reports='random'))
             or self.rules not in (Rules(initial_seer='none'),Rules(initial_seer='random_white'))):
             raise Pending('latent_max_initial_comparison_scope')
         root=prepare_root_secrets(b,self.rules,max_work=100000)
@@ -43,7 +44,7 @@ def evaluate(source,**kwargs):
     return evaluate_common(source,engine_class=CutOutMaxEngine,**kwargs)
 
 
-def scan_values(source,view,*,official_reference=False,max_seconds=25):
+def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_night_max=False):
     """Existing configured scan interventions; no new max scan/CO strategy."""
     from .cut_out_uniform_game import OwnView,OfficialLabelledEngine
     from werewolf.actor_information import condition_actor_state
@@ -55,7 +56,7 @@ def scan_values(source,view,*,official_reference=False,max_seconds=25):
     from werewolf.information_set_forecast import Pending
     if not isinstance(source,SavedCutOutGraph) or type(view) is not OwnView or view.role!='seer':
         return UnsupportedPartition('explicit latent own seer history required')
-    reason=_reason(source.engine.baseline.spec,max_trial=True,latent_max=True)
+    reason=_reason(source.engine.baseline.spec,max_trial=True,latent_max=True,terminal_night_max=_terminal_night_max)
     if reason:return UnsupportedPartition(reason)
     if type(max_seconds) not in (int,float) or not 0<max_seconds<=25:
         return UnsupportedPartition('positive <=25s comparison budget required')
@@ -67,7 +68,8 @@ def scan_values(source,view,*,official_reference=False,max_seconds=25):
     if len(histories)!=1:return UnsupportedPartition('seer_view_past_private_history_unresolved')
     choices={candidates(h,view.player,scan_target_players(root.public_state,root.public.alive)) for h in own.hypotheses}
     if len(choices)!=1:return UnsupportedPartition('seer_view_target_generation_support_unresolved')
-    engine=(OfficialLabelledEngine if official_reference else CutOutMaxEngine)(source,view=view)
+    from .cut_out_terminal_night_max import TerminalNightMaxEngine
+    engine=(OfficialLabelledEngine if official_reference else TerminalNightMaxEngine if _terminal_night_max else CutOutMaxEngine)(source,view=view)
     values=[]
     try:
         with calculation_budget(1000000,max_seconds=max_seconds),calculation_origin(source.data):
