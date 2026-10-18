@@ -1,0 +1,33 @@
+{
+  "status": "unverified",
+  "target": "actual saved7 C3/M1/S1/W2/H0 public; only three policies max->random",
+  "initial_worlds": 6,
+  "initial_hypotheses": 6,
+  "paths": {
+    "inherited": {
+      "status": "unverified",
+      "reason": "common flow pending: inherited_publication_or_CO_transition_unproved",
+      "seconds": 0.23499999998603016
+    },
+    "independent": {
+      "status": "unverified",
+      "reason": "comparison evaluation budget exhausted",
+      "seconds": 5.0
+    }
+  },
+  "forecast_equal": null,
+  "Table_joint_equal": null,
+  "branch_mass_comparisons": null,
+  "terminal_readbacks": null,
+  "canonical_calls": 0,
+  "CandidateRules_calls": 0,
+  "legacy_root_calls": 0,
+  "worker_seconds": 5.282000000006519,
+  "peak_working_set_bytes": 119083008,
+  "limits": {
+    "evaluation_seconds": 5,
+    "worker_seconds": 30,
+    "peak_working_set_bytes": 1500000000
+  },
+  "speed_measurement_executed": false
+}
