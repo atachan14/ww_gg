@@ -168,9 +168,9 @@ class StructuralRoleFilterTests(unittest.TestCase):
 
     def test_minted_receipt_revision_and_configuration_guards(self):
         from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import make_role_filter_scope
-        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_role_filter,require_role_filter,condition_known_role
-        scope=make_role_filter_scope();proof=seed_role_filter(scope)
-        with self.assertRaises(Pending):require_role_filter(replace(proof))
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_structural,require_structural,condition_known_role
+        scope=make_role_filter_scope();proof=seed_structural(scope)
+        with self.assertRaises(Pending):require_structural(replace(proof))
         data=scope.graph.data;scope.graph.data=data.updated(revision=data.to_game().get('revision',0)+1)
         try:
             with self.assertRaises(Pending):condition_known_role(proof,2,'villager')
@@ -181,15 +181,48 @@ class StructuralRoleFilterTests(unittest.TestCase):
         finally:scope.builder.strategy=strategy
         baseline=scope.graph.engine.baseline;scope.graph.engine.baseline=replace(baseline,strategy=replace(baseline.strategy,night='max'))
         try:
-            with self.assertRaises(Pending):require_role_filter(proof)
+            with self.assertRaises(Pending):require_structural(proof)
         finally:scope.graph.engine.baseline=baseline
 
     def test_no_arbitrary_predicate_observer_or_new_posterior(self):
         from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import make_role_filter_scope
-        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_role_filter,require_role_filter,condition_known_role
-        scope=make_role_filter_scope();proof=seed_role_filter(scope)
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_structural,require_structural,condition_known_role
+        scope=make_role_filter_scope();proof=seed_structural(scope)
         for player,role in ((2,lambda h:True),(True,'villager'),(2,'hunter')):
             with self.assertRaises(Pending):condition_known_role(proof,player,role)
         own=condition_known_role(proof,2,'villager')
         with self.assertRaises(Pending):condition_known_role(own,4,'villager')
-        with self.assertRaises(Pending):require_role_filter(replace(own,source=scope.source))
+        with self.assertRaises(Pending):require_structural(replace(own,source=scope.source))
+
+
+class StructuralDeathTests(unittest.TestCase):
+    def test_known_villager_death_full_labelled_forecast_table_cold(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import death_audit
+        with calculation_budget(4000000,max_seconds=20):result=death_audit()
+        self.assertEqual(result['status'],'verified')
+        self.assertEqual(result['certified_named_deaths'],11)
+        self.assertEqual(result['independent_cold_reads'],12)
+        self.assertEqual(result['death_full_symmetry_comparisons'],0)
+        self.assertEqual(result['death_parent_replays'],0)
+        self.assertEqual(result['death_acquisition_calls'],0)
+        self.assertEqual(result['outside_scope_P_only_known_Q_continue'],'2/3')
+        self.assertEqual(result['outside_scope_P_only_known_P_continue'],'1')
+
+    def test_unsupported_target_phase_or_receipt_never_mints_guarantee(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import make_role_filter_scope
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_structural,known_villager_death,condition_known_role
+        seed=seed_structural(make_role_filter_scope())
+        for target in (True,0,6,1,2):self.assertIsNone(known_villager_death(seed,target))
+        own=condition_known_role(seed,2,'villager');self.assertIsNone(known_villager_death(own,2))
+        death=known_villager_death(seed,3);self.assertIsNotNone(death)
+        self.assertIsNone(known_villager_death(death,4))
+        with self.assertRaises(Pending):known_villager_death(replace(seed),3)
+
+    def test_broken_common_kernel_contract_propagates_instead_of_fallback(self):
+        from unittest.mock import patch
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import make_role_filter_scope
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_structural,known_villager_death,InformationSetActionPolicy
+        seed=seed_structural(make_role_filter_scope())
+        with patch.object(InformationSetActionPolicy,'outcomes',return_value=()):
+            with self.assertRaises(Pending) as error:known_villager_death(seed,3)
+        self.assertEqual(error.exception.reason,'structural_known_villager_death_kernel_contract')

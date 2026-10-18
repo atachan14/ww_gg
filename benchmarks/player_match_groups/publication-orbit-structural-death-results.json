@@ -1,0 +1,45 @@
+{
+  "status": "verified",
+  "scope": "Day1 five alive W1/S1/V3/H0/M0; target villager in Q and P; uniform configured strategy",
+  "seed_full_audits": 2,
+  "certified_named_deaths": 11,
+  "public_and_personal_Forecast_Table_checks": 11,
+  "independent_cold_reads": 12,
+  "residual_complete_symmetry_generators": 12,
+  "receipt_only_rechecks": 352,
+  "death_full_symmetry_comparisons": 0,
+  "death_parent_replays": 0,
+  "death_acquisition_calls": 0,
+  "Q_death_chance": "1",
+  "P_death_chance": "1",
+  "separate_uniform_choice": "1/5",
+  "complete_QP_histories_unchanged": true,
+  "semantic_visits_and_projection_cost": {
+    "preflight_hypothesis_visits": 49,
+    "preflight_seconds": 7.27000879123807e-05,
+    "common_resolution_projection_seconds": 0.0015153000131249428,
+    "input_Q_hypotheses": 29,
+    "input_P_hypotheses": 20,
+    "output_Q_hypotheses": 29,
+    "output_P_hypotheses": 20,
+    "certified_deaths": 11
+  },
+  "timings": {
+    "ordinary_resolve_reconstruct_seconds": 0.0038041999796405435,
+    "structural_death_seconds": 0.0019335998804308474
+  },
+  "explicit_endpoint_split_targets": [
+    4,
+    5
+  ],
+  "outside_scope_ordinary_branches": 2,
+  "outside_scope_P_only_known_Q_continue": "2/3",
+  "outside_scope_P_only_known_P_continue": "1",
+  "role_death_order_commutes": true,
+  "full_initial7_search": false,
+  "public64_aggregate_retried": false,
+  "recursive_engine_adopted": false,
+  "immutable_sharing": false,
+  "seconds": 0.6251974999904633,
+  "peak_working_set_bytes": 37326848
+}

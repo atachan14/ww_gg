@@ -1,0 +1,11 @@
+{
+  "status": "verified",
+  "tests": 17,
+  "errors": 0,
+  "failures": 0,
+  "seconds": 11.03913630003808,
+  "peak_working_set_bytes": 65130496,
+  "recursive_engine_adopted": false,
+  "immutable_sharing": false,
+  "full_initial7_search": false
+}

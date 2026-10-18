@@ -118,3 +118,48 @@ The important distinction is **zero repeated symmetry comparisons**, not zero wo
 The essential remaining work is a trusted complete-law transition provenance chain: immutable parent references, exact kernel/version/strategy, changed observation endpoints, private and public normalization masses, and physical/observer dependencies. Existing public inherited groups can supply the endpoint trace but cannot substitute for the missing private/kernel provenance. Realistic choices are to stop with this result; incrementally certify one existing common generator next (preferably the uniform acquisition mixture, before optimizing its representation); or retain ordinary evaluation until that chain exists. Repeating more global full-state checks or silently skipping them does not solve this structural gap. No new recursive evaluator or additional long-search prototype was added.
 
 Regression suite for this checkpoint: 14 tests, zero errors/failures, 9.947 seconds runner time (`publication-orbit-structural-role-tests.json`). It includes copied/substituted receipt refusal, arbitrary predicate and observer-change refusal, saved-revision/builder-strategy/baseline replacement invalidation, and all earlier orbit regressions. No initial7/public64 searches were rerun, and normal UI/HELP/MAX/public edition remain unchanged; immutable sharing stays OFF.
+
+## Structural generation extension: one certain-villager daytime death
+
+This checkpoint extends the same structural receipt foundation with exactly one of acquisition/report/death: a **selected Day1 daytime execution of a player known to be a villager in both Q and P**, in a five-alive W1/S1/V3/H0/M0 game with the existing uniform configuration. It does not certify uncertain-role executions, night attacks, guards, medium opportunities or new reports. The slower recursive evaluator stays unadopted.
+
+### Inputs, weights and preservation contract
+
+The input is a minted parent receipt for the exact immutable public Board, complete public Q and actual private P, all acquisitions/guards/attacks, roster/tracked/initial-rule metadata, published history, physical Board and observer. The parent was either fully audited once or constructed by an already certified operation. Saved inputs, owner, builder/baseline rules and strategy references must still match. No arbitrary child law, callback or custom engine is accepted.
+
+The narrow preflight requires five original players all alive, first daytime action, no prior death history, no medium/hunter, one wolf and one seer in every Q/P hypothesis, and a target with no special-role bit in **either** complete support. It scans these supports for the semantic preconditions; that scan is not hidden or represented as eliminated. The source observer is preserved. Existing own-role conditioning can occur before or after this death within its own supported scope.
+
+For this selected target t, every world loses a villager and still has four alive with one wolf. There is a single continuing physical outcome. Public death chance is exactly 1 and actual private death chance is independently exactly 1. The uniform strategy's probability of selecting t is 1/5, stored separately from both death chance masses and conditional Q/P laws. No private normalization is substituted for public weighting. The constructor uses the **existing common daytime outcomes and pure generated-role projection**; it neither implements another death model nor changes policy selection.
+
+Daytime resolution does not acquire a new result. Complete Q/P laws, existing secret records, original acquisition/target rosters and published past remain unchanged. Only the visible Board's alive set and death event change. For the subgroup fixing t, deleting t and appending its death commute with relabelling. Thus the child group is exactly the parent group with t point-fixed; no full Q/P/history permutation comparison is needed. The typed constructor creates and binds the immutable child itself.
+
+To avoid duplicate proof classes, `RoleFilterWitness` and its seed/require/request helpers have been generalized in place to `StructuralWitness`, `seed_structural`, `require_structural` and `structural_request`; the existing role operation uses the same registry. The new receipt separately records public chance, private chance and optional action-choice probability. There is no second recursive evaluator. Evidence is created only for requested detail, as ordinary ActionEvidence after the existing parent chain. Actual fresh SavedOrigin cold reconstruction still replays normally on that explicit read.
+
+The constructor deliberately calls the common pure outcome/projection kernels rather than `reconstruct_child`, whose responsibility includes replaying a parent to attach evidence. This is safe only for the stated daytime/no-ability scope. A later general night path must restore the full common acquire/resolve/project order, not copy this shortcut.
+
+### Small examples and required refusals
+
+The earlier true-seer1/white3 fixture executes the certain villager3, preserving the unaffected `(2,4,5)` group or its existing private refinements. A second fixture also publicly fixes wolf2, leaving `(4,5)` as interchangeable villagers. Executing4 must split that group: swapping4/5 no longer fixes the named death. Executing5 is checked independently as well. The operation does not retain the old group merely because both players have equal role probabilities.
+
+A key counterexample executes player2 after only the private observer has learned that player2 is a villager. P's continuing death mass is 1, but Q's is 2/3. The structural operation **declines** this case; ordinary named resolution retains those distinct weights. With neither law certain of player2's role, ordinary resolution has two outcome branches. These are valid ordinary cases, not evidence of unsupported uniform completion.
+
+`known_villager_death` returns None for valid inputs outside its narrow scope, leaving ordinary processing available. Invalid/stale/unminted receipts remain explicit errors requiring new ownership/proof; a contradiction or failure inside the promised common kernel also propagates rather than silently gaining a certificate. No normal dispatcher is wired to this experiment, so all other operations retain their existing ordinary paths.
+
+### Validation and residual cost
+
+`publication-orbit-structural-death-results.json` records:
+
+- Two initial full seed audits, 11 individually named death cases (public plus all 8 positive own-role conditions, plus the two explicitly split endpoints).
+- Full Q/P laws and metadata, physical Boards, existing secret/public histories, complete legal-action Forecast and public/personal Table all equal independent ordinary named `resolve_action`/projection calculations.
+- Twelve fresh independent SavedOrigin cold reads, including role-before-death and death-before-role equality in this exact certain-villager scope.
+- Twelve independent complete residual-group generator checks, performed only as validation outside the certified constructor.
+- 352 receipt-only rechecks. Full symmetry comparison, parent replay and daytime acquisition calls are forbidden by test patches during construction/recheck: all zero.
+- **49 actual preflight hypothesis visits**. Common projection still receives 29 Q plus 20 P entries and retains those 49 entries. These are input/output counts, not a claim that every internal normalization/marginal pass was counted.
+
+Measured tiny-run costs: preflight approximately 0.073 ms, common resolution/projection 1.515 ms, and all 11 structural constructions 1.934 ms. The ordinary resolve/project/recipe paths measured 3.804 ms with their then-current caches. Whole audit, including independent forecasts, tables and cold reads, was 0.625 seconds at about 37 MB peak. These are diagnostic microtimings; they **do not demonstrate a reliable solver speedup** or reduce the recursive action/state count. The demonstrated reduction is repeated symmetry verification/replay work in this typed boundary only. Explicit hypothesis filtering, normalization, Board construction and physical marginal work remain.
+
+The shared verification fixture now uses the existing `legal_targets` when constructing a night Forecast, so a known wolf's illegal self-bite is not evaluated during these new night continuation Table checks. No ordinary UI or solver legality rule changed.
+
+Seventeen regression tests pass in 10.752 seconds runner time (`publication-orbit-structural-death-tests.json`). They include unsupported target/phase handling and broken common-kernel contract propagation, plus all earlier role-filter/orbit/secret-asymmetry tests. Normal UI, HELP, MAX, public edition, server processes and immutable-sharing defaults are untouched; no initial7/public64 long run or retry occurred.
+
+A broader integration still needs typed acquisition/report/uncertain-death likelihood provenance and automatic dispatcher fallback, plus general output-path composition. None of those changes are necessary to establish this narrow operation, so they were not expanded here. This result provides a working example of a generated child carrying a change-only guarantee, while keeping its limits and remaining scans explicit.

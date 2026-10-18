@@ -44,9 +44,11 @@ def make_scope(case):
 
 
 def forecast(engine,source):
+    from werewolf.exact import legal_targets
     value=engine.solve(*source,physical=source.physical)
-    actions=tuple((p,engine.act(*source[:3],p,source.private,source.observer,physical=source.physical)) for p in source.public.alive)
-    dawn=tuple((p,horizon_for_action(engine,source.public,source.public_state,source.past,p,source.private,observer=source.observer)) for p in source.public.alive)
+    targets=legal_targets(source.physical,engine.rules,engine.strategy)
+    actions=tuple((p,engine.act(*source[:3],p,source.private,source.observer,physical=source.physical)) for p in targets)
+    dawn=tuple((p,horizon_for_action(engine,source.public,source.public_state,source.past,p,source.private,observer=source.observer)) for p in targets)
     return Forecast(value,actions,dawn)
 
 
@@ -191,23 +193,24 @@ def recursive_worker(case):
     print(json.dumps(row),flush=True)
 
 
-def make_role_filter_scope():
+def make_role_filter_scope(*,known_wolf=False):
     from .cut_out_model_a import InitialModelASpec
     from werewolf.exact import Rules
     from werewolf.seer_acquisition import SeerReport
-    spec=InitialModelASpec(5,('seer',)+('latent',)*4,True,mediums=0,rules=Rules(initial_seer='random_white'),reports=(SeerReport(1,1,1,3,'white'),))
+    claims=('seer','wolf','latent','latent','latent') if known_wolf else ('seer',)+('latent',)*4
+    spec=InitialModelASpec(5,claims,True,mediums=0,rules=Rules(initial_seer='random_white'),reports=(SeerReport(1,1,1,3,'white'),))
     graph=SavedCutOutGraph(adapt_model_a(spec));builder=CompactTerminalSmallEngine(graph)
     return issue_scope(graph,builder,graph.root,graph.origin())
 
 
 def structural_audit():
-    from .cut_out_publication_orbit_value import seed_role_filter,condition_known_role,require_role_filter,role_filter_request
+    from .cut_out_publication_orbit_value import seed_structural,condition_known_role,require_structural,structural_request
     from .cut_out_structural_publications import require_groups
     from .cut_out_joint_night_forecast_fixture import moved_source
     from unittest.mock import patch
     from . import cut_out_publication_orbit_value as module
     from werewolf.seer_acquisition import Acquisition,Hypothesis,normalize
-    scope=make_role_filter_scope();start=time.perf_counter();seed=seed_role_filter(scope);seed_seconds=time.perf_counter()-start
+    scope=make_role_filter_scope();start=time.perf_counter();seed=seed_structural(scope);seed_seconds=time.perf_counter()-start
     full_checks=0;cold_reads=0;positive=0;zero=0;checks=0
     old=InitialReferenceEngine(scope.graph)
     with calculation_origin(scope.graph.data):
@@ -220,7 +223,7 @@ def structural_audit():
                     except Pending as error:assert error.reason=='role_filter_zero_private_support';zero+=1
                     else:raise AssertionError('zero support accepted')
                     continue
-                proof=condition_known_role(seed,player,role);source=require_role_filter(proof)
+                proof=condition_known_role(seed,player,role);source=require_structural(proof)
                 expected_private=condition_actor_state(scope.source.private,view.accepts)
                 expected=replace(scope.source,private=expected_private,observer=view,physical=physical_board(scope.source.public,expected_private,scope.source.physical),board_data=None)
                 assert source==expected and proof.private_mass==mass and source.public_state is scope.source.public_state
@@ -231,7 +234,7 @@ def structural_audit():
                     for p in group[1:]:
                         mapping=list(range(1,6));mapping[group[0]-1],mapping[p-1]=p,group[0];mapping=tuple(mapping)
                         assert moved_source(source,mapping)==source;full_checks+=1
-                request=role_filter_request(proof);assert independent_cold(scope.graph,request)==source;cold_reads+=1
+                request=structural_request(proof);assert independent_cold(scope.graph,request)==source;cold_reads+=1
                 result=forecast(old,expected)
                 # Fresh common engine evaluates the certified carrier unchanged.
                 fresh=InitialReferenceEngine(scope.graph);actual=forecast(fresh,source)
@@ -241,7 +244,7 @@ def structural_audit():
         # functions or replay the seed scope. Actual Bayesian filtering remains.
         proof=seed;start=time.perf_counter()
         with patch.object(module,'move_law',side_effect=AssertionError('full law comparison')),patch.object(module,'same_role_board',side_effect=AssertionError('physical comparison')),patch.object(module,'check_scope',side_effect=AssertionError('seed replay')):
-            for i in range(32):proof=condition_known_role(proof,2,'villager');require_role_filter(proof)
+            for i in range(32):proof=condition_known_role(proof,2,'villager');require_structural(proof)
         carry_seconds=time.perf_counter()-start
         assert set(proof.groups)=={(1,),(2,),(3,),(4,5)}
         # Concrete counterexample: fixed roles and physical marginal, unequal
@@ -252,7 +255,7 @@ def structural_audit():
         asymmetric=condition_actor_state(symmetric,lambda h:h.acquisitions[-1].target==4)
         mapping=(1,2,3,5,4)
         assert move_law(asymmetric,mapping).public_roles==asymmetric.public_roles and move_law(asymmetric,mapping)!=asymmetric
-        try:require_role_filter(replace(proof,source=replace(proof.source,private=asymmetric)))
+        try:require_structural(replace(proof,source=replace(proof.source,private=asymmetric)))
         except Pending as error:assert error.reason=='role_filter_minted_receipt_required'
         else:raise AssertionError('arbitrary posterior certified')
     return dict(status='verified',scope='five original players; exact known-role private conditioning only',seed_full_audits=1,seed_seconds=seed_seconds,
@@ -270,7 +273,94 @@ def structural_worker():
     print(json.dumps(row),flush=True)
 
 
+def death_audit():
+    from .cut_out_publication_orbit_value import seed_structural,require_structural,condition_known_role,known_villager_death,structural_request
+    from .cut_out_joint_night_forecast_fixture import moved_source
+    from . import cut_out_publication_orbit_value as module
+    from werewolf.action_flow import resolve_action
+    from werewolf.evaluation_branch import ActionInputs
+    from werewolf.board_future import GeneratedBoard
+    from unittest.mock import patch
+    scope=make_role_filter_scope();seed=seed_structural(scope)
+    parents=[(scope,seed,3)]
+    for player in range(1,6):
+        for role in ('wolf','medium','seer','villager'):
+            if any(OwnView(player,role).accepts(h) for h in seed.source.private.hypotheses):parents.append((scope,condition_known_role(seed,player,role),3))
+    known=make_role_filter_scope(known_wolf=True);known_seed=seed_structural(known)
+    parents.extend((known,known_seed,target) for target in (4,5))
+    metrics=Counter();roots={};checks=0;generators=0;copies=32
+    timings=Counter()
+    for graph_scope,parent,target in parents:
+        source=require_structural(parent);request=structural_request(parent)
+        with calculation_origin(graph_scope.graph.data):
+            reference=InitialReferenceEngine(graph_scope.graph);remember(reference,request,source)
+            payload=ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical)
+            start=time.perf_counter();acquired,outcomes=resolve_action(source.public,payload,target,reference.action_policy,terminal_payoffs=False)
+            assert len(outcomes)==1 and outcomes[0].probability==1
+            expected=reference.action_policy.project(source.public,acquired,outcomes[0],target)
+            timings['ordinary_resolve_reconstruct_seconds']+=time.perf_counter()-start
+            with patch.object(module,'move_law',side_effect=AssertionError('full comparison')),patch.object(module,'same_role_board',side_effect=AssertionError('physical comparison')),patch.object(module,'check_scope',side_effect=AssertionError('seed replay')),patch.object(GeneratedBoard,'roles',side_effect=AssertionError('parent replay')),patch.object(module.InformationSetActionPolicy,'acquire',side_effect=AssertionError('day acquired secrets')):
+                start=time.perf_counter();proof=known_villager_death(parent,target,stats=metrics);timings['structural_death_seconds']+=time.perf_counter()-start
+                assert proof is not None
+                for i in range(copies):assert require_structural(proof) is proof.source
+            child=require_structural(proof)
+            assert child==expected and proof.public_mass==1 and proof.private_mass==1 and proof.choice_probability==F(1,5)
+            # Entire laws and metadata must survive this deterministic daytime
+            # event, rather than retaining merely role marginals.
+            assert child.public_state==source.public_state and child.private==source.private and child.past==source.past
+            for group in proof.groups:
+                for p in group[1:]:
+                    mapping=list(range(1,6));mapping[group[0]-1],mapping[p-1]=p,group[0]
+                    assert moved_source(child,tuple(mapping))==child;generators+=1
+            result=forecast(reference,expected);fresh=InitialReferenceEngine(graph_scope.graph)
+            actual=forecast(fresh,child)
+            assert actual==result and tables(child,actual)==tables(expected,result)
+            assert independent_cold(graph_scope.graph,structural_request(proof))==child
+            checks+=1
+            if parent is seed:roots['death']=proof
+            if parent.selector==(2,'villager'):roots['own_before_death']=proof
+            if graph_scope is known:
+                assert (4,5) in parent.groups and all(target not in g or len(g)==1 for g in proof.groups)
+    # Role knowledge and a certain-villager death commute in this exact scope.
+    later=condition_known_role(roots['death'],2,'villager')
+    assert later.source==roots['own_before_death'].source
+    assert independent_cold(scope.graph,structural_request(later))==later.source
+    # A valid but outside-scope selected action declines; caller retains the
+    # ordinary full named event distribution, with no uniform substitution.
+    with calculation_origin(scope.graph.data):
+        assert known_villager_death(seed,2) is None
+        normal=InitialReferenceEngine(scope.graph);remember(normal,scope.request,scope.source)
+        s=scope.source;payload=ActionInputs(s.public_state,s.past,s.private,s.observer,s.physical)
+        _,ordinary=resolve_action(s.public,payload,2,normal.action_policy,terminal_payoffs=False)
+        assert len(ordinary)==2 and sum((o.probability for o in ordinary),F())==1
+        own=condition_known_role(seed,2,'villager');s=own.source
+        assert known_villager_death(own,2) is None  # P knows; Q does not.
+        normal=InitialReferenceEngine(scope.graph);remember(normal,structural_request(own),s)
+        payload=ActionInputs(s.public_state,s.past,s.private,s.observer,s.physical)
+        _,physical=resolve_action(s.public,payload,2,normal.action_policy,terminal_payoffs=False)
+        public=normal.public_children(s.public,2,s.public_state)
+        q_continue=sum((o.probability for o in public if o.board.winner is None),F())
+        p_continue=sum((o.probability for o in physical if o.board.winner is None),F())
+        assert q_continue==F(2,3) and p_continue==1
+    return dict(status='verified',scope='Day1 five alive W1/S1/V3/H0/M0; target villager in Q and P; uniform configured strategy',
+        seed_full_audits=2,certified_named_deaths=checks,public_and_personal_Forecast_Table_checks=checks,independent_cold_reads=checks+1,
+        residual_complete_symmetry_generators=generators,receipt_only_rechecks=checks*copies,death_full_symmetry_comparisons=0,death_parent_replays=0,death_acquisition_calls=0,
+        Q_death_chance='1',P_death_chance='1',separate_uniform_choice='1/5',complete_QP_histories_unchanged=True,
+        semantic_visits_and_projection_cost=dict(metrics),timings=dict(timings),
+        explicit_endpoint_split_targets=[4,5],outside_scope_ordinary_branches=len(ordinary),outside_scope_P_only_known_Q_continue=str(q_continue),outside_scope_P_only_known_P_continue=str(p_continue),role_death_order_commutes=True,
+        full_initial7_search=False,public64_aggregate_retried=False,recursive_engine_adopted=False,immutable_sharing=False)
+
+
+def death_worker():
+    start=time.perf_counter()
+    with calculation_budget(4000000,max_seconds=20),independent_joint_values():row=death_audit()
+    row.update(seconds=time.perf_counter()-start,peak_working_set_bytes=peak_bytes())
+    Path('benchmarks/player_match_groups/publication-orbit-structural-death-results.json').write_text(json.dumps(row,indent=2)+'\n')
+    print(json.dumps(row),flush=True)
+
+
 if __name__=='__main__':
     if len(sys.argv)>1 and sys.argv[1]=='recursive':recursive_worker(sys.argv[2])
     elif len(sys.argv)>1 and sys.argv[1]=='structural-role':structural_worker()
+    elif len(sys.argv)>1 and sys.argv[1]=='structural-death':death_worker()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

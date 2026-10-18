@@ -310,28 +310,30 @@ def labelled_descendant(root_plan,root_row,mapping,request):
 
 # A separate, narrow provenance experiment: no recursive evaluator adoption.
 # Full joint symmetry is audited once at seed issuance. Only this module's
-# fixed-role filter may mint a derived receipt; no supplied posterior accepted.
+# typed transition constructors may mint children; no supplied posterior accepted.
 _structural=WeakKeyDictionary()
 
 
 @dataclass(frozen=True,eq=False)
-class RoleFilterWitness:
+class StructuralWitness:
     source:object
     groups:tuple
     owner:tuple
     parent:object=None
     selector:object=None
     private_mass:F=F(1)
+    public_mass:F=F(1)
+    choice_probability:object=None
     root_request:object=None
 
 
-def _mint_role_witness(source,groups,owner,**kwargs):
-    proof=RoleFilterWitness(source,groups,owner,**kwargs)
+def _mint_structural(source,groups,owner,**kwargs):
+    proof=StructuralWitness(source,groups,owner,**kwargs)
     _structural[proof]=tuple(vars(proof).values())
     return proof
 
 
-def seed_role_filter(scope):
+def seed_structural(scope):
     """One full audit, including full public/private histories, before reuse."""
     from .cut_out_structural_publications import require_groups
     from werewolf.board_future import canonical_hypothesis
@@ -344,12 +346,12 @@ def seed_role_filter(scope):
     groups,_=private_stabilizer(scope)
     require_groups(source.public,source.public_state,source.past,groups)
     owner=(scope.graph,scope.graph.data,scope.graph.engine,scope.graph.root,scope.builder,scope.builder.rules,scope.builder.strategy,scope.graph.engine.baseline,scope.graph.engine.baseline.rules,scope.graph.engine.baseline.strategy)
-    return _mint_role_witness(source,groups,owner,root_request=scope.request)
+    return _mint_structural(source,groups,owner,root_request=scope.request)
 
 
-def require_role_filter(proof):
+def require_structural(proof):
     """Constant-field checks: no law hashing, equality, replay, or parent walk."""
-    if type(proof)is not RoleFilterWitness or proof not in _structural:
+    if type(proof)is not StructuralWitness or proof not in _structural:
         raise Pending('role_filter_minted_receipt_required')
     if any(a is not b for a,b in zip(tuple(vars(proof).values()),_structural[proof])):
         raise Pending('role_filter_receipt_changed')
@@ -368,7 +370,7 @@ def condition_known_role(proof,player,role):
     weights. This theorem says nothing about arbitrary predicates or policies.
     """
     from werewolf.actor_information import condition_actor_state
-    source=require_role_filter(proof)
+    source=require_structural(proof)
     if type(player)is not int or player not in range(1,source.public.player_count+1) or type(role)is not str or role not in ('wolf','medium','seer','villager'):
         raise Pending('role_filter_explicit_supported_role_required')
     if source.observer is not None and source.observer!=OwnView(player,role):
@@ -379,15 +381,68 @@ def condition_known_role(proof,player,role):
     private=condition_actor_state(source.private,observer.accepts)
     child=replace(source,private=private,observer=observer,physical=physical_board(source.public,private,source.physical),board_data=None)
     groups=point_fix(proof.groups,player)
-    return _mint_role_witness(child,groups,proof.owner,parent=proof,selector=(player,role),private_mass=mass)
+    return _mint_structural(child,groups,proof.owner,parent=proof,selector=(player,role),private_mass=mass)
 
 
-def role_filter_request(proof):
+def structural_request(proof):
     """Ordinary cold evidence only when detail is explicitly requested."""
     from werewolf.board_future import condition_recipe
-    source=require_role_filter(proof)
+    source=require_structural(proof)
     if proof.parent is None:return proof.root_request
-    parent=role_filter_request(proof.parent)
-    recipe=condition_recipe(proof.parent.source,source)
-    if recipe is None:raise Pending('role_filter_condition_receipt_unproved')
+    parent=structural_request(proof.parent)
+    if proof.selector[0]=='known-villager-death':
+        from werewolf.board_future import ActionEvidence,outcome_key
+        from types import SimpleNamespace
+        _,target=proof.selector
+        engine=InitialReferenceEngine(proof.owner[0])
+        recipe=ActionEvidence(kernel_snapshot(engine),target,outcome_key(SimpleNamespace(board=source.physical)),False)
+    else:
+        recipe=condition_recipe(proof.parent.source,source)
+        if recipe is None:raise Pending('role_filter_condition_receipt_unproved')
     return parent.child(recipe,None)
+
+
+def known_villager_death(proof,target,*,stats=None):
+    """Narrow certified common death kernel, or None for ordinary fallback.
+
+    Five-alive Day1, W1/S1/V3/H0/M0, uniform strategy; target is a villager
+    in BOTH complete Q/P supports. Daytime has no acquisition. The sole
+    continuing death event has separate Q=P=1 chance; action choice is 1/5.
+    Parent full histories are preserved by common projection. Fix target.
+    """
+    from time import perf_counter
+    from werewolf.information_set_forecast import InformationSetForecast
+    from werewolf.evaluation_branch import ActionInputs
+    source=require_structural(proof);b=source.public
+    metrics=stats if stats is not None else Counter()
+    if (type(target)is not int or target not in b.alive or b.winner or b.phase!='day' or b.day!=1 or b.history or len(b.alive)!=5 or b.player_count!=5 or b.initial_medium_count or b.initial_hunter_count or b.initial_seer_count!=1 or 'medium' in b.claims):
+        metrics['declined']+=1;return None
+    rules,strategy=proof.owner[5:7]
+    if (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3:
+        metrics['declined']+=1;return None
+    begin=perf_counter();bit=1<<(target-1)
+    for law in (source.public_state,source.private):
+        for h in law.hypotheses:
+            metrics['preflight_hypothesis_visits']+=1
+            if h.guards or h.roles[0].bit_count()!=1 or h.roles[2].bit_count()!=1 or h.roles[1] or h.roles[3] or any(m&bit for m in h.roles):
+                metrics['declined']+=1;metrics['preflight_seconds']+=perf_counter()-begin;return None
+    metrics['preflight_seconds']+=perf_counter()-begin
+    # Reuse the pure common daytime resolution/projection kernels. Do not call
+    # before_action/reconstruct_child: those attach evidence by replaying a
+    # parent. Evidence is created only by structural_request on explicit read.
+    begin=perf_counter()
+    engine=InformationSetForecast(rules,strategy,exact_renaming=False,retire_uninformative_scans=False)
+    engine.retain_joint_guard_history=True
+    payload=ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical)
+    outcomes=engine.action_policy.outcomes(b,payload,target)
+    if len(outcomes)!=1 or outcomes[0].probability!=1 or outcomes[0].board.winner is not None or outcomes[0].context is None:
+        raise Pending('structural_known_villager_death_kernel_contract')
+    child=engine.action_policy._project_roles(b,payload,outcomes[0],target)
+    metrics['common_resolution_projection_seconds']+=perf_counter()-begin
+    metrics['input_Q_hypotheses']+=len(source.public_state.hypotheses)
+    metrics['input_P_hypotheses']+=len(source.private.hypotheses)
+    metrics['output_Q_hypotheses']+=len(child.public_state.hypotheses)
+    metrics['output_P_hypotheses']+=len(child.private.hypotheses)
+    metrics['certified_deaths']+=1
+    return _mint_structural(child,point_fix(proof.groups,target),proof.owner,parent=proof,selector=('known-villager-death',target),
+        public_mass=F(1),private_mass=F(1),choice_probability=F(1,len(b.alive)))
