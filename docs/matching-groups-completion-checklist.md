@@ -53,7 +53,7 @@ Final dedicated18801 runtime is PID24956, source code357e139, HTTP200 and isolat
 
 ## Late-seven admission (incremental extension)
 
-The general factory now also admits a measured PUBLIC size/strategy region: original count7, survivors5, day2 daytime, one publicly fixed seer (same singleton seer mask in all worlds), no medium/hunter, exactly4 equiprobable public role worlds, initial-seer rule none, day/night random, fake-report selector max, seer disclosure all, no self-bite, unvisited/uniform seer and noncontradictory/uniform fake-seer selection. This is an incremental general-factory performance admission, distinct from the initial two-CO special-seven factory. It is not completion of unrestricted general seven.
+The general factory now also admits a measured PUBLIC size/strategy region: original count7, survivors5, day2 daytime, one publicly fixed living seer (same singleton seer mask in all worlds), one wolf still living in every world, no medium/hunter, exactly4 equiprobable public role worlds, initial-seer rule none, day/night random, fake-report selector max, seer disclosure all, no self-bite, unvisited/uniform seer and noncontradictory/uniform fake-seer selection. This is an incremental general-factory performance admission, distinct from the initial two-CO special-seven factory. It is not completion of unrestricted general seven.
 
 Admission uses no viewer secret. Complete canonical serialization still retains all public/private masses, reports/acquisitions/rosters/observers/physical context; unknown shapes, opaque observers and >120 mappings retain original fallback. General-path new retirement/physical caches remain OFF. Root/hunter factory remains original-count<=6. Default startup remains OFF.
 
