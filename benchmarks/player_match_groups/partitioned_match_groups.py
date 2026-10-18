@@ -8,6 +8,7 @@ physical transitions, action optimization or a game-value evaluator.
 from collections import Counter
 from dataclasses import dataclass, field, replace
 from fractions import Fraction as F
+from time import perf_counter
 from werewolf.exact import (Rules, Strategy, ClaimPolicy, initial_board,
                             replace_worlds, condition_claims)
 from werewolf.seer_acquisition import from_board, normalize, condition_publications, SeerReport
@@ -89,8 +90,10 @@ class SymmetricBaseline:
     mediums: int
     board: object = field(init=False, repr=False)
     state: TrueScanState = field(init=False, repr=False)
+    construction_seconds: float = field(init=False, repr=False)
 
     def __post_init__(self):
+        started = perf_counter()
         if _unsupported_baseline(self.players, self.mediums, self.rules, self.strategy, self.claim_policy):
             raise ValueError('Unsupported constructed baseline')
         board = initial_board(self.players, 1, self.mediums, 1)
@@ -99,6 +102,7 @@ class SymmetricBaseline:
         if isinstance(state, FuturePending):raise ValueError(state.reason)
         object.__setattr__(self, "board", board)
         object.__setattr__(self, "state", state)
+        object.__setattr__(self, "construction_seconds", perf_counter()-started)
 
 
 def make_baseline(players=5, *, mediums=0, rules=None, strategy=None, claim_policy=None):
@@ -168,7 +172,9 @@ class PartitionedMatchGroups:
         self.baseline = baseline
         self.stats = Counter(baseline_constructions=1, joint_normalizations=0,
                              generator_checks=0, full_permutation_searches=0,
-                             comparisons=0, rebuilds=0, updates=0)
+                             symmetry_history_rows_read=0,
+                             comparisons=0, rebuilds=0, updates=0,
+                             baseline_seconds=baseline.construction_seconds)
 
     def start(self):
         b = self.baseline
@@ -176,17 +182,36 @@ class PartitionedMatchGroups:
                              tuple(range(1, b.players+1)), (), (tuple(range(1, b.players+1)),))
 
     def _condition(self, law, predicate):
+        started = perf_counter()
         self.stats['joint_normalizations'] += 1
-        return replace(law, hypotheses=normalize(tuple(h for h in law.hypotheses if predicate(h))))
+        self.stats['normalization_input_hypotheses'] += len(law.hypotheses)
+        try:return replace(law, hypotheses=normalize(tuple(h for h in law.hypotheses if predicate(h))))
+        finally:self.stats['law_condition_seconds'] += perf_counter()-started
+
+    def _reports(self, law, reports):
+        started = perf_counter()
+        self.stats['joint_normalizations'] += 1
+        self.stats['normalization_input_hypotheses'] += len(law.hypotheses)
+        try:return replace(law, hypotheses=condition_publications(law.hypotheses, reports))
+        finally:self.stats['law_condition_seconds'] += perf_counter()-started
 
     def _support_mass(self, law):
         # These are support-only filters: retain exact mass under the original
         # joint law. This is not a fake-report likelihood or physical branch mass.
+        started = perf_counter()
         self.stats['support_mass_scans'] += 1
+        self.stats['support_mass_input_hypotheses'] += len(law.hypotheses)+len(self.baseline.state.hypotheses)
         keys = {(h.roles, h.acquisitions, h.guards, h.attacks) for h in law.hypotheses}
-        return sum((h.mass for h in self.baseline.state.hypotheses if (h.roles, h.acquisitions, h.guards, h.attacks) in keys), F())
+        result = sum((h.mass for h in self.baseline.state.hypotheses if (h.roles, h.acquisitions, h.guards, h.attacks) in keys), F())
+        self.stats['support_mass_seconds'] += perf_counter()-started
+        return result
 
     def update(self, context, event):
+        started = perf_counter()
+        try:return self._update(context, event)
+        finally:self.stats["update_seconds"] += perf_counter()-started
+
+    def _update(self, context, event):
         if type(context) is not SharedContext or context.baseline is not self.baseline:
             return UnsupportedPartition('context belongs to a different baseline/configuration')
         reason = _validate(event, self.baseline.players)
@@ -194,6 +219,7 @@ class PartitionedMatchGroups:
             return UnsupportedPartition(reason)
         b = self.baseline
         public, private, claims, alive, scope = context.public, context.private, context.claims, context.alive, context.scope
+        event_started = perf_counter()
         try:
             if event.kind == 'co':
                 if alive != tuple(range(1, b.players+1)) or scope != 'public':
@@ -210,17 +236,16 @@ class PartitionedMatchGroups:
                     return UnsupportedPartition('no initial acquisition; slot1 reporting eligibility is unsupported')
                 if any(p not in alive or claims[p-1] != 'seer' for p, t, c, d in event.rows):
                     return UnsupportedPartition('public report requires living declared seer')
+                self.stats['report_duplicate_history_rows_read'] += sum(len(e.rows) for e in context.events if e.kind == 'report')
                 previous = {(r[0], r[3]) for e in context.events if e.kind == 'report' for r in e.rows}
                 if any((p, d) in previous for p, t, c, d in event.rows):
                     return UnsupportedPartition('report correction requires baseline rebuild')
                 reports = tuple(SeerReport(d, event.day, p, t, c) for p, t, c, d in event.rows)
-                self.stats['joint_normalizations'] += 1
-                public = replace(public, hypotheses=condition_publications(public.hypotheses, reports))
+                public = self._reports(public, reports)
                 if private is context.public:
                     private = public
                 else:
-                    self.stats['joint_normalizations'] += 1
-                    private = replace(private, hypotheses=condition_publications(private.hypotheses, reports))
+                    private = self._reports(private, reports)
             elif event.kind == 'death':
                 if any(p not in alive for p, in event.rows):
                     return UnsupportedPartition('death observation must remove a living original player')
@@ -245,8 +270,23 @@ class PartitionedMatchGroups:
                 private = self._condition(private, lambda h: any((a.player, a.target, a.color, a.day) == (p, t, c, d) for a in h.acquisitions))
         except ValueError as error:
             return UnsupportedPartition('zero/invalid joint support: '+str(error))
+        finally:
+            self.stats['event_execution_seconds'] += perf_counter()-event_started
+        events = context.events+(event,)
+        partition_started = perf_counter()
+        groups = self._refine_groups(context, event)
+        self.stats['partition_seconds'] += perf_counter()-partition_started
+        self.stats['updates'] += 1
+        mass = self._support_mass(public)
+        own_mass = mass if private is public else self._support_mass(private)
+        return SharedContext(b, public, private, claims, alive, events, tuple(groups), scope, mass, own_mass)
+
+    def _refine_groups(self, context, event):
+        b = self.baseline
         events = context.events+(event,)
         identity = tuple(range(1, b.players+1))
+        history_size = sum(len(e.rows) for e in events)
+        self.stats['symmetry_history_rows_read'] += history_size
         reference = tuple(_map_event(e, identity) for e in events)
         groups = []
         # Only inherited within-block swaps are eligible. No merging, arbitrary
@@ -261,16 +301,14 @@ class PartitionedMatchGroups:
                     ids = list(identity); q = group[0]
                     ids[p-1], ids[q-1] = ids[q-1], ids[p-1]
                     self.stats['generator_checks'] += 1
+                    self.stats['symmetry_history_rows_read'] += history_size
                     if tuple(_map_event(e, ids) for e in events) == reference:
                         group.append(p)
                         break
                 else:
                     children.append([p])
             groups.extend(tuple(g) for g in children)
-        self.stats['updates'] += 1
-        mass = self._support_mass(public)
-        own_mass = mass if private is public else self._support_mass(private)
-        return SharedContext(b, public, private, claims, alive, events, tuple(groups), scope, mass, own_mass)
+        return tuple(groups)
 
     def rebuild(self, active_program):
         self.stats['rebuilds'] += 1
@@ -284,15 +322,19 @@ class PartitionedMatchGroups:
     def rows(self, context):
         if context.baseline is not self.baseline:
             raise ValueError('Different baseline')
+        started = perf_counter()
         self.stats['role_rate_builds'] += 1
+        self.stats['role_rate_input_hypotheses'] += len(context.private.hypotheses)
         law = context.private
         rates = [[F() for _ in range(5)] for p in range(self.baseline.players)]
         for h in law.hypotheses:
             for p in range(self.baseline.players):
                 r = next((r for r, mask in enumerate(h.roles) if mask & (1<<p)), 4)
                 rates[p][r] += h.mass
-        return tuple(PlayerComparisonInfo(p, context, i, tuple(rates[p-1]))
+        result = tuple(PlayerComparisonInfo(p, context, i, tuple(rates[p-1]))
                      for i, group in enumerate(context.groups) for p in group)
+        self.stats['role_rate_seconds'] += perf_counter()-started
+        return result
 
     def equivalent(self, left, right):
         self.stats['comparisons'] += 1
