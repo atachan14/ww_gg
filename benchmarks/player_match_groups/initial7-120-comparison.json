@@ -1,0 +1,32 @@
+{
+  "status": "unverified",
+  "recorded_utc": "2026-10-18T20:05:52.356155+00:00",
+  "workers": [
+    {
+      "kind": "new",
+      "status": "unverified",
+      "reason": "external_120s_timeout",
+      "process_wall_seconds": 120.09532309998758,
+      "saved_status": "unverified",
+      "saved_reason": "calculation_time_limit",
+      "saved_elapsed_seconds": 116.08295399998315,
+      "comparison_scope": {
+        "Forecast": false,
+        "Table": false,
+        "joint": false,
+        "branches": false,
+        "representative_cold": false
+      },
+      "note": "120s supervisor stopped process after completed atomic checkpoint at116.083s; no retry or reference run"
+    }
+  ],
+  "full_initial_retry_count": 1,
+  "reason": "external_120s_timeout",
+  "reference_executed": false,
+  "note": "No further attempt; incomplete new result cannot authorize reference worker",
+  "notes": [
+    "The calculation exhausted its115s budget; full exact checkpoint and identity census were saved before worker shutdown.",
+    "The worker did not finish exiting by the120s process timeout and was stopped by subprocess.run; external timeout is distinct from the saved calculation stop.",
+    "No reference was started; no further initial trial was run."
+  ]
+}
