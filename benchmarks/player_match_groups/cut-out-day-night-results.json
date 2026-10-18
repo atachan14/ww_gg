@@ -1,0 +1,1011 @@
+{
+  "recorded_utc": "2026-10-18T07:36:37.379107+00:00",
+  "head_before_evidence_commit": "cfcc4465b8a48c4b024faa3adbd1ed3571393bc7",
+  "sources_sha256": {
+    "benchmarks/player_match_groups/cut_out_day_night.py": "e7cf66726614e7169e1a325e6b435273b428a657c52eff4bd2ae820a6a65ae71",
+    "tests/test_cut_out_day_night.py": "36f65d2214334839cac0d17e37d244906d2b3b4244f4c0243245ee5675a66c52"
+  },
+  "tests": 4,
+  "test_seconds_limit": 20,
+  "test_log": ".artifacts\\cut-out-day-night-final.log",
+  "cases": [
+    {
+      "players": 4,
+      "case": "witness",
+      "initial_adapter_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0033007000165525824,
+        "official_prior_seconds": 0.00044800000614486635,
+        "nominal_initial_worlds": 24,
+        "public_worlds": 12,
+        "public_hypotheses": 12,
+        "constructive_events": 1,
+        "event_rows_read": 1,
+        "partition_positions_read": 4,
+        "partition_seconds": 1.279998105019331e-05
+      },
+      "grouped_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 2,
+        "wolf_information_groups": 6,
+        "night_candidates": 8,
+        "full_night_candidates": 12,
+        "labelled_night_choices": 12,
+        "transport_hypotheses": 12,
+        "day_joint_hypotheses_scanned": 24,
+        "day_kernel_seconds": 0.0006197000038810074,
+        "day_posterior_seconds": 0.0003672000311780721,
+        "day_template_seconds": 0.00036100001307204366,
+        "partition_positions": 64,
+        "partition_seconds": 8.830000297166407e-05,
+        "actor_condition_seconds": 0.0004726999904960394,
+        "actor_condition_input_hypotheses": 16,
+        "night_policy_calls": 6,
+        "night_policy_seconds": 0.000982600060524419,
+        "physical_kernel_seconds": 0.004376900033093989,
+        "kernel_input_hypotheses": 20,
+        "kernel_output_hypotheses": 36,
+        "transport_seconds": 0.0006247000419534743,
+        "public_merge_input_hypotheses": 48,
+        "public_observation_merge_seconds": 0.0017381000216118991,
+        "acquisition_cache_entries": 6,
+        "evaluation_seconds": 0.010121500003151596
+      },
+      "full_labelled_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 4,
+        "wolf_information_groups": 12,
+        "night_candidates": 24,
+        "full_night_candidates": 24,
+        "labelled_night_choices": 24,
+        "transport_hypotheses": 0,
+        "day_joint_hypotheses_scanned": 48,
+        "day_kernel_seconds": 0.0011263999913353473,
+        "day_posterior_seconds": 0.0007072000007610768,
+        "day_template_seconds": 0.0005524000152945518,
+        "partition_positions": 128,
+        "partition_seconds": 0.000175799970747903,
+        "actor_condition_seconds": 0.0008215000270865858,
+        "actor_condition_input_hypotheses": 36,
+        "night_policy_calls": 12,
+        "night_policy_seconds": 0.0018902999872807413,
+        "physical_kernel_seconds": 0.013237500126706436,
+        "kernel_input_hypotheses": 72,
+        "kernel_output_hypotheses": 120,
+        "transport_seconds": 2.3499975213781e-05,
+        "public_merge_input_hypotheses": 120,
+        "public_observation_merge_seconds": 0.0035510000016074628,
+        "acquisition_cache_entries": 12,
+        "evaluation_seconds": 0.02330280002206564
+      },
+      "optional_day_label_transport": {
+        "transport_hypotheses": 76,
+        "transport_seconds": 0.0026698000147007406
+      },
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/4"
+        },
+        {
+          "winner": "wolf",
+          "mass": "3/4"
+        }
+      ],
+      "day_classes": [
+        {
+          "targets": [
+            1,
+            2,
+            3
+          ],
+          "multiplicity": 3,
+          "selection_mass": "3/4"
+        },
+        {
+          "targets": [
+            4
+          ],
+          "multiplicity": 1,
+          "selection_mass": "1/4"
+        }
+      ],
+      "night_choice_classes": [
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/2",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            4
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/2",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 4,
+          "targets": [
+            2
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/2",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 4,
+          "targets": [
+            4
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/2",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 8,
+          "targets": [
+            2,
+            3
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 1,
+          "targets": [
+            2,
+            3
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 2,
+          "targets": [
+            1,
+            3
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 4,
+          "targets": [
+            1,
+            2
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1",
+          "multiplicity": 2
+        }
+      ],
+      "complete_labelled_paths_equal": true
+    },
+    {
+      "players": 5,
+      "case": "witness",
+      "initial_adapter_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.002419900003587827,
+        "official_prior_seconds": 0.0006671999872196466,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 24,
+        "public_hypotheses": 24,
+        "constructive_events": 1,
+        "event_rows_read": 1,
+        "partition_positions_read": 5,
+        "partition_seconds": 1.09999964479357e-05
+      },
+      "grouped_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 2,
+        "wolf_information_groups": 8,
+        "night_candidates": 11,
+        "full_night_candidates": 24,
+        "labelled_night_choices": 24,
+        "transport_hypotheses": 84,
+        "day_joint_hypotheses_scanned": 48,
+        "day_kernel_seconds": 0.0010255000088363886,
+        "day_posterior_seconds": 0.0006847000040579587,
+        "day_template_seconds": 0.0005357000045478344,
+        "partition_positions": 100,
+        "partition_seconds": 0.00011039999662898481,
+        "actor_condition_seconds": 0.0006622999790124595,
+        "actor_condition_input_hypotheses": 33,
+        "night_policy_calls": 8,
+        "night_policy_seconds": 0.001310099964030087,
+        "physical_kernel_seconds": 0.009867499931715429,
+        "kernel_input_hypotheses": 42,
+        "kernel_output_hypotheses": 96,
+        "transport_seconds": 0.003264499973738566,
+        "public_merge_input_hypotheses": 180,
+        "public_observation_merge_seconds": 0.005092699982924387,
+        "acquisition_cache_entries": 8,
+        "evaluation_seconds": 0.02409519997308962
+      },
+      "full_labelled_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 5,
+        "wolf_information_groups": 20,
+        "night_candidates": 60,
+        "full_night_candidates": 60,
+        "labelled_night_choices": 60,
+        "transport_hypotheses": 0,
+        "day_joint_hypotheses_scanned": 120,
+        "day_kernel_seconds": 0.0023692999966442585,
+        "day_posterior_seconds": 0.0015699000214226544,
+        "day_template_seconds": 0.0011702000047080219,
+        "partition_positions": 250,
+        "partition_seconds": 0.0002988000924233347,
+        "actor_condition_seconds": 0.002011000004131347,
+        "actor_condition_input_hypotheses": 96,
+        "night_policy_calls": 20,
+        "night_policy_seconds": 0.004020499967737123,
+        "physical_kernel_seconds": 0.052911399863660336,
+        "kernel_input_hypotheses": 288,
+        "kernel_output_hypotheses": 612,
+        "transport_seconds": 6.0800055507570505e-05,
+        "public_merge_input_hypotheses": 612,
+        "public_observation_merge_seconds": 0.01569900001049973,
+        "acquisition_cache_entries": 20,
+        "evaluation_seconds": 0.08588810000219382
+      },
+      "optional_day_label_transport": {
+        "transport_hypotheses": 441,
+        "transport_seconds": 0.013650700013386086
+      },
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "mass": "4/5"
+        }
+      ],
+      "day_classes": [
+        {
+          "targets": [
+            1,
+            2,
+            3,
+            4
+          ],
+          "multiplicity": 4,
+          "selection_mass": "4/5"
+        },
+        {
+          "targets": [
+            5
+          ],
+          "multiplicity": 1,
+          "selection_mass": "1/5"
+        }
+      ],
+      "night_choice_classes": [
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            3,
+            4
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            5
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 4,
+          "targets": [
+            2,
+            4
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 4,
+          "targets": [
+            5
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 8,
+          "targets": [
+            2,
+            3
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 8,
+          "targets": [
+            5
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 16,
+          "targets": [
+            2,
+            3,
+            4
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1",
+          "multiplicity": 3
+        },
+        {
+          "execution_target": 5,
+          "wolf_mask": 1,
+          "targets": [
+            2,
+            3,
+            4
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1",
+          "multiplicity": 3
+        },
+        {
+          "execution_target": 5,
+          "wolf_mask": 2,
+          "targets": [
+            1,
+            3,
+            4
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1",
+          "multiplicity": 3
+        },
+        {
+          "execution_target": 5,
+          "wolf_mask": 4,
+          "targets": [
+            1,
+            2,
+            4
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1",
+          "multiplicity": 3
+        },
+        {
+          "execution_target": 5,
+          "wolf_mask": 8,
+          "targets": [
+            1,
+            2,
+            3
+          ],
+          "actor_mass": "1/4",
+          "selection_mass": "1",
+          "multiplicity": 3
+        }
+      ],
+      "complete_labelled_paths_equal": true
+    },
+    {
+      "players": 5,
+      "case": "same_reports",
+      "initial_adapter_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0016592999745626003,
+        "official_prior_seconds": 0.0003198999911546707,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 6,
+        "public_hypotheses": 6,
+        "constructive_events": 2,
+        "event_rows_read": 4,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.759998849593103e-05
+      },
+      "grouped_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 3,
+        "wolf_information_groups": 5,
+        "night_candidates": 12,
+        "full_night_candidates": 15,
+        "labelled_night_choices": 15,
+        "transport_hypotheses": 21,
+        "day_joint_hypotheses_scanned": 18,
+        "day_kernel_seconds": 0.0004752000095322728,
+        "day_posterior_seconds": 0.00026619998971000314,
+        "day_template_seconds": 0.00025949999690055847,
+        "partition_positions": 100,
+        "partition_seconds": 0.00011819999781437218,
+        "actor_condition_seconds": 0.0003816999960690737,
+        "actor_condition_input_hypotheses": 15,
+        "night_policy_calls": 5,
+        "night_policy_seconds": 0.0006881000008434057,
+        "physical_kernel_seconds": 0.008516700007021427,
+        "kernel_input_hypotheses": 36,
+        "kernel_output_hypotheses": 96,
+        "transport_seconds": 0.0009239000210072845,
+        "public_merge_input_hypotheses": 117,
+        "public_observation_merge_seconds": 0.0036868999886792153,
+        "acquisition_cache_entries": 5,
+        "evaluation_seconds": 0.0165776000067126
+      },
+      "full_labelled_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 5,
+        "wolf_information_groups": 8,
+        "night_candidates": 24,
+        "full_night_candidates": 24,
+        "labelled_night_choices": 24,
+        "transport_hypotheses": 0,
+        "day_joint_hypotheses_scanned": 30,
+        "day_kernel_seconds": 0.0009671999723650515,
+        "day_posterior_seconds": 0.0005502999993041158,
+        "day_template_seconds": 0.00033300003269687295,
+        "partition_positions": 165,
+        "partition_seconds": 0.0001927000703290105,
+        "actor_condition_seconds": 0.0005794000171590596,
+        "actor_condition_input_hypotheses": 24,
+        "night_policy_calls": 8,
+        "night_policy_seconds": 0.0009830000344663858,
+        "physical_kernel_seconds": 0.015175199951045215,
+        "kernel_input_hypotheses": 72,
+        "kernel_output_hypotheses": 180,
+        "transport_seconds": 2.190002123825252e-05,
+        "public_merge_input_hypotheses": 180,
+        "public_observation_merge_seconds": 0.005948500009253621,
+        "acquisition_cache_entries": 8,
+        "evaluation_seconds": 0.026657999987946823
+      },
+      "optional_day_label_transport": {
+        "transport_hypotheses": 66,
+        "transport_seconds": 0.00268480007071048
+      },
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "mass": "4/5"
+        }
+      ],
+      "day_classes": [
+        {
+          "targets": [
+            1,
+            2
+          ],
+          "multiplicity": 2,
+          "selection_mass": "2/5"
+        },
+        {
+          "targets": [
+            3
+          ],
+          "multiplicity": 1,
+          "selection_mass": "1/5"
+        },
+        {
+          "targets": [
+            4,
+            5
+          ],
+          "multiplicity": 2,
+          "selection_mass": "2/5"
+        }
+      ],
+      "night_choice_classes": [
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            4,
+            5
+          ],
+          "actor_mass": "1",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 1,
+          "targets": [
+            2
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 1,
+          "targets": [
+            4,
+            5
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 2,
+          "targets": [
+            1
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 2,
+          "targets": [
+            4,
+            5
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 1,
+          "targets": [
+            2
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 1,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 1,
+          "targets": [
+            5
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 2,
+          "targets": [
+            1
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 2,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 4,
+          "wolf_mask": 2,
+          "targets": [
+            5
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        }
+      ],
+      "complete_labelled_paths_equal": true
+    },
+    {
+      "players": 5,
+      "case": "single",
+      "initial_adapter_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0022822000028099865,
+        "official_prior_seconds": 0.0003938000008929521,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 9,
+        "public_hypotheses": 9,
+        "constructive_events": 2,
+        "event_rows_read": 2,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.920000067912042e-05
+      },
+      "grouped_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 3,
+        "wolf_information_groups": 8,
+        "night_candidates": 18,
+        "full_night_candidates": 24,
+        "labelled_night_choices": 24,
+        "transport_hypotheses": 36,
+        "day_joint_hypotheses_scanned": 27,
+        "day_kernel_seconds": 0.000596500001847744,
+        "day_posterior_seconds": 0.00034659996163100004,
+        "day_template_seconds": 0.0002476000227034092,
+        "partition_positions": 120,
+        "partition_seconds": 0.00014540005940943956,
+        "actor_condition_seconds": 0.0006265999982133508,
+        "actor_condition_input_hypotheses": 24,
+        "night_policy_calls": 8,
+        "night_policy_seconds": 0.0011154999665450305,
+        "physical_kernel_seconds": 0.011527899972861633,
+        "kernel_input_hypotheses": 54,
+        "kernel_output_hypotheses": 126,
+        "transport_seconds": 0.0015994000423233956,
+        "public_merge_input_hypotheses": 162,
+        "public_observation_merge_seconds": 0.005288100044708699,
+        "acquisition_cache_entries": 8,
+        "evaluation_seconds": 0.023566099989693612
+      },
+      "full_labelled_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 5,
+        "wolf_information_groups": 12,
+        "night_candidates": 36,
+        "full_night_candidates": 36,
+        "labelled_night_choices": 36,
+        "transport_hypotheses": 0,
+        "day_joint_hypotheses_scanned": 45,
+        "day_kernel_seconds": 0.0010617999942041934,
+        "day_posterior_seconds": 0.0006572999991476536,
+        "day_template_seconds": 0.00042389999725855887,
+        "partition_positions": 200,
+        "partition_seconds": 0.0002476999943610281,
+        "actor_condition_seconds": 0.0009142000344581902,
+        "actor_condition_input_hypotheses": 36,
+        "night_policy_calls": 12,
+        "night_policy_seconds": 0.0016771999653428793,
+        "physical_kernel_seconds": 0.023212900036014616,
+        "kernel_input_hypotheses": 108,
+        "kernel_output_hypotheses": 270,
+        "transport_seconds": 3.59999539796263e-05,
+        "public_merge_input_hypotheses": 270,
+        "public_observation_merge_seconds": 0.008426300046266988,
+        "acquisition_cache_entries": 12,
+        "evaluation_seconds": 0.03954840000369586
+      },
+      "optional_day_label_transport": {
+        "transport_hypotheses": 114,
+        "transport_seconds": 0.00424329997622408
+      },
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "mass": "4/5"
+        }
+      ],
+      "day_classes": [
+        {
+          "targets": [
+            1
+          ],
+          "multiplicity": 1,
+          "selection_mass": "1/5"
+        },
+        {
+          "targets": [
+            2,
+            4,
+            5
+          ],
+          "multiplicity": 3,
+          "selection_mass": "3/5"
+        },
+        {
+          "targets": [
+            3
+          ],
+          "multiplicity": 1,
+          "selection_mass": "1/5"
+        }
+      ],
+      "night_choice_classes": [
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            4,
+            5
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 2,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 8,
+          "targets": [
+            2,
+            5
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 8,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 16,
+          "targets": [
+            2,
+            4
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 1,
+          "wolf_mask": 16,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 2,
+          "wolf_mask": 8,
+          "targets": [
+            1
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 2,
+          "wolf_mask": 8,
+          "targets": [
+            5
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 2,
+          "wolf_mask": 8,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 2,
+          "wolf_mask": 16,
+          "targets": [
+            1
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 2,
+          "wolf_mask": 16,
+          "targets": [
+            4
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 2,
+          "wolf_mask": 16,
+          "targets": [
+            3
+          ],
+          "actor_mass": "1/2",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 2,
+          "targets": [
+            1
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 2,
+          "targets": [
+            4,
+            5
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 8,
+          "targets": [
+            1
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 8,
+          "targets": [
+            2,
+            5
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 16,
+          "targets": [
+            1
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "1/3",
+          "multiplicity": 1
+        },
+        {
+          "execution_target": 3,
+          "wolf_mask": 16,
+          "targets": [
+            2,
+            4
+          ],
+          "actor_mass": "1/3",
+          "selection_mass": "2/3",
+          "multiplicity": 2
+        }
+      ],
+      "complete_labelled_paths_equal": true
+    }
+  ],
+  "reference": "exact.action_outcomes + project_private + wolf_information_groups + wolf_policy + physical_actor_outcomes; full labels, no sharing",
+  "scope": "4/5 initial public uniform W1 H0, execution + one night, stop before next publication",
+  "initial_prior_reallocated": false,
+  "exchange_audit_in_runtime": false,
+  "full_future_solver": false,
+  "ordinary_route_changed": false,
+  "performance_claim": false
+}
