@@ -1,0 +1,428 @@
+{
+  "recorded_utc": "2026-10-18T13:03:40.529914+00:00",
+  "tested_head": "c4fb959d59677a0f182cc7d59721b2bd224e2b87",
+  "correctness_requests": [
+    {
+      "target": "tests.test_cut_out_white_joint_max.WhiteJointMaxTests.test_public_CO_and_secret_support_neighbors_are_refused",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 293,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.8659476999891922,
+      "peak_working_set_bytes": 38166528,
+      "fresh_process_wall_seconds": 0.9370000000053551,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_white_joint_max.WhiteJointMaxTests.test_unknown_or_impossible_own_initial_white_is_not_filled",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 0,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.37519729998894036,
+      "peak_working_set_bytes": 36229120,
+      "fresh_process_wall_seconds": 0.4379999999946449,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_no_read_night_max.NoReadNightMaxTests.test_actual_profile_read_is_never_an_independence_certificate",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 0,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.3443294999888167,
+      "peak_working_set_bytes": 35807232,
+      "fresh_process_wall_seconds": 0.40600000001722947,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_no_read_night_max.NoReadNightMaxTests.test_proof_scope_is_five_player_none_no_public_abilities",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 0,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.3494568000023719,
+      "peak_working_set_bytes": 36311040,
+      "fresh_process_wall_seconds": 0.40599999998812564,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_triple_max.TripleMaxTests.test_three_max_settings_are_preserved_without_inventing_fake_seer_max",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 73,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.9968189999926835,
+      "peak_working_set_bytes": 36298752,
+      "fresh_process_wall_seconds": 1.0469999999913853,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_active_report_max.ActiveReportMaxTests.test_entry_preserves_two_medium_co_and_existing_rules",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 25,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.44956129998899996,
+      "peak_working_set_bytes": 36040704,
+      "fresh_process_wall_seconds": 0.5160000000032596,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_saved_recipes.CutOutSavedRecipeTests.test_unreachable_observation_invalidates_instead_of_filling_or_reusing",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 0,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.4341548999946099,
+      "peak_working_set_bytes": 36270080,
+      "fresh_process_wall_seconds": 0.5,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_max_game.MaxCutOutTests.test_scope_is_sealed_and_uniform_entry_stays_uniform",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 0,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.3405491999874357,
+      "peak_working_set_bytes": 35770368,
+      "fresh_process_wall_seconds": 0.39100000000325963,
+      "suite": "gate_smoke"
+    },
+    {
+      "target": "tests.test_cut_out_saved_recipes.CutOutSavedRecipeTests.test_all_labelled_branches_have_saved_origin_recipes_roles_and_mass",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 0,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 1.5776513000018895,
+      "peak_working_set_bytes": 40923136,
+      "fresh_process_wall_seconds": 1.6559999999881256,
+      "suite": "integration_core"
+    },
+    {
+      "target": "tests.test_cut_out_inherited_groups.InheritedGroupTests.test_recursive_medium_reports_and_private_history_preserve_full_groups",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 452,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 4.371720700000878,
+      "peak_working_set_bytes": 46104576,
+      "fresh_process_wall_seconds": 4.437000000005355,
+      "suite": "integration_core"
+    },
+    {
+      "target": "tests.test_cut_out_inherited_groups.InheritedGroupTests.test_sealed_initial_CO_and_public_seer_report_children",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 302,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 1.167188100022031,
+      "peak_working_set_bytes": 41246720,
+      "fresh_process_wall_seconds": 1.235000000015134,
+      "suite": "integration_core"
+    },
+    {
+      "target": "tests.test_cut_out_latent_max.LatentMaxTests.test_nontrivial_public_max_and_private_scan_share_policy",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 845,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 5.577593099995283,
+      "peak_working_set_bytes": 61063168,
+      "fresh_process_wall_seconds": 5.73399999999674,
+      "suite": "integration_core"
+    },
+    {
+      "target": "tests.test_cut_out_max_game.MaxCutOutTests.test_private_medium_does_not_select_private_best_or_reveal_role_to_wolf",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 352,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 1.2793608999927528,
+      "peak_working_set_bytes": 42749952,
+      "fresh_process_wall_seconds": 1.3439999999827705,
+      "suite": "integration_core"
+    },
+    {
+      "target": "tests.test_cut_out_active_report_max.ActiveReportMaxTests.test_candidate_identity_ties_and_private_posterior_recipes",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 335,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 3.085862999985693,
+      "peak_working_set_bytes": 45735936,
+      "fresh_process_wall_seconds": 3.172000000020489,
+      "suite": "integration_core"
+    },
+    {
+      "target": "tests.test_cut_out_white_joint_max.WhiteJointMaxTests.test_complete_private_white_contexts_and_current_scan_match",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 1175,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 38.16885829999228,
+      "peak_working_set_bytes": 155992064,
+      "fresh_process_wall_seconds": 38.280999999988126,
+      "suite": "integration_core"
+    },
+    {
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law",
+      "tests": 1,
+      "monitor": {
+        "guarded_entries": 0,
+        "recursive_canonical_calls": 0,
+        "recursive_CandidateRules_calls": 0,
+        "root_rebuild_calls": 0
+      },
+      "worker_seconds": 0.7718744000012521,
+      "peak_working_set_bytes": 42643456,
+      "fresh_process_wall_seconds": 0.8440000000118744,
+      "suite": "integration_core"
+    }
+  ],
+  "correctness_tests": 16,
+  "correctness_suite_seconds": 61.344000000011874,
+  "end_to_end_pairs": [
+    {
+      "case": "uniform4",
+      "new": {
+        "case": "uniform4",
+        "mode": "new",
+        "signature": {
+          "forecast": "5c379cb8fe5645cf0ff8b730d11532ce88615b49f5fe3015d9e3bce7a65be57e",
+          "table": "2ce02f00d66830effe3e4025f3c137ee0235a015f2a95720b5ebd745021c9cb6",
+          "root_joint": "0302d3b4f4ac3031edba3af8ed2c599b790a3349e99a4a7c133ecec2264d38ec",
+          "branch": "0fc71eba6185e4f44c396b8457649699643ad5703423d19066e0b274659f2a71"
+        },
+        "village_win": "1/4",
+        "phases": {
+          "startup_and_import_seconds": 0.339934199990239,
+          "constructed_prior_seconds": 0.017848500021500513,
+          "forecast_including_root_actions_horizons_seconds": 0.01649300000281073,
+          "table_seconds": 0.00274389999685809,
+          "one_cold_branch_seconds": 0.0013310999784152955
+        },
+        "worker_start_to_branch_seconds": 0.3783506999898236,
+        "phase_measurement": "one fresh process, unmocked; startup begins at module import, parent process wall also recorded",
+        "branch_execution_target": 2,
+        "peak_working_set_bytes": 35504128,
+        "fresh_process_wall_seconds": 0.4370000000053551
+      },
+      "old": {
+        "case": "uniform4",
+        "mode": "old",
+        "signature": {
+          "forecast": "5c379cb8fe5645cf0ff8b730d11532ce88615b49f5fe3015d9e3bce7a65be57e",
+          "table": "2ce02f00d66830effe3e4025f3c137ee0235a015f2a95720b5ebd745021c9cb6",
+          "root_joint": "0302d3b4f4ac3031edba3af8ed2c599b790a3349e99a4a7c133ecec2264d38ec",
+          "branch": "0fc71eba6185e4f44c396b8457649699643ad5703423d19066e0b274659f2a71"
+        },
+        "village_win": "1/4",
+        "phases": {
+          "startup_and_import_seconds": 0.3111923999967985,
+          "constructed_prior_seconds": 0.016980100015643984,
+          "forecast_including_root_actions_horizons_seconds": 0.017026199988322333,
+          "table_seconds": 0.0023794000153429806,
+          "one_cold_branch_seconds": 0.0012605999945662916
+        },
+        "worker_start_to_branch_seconds": 0.3488387000106741,
+        "phase_measurement": "one fresh process, unmocked; startup begins at module import, parent process wall also recorded",
+        "branch_execution_target": 2,
+        "peak_working_set_bytes": 35033088,
+        "fresh_process_wall_seconds": 0.42199999999138527
+      },
+      "all_semantic_fingerprints_equal": true,
+      "old_over_new_process_wall_ratio": 0.965675057176691
+    },
+    {
+      "case": "seer5",
+      "new": {
+        "case": "seer5",
+        "mode": "new",
+        "signature": {
+          "forecast": "18b34d2478ef710bb43b0e39ff5da50dcba1903148f69cd138be88b9eabe1a25",
+          "table": "29ac23be1b523a16af7f860dd1131a6ee81a162b941fe5188a476c9968d6ab2e",
+          "root_joint": "1500a862daaf791540d75138840443e7a5aff4777d3674b680317dda428b6371",
+          "branch": "f183d74795b9f282f4937935b770886692fbc97c033769f52590c2cffb234936"
+        },
+        "village_win": "2/3",
+        "phases": {
+          "startup_and_import_seconds": 0.33848760000546463,
+          "constructed_prior_seconds": 0.025077199999941513,
+          "forecast_including_root_actions_horizons_seconds": 0.18016459999489598,
+          "table_seconds": 0.0037243000115267932,
+          "one_cold_branch_seconds": 0.002686599997105077
+        },
+        "worker_start_to_branch_seconds": 0.550140300008934,
+        "phase_measurement": "one fresh process, unmocked; startup begins at module import, parent process wall also recorded",
+        "branch_execution_target": 2,
+        "peak_working_set_bytes": 35524608,
+        "fresh_process_wall_seconds": 0.6089999999967404
+      },
+      "old": {
+        "case": "seer5",
+        "mode": "old",
+        "signature": {
+          "forecast": "18b34d2478ef710bb43b0e39ff5da50dcba1903148f69cd138be88b9eabe1a25",
+          "table": "29ac23be1b523a16af7f860dd1131a6ee81a162b941fe5188a476c9968d6ab2e",
+          "root_joint": "1500a862daaf791540d75138840443e7a5aff4777d3674b680317dda428b6371",
+          "branch": "f183d74795b9f282f4937935b770886692fbc97c033769f52590c2cffb234936"
+        },
+        "village_win": "2/3",
+        "phases": {
+          "startup_and_import_seconds": 0.3285006000078283,
+          "constructed_prior_seconds": 0.01943260000552982,
+          "forecast_including_root_actions_horizons_seconds": 0.20086290000472218,
+          "table_seconds": 0.004217499983496964,
+          "one_cold_branch_seconds": 0.0026185000024270266
+        },
+        "worker_start_to_branch_seconds": 0.5556321000040043,
+        "phase_measurement": "one fresh process, unmocked; startup begins at module import, parent process wall also recorded",
+        "branch_execution_target": 2,
+        "peak_working_set_bytes": 35491840,
+        "fresh_process_wall_seconds": 0.625
+      },
+      "all_semantic_fingerprints_equal": true,
+      "old_over_new_process_wall_ratio": 1.026272578002209
+    },
+    {
+      "case": "active5",
+      "new": {
+        "case": "active5",
+        "mode": "new",
+        "signature": {
+          "forecast": "da60f4d522a538bae26f5542950b7bdc4c3dec65524207f1336055b3460f3bba",
+          "table": "92f13d406b28f34161af15b06d0f8650f2920616f227b34f498b68f413ef0168",
+          "root_joint": "b101ffec1b6376e07e4fd57715fcc4e42bf2540101f2c28d27119595dca168d2",
+          "branch": "7a8cbde68f6bc34a0c4a91380658905b8757b0f90e5259186b21de8175bdac82"
+        },
+        "village_win": "1",
+        "phases": {
+          "startup_and_import_seconds": 0.3254673999908846,
+          "constructed_prior_seconds": 0.01911110000219196,
+          "forecast_including_root_actions_horizons_seconds": 0.4178883999993559,
+          "table_seconds": 0.005549099994823337,
+          "one_cold_branch_seconds": 0.002203600015491247
+        },
+        "worker_start_to_branch_seconds": 0.770219600002747,
+        "phase_measurement": "one fresh process, unmocked; startup begins at module import, parent process wall also recorded",
+        "branch_execution_target": 3,
+        "peak_working_set_bytes": 36143104,
+        "fresh_process_wall_seconds": 0.8289999999979045
+      },
+      "old": {
+        "case": "active5",
+        "mode": "old",
+        "signature": {
+          "forecast": "da60f4d522a538bae26f5542950b7bdc4c3dec65524207f1336055b3460f3bba",
+          "table": "92f13d406b28f34161af15b06d0f8650f2920616f227b34f498b68f413ef0168",
+          "root_joint": "b101ffec1b6376e07e4fd57715fcc4e42bf2540101f2c28d27119595dca168d2",
+          "branch": "7a8cbde68f6bc34a0c4a91380658905b8757b0f90e5259186b21de8175bdac82"
+        },
+        "village_win": "1",
+        "phases": {
+          "startup_and_import_seconds": 0.3148194999957923,
+          "constructed_prior_seconds": 0.018252999987453222,
+          "forecast_including_root_actions_horizons_seconds": 0.38382330001331866,
+          "table_seconds": 0.003456300008110702,
+          "one_cold_branch_seconds": 0.0021026000031270087
+        },
+        "worker_start_to_branch_seconds": 0.7224547000078019,
+        "phase_measurement": "one fresh process, unmocked; startup begins at module import, parent process wall also recorded",
+        "branch_execution_target": 3,
+        "peak_working_set_bytes": 36044800,
+        "fresh_process_wall_seconds": 0.7960000000020955
+      },
+      "all_semantic_fingerprints_equal": true,
+      "old_over_new_process_wall_ratio": 0.9601930036237727
+    }
+  ],
+  "total_driver_seconds": 65.09400000001187,
+  "limits": {
+    "per_worker_seconds": 60,
+    "overall_seconds": 270,
+    "working_set_bytes": 1500000000
+  },
+  "scope": "existing4/5 comparison only; no normal UI publication",
+  "interpretation": "correctness suite is not product latency; e2e pairs are separate single unmocked cold-process samples, not a benchmark distribution",
+  "explicit_old_oracle": "OfficialLabelledEngine and H1 read-control are intentional references outside actual-path monitor",
+  "no_heavy_measurement": true,
+  "full_project_suite_run": false,
+  "existing62_run": false,
+  "tested_source_sha256": {
+    "benchmarks/player_match_groups/constructive_cut_out.py": "77f23a041e64f55fb6288523630764070349b0ab427d28d3597e130d71197011",
+    "benchmarks/player_match_groups/cut_out_active_report_max.py": "972771287b4a43b603a064272593eaf5ae8fb72be2867fa133a83eb468559f41",
+    "benchmarks/player_match_groups/cut_out_candidate_context.py": "ed09ba6e9bc55bbe667cf90dd00868cbf1846dca1062578e4b8ac055daee89af",
+    "benchmarks/player_match_groups/cut_out_inherited_groups.py": "f8190ebe9c756337e40b9db65ba4f3edb1bdc4c61b64119795348895eb970499",
+    "benchmarks/player_match_groups/cut_out_integration_checkpoint.py": "b28bc4b338b259cb6fea8963544cb90b016676b38d8460d00a2dd0da244e0f65",
+    "benchmarks/player_match_groups/cut_out_max_game.py": "6ffa1221f1d2126590ab3b4f02568d327aff576ac99adf9cddd7392417060aad",
+    "benchmarks/player_match_groups/cut_out_model_a.py": "5afd3330b75d48b031ece242e224086e1fc994c00d241a5b1d31f571f08626c1",
+    "benchmarks/player_match_groups/cut_out_no_read_night_max.py": "66cc7cdac921914a997aae4afa024ff7a06ce206b6231fbb59758adfc0e3f9e9",
+    "benchmarks/player_match_groups/cut_out_saved_recipes.py": "3de675512c2980249cef438dbdeb3e32208c82d3b8619cdc2154b6ffca8f1d12",
+    "benchmarks/player_match_groups/cut_out_six_registry.py": "daeba2cfacc22cf3fc0ef45c23de48dfe731361633d44357d04f3e1c4f4d0b6d",
+    "benchmarks/player_match_groups/cut_out_uniform_game.py": "43b751fabec72c544e1aab08ba9265b9480f85e83b8c3fd83739fad967a3a174",
+    "benchmarks/player_match_groups/cut_out_white_joint_max.py": "a0029b29d9a63f1c3fcc1f7e838117ee0fb00c810434eb3466d1f402312f6187",
+    "tests/test_cut_out_active_report_max.py": "de0746f3cee92c204c877af41aa57bd51d800434b5366df0a0ab07a862983584",
+    "tests/test_cut_out_inherited_groups.py": "e39ca60041f1b4f30293770e6bf0a4f661b578599bbe5b991e630b00901cfe93",
+    "tests/test_cut_out_latent_max.py": "2438955a01909d573d46e7bf055b00bd79d5a30e0ba08fb8e7eaa159e237d3fa",
+    "tests/test_cut_out_max_game.py": "0248db5be6aaa81303687ded7ec7b3fd695445e4d3ef1706ccd330f2b256c786",
+    "tests/test_cut_out_no_read_night_max.py": "05ea241d410225b36ce13d8daeff28a8547e1da8b31d813f4bca62cbd9e4ce48",
+    "tests/test_cut_out_saved_recipes.py": "bbd1cffe8510980aadd41d530828aeebe505149cae0d18c9b16892edccf039b8",
+    "tests/test_cut_out_triple_max.py": "8f2f6e3a5e7ed0967027c117c2f66925d3e99f302ccf258e11fd2a82d77a0d16",
+    "tests/test_cut_out_white_joint_max.py": "e30dbc9ead9292f0f346af8defb169c5fd868ebc8976d7c45c107ca2cec95bba",
+    "tests/test_root_secret_replay.py": "2f06cfbc97d3fddb46096c4284f12f8254e03e1851644db7be223c014c5ad147",
+    "werewolf/candidate_policy.py": "6b741f315069920cb326a7bff62f930e51b183f51e09eac13aa2d8aa57de11e2",
+    "werewolf/exact_renaming.py": "51fc8d9a161035294cce9d24e64131a4bda0ab423d1e7438baa235052100b2e7",
+    "werewolf/information_set_forecast.py": "15cdfad0c297e84d08b13ffb040f063f678a4867090f9adf377a3f16aa7f409d",
+    "werewolf/morning_flow.py": "d4620a89779b085602b55e38765f4a74defc112606f027949001db160418689c",
+    "werewolf/wolf_profile_certificate.py": "38cb000eec63bcf017e3799d926b618553d775e256cf4b41221ba63772908d9c"
+  },
+  "runner_preflight_note": "Initial runner stopped on missing tests-directory import path after six smoke passes. Added the existing test import path, then executed all16 successfully; no numerical code changed."
+}

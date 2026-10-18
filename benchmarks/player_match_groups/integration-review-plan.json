@@ -1,18 +1,18 @@
 {
-  "review_baseline": "ffadaa4a22cc537b678617eb2de7967ae168ccb1",
-  "executed": false,
+  "review_baseline": "c4fb959d59677a0f182cc7d59721b2bd224e2b87",
+  "executed": true,
   "numerical_code_changed": false,
-  "validation": "AST selector existence and source inspection only",
+  "validation": "revised16 executed; actual-path zero-call guards and three separate e2e pairs passed",
   "limits": {
     "per_worker_seconds": 60,
-    "overall_seconds": 300,
+    "overall_seconds": 270,
     "working_set_bytes": 1500000000
   },
   "worker_command": [
     "python",
     "-B",
     "-m",
-    "benchmarks.player_match_groups.withdraw_prefix_diagnostic_fixture",
+    "benchmarks.player_match_groups.cut_out_integration_checkpoint",
     "<kind>",
     "<target>"
   ],
@@ -75,11 +75,11 @@
         ],
         [
           "named",
-          "tests.test_cut_out_six_registry.SixInputRegistryTests.test_current_result_and_root_co_roundtrip_restore_joint_and_invalidate_old_actor"
+          "tests.test_cut_out_inherited_groups.InheritedGroupTests.test_recursive_medium_reports_and_private_history_preserve_full_groups"
         ],
         [
           "named",
-          "tests.test_cut_out_six_registry.SixInputRegistryTests.test_standard_historical_withdraw_resolves_legacy_pending_and_can_be_undone"
+          "tests.test_cut_out_inherited_groups.InheritedGroupTests.test_sealed_initial_CO_and_public_seer_report_children"
         ],
         [
           "named",
@@ -99,7 +99,7 @@
         ],
         [
           "named",
-          "tests.test_cut_out_seven_minimal.SevenMinimalTests.test_conditional_private_table_joint_mass_and_history_match_labelled_reference"
+          "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
         ]
       ],
       "test_count": 8,
@@ -261,7 +261,7 @@
       "external_time_and_rss_watch_required": true
     }
   ],
-  "no_stacking": "Do not run core + existing62 + all eight-case fixture mains together. One plan-wide300s deadline, with per-worker60s and RSS watch.",
+  "no_stacking": "Only revised16 and three separate new/reference timing pairs. All workers60s/1.5GB; one shared270s deadline. Do not add existing62 or full fixture mains.",
   "archived_evidence": {
     "source": "benchmarks/player_match_groups/cut-out-white-joint-max-results.json",
     "eight_cases_plus62_seconds": 247.063,
@@ -275,7 +275,35 @@
     "main grouped flow separate from certificate engines",
     "test-only reference/readback/independent-ground time"
   ],
-  "source_sha256": {
+  "previous_review_baseline": "ffadaa4a22cc537b678617eb2de7967ae168ccb1",
+  "revised16_reason": "Replace three6/7-only core cases with recursive4/5 group witnesses and report edit/cancel/cache regression; keep eight smoke selectors and five related core cases",
+  "replaced_selectors": [
+    {
+      "old": "tests.test_cut_out_six_registry.SixInputRegistryTests.test_current_result_and_root_co_roundtrip_restore_joint_and_invalidate_old_actor",
+      "new": "tests.test_cut_out_inherited_groups.InheritedGroupTests.test_recursive_medium_reports_and_private_history_preserve_full_groups"
+    },
+    {
+      "old": "tests.test_cut_out_six_registry.SixInputRegistryTests.test_standard_historical_withdraw_resolves_legacy_pending_and_can_be_undone",
+      "new": "tests.test_cut_out_inherited_groups.InheritedGroupTests.test_sealed_initial_CO_and_public_seer_report_children"
+    },
+    {
+      "old": "tests.test_cut_out_seven_minimal.SevenMinimalTests.test_conditional_private_table_joint_mass_and_history_match_labelled_reference",
+      "new": "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
+    }
+  ],
+  "selected_suites": [
+    "gate_smoke",
+    "integration_core"
+  ],
+  "new_worker_module": "benchmarks.player_match_groups.cut_out_integration_checkpoint",
+  "new_path_monitor": "Fail canonical/CandidateRules throughout guarded4/5 grouped evaluation including nested labelled proof children; explicit references/read-control remain outside guard. Fail legacy root rebuild for4/5.",
+  "timing_cases": [
+    "uniform4",
+    "seer5",
+    "active5"
+  ],
+  "execution_result": "benchmarks/player_match_groups/integration-checkpoint-results.json",
+  "archived_review_source_sha256": {
     "benchmarks/player_match_groups/constructive_cut_out.py": "77f23a041e64f55fb6288523630764070349b0ab427d28d3597e130d71197011",
     "benchmarks/player_match_groups/cut_out_model_a.py": "5afd3330b75d48b031ece242e224086e1fc994c00d241a5b1d31f571f08626c1",
     "benchmarks/player_match_groups/cut_out_uniform_game.py": "cf560769b7da6a35b0452780271a385e057d2c6f97a01ab28456f2edb3785f5b",
@@ -289,5 +317,52 @@
     "werewolf/exact_renaming.py": "51fc8d9a161035294cce9d24e64131a4bda0ab423d1e7438baa235052100b2e7",
     "werewolf/wolf_profile_certificate.py": "38cb000eec63bcf017e3799d926b618553d775e256cf4b41221ba63772908d9c",
     "werewolf/information_set_forecast.py": "d7ac940c015ee5c9b2a16ceb59617e79358c9382a6eefd97f89781f34deec244"
+  },
+  "archived_worker_command": [
+    "python",
+    "-B",
+    "-m",
+    "benchmarks.player_match_groups.withdraw_prefix_diagnostic_fixture",
+    "<kind>",
+    "<target>"
+  ],
+  "tested_source_sha256": {
+    "benchmarks/player_match_groups/constructive_cut_out.py": "77f23a041e64f55fb6288523630764070349b0ab427d28d3597e130d71197011",
+    "benchmarks/player_match_groups/cut_out_active_report_max.py": "972771287b4a43b603a064272593eaf5ae8fb72be2867fa133a83eb468559f41",
+    "benchmarks/player_match_groups/cut_out_candidate_context.py": "ed09ba6e9bc55bbe667cf90dd00868cbf1846dca1062578e4b8ac055daee89af",
+    "benchmarks/player_match_groups/cut_out_inherited_groups.py": "f8190ebe9c756337e40b9db65ba4f3edb1bdc4c61b64119795348895eb970499",
+    "benchmarks/player_match_groups/cut_out_integration_checkpoint.py": "b28bc4b338b259cb6fea8963544cb90b016676b38d8460d00a2dd0da244e0f65",
+    "benchmarks/player_match_groups/cut_out_max_game.py": "6ffa1221f1d2126590ab3b4f02568d327aff576ac99adf9cddd7392417060aad",
+    "benchmarks/player_match_groups/cut_out_model_a.py": "5afd3330b75d48b031ece242e224086e1fc994c00d241a5b1d31f571f08626c1",
+    "benchmarks/player_match_groups/cut_out_no_read_night_max.py": "66cc7cdac921914a997aae4afa024ff7a06ce206b6231fbb59758adfc0e3f9e9",
+    "benchmarks/player_match_groups/cut_out_saved_recipes.py": "3de675512c2980249cef438dbdeb3e32208c82d3b8619cdc2154b6ffca8f1d12",
+    "benchmarks/player_match_groups/cut_out_six_registry.py": "daeba2cfacc22cf3fc0ef45c23de48dfe731361633d44357d04f3e1c4f4d0b6d",
+    "benchmarks/player_match_groups/cut_out_uniform_game.py": "43b751fabec72c544e1aab08ba9265b9480f85e83b8c3fd83739fad967a3a174",
+    "benchmarks/player_match_groups/cut_out_white_joint_max.py": "a0029b29d9a63f1c3fcc1f7e838117ee0fb00c810434eb3466d1f402312f6187",
+    "tests/test_cut_out_active_report_max.py": "de0746f3cee92c204c877af41aa57bd51d800434b5366df0a0ab07a862983584",
+    "tests/test_cut_out_inherited_groups.py": "e39ca60041f1b4f30293770e6bf0a4f661b578599bbe5b991e630b00901cfe93",
+    "tests/test_cut_out_latent_max.py": "2438955a01909d573d46e7bf055b00bd79d5a30e0ba08fb8e7eaa159e237d3fa",
+    "tests/test_cut_out_max_game.py": "0248db5be6aaa81303687ded7ec7b3fd695445e4d3ef1706ccd330f2b256c786",
+    "tests/test_cut_out_no_read_night_max.py": "05ea241d410225b36ce13d8daeff28a8547e1da8b31d813f4bca62cbd9e4ce48",
+    "tests/test_cut_out_saved_recipes.py": "bbd1cffe8510980aadd41d530828aeebe505149cae0d18c9b16892edccf039b8",
+    "tests/test_cut_out_triple_max.py": "8f2f6e3a5e7ed0967027c117c2f66925d3e99f302ccf258e11fd2a82d77a0d16",
+    "tests/test_cut_out_white_joint_max.py": "e30dbc9ead9292f0f346af8defb169c5fd868ebc8976d7c45c107ca2cec95bba",
+    "tests/test_root_secret_replay.py": "2f06cfbc97d3fddb46096c4284f12f8254e03e1851644db7be223c014c5ad147",
+    "werewolf/candidate_policy.py": "6b741f315069920cb326a7bff62f930e51b183f51e09eac13aa2d8aa57de11e2",
+    "werewolf/exact_renaming.py": "51fc8d9a161035294cce9d24e64131a4bda0ab423d1e7438baa235052100b2e7",
+    "werewolf/information_set_forecast.py": "15cdfad0c297e84d08b13ffb040f063f678a4867090f9adf377a3f16aa7f409d",
+    "werewolf/morning_flow.py": "d4620a89779b085602b55e38765f4a74defc112606f027949001db160418689c",
+    "werewolf/wolf_profile_certificate.py": "38cb000eec63bcf017e3799d926b618553d775e256cf4b41221ba63772908d9c"
+  },
+  "result_summary": {
+    "correctness_tests": 16,
+    "correctness_suite_seconds": 61.344,
+    "total_driver_seconds": 65.094,
+    "guarded_entries": 3852,
+    "canonical_calls": 0,
+    "CandidateRules_calls": 0,
+    "initial_group_rebuild_calls": 0,
+    "end_to_end_pairs": 3,
+    "end_to_end_uniform_speedup_confirmed": false
   }
 }
