@@ -1,0 +1,142 @@
+{
+  "scope": "7/W2 user public snapshot; strategy-only uniform comparison; preparation only",
+  "original_strategy": {
+    "day": "max",
+    "fake_reports": "max",
+    "include_self_bite": false,
+    "night": "max"
+  },
+  "comparison_strategy": {
+    "day": "random",
+    "fake_reports": "random",
+    "include_self_bite": false,
+    "night": "random"
+  },
+  "strategy_only_fields_changed": [
+    "policy.day",
+    "policy.night",
+    "policy.fake_reports"
+  ],
+  "initial_worlds": 6,
+  "initial_hypotheses": 6,
+  "initial_groups": [
+    [
+      1,
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5,
+      6,
+      7
+    ]
+  ],
+  "initial_tracked": [
+    1,
+    2
+  ],
+  "wolf_owned_information_sets": 6,
+  "wolf_initial_roster_bits": 2,
+  "initial_and_prefix_joint_swaps": 14,
+  "synthetic_prefix": {
+    "execution": 7,
+    "bite": 6,
+    "new_seer_reports": "P1/P2 Day2 white7",
+    "medium_report": "P3 Day2 white7",
+    "saved_replay_contexts": 7,
+    "post_night_before_reports_groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ],
+      [
+        7
+      ]
+    ],
+    "Q_dead_wolf7": "1/2",
+    "P_dead_wolf7": "4/9",
+    "Q_P_kept_separate": true,
+    "final_worlds": 2,
+    "final_hypotheses": 2,
+    "final_tracked": null,
+    "final_conservative_groups": [
+      [
+        1
+      ],
+      [
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ],
+      [
+        6
+      ],
+      [
+        7
+      ]
+    ]
+  },
+  "canonical_calls": 0,
+  "CandidateRules_calls": 0,
+  "solve_calls": 0,
+  "act_value_calls": 0,
+  "full_forecast_enabled": false,
+  "seven_source_capability_issued": false,
+  "initial_max_supported": false,
+  "missing": [
+    "explicit7/W2 cast descriptor instead of W1-fixed adapter",
+    "typed7 source issuer owner/revision scope",
+    "new simultaneous snapshot batch witness if reporter symmetry should survive publication",
+    "initial trackedCO metadata vs replay full-tracking metadata must not be replaced"
+  ],
+  "ordinary_UI_changed": false,
+  "speed_measurement_executed": false,
+  "worker_seconds": 0.14100000000325963,
+  "peak_working_set_bytes": 36151296,
+  "recorded_utc": "2026-10-18T14:10:07.161106+00:00",
+  "tested_parent_commit": "11b1b1b03a5253763ce9ff4b3b4adfa174db5e5d",
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_user_seven_uniform_preparation.py": "131510d7ca19a95380066cb0c7259abcc41b8863a14a4d6858b66abb81394d20",
+    "benchmarks/player_match_groups/cut_out_user_seven_preparation_fixture.py": "cf813f80abad6f2a53d9e86b896912e26591918f59f03d5d7f6acc95c6e2fca4",
+    "benchmarks/player_match_groups/actual-seven-max-results.json": "f12d94e2566da0ed9cef015c1e69a91dd5d365387d7345f3be11ad1aa8f479b9",
+    "benchmarks/player_match_groups/constructive_cut_out.py": "77f23a041e64f55fb6288523630764070349b0ab427d28d3597e130d71197011",
+    "benchmarks/player_match_groups/cut_out_six_source_bridge.py": "d1c021cecd062b4e172cfe5e055f04172419f786a4d7b25d379eb90be9e19106",
+    "werewolf/root_secret_flow.py": "4f70cc455c0eed3964cf546ba298e5989eeb591b714e2863c9419fc9fc25b913",
+    "tests/test_cut_out_user_seven_preparation.py": "744695837c78bf274fe8280d9df8c185e9dc11c2a2acb87753b8ef43d7fc7a2c"
+  },
+  "light_regression_tests": 2,
+  "light_regression_driver_seconds": 0.828,
+  "fixture_limits": {
+    "worker_seconds": 30,
+    "first_night_replay_seconds": 10,
+    "peak_working_set_bytes": 1500000000
+  },
+  "source": "Saved actual-seven-max-results.json.game only; public facts match parent request; only three policy fields changed for comparison",
+  "actual_first_night_user_observation_provided": false,
+  "synthetic_timeline_revision": 0,
+  "adapter_limitation": "PreparedSeven preserves typed GameData W2, but it is not an engine-consumable/issued ModelAInitialGroups adapter"
+}
