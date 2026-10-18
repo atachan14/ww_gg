@@ -1,0 +1,308 @@
+{
+  "cases": [
+    {
+      "players": 5,
+      "mediums": 0,
+      "initial": "none",
+      "view": "public",
+      "medium_co": false,
+      "initial_hypotheses": 20,
+      "own_initial_hypotheses": 0,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 17,
+      "scalar_context_comparisons": 15,
+      "own_scan_targets": [],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 0,
+      "grouped": {
+        "cut_out_builds": 8,
+        "cut_out_seconds": 0.00022509993868879974,
+        "key_seconds": 0.001988600008189678,
+        "action_requests": 45,
+        "action_evaluations": 15,
+        "law_seconds": 0.03175940006622113,
+        "acquisition_calls": 128,
+        "morning_calls": 4,
+        "inclusive_action_seconds": 0.19147559997509234,
+        "representative_hits": 30,
+        "label_scalar_restores": 28,
+        "label_restore_seconds": 0.0008201001037377864,
+        "total_seconds": 0.6800386999966577,
+        "evaluation_other_seconds": 0.6452454998798203,
+        "saved_origins": 1,
+        "generated_boards": 52,
+        "law_hypotheses_retained": 192
+      },
+      "labelled": {
+        "action_requests": 390,
+        "action_evaluations": 372,
+        "law_seconds": 0.3338739996543154,
+        "acquisition_calls": 360,
+        "morning_calls": 120,
+        "total_seconds": 0.6192954999860376,
+        "evaluation_other_seconds": 0.2854215003317222,
+        "saved_origins": 1,
+        "generated_boards": 126,
+        "law_hypotheses_retained": 2440
+      },
+      "seconds": 1.9436978000157978,
+      "connected_complete_proofs": [
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        }
+      ],
+      "certified_policy_matches_existing_exact": true,
+      "case": "public",
+      "worker_seconds": 3.4539999999979045,
+      "peak_working_set_bytes": 37388288
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "initial": "none",
+      "view": "role",
+      "medium_co": false,
+      "initial_hypotheses": 20,
+      "own_initial_hypotheses": 4,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 68,
+      "scalar_context_comparisons": 80,
+      "own_scan_targets": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "private_intervention_contexts": 56,
+      "public_unforced_scan_contexts": 56,
+      "own_scan_group_swap_audits": 226,
+      "grouped": {
+        "cut_out_builds": 10,
+        "cut_out_seconds": 0.0007192001212388277,
+        "key_seconds": 0.007494499965105206,
+        "action_requests": 138,
+        "action_evaluations": 80,
+        "law_seconds": 0.07290129986358806,
+        "acquisition_calls": 138,
+        "morning_calls": 21,
+        "inclusive_action_seconds": 0.490951999934623,
+        "representative_hits": 58,
+        "label_scalar_restores": 56,
+        "label_restore_seconds": 0.0015586000517942011,
+        "total_seconds": 0.7464800000016112,
+        "evaluation_other_seconds": 0.6638063999998849,
+        "saved_origins": 1,
+        "generated_boards": 83,
+        "law_hypotheses_retained": 903
+      },
+      "labelled": {
+        "action_requests": 647,
+        "action_evaluations": 571,
+        "law_seconds": 0.4884933003631886,
+        "acquisition_calls": 432,
+        "morning_calls": 168,
+        "total_seconds": 0.8694845999998506,
+        "evaluation_other_seconds": 0.3823774996562861,
+        "saved_origins": 1,
+        "generated_boards": 212,
+        "law_hypotheses_retained": 4392
+      },
+      "seconds": 5.486514300020644,
+      "connected_complete_proofs": [
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        },
+        {
+          "profile_reads": 0,
+          "complete_candidate_scores": 12,
+          "candidate_engines": 12,
+          "theoretical_profiles": 2401
+        }
+      ],
+      "certified_policy_matches_existing_exact": true,
+      "case": "role",
+      "worker_seconds": 7.3289999999979045,
+      "peak_working_set_bytes": 61210624
+    },
+    {
+      "structural_refusal": "five_player_no_read_structure_unproved",
+      "guarded_refusal": "fixed_public_profile_read",
+      "diagnostics": {
+        "profile_reads": 1,
+        "complete_candidate_scores": 0,
+        "candidate_engines": 1,
+        "theoretical_profiles": 27
+      },
+      "numeric_certificate": false,
+      "case": "read-control",
+      "worker_seconds": 0.15700000000651926,
+      "peak_working_set_bytes": 27615232
+    }
+  ],
+  "checks": [
+    [
+      "pattern",
+      "test_withdraw_prefix_diagnostic.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_six_registry.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_saved_recipes.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_two_nights.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_uniform_game.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_model_a.py"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization"
+    ],
+    [
+      "named",
+      "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation"
+    ],
+    [
+      "pattern",
+      "test_cut_out_seven_minimal.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_max_game.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_latent_max.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_terminal_night_max.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_no_read_night_max.py"
+    ]
+  ],
+  "existing50_preserved": true,
+  "regression_tests": 53,
+  "overall_seconds": 59.92200000002049,
+  "timing_interpretation": "budget verification only; not an uncontended speed comparison",
+  "concurrent_work_notice": "Morishi profiling notice received during the finite run; no additional speed runs launched"
+}
