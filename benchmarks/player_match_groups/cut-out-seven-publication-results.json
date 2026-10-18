@@ -1,0 +1,50 @@
+{
+  "status": "verified",
+  "literal_actions": [
+    1,
+    4
+  ],
+  "day": 2,
+  "alive": [
+    2,
+    3,
+    5,
+    6,
+    7
+  ],
+  "source_hypotheses": 18,
+  "cause": "medium result narrows derived live wolf_count; no CO change",
+  "cases": [
+    {
+      "color": "black",
+      "mass": "1/2",
+      "wolf_count": 1,
+      "fixed": [
+        1,
+        3
+      ]
+    },
+    {
+      "color": "white",
+      "mass": "1/2",
+      "wolf_count": 2,
+      "fixed": [
+        1,
+        3
+      ]
+    }
+  ],
+  "morning_vectors": 18,
+  "group_law_swaps": 37,
+  "rejected": [
+    "new_CO",
+    "withdraw_CO",
+    "withdraw_medium_result",
+    "withdraw_seer_history",
+    "change_phase",
+    "forged_derived_wolf_count"
+  ],
+  "canonical_calls": 0,
+  "CandidateRules_calls": 0,
+  "recursive_forecasts": 0
+}

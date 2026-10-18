@@ -1,5 +1,5 @@
 """Group witnesses carried by completed common transitions, never law search."""
-from dataclasses import dataclass,fields
+from dataclasses import dataclass
 from collections import Counter
 from .cut_out_day_night import point_fix
 from werewolf.information_set_forecast import Pending
@@ -90,10 +90,16 @@ class InheritedGroupRegistry:
 
     def publication(self,b,s,past,c,ns,new_past,kind):
         parent=self.require(b,s,past)
-        if (type(c)is not type(b) or c.claims!=b.claims or c.reports[:len(b.reports)]!=b.reports
-            or new_past[:len(past)]!=past
-            or any(getattr(b,f.name)!=getattr(c,f.name) for f in fields(b)
-                   if f.name not in ('worlds','belief','role_belief','world_belief','reports','report_resolved'))):
+        # A report may narrow an uncertain live wolf count. It is a derived
+        # summary of the new public worlds, never a freely editable field.
+        from werewolf.exact import replace_worlds
+        if type(c)is not type(b) or c.claims!=b.claims or c.reports[:len(b.reports)]!=b.reports or new_past[:len(past)]!=past:
+            raise Pending('inherited_publication_or_CO_transition_unproved')
+        try:
+            expected=replace_worlds(b,c.worlds,wolf_count=None,reports=c.reports,report_resolved=c.report_resolved)
+        except (ValueError,TypeError):
+            raise Pending('inherited_publication_derived_board_unproved')
+        if expected!=c:
             raise Pending('inherited_publication_or_CO_transition_unproved')
         if (b,s,past)==(c,ns,new_past):return parent
         fixed=set()
