@@ -45,18 +45,18 @@ def path_mappings(cap,engine,b,payload,target,parent,cache):
 def complete_joint_selection(cap,engine,reference):
  from .cut_out_joint_night_forecast_fixture import moved_source
  from werewolf.actor_information import wolf_information_groups
- actual={};expected={};cache={}
+ actual={};expected={};cache={};source_n=cap.source.public.player_count
  for node in engine.joint_nodes:
   require_node(node);selection={}
   for orbit in node.orbits:
    for mapping in members(cap,node.source,orbit):
-    mask=sum(1<<(mapping[p-1]-1) for p in range(1,7) if orbit.roster&(1<<(p-1)))
+    mask=sum(1<<(mapping[p-1]-1) for p in range(1,source_n+1) if orbit.roster&(1<<(p-1)))
     selection[mask,orbit.attacks,mapping[orbit.target-1]]=orbit.mass/orbit.multiplicity
   payload=ActionInputs(node.source.public_state,node.source.past,node.source.private,node.source.observer,node.source.physical)
   for mapping in path_mappings(cap,engine,node.source.public,payload,None,node.request,cache):
    transformed={}
    for (mask,attacks,target),mass in selection.items():
-    moved_mask=sum(1<<(mapping[p-1]-1) for p in range(1,7) if mask&(1<<(p-1)))
+    moved_mask=sum(1<<(mapping[p-1]-1) for p in range(1,source_n+1) if mask&(1<<(p-1)))
     transformed[moved_mask,tuple(replace(a,target=mapping[a.target-1]) for a in attacks),mapping[target-1]]=mass
    source=moved_source(node.source,mapping)
    if source in actual:assert actual[source]==transformed

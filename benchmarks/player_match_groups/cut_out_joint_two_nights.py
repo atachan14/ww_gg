@@ -30,6 +30,12 @@ def issue_node(engine,source,request):
  # Existing completed action/acquisition/publication receipts refine groups;
  # no world permutation search or reconstruction from an initial prior here.
  if source.observer!=engine.view:raise Pending('joint_two_night_view_mismatch')
+ result=structural_orbits(source,groups)
+ node=NightNode(cap,source,request,groups,tuple(result));_nodes[node]=(cap,source,request,groups,node.orbits,context)
+ return node
+
+
+def structural_orbits(source,groups):
  attacks={h.attacks for h in source.private.hypotheses}
  if len(attacks)!=1:raise Pending('joint_two_night_attack_signature_unproved')
  attacks=next(iter(attacks));result=[];b=source.public
@@ -43,8 +49,7 @@ def issue_node(engine,source,request):
    choices=tuple(p for p in g if p in legal)
    if choices:result.append(Orbit(roster,attacks,choices[0],groups,counts,mult*len(choices),mass*mult*F(len(choices),len(legal))))
  if sum((o.mass for o in result),F())!=1:raise Pending('joint_two_night_mass_unproved')
- node=NightNode(cap,source,request,groups,tuple(result));_nodes[node]=(cap,source,request,groups,node.orbits,context)
- return node
+ return tuple(result)
 
 
 def require_node(node):

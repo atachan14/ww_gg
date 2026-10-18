@@ -37,6 +37,7 @@ class ForecastCertificate:
  groups:tuple
  preprocessing_seconds:float
  night_limit:int=1
+ source_scope:str='night'
 
 
 def make_case(players=5,*,night_limit=1,known_wolf=False):
@@ -60,19 +61,24 @@ def make_case(players=5,*,night_limit=1,known_wolf=False):
   request=r.root.child(ActionEvidence(kernel_snapshot(e),target,outcome_key(outcomes[0]),False),None)
   if request.roles()!=child:raise Pending('joint_forecast_saved_prefix_mismatch')
  cap=ForecastCertificate(r,w,child,request,point_fix(root_groups,target),perf_counter()-start,night_limit)
- _issued[cap]=(r,r.data,r.engine,r.origin,r.root,r.data.inputs,r.data.to_game().get('revision',0),child,request,cap.groups,repr((r.engine.baseline.rules,r.engine.baseline.strategy)),night_limit)
+ _issued[cap]=(r,r.data,r.engine,r.origin,r.root,r.data.inputs,r.data.to_game().get('revision',0),child,request,cap.groups,repr((r.engine.baseline.rules,r.engine.baseline.strategy)),night_limit,cap.source_scope)
  return cap
 
 
 def require(cap,*,source=None):
  if type(cap)is not ForecastCertificate or cap not in _issued:raise Pending('joint_forecast_issued_receipt_required')
- r,data,engine,origin,root,inputs,rev,s,request,groups,settings,night_limit=_issued[cap]
+ r,data,engine,origin,root,inputs,rev,s,request,groups,settings,night_limit,scope=_issued[cap]
  if cap.registry is not r or r.data is not data or r.engine is not engine or r.origin is not origin or r.root is not root or data.inputs!=inputs or data.to_game().get('revision',0)!=rev or cap.source is not s or cap.request is not request or cap.groups!=groups:raise Pending('joint_forecast_owner_revision_source_changed')
+ if cap.source_scope!=scope:raise Pending('joint_forecast_scope_changed')
  if cap.night_limit!=night_limit:raise Pending('joint_forecast_night_scope_changed')
  if repr((engine.baseline.rules,engine.baseline.strategy))!=settings:raise Pending('joint_forecast_settings_changed')
  if cap.witness is not None:require_seven(r,cap.witness)
  if source is not None and source!=s:raise Pending('joint_forecast_one_sided_carrier_change')
- if s.public.phase!='night' or len(s.public.alive)>(5 if night_limit==2 else 4):raise Pending('joint_forecast_small_night_only')
+ if scope=='night':
+  if s.public.phase!='night' or len(s.public.alive)>(5 if night_limit==2 else 4):raise Pending('joint_forecast_small_night_only')
+ elif scope=='seven-mid':
+  if s.public.player_count!=7 or s.public.phase!='day' or s.public.day!=2 or len(s.public.alive)!=5 or len(s.public.history)!=2:raise Pending('joint_forecast_seven_mid_scope')
+ else:raise Pending('joint_forecast_unknown_scope')
  strategy=r.engine.baseline.strategy
  if (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3 or strategy.include_self_bite or s.public.initial_hunter_count:raise Pending('joint_forecast_uniform_H0_only')
  return s
@@ -80,6 +86,7 @@ def require(cap,*,source=None):
 
 def view_source(cap,view=None):
  s=require(cap)
+ if cap.source_scope=='seven-mid' and view is not None:raise Pending('joint_seven_mid_public_only')
  if view is None:return s,cap.request,cap.groups
  if type(view)is not OwnView or view.role not in ('wolf','medium','seer','villager') or not 1<=view.player<=s.public.player_count or any(a.player!=view.player for a in view.acquisitions):raise Pending('joint_forecast_explicit_own_view_only')
  private=condition_actor_state(s.private,view.accepts)

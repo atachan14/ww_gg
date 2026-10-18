@@ -1,0 +1,221 @@
+{
+  "cases": [
+    {
+      "case": "agree",
+      "status": "verified",
+      "village_win": "2/15",
+      "action_values": {
+        "1": "1/6",
+        "2": "1/6",
+        "5": "1/3",
+        "6": "0",
+        "7": "0"
+      },
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "root_QP_different": false,
+      "first_night": {
+        "representatives": 3,
+        "literal_pairs": 24,
+        "observed_choice_mass": "1/4",
+        "two_wolves_one_joint_choice": true
+      },
+      "Q_report_mass": "1/120",
+      "P_report_mass": "1/120",
+      "complete_Forecast_Table_joint_equal": true,
+      "selection_contexts": 3,
+      "selection_pairs": 12,
+      "labelled_branches": 311,
+      "terminal_transitions": 298,
+      "followup_joint_representatives": 4,
+      "followup_literal_pairs": 9,
+      "preprocessing_seconds": 0.09427209998830222,
+      "forecast_seconds": 0.2126861000142526,
+      "reference_forecast_seconds": 0.5649657000030857,
+      "restore_seconds": 2.554420900007244,
+      "reference_restore_seconds": 2.488667900004657,
+      "prefix_independent_cold_seconds": 0.04305710000335239,
+      "future_independent_cold": {
+        "seconds": 0.04913600001600571,
+        "fresh_engine": true,
+        "fresh_SavedOrigin": true,
+        "reuse": false,
+        "raw_team_policy_oracle": true,
+        "QP_different": true,
+        "initial_wolf_roster_bits": 2,
+        "observed_attacks": 2
+      },
+      "prototype_including_preprocessing_restore_cold": 2.953572200029157,
+      "total_comparison_seconds": 6.0490869999921415,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "full_initial_search": false,
+      "peak_working_set_bytes": 57012224
+    },
+    {
+      "case": "disagree",
+      "status": "verified",
+      "village_win": "2/15",
+      "action_values": {
+        "1": "1/9",
+        "2": "2/9",
+        "5": "1/9",
+        "6": "1/9",
+        "7": "1/9"
+      },
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "root_QP_different": false,
+      "first_night": {
+        "representatives": 3,
+        "literal_pairs": 24,
+        "observed_choice_mass": "1/4",
+        "two_wolves_one_joint_choice": true
+      },
+      "Q_report_mass": "1/80",
+      "P_report_mass": "1/80",
+      "complete_Forecast_Table_joint_equal": true,
+      "selection_contexts": 5,
+      "selection_pairs": 18,
+      "labelled_branches": 752,
+      "terminal_transitions": 734,
+      "followup_joint_representatives": 10,
+      "followup_literal_pairs": 15,
+      "preprocessing_seconds": 0.0926913000002969,
+      "forecast_seconds": 0.7513793999969494,
+      "reference_forecast_seconds": 1.2968694999872241,
+      "restore_seconds": 6.357933499995852,
+      "reference_restore_seconds": 6.1111006999854,
+      "prefix_independent_cold_seconds": 0.04290880000917241,
+      "future_independent_cold": {
+        "seconds": 0.04555529999197461,
+        "fresh_engine": true,
+        "fresh_SavedOrigin": true,
+        "reuse": false,
+        "raw_team_policy_oracle": true,
+        "QP_different": true,
+        "initial_wolf_roster_bits": 2,
+        "observed_attacks": 2
+      },
+      "prototype_including_preprocessing_restore_cold": 7.290468299994245,
+      "total_comparison_seconds": 14.778115799999796,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "full_initial_search": false,
+      "peak_working_set_bytes": 88801280
+    },
+    {
+      "case": "count-change",
+      "status": "verified",
+      "village_win": "598/2085",
+      "action_values": {
+        "2": "1/3",
+        "4": "64/417",
+        "5": "89/417",
+        "6": "51/139",
+        "7": "51/139"
+      },
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "root_QP_different": true,
+      "first_night": {
+        "representatives": 7,
+        "literal_pairs": 27,
+        "observed_choice_mass": "9/40",
+        "two_wolves_one_joint_choice": true
+      },
+      "Q_report_mass": "31/240",
+      "P_report_mass": "139/1080",
+      "complete_Forecast_Table_joint_equal": true,
+      "selection_contexts": 5,
+      "selection_pairs": 42,
+      "labelled_branches": 392,
+      "terminal_transitions": 351,
+      "followup_joint_representatives": 22,
+      "followup_literal_pairs": 36,
+      "preprocessing_seconds": 0.06480749999172986,
+      "forecast_seconds": 0.41564270001254044,
+      "reference_forecast_seconds": 0.6633211000007577,
+      "restore_seconds": 2.979701100004604,
+      "reference_restore_seconds": 2.768161100015277,
+      "prefix_independent_cold_seconds": 0.02518860000418499,
+      "future_independent_cold": {
+        "seconds": 0.027467999985674396,
+        "fresh_engine": true,
+        "fresh_SavedOrigin": true,
+        "reuse": false,
+        "raw_team_policy_oracle": true,
+        "QP_different": true,
+        "initial_wolf_roster_bits": 2,
+        "observed_attacks": 2
+      },
+      "prototype_including_preprocessing_restore_cold": 3.5128078999987338,
+      "total_comparison_seconds": 7.012079000007361,
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "full_initial_search": false,
+      "peak_working_set_bytes": 64368640
+    }
+  ],
+  "limits": {
+    "comparison_seconds": 30,
+    "worker_seconds": 120,
+    "peak_working_set_bytes": 1500000000
+  },
+  "scope": "selected actual7 W2 public intermediate only; no initial Forecast"
+}

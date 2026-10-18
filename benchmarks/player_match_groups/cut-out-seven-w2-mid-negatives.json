@@ -1,0 +1,45 @@
+{
+  "status": "verified",
+  "rejected": [
+    {
+      "case": "unproved_prefix_or_vector",
+      "reason": "seven_mid_report_or_prefix_unproved"
+    },
+    {
+      "case": "positive_Q_zero_P",
+      "reason": "seven_mid_positive_Q_zero_P_report: exe1/bite3/private wolves1+5/P2 white5; P2 true and5 wolf; Q=31/240 P=0"
+    },
+    {
+      "case": "private_view_not_admitted",
+      "reason": "joint_seven_mid_public_only"
+    },
+    {
+      "case": "copied_cap",
+      "reason": "joint_forecast_issued_receipt_required"
+    },
+    {
+      "case": "one_sided_public_state",
+      "reason": "joint_forecast_one_sided_carrier_change"
+    },
+    {
+      "case": "one_sided_private",
+      "reason": "joint_forecast_one_sided_carrier_change"
+    },
+    {
+      "case": "copied_joint_choice",
+      "reason": "seven_mid_joint_choice_not_issued"
+    },
+    {
+      "case": "unproved_victim_orbit",
+      "reason": "seven_mid_only_known_nonwolf_observations_proved"
+    },
+    {
+      "case": "max_or_changed_choice_policy",
+      "reason": "seven_mid_joint_choice_not_configured_policy"
+    },
+    {
+      "case": "stale_joint_source",
+      "reason": "seven_invalid_revision"
+    }
+  ]
+}
