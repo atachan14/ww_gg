@@ -43,7 +43,7 @@ class RetirementProofTests(unittest.TestCase):
 
     def test_diagnostic_role_independent_noise(self):
         row=probe()['rows'][0]
-        self.assertEqual(row['generated_branches'],48)
+        self.assertEqual(row['generated_branches'],64)
         self.assertTrue(row['all_role_posteriors_unchanged'])
         self.assertEqual(row['total_probability'],'1')
 

@@ -141,5 +141,5 @@ def timeline(g,board,player,finished=False):
         claims=g['history'][claim_index]['claims'] if claim_index<len(g['history']) else g['claims']
         if player not in alive or (claims[player-1]!='seer' and not (g.get('public_log',{}).get('version')==2 and (g['claims'][player-1]=='seer' or (day,player) in data))):continue
         row=data.get((day,player),{'target':None,'color':None})
-        rows.append({'day':day,'target':row['target'],'color':row['color'],'targets':tuple(i for i in sorted(scan) if i!=player),'editable':not finished,'initial_none':day==1 and g['seer_options']['initial_rule']=='none' and row['target'] is None and row['color'] is None})
+        rows.append({'day':day,'target':row['target'],'color':row['color'],'targets':tuple(i for i in range(1,g['players']+1) if i!=player),'editable':not finished,'initial_none':day==1 and g['seer_options']['initial_rule']=='none' and row['target'] is None and row['color'] is None})
     return rows

@@ -1,0 +1,3237 @@
+[
+  {
+    "case": "uniform-five",
+    "original_inherited_numerical_methods": true,
+    "original_new_optimizations_disabled": true,
+    "game": {
+      "claim_policy": {
+        "medium": "filled",
+        "villager": "filled",
+        "wolf": "none"
+      },
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "history": [],
+      "hunters": 0,
+      "mediums": 0,
+      "model": "group",
+      "players": 5,
+      "policy": {
+        "day": "random",
+        "fake_reports": "random",
+        "include_self_bite": false,
+        "night": "random"
+      },
+      "public_log": {
+        "acquisition_provenance": [
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 1,
+            "source": "b1:e2",
+            "target": 3
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 2,
+            "source": "b1:e3",
+            "target": 3
+          }
+        ],
+        "base_claims": [
+          [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ]
+        ],
+        "base_medium": [],
+        "base_seer": [],
+        "batches": [
+          {
+            "board_id": "5373e3bc74a203fd:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e2",
+                "kind": "seer",
+                "player": 1,
+                "target": 3
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 2,
+                "target": 3
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "board_graph": {
+          "archives": [
+            {
+              "ancestor_path": [
+                "5373e3bc74a203fd:board:1"
+              ],
+              "generation": 1,
+              "nodes": {
+                "5373e3bc74a203fd:board:1": {
+                  "active": true,
+                  "branch": 1,
+                  "children": [],
+                  "day": 1,
+                  "edge": null,
+                  "generation": 0,
+                  "id": "5373e3bc74a203fd:board:1",
+                  "input_revision": 0,
+                  "legacy_claims": [
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent"
+                  ],
+                  "legacy_medium": [],
+                  "legacy_seer": [],
+                  "local_batches": [],
+                  "parent": null,
+                  "phase": "day",
+                  "revision": 0,
+                  "slot": 0
+                }
+              },
+              "owner": "5373e3bc74a203fd:board:1",
+              "retired_roots": [],
+              "settings": {
+                "claim_policy": {
+                  "medium": "filled",
+                  "villager": "filled",
+                  "wolf": "none"
+                },
+                "hunters": 0,
+                "mediums": 0,
+                "model": "group",
+                "players": 5,
+                "policy": {
+                  "day": "random",
+                  "fake_reports": "random",
+                  "include_self_bite": false,
+                  "night": "random"
+                },
+                "rules": {
+                  "allow_repeat_guard": true,
+                  "allow_self_bite": false,
+                  "initial_seer": "random_white"
+                },
+                "seers": 1,
+                "wolves": 1
+              }
+            }
+          ],
+          "current": "5373e3bc74a203fd:board:1",
+          "game_id": "5373e3bc74a203fd",
+          "generation": 1,
+          "invalidated": [
+            "5373e3bc74a203fd:board:1"
+          ],
+          "next_board": 2,
+          "next_branch": 2,
+          "nodes": {
+            "5373e3bc74a203fd:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "content_generation": 1,
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "5373e3bc74a203fd:board:1",
+              "input_revision": 1,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [
+                {
+                  "board_id": "5373e3bc74a203fd:board:1",
+                  "day": 1,
+                  "events": [
+                    {
+                      "action": "assert",
+                      "id": "b1:e0",
+                      "kind": "co",
+                      "player": 1,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e1",
+                      "kind": "co",
+                      "player": 2,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e2",
+                      "kind": "seer",
+                      "player": 1,
+                      "target": 3
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e3",
+                      "kind": "seer",
+                      "player": 2,
+                      "target": 3
+                    }
+                  ],
+                  "id": 1,
+                  "mode": "simultaneous",
+                  "phase": "day",
+                  "slot": 0
+                }
+              ],
+              "parent": null,
+              "phase": "day",
+              "retired_children": [],
+              "revision": 1,
+              "slot": 0
+            }
+          },
+          "root": "5373e3bc74a203fd:board:1"
+        },
+        "board_id": "5373e3bc74a203fd:board:1",
+        "branch_id": 1,
+        "has_local_legacy": false,
+        "legacy": false,
+        "local_batches": [
+          {
+            "board_id": "5373e3bc74a203fd:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e2",
+                "kind": "seer",
+                "player": 1,
+                "target": 3
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 2,
+                "target": 3
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "local_legacy": {
+          "claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "medium": [],
+          "seer": []
+        },
+        "next_id": 2,
+        "report_publications": {
+          "seer:1:1": {
+            "board_id": "5373e3bc74a203fd:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          },
+          "seer:1:2": {
+            "board_id": "5373e3bc74a203fd:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          }
+        },
+        "retired_input_reports": [],
+        "version": 2
+      },
+      "reports": [],
+      "result_disclosure_model": "full-observed-v1",
+      "revision": 1,
+      "rules": {
+        "allow_repeat_guard": true,
+        "allow_self_bite": false,
+        "initial_seer": "random_white"
+      },
+      "seer_inputs": [
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 1,
+          "target": 3
+        },
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 2,
+          "target": 3
+        }
+      ],
+      "seer_mode": "information-fixed-v1",
+      "seer_options": {
+        "initial_rule": "random_white",
+        "likelihood": "compatibility"
+      },
+      "seers": 1,
+      "selection": null,
+      "wolves": 1
+    },
+    "old": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 5,
+      "wolves": 1,
+      "enabled": false,
+      "physical_reuse": false,
+      "retired_reuse": false,
+      "compact_keys": false,
+      "fast_parts": false,
+      "retirement_proof": false,
+      "retirement_proof_hits": 0,
+      "seconds": 0.7749443000066094,
+      "value": "7/15",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "2/3",
+            "wolf_win": "1/3"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "2/3",
+            "wolf_win": "1/3"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/3",
+            "wolf_win": "2/3"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/3",
+            "wolf_win": "2/3"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/3",
+            "wolf_win": "2/3"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {},
+      "mask_stats": {},
+      "expansions": {
+        "actions": 2657,
+        "values": 882
+      },
+      "memory": {
+        "peak_working_set_bytes": 60821504,
+        "peak_process_commit_bytes": 49668096,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "new": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 5,
+      "wolves": 1,
+      "enabled": true,
+      "physical_reuse": true,
+      "retired_reuse": true,
+      "compact_keys": true,
+      "fast_parts": true,
+      "retirement_proof": true,
+      "retirement_proof_hits": 6,
+      "seconds": 0.1494063999853097,
+      "value": "7/15",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "2/3",
+            "wolf_win": "1/3"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "2/3",
+            "wolf_win": "1/3"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/3",
+            "wolf_win": "2/3"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/3",
+            "wolf_win": "2/3"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/3",
+            "wolf_win": "2/3"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {
+        "key_seconds": 0.09060460003092885,
+        "key_requests": 281,
+        "key_source_hits": 5,
+        "key_supported": 281,
+        "key_value_hits": 0,
+        "key_action_hits": 14,
+        "generated_publication_branches": 35,
+        "acquisition_states": 13,
+        "kernel_requests": 420,
+        "kernel_hits": 320,
+        "kernel_computations": 100,
+        "kernel_key_seconds": 0.004196900234092027
+      },
+      "mask_stats": {
+        "mask_requests": 353,
+        "mask_hits": 340
+      },
+      "expansions": {
+        "actions": 200,
+        "values": 67
+      },
+      "memory": {
+        "peak_working_set_bytes": 63156224,
+        "peak_process_commit_bytes": 52318208,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "equal": true
+  },
+  {
+    "case": "max-five",
+    "original_inherited_numerical_methods": true,
+    "original_new_optimizations_disabled": true,
+    "game": {
+      "claim_policy": {
+        "medium": "filled",
+        "villager": "filled",
+        "wolf": "none"
+      },
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "history": [],
+      "hunters": 0,
+      "mediums": 0,
+      "model": "group",
+      "players": 5,
+      "policy": {
+        "day": "max",
+        "fake_reports": "max",
+        "include_self_bite": false,
+        "night": "max"
+      },
+      "public_log": {
+        "acquisition_provenance": [
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 1,
+            "source": "b1:e2",
+            "target": 3
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 2,
+            "source": "b1:e3",
+            "target": 3
+          }
+        ],
+        "base_claims": [
+          [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ]
+        ],
+        "base_medium": [],
+        "base_seer": [],
+        "batches": [
+          {
+            "board_id": "e53991fa50f31dc4:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e2",
+                "kind": "seer",
+                "player": 1,
+                "target": 3
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 2,
+                "target": 3
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "board_graph": {
+          "archives": [
+            {
+              "ancestor_path": [
+                "e53991fa50f31dc4:board:1"
+              ],
+              "generation": 1,
+              "nodes": {
+                "e53991fa50f31dc4:board:1": {
+                  "active": true,
+                  "branch": 1,
+                  "children": [],
+                  "day": 1,
+                  "edge": null,
+                  "generation": 0,
+                  "id": "e53991fa50f31dc4:board:1",
+                  "input_revision": 0,
+                  "legacy_claims": [
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent"
+                  ],
+                  "legacy_medium": [],
+                  "legacy_seer": [],
+                  "local_batches": [],
+                  "parent": null,
+                  "phase": "day",
+                  "revision": 0,
+                  "slot": 0
+                }
+              },
+              "owner": "e53991fa50f31dc4:board:1",
+              "retired_roots": [],
+              "settings": {
+                "claim_policy": {
+                  "medium": "filled",
+                  "villager": "filled",
+                  "wolf": "none"
+                },
+                "hunters": 0,
+                "mediums": 0,
+                "model": "group",
+                "players": 5,
+                "policy": {
+                  "day": "max",
+                  "fake_reports": "max",
+                  "include_self_bite": false,
+                  "night": "max"
+                },
+                "rules": {
+                  "allow_repeat_guard": true,
+                  "allow_self_bite": false,
+                  "initial_seer": "random_white"
+                },
+                "seers": 1,
+                "wolves": 1
+              }
+            }
+          ],
+          "current": "e53991fa50f31dc4:board:1",
+          "game_id": "e53991fa50f31dc4",
+          "generation": 1,
+          "invalidated": [
+            "e53991fa50f31dc4:board:1"
+          ],
+          "next_board": 2,
+          "next_branch": 2,
+          "nodes": {
+            "e53991fa50f31dc4:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "content_generation": 1,
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "e53991fa50f31dc4:board:1",
+              "input_revision": 1,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [
+                {
+                  "board_id": "e53991fa50f31dc4:board:1",
+                  "day": 1,
+                  "events": [
+                    {
+                      "action": "assert",
+                      "id": "b1:e0",
+                      "kind": "co",
+                      "player": 1,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e1",
+                      "kind": "co",
+                      "player": 2,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e2",
+                      "kind": "seer",
+                      "player": 1,
+                      "target": 3
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e3",
+                      "kind": "seer",
+                      "player": 2,
+                      "target": 3
+                    }
+                  ],
+                  "id": 1,
+                  "mode": "simultaneous",
+                  "phase": "day",
+                  "slot": 0
+                }
+              ],
+              "parent": null,
+              "phase": "day",
+              "retired_children": [],
+              "revision": 1,
+              "slot": 0
+            }
+          },
+          "root": "e53991fa50f31dc4:board:1"
+        },
+        "board_id": "e53991fa50f31dc4:board:1",
+        "branch_id": 1,
+        "has_local_legacy": false,
+        "legacy": false,
+        "local_batches": [
+          {
+            "board_id": "e53991fa50f31dc4:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e2",
+                "kind": "seer",
+                "player": 1,
+                "target": 3
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 2,
+                "target": 3
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "local_legacy": {
+          "claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "medium": [],
+          "seer": []
+        },
+        "next_id": 2,
+        "report_publications": {
+          "seer:1:1": {
+            "board_id": "e53991fa50f31dc4:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          },
+          "seer:1:2": {
+            "board_id": "e53991fa50f31dc4:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          }
+        },
+        "retired_input_reports": [],
+        "version": 2
+      },
+      "reports": [],
+      "result_disclosure_model": "full-observed-v1",
+      "revision": 1,
+      "rules": {
+        "allow_repeat_guard": true,
+        "allow_self_bite": false,
+        "initial_seer": "random_white"
+      },
+      "seer_inputs": [
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 1,
+          "target": 3
+        },
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 2,
+          "target": 3
+        }
+      ],
+      "seer_mode": "information-fixed-v1",
+      "seer_options": {
+        "initial_rule": "random_white",
+        "likelihood": "compatibility"
+      },
+      "seers": 1,
+      "selection": null,
+      "wolves": 1
+    },
+    "old": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 5,
+      "wolves": 1,
+      "enabled": false,
+      "physical_reuse": false,
+      "retired_reuse": false,
+      "compact_keys": false,
+      "fast_parts": false,
+      "retirement_proof": false,
+      "retirement_proof_hits": 0,
+      "seconds": 0.5830901000008453,
+      "value": "1",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {},
+      "mask_stats": {},
+      "expansions": {
+        "actions": 1175,
+        "values": 882
+      },
+      "memory": {
+        "peak_working_set_bytes": 63578112,
+        "peak_process_commit_bytes": 52318208,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "new": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 5,
+      "wolves": 1,
+      "enabled": true,
+      "physical_reuse": true,
+      "retired_reuse": true,
+      "compact_keys": true,
+      "fast_parts": true,
+      "retirement_proof": true,
+      "retirement_proof_hits": 10,
+      "seconds": 0.10809199998038821,
+      "value": "1",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {
+        "key_seconds": 0.04109410007367842,
+        "key_requests": 312,
+        "key_source_hits": 11,
+        "key_supported": 312,
+        "key_value_hits": 0,
+        "key_action_hits": 22,
+        "generated_publication_branches": 35,
+        "acquisition_states": 13,
+        "kernel_requests": 448,
+        "kernel_hits": 384,
+        "kernel_computations": 64,
+        "kernel_key_seconds": 0.004593500023474917
+      },
+      "mask_stats": {
+        "mask_requests": 415,
+        "mask_hits": 402
+      },
+      "expansions": {
+        "actions": 219,
+        "values": 71
+      },
+      "memory": {
+        "peak_working_set_bytes": 64016384,
+        "peak_process_commit_bytes": 52748288,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "equal": true
+  },
+  {
+    "case": "medium-max-five",
+    "original_inherited_numerical_methods": true,
+    "original_new_optimizations_disabled": true,
+    "game": {
+      "claim_policy": {
+        "medium": "filled",
+        "villager": "filled",
+        "wolf": "none"
+      },
+      "claims": [
+        "seer",
+        "seer",
+        "medium",
+        "latent",
+        "latent"
+      ],
+      "history": [],
+      "hunters": 0,
+      "mediums": 1,
+      "model": "group",
+      "players": 5,
+      "policy": {
+        "day": "max",
+        "fake_reports": "max",
+        "include_self_bite": false,
+        "night": "max"
+      },
+      "public_log": {
+        "acquisition_provenance": [
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 1,
+            "source": "b1:e3",
+            "target": 4
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 2,
+            "source": "b1:e4",
+            "target": 4
+          }
+        ],
+        "base_claims": [
+          [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ]
+        ],
+        "base_medium": [],
+        "base_seer": [],
+        "batches": [
+          {
+            "board_id": "9175949ceb977cec:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "board_graph": {
+          "archives": [
+            {
+              "ancestor_path": [
+                "9175949ceb977cec:board:1"
+              ],
+              "generation": 1,
+              "nodes": {
+                "9175949ceb977cec:board:1": {
+                  "active": true,
+                  "branch": 1,
+                  "children": [],
+                  "day": 1,
+                  "edge": null,
+                  "generation": 0,
+                  "id": "9175949ceb977cec:board:1",
+                  "input_revision": 0,
+                  "legacy_claims": [
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent"
+                  ],
+                  "legacy_medium": [],
+                  "legacy_seer": [],
+                  "local_batches": [],
+                  "parent": null,
+                  "phase": "day",
+                  "revision": 0,
+                  "slot": 0
+                }
+              },
+              "owner": "9175949ceb977cec:board:1",
+              "retired_roots": [],
+              "settings": {
+                "claim_policy": {
+                  "medium": "filled",
+                  "villager": "filled",
+                  "wolf": "none"
+                },
+                "hunters": 0,
+                "mediums": 1,
+                "model": "group",
+                "players": 5,
+                "policy": {
+                  "day": "max",
+                  "fake_reports": "max",
+                  "include_self_bite": false,
+                  "night": "max"
+                },
+                "rules": {
+                  "allow_repeat_guard": true,
+                  "allow_self_bite": false,
+                  "initial_seer": "random_white"
+                },
+                "seers": 1,
+                "wolves": 1
+              }
+            }
+          ],
+          "current": "9175949ceb977cec:board:1",
+          "game_id": "9175949ceb977cec",
+          "generation": 1,
+          "invalidated": [
+            "9175949ceb977cec:board:1"
+          ],
+          "next_board": 2,
+          "next_branch": 2,
+          "nodes": {
+            "9175949ceb977cec:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "content_generation": 1,
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "9175949ceb977cec:board:1",
+              "input_revision": 1,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [
+                {
+                  "board_id": "9175949ceb977cec:board:1",
+                  "day": 1,
+                  "events": [
+                    {
+                      "action": "assert",
+                      "id": "b1:e0",
+                      "kind": "co",
+                      "player": 1,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e1",
+                      "kind": "co",
+                      "player": 2,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e2",
+                      "kind": "co",
+                      "player": 3,
+                      "role": "medium"
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e3",
+                      "kind": "seer",
+                      "player": 1,
+                      "target": 4
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e4",
+                      "kind": "seer",
+                      "player": 2,
+                      "target": 4
+                    }
+                  ],
+                  "id": 1,
+                  "mode": "simultaneous",
+                  "phase": "day",
+                  "slot": 0
+                }
+              ],
+              "parent": null,
+              "phase": "day",
+              "retired_children": [],
+              "revision": 1,
+              "slot": 0
+            }
+          },
+          "root": "9175949ceb977cec:board:1"
+        },
+        "board_id": "9175949ceb977cec:board:1",
+        "branch_id": 1,
+        "has_local_legacy": false,
+        "legacy": false,
+        "local_batches": [
+          {
+            "board_id": "9175949ceb977cec:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "local_legacy": {
+          "claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "medium": [],
+          "seer": []
+        },
+        "next_id": 2,
+        "report_publications": {
+          "seer:1:1": {
+            "board_id": "9175949ceb977cec:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          },
+          "seer:1:2": {
+            "board_id": "9175949ceb977cec:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          }
+        },
+        "retired_input_reports": [],
+        "version": 2
+      },
+      "reports": [],
+      "result_disclosure_model": "full-observed-v1",
+      "revision": 1,
+      "rules": {
+        "allow_repeat_guard": true,
+        "allow_self_bite": false,
+        "initial_seer": "random_white"
+      },
+      "seer_inputs": [
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 1,
+          "target": 4
+        },
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 2,
+          "target": 4
+        }
+      ],
+      "seer_mode": "information-fixed-v1",
+      "seer_options": {
+        "initial_rule": "random_white",
+        "likelihood": "compatibility"
+      },
+      "seers": 1,
+      "selection": null,
+      "wolves": 1
+    },
+    "old": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 5,
+      "wolves": 1,
+      "enabled": false,
+      "physical_reuse": false,
+      "retired_reuse": false,
+      "compact_keys": false,
+      "fast_parts": false,
+      "retirement_proof": false,
+      "retirement_proof_hits": 0,
+      "seconds": 0.7252340000122786,
+      "value": "1",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "1",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "medium",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {},
+      "mask_stats": {},
+      "expansions": {
+        "actions": 1175,
+        "values": 900
+      },
+      "memory": {
+        "peak_working_set_bytes": 64229376,
+        "peak_process_commit_bytes": 52957184,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "new": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 5,
+      "wolves": 1,
+      "enabled": true,
+      "physical_reuse": true,
+      "retired_reuse": true,
+      "compact_keys": true,
+      "fast_parts": true,
+      "retirement_proof": true,
+      "retirement_proof_hits": 14,
+      "seconds": 0.2563399000209756,
+      "value": "1",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1",
+            "wolf_win": "0"
+          },
+          "by_dawn": {
+            "village_win": "1/2",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "1",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "medium",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "1/2",
+            "wolf_win": "1/2"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "0"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {
+        "key_seconds": 0.11164370030746795,
+        "key_requests": 638,
+        "key_source_hits": 63,
+        "key_supported": 638,
+        "key_value_hits": 8,
+        "key_action_hits": 55,
+        "generated_publication_branches": 66,
+        "acquisition_states": 13,
+        "kernel_requests": 848,
+        "kernel_hits": 753,
+        "kernel_computations": 95,
+        "kernel_key_seconds": 0.009816499892622232
+      },
+      "mask_stats": {
+        "mask_requests": 680,
+        "mask_hits": 676
+      },
+      "expansions": {
+        "actions": 425,
+        "values": 150
+      },
+      "memory": {
+        "peak_working_set_bytes": 64229376,
+        "peak_process_commit_bytes": 52957184,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "equal": true
+  },
+  {
+    "case": "medium-max-six-two",
+    "original_inherited_numerical_methods": true,
+    "original_new_optimizations_disabled": true,
+    "game": {
+      "claim_policy": {
+        "medium": "filled",
+        "villager": "filled",
+        "wolf": "none"
+      },
+      "claims": [
+        "seer",
+        "seer",
+        "medium",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "history": [],
+      "hunters": 0,
+      "mediums": 1,
+      "model": "group",
+      "players": 6,
+      "policy": {
+        "day": "max",
+        "fake_reports": "max",
+        "include_self_bite": false,
+        "night": "max"
+      },
+      "public_log": {
+        "acquisition_provenance": [
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 1,
+            "source": "b1:e3",
+            "target": 4
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 2,
+            "source": "b1:e4",
+            "target": 4
+          }
+        ],
+        "base_claims": [
+          [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ]
+        ],
+        "base_medium": [],
+        "base_seer": [],
+        "batches": [
+          {
+            "board_id": "d718bd13fd50cf70:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "board_graph": {
+          "archives": [
+            {
+              "ancestor_path": [
+                "d718bd13fd50cf70:board:1"
+              ],
+              "generation": 1,
+              "nodes": {
+                "d718bd13fd50cf70:board:1": {
+                  "active": true,
+                  "branch": 1,
+                  "children": [],
+                  "day": 1,
+                  "edge": null,
+                  "generation": 0,
+                  "id": "d718bd13fd50cf70:board:1",
+                  "input_revision": 0,
+                  "legacy_claims": [
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent"
+                  ],
+                  "legacy_medium": [],
+                  "legacy_seer": [],
+                  "local_batches": [],
+                  "parent": null,
+                  "phase": "day",
+                  "revision": 0,
+                  "slot": 0
+                }
+              },
+              "owner": "d718bd13fd50cf70:board:1",
+              "retired_roots": [],
+              "settings": {
+                "claim_policy": {
+                  "medium": "filled",
+                  "villager": "filled",
+                  "wolf": "none"
+                },
+                "hunters": 0,
+                "mediums": 1,
+                "model": "group",
+                "players": 6,
+                "policy": {
+                  "day": "max",
+                  "fake_reports": "max",
+                  "include_self_bite": false,
+                  "night": "max"
+                },
+                "rules": {
+                  "allow_repeat_guard": true,
+                  "allow_self_bite": false,
+                  "initial_seer": "random_white"
+                },
+                "seers": 1,
+                "wolves": 2
+              }
+            }
+          ],
+          "current": "d718bd13fd50cf70:board:1",
+          "game_id": "d718bd13fd50cf70",
+          "generation": 1,
+          "invalidated": [
+            "d718bd13fd50cf70:board:1"
+          ],
+          "next_board": 2,
+          "next_branch": 2,
+          "nodes": {
+            "d718bd13fd50cf70:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "content_generation": 1,
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "d718bd13fd50cf70:board:1",
+              "input_revision": 1,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [
+                {
+                  "board_id": "d718bd13fd50cf70:board:1",
+                  "day": 1,
+                  "events": [
+                    {
+                      "action": "assert",
+                      "id": "b1:e0",
+                      "kind": "co",
+                      "player": 1,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e1",
+                      "kind": "co",
+                      "player": 2,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e2",
+                      "kind": "co",
+                      "player": 3,
+                      "role": "medium"
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e3",
+                      "kind": "seer",
+                      "player": 1,
+                      "target": 4
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e4",
+                      "kind": "seer",
+                      "player": 2,
+                      "target": 4
+                    }
+                  ],
+                  "id": 1,
+                  "mode": "simultaneous",
+                  "phase": "day",
+                  "slot": 0
+                }
+              ],
+              "parent": null,
+              "phase": "day",
+              "retired_children": [],
+              "revision": 1,
+              "slot": 0
+            }
+          },
+          "root": "d718bd13fd50cf70:board:1"
+        },
+        "board_id": "d718bd13fd50cf70:board:1",
+        "branch_id": 1,
+        "has_local_legacy": false,
+        "legacy": false,
+        "local_batches": [
+          {
+            "board_id": "d718bd13fd50cf70:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "local_legacy": {
+          "claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "medium": [],
+          "seer": []
+        },
+        "next_id": 2,
+        "report_publications": {
+          "seer:1:1": {
+            "board_id": "d718bd13fd50cf70:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          },
+          "seer:1:2": {
+            "board_id": "d718bd13fd50cf70:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          }
+        },
+        "retired_input_reports": [],
+        "version": 2
+      },
+      "reports": [],
+      "result_disclosure_model": "full-observed-v1",
+      "revision": 1,
+      "rules": {
+        "allow_repeat_guard": true,
+        "allow_self_bite": false,
+        "initial_seer": "random_white"
+      },
+      "seer_inputs": [
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 1,
+          "target": 4
+        },
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 2,
+          "target": 4
+        }
+      ],
+      "seer_mode": "information-fixed-v1",
+      "seer_options": {
+        "initial_rule": "random_white",
+        "likelihood": "compatibility"
+      },
+      "seers": 1,
+      "selection": null,
+      "wolves": 2
+    },
+    "old": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 6,
+      "wolves": 2,
+      "enabled": false,
+      "physical_reuse": false,
+      "retired_reuse": false,
+      "compact_keys": false,
+      "fast_parts": false,
+      "retirement_proof": false,
+      "retirement_proof_hits": 0,
+      "seconds": 1.3501773000170942,
+      "value": "1/4",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "1",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "medium",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1/2",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1/2",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 6,
+          "name": "Player 6",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {},
+      "mask_stats": {},
+      "expansions": {
+        "actions": 2244,
+        "values": 946
+      },
+      "memory": {
+        "peak_working_set_bytes": 65839104,
+        "peak_process_commit_bytes": 55091200,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "new": {
+      "trial_source": {
+        "future_reuse.py": "c757eb2ffce5c67fc7b1f8da6ccbf509189826ebb4baccbba4dd08be050974dc",
+        "fast_key_parts.py": "c0bef48c7b71228f7750edf7c6d8488292425aef3646357163470a6c1ac6ec07",
+        "measure_future_reuse.py": "462f7df6652f392a71b9208437e951bf36b4f2cad58bcff809a3b6b3d7e6b236",
+        "retirement_proof.py": "61aa41c6a84c85b5659d8f0557cb52c392669e67de2cfe05900f01b281351c45",
+        "extension_reuse.py": "de7517b41c038306fdb46a39b4201645aae2727a43230d90466399a25ae5cc61",
+        "extension_cases.py": "294339476fac1502e0e23b72974aaf27dca52ca8ba481690089046f8eef7d6df"
+      },
+      "complete": true,
+      "players": 6,
+      "wolves": 2,
+      "enabled": true,
+      "physical_reuse": true,
+      "retired_reuse": true,
+      "compact_keys": true,
+      "fast_parts": true,
+      "retirement_proof": true,
+      "retirement_proof_hits": 220,
+      "seconds": 1.1935252000112087,
+      "value": "1/4",
+      "table": [
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 1,
+          "name": "Player 1",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "1/2",
+            "hunter": "0"
+          },
+          "claim": "seer",
+          "legal": true,
+          "id": 2,
+          "name": "Player 2",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "1",
+          "citizen_probability": "0",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "medium",
+          "legal": true,
+          "id": 3,
+          "name": "Player 3",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 4,
+          "name": "Player 4",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "0",
+          "village_probability": "1",
+          "action": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1/2",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 5,
+          "name": "Player 5",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        },
+        {
+          "medium_probability": "0",
+          "citizen_probability": "1/2",
+          "extra_probabilities": {
+            "seer": "0",
+            "hunter": "0"
+          },
+          "claim": "latent",
+          "legal": true,
+          "id": 6,
+          "name": "Player 6",
+          "status": "\u751f\u5b58",
+          "alive": true,
+          "wolf_probability": "1/2",
+          "village_probability": "1/2",
+          "action": {
+            "village_win": "1/4",
+            "wolf_win": "3/4"
+          },
+          "by_dawn": {
+            "village_win": "0",
+            "wolf_win": "1/2"
+          },
+          "medium_timeline": [
+            {
+              "day": 1,
+              "target": null,
+              "color": "",
+              "editable": false,
+              "state": "none"
+            }
+          ],
+          "co_pending": false
+        }
+      ],
+      "stats": {
+        "key_seconds": 0.5073848994798027,
+        "key_requests": 2801,
+        "key_source_hits": 775,
+        "key_supported": 2801,
+        "key_value_hits": 120,
+        "key_action_hits": 758,
+        "generated_publication_branches": 84,
+        "acquisition_states": 236,
+        "kernel_requests": 2028,
+        "kernel_hits": 1750,
+        "kernel_computations": 278,
+        "kernel_key_seconds": 0.02821670033154078
+      },
+      "mask_stats": {
+        "mask_requests": 2500,
+        "mask_hits": 2488
+      },
+      "expansions": {
+        "actions": 1453,
+        "values": 436
+      },
+      "memory": {
+        "peak_working_set_bytes": 68743168,
+        "peak_process_commit_bytes": 58781696,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    "equal": true
+  }
+]

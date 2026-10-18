@@ -1,0 +1,10 @@
+{
+  "isolatedHeadlessEdge": true,
+  "backend": "Python server; no Pyodide",
+  "corpseOptionRetained": true,
+  "corpseSelected": true,
+  "publicWin": "1/3",
+  "ownerLaterDeathRetainsPublishedResults": true,
+  "http": 200,
+  "errors": []
+}

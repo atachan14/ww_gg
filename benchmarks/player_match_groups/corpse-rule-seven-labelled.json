@@ -1,0 +1,35 @@
+{
+  "rule": "corpse-target",
+  "same_retirement_and_physical_cache": true,
+  "new_canonical_reuse": false,
+  "equal": null,
+  "result": {
+    "complete": false,
+    "reason": "information_set_budget_exceeded",
+    "seconds": 74.9906631000049,
+    "stats": {
+      "key_seconds": 0.0,
+      "key_requests": 0,
+      "key_source_hits": 0,
+      "key_supported": 0,
+      "key_value_hits": 0,
+      "key_action_hits": 0,
+      "generated_publication_branches": 61682,
+      "acquisition_states": 1822,
+      "kernel_requests": 457736,
+      "kernel_hits": 453424,
+      "kernel_computations": 4312,
+      "kernel_key_seconds": 6.032170399179449
+    },
+    "mask_stats": {},
+    "expansions": {
+      "actions": 232892,
+      "values": 95494
+    },
+    "memory": {
+      "peak_working_set_bytes": 1108037632,
+      "peak_process_commit_bytes": 1104199680,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  }
+}

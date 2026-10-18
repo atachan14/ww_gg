@@ -22,7 +22,7 @@ class SeerForecastTests(unittest.TestCase):
     def test_target_information_values_are_computed_not_constant(self):
         b,s=fixture();before=copy.deepcopy((b,s))
         result=seer_forecast(b,1,(),Rules(initial_seer='none'),Strategy('max','random'),scan_state=s)
-        self.assertEqual(dict(result),{2:F(5,6),3:F(5,6),4:F(23,30)})
+        self.assertEqual(dict(result),{2:F(5,6),3:F(5,6),4:F(23,30),5:F(7,10)})
         self.assertEqual((b,s),before)
 
     def test_symmetric_targets_and_max_ties_are_equal(self):
@@ -41,7 +41,7 @@ class SeerForecastTests(unittest.TestCase):
         b,s=fixture();s=replace(s,initial_rule='normal',hypotheses=normalize(tuple(Hypothesis(h.roles,(Acquisition(1,1,2,'white'),),h.mass) for h in s.hypotheses if h.roles[0]!=2)))
         b=replace_worlds(b,s.public_roles)
         result=seer_forecast(b,1,(Acquisition(1,1,2,'white'),),Rules(initial_seer='normal'),Strategy(),scan_state=s)
-        self.assertEqual(set(dict(result)),{3,4})
+        self.assertEqual(set(dict(result)),{3,4,5})
         with self.assertRaises(ValueError):
             seer_forecast(b,1,(Acquisition(1,1,2,'black'),),Rules(initial_seer='normal'),Strategy(),scan_state=s)
 

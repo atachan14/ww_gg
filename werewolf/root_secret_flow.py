@@ -4,6 +4,7 @@ This API never replaces the fixed-CO entry or an unsupported max with random.
 Public Model A role weights and actual branch measures remain distinct.
 """
 from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
+from .seer_intervention import scan_intervention_matches
 from dataclasses import dataclass,replace,asdict
 from fractions import Fraction as F
 from .seer_acquisition import from_board,normalize
@@ -644,13 +645,13 @@ def root_branch_forecast(branch,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_s
 
 def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_actor=None):
     """Own scan interventions over the unchanged public joint policy law."""
-    from .seer_future_uniform import candidates
+    from .seer_future_uniform import candidates,scan_target_players
     compatible=lambda h:bool(h.roles[2]&(1<<(player-1))) and all(a in h.acquisitions for a in acquisitions)
     actor=_actor if _actor is not None else root_actor_view(branch,compatible)
     if isinstance(actor,FuturePending):return actor
     histories={tuple(a for a in h.acquisitions if a.player==player) for h in actor.physical_law.hypotheses}
     if len(histories)!=1:return FuturePending('seer_view_past_private_history_unresolved')
-    choices={candidates(h,player,branch.public.alive) for h in actor.physical_law.hypotheses}
+    choices={candidates(h,player,scan_target_players(branch.public_law,range(1,branch.public.player_count+1))) for h in actor.physical_law.hypotheses}
     if len(choices)!=1:return FuturePending('seer_view_target_generation_support_unresolved')
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)
@@ -668,9 +669,7 @@ def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFA
                 return tuple((target,invariant) for target in next(iter(choices)))
             for target in next(iter(choices)):
                 def observer(h,state,target=target):
-                    return compatible(h) and (len(state.rosters)<day or
-                        player not in state.rosters[day-1] or target not in state.rosters[day-1] or
-                        any(a.player==player and a.day==day and a.target==target for a in h.acquisitions))
+                    return compatible(h) and scan_intervention_matches(h,state,player,day,target)
                 value=engine.solve(branch.public,branch.public_law,branch.past,actor.physical_law,
                     observer,physical=physical_board(branch.public,actor.physical_law,branch.physical))
                 values.append((target,value))

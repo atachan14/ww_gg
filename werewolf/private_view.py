@@ -84,7 +84,7 @@ def condition_private(board, role, players, results=(), *, rules):
                 raise ValueError('Private result conflicts with initial seer rule')
             # Night N acquires result slot N+1 before that night's casualty.
             roster=acquisition_roster(board.player_count,board.history,day)
-            if target not in roster or players[0] not in roster:raise ValueError('Private scan target was unavailable')
+            if players[0] not in roster:raise ValueError('Private scan owner was unavailable')
             acquisitions.append(Acquisition(day,players[0],target,color))
         else:
             executions={event.target for event in board.history if event.phase=='day' and event.day==day-1}

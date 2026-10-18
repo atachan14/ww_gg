@@ -1,0 +1,915 @@
+{
+  "input": "a321faf3f7b27ec87d4857b7bfe7d279867980fc478df35ff4409945d6ae2b19",
+  "frozen_core": "4cf52d058bd89df4c5c7a61690a0b7b9bc45694ca075b4a54552be3b1353e473",
+  "original_full_complete": false,
+  "original_seconds": 24.999723199987784,
+  "original_recorded_nontrivial": 128,
+  "verified": 128,
+  "all_equal": true,
+  "reference": "original InformationSetForecast completed nontrivial act calls; exact full arguments/physical/private evidence passed unchanged",
+  "rows": [
+    {
+      "input": "6600039f0a7a0c468f0ff682f5647926be8f0c4b01a593d9c286fb1715596b33",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "906920a4c921ddf5c32ba8034445d7cd9dd6b762d0db0ae674e741dcd4f72e6d",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "015f3969dcc1a832b2d31949e14da3a3bca961b4e52936271a95bf506d4bd4fe",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "dde17b5f0dc6bb9a8ef7e403e03b749a6be9ac92638c2be688095b2d60091386",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "0381418fb69ce23cc99f6c028f77858c83f0b6dfad21ced175fa273ebfa08e27",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "f55b8877a83cad850fe623ed5798e522f9a4ef86b2910c47b3971a3e090d9246",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "793ce576dc24fae764a6af15dacbb67be21546a15c71dd94a711c9d77c6e8ea6",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "ce0a07871502da0a9d12783d5abfdda37b7d49f5c7f20c6881a7b01ad17cdb53",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "a41d59d278f55f54c69c67b4a8e8034e0e708801840f272b820c6b32feb78757",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "0d9b7224fc4ad22483c268ea5ce080e4740f94a83f541a1c9112d8e0165c7648",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "9344f8491165d8f81e0e0c1a0dfd81a05372ed678259dacbb9be3412c6980fb8",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "37e3a589e14474fe830826e3143ae044b1b3ac05074744345a420198c3e13bf2",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "56c96c8ce014e3f991ebe199ce10ab525b65834aa2e53063c27b4ccdef00ab8d",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "4cf3795543c3e83f4c52ad4d36dcfc664f396c8f922b371a4d6e7f8bb3b27c34",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "1da07df06109d956b6850c4f2f835b654ccb8a96f915cb8092fa474636c6e53a",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "f4f4f062069ab180421556c2a6ae945e854bb6b8707d80272ae6db5c3031f54e",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "c17eb90db449bff0a768f56f3a4438acbb2065d01c9fce39df9f94a33685cd78",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "7adce128dde868002281715645ef29466939b61a467f274e68da34c7c8c6a6c8",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "6f8d86b09680effbad16276689d255df233ba486932d9303a2377a59b458e253",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "49763a87f3ea1463490d3a7511e652de53e156245c972ce01b4e350d6b6a34ca",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "dbe1738eb8fc4b7eee09a5eedb4aa5c1e35221020ebfd16136276abd1806146c",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "16e9a2d92540d347326b4236ff0fb6e6fefe130d30804b2357dcc6cb4dcbedbe",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "5d0a0ea282738571af63a4053230eba197a9ee3ad2252c4dc89cbe5b1333c3e8",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "026a74127c687ad8a2aca5e7c4a019caad0c695a3c0f5276789278d09110a69b",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "07c1135344c7d1b278dcb31091db9c3a7703e97c18a567309dcb742560d0ac3d",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "506c7576e79d47963ea7281d7695aecfc613e884f30a3480b73467804d4f460b",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "5c3f92fe36b2ab4353699add126270f2a55bfe1633d92762ee2bb02bedfe5e78",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "72a3bfc83e4a68b78c89f48fadd96f394d76f0d74540d12954943d476b6f0dab",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "bb2170122a120d75b02d69037f5cee1ebfe5545d091e8a47a140cd750bbd754e",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "1d0e022eb24c481b6c982c3a9c914a2de60060a840d5818af073121ecbb5106a",
+      "value": "1/2",
+      "alive": 5,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "399ef09ccfc3a27a10dfd6a4b528e2a683a5df5f1249c648f105c62e04af1473",
+      "value": "1/2",
+      "alive": 5,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "0dae65d8a5609ccd966eaa2cf8252ee18af31ae278ec43d50cf2d1d3fd615fcf",
+      "value": "2/3",
+      "alive": 6,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "fcff6ab638fcb7a3f3cf176dbc0cfa5c746193d493aacc00bf780d98450f3f2d",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "28d05ccfc9ec24b9b1005b163fb0f62dc75cb5d67e5b974fe28e2428fc86be2e",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "6dd8a280da00f48adc708bc7dcc81792ba2d23ab18ffe93c084aad8b0afd75c0",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "3d8d1a79cc2e3dc16de31a54246f1360ccf8fc045b4f33b5a6ec385c03ddfbcd",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "9f3e9561e51e7db1d88d9d2c71a679edd05f3af48bc5e16dc7d72a9c7f6a6b65",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "5f0f10b1d9792dc3e426c6ae1717b8071d7fcfc5f3baa60c7aa9f57676b664b4",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "db014f1fbb203e85359d3588bd0fc5c29b30349ccd8e129a668aa6ae438949a4",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "4b4bebf75dda86ecf5490a1bcee3a8fe4de1338f0a44ecb6a3eeb17af7b3e6d7",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "23ace36721036e14b90a8e54e6ebef5ec59b65aedc9275a4b0c45b521a71fdbf",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "f52356e96df69d90d082b401d2990eda7e2bc19a77d49c2bc2bb4a0fab2802b4",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "dc391dfb8a392dbe55d3b0c0da364c410e1504702ebd27797e164e2f3f6b7803",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "7ade5a227d3c58c1de048764cdd17e91375787fb3db839f44a50acfd29006e81",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "465fe65d66d5537dc1552b55b2419cfcc34f5a1857826616eb9f28ad8df71823",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 6,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "42a07a3bb59040e61a7aa31381ebec583310440aa448a7c1a9143a675388ffe5",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "b2565feeba4d223706fe95f0df840c52f02c3cb4d4f55303e47a9b6e79052323",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "330eaac14be4287156fe707997f4997ae3f0018a302fbb1a2e32f3da98c08fcc",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "c8d1ab69ca49931b68eb66e986b764113428c8be4c986c775461e8ebcbc73064",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "0781d238fbdba62379ec1c4c38a9a004f4d085469d2bc34211387a5ed69cf2bc",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "1a013b37661fe95d6208774c513e711857758937e68cc847cba380bd5a7809b5",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "f8c3df39d235f8b049ce19045e17af9d13220f7e31bc44c707d9d353818f9fa1",
+      "value": "8/39",
+      "alive": 5,
+      "private_hypotheses": 6,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "0a883ddaf0e707e864f171ba5c72cefc3830c69fdca81427bf9acf2c729299b1",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "57724389db45aa6d5d83c5def09d4e9adfcce30a1ecb8aed2c632354b479bb35",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "11048811eb87923a90e3633085014390942d09bc8910ec4e4b0cc4d94a30b864",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "923db8a20bd0841a11d8de437deb96b23112b139be26f50133d11ea85e64eb03",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "6a84a86ff02c345e8e33ed4144c4d475826e10af0e68522ca9b1d27fbad97eb3",
+      "value": "16/39",
+      "alive": 5,
+      "private_hypotheses": 6,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "7556db9a136ddf2b5767396427cc7bdcf1d99650700971cd47df40dfff5e864b",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "51351e9a984235c38b981e9b06a58f4afa74c42eca263a92decdd4ae60604173",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "74049be0cd91e83c483251293f6863386112d85f50502e2888a660c41b030cb8",
+      "value": "1/2",
+      "alive": 5,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "4e6d54ecfba5cd698b78d208314df255cc7b33a06427a9fcace53fb15d98746a",
+      "value": "1/2",
+      "alive": 5,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "b59875422fabc4049530d664d024860ad27aba7b84d6011cd0f8a751c65f763a",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 6,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "dfa66dfdd7ac8863ab013cd559b4874bc5634de9c9f998f8c24a2e2b35d206d2",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "349c9126a90ec187d923d3f72779253b8b7f9a7c2f4172096c6c0bdb589160e5",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "6ffa42317bb24505d3a7c644dda5ad894f17979d705281f44bde18a9a3468b45",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "3098eb5f2ae61f41e4a9d622877b8c3a9487a763502d9e5ab8d662f5173d99c8",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "9687587eec61bc3a0e4b8755e65bec4f4f83e5529166c41687bc33cc676fa7d9",
+      "value": "1/3",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "ec70bd42f5b37cf6191ed4a2ff748898b8904b9d83076efaf2e98148ff2409e8",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "fcc6e078dad38547055124dae43ee56d92bf98f4b35869e63080564f5c3bf5de",
+      "value": "8/39",
+      "alive": 5,
+      "private_hypotheses": 6,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "28092671f4d08a5661718fe92128853d317a780cbfafaaf669e7650083377260",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "899649ec5897ace0e2d4654a9306114d79c211e3848d3682e12413c8fafa3681",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "01b73b24a676e5a5768cf58410fbdf00919de82c9604de1eb56f6cff07797eba",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "e6e3a797399748de1768a29b085f09fbfd745b43096fe63ca3b11189d230c371",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "643f1d76fd0984bff39b3bb8a8826f5b9b22b95aa005d18af6778ddf4b728a3b",
+      "value": "16/39",
+      "alive": 5,
+      "private_hypotheses": 6,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "ab39d708d3797d3168e7c3d9d6519402382ae7ff325bde46328b5cee95a03733",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "599ecfc2342de1112b05ab4e317a195720c87309e1c47e9c1e6add5931aa63b8",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "aa72bfa80256769f0270f6351c0e230511cd2a408a5203f532eabd9f322be614",
+      "value": "1/2",
+      "alive": 5,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "76ba3b6d81cf84ebe670bf79e9a2eb1d476ac5ba43036e8d74b936bde097d4c3",
+      "value": "1/2",
+      "alive": 5,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "5c40366f58d692d1738f1a1ee21d1153b0455c95f174fcade93b0d20ed0ecc06",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 4
+    },
+    {
+      "input": "3fbff9ca91347bbf77943f8fe5117f8b494c5d9016ef00c8de852e6922e663c0",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 4
+    },
+    {
+      "input": "0f606f9d3790c7bd5f39a040ed7cce7f5c5d7885652e9677a9539974b9daa7e6",
+      "value": "13/23",
+      "alive": 5,
+      "private_hypotheses": 4,
+      "public_hypotheses": 4
+    },
+    {
+      "input": "7ca3eec96aa04be3984d0844149044afa941471c025ff7823c38bb64558bbc96",
+      "value": "8/23",
+      "alive": 5,
+      "private_hypotheses": 4,
+      "public_hypotheses": 4
+    },
+    {
+      "input": "fbbd7c3261ef2070454e10f2dae3b1b0ad0c7fdbc6382aff895be92165523fcd",
+      "value": "13/23",
+      "alive": 5,
+      "private_hypotheses": 4,
+      "public_hypotheses": 4
+    },
+    {
+      "input": "2f806678588ff341f640b806af4aa8da3931dac1f65cf15c74ed8d4c1ceb3e46",
+      "value": "8/23",
+      "alive": 5,
+      "private_hypotheses": 4,
+      "public_hypotheses": 4
+    },
+    {
+      "input": "0996cf9250e6b677b2713c8552b7886b31fea66cc6848d3670ec7ea97b55704e",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "9d7672df16240a0ebcd36f88335dd0342cb7a0ad0a1876c103e66c9274345c2c",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "bda19fe4a065ae87134208266cd9acd43efe338031da7390d58871c55c2351a8",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "8d4c06ab1febb49117f36b18792f51393faec7bb2d94721294e4c6ccb0e54c88",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "999fe0f6767264240b5d534394807b6a9ac4c1f671808e9490fc66e960166f18",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "1b402fe39349642619db134afd01814eef1e2e6dd8a39e0ecd5553b9165dc47a",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "e7ba8b6a2ab92a4c41db26796dccc85ce0332a283e7c81563db7ec483923496f",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "8a5f308f95f73935ec50baf2b4097404873dd7eb738599bc3012b67ab6183e3d",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "9de27272471bd25266057ab8f8fcec8607d85b811ade0e276ffb709613d64acd",
+      "value": "13/31",
+      "alive": 5,
+      "private_hypotheses": 5,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "eae90aefd5694b702fa23f6509191b488cff10c5ea11df68067fa6c40cd7542c",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "6e1c4944da0499414d50b1efa4b6dfbf4a6d64c52efa6eda6125d782f00f8170",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "02855712037712cc583f088252f8e63f319fd56562c279a1691ecc699faaa0e8",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "4cbf9428dfe938767ab6729aecf1e908377728a70f6ae78a370631f157c94b1b",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "a8947161f085c162448b5f5d80417ddbe323ca42fdbdf3ae653d3838e5741571",
+      "value": "8/31",
+      "alive": 5,
+      "private_hypotheses": 5,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "f6665e3ba1f387a080e19e7da27abedb007d74f6f49873e3cb8e70814189a903",
+      "value": "16/31",
+      "alive": 5,
+      "private_hypotheses": 5,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "8a750f0541f5338797e6743916526e740af3be375c590abc221200484a1ab897",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "d505e58ad5fe3eb47444d9e4890e864e7365a92fa0322030891938f839d3f28c",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "122873d1e0f89d64661bfdc4f1aef0250758f5cd4960ce79351aad353468b4aa",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "232fbd7685d4d3e786be962366b325748f14bb6ba3563aaf572e9d4cbf22198f",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "b898113cbeb35443a92007ec20cd0ffd2d74c8903a67a07081bca812af0aba08",
+      "value": "8/31",
+      "alive": 5,
+      "private_hypotheses": 5,
+      "public_hypotheses": 5
+    },
+    {
+      "input": "12f8392f27e292b31434e60241e9a0e53e412d11e766ae131ab9549df43010b3",
+      "value": "13/15",
+      "alive": 6,
+      "private_hypotheses": 1,
+      "public_hypotheses": 6
+    },
+    {
+      "input": "023ed95bfd0a1f4a601a85acbf476937033f261a2302682e29adf710724734c4",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "1a6afd1172a3bb31f43824ee6f6a70633bbdf97c757ba98f1a419f7629c014ff",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "d0f208beda4e4f35ff55d2a161994ad900952229faa6367215311b39099f62e4",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "a64fed0fd5f953bad3594994b0f9a0116881f8ecb1d3bbaf19d901665941eb23",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "ba330f4560acc3cb54bfcbfc09e602d8633fb2db1986d7538138e037cbc444ee",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "517f85fd717bb906892df86f0c048b3b769a403bd08329182151e087a253a9dc",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "5e29bc0aa8b08d14b8db0f0603dbbd936ec726c3b8c2bb87a1ce72937607847b",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "a6b31f245521c9a8ca87b0a63283e4612ef25ce6fe72c1202fb5dce14e773e0a",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "8a5c7fb5e6d1b98cde620c8365bf27deb394df1cad2385717efc8b8a870dda50",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "eb04a9bfc7416eaf6d1a95106d64ebb2f7f2979c2cf6bcb37c925b4cd9bb9ae6",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "33f4365d201f5b0c7ea0e7c907d7660657d508d136e04ecd4249fb83611c208e",
+      "value": "1/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "6e39e85a393f0bc254994d03e5f9b82f67662b41b4c0d5d205389d42dba332ac",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "fea8f11c4ec96f8354fab0375bb10dbe995f99e6e7df972195623f10208fc89b",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "27b5118474e3f12f8e398a30644e21f2829f2a02077e41009f59371f95bc9c18",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "550dcf02f4cecce6da313694c5d56fdfe3f4c092d813bb8279766bd95ee388cb",
+      "value": "3/4",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "40a7a9932e34db7c11aefcace74286a2164e5680deb60ef071e7e494d52c59f6",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "0c84c94ec815d59b9fdacbafaba35bb68681a7b19ddef0809c6fe883c05efb30",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "224376db6e91319f00db5536e02f0e3c561682ae4ff5e613afbb9a06f95999af",
+      "value": "2/3",
+      "alive": 5,
+      "private_hypotheses": 3,
+      "public_hypotheses": 3
+    },
+    {
+      "input": "b78e59d2838c3af1de2a812c604c8ca84741a30a7b08fe2f5f942e3f5a8a7b11",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "ace427d5183d06c537c4f53ef4b1cd3ad86a9ee6f460d954929941818f3dc75c",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "75ff449fd8bacca10a7655c28e8b4569acd5f4450ed57ae0f0939767601d61d2",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "a37dd7e616d88ce58da639c61e39ae6fecc495c148a4b8c6b1617302d923305a",
+      "value": "1/2",
+      "alive": 4,
+      "private_hypotheses": 1,
+      "public_hypotheses": 2
+    },
+    {
+      "input": "7e023d7dbfed7b4b4fdd094de5cca2db8be9176526206c149239716de55f52b7",
+      "value": "1/2",
+      "alive": 5,
+      "private_hypotheses": 2,
+      "public_hypotheses": 2
+    }
+  ],
+  "seconds": 25.520387900003698,
+  "memory": {
+    "peak_working_set_bytes": 482525184,
+    "peak_process_commit_bytes": 473890816,
+    "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+  },
+  "reference_rule": "corrected corpse-target rule; original evaluator class with new sharing/retirement/physical cache disabled"
+}

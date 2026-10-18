@@ -108,7 +108,8 @@ class ExtensionReuseTests(unittest.TestCase):
             e=ExtensionForecast(*args,future_reuse=True,physical_reuse=True,combined_reuse=True,extended_retirement=True,retirement_proof=True,**kwargs);engines.append(e);return e
         with patch('werewolf.seer_view_forecast.InformationSetForecast',factory):
             trial=seer_forecast(b,1,own,rules,strategy,scan_state=s,past=past,max_seconds=10)
-        self.assertEqual(original,FuturePending('seer_view_scan_outside_public_support'))
+        self.assertNotIsInstance(original,FuturePending)
+        self.assertTrue(all(v==1 for _,v in original))
         self.assertEqual(original,trial)
         self.assertTrue(engines)
         self.assertTrue(all(e.reuse_stats['key_requests']==e.retirement_proof_hits==0 for e in engines))

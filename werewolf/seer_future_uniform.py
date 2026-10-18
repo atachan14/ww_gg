@@ -39,7 +39,7 @@ class TrueScanState:
             for a in h.acquisitions:
                 if self.tracked is not None and a.player not in self.tracked:raise ValueError('Acquisition owner is marginalized, not tracked')
                 if a.day==1 and (self.initial_rule=='none' or self.initial_rule=='random_white' and a.color!='white'):raise ValueError('Initial acquisition violates GameRule')
-                if a.day>len(self.rosters) or a.player not in self.rosters[a.day-1] or a.target not in self.rosters[a.day-1]:raise ValueError('Acquisition lacks its original night roster')
+                if a.day>len(self.rosters) or a.player not in self.rosters[a.day-1] or a.target not in self.rosters[0]:raise ValueError('Acquisition owner lacks its night roster or target lacks the original player roster')
             for day,alive in enumerate(self.rosters,1):
                 expected={p for p in alive if h.roles[2]&(1<<(p-1)) and (self.tracked is None or p in self.tracked)} if day!=1 or self.initial_rule!='none' else set()
                 actual={a.player for a in h.acquisitions if a.day==day}
@@ -59,9 +59,14 @@ class TrueScanState:
 def validate_roster(alive):
     if not isinstance(alive,tuple) or len(set(alive))!=len(alive) or any(type(p)is not int or not 1<=p<=9 for p in alive):raise ValueError('Explicit unique 1-9 player roster required')
 
-def candidates(h,player,alive):
-    """Use only this player's own history; other seers' private scans do not count."""
-    legal=tuple(sorted(p for p in alive if p!=player))
+def scan_target_players(state,fallback=()):
+    """All original players are scan targets; later rosters govern owners only."""
+    return state.rosters[0] if state.rosters else tuple(fallback)
+
+
+def candidates(h,player,players):
+    """Use own history on the original target domain, including corpses."""
+    legal=tuple(sorted(p for p in players if p!=player))
     visited={a.target for a in h.acquisitions if a.player==player}
     preferred=tuple(p for p in legal if p not in visited)
     return preferred or legal
@@ -75,13 +80,13 @@ def acquire_uniform(state,alive,*,max_work=DEFAULT_MAX_WORK,position=('unvisited
     if tuple(position)!=('unvisited','uniform'):raise ValueError('Unsupported ordered scan-position filters')
     validate_roster(alive)
     if state.rosters and not set(alive)<=set(state.rosters[-1]):raise ValueError('Acquisition roster cannot resurrect players')
-    day=len(state.rosters)+1;entries=[]
+    day=len(state.rosters)+1;entries=[];targets_roster=scan_target_players(state,alive)
     try:
         with calculation_budget(max_work):
             for h in state.hypotheses:
                 tick()
                 owners=tuple(p for p in alive if h.roles[2]&(1<<(p-1)) and (state.tracked is None or p in state.tracked)) if day!=1 or state.initial_rule!='none' else ()
-                choices=tuple(tuple(p for p in alive if p!=owner and not h.roles[0]&(1<<(p-1))) if day==1 and state.initial_rule=='random_white' else candidates(h,owner,alive) for owner in owners)
+                choices=tuple(tuple(p for p in targets_roster if p!=owner and not h.roles[0]&(1<<(p-1))) if day==1 and state.initial_rule=='random_white' else candidates(h,owner,targets_roster) for owner in owners)
                 if any(not c for c in choices):return FuturePending('no_legal_true_seer_target; terminal handling belongs to caller')
                 count=1
                 for c in choices:count*=len(c)

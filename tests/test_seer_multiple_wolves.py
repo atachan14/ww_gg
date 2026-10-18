@@ -23,7 +23,7 @@ class MultipleWolfSeerTests(unittest.TestCase):
                 self.assertEqual(set(b.wolf_count_distribution),counts)
                 values=seer_forecast(b,1,(),Rules(initial_seer='none'),Strategy(),scan_state=s)
                 self.assertNotIsInstance(values,FuturePending)
-                self.assertEqual(set(dict(values)),{2,3,4,5,6})
+                self.assertEqual(set(dict(values)),{2,3,4,5,6,7})
                 self.assertTrue(all(0<=v<=1 for _,v in values));self.assertEqual((b,s),before)
 
     def test_private_count_prior_is_preserved_and_illegal_public_instruction_is_pending(self):

@@ -74,7 +74,7 @@ def reconstruct_manual(g,guard_priors,common_rules=None):
         selected=tuple(r for r in rows if publication_slot(g,'seer',r)<=slot and (r['day'],r['reporter']) not in applied)
         for row in selected:
             if row['reporter'] not in board.alive or claims[row['reporter']-1]!='seer':raise ValueError('結果の公開時点に生存・占いCOしている報告者を指定してください。')
-            if row['target'] is not None and row['target'] not in scan[row['day']]:raise ValueError('取得時点に生存していた対象を指定してください。')
+            if row['target'] is not None and (not 1<=row['target']<=g['players'] or row['target']==row['reporter']):raise ValueError('Scan target must be another original player; corpses are legal')
         complete=tuple(r for r in selected if r['target'] is not None and r['color'] is not None)
         if opt['initial_rule'] is not None and opt['likelihood'] is not None:board=condition(board,complete,opt,initial)
         applied.update((r['day'],r['reporter']) for r in selected)

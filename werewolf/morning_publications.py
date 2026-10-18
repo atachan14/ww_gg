@@ -34,7 +34,7 @@ def fake_backlog_options(state,reporters,past):
     p=reporters[0];seen={(r.player,r.acquired_day) for r in past};plans=[]
     for day,roster in enumerate(state.rosters,1):
         if day==1 and state.initial_rule=='none' or p not in roster or (p,day) in seen:continue
-        options=fake_uniform_options(roster,p,past)
+        options=fake_uniform_options(state.rosters[0],p,past)
         if isinstance(options,FuturePending):return options
         plans.append(tuple((SeerReport(day,len(state.rosters),p,t,c),q) for (t,c),q in options))
     result=[]

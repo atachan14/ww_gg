@@ -5,7 +5,7 @@ from .seer_future_uniform import FuturePending,validate_roster
 
 
 def fake_uniform_options(alive,player,past):
-    """Own PUBLIC unreported living targets first; target and color uniform.
+    """Own PUBLIC unreported legal targets first (including corpses); target and color uniform.
 
     This is for a future-night report, not a rule for initial declarations.
     It deliberately does not inspect teammate identities or private scans.

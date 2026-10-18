@@ -104,16 +104,18 @@ def public_worlds(entries):
     return tuple((*roles,q) for roles,q in sorted(grouped.items()))
 
 
-def acquire(entries, day, alive, targets):
+def acquire(entries, day, alive, targets, *, target_players=None):
     """Apply one already chosen common instruction; do not optimize inside worlds.
 
     targets supplies every possible live seer position, including latent ones.
     The visible action selector must supply it without inspecting entries.
     """
     if type(day) is not int or day<1 or len(set(alive))!=len(alive):raise ValueError('Invalid acquisition opportunity')
+    legal=tuple(alive)if target_players is None else tuple(target_players)
+    if any(type(p)is not int or p<1 for p in legal)or len(set(legal))!=len(legal):raise ValueError('Original target roster required')
     possible={p for h in entries for p in alive if h.roles[2] & (1<<(p-1))}
-    if not possible<=set(targets) or any(targets[p] not in alive or targets[p]==p for p in possible):
-        raise ValueError('Target must be another player alive on that night')
+    if not possible<=set(targets) or any(targets[p] not in legal or targets[p]==p for p in possible):
+        raise ValueError('Target must be another original player; corpses are legal')
     result=[]
     for h in entries:
         players=tuple(p for p in alive if h.roles[2] & (1<<(p-1)))

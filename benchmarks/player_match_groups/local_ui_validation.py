@@ -8,8 +8,10 @@ from werewolf.player_view import build_public_view,ViewScope,ResultFrame
 from werewolf.exact import Values
 from .checkpoint_audit import encode
 
-def run():
-    source=json.loads(Path('benchmarks/player_match_groups/actual-seven-extended-retirement.json').read_text(encoding='utf-8'))
+def run(corpse_rule=False):
+    source=json.loads(Path('benchmarks/player_match_groups/'+('corpse-rule-seven-results.json' if corpse_rule else 'actual-seven-extended-retirement.json')).read_text(encoding='utf-8'))
+    if corpse_rule: source['result']=source['after']
+    expected=source['result']['value']
     app=create_app({'TESTING':True,'SECRET_KEY':'local-ui-seven','HYBRID_TABLE_PREVIEW':True,'SEER_UNIFORM_FUTURE_PREVIEW':True,'EXACT_FUTURE_REUSE_PREVIEW':True,'MANUAL_CALC_MAX_SECONDS':60})
     c=app.test_client()
     with c.session_transaction()as session:session['game']=source['game']
@@ -29,8 +31,8 @@ def run():
     Path('.artifacts/local-ui-seven-row-differences.json').write_text(json.dumps(differences,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'row_differences':differences}),flush=True)
     assert not differences
-    assert re.search(r'id="village-rate"[^>]*data-fraction="17/36"',rendered[-1]['html'])
-    record=dict(reference='8f7455d actual-seven-extended-retirement.json complete local prototype',status=response.status_code,seconds=time.perf_counter()-started,roles_first=True,all_table_rows_match_preintegration_reference=True,terminal='17/36',execution='actual Flask NDJSON/position worker and BoardData runtime',event_types=[e['event']for e in events])
-    Path('benchmarks/player_match_groups/local-ui-seven-results.json').write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
+    assert re.search(r'id="village-rate"[^>]*data-fraction="'+re.escape(expected)+'"',rendered[-1]['html'])
+    record=dict(reference=('corpse-rule-seven-results.json corrected-rule complete prototype' if corpse_rule else '8f7455d historical pre-rule prototype'),status=response.status_code,seconds=time.perf_counter()-started,roles_first=True,all_table_rows_match_reference=True,terminal=expected,execution='actual Flask NDJSON/position worker and BoardData runtime',event_types=[e['event']for e in events])
+    Path('benchmarks/player_match_groups/'+('corpse-rule-ui-seven-results.json' if corpse_rule else 'local-ui-seven-results.json')).write_text(json.dumps(record,indent=2)+'\n',encoding='utf-8')
     return record
-if __name__=='__main__':print(json.dumps(run()),flush=True)
+if __name__=='__main__':print(json.dumps(run(corpse_rule=True)),flush=True)

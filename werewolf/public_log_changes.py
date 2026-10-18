@@ -121,7 +121,7 @@ def transaction_changes(g,board,payload,finished=False):
             acquired_alive=set(range(1,g['players']+1))
             if e['day']>1:
                 for step in g['history'][:2*e['day']-3]:acquired_alive.discard(step['target'])
-            if kind=='seer' and (e['target']==player or e['target'] not in acquired_alive or player not in acquired_alive):raise ValueError('取得時点の対象を確認してください。')
+            if kind=='seer' and (e['target']==player or player not in acquired_alive):raise ValueError('取得時点の対象を確認してください。')
             if kind=='medium' and (e['day']<2 or len(g['history'])<2*e['day']-3 or e['target']!=g['history'][2*e['day']-4]['target']):raise ValueError('霊能の取得日と処刑対象を確認してください。')
         key=identity(e)
         if key in seen:raise ValueError('同じ宣言が重複しています。')
