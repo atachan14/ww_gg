@@ -1,4 +1,4 @@
-"""Limited live-medium black publication -> Forecast and cold SavedOrigin.
+"""Limited live-medium single publication -> Forecast and cold SavedOrigin.
 
 A zero physical mass is an outcome receipt, not a normalized conditional law.
 Its Q hypothetical remains evaluable through existing PublicReportEvidence.
@@ -7,7 +7,7 @@ from dataclasses import dataclass,replace
 from fractions import Fraction as F
 from weakref import WeakKeyDictionary
 from time import perf_counter
-from .cut_out_live_medium_reports import prepublication,single_truth_orbits,restore_reports
+from .cut_out_live_medium_reports import prepublication,single_report_orbits,restore_reports
 from .cut_out_seven_w2_mid import SevenMidEngine,SevenMidReference,JointObservedChoice
 from .cut_out_joint_night_forecast import (ForecastCertificate,ExperimentalGraph,
     InformationSetForecast,Pending,point_fix,require,remember,Forecast,horizon_for_action,
@@ -24,9 +24,9 @@ _receipts=WeakKeyDictionary()
 
 class StructuralPublicationKernel(InformationSetForecast):
     def generate_publications(self,b,s,past):
-        if b.day==2 and len(b.history)==2 and any(r.reporter==3 and r.target==1 and r.color=='black' for r in b.reports):
+        if b.day==2 and len(b.history)==2 and any(r.reporter==3 and r.target==1 and r.color in ('black','white') for r in b.reports):
             from werewolf.morning_publications import public_report_branches
-            orbits=single_truth_orbits(b,s,past,GROUPS)
+            orbits=single_report_orbits(b,s,past,GROUPS,fake_policy=self.strategy.fake_seer_policy)
             return public_report_branches(b,past,restore_reports(orbits))
         return super().generate_publications(b,s,past)
 
@@ -57,21 +57,26 @@ def check(receipt):
     return receipt
 
 
-def make_case(target=5,color='white',*,restricted=False):
-    if (target,color) not in ((1,'black'),(3,'white'),(5,'black'),(5,'white'),(6,'black'),(6,'white'),(7,'black'),(7,'white')):
-        raise Pending('live_medium_black_single_scan_vector_scope')
+def make_case(target=5,color='white',*,restricted=False,medium='black',roster=None):
+    if medium not in ('black','white'):raise Pending('live_medium_result_scope')
+    if type(target)is not int or not 1<=target<=7 or color not in ('black','white'):
+        raise Pending('live_medium_single_report_input_scope')
+    if roster is not None and not restricted:raise Pending('live_medium_private_roster_requires_condition')
     e,before,_,r,w,request=prepublication(receipt=True,kernel_class=StructuralPublicationKernel)
     if restricted:
-        own=replace(before.private,hypotheses=normalize(tuple(h for h in before.private.hypotheses if h.roles[0]==17)))
+        roster=(17 if medium=='black' else 18) if roster is None else roster
+        if roster not in (17,18):raise Pending('live_medium_private_roster_scope')
+        own=replace(before.private,hypotheses=normalize(tuple(h for h in before.private.hypotheses if h.roles[0]==roster)))
         changed=replace(before,private=own,physical=physical_board(before.public,own,before.physical))
         recipe=condition_recipe(before,changed)
         if recipe is None:raise Pending('live_medium_private_roster_recipe_unproved')
         request=request.child(recipe,None);before=request.roles()
     rows=e.morning(before.public,before.public_state,before.past)
     physical=e.push(before.public_state,before.private,rows)
-    wanted=lambda b,p:any(x.reporter==3 and x.target==1 and x.color=='black' for x in b.reports) and any(x.player==2 and x.acquired_day==2 and (x.target,x.color)==(target,color) for x in p)
+    wanted=lambda b,p:any(x.reporter==3 and x.target==1 and x.color==medium for x in b.reports) and any(x.player==2 and x.acquired_day==2 and (x.target,x.color)==(target,color) for x in p)
     selected=[row for row in rows if wanted(row[1],row[3])]
-    if len(selected)!=1:raise Pending('live_medium_public_vector_not_unique')
+    if not selected:raise Pending('live_medium_public_vector_support_zero')
+    if len(selected)>1:raise Pending('live_medium_public_vector_not_unique')
     q,b,s,past=selected[0];observation=publication_key(b,past)
     selectedP=[row for row in physical if wanted(row[1],row[3])]
     if len(selectedP)>1:raise Pending('live_medium_physical_vector_not_unique')
@@ -132,12 +137,12 @@ def cold(cap,request):
     return result
 
 
-def audit(target,color,kind):
+def audit(target,color,kind,medium='black'):
     from .cut_out_joint_two_nights_fixture import complete_joint_selection,path_mappings
     from .cut_out_joint_night_forecast_fixture import full_readback
     if kind not in ('public','physical','zero'):raise Pending('live_medium_measure_kind_unproved')
     start=perf_counter();restricted=kind!='public'
-    receipt=make_case(target,color,restricted=restricted)
+    receipt=make_case(target,color,restricted=restricted,medium=medium,roster=17 if medium=='white' and kind=='zero' else None)
     cap=certificate(receipt,public=kind in ('public','zero'))
     assert cold(cap,cap.request)==cap.source
     rebuilt_before=cold(cap,GeneratedBoard(cap.request.origin,cap.request.history[:-1]))
@@ -164,25 +169,35 @@ def audit(target,color,kind):
     # report and the true-seer scan are both covered by the cold reconstruction.
     candidates=[(key,request) for key,request in candidates if request.roles().public.day==3 and 3 in request.roles().public.alive]
     if not candidates:raise Pending('live_medium_surviving_future_medium_witness_missing')
-    _,request=candidates[-1];warm=request.roles();assert cold(cap,request)==warm
+    with_reporter=[row for row in candidates if 2 in row[1].roles().public.alive]
+    _,request=(with_reporter or candidates)[-1];warm=request.roles();assert cold(cap,request)==warm
     assert len(warm.public.history)==4 and any(r.reporter==3 for r in warm.public.reports)
+    parity=None
+    if medium=='white':
+        def root_outcomes(target):
+            return next(outcomes for board,payload,t,outcomes in e.full_branch_records
+                if board==cap.source.public and payload.private==cap.source.private and t==target)
+        assert cap.source.public.wolf_count==2
+        assert all(o.board.winner=='wolf' for o in root_outcomes(3))
+        assert all(o.board.winner is None and o.board.wolf_count==1 for o in root_outcomes(2))
+        parity='execute known citizen -> immediate W2 parity; execute wolf2 -> W1 continuation'
     if kind=='zero':
         assert receipt.q>0 and receipt.p==0 and receipt.physical_request is None
         try:certificate(receipt)
         except Pending as error:zero_boundary=error.reason
         else:raise AssertionError('zero physical branch fabricated a law')
     else:zero_boundary=None
-    return dict(status='verified',target=target,color=color,kind=kind,Q_mass=str(receipt.q),P_mass=str(receipt.p),
+    return dict(status='verified',medium=medium,target=target,color=color,kind=kind,Q_mass=str(receipt.q),P_mass=str(receipt.p),
         forecast_measure='public_Q_hypothetical' if kind in ('public','zero') else 'conditional_physical_P',
         physical_weighted_contribution=str(receipt.p*a.village_win),
         village_win=str(a.village_win),action_values={p:str(v) for p,v in a.action_values},
         complete_Forecast_Table_equal=True,selection_contexts=selection[0],selection_pairs=selection[1],
         labelled_branches=len(actual['branches']),terminal_transitions=len(actual['terminals']),
-        independent_cold_prefix_and_future=True,zero_boundary=zero_boundary,
+        independent_cold_prefix_and_future=True,zero_boundary=zero_boundary,parity_check=parity,
         total_comparison_seconds=perf_counter()-start)
 
 
-def worker(target,color,kind):
+def worker(target,color,kind,medium='black'):
     import json,os,threading,time
     from .cut_out_uniform_game_fixture import peak_bytes
     start=perf_counter()
@@ -191,21 +206,23 @@ def worker(target,color,kind):
             if perf_counter()-start>120 or peak_bytes()>1500000000:os._exit(124)
             time.sleep(.05)
     threading.Thread(target=watch,daemon=True).start()
-    with calculation_budget(4000000,max_seconds=30):row=audit(target,color,kind)
+    with calculation_budget(4000000,max_seconds=30):row=audit(target,color,kind,medium)
     row['peak_working_set_bytes']=peak_bytes()
     print(json.dumps(row),flush=True)
 
-def run_all():
+def run_all(medium='black'):
     import json,subprocess,sys
     from pathlib import Path
-    cases=((1,'black'),(3,'white'),(5,'black'),(5,'white'),(6,'black'),(6,'white'),(7,'black'),(7,'white'))
-    result=dict(scope='live-medium3-black1-only',status='running',rows=[])
-    path=Path('benchmarks/player_match_groups/cut-out-live-medium-forecast-results.json')
-    for restricted in (False,True):
+    cases=((1,'black'),(3,'white'),(5,'black'),(5,'white'),(6,'black'),(6,'white'),(7,'black'),(7,'white')) if medium=='black' else tuple((t,c) for t in (1,3,5,6,7) for c in ('white','black'))
+    result=dict(scope='live-medium3-'+medium+'1-only',status='running',rows=[])
+    suffix='' if medium=='black' else '-white'
+    path=Path('benchmarks/player_match_groups/cut-out-live-medium'+suffix+'-forecast-results.json')
+    modes=('public','physical') if medium=='black' else ('public','physical','zero')
+    for mode in modes:
         for target,color in cases:
-            kind='public' if not restricted else ('zero' if (target,color) in ((5,'white'),(6,'black'),(7,'black')) else 'physical')
+            kind='zero' if medium=='black' and mode=='physical' and (target,color) in ((5,'white'),(6,'black'),(7,'black')) else mode
             try:
-                output=subprocess.run([sys.executable,'-m',__spec__.name,str(target),color,kind],capture_output=True,text=True,timeout=121)
+                output=subprocess.run([sys.executable,'-m',__spec__.name,str(target),color,kind,medium],capture_output=True,text=True,timeout=121)
                 if output.returncode:raise RuntimeError(output.stderr or output.stdout or 'worker stopped')
                 row=json.loads(output.stdout)
             except (subprocess.TimeoutExpired,RuntimeError,json.JSONDecodeError) as error:
@@ -214,14 +231,17 @@ def run_all():
             print(json.dumps(row),flush=True)
     result['status']='verified' if all(row['status']=='verified' for row in result['rows']) else 'unverified'
     if result['status']=='verified':
-        public=result['rows'][:8];restricted=result['rows'][8:]
-        assert sum(F(row['Q_mass']) for row in public)==F(1,2)
-        assert sum(F(row['P_mass']) for row in public)==F(4,9)
-        assert sum(F(row['Q_mass']) for row in restricted)==F(1,2)
-        assert sum(F(row['P_mass']) for row in restricted)==1
-        result['conditional_black_village_win']=str(sum(F(row['physical_weighted_contribution']) for row in public)/F(4,9))
+        n=len(cases);public=result['rows'][:n];restricted=result['rows'][n:2*n]
+        pmass=F(4,9) if medium=='black' else F(5,9)
+        for rows,expectedP in ((public,pmass),(restricted,F(1))):
+            assert sum(F(row['Q_mass']) for row in rows)==F(1,2)
+            assert sum(F(row['P_mass']) for row in rows)==expectedP
+        result['conditional_'+medium+'_village_win']=str(sum(F(row['physical_weighted_contribution']) for row in public)/pmass)
         result['restricted_village_win']=str(sum(F(row['physical_weighted_contribution']) for row in restricted))
-        result['retained_Q_positive_P_zero']=sum(row['kind']=='zero' for row in restricted)
+        result['retained_Q_positive_P_zero']=sum(row['kind']=='zero' for row in result['rows'][n:])
+        if medium=='white':
+            assert sum(F(row['Q_mass']) for row in result['rows'][2*n:])==F(1,2)
+            assert all(F(row['P_mass'])==0 for row in result['rows'][2*n:])
         result['max_comparison_seconds']=max(row['total_comparison_seconds'] for row in result['rows'])
         result['max_peak_working_set_bytes']=max(row['peak_working_set_bytes'] for row in result['rows'])
     path.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
@@ -231,4 +251,5 @@ def run_all():
 if __name__=='__main__':
     import sys
     if len(sys.argv)==1:run_all()
-    else:worker(int(sys.argv[1]),sys.argv[2],sys.argv[3])
+    elif sys.argv[1]=='--white':run_all('white')
+    else:worker(int(sys.argv[1]),sys.argv[2],sys.argv[3],sys.argv[4] if len(sys.argv)>4 else 'black')

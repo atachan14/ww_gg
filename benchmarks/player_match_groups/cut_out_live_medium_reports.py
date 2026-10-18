@@ -1,4 +1,4 @@
-"""Opt-in pre-vector aggregation after a surviving true medium's black report.
+"""Opt-in pre-vector aggregation after a surviving true medium report.
 
 This is a morning producer checkpoint, not a Forecast or initial-seven solver.
 Public generation only sees Q. Deferred named output is reweighted from the
@@ -13,7 +13,6 @@ from .cut_out_seven_w2_mid import (initial_night, InformationSetForecast,
 from .cut_out_joint_night_prototype import move_law, move_board
 from werewolf.exact import random_report_outcomes
 from werewolf.morning_publications import GeneratedPublication, public_report_branches
-from werewolf.seer_future_uniform import true_reports
 from werewolf.seer_acquisition import normalize
 
 
@@ -40,20 +39,22 @@ def prepublication(*, receipt=False, kernel_class=InformationSetForecast):
     return result+(r,w,request) if receipt else result
 
 
-def single_truth_orbits(board,state,past,groups):
-    """Partition acquisition patterns before constructing public report vectors.
-
-    Receipt boundary: fixed true seer P2, one new scan, Day2, exact Q symmetry,
-    and medium P3's observed black result for dead P1. No fake law is inferred.
-    Every acquisition, attack and initial role mask remains in each branch.
-    """
+def single_report_orbits(board,state,past,groups,*,fake_policy=('noncontradictory','uniform')):
+    """Reduce acquisition or exposed-fake primitives before making vectors."""
+    from .cut_out_single_report_patterns import report_patterns
+    if tuple(fake_policy) not in (('uniform',),('noncontradictory','uniform')):
+        raise Pending('live_medium_fake_policy_unproved')
     if (board.player_count!=7 or board.day!=2 or board.initial_hunter_count or
-        board.wolf_count!=1 or not any(r.reporter==3 and r.target==1 and r.color=='black' for r in board.reports)):
-        raise Pending('live_medium_black1_single_true_seer_scope')
+        board.alive!=(2,3,5,6,7) or len(state.rosters)!=2):
+        raise Pending('live_medium_single_report_scope')
+    medium=tuple(r for r in board.reports if r.reporter==3 and r.target==1)
+    if len(medium)!=1 or medium[0].color not in ('black','white'):
+        raise Pending('live_medium_observation_unproved')
+    truth=medium[0].color=='black'
+    if board.wolf_count!=(1 if truth else 2) or any(h.roles[2]!=(2 if truth else 1) for h in state.hypotheses):
+        raise Pending('live_medium_truth_owner_or_live_count_inconsistent')
     if groups!=((1,),(2,),(3,),(4,),(5,6,7)):
         raise Pending('live_medium_group_receipt_unproved')
-    if any(h.roles[2]!=2 for h in state.hypotheses):
-        raise Pending('live_medium_fake_or_ambiguous_true_owner_not_implemented')
     if tuple(p for p in board.alive if board.claims[p-1]=='seer')!=(2,):
         raise Pending('live_medium_multiple_reporters_not_implemented')
     for p in (6,7):
@@ -61,28 +62,23 @@ def single_truth_orbits(board,state,past,groups):
         if (move_law(state,tuple(mapping))!=state or move_board(board,state,tuple(mapping))!=board or
             tuple(sorted(replace(r,player=mapping[r.player-1],target=mapping[r.target-1]) for r in past))!=past):
             raise Pending('live_medium_complete_history_Q_not_exchangeable')
-    seen={(r.player,r.acquired_day) for r in past};patterns={}
-    for h in state.hypotheses:
-        scans=tuple(a for a in h.acquisitions if a.player==2 and (2,a.day) not in seen)
-        if len(scans)!=1 or scans[0].day!=2:
-            raise Pending('live_medium_one_unpublished_scan_required')
-        a=scans[0];block=next(g for g in groups if a.target in g)
-        # Only an acquisition pattern is keyed here. No complete named report
-        # vectors are generated and subsequently canonicalized.
-        patterns.setdefault((block,a.color),[]).append((h,a.target))
     result=[]
-    for (block,color),entries in patterns.items():
-        selected=tuple(h for h,target in entries if target==block[0])
-        if not selected:raise Pending('live_medium_orbit_representative_missing')
-        total=sum((h.mass for h,_ in entries),F())
+    for block,color,selected,total in report_patterns(state,past,groups,truth=truth,fake_policy=fake_policy):
         one=sum((h.mass for h in selected),F())
         if total!=one*len(block):raise Pending('live_medium_unequal_target_orbit_mass')
-        reports=true_reports(selected[0],past,board.alive,board.claims,2)
+        from werewolf.seer_acquisition import SeerReport
+        reports=(SeerReport(2,2,2,block[0],color),)
         branch=GeneratedPublication(reports,one,replace(state,hypotheses=normalize(selected)))
         result.append(ReportOrbit(block,color,total,branch))
-    if sum((o.mass for o in result),F())!=1:raise Pending('live_medium_incomplete_acquisition_patterns')
+    if sum((o.mass for o in result),F())!=1:raise Pending('live_medium_incomplete_report_patterns')
     return tuple(result)
 
+
+def single_truth_orbits(board,state,past,groups):
+    """Compatibility entry for the earlier black-only producer experiment."""
+    if not any(r.reporter==3 and r.target==1 and r.color=='black' for r in board.reports):
+        raise Pending('live_medium_black1_single_true_seer_scope')
+    return single_report_orbits(board,state,past,groups)
 
 def restore_reports(orbits):
     """Output-only label restoration; no report generator or solver is rerun."""
