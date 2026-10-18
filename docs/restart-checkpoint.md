@@ -1,4 +1,4 @@
-# Restart-safe checkpoint — paused
+# Restart-safe checkpoint — historical pause
 
 Recorded: 2026-10-18T21:59:53.2894029Z (UTC).
 
@@ -35,3 +35,8 @@ The server was not terminated or restarted. HTTP content was not retested in thi
 User requested pause for a possible desktop-app restart. Do not start the next implementation or any long job until instructed to resume. No forced termination was performed.
 
 The next design unit, if explicitly resumed, is a shared optional provenance carrier through ActionInputs/ContinuationInputs, trusted acquire_laws, general Q/P death/report event weights, cache receipt binding and cold evidence. Existing numerical kernels can remain; more cast-specific prototypes do not complete this chain. Original MAX needs separate policy/value equivariance assessment and must not be silently replaced by uniform.
+
+
+## Resumed after desktop restart
+
+The parent explicitly authorized resumption. The 157e52e research remains the baseline. Current shared work adds default-OFF acquisition kernel lineage to the input carriers and canonical acquisition cache-fill path; it does not add a new symmetry root, group merge, observer certificate, death/report propagation or MAX adoption. See the current ledger at the top and the resumed-common-implementation section of `publication-orbit-value-checkpoint.md`. The combined 96-test run passed. This file's earlier pause/process information is historical, not a new request to remain paused or a fresh process-health check.

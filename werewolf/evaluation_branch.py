@@ -51,6 +51,7 @@ class ActionInputs:
     private: object
     observer: object
     physical: object
+    provenance: object = field(default=None,compare=False,hash=False,repr=False)
 
     def __iter__(self):
         return iter((self.public_state,self.past,self.private,self.observer,self.physical))
@@ -69,6 +70,7 @@ class ContinuationInputs:
     observer: object
     physical: object
     board_data: object = field(default=None,compare=False,hash=False,repr=False)
+    provenance: object = field(default=None,compare=False,hash=False,repr=False)
 
     def __iter__(self):
         # Existing five-input evaluation helpers can still inspect a carrier;

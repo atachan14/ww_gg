@@ -359,7 +359,7 @@ def death_worker():
     print(json.dumps(row),flush=True)
 
 
-def seven_coverage_audit():
+def seven_coverage_audit(*,track_provenance=False):
     """Verification-only census of physical kernels; never Forecast/solve/MAX."""
     from .cut_out_first_cycle_coverage import base
     from .cut_out_joint_night_forecast_fixture import moved_source
@@ -374,8 +374,8 @@ def seven_coverage_audit():
     original,uniform=comparison_game()
     registry,witness=base();root=registry.origin()
     def no_value(*args,**kwargs):raise AssertionError('coverage audit must not solve/act')
-    def ordinary_engine():
-        e=InformationSetForecast(registry.engine.baseline.rules,registry.engine.baseline.strategy,exact_renaming=False,retire_uninformative_scans=False)
+    def ordinary_engine(track=False):
+        e=InformationSetForecast(registry.engine.baseline.rules,registry.engine.baseline.strategy,exact_renaming=False,retire_uninformative_scans=False,track_acquisition_provenance=track)
         e.retain_joint_guard_history=True;e.solve=e.act=no_value;return e
     def instructed_reference(law,alive):
         # Independent route: exhaustively select each deterministic legal
@@ -399,7 +399,7 @@ def seven_coverage_audit():
         return (same_role_board(left.public,right.public) and same_role_board(left.physical,right.physical)
             and all(getattr(left,k)==getattr(right,k) for k in ('public_state','private','past','observer')))
     seer1_record=next(a for h in root.private.hypotheses if h.roles[2]&1 for a in h.acquisitions if a.player==1)
-    contexts=[];day_checks=0;kernel_checks=0;symmetry_checks=0;instruction_count=0;input_rows=0;output_rows=0;seconds=Counter();negative=None
+    contexts=[];day_checks=0;kernel_checks=0;symmetry_checks=0;instruction_count=0;input_rows=0;output_rows=0;seconds=Counter();negative=None;lineage=Counter()
     with calculation_origin(registry.data):
         for target in range(1,8):
             e=ordinary_engine();remember(e,registry.root,root)
@@ -416,8 +416,18 @@ def seven_coverage_audit():
                     own=condition_actor_state(night.private,view.accepts)
                     source=replace(night,private=own,observer=view,physical=physical_board(night.public,own,night.physical),board_data=None)
                     private_groups=point_fix(groups,1,4)
-                e=ordinary_engine();payload=ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical)
+                e=ordinary_engine(track_provenance);payload=ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical)
                 start=time.perf_counter();actual=e.action_policy.acquire(source.public,payload);seconds['common_acquisition']+=time.perf_counter()-start
+                if track_provenance:
+                    from unittest.mock import patch
+                    from werewolf.seer_future_uniform import TrueScanState
+                    from werewolf.board_future import GeneratedBoard
+                    if view is None:
+                        assert actual.provenance is not None
+                        with patch.object(TrueScanState,'__eq__',side_effect=AssertionError('lineage full equality')),patch.object(TrueScanState,'__hash__',side_effect=AssertionError('lineage full hashing')),patch.object(GeneratedBoard,'roles',side_effect=AssertionError('lineage parent replay')):
+                            for i in range(32):assert e.acquisition_provenance.validates(actual.provenance,source.public,payload,actual)
+                    else:assert actual.provenance is None
+                    lineage.update(e.acquisition_provenance.stats)
                 start=time.perf_counter();q,qn=instructed_reference(source.public_state,source.public.alive);p,pn=instructed_reference(source.private,source.public.alive);seconds['deterministic_instruction_reference']+=time.perf_counter()-start
                 instruction_count+=qn+pn
                 assert actual.public_state==q and actual.private==p and actual.physical==source.physical and actual.observer==source.observer
@@ -444,12 +454,12 @@ def seven_coverage_audit():
         input_hypotheses=input_rows,output_hypotheses=output_rows,timings=dict(seconds),contexts=contexts,
         observed_target6_same_role_marginal_breaks_swap67=True,observed_target6_preserves_swap57=True,
         role_certainty_required=False,typed_acquisition_receipt_implemented=False,parent_replay_avoidance_implemented=False,
-        new_evaluator_implemented=False,solve_calls=0,act_calls=0,MAX_evaluated=False,full_initial7_search=False,public64_aggregate_retried=False,immutable_sharing=False)
+        new_evaluator_implemented=False,kernel_lineage_enabled=track_provenance,kernel_lineage_counts=dict(lineage),kernel_lineage_root_symmetry_proved=False,solve_calls=0,act_calls=0,MAX_evaluated=False,full_initial7_search=False,public64_aggregate_retried=False,immutable_sharing=False)
 
 
 def seven_coverage_worker():
     start=time.perf_counter()
-    with calculation_budget(4000000,max_seconds=20),independent_joint_values():row=seven_coverage_audit()
+    with calculation_budget(4000000,max_seconds=20),independent_joint_values():row=seven_coverage_audit(track_provenance=True)
     row.update(seconds=time.perf_counter()-start,peak_working_set_bytes=peak_bytes())
     Path('benchmarks/player_match_groups/publication-orbit-seven-coverage-results.json').write_text(json.dumps(row,indent=2)+'\n')
     print(json.dumps({k:v for k,v in row.items() if k!='contexts'}),flush=True)

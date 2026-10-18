@@ -13,7 +13,8 @@ The actual user case is **villagers3 / medium1 / seer1 / wolves2 / hunter0**, wi
 | Immutable complete-law pooling (8383206) | **Unadopted, OFF** | Slower in its measured checkpoint |
 | Exact own-role structural filter (ae0d19d) | Narrow proof/tests completed | One typed private observation; shared receipt foundation, not a complete game pipeline |
 | Certain-villager daytime death (0df02e5) | Narrow proof/tests completed | W1/S1/V3/H0/M0 five-alive example; does not cover ordinary seven-player deaths; retained as a reference test, not extended with more cast-specific examples |
-| Actual-seven acquisition coverage audit (current) | **Verification only** | All first executions plus complete uniform acquisition mixtures checked without role certainty; no typed acquisition receipt, replay shortcut or new evaluator implemented |
+| Actual-seven acquisition coverage audit | **Verification only** | All first executions plus complete uniform acquisition mixtures checked without role certainty; no complete symmetry-root receipt or new evaluator |
+| Shared acquisition lineage (current) | **Opt-in common foundation; default OFF** | Exact kernel-fill/pairing metadata reaches predeath ActionInputs; 7 public receipts and 224 identity validations. No group merging, observer proof or death/report propagation |
 
 The current bounded inspection entry is:
 
@@ -21,7 +22,7 @@ The current bounded inspection entry is:
 python -m benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture seven-coverage
 ```
 
-It has a 20-second calculation cap and forbids solve/act; the observed run took about 0.17 seconds. It prepares the actual source but does not search the initial game. Its evidence is `publication-orbit-seven-coverage-results.json`. Regression entry: `python -m unittest discover -s tests -p test_publication_orbit_value.py` (18 tests). Historical `structural-role` and `structural-death` modes are the existing small reference tests. The `recursive` mode remains an unadopted experiment; it is not the current optimization entry. Initial7 searches and the unverified public64 aggregate are not to be rerun as part of this audit.
+It has a 20-second calculation cap and forbids solve/act. The current run enables optional kernel-lineage inspection and took about 0.20 seconds; the original verification-only run was about 0.17 seconds. It prepares the actual source but does not search the initial game. Its evidence is `publication-orbit-seven-coverage-results.json`. Regression entry: `python -m unittest discover -s tests -p test_publication_orbit_value.py` (18 tests). Historical `structural-role` and `structural-death` modes are the existing small reference tests. The `recursive` mode remains an unadopted experiment; it is not the current optimization entry. Initial7 searches and the unverified public64 aggregate are not to be rerun as part of this audit.
 
 The following sections preserve earlier checkpoints as historical evidence; later status tables take precedence over their then-current wording.
 
@@ -239,3 +240,33 @@ A practical staged refactor can keep all numerical kernels and ordinary fallback
 5. Bind cached flows and cold evidence to these receipts. Unknown/old receipts invalidate conservatively. Only after the uniform path is complete should policy/value equivariance for existing MAX be assessed: exact continuation scores, complete ties, public rankings and roster-owned policies must commute without adding a new optimal CO/report convention or assuming an unimplemented simultaneous-MAX equilibrium.
 
 This is a coordinated change across several shared boundaries, not a whole new game engine. Implementing only a standalone acquisition receipt now would not remove repeated checks from the actual execution→night→report cycle. The realistic next implementation unit is the shared carrier plus trusted acquisition seam, with explicit fallback and cache/evidence rules agreed in that design; more special-case death or cast prototypes are not a substitute. The existing original MAX behavior remains untouched and outside the new guarantee's validated scope.
+
+
+## Resumed common implementation: opt-in acquisition lineage
+
+Research at 157e52e established the complete uniform kernel comparisons; restart checkpoint 4f7dd67 preserved that result. This increment connects **trusted kernel invocation lineage** into shared carriers, rather than adding another cast-specific evaluator. It deliberately stops short of asserting a complete parent symmetry guarantee.
+
+### Shared changes and the exact contract
+
+- `evaluation_branch.ActionInputs` and `ContinuationInputs` gain optional `provenance`, excluded from comparison, hashing and repr. Existing five-element iteration/tuple interfaces and positional `board_data` remain intact.
+- `InformationSetForecast` has `track_acquisition_provenance=False` by default. The new `AcquisitionLedger` records exact input/output references **only at a real canonical acquire_uniform cache fill**. A cached numerical value with no corresponding identity-bound generation record gets no certificate; no added full-law comparison is used to repair it.
+- `InformationSetActionPolicy.acquire` continues to call the existing separate Q/P `acquire_laws` and physical projection unchanged. For an observer-free uniform H0 night, it pairs the recorded Q and P invocations with the exact before/after carrier references, current engine configuration and prior metadata reference.
+- The receipt means only: these complete Q/P inputs generated these outputs through the known unobserved-uniform kernel. It does **not** mean the parent is G-invariant, certify an arbitrary parent token, establish new groups, or authorize value merging. A future group consumer must separately establish its root and validate both provenance layers.
+- Unknown observers (even an identity predicate), custom generators, unsupported scopes, configuration replacement, unissued/copy receipts and nonidentical cache input identities do not gain lineage. Ordinary numerical results/errors remain unchanged. MAX also receives no new receipt; no setting is replaced with random.
+- `kernel_snapshot` disables the live ledger for replay. The existing death projection constructs a continuation with provenance None: an acquisition receipt is not silently promoted to a death/report certificate. No standalone acquired Board or new saved observation is introduced. Cold reconstruction remains the existing ordinary action recipe.
+
+Validation uses fixed-size object-reference checks and object-identity receipt keys. It does not hash Q/P, compare their hypotheses or walk/replay parents. Existing numerical cache hashing, hypothesis generation/filtering, normalization and physical marginal work remain. A receipt found in a cached flow is not valid merely because it is present: the exact before/after references must pass `ledger.validates`; this rule is essential for future cache consumers. The prototype pool remains OFF.
+
+### Evidence
+
+The existing actual-seven coverage mode now opts into this shared metadata while retaining all 14 independent Q/P kernel comparisons, 651 deterministic reference instructions and 27 complete group-generator comparisons. It records 21 actual generation invocations, 7 public paired receipts and 224 successful reference-only validations. The 7 seer-observer contexts are explicitly declined by lineage pairing while their full ordinary laws still match the independent reference. Receipt validation runs with full-law equality, full-law hashing and parent replay functions forbidden. This is role-certainty-free acquisition provenance, not a newly adopted symmetry evaluator.
+
+The updated bounded probe took 0.195 seconds, with about 34 MB peak. Common acquisition across all contexts took 18.09 ms; the independent reference took 48.11 ms. It still processes 147 input hypothesis occurrences into 651 outputs. These are diagnostic costs, **not a solver performance improvement claim**. `typed_acquisition_receipt_implemented=false` in the historical coverage schema continues to denote the missing complete symmetry certificate; the new `kernel_lineage_enabled=true` and `kernel_lineage_counts` describe this narrower implemented layer.
+
+Nine new provenance tests cover separate Q/P generation, unchanged default values/keys/five-element carrier protocol, 100 identity-only validations with hash/equality/replay forbidden, wrong source/private/parent/receipt rejection, observer/custom-generator refusal, preloaded and equal-but-different cache input fallback, configuration/MAX refusal, snapshot and unproved death dropping, and generation-error propagation.
+
+A combined regression run completed **96 tests with zero failures/errors in 91.457 seconds**, including the earlier 18 experiments, carrier/action plumbing, full-law ownership, acquisition, ordinary cold reconstruction, public/physical continuation and existing small MAX/report/wolf-selection tests. These are existing bounded regression cases, not a restart of the actual initial-seven MAX search. Evidence: `acquisition-provenance-tests.json`; the actual-source inspection is in the updated `publication-orbit-seven-coverage-results.json`.
+
+### Remaining shared work
+
+The new token is kernel lineage only. Next layers remain: connect an audited parent group root to it; certify known observer filters/interventions; carry typed Q/P likelihood/normalization through general death and report kernels; bind cache/cold restoration and output maps to those receipts; then assess existing MAX policy/value equivariance. None is implied by this increment. Ordinary UI, HELP, public edition and MAX behavior/defaults are unchanged. No server process was changed for this increment, and no long actual-initial7/public64 run was started.

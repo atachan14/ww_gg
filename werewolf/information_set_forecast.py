@@ -44,8 +44,10 @@ def exchangeable_value(n,w,phase,strategy):
 
 class InformationSetForecast:
     def __init__(self, rules, strategy, *, max_work=DEFAULT_MAX_WORK, trace=None, memoize_flows=True,
-                 retire_uninformative_scans=True, exact_renaming=True):
+                 retire_uninformative_scans=True, exact_renaming=True, track_acquisition_provenance=False):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
+        from .acquisition_provenance import AcquisitionLedger
+        self.acquisition_provenance=AcquisitionLedger(self) if track_acquisition_provenance else None
         self.board_sources={}
         self.board_action_options={}
         self.board_action_kernels={}
@@ -143,8 +145,11 @@ class InformationSetForecast:
     def acquire(self,b,state):
         key=(b,state)
         if key not in self.acquired:
-            self.acquired[key]=self.checked(acquire_uniform(state,b.alive,max_work=self.max_work,
-                                                          position=self.strategy.seer_position))
+            generated=self.checked(acquire_uniform(state,b.alive,max_work=self.max_work,
+                                                    position=self.strategy.seer_position))
+            self.acquired[key]=generated
+            if self.acquisition_provenance is not None:
+                self.acquisition_provenance._record_uniform(b,state,generated)
         return self.acquired[key]
 
     def canonical_payoff_key(self,*args,**kwargs):
@@ -456,7 +461,12 @@ class InformationSetActionPolicy:
         s,past,private,observer,physical=payload;e=self.engine
         laws=acquire_laws(b,s,lambda source,alive:e.acquire(b,source),private=private,observer=observer,
                           inconsistent=lambda:Pending('seer_view_scan_outside_public_support'))
-        return ActionInputs(laws.public,past,laws.private,observer,physical_board(b,laws.private,physical))
+        result=ActionInputs(laws.public,past,laws.private,observer,physical_board(b,laws.private,physical))
+        ledger=getattr(e,'acquisition_provenance',None)
+        if ledger is not None:
+            receipt=ledger._bind(b,payload,result)
+            if receipt is not None:result=replace(result,provenance=receipt)
+        return result
 
     def night_outcomes(self,frame,prepared):
         from .guard_model import guarded_outcomes

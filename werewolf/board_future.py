@@ -115,6 +115,8 @@ def kernel_snapshot(engine):
     # must not change the policy that generated an earlier observation.
     frozen=copy(engine)
     frozen._board_evidence_snapshot=True
+    # Runtime acquisition receipts belong to their live engine, not replay.
+    if hasattr(frozen,'acquisition_provenance'):frozen.acquisition_provenance=None
     for key,value in vars(engine).items():
         if key in ('night_kernels','night_sources','candidate_rule_cache'):
             setattr(frozen,key,value.copy())

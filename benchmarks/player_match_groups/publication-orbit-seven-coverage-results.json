@@ -28,8 +28,8 @@
   "input_hypotheses": 147,
   "output_hypotheses": 651,
   "timings": {
-    "common_acquisition": 0.015510300057940185,
-    "deterministic_instruction_reference": 0.04530860000522807
+    "common_acquisition": 0.018089199904352427,
+    "deterministic_instruction_reference": 0.04811079992214218
   },
   "contexts": [
     {
@@ -419,12 +419,20 @@
   "typed_acquisition_receipt_implemented": false,
   "parent_replay_avoidance_implemented": false,
   "new_evaluator_implemented": false,
+  "kernel_lineage_enabled": true,
+  "kernel_lineage_counts": {
+    "generation_records": 21,
+    "paired_receipts": 7,
+    "validation_requests": 224,
+    "observer_declines": 7
+  },
+  "kernel_lineage_root_symmetry_proved": false,
   "solve_calls": 0,
   "act_calls": 0,
   "MAX_evaluated": false,
   "full_initial7_search": false,
   "public64_aggregate_retried": false,
   "immutable_sharing": false,
-  "seconds": 0.1741267000325024,
-  "peak_working_set_bytes": 33304576
+  "seconds": 0.1953823000076227,
+  "peak_working_set_bytes": 34471936
 }

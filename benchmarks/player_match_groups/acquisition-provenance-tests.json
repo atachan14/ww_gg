@@ -1,0 +1,26 @@
+{
+  "status": "verified",
+  "tests": 96,
+  "errors": 0,
+  "failures": 0,
+  "seconds": 91.45683630002895,
+  "peak_working_set_bytes": 365969408,
+  "patterns": [
+    "test_acquisition_provenance.py",
+    "test_publication_orbit_value.py",
+    "test_evaluation_branch.py",
+    "test_action_flow.py",
+    "test_information_plumbing.py",
+    "test_information_set_model_a.py",
+    "test_board_future.py",
+    "test_public_physical_continuation.py",
+    "test_seer_future_uniform.py",
+    "test_actor_information.py",
+    "test_morning_flow.py",
+    "test_report_max_choice.py",
+    "test_wolf_target_choice.py"
+  ],
+  "default_provenance": false,
+  "whole_initial7_search": false,
+  "immutable_sharing": false
+}
