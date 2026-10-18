@@ -1,0 +1,19 @@
+{
+  "source_code_commit": "357e139bbe6c3e1ca159b11680dbea892371dd24",
+  "port": 18801,
+  "pid": 24956,
+  "http": 200,
+  "checked_at_utc": "2026-10-18T00:56:47.347066+00:00",
+  "explicit_local_preview": true,
+  "normal_startup_default_off": true,
+  "flags": [
+    "--hybrid-table-preview",
+    "--dawn-board",
+    "--seer-future-uniform",
+    "--exact-future-reuse"
+  ],
+  "browser_evidence": "corpse-browser-results.json",
+  "browser_backend": "Python server, not Pyodide",
+  "ownership_verified": true,
+  "push_or_deploy": false
+}

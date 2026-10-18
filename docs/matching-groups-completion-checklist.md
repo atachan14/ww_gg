@@ -46,3 +46,7 @@ Saved seven-player fixtures (two mediums and an observed public ledger): additio
 Final owner-guard and wolf/seer private Table factories are connected to the same explicit local setting, preserving root factory attributes and custom reference engines. The new key cap falls back through the original constructor, retaining pre-existing hunter sharing. The6-player/no-repeat/two-GJ inactive-role reference finishes in39.67s at peak123,297,792bytes.
 
 Full completion is not claimed: the3 long references above and the3487/7200 seven-player whole original reference remain unverified. Future work must use bounded decomposition/checkpoints or smaller exact controls, not repeat unproductive time extensions. Browser numerical backend selection remains a separate unimplemented feature.
+
+Final implementation357e139 scope measurements (single cold runs): different-target five-player public Table0.786s ->0.563s,2657 ->556 action expansions; medium-five0.846s ->0.726s,2657 ->941. Weighted-history own-seer0.054s ->0.068s, all actions equal; light private cases pay key overhead. All remain explicit local opt-in. See general-scope-performance.json.
+
+Final dedicated18801 runtime is PID24956, source code357e139, HTTP200 and isolated Edge corpse selection/retained-public-evidence checks pass. This is Python-server UI verification, not Pyodide. Metadata-only audit commits do not change the loaded application sources.

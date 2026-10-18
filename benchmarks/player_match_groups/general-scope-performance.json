@@ -1,0 +1,78 @@
+{
+  "source_commit": "357e139bbe6c3e1ca159b11680dbea892371dd24",
+  "rule": "corrected corpse rule",
+  "cases": [
+    {
+      "case": "different-targets-five",
+      "equal": true,
+      "original_seconds": 0.7857810000132304,
+      "general_seconds": 0.5633198999857996,
+      "value": "7/15",
+      "old_actions": 2657,
+      "new_actions": 556,
+      "key_stats": {
+        "key_seconds": 0.2665358002705034,
+        "key_requests": 1157,
+        "key_source_hits": 5,
+        "key_supported": 1157,
+        "key_value_hits": 369,
+        "key_action_hits": 39,
+        "generated_publication_branches": 502,
+        "acquisition_states": 12,
+        "kernel_requests": 1127,
+        "kernel_hits": 0,
+        "kernel_computations": 1127,
+        "kernel_key_seconds": 0.0
+      }
+    },
+    {
+      "case": "medium-five",
+      "equal": true,
+      "original_seconds": 0.8456126000091899,
+      "general_seconds": 0.7256538000074215,
+      "value": "7/15",
+      "old_actions": 2657,
+      "new_actions": 941,
+      "key_stats": {
+        "key_seconds": 0.3384942994453013,
+        "key_requests": 1605,
+        "key_source_hits": 5,
+        "key_supported": 1605,
+        "key_value_hits": 305,
+        "key_action_hits": 38,
+        "generated_publication_branches": 566,
+        "acquisition_states": 12,
+        "kernel_requests": 1896,
+        "kernel_hits": 0,
+        "kernel_computations": 1896,
+        "kernel_key_seconds": 0.0
+      }
+    },
+    {
+      "case": "weighted-history-own-seer",
+      "equal": true,
+      "original_seconds": 0.0541032999753952,
+      "general_seconds": 0.06769709999207407,
+      "actions": [
+        [
+          2,
+          "5/6"
+        ],
+        [
+          3,
+          "5/6"
+        ],
+        [
+          4,
+          "23/30"
+        ],
+        [
+          5,
+          "7/10"
+        ]
+      ]
+    }
+  ],
+  "reference": "Additional optimization flags OFF or local mode OFF; not pre-correction code",
+  "note": "Cold finite single measurements, not universal speedup guarantees"
+}
