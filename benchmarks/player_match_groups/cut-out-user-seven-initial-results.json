@@ -6,8 +6,8 @@
   "paths": {
     "inherited": {
       "status": "unverified",
-      "reason": "common flow pending: inherited_publication_or_CO_transition_unproved",
-      "seconds": 0.23499999998603016
+      "reason": "comparison evaluation budget exhausted",
+      "seconds": 5.14000000001397
     },
     "independent": {
       "status": "unverified",
@@ -22,12 +22,16 @@
   "canonical_calls": 0,
   "CandidateRules_calls": 0,
   "legacy_root_calls": 0,
-  "worker_seconds": 5.282000000006519,
-  "peak_working_set_bytes": 119083008,
+  "worker_seconds": 10.187000000005355,
+  "peak_working_set_bytes": 124805120,
   "limits": {
     "evaluation_seconds": 5,
     "worker_seconds": 30,
     "peak_working_set_bytes": 1500000000
   },
-  "speed_measurement_executed": false
+  "speed_measurement_executed": false,
+  "tested_head": "2eac553ff8bc6dcc7fe0730ba4464748cfb074e0",
+  "publication_fix": "f4551d44360f8f5e9527a28ba6441304e046cce1",
+  "attempt": "coordinated post-publication-repair; one case only",
+  "remaining_constructor_cost": "two full-history validation passes per reconstructed Board; unchanged"
 }
