@@ -1,0 +1,11 @@
+# Follow-up validation (2026-10-18 UTC)
+
+The runtime change in this milestone limits structured seer observers to engines that explicitly support them. Boards with at most four survivors, at most three public worlds and no initial hunter use the original evaluator. This selection uses public input size only. Alternating tiny-case measurements were 0.065865 seconds OFF and 0.066675 seconds ON (medians).
+
+The owned-roster test retains all 36 original combinations, now independently named and checked with separate reference and reduced evaluators. Corrected corpse-acquisition semantics increase the representative joint support from 156 to 192 hypotheses; the original, corrected-OFF and current-ON comparison attributes the extra cost to that semantic expansion. Nine-player high-ID rendering, budget Pending and cache boundaries are tested separately from full nine-player exhaustive performance, which remains unverified.
+
+The five-player root profile search completed with a unique certificate; all 12 root deviations were independently recomputed. The six-player search remains budget-unfinished: 23 two-second slices retained 196 complete child certificates, but no root certificate or selected root policy. Peak measured worker working set was about 56.6 MB, below the enforced 1.5 GB cap. The dedicated verification process PID24464 was explicitly exited at the safe boundary. No further seven-player cold run was attempted.
+
+Candidate-row retention, joint-kernel LRU and cursor resumption experiments are archived as deferred-resume-experiment.diff and deferred_*_tests.py. They are NOT imported by the application or its current tests. In particular the cursor draft was not validated and must not be treated as an accepted solver. The recorded resumptions used experimental hot method replacements and a verification-only 32000-state cache; they are progress evidence, not a reproducible production certificate. Review-only child checkpoint JSON is never automatically loaded.
+
+The earlier 811/814 regression report was accumulated across runs and is not a full-suite run at this milestone. The remaining full six-player max proof and full nine-player performance are explicit open items. Backend/Pyodide integration and enabling broader seven-player generic reuse remain separate unfinished work.

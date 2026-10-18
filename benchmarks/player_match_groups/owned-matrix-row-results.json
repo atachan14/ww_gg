@@ -1,0 +1,505 @@
+{
+  "reference": "Original unreduced common-flow action vs separately conditioned actor law; independent numerical engines; separate exact branch/acquisition pools",
+  "rows": [
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_0_mask_1_target_3",
+      "status": "passed",
+      "seconds": 5.592278399999486,
+      "witness": {
+        "repeat": false,
+        "mode": 0,
+        "mask": 1,
+        "target": 3,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_0_mask_1_target_4",
+      "status": "passed",
+      "seconds": 1.5372120000247378,
+      "witness": {
+        "repeat": false,
+        "mode": 0,
+        "mask": 1,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_0_mask_1_target_5",
+      "status": "passed",
+      "seconds": 0.7191349000204355,
+      "witness": {
+        "repeat": false,
+        "mode": 0,
+        "mask": 1,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_0_mask_4_target_1",
+      "status": "passed",
+      "seconds": 1.3481450999970548,
+      "witness": {
+        "repeat": false,
+        "mode": 0,
+        "mask": 4,
+        "target": 1,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_0_mask_4_target_4",
+      "status": "passed",
+      "seconds": 0.9660057000000961,
+      "witness": {
+        "repeat": false,
+        "mode": 0,
+        "mask": 4,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_0_mask_4_target_5",
+      "status": "passed",
+      "seconds": 0.6260460000194144,
+      "witness": {
+        "repeat": false,
+        "mode": 0,
+        "mask": 4,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_1_mask_1_target_3",
+      "status": "passed",
+      "seconds": 1.344006300001638,
+      "witness": {
+        "repeat": false,
+        "mode": 1,
+        "mask": 1,
+        "target": 3,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_1_mask_1_target_4",
+      "status": "passed",
+      "seconds": 1.0469332999782637,
+      "witness": {
+        "repeat": false,
+        "mode": 1,
+        "mask": 1,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_1_mask_1_target_5",
+      "status": "passed",
+      "seconds": 0.5975046999810729,
+      "witness": {
+        "repeat": false,
+        "mode": 1,
+        "mask": 1,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_1_mask_4_target_1",
+      "status": "passed",
+      "seconds": 1.3850307000102475,
+      "witness": {
+        "repeat": false,
+        "mode": 1,
+        "mask": 4,
+        "target": 1,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_1_mask_4_target_4",
+      "status": "passed",
+      "seconds": 0.9921395999845117,
+      "witness": {
+        "repeat": false,
+        "mode": 1,
+        "mask": 4,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_1_mask_4_target_5",
+      "status": "passed",
+      "seconds": 0.6343928000133019,
+      "witness": {
+        "repeat": false,
+        "mode": 1,
+        "mask": 4,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_2_mask_1_target_3",
+      "status": "passed",
+      "seconds": 1.577493399992818,
+      "witness": {
+        "repeat": false,
+        "mode": 2,
+        "mask": 1,
+        "target": 3,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_2_mask_1_target_4",
+      "status": "passed",
+      "seconds": 1.1508880999754183,
+      "witness": {
+        "repeat": false,
+        "mode": 2,
+        "mask": 1,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_2_mask_1_target_5",
+      "status": "passed",
+      "seconds": 0.5243910000135656,
+      "witness": {
+        "repeat": false,
+        "mode": 2,
+        "mask": 1,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_2_mask_4_target_1",
+      "status": "passed",
+      "seconds": 1.219980800000485,
+      "witness": {
+        "repeat": false,
+        "mode": 2,
+        "mask": 4,
+        "target": 1,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_2_mask_4_target_4",
+      "status": "passed",
+      "seconds": 0.6868969999777619,
+      "witness": {
+        "repeat": false,
+        "mode": 2,
+        "mask": 4,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_0_mode_2_mask_4_target_5",
+      "status": "passed",
+      "seconds": 0.4632123000046704,
+      "witness": {
+        "repeat": false,
+        "mode": 2,
+        "mask": 4,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_0_mask_1_target_3",
+      "status": "time_limit",
+      "seconds": 6.143619599984959,
+      "witness": null,
+      "errors": [
+        "^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact_renaming.py\", line 180, in canonical_key\n    tick()\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\calculation_budget.py\", line 49, in tick\n    if cancelled is not None and cancelled.is_set():raise CalculationCancelled()\n                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nwerewolf.calculation_budget.CalculationCancelled\n"
+      ]
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_0_mask_1_target_4",
+      "status": "passed",
+      "seconds": 2.428876499994658,
+      "witness": {
+        "repeat": true,
+        "mode": 0,
+        "mask": 1,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_0_mask_1_target_5",
+      "status": "passed",
+      "seconds": 0.8865610999928322,
+      "witness": {
+        "repeat": true,
+        "mode": 0,
+        "mask": 1,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_0_mask_4_target_1",
+      "status": "passed",
+      "seconds": 2.077324600017164,
+      "witness": {
+        "repeat": true,
+        "mode": 0,
+        "mask": 4,
+        "target": 1,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_0_mask_4_target_4",
+      "status": "passed",
+      "seconds": 1.359590299980482,
+      "witness": {
+        "repeat": true,
+        "mode": 0,
+        "mask": 4,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_0_mask_4_target_5",
+      "status": "passed",
+      "seconds": 1.1482956999971066,
+      "witness": {
+        "repeat": true,
+        "mode": 0,
+        "mask": 4,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_1_mask_1_target_3",
+      "status": "passed",
+      "seconds": 1.8564908000116702,
+      "witness": {
+        "repeat": true,
+        "mode": 1,
+        "mask": 1,
+        "target": 3,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_1_mask_1_target_4",
+      "status": "passed",
+      "seconds": 1.567929999990156,
+      "witness": {
+        "repeat": true,
+        "mode": 1,
+        "mask": 1,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_1_mask_1_target_5",
+      "status": "passed",
+      "seconds": 0.7395923000003677,
+      "witness": {
+        "repeat": true,
+        "mode": 1,
+        "mask": 1,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_1_mask_4_target_1",
+      "status": "passed",
+      "seconds": 1.6842307000188157,
+      "witness": {
+        "repeat": true,
+        "mode": 1,
+        "mask": 4,
+        "target": 1,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_1_mask_4_target_4",
+      "status": "passed",
+      "seconds": 1.1826648999995086,
+      "witness": {
+        "repeat": true,
+        "mode": 1,
+        "mask": 4,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_1_mask_4_target_5",
+      "status": "passed",
+      "seconds": 0.7361915000074077,
+      "witness": {
+        "repeat": true,
+        "mode": 1,
+        "mask": 4,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_2_mask_1_target_3",
+      "status": "passed",
+      "seconds": 1.9820676000090316,
+      "witness": {
+        "repeat": true,
+        "mode": 2,
+        "mask": 1,
+        "target": 3,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_2_mask_1_target_4",
+      "status": "passed",
+      "seconds": 1.298362100002123,
+      "witness": {
+        "repeat": true,
+        "mode": 2,
+        "mask": 1,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_2_mask_1_target_5",
+      "status": "passed",
+      "seconds": 0.5387722000014037,
+      "witness": {
+        "repeat": true,
+        "mode": 2,
+        "mask": 1,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_2_mask_4_target_1",
+      "status": "passed",
+      "seconds": 1.273795799992513,
+      "witness": {
+        "repeat": true,
+        "mode": 2,
+        "mask": 4,
+        "target": 1,
+        "value": "5/16",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_2_mask_4_target_4",
+      "status": "passed",
+      "seconds": 1.0030189999961294,
+      "witness": {
+        "repeat": true,
+        "mode": 2,
+        "mask": 4,
+        "target": 4,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    },
+    {
+      "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_2_mask_4_target_5",
+      "status": "passed",
+      "seconds": 0.5156398999970406,
+      "witness": {
+        "repeat": true,
+        "mode": 2,
+        "mask": 4,
+        "target": 5,
+        "value": "23/72",
+        "hypotheses": 192
+      },
+      "errors": []
+    }
+  ],
+  "not_run": []
+}

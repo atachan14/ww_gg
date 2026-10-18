@@ -1,0 +1,87 @@
+diff --git a/werewolf/wolf_profile_certificate.py b/werewolf/wolf_profile_certificate.py
+index be3c69f..9e8adff 100644
+--- a/werewolf/wolf_profile_certificate.py
++++ b/werewolf/wolf_profile_certificate.py
+@@ -4,6 +4,8 @@ No replacement Board, acquisition ledger or private posterior is constructed.
+ Later public contexts use bounded complete-profile proofs. Unsupported or
+ unproved dependencies remain Pending, never an arbitrary completed choice.
+ """
++from collections import OrderedDict
++from time import perf_counter
+ from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
+ from .actor_information import wolf_information_groups
+ from .policy_certificates import certify_uniform_profiles
+@@ -49,8 +51,12 @@ class WolfProfileResolver:
+     results remain diagnostics, not cached choices. Parent calculation deadlines
+     are inherited by each nested certificate; the profile-work cap is shared.
+     """
+-    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,canonical_certificates=True):
++    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,canonical_certificates=True,memoize_certificate_keys=None):
+         if type(max_profiles)is not int or max_profiles<1:raise ValueError('Positive profile limit required')
++        from .local_reuse import enabled
++        self.memoize_certificate_keys=enabled() if memoize_certificate_keys is None else bool(memoize_certificate_keys)
++        self.certificate_key_sources=OrderedDict();self.certificate_key_hypotheses=0
++        self.certificate_key_stats={'calls':0,'hits':0,'constructions':0,'seconds':0.}
+         self.rules=rules;self.strategy=strategy;self.max_profiles=max_profiles
+         self.max_work=max_work;self.max_seconds=max_seconds
+         self.cache={};self.active=set();self.diagnostics={};self.profiles_evaluated=0
+@@ -103,6 +109,32 @@ class WolfProfileResolver:
+             raise CalculationBudgetExceeded('Aggregate complete-profile work limit exceeded')
+         self.profiles_evaluated+=1
+
++    def complete_certificate_key(self,board,state,past):
++        from .exact_renaming import canonical_key
++        def compute():
++            return canonical_key(board,state,past,state,None,self.rules,self.strategy,
++                                 return_mapping=True,serialization_cache={})
++        if not self.memoize_certificate_keys:return compute()
++        key=(self.rules,self.strategy,board,state,past);stats=self.certificate_key_stats
++        stats['calls']+=1;start=perf_counter()
++        try:
++            if key in self.certificate_key_sources:
++                value,cost=self.certificate_key_sources.pop(key)
++                self.certificate_key_sources[key]=(value,cost);stats['hits']+=1;return value
++            stats['constructions']+=1;value=compute()  # No exception/partial key stored.
++            cost=len(state.hypotheses)
++            if cost<=8000:
++                while self.certificate_key_sources and (len(self.certificate_key_sources)>=16 or self.certificate_key_hypotheses+cost>8000):
++                    _,(_,removed)=self.certificate_key_sources.popitem(last=False)
++                    self.certificate_key_hypotheses-=removed
++                self.certificate_key_sources[key]=(value,cost);self.certificate_key_hypotheses+=cost
++            return value
++        finally:stats['seconds']+=perf_counter()-start
++
++    def discard_certificate_key(self,board,state,past):
++        saved=self.certificate_key_sources.pop((self.rules,self.strategy,board,state,past),None)
++        if saved is not None:self.certificate_key_hypotheses-=saved[1]
++
+     def resolve(self,board,state,past=()):
+         key=(board,state,past)
+         node=Dependency('profile-proof',(self.rules,self.strategy,*key))
+@@ -122,16 +154,15 @@ class WolfProfileResolver:
+                     # every secret ledger/mass and all rules enter the key. Limits
+                     # bound retained serialized input, not the mathematical domain.
+                     if self.canonical_certificates and len(state.hypotheses)<=4000:
+-                        from .exact_renaming import canonical_key
+                         self.certificate_cache_stats['calls']+=1
+-                        canonical=canonical_key(board,state,past,state,None,self.rules,self.strategy,
+-                                                return_mapping=True,serialization_cache={})
++                        canonical=self.complete_certificate_key(board,state,past)
+                         if canonical is not None and canonical[0] in self.certificate_cache:
+                             ids=canonical[1];inverse=tuple(ids.index(p)+1 for p in range(1,len(ids)+1))
+                             order=tuple(i for i,mass,group in wolf_information_groups(state))
+                             result=renamed_profile_search(self.certificate_cache[canonical[0]],inverse,order)
+                             self.certificate_cache_stats['hits']+=1
+                             self.cache[key]=result;self.diagnostics[key]=result
++                            self.discard_certificate_key(board,state,past)
+                             return result
+                     result=certify_wolf_profiles(board,state,past,self.rules,self.strategy,
+                         max_profiles=self.max_profiles,max_work=self.max_work,
+@@ -144,6 +175,8 @@ class WolfProfileResolver:
+                         self.certificate_cache_size+len(state.hypotheses)<=32000):
+                         self.certificate_cache[canonical[0]]=renamed_profile_search(result,canonical[1])
+                         self.certificate_cache_size+=len(state.hypotheses)
++                if result.selected is not None or result.status in ('multiple','no_admissible_profile','undefined_observations'):
++                    self.discard_certificate_key(board,state,past)
+                 return result
+         finally:self.active.remove(key)

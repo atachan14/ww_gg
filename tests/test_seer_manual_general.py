@@ -66,7 +66,12 @@ class SeerManualGeneralTests(unittest.TestCase):
     def test_high_player_ids_dynamic_fields_cache_and_terminal(self):
         self.start(9,w=2,s=1);self.configure(co_9='seer',seer_target_1_9='8',seer_color_1_9='white')
         g=self.game();board=replay(g)[1].board;self.assertEqual(board.role_probability(9,'seer'),1);self.assertEqual(board.wolf_probability(8),0)
-        self.assertIn(b'name="seer_target_1_9"',self.client.get('/main',follow_redirects=True).data)
+        # Rendering boundary, deliberately independent of nine-player exhaustive performance.
+        self.app.config['MANUAL_CALC_MAX_WORK']=1
+        html=self.client.get('/main',follow_redirects=True).data
+        self.assertIn(b'name="seer_target_1_9"',html)
+        self.assertIn(b'data-seer-pending',html);self.assertNotIn(b'id="village-rate"',html)
+        self.app.config['MANUAL_CALC_MAX_WORK']=4000000
         self.start(3);self.configure();self.assertEqual(replay(self.game())[1].board.player_count,3)
         self.start(1,w=0,s=1);html=self.client.get('/main',follow_redirects=True).data;self.assertIn(b'data-fraction="1"',html)
 

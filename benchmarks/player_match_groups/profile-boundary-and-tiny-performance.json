@@ -1,0 +1,161 @@
+{
+  "profile_preflight": [
+    {
+      "players": 5,
+      "profile_limit": 64,
+      "seconds": 0.5525267999910284,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "total": 2401,
+      "evaluated": 0,
+      "selected": false,
+      "issues": [],
+      "cache_entries": 12,
+      "actors": 4,
+      "legal_actions": [
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          8,
+          3
+        ]
+      ],
+      "dependencies": {
+        "1": [
+          4,
+          2,
+          8
+        ],
+        "2": [
+          1
+        ],
+        "4": [
+          1
+        ],
+        "8": [
+          1
+        ]
+      }
+    },
+    {
+      "players": 6,
+      "profile_limit": 4096,
+      "seconds": 2.9862113000126556,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "total": 759375,
+      "evaluated": 0,
+      "selected": false,
+      "issues": [],
+      "cache_entries": 39,
+      "actors": 10,
+      "legal_actions": [
+        [
+          1,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          16,
+          3
+        ],
+        [
+          16,
+          3
+        ],
+        [
+          16,
+          3
+        ]
+      ],
+      "dependencies": {
+        "1": [
+          8,
+          16,
+          8,
+          4,
+          4,
+          16,
+          4,
+          16,
+          8
+        ],
+        "4": [
+          1,
+          4,
+          16,
+          8
+        ],
+        "8": [
+          1,
+          4,
+          16,
+          8
+        ],
+        "16": [
+          1,
+          4,
+          16,
+          8
+        ]
+      }
+    }
+  ],
+  "light_private": {
+    "samples": 6,
+    "alternating_order": true,
+    "equal": true,
+    "off_median": 0.06586469999456313,
+    "on_median": 0.06667545001255348,
+    "off_samples": [
+      0.07270559997414239,
+      0.06445029997848906,
+      0.06212170000071637,
+      0.0670265999797266,
+      0.11155039997538552,
+      0.06470280000939965
+    ],
+    "on_samples": [
+      0.06301280000479892,
+      0.07111140000051819,
+      0.06878580001648515,
+      0.06581850000657141,
+      0.06579739999142475,
+      0.06753240001853555
+    ],
+    "selection": "Public board <=4 alive, <=3 role worlds, no hunter -> original evaluator and opaque observer; public information only"
+  }
+}

@@ -8,6 +8,7 @@ from werewolf.root_secret_flow import RootSecretEngine
 from .fast_key_parts import make_canonical
 
 class LocalRootEngine(RootSecretEngine):
+    structured_seer_observer=True
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
         self.local_canonical,_,self.local_mask_stats=make_canonical()

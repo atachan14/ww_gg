@@ -1,0 +1,9 @@
+{
+  "complete": false,
+  "seconds": 30.36549090000335,
+  "time_limit": true,
+  "errors": [
+    " memo(key,compute)\n           ^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\information_set_forecast.py\", line 98, in public_support\n    value=compute()\n          ^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\guard_model.py\", line 144, in <lambda>\n    compute=lambda:_public_guard_branch_law(board,state,child,attack,blocked,engine,\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\guard_model.py\", line 202, in _public_guard_branch_law\n    tick()\n  File \"C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\calculation_budget.py\", line 49, in tick\n    if cancelled is not None and cancelled.is_set():raise CalculationCancelled()\n                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nwerewolf.calculation_budget.CalculationCancelled\n"
+  ],
+  "reference_and_actual_resolver_pools_separate": true
+}

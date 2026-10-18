@@ -1,0 +1,140 @@
+[
+  {
+    "players": 5,
+    "lru": false,
+    "stages": [
+      {
+        "seconds": 0.8474639999913052,
+        "status": "unique",
+        "reason": null,
+        "children": 19,
+        "root_cached": true,
+        "acquisition": {
+          "calls": 886,
+          "hits": 541
+        },
+        "support": {
+          "calls": 145,
+          "hits": 113
+        },
+        "kernel_retained_hypotheses": {
+          "acquisition": 0,
+          "support": 0
+        }
+      }
+    ]
+  },
+  {
+    "players": 5,
+    "lru": true,
+    "stages": [
+      {
+        "seconds": 0.9519764000142459,
+        "status": "unique",
+        "reason": null,
+        "children": 19,
+        "root_cached": true,
+        "acquisition": {
+          "calls": 886,
+          "hits": 815
+        },
+        "support": {
+          "calls": 145,
+          "hits": 0
+        },
+        "kernel_retained_hypotheses": {
+          "acquisition": 410,
+          "support": 0
+        }
+      }
+    ]
+  },
+  {
+    "players": 6,
+    "lru": false,
+    "stages": [
+      {
+        "seconds": 1.9862627999973483,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 31,
+        "root_cached": false,
+        "acquisition": {
+          "calls": 1452,
+          "hits": 919
+        },
+        "support": {
+          "calls": 209,
+          "hits": 169
+        },
+        "kernel_retained_hypotheses": {
+          "acquisition": 0,
+          "support": 0
+        }
+      },
+      {
+        "seconds": 1.999814399983734,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 31,
+        "root_cached": false,
+        "acquisition": {
+          "calls": 3524,
+          "hits": 2216
+        },
+        "support": {
+          "calls": 492,
+          "hits": 412
+        },
+        "kernel_retained_hypotheses": {
+          "acquisition": 0,
+          "support": 0
+        }
+      }
+    ]
+  },
+  {
+    "players": 6,
+    "lru": true,
+    "stages": [
+      {
+        "seconds": 1.9990594999981113,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 31,
+        "root_cached": false,
+        "acquisition": {
+          "calls": 1418,
+          "hits": 1228
+        },
+        "support": {
+          "calls": 205,
+          "hits": 0
+        },
+        "kernel_retained_hypotheses": {
+          "acquisition": 310,
+          "support": 0
+        }
+      },
+      {
+        "seconds": 1.9998924999963492,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 31,
+        "root_cached": false,
+        "acquisition": {
+          "calls": 3434,
+          "hits": 3052
+        },
+        "support": {
+          "calls": 480,
+          "hits": 0
+        },
+        "kernel_retained_hypotheses": {
+          "acquisition": 292,
+          "support": 0
+        }
+      }
+    ]
+  }
+]

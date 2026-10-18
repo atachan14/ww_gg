@@ -1,0 +1,338 @@
+[
+  {
+    "version": "old",
+    "seconds": 4.424620899982983,
+    "exit": 0,
+    "result": {
+      "mode": false,
+      "rows": [
+        {
+          "stage": "owned-root",
+          "seconds": 0.3848388000042178,
+          "complete": true
+        },
+        {
+          "stage": "owned-first-night",
+          "seconds": 1.9590261000266764,
+          "complete": true
+        },
+        {
+          "stage": "owned-next-day",
+          "seconds": 0.2370121999992989,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-full-reference",
+          "seconds": 0.5854119000141509,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-reduced",
+          "seconds": 0.40327959999558516,
+          "complete": true
+        },
+        {
+          "stage": "owned-witness",
+          "hypotheses": 156,
+          "roles": 4,
+          "target": 3,
+          "reference": "5/16",
+          "actual": "5/16"
+        },
+        {
+          "stage": "profile-root-5",
+          "seconds": 0.0056573000038042665,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-5",
+          "seconds": 0.003644200012786314,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-5",
+          "status": "budget_unfinished",
+          "total": 2401,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        },
+        {
+          "stage": "profile-root-6",
+          "seconds": 0.00608049999573268,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-6",
+          "seconds": 0.009934700006851926,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-6",
+          "status": "budget_unfinished",
+          "total": 759375,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        }
+      ],
+      "source": {
+        "FixedPublicWolfProfile": "013d42c7d6772bc5b00c357745edcc2decc95a708288667f2623268f1f7a360d",
+        "owned-test": "da9518b9f4d10f769a2638018e2be7a9e8a1100b3615460db75cc55627bd2225"
+      }
+    },
+    "error": null
+  },
+  {
+    "version": "corrected",
+    "seconds": 6.028282599989325,
+    "exit": 0,
+    "result": {
+      "mode": false,
+      "rows": [
+        {
+          "stage": "owned-root",
+          "seconds": 0.38434060002327897,
+          "complete": true
+        },
+        {
+          "stage": "owned-first-night",
+          "seconds": 2.3899995000101626,
+          "complete": true
+        },
+        {
+          "stage": "owned-next-day",
+          "seconds": 0.29043319998891093,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-full-reference",
+          "seconds": 1.2762862000090536,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-reduced",
+          "seconds": 0.8143897000118159,
+          "complete": true
+        },
+        {
+          "stage": "owned-witness",
+          "hypotheses": 192,
+          "roles": 4,
+          "target": 3,
+          "reference": "5/16",
+          "actual": "5/16"
+        },
+        {
+          "stage": "profile-root-5",
+          "seconds": 0.005058399983681738,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-5",
+          "seconds": 0.003572999994503334,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-5",
+          "status": "budget_unfinished",
+          "total": 2401,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        },
+        {
+          "stage": "profile-root-6",
+          "seconds": 0.0058271999878343195,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-6",
+          "seconds": 0.009437200002139434,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-6",
+          "status": "budget_unfinished",
+          "total": 759375,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        }
+      ],
+      "source": {
+        "FixedPublicWolfProfile": "013d42c7d6772bc5b00c357745edcc2decc95a708288667f2623268f1f7a360d",
+        "owned-test": "da9518b9f4d10f769a2638018e2be7a9e8a1100b3615460db75cc55627bd2225"
+      }
+    },
+    "error": null
+  },
+  {
+    "version": "current-off",
+    "seconds": 5.990589599998202,
+    "exit": 0,
+    "result": {
+      "mode": false,
+      "rows": [
+        {
+          "stage": "owned-root",
+          "seconds": 0.3742276000266429,
+          "complete": true
+        },
+        {
+          "stage": "owned-first-night",
+          "seconds": 2.4184635000128765,
+          "complete": true
+        },
+        {
+          "stage": "owned-next-day",
+          "seconds": 0.2993774999922607,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-full-reference",
+          "seconds": 1.2458540000079665,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-reduced",
+          "seconds": 0.817555599991465,
+          "complete": true
+        },
+        {
+          "stage": "owned-witness",
+          "hypotheses": 192,
+          "roles": 4,
+          "target": 3,
+          "reference": "5/16",
+          "actual": "5/16"
+        },
+        {
+          "stage": "profile-root-5",
+          "seconds": 0.00486849999288097,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-5",
+          "seconds": 0.0035598999820649624,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-5",
+          "status": "budget_unfinished",
+          "total": 2401,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        },
+        {
+          "stage": "profile-root-6",
+          "seconds": 0.00612199999159202,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-6",
+          "seconds": 0.00893999999971129,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-6",
+          "status": "budget_unfinished",
+          "total": 759375,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        }
+      ],
+      "source": {
+        "FixedPublicWolfProfile": "013d42c7d6772bc5b00c357745edcc2decc95a708288667f2623268f1f7a360d",
+        "owned-test": "da9518b9f4d10f769a2638018e2be7a9e8a1100b3615460db75cc55627bd2225"
+      }
+    },
+    "error": null
+  },
+  {
+    "version": "current-on",
+    "seconds": 6.014781000005314,
+    "exit": 0,
+    "result": {
+      "mode": true,
+      "rows": [
+        {
+          "stage": "owned-root",
+          "seconds": 0.38357030000770465,
+          "complete": true
+        },
+        {
+          "stage": "owned-first-night",
+          "seconds": 2.39515389999724,
+          "complete": true
+        },
+        {
+          "stage": "owned-next-day",
+          "seconds": 0.31156830000691116,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-full-reference",
+          "seconds": 1.2646175999834668,
+          "complete": true
+        },
+        {
+          "stage": "owned-one-reduced",
+          "seconds": 0.8188725000072736,
+          "complete": true
+        },
+        {
+          "stage": "owned-witness",
+          "hypotheses": 192,
+          "roles": 4,
+          "target": 3,
+          "reference": "5/16",
+          "actual": "5/16"
+        },
+        {
+          "stage": "profile-root-5",
+          "seconds": 0.005035200010752305,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-5",
+          "seconds": 0.004414499999256805,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-5",
+          "status": "budget_unfinished",
+          "total": 2401,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        },
+        {
+          "stage": "profile-root-6",
+          "seconds": 0.00608339998871088,
+          "complete": true
+        },
+        {
+          "stage": "profile-bounded-6",
+          "seconds": 0.009730199992191046,
+          "complete": true
+        },
+        {
+          "stage": "profile-witness-6",
+          "status": "budget_unfinished",
+          "total": 759375,
+          "evaluated": 0,
+          "issues": [],
+          "cached": false
+        }
+      ],
+      "source": {
+        "FixedPublicWolfProfile": "013d42c7d6772bc5b00c357745edcc2decc95a708288667f2623268f1f7a360d",
+        "owned-test": "da9518b9f4d10f769a2638018e2be7a9e8a1100b3615460db75cc55627bd2225"
+      }
+    },
+    "error": null
+  }
+]

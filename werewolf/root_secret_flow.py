@@ -669,8 +669,7 @@ def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFA
                 # reads the scan; its unit-mass kernel cannot change this value.
                 return tuple((target,invariant) for target in next(iter(choices)))
             for target in next(iter(choices)):
-                from .local_reuse import enabled
-                if enabled():
+                if getattr(engine,'structured_seer_observer',False):
                     from .seer_intervention import SeerObserver
                     observer=SeerObserver(player,tuple(acquisitions),day,target)
                 else:

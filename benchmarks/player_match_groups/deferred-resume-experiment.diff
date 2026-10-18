@@ -1,0 +1,293 @@
+diff --git a/werewolf/policy_certificates.py b/werewolf/policy_certificates.py
+index addc1eb..ebff500 100644
+--- a/werewolf/policy_certificates.py
++++ b/werewolf/policy_certificates.py
+@@ -287,3 +287,99 @@ def certify_dependency_profiles(legal,evaluate_rows,dependencies,*,maximize=Fals
+                        for values,scores in states)
+     status='multiple' if len(certificates)>1 else 'unique' if certificates else 'no_admissible_profile'
+     return ProfileSearch(status,total,total,certificates,proof='dependency_elimination')
++
++
++def resume_dependency_profiles(legal,evaluate_rows,dependencies,checkpoint,*,maximize=False,
++                                max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
++    """Eliminate necessary best-response equations without restricting profiles.
++
++    Caller proves each COMPLETE row depends only on the listed policy rows.
++    SCCs are processed after their dependencies. In each SCC an independent
++    block is uniquely forced by the remaining assignment; asymmetric responses
++    stay separate. All legal candidates of each retained profile are computed.
++    """
++    legal=tuple((i,tuple(a)) for i,a in legal);infos=tuple(i for i,a in legal)
++    if not legal or len(set(infos))!=len(infos) or set(dependencies)!=set(infos):
++        raise ValueError('Complete unique dependency inputs required')
++    if type(max_profiles)is not int or max_profiles<1:raise ValueError('Positive profile limit required')
++    if any(not set(d)<=set(infos) for d in dependencies.values()):raise ValueError('Unknown dependency')
++    if (type(maximize)is not bool and not isinstance(maximize,dict) or isinstance(maximize,dict) and
++        (set(maximize)!=set(infos) or any(type(v)is not bool for v in maximize.values()))):
++        raise ValueError('Explicit objective for every infoset required')
++    options={i:uniform_options(a) for i,a in legal};total=1
++    for choices in options.values():total*=len(choices)
++    # Tarjan emits a component only after its outgoing dependencies.
++    indices={};low={};stack=[];active=set();components=[]
++    def visit(i):
++        indices[i]=low[i]=len(indices);stack.append(i);active.add(i)
++        for d in infos:
++            if d not in dependencies[i]:continue
++            if d not in indices:visit(d);low[i]=min(low[i],low[d])
++            elif d in active:low[i]=min(low[i],indices[d])
++        if low[i]==indices[i]:
++            members=set()
++            while True:
++                d=stack.pop();active.remove(d);members.add(d)
++                if d==i:break
++            components.append(tuple(d for d in infos if d in members))
++    for i in infos:
++        if i not in indices:visit(i)
++    def subset_legal(members):return tuple((i,a) for i,a in legal if i in members)
++    def direction(members):return {i:maximize[i] for i in members} if isinstance(maximize,dict) else maximize
++    signature=(legal,tuple((i,frozenset(dependencies[i]))for i in infos),tuple((i,maximize[i]if isinstance(maximize,dict)else maximize)for i in infos))
++    if checkpoint and checkpoint.get('signature')!=signature:raise ValueError('Exact dependency checkpoint input mismatch')
++    if not checkpoint:checkpoint.update(signature=signature,states=[({}, {})],component=0,state_index=0,choice_index=0,following=[],work=0,base_work=0)
++    profile=()
++    try:
++        with calculation_budget(max_work,max_seconds=max_seconds):
++            for component_index in range(checkpoint['component'],len(components)):
++                component=components[component_index];states=checkpoint['states'];blocks=[()]
++                for seed in component:
++                    if seed in dependencies[seed]:continue
++                    block=[seed]
++                    for i in component:
++                        if i not in block and not set(dependencies[i])&set((*block,i)) and all(i not in dependencies[d]for d in block):block.append(i)
++                    blocks.append(tuple(block))
++                def size(block):
++                    n=1
++                    for i in block:n*=len(options[i])
++                    return n
++                eliminated=max(blocks,key=size);feedback=tuple(i for i in component if i not in eliminated)
++                count=1
++                for i in feedback:count*=len(options[i])
++                if checkpoint['base_work']+count*len(states)>max_profiles:
++                    return ProfileSearch('budget_unfinished',total,0,reason='dependency_feedback_limit',proof='dependency_elimination_resume')
++                for state_index in range(checkpoint['state_index'],len(states)):
++                    assigned,known_scores=states[state_index]
++                    for choice_index,choices in enumerate(product(*(options[i]for i in feedback))):
++                        if choice_index<checkpoint['choice_index']:continue
++                        tick()
++                        values={i:uniform_policy(a)for i,a in legal};values.update(assigned);values.update(zip(feedback,choices))
++                        profile=tuple((i,values[i])for i in infos)
++                        if eliminated:
++                            scores=evaluate_rows(profile,eliminated)
++                            forced,_=best_response_profile(subset_legal(eliminated),scores,maximize=direction(eliminated));values.update(forced)
++                        profile=tuple((i,values[i])for i in infos)
++                        scores=evaluate_rows(profile,component)
++                        expected,rows=best_response_profile(subset_legal(component),scores,maximize=direction(component))
++                        if all(values[i]==policy for i,policy in expected):
++                            accepted=dict(assigned);accepted.update((i,values[i])for i in component)
++                            complete=dict(known_scores);complete.update(rows)
++                            cells=len(accepted)+sum(len(row)for row in complete.values())
++                            retained=sum(len(a)+sum(len(row)for row in r.values())for a,r in checkpoint['following'])
++                            if retained+cells>32000:return ProfileSearch('budget_unfinished',total,0,reason='resume_checkpoint_size',proof='dependency_elimination_resume')
++                            checkpoint['following'].append((accepted,complete))
++                        # Cursor advances only after the WHOLE candidate equation.
++                        checkpoint['work']+=1;checkpoint['choice_index']=choice_index+1
++                    checkpoint['state_index']=state_index+1;checkpoint['choice_index']=0
++                checkpoint['states']=checkpoint['following'];checkpoint['following']=[]
++                checkpoint['component']=component_index+1;checkpoint['state_index']=0;checkpoint['choice_index']=0;checkpoint['base_work']=checkpoint['work']
++                if not checkpoint['states']:break
++    except Pending as error:
++        undefined=error.reason in ('public_generated_observation_zero_support','root_guard_profile_undefined_observations','public_continuation_zero_support','public_terminal_observation_zero_support','root_secret_public_history_zero_support','root_secret_physical_zero_support','root_secret_actor_belief_zero_support')
++        return ProfileSearch('undefined_observations'if undefined else'dependency_unfinished',total,0,issues=(ProfileIssue(profile,'undefined_observation'if undefined else'unresolved_dependency',error.reason),),reason=error.reason,proof='dependency_elimination_resume')
++    except CalculationBudgetExceeded:
++        return ProfileSearch('budget_unfinished',total,0,reason='calculation_budget_exceeded',proof='dependency_elimination_resume')
++    certificates=tuple(ProfileCertificate(tuple((i,values[i])for i in infos),tuple((i,scores[i])for i in infos))for values,scores in checkpoint['states'])
++    status='multiple'if len(certificates)>1 else'unique'if certificates else'no_admissible_profile'
++    return ProfileSearch(status,total,total,certificates,proof='dependency_elimination_resume')
+diff --git a/werewolf/wolf_profile_certificate.py b/werewolf/wolf_profile_certificate.py
+index be3c69f..e416506 100644
+--- a/werewolf/wolf_profile_certificate.py
++++ b/werewolf/wolf_profile_certificate.py
+@@ -4,6 +4,8 @@ No replacement Board, acquisition ledger or private posterior is constructed.
+ Later public contexts use bounded complete-profile proofs. Unsupported or
+ unproved dependencies remain Pending, never an arbitrary completed choice.
+ """
++from fractions import Fraction as F
++from collections import OrderedDict
+ from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
+ from .actor_information import wolf_information_groups
+ from .policy_certificates import certify_uniform_profiles
+@@ -49,8 +51,21 @@ class WolfProfileResolver:
+     results remain diagnostics, not cached choices. Parent calculation deadlines
+     are inherited by each nested certificate; the profile-work cap is shared.
+     """
+-    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,canonical_certificates=True):
++    def __init__(self,rules,strategy,*,max_profiles=4096,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,canonical_certificates=True,joint_kernel_reuse=None,candidate_row_reuse=False,candidate_row_state_limit=8000):
+         if type(max_profiles)is not int or max_profiles<1:raise ValueError('Positive profile limit required')
++        from .local_reuse import enabled
++        self.joint_kernel_reuse=enabled() if joint_kernel_reuse is None else bool(joint_kernel_reuse)
++        if type(candidate_row_state_limit)is not int or not 1<=candidate_row_state_limit<=32000:
++            raise ValueError('Candidate-row state budget must be1..32000')
++        self.candidate_row_state_limit=candidate_row_state_limit
++        self.candidate_row_reuse=bool(candidate_row_reuse)
++        self.dependency_search_checkpoints={}
++        self.completed_candidate_rows=OrderedDict();self.candidate_row_sources={};self.candidate_row_weight=0
++        self.candidate_source_frames=OrderedDict();self.candidate_source_frame_weight=0
++        self.candidate_row_stats={'calls':0,'hits':0,'stored':0}
++        self.joint_kernels={'acquisition':OrderedDict(),'support':OrderedDict()}
++        self.joint_kernel_costs={'acquisition':0,'support':0}
++        self.joint_kernel_weights={'acquisition':{},'support':{}}
+         self.rules=rules;self.strategy=strategy;self.max_profiles=max_profiles
+         self.max_work=max_work;self.max_seconds=max_seconds
+         self.cache={};self.active=set();self.diagnostics={};self.profiles_evaluated=0
+@@ -75,7 +90,31 @@ class WolfProfileResolver:
+         if len(self.branch_cache)<4096:self.branch_cache[key]=value
+         return value
+
++    def joint_kernel_scope(self,key):
++        # Input-size gate from measured trials: small cases paid LRU overhead;
++        # the six-player frontier reused more completed joint kernels. Other
++        # sizes keep their original cache and numerical flow.
++        return self.joint_kernel_reuse and isinstance(key,tuple) and len(key)>2 and getattr(key[2],'player_count',0)==6
++
++    def joint_kernel(self,kind,memo,key,compute,stats):
++        stats['calls']+=1
++        if key in memo:
++            value=memo.pop(key);memo[key]=value;stats['hits']+=1;return value
++        value=compute()  # No exceptions or incomplete generation retained.
++        from .seer_future_uniform import TrueScanState
++        from .exact import Board
++        joint=value if kind=='acquisition' else (value[1] if isinstance(value,tuple) and len(value)==2 and isinstance(value[0],Board) else None)
++        if not isinstance(joint,TrueScanState):return value
++        cost=len(joint.hypotheses)+sum(len(x.hypotheses)for x in key if isinstance(x,TrueScanState))
++        if cost>8000:return value
++        weights=self.joint_kernel_weights[kind]
++        while memo and (len(memo)>=64 or self.joint_kernel_costs[kind]+cost>8000):
++            old,_=memo.popitem(last=False);self.joint_kernel_costs[kind]-=weights.pop(old)
++        memo[key]=value;weights[key]=cost;self.joint_kernel_costs[kind]+=cost
++        return value
++
+     def acquisition(self,key,compute):
++        if self.joint_kernel_scope(key):return self.joint_kernel('acquisition',self.joint_kernels['acquisition'],key,compute,self.acquisition_stats)
+         self.acquisition_stats['calls']+=1
+         if key in self.acquisition_cache:
+             self.acquisition_stats['hits']+=1
+@@ -89,6 +128,7 @@ class WolfProfileResolver:
+
+     def public_support(self,key,compute):
+         """Memoize only completed generated FULL public joint laws."""
++        if self.joint_kernel_scope(key):return self.joint_kernel('support',self.joint_kernels['support'],key,compute,self.support_stats)
+         self.support_stats['calls']+=1
+         if key in self.support_cache:
+             self.support_stats['hits']+=1
+@@ -103,6 +143,62 @@ class WolfProfileResolver:
+             raise CalculationBudgetExceeded('Aggregate complete-profile work limit exceeded')
+         self.profiles_evaluated+=1
+
++    def candidate_row_source(self,board,state,past,rules,strategy):
++        if not self.candidate_row_reuse or board.player_count!=6:return None
++        # Exact same source and SAME dependency graph. This is resumable scalar
++        # memoization; no rank/tie transport or partial profile selection.
++        from .board_future import EvidenceKey
++        values=(rules,strategy,board,state,past,self.dependencies,tuple(self.dependencies.stack))
++        marker=tuple(id(x)for x in values[:6])+tuple(id(x)for x in self.dependencies.stack)
++        saved=self.candidate_source_frames.get(marker)
++        if saved is not None and saved[0].values==values:
++            self.candidate_source_frames.move_to_end(marker);return saved[0]
++        cost=max(1,4*len(state.hypotheses))
++        if cost>self.candidate_row_state_limit:return None
++        source=EvidenceKey(values,(hash(values),))  # Equality still checks full input.
++        while self.candidate_source_frames and (len(self.candidate_source_frames)>=16 or self.candidate_source_frame_weight+cost>self.candidate_row_state_limit):
++            _,(_,removed)=self.candidate_source_frames.popitem(last=False)
++            self.candidate_source_frame_weight-=removed
++        self.candidate_source_frames[marker]=(source,cost);self.candidate_source_frame_weight+=cost
++        return source
++
++    def dependency_search_checkpoint(self,source):
++        if source is None:return None
++        if source not in self.dependency_search_checkpoints and len(self.dependency_search_checkpoints)>=16:return None
++        return self.dependency_search_checkpoints.setdefault(source,{})
++
++    def candidate_row_get(self,source,key,independence_only):
++        if source is None:return None
++        self.candidate_row_stats['calls']+=1;k=(source,independence_only,key)
++        if k not in self.completed_candidate_rows:return None
++        value,cost=self.completed_candidate_rows.pop(k)
++        self.completed_candidate_rows[k]=(value,cost);self.candidate_row_stats['hits']+=1
++        return value
++
++    def candidate_row_store(self,source,key,independence_only,value):
++        if source is None or type(value[0])not in(int,F)or not 0<=value[0]<=1:return
++        k=(source,independence_only,key);cost=max(1,4*len(source.values[3].hypotheses))
++        if cost>self.candidate_row_state_limit or k in self.completed_candidate_rows:return
++        while self.completed_candidate_rows and (len(self.completed_candidate_rows)>=512 or self.candidate_row_weight+cost>self.candidate_row_state_limit):
++            old,(_,weight)=self.completed_candidate_rows.popitem(last=False)
++            self.candidate_row_weight-=weight
++            group=self.candidate_row_sources[old[0]];group.remove(old)
++            if not group:del self.candidate_row_sources[old[0]]
++        self.completed_candidate_rows[k]=(value,cost);self.candidate_row_weight+=cost
++        self.candidate_row_sources.setdefault(source,set()).add(k);self.candidate_row_stats['stored']+=1
++
++    def discard_candidate_rows(self,board,state,past):
++        prefix=(self.rules,self.strategy,board,state,past,self.dependencies)
++        for source in tuple(self.candidate_row_sources):
++            if source.values[:6]!=prefix:continue
++            for k in self.candidate_row_sources.pop(source):
++                _,cost=self.completed_candidate_rows.pop(k);self.candidate_row_weight-=cost
++        for source in tuple(self.dependency_search_checkpoints):
++            if source.values[:6]==prefix:del self.dependency_search_checkpoints[source]
++        for marker,(source,cost)in tuple(self.candidate_source_frames.items()):
++            if source.values[:6]==prefix:
++                del self.candidate_source_frames[marker];self.candidate_source_frame_weight-=cost
++
+     def resolve(self,board,state,past=()):
+         key=(board,state,past)
+         node=Dependency('profile-proof',(self.rules,self.strategy,*key))
+@@ -132,6 +228,7 @@ class WolfProfileResolver:
+                             result=renamed_profile_search(self.certificate_cache[canonical[0]],inverse,order)
+                             self.certificate_cache_stats['hits']+=1
+                             self.cache[key]=result;self.diagnostics[key]=result
++                            self.discard_candidate_rows(board,state,past)
+                             return result
+                     result=certify_wolf_profiles(board,state,past,self.rules,self.strategy,
+                         max_profiles=self.max_profiles,max_work=self.max_work,
+@@ -144,6 +241,8 @@ class WolfProfileResolver:
+                         self.certificate_cache_size+len(state.hypotheses)<=32000):
+                         self.certificate_cache[canonical[0]]=renamed_profile_search(result,canonical[1])
+                         self.certificate_cache_size+=len(state.hypotheses)
++                if result.selected is not None or result.status in ('multiple','no_admissible_profile','undefined_observations'):
++                    self.discard_candidate_rows(board,state,past)
+                 return result
+         finally:self.active.remove(key)
+
+@@ -360,6 +459,10 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
+                                 serialization_cache=key_serializations)
+                         row_keys[identity]=('complete-renamed-candidate',exact) if exact is not None else identity
+                     key=row_keys[identity]
++                row_source=resolver.candidate_row_source(board,state,past,rules,strategy)
++                if key not in row_values:
++                    saved=resolver.candidate_row_get(row_source,key,independence_only)
++                    if saved is not None:row_values[key]=saved
+                 if key not in row_values:
+                     if not spent:resolver.spend_profile();spent=True
+                     if candidate is None:candidate=wolf_candidate_profile(profile,info,target,rules=candidate_rules)
+@@ -387,6 +490,7 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
+                             value=engine.act(value_board,value_state,past,target,group,None)
+                             policy_reads=engine.policy_reads
+                     row_values[key]=(value,policy_reads)
++                    resolver.candidate_row_store(row_source,key,independence_only,row_values[key])
+                     resolver.row_reuse_stats['classes']+=1
+                 else:
+                     tick();resolver.row_reuse_stats['hits']+=1
+@@ -416,6 +520,13 @@ def certify_wolf_profiles(board,state,past,rules,strategy,*,max_profiles=4096,
+         if isolated:
+             dependencies={info:{other for other in rows if other.initial_roster==info.initial_roster}
+                           for info,rows in dependencies.items()}
++        row_source=resolver.candidate_row_source(board,state,past,rules,strategy)
++        checkpoint=resolver.dependency_search_checkpoint(row_source)
++        if checkpoint is not None:
++            from .policy_certificates import resume_dependency_profiles
++            return resume_dependency_profiles(legal,
++                lambda profile,requested:evaluate_raw(profile,requested=requested)[0],dependencies,checkpoint,
++                maximize=False,max_profiles=max_profiles,max_work=max_work,max_seconds=max_seconds)
+         return certify_dependency_profiles(legal,
+             lambda profile,requested:evaluate_raw(profile,requested=requested)[0],dependencies,
+             maximize=False,max_profiles=max_profiles,max_work=max_work,max_seconds=max_seconds)

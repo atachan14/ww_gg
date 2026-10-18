@@ -3,6 +3,7 @@ from .extension_reuse import ExtensionForecast
 from werewolf.information_set_forecast import InformationSetForecast
 
 class GeneralReuseForecast(ExtensionForecast):
+    structured_seer_observer=True
     def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
         if (self.future_reuse and self.exact_renaming and self.memoize_flows
             and self.trace is None and b.player_count<=7):

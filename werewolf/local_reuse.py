@@ -81,5 +81,9 @@ def make_root_engine(original,board,rules,strategy,**kwargs):
 
 def make_view_engine(original,board,rules,strategy,**kwargs):
     if not enabled() or board.player_count>6:return original(rules,strategy,**kwargs)
+    # Complete-key construction dominates measured tiny private inputs.
+    # This selects the same original evaluator, never another policy/model.
+    tiny=(len(board.alive)<=4 and len(board.worlds)<=3 and not board.initial_hunter_count)
+    if tiny:return original(rules,strategy,**kwargs)
     from benchmarks.player_match_groups.general_reuse import GeneralReuseForecast
     return GeneralReuseForecast(rules,strategy,future_reuse=True,compact_keys=True,fast_parts=True,**kwargs)

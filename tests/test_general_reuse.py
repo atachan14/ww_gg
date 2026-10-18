@@ -77,3 +77,42 @@ class GeneralReuseTests(unittest.TestCase):
         e=GeneralReuseForecast(rules,strategy,future_reuse=True)
         with patch.object(e,'complete_reuse_key',return_value=None),patch.object(InformationSetForecast,'full_renamed_key',return_value='legacy-constructor'):
             self.assertEqual(e.full_renamed_key(b,s,past,s,None),'legacy-constructor')
+
+    def test_tiny_private_entry_uses_original_evaluator_without_semantic_change(self):
+        from tests.test_seer_view_forecast import fixture as weighted
+        from werewolf.exact import Rules,Strategy
+        from werewolf.information_set_forecast import InformationSetForecast
+        from werewolf.local_reuse import make_view_engine
+        b,s=weighted();rules=Rules(initial_seer='none');strategy=Strategy('max','random')
+        with reuse_scope(True):
+            e=make_view_engine(InformationSetForecast,b,rules,strategy)
+            self.assertIs(type(e),InformationSetForecast)
+        self.test_nonuniform_history_private_actions_match()
+
+    def test_nonuniform_five_player_general_law_matches_original(self):
+        from werewolf.seer_acquisition import normalize
+        from werewolf.exact import replace_worlds
+        from werewolf.information_set_forecast import InformationSetForecast
+        from werewolf.calculation_budget import calculation_budget
+        _,_,b,s,past,rules,strategy,_=prepare_game(fixture()[1])
+        weighted=replace(s,hypotheses=normalize(tuple(replace(h,mass=h.mass*(3 if h.roles[2]&1 else 1))for h in s.hypotheses)))
+        b=replace_worlds(b,weighted.public_roles,wolf_count=None)
+        original=InformationSetForecast(rules,strategy)
+        shared=GeneralReuseForecast(rules,strategy,future_reuse=True,compact_keys=True,fast_parts=True)
+        with calculation_budget(1000000,max_seconds=8):
+            self.assertEqual(original.scalar(b,weighted,past),shared.scalar(b,weighted,past))
+            self.assertEqual(tuple(original.act(b,weighted,past,t,weighted,None)for t in b.alive),tuple(shared.act(b,weighted,past,t,weighted,None)for t in b.alive))
+        self.assertGreater(shared.reuse_stats['key_supported'],0)
+
+    def test_out_of_scope_personal_entry_keeps_original_observer(self):
+        from werewolf.information_set_forecast import InformationSetForecast
+        _,_,b,s,past,rules,strategy,_=prepare_game(fixture(n=7,wolves=2)[1])
+        own=next(tuple(a for a in h.acquisitions if a.player==1)for h in s.hypotheses if h.roles[2]&1)
+        observations=[]
+        def checked(engine,*args,**kwargs):
+            self.assertIs(type(engine),InformationSetForecast)
+            self.assertNotIsInstance(kwargs['observer'],SeerObserver)
+            observations.append(kwargs['observer']);return F()
+        with reuse_scope(True),patch.object(InformationSetForecast,'evaluate',checked):
+            seer_forecast(b,1,own,rules,strategy,scan_state=s,past=past)
+        self.assertTrue(observations)

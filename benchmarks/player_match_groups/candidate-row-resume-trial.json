@@ -1,0 +1,96 @@
+[
+  {
+    "resume_reuse": false,
+    "stages": [
+      {
+        "seconds": 1.998000999999931,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 31,
+        "root_cached": false,
+        "candidate_rows": {
+          "calls": 0,
+          "hits": 0,
+          "stored": 0
+        },
+        "row_weight": 0,
+        "retained_rows": 0
+      },
+      {
+        "seconds": 1.9995405999943614,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 34,
+        "root_cached": false,
+        "candidate_rows": {
+          "calls": 0,
+          "hits": 0,
+          "stored": 0
+        },
+        "row_weight": 0,
+        "retained_rows": 0
+      },
+      {
+        "seconds": 1.9994468999793753,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 36,
+        "root_cached": false,
+        "candidate_rows": {
+          "calls": 0,
+          "hits": 0,
+          "stored": 0
+        },
+        "row_weight": 0,
+        "retained_rows": 0
+      }
+    ]
+  },
+  {
+    "resume_reuse": true,
+    "stages": [
+      {
+        "seconds": 1.9913560000131838,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 31,
+        "root_cached": false,
+        "candidate_rows": {
+          "calls": 561,
+          "hits": 0,
+          "stored": 559
+        },
+        "row_weight": 1332,
+        "retained_rows": 28
+      },
+      {
+        "seconds": 2.0006054999830667,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 43,
+        "root_cached": false,
+        "candidate_rows": {
+          "calls": 1105,
+          "hits": 28,
+          "stored": 1073
+        },
+        "row_weight": 2676,
+        "retained_rows": 56
+      },
+      {
+        "seconds": 2.000575400015805,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "children": 58,
+        "root_cached": false,
+        "candidate_rows": {
+          "calls": 1679,
+          "hits": 84,
+          "stored": 1589
+        },
+        "row_weight": 3924,
+        "retained_rows": 82
+      }
+    ]
+  }
+]

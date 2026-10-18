@@ -1,0 +1,416 @@
+{
+  "mode": "same resolver/dependency graph,2second slices,1.5GB watcher; only completed children and scalar rows retained",
+  "stages": [
+    {
+      "slice": 1,
+      "seconds": 1.9918139000074007,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 31,
+      "rows": {
+        "calls": 552,
+        "hits": 0,
+        "stored": 550
+      },
+      "weight": 900
+    },
+    {
+      "slice": 2,
+      "seconds": 1.99571129999822,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 40,
+      "rows": {
+        "calls": 924,
+        "hits": 19,
+        "stored": 901
+      },
+      "weight": 2580,
+      "memory": {
+        "peak_working_set_bytes": 35950592,
+        "peak_process_commit_bytes": 27185152,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 3,
+      "seconds": 1.9944198000011966,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 52,
+      "rows": {
+        "calls": 1518,
+        "hits": 73,
+        "stored": 1439
+      },
+      "weight": 3732,
+      "memory": {
+        "peak_working_set_bytes": 37994496,
+        "peak_process_commit_bytes": 29425664,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 4,
+      "seconds": 1.9991835999826435,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 66,
+      "rows": {
+        "calls": 2106,
+        "hits": 151,
+        "stored": 1947
+      },
+      "weight": 3888,
+      "memory": {
+        "peak_working_set_bytes": 38834176,
+        "peak_process_commit_bytes": 29495296,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 5,
+      "seconds": 1.997339199995622,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 68,
+      "rows": {
+        "calls": 2282,
+        "hits": 232,
+        "stored": 2040
+      },
+      "weight": 5700,
+      "memory": {
+        "peak_working_set_bytes": 40734720,
+        "peak_process_commit_bytes": 32002048,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 6,
+      "seconds": 1.9992576999939047,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 79,
+      "rows": {
+        "calls": 2978,
+        "hits": 351,
+        "stored": 2615
+      },
+      "weight": 2928,
+      "memory": {
+        "peak_working_set_bytes": 41201664,
+        "peak_process_commit_bytes": 32108544,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 7,
+      "seconds": 1.9953906000009738,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 79,
+      "rows": {
+        "calls": 3019,
+        "hits": 351,
+        "stored": 2654
+      },
+      "weight": 4788,
+      "memory": {
+        "peak_working_set_bytes": 41361408,
+        "peak_process_commit_bytes": 32108544,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 8,
+      "seconds": 1.998390399996424,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 79,
+      "rows": {
+        "calls": 3098,
+        "hits": 390,
+        "stored": 2692
+      },
+      "weight": 6612,
+      "memory": {
+        "peak_working_set_bytes": 42397696,
+        "peak_process_commit_bytes": 33296384,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 9,
+      "seconds": 2.000317600002745,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 92,
+      "rows": {
+        "calls": 3546,
+        "hits": 528,
+        "stored": 3000
+      },
+      "weight": 6144,
+      "memory": {
+        "peak_working_set_bytes": 43081728,
+        "peak_process_commit_bytes": 34418688,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 10,
+      "seconds": 1.9972182999772485,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 92,
+      "rows": {
+        "calls": 3713,
+        "hits": 656,
+        "stored": 3037
+      },
+      "weight": 7908,
+      "memory": {
+        "peak_working_set_bytes": 43601920,
+        "peak_process_commit_bytes": 34430976,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 11,
+      "seconds": 2.0011511000047904,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 100,
+      "rows": {
+        "calls": 4232,
+        "hits": 821,
+        "stored": 3389
+      },
+      "weight": 9252,
+      "memory": {
+        "peak_working_set_bytes": 45707264,
+        "peak_process_commit_bytes": 36872192,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 12,
+      "seconds": 1.9976716999954078,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 109,
+      "rows": {
+        "calls": 4774,
+        "hits": 1014,
+        "stored": 3736
+      },
+      "weight": 10500,
+      "memory": {
+        "peak_working_set_bytes": 47075328,
+        "peak_process_commit_bytes": 38121472,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 13,
+      "seconds": 1.9925485999847297,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 112,
+      "rows": {
+        "calls": 5174,
+        "hits": 1233,
+        "stored": 3915
+      },
+      "weight": 11316,
+      "memory": {
+        "peak_working_set_bytes": 47157248,
+        "peak_process_commit_bytes": 38793216,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 14,
+      "seconds": 2.0013300999999046,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 116,
+      "rows": {
+        "calls": 5578,
+        "hits": 1469,
+        "stored": 4081
+      },
+      "weight": 12084,
+      "memory": {
+        "peak_working_set_bytes": 47505408,
+        "peak_process_commit_bytes": 38981632,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 15,
+      "seconds": 2.0567558000038844,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 124,
+      "rows": {
+        "calls": 6044,
+        "hits": 1721,
+        "stored": 4293
+      },
+      "weight": 12612,
+      "memory": {
+        "peak_working_set_bytes": 48824320,
+        "peak_process_commit_bytes": 40034304,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 16,
+      "seconds": 1.9971917000075337,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 133,
+      "rows": {
+        "calls": 6626,
+        "hits": 1984,
+        "stored": 4610
+      },
+      "weight": 13908,
+      "memory": {
+        "peak_working_set_bytes": 51568640,
+        "peak_process_commit_bytes": 42901504,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 17,
+      "seconds": 1.9969302999961656,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 142,
+      "rows": {
+        "calls": 7263,
+        "hits": 2274,
+        "stored": 4955
+      },
+      "weight": 15060,
+      "memory": {
+        "peak_working_set_bytes": 51568640,
+        "peak_process_commit_bytes": 43175936,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 18,
+      "seconds": 2.0021288999996614,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 149,
+      "rows": {
+        "calls": 7920,
+        "hits": 2588,
+        "stored": 5296
+      },
+      "weight": 16452,
+      "memory": {
+        "peak_working_set_bytes": 51568640,
+        "peak_process_commit_bytes": 43175936,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 19,
+      "seconds": 1.9944091999786906,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 161,
+      "rows": {
+        "calls": 8569,
+        "hits": 2931,
+        "stored": 5599
+      },
+      "weight": 17588,
+      "memory": {
+        "peak_working_set_bytes": 52916224,
+        "peak_process_commit_bytes": 45080576,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 20,
+      "seconds": 1.9970193000044674,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 170,
+      "rows": {
+        "calls": 9327,
+        "hits": 3298,
+        "stored": 5988
+      },
+      "weight": 18900,
+      "memory": {
+        "peak_working_set_bytes": 54759424,
+        "peak_process_commit_bytes": 46202880,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 21,
+      "seconds": 1.998365899984492,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 176,
+      "rows": {
+        "calls": 10004,
+        "hits": 3692,
+        "stored": 6269
+      },
+      "weight": 20148,
+      "memory": {
+        "peak_working_set_bytes": 54792192,
+        "peak_process_commit_bytes": 46202880,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 22,
+      "seconds": 1.9972210999985691,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 189,
+      "rows": {
+        "calls": 10784,
+        "hits": 4112,
+        "stored": 6627
+      },
+      "weight": 21108,
+      "memory": {
+        "peak_working_set_bytes": 55525376,
+        "peak_process_commit_bytes": 47222784,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    },
+    {
+      "slice": 23,
+      "seconds": 1.9983942000253592,
+      "status": "budget_unfinished",
+      "reason": "calculation_budget_exceeded",
+      "children": 196,
+      "rows": {
+        "calls": 11537,
+        "hits": 4552,
+        "stored": 6938
+      },
+      "weight": 21408,
+      "memory": {
+        "peak_working_set_bytes": 56627200,
+        "peak_process_commit_bytes": 48209920,
+        "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+      }
+    }
+  ],
+  "root_cached": false,
+  "certificate": null
+}

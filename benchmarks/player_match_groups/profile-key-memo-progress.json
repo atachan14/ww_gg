@@ -1,0 +1,128 @@
+[
+  {
+    "players": 5,
+    "key_memo_enabled": false,
+    "slices": [
+      {
+        "seconds": 0.9008246000157669,
+        "status": "unique",
+        "reason": null,
+        "complete_children": 19,
+        "root_cached": true,
+        "profiles_spent": 92,
+        "certificate_hits": 6,
+        "key_memo": {
+          "calls": 0,
+          "hits": 0,
+          "constructions": 0,
+          "seconds": 0.0
+        },
+        "retained_keys": 0,
+        "retained_hypotheses": 0
+      }
+    ]
+  },
+  {
+    "players": 5,
+    "key_memo_enabled": true,
+    "slices": [
+      {
+        "seconds": 0.7800555999856442,
+        "status": "unique",
+        "reason": null,
+        "complete_children": 19,
+        "root_cached": true,
+        "profiles_spent": 92,
+        "certificate_hits": 6,
+        "key_memo": {
+          "calls": 19,
+          "hits": 0,
+          "constructions": 19,
+          "seconds": 0.010185599967371672
+        },
+        "retained_keys": 0,
+        "retained_hypotheses": 0
+      }
+    ]
+  },
+  {
+    "players": 6,
+    "key_memo_enabled": false,
+    "slices": [
+      {
+        "seconds": 1.9972052999946754,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "complete_children": 31,
+        "root_cached": false,
+        "profiles_spent": 101,
+        "certificate_hits": 9,
+        "key_memo": {
+          "calls": 0,
+          "hits": 0,
+          "constructions": 0,
+          "seconds": 0.0
+        },
+        "retained_keys": 0,
+        "retained_hypotheses": 0
+      },
+      {
+        "seconds": 1.9993215999857057,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "complete_children": 31,
+        "root_cached": false,
+        "profiles_spent": 105,
+        "certificate_hits": 9,
+        "key_memo": {
+          "calls": 0,
+          "hits": 0,
+          "constructions": 0,
+          "seconds": 0.0
+        },
+        "retained_keys": 0,
+        "retained_hypotheses": 0
+      }
+    ]
+  },
+  {
+    "players": 6,
+    "key_memo_enabled": true,
+    "slices": [
+      {
+        "seconds": 1.9991565000091214,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "complete_children": 31,
+        "root_cached": false,
+        "profiles_spent": 101,
+        "certificate_hits": 9,
+        "key_memo": {
+          "calls": 33,
+          "hits": 0,
+          "constructions": 33,
+          "seconds": 0.04359869999461807
+        },
+        "retained_keys": 2,
+        "retained_hypotheses": 21
+      },
+      {
+        "seconds": 2.0008013999904506,
+        "status": "budget_unfinished",
+        "reason": "calculation_budget_exceeded",
+        "complete_children": 31,
+        "root_cached": false,
+        "profiles_spent": 105,
+        "certificate_hits": 9,
+        "key_memo": {
+          "calls": 35,
+          "hits": 2,
+          "constructions": 33,
+          "seconds": 0.04372679998050444
+        },
+        "retained_keys": 2,
+        "retained_hypotheses": 21
+      }
+    ]
+  }
+]

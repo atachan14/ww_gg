@@ -38,8 +38,7 @@ def seer_forecast(public, player, acquisitions, rules, strategy, *, scan_state, 
         with calculation_budget(max_work, max_seconds=max_seconds):
             for target in targets:
                 tick()
-                from .local_reuse import enabled
-                if enabled():observer=SeerObserver(player,acquisitions,day,target)
+                if getattr(engine,'structured_seer_observer',False):observer=SeerObserver(player,acquisitions,day,target)
                 else:
                     def observer(h,state,target=target):
                         return compatible(h) and scan_intervention_matches(h,state,player,day,target)

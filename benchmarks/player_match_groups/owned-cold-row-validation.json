@@ -1,0 +1,7 @@
+{
+  "test": "tests.test_owned_roster_value_cut.OwnedRosterValueCutTests.test_row_repeat_1_mode_0_mask_1_target_3",
+  "passed": true,
+  "time_limit": false,
+  "seconds": 5.909097499999916,
+  "errors": []
+}
