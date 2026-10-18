@@ -1,0 +1,1503 @@
+{
+  "recorded_utc": "2026-10-18T07:09:58.965764+00:00",
+  "head_before_evidence_commit": "2b696f24c2e5043e1ff124759192c4a6dec981d5",
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_one_step.py": "fb0f7c430f17a66692d1c9389eee3a0694cbd4a1f16cd0921d58e577de351bdd",
+    "tests/test_cut_out_independent.py": "8b69f0efd22e08d66eed0c958c6827d003e688c2c0f3bef640a4d7b59adfd15e"
+  },
+  "tests": 4,
+  "test_seconds_limit": 20,
+  "test_log": ".artifacts\\cut-out-independent-final.log",
+  "exhaustive": {
+    "programs": 100
+  },
+  "random_audit": {
+    "seed": 20261018,
+    "programs": 128,
+    "accepted_prefixes": 260,
+    "zero_support": 16,
+    "permutation_candidates": 20256,
+    "co_roles": [
+      "medium",
+      "seer",
+      "villager",
+      "wolf"
+    ]
+  },
+  "one_step_cases": [
+    {
+      "players": 4,
+      "mediums": 0,
+      "case": "initial",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 0,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 0,
+        "updates": 0,
+        "baseline_seconds": 0.008069700008491054
+      },
+      "role_worlds": 12,
+      "joint_hypotheses": 24,
+      "representative_evaluation": {
+        "candidate_evaluations": 1,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 24,
+        "posterior_normalizations": 2,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.00012240000069141388,
+        "posterior_seconds": 0.0003735999925993383,
+        "evaluation_seconds": 0.0005714000144507736
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 96,
+        "posterior_normalizations": 8,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.00045070002670399845,
+        "posterior_seconds": 0.0014826000551693141,
+        "evaluation_seconds": 0.00210089999018237
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 72,
+        "materialization_seconds": 0.0017047000292222947
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "1/2"
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "mediums": 0,
+      "case": "co-report",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 2,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 2,
+        "baseline_seconds": 0.008069700008491054,
+        "normalization_input_hypotheses": 28,
+        "law_condition_seconds": 0.00015310000162571669,
+        "event_execution_seconds": 0.0005262999911792576,
+        "constructive_events": 2,
+        "event_rows_read": 4,
+        "partition_positions_read": 8,
+        "partition_seconds": 1.9000028260052204e-05,
+        "support_mass_scans": 2,
+        "support_mass_input_hypotheses": 54,
+        "support_mass_seconds": 3.850000211969018e-05,
+        "update_seconds": 0.0006225999968592077,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 2,
+      "joint_hypotheses": 2,
+      "representative_evaluation": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 6,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 3.8600031984969974e-05,
+        "posterior_seconds": 0.00020099998801015317,
+        "evaluation_seconds": 0.00033930002246052027
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 8,
+        "posterior_normalizations": 6,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 6.0799968196079135e-05,
+        "posterior_seconds": 0.00022639991948381066,
+        "evaluation_seconds": 0.0004482999793253839
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 2,
+        "materialization_seconds": 0.00011910003377124667
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "1/2"
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "mediums": 0,
+      "case": "own-seer",
+      "view": "private",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 3,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 3,
+        "baseline_seconds": 0.008069700008491054,
+        "normalization_input_hypotheses": 30,
+        "law_condition_seconds": 0.0001894000160973519,
+        "event_execution_seconds": 0.0005660000024363399,
+        "constructive_events": 3,
+        "event_rows_read": 5,
+        "partition_positions_read": 12,
+        "partition_seconds": 2.5900022592395544e-05,
+        "support_mass_scans": 4,
+        "support_mass_input_hypotheses": 105,
+        "support_mass_seconds": 6.14999735262245e-05,
+        "update_seconds": 0.000703999976394698,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 1,
+      "joint_hypotheses": 1,
+      "representative_evaluation": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 4,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 3.200001083314419e-05,
+        "posterior_seconds": 0.00010800000745803118,
+        "evaluation_seconds": 0.00025320000713691115
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 4,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 2.6399997295811772e-05,
+        "posterior_seconds": 9.300006786361337e-05,
+        "evaluation_seconds": 0.00022119999630376697
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 4,
+        "materialization_seconds": 1.9000144675374031e-06
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "1/2"
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "mediums": 1,
+      "case": "initial",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 0,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 0,
+        "updates": 0,
+        "baseline_seconds": 0.00157200000830926
+      },
+      "role_worlds": 24,
+      "joint_hypotheses": 48,
+      "representative_evaluation": {
+        "candidate_evaluations": 1,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 48,
+        "posterior_normalizations": 2,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.0005175999831408262,
+        "posterior_seconds": 0.0020108000026084483,
+        "evaluation_seconds": 0.00261939998017624
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 192,
+        "posterior_normalizations": 8,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.0010189000167883933,
+        "posterior_seconds": 0.0028756999236065894,
+        "evaluation_seconds": 0.004080799990333617
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 144,
+        "materialization_seconds": 0.0032103999401442707
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "1/4"
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "mediums": 1,
+      "case": "co-report",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 2,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 2,
+        "baseline_seconds": 0.00157200000830926,
+        "normalization_input_hypotheses": 56,
+        "law_condition_seconds": 0.00023239996517077088,
+        "event_execution_seconds": 0.0006618000043090433,
+        "constructive_events": 2,
+        "event_rows_read": 4,
+        "partition_positions_read": 8,
+        "partition_seconds": 3.199998172931373e-05,
+        "support_mass_scans": 2,
+        "support_mass_input_hypotheses": 108,
+        "support_mass_seconds": 5.6199991377070546e-05,
+        "update_seconds": 0.0007781999884173274,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 4,
+      "joint_hypotheses": 4,
+      "representative_evaluation": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 12,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 6.670001312159002e-05,
+        "posterior_seconds": 0.00018809997709468007,
+        "evaluation_seconds": 0.0003463999892119318
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 16,
+        "posterior_normalizations": 6,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 8.689999231137335e-05,
+        "posterior_seconds": 0.00027530002989806235,
+        "evaluation_seconds": 0.00048499999684281647
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 4,
+        "materialization_seconds": 0.00019820002489723265
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "1/4"
+        }
+      ]
+    },
+    {
+      "players": 4,
+      "mediums": 1,
+      "case": "own-seer",
+      "view": "private",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 3,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 3,
+        "baseline_seconds": 0.00157200000830926,
+        "normalization_input_hypotheses": 60,
+        "law_condition_seconds": 0.00029099994571879506,
+        "event_execution_seconds": 0.0007239000115077943,
+        "constructive_events": 3,
+        "event_rows_read": 5,
+        "partition_positions_read": 12,
+        "partition_seconds": 3.899997682310641e-05,
+        "support_mass_scans": 4,
+        "support_mass_input_hypotheses": 210,
+        "support_mass_seconds": 9.709998266771436e-05,
+        "update_seconds": 0.000901099992915988,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 2,
+      "joint_hypotheses": 2,
+      "representative_evaluation": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 8,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 4.879999323748052e-05,
+        "posterior_seconds": 0.00012630000128410757,
+        "evaluation_seconds": 0.0002700999903026968
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 8,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 4.749998333863914e-05,
+        "posterior_seconds": 0.00012470001820474863,
+        "evaluation_seconds": 0.0002690000110305846
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 4,
+        "materialization_seconds": 1.9999861251562834e-06
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "1/4"
+        }
+      ]
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "case": "initial",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 0,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 0,
+        "updates": 0,
+        "baseline_seconds": 0.0016918999899644405
+      },
+      "role_worlds": 20,
+      "joint_hypotheses": 60,
+      "representative_evaluation": {
+        "candidate_evaluations": 1,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 60,
+        "posterior_normalizations": 2,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.00031969998963177204,
+        "posterior_seconds": 0.0008518999675288796,
+        "evaluation_seconds": 0.0012318000080995262
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 5,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 300,
+        "posterior_normalizations": 10,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.002707100036786869,
+        "posterior_seconds": 0.006501000025309622,
+        "evaluation_seconds": 0.00957130000460893
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 240,
+        "materialization_seconds": 0.005526200024178252
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "3/5"
+        }
+      ]
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "case": "co-report",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 2,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 2,
+        "baseline_seconds": 0.0016918999899644405,
+        "normalization_input_hypotheses": 66,
+        "law_condition_seconds": 0.000172999978531152,
+        "event_execution_seconds": 0.0005362999800127,
+        "constructive_events": 2,
+        "event_rows_read": 4,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.4099990949034691e-05,
+        "support_mass_scans": 2,
+        "support_mass_input_hypotheses": 128,
+        "support_mass_seconds": 5.529998452402651e-05,
+        "update_seconds": 0.0006331999902613461,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 2,
+      "joint_hypotheses": 2,
+      "representative_evaluation": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 6,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 3.7999998312443495e-05,
+        "posterior_seconds": 0.00012859998969361186,
+        "evaluation_seconds": 0.00026339999749325216
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 5,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 10,
+        "posterior_normalizations": 7,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 5.869995220564306e-05,
+        "posterior_seconds": 0.00021190001280047,
+        "evaluation_seconds": 0.00041149999015033245
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 4,
+        "materialization_seconds": 0.00019109997083432972
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "3/5"
+        }
+      ]
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "case": "own-seer",
+      "view": "private",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 3,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 3,
+        "baseline_seconds": 0.0016918999899644405,
+        "normalization_input_hypotheses": 68,
+        "law_condition_seconds": 0.00020779998158104718,
+        "event_execution_seconds": 0.0005737999745178968,
+        "constructive_events": 3,
+        "event_rows_read": 5,
+        "partition_positions_read": 15,
+        "partition_seconds": 2.0500010577961802e-05,
+        "support_mass_scans": 4,
+        "support_mass_input_hypotheses": 251,
+        "support_mass_seconds": 9.899999713525176e-05,
+        "update_seconds": 0.0007325999904423952,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 1,
+      "joint_hypotheses": 1,
+      "representative_evaluation": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 4,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 2.609999501146376e-05,
+        "posterior_seconds": 8.880000677891076e-05,
+        "evaluation_seconds": 0.00020909999147988856
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 5,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 5,
+        "posterior_normalizations": 5,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 3.0900060664862394e-05,
+        "posterior_seconds": 0.00010720000136643648,
+        "evaluation_seconds": 0.0002468000166118145
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 1,
+        "materialization_seconds": 5.020000389777124e-05
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "3/5"
+        }
+      ]
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "case": "initial",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 0,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 0,
+        "updates": 0,
+        "baseline_seconds": 0.007067399972584099
+      },
+      "role_worlds": 60,
+      "joint_hypotheses": 180,
+      "representative_evaluation": {
+        "candidate_evaluations": 1,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 180,
+        "posterior_normalizations": 2,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.000889300019480288,
+        "posterior_seconds": 0.0029298999870661646,
+        "evaluation_seconds": 0.0039010999898891896
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 5,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 900,
+        "posterior_normalizations": 10,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.004670399997849017,
+        "posterior_seconds": 0.01475690002553165,
+        "evaluation_seconds": 0.01965630002086982
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 720,
+        "materialization_seconds": 0.017347799992421642
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "2/5"
+        }
+      ]
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "case": "co-report",
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 2,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 2,
+        "baseline_seconds": 0.007067399972584099,
+        "normalization_input_hypotheses": 198,
+        "law_condition_seconds": 0.0004155999922659248,
+        "event_execution_seconds": 0.001318400027230382,
+        "constructive_events": 2,
+        "event_rows_read": 4,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.479999627918005e-05,
+        "support_mass_scans": 2,
+        "support_mass_input_hypotheses": 384,
+        "support_mass_seconds": 0.00014769998961128294,
+        "update_seconds": 0.0015107999788597226,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 6,
+      "joint_hypotheses": 6,
+      "representative_evaluation": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 18,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.00013190004392527044,
+        "posterior_seconds": 0.0006495999987237155,
+        "evaluation_seconds": 0.0009171999990940094
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 5,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 30,
+        "posterior_normalizations": 7,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.00015209999401122332,
+        "posterior_seconds": 0.0004198999668005854,
+        "evaluation_seconds": 0.0007126000127755105
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 12,
+        "materialization_seconds": 0.0003529000096023083
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "2/5"
+        }
+      ]
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "case": "own-seer",
+      "view": "private",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "context_construction_stats": {
+        "baseline_constructions": 1,
+        "joint_normalizations": 3,
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "symmetry_history_rows_read": 0,
+        "comparisons": 0,
+        "rebuilds": 1,
+        "updates": 3,
+        "baseline_seconds": 0.007067399972584099,
+        "normalization_input_hypotheses": 204,
+        "law_condition_seconds": 0.0004823999770451337,
+        "event_execution_seconds": 0.0013883000356145203,
+        "constructive_events": 3,
+        "event_rows_read": 5,
+        "partition_positions_read": 15,
+        "partition_seconds": 2.169999061152339e-05,
+        "support_mass_scans": 4,
+        "support_mass_input_hypotheses": 753,
+        "support_mass_seconds": 0.0002735000161919743,
+        "update_seconds": 0.001726799993775785,
+        "report_duplicate_history_rows_read": 0
+      },
+      "role_worlds": 3,
+      "joint_hypotheses": 3,
+      "representative_evaluation": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 12,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 7.130001904442906e-05,
+        "posterior_seconds": 0.0002818999346345663,
+        "evaluation_seconds": 0.0005122000002302229
+      },
+      "full_labelled_same_kernel": {
+        "candidate_evaluations": 5,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 15,
+        "posterior_normalizations": 5,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 8.430000161752105e-05,
+        "posterior_seconds": 0.00029409999842755497,
+        "evaluation_seconds": 0.0004922000225633383
+      },
+      "optional_grouped_materialization": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 3,
+        "materialization_seconds": 0.00015320000238716602
+      },
+      "complete_branches_equal": true,
+      "aggregate_equal": true,
+      "aggregate": [
+        {
+          "winner": "village",
+          "role_index": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role_index": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role_index": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role_index": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role_index": 4,
+          "mass": "2/5"
+        }
+      ]
+    }
+  ],
+  "independent_oracle": "old labelled joint enumeration + existing full state_signature audit + exact.action_outcomes",
+  "weight_witness": {
+    "players": 5,
+    "mediums": 1,
+    "claim_policy": "all none",
+    "p5_only_seer_co": true,
+    "prototype_p5_wolf": "1/2",
+    "existing_group_model_p5_wolf": "1/5"
+  },
+  "model_a_connected": false,
+  "normal_route_changed": false,
+  "full_game_solver": false,
+  "performance_claim": false,
+  "note": "same-kernel full-labelled reference demonstrates candidate work reduction; legacy action_outcomes is separately audited in tests. Tiny single-run timing, not production performance."
+}
