@@ -1,0 +1,148 @@
+"""Constructed initial Model A public prior adapter; no arbitrary-law ingestion.
+
+Only explicit simultaneous Day1 snapshots use this path. Existing reconstruction
+and public-prior objects are retained by reference. Group guarantee is for their
+joint law, snapshot relations and ONE execution, not future disclosure policies
+or equality of the legacy ordered-past cache representation.
+"""
+from collections import Counter
+from dataclasses import dataclass, asdict
+import json
+from time import perf_counter
+from math import comb
+from types import SimpleNamespace
+from .partitioned_match_groups import SharedContext, Observation, UnsupportedPartition
+from .constructive_cut_out import ConstructiveCutOutGroups
+from .cut_out_one_step import OneStepExecution
+from werewolf.exact import Rules,Strategy,ClaimPolicy
+from werewolf.seer_acquisition import SeerReport
+from werewolf.seer_future_uniform import FuturePending
+from werewolf.board_roles import reconstruct_saved
+from werewolf.public_prior import prepare_public_prior
+from werewolf.public_log import migrate
+from werewolf.public_log_changes import upgrade
+
+
+@dataclass(frozen=True)
+class InitialModelASpec:
+    players: int
+    claims: tuple
+    simultaneous_snapshot: bool
+    mediums: int = 1
+    seers: int = 1
+    reports: tuple = ()
+    rules: Rules = Rules(initial_seer='none')
+    strategy: Strategy = Strategy(day='random',night='random',fake_reports='random')
+    claim_policy: ClaimPolicy = ClaimPolicy()
+
+
+def _reason(spec):
+    if type(spec) is not InitialModelASpec:return 'constructed InitialModelASpec only; no Board/law/game/callable input'
+    if (type(spec.players) is not int or spec.players not in (4,5) or type(spec.mediums) is not int or spec.mediums not in (0,1)
+        or type(spec.seers) is not int or spec.seers not in (1,2) or 1+spec.mediums+spec.seers>spec.players):return '4/5 original players W1 H0 M0/1 S1/2 only'
+    if spec.simultaneous_snapshot is not True:return 'explicit simultaneous initial snapshot required; no inferred CCO timing'
+    if (type(spec.rules) is not Rules or spec.rules.allow_self_bite or type(spec.strategy) is not Strategy
+        or (spec.strategy.day,spec.strategy.night,spec.strategy.fake_reports)!=('random',)*3
+        or spec.strategy.include_self_bite or spec.strategy.disclosure_for('seer')!='all'
+        or spec.strategy.disclosure_for('medium')!='all' or type(spec.claim_policy) is not ClaimPolicy):return 'fixed supported uniform/full-disclosure configuration only'
+    if type(spec.claims) is not tuple or len(spec.claims)!=spec.players or any(type(c) is not str or c not in ('latent','villager','seer','medium','wolf') for c in spec.claims):return 'explicit original-player CO snapshot required'
+    if type(spec.reports) is not tuple or any(type(r) is not SeerReport for r in spec.reports):return 'exact initial SeerReport records only'
+    if len({r.player for r in spec.reports})!=len(spec.reports):return 'one initial result per reporter'
+    for r in spec.reports:
+        if (r.acquired_day!=1 or r.published_day!=1 or not 1<=r.player<=spec.players or not 1<=r.target<=spec.players
+            or spec.claims[r.player-1]!='seer'):return 'Day1 same-frame reports by declared seers only'
+    if spec.rules.initial_seer=='none' and spec.reports:return 'no initial result when initial acquisition is none'
+    return None
+
+
+def source_game(spec):
+    """Build a NEW narrow snapshot, never reinterpret an existing game/log."""
+    reason=_reason(spec)
+    if reason:raise ValueError(reason)
+    game=dict(players=spec.players,wolves=1,mediums=spec.mediums,seers=spec.seers,hunters=0,
+        model='group',history=[],claims=list(spec.claims),claim_policy=asdict(spec.claim_policy),
+        policy=asdict(spec.strategy),rules=asdict(spec.rules),seer_mode='information-fixed-v1',
+        seer_options=dict(initial_rule=spec.rules.initial_seer,likelihood='compatibility'),
+        seer_inputs=[dict(day=r.acquired_day,reporter=r.player,target=r.target,color=r.color) for r in spec.reports],
+        reports=[],result_disclosure_model='full-observed-v1')
+    game['public_log']=upgrade(migrate(game))
+    return game
+
+
+@dataclass(frozen=True,eq=False)
+class ModelAReference:
+    players: int
+    mediums: int
+    seers: int
+    rules: Rules
+    strategy: Strategy
+    claim_policy: ClaimPolicy
+    board: object
+    state: object
+    past: tuple
+    spec: InitialModelASpec
+    game_json: str
+
+
+class ModelAInitialGroups(ConstructiveCutOutGroups):
+    def __init__(self,spec):
+        reason=_reason(spec)
+        if reason:raise ValueError(reason)
+        self.stats=Counter(generator_checks=0,symmetry_history_rows_read=0,full_permutation_searches=0,
+                           upstream_permutation_checks=0,comparisons=0,official_board_builds=1,official_prior_builds=1)
+        started=perf_counter();game=source_game(spec)
+        rules,progress=reconstruct_saved(game)
+        self.stats['official_board_seconds']=perf_counter()-started
+        if progress.finished:raise ValueError('terminal snapshot outside initial one-step scope')
+        started=perf_counter();prior=prepare_public_prior(game,progress.board,rules,max_work=100000)
+        self.stats['official_prior_seconds']=perf_counter()-started
+        if isinstance(prior,FuturePending):raise ValueError(prior.reason)
+        state,past=prior
+        if state.public_roles!=tuple(sorted(progress.board.worlds)):raise ValueError('official public role/joint prior mismatch')
+        self.baseline=ModelAReference(spec.players,spec.mediums,spec.seers,rules,spec.strategy,spec.claim_policy,
+            progress.board,state,past,spec,json.dumps(game,sort_keys=True,separators=(',',':')))
+        self.stats['nominal_initial_worlds']=spec.players*comb(spec.players-1,spec.mediums)*comb(spec.players-1-spec.mediums,spec.seers)
+        self.stats['public_worlds']=len(progress.board.worlds)
+        self.stats['public_hypotheses']=len(state.hypotheses)
+        # Proof-only partition construction: initial S_n is restricted by the
+        # final CO map then fixed-target report relations. No law is conditioned
+        # here; the COMPLETE official weighted law above is used unchanged.
+        events=[]
+        co=tuple((p,c) for p,c in enumerate(spec.claims,1) if c!='latent')
+        if co:events.append(Observation('co',co))
+        if spec.reports:events.append(Observation('report',tuple((r.player,r.target,r.color,r.acquired_day) for r in spec.reports)))
+        started=perf_counter();groups=(tuple(range(1,spec.players+1)),)
+        for event in events:groups=self._refine_groups(SimpleNamespace(groups=groups),event)
+        self.stats['partition_seconds']=perf_counter()-started
+        self._context=SharedContext(self.baseline,state,state,spec.claims,progress.board.alive,tuple(events),groups)
+
+    def start(self):return self._context
+
+    def update(self,*args,**kwargs):
+        return UnsupportedPartition('Model A adapter is initial-snapshot only; reconstruct a new explicit spec, never use prototype filtering')
+
+    def rebuild(self,*args,**kwargs):
+        return UnsupportedPartition('reconstruct a new InitialModelASpec; no inferred temporal/CCO changes')
+
+
+def adapt_model_a(spec):
+    reason=_reason(spec)
+    if reason:return UnsupportedPartition(reason)
+    try:return ModelAInitialGroups(spec)
+    except ValueError as error:return UnsupportedPartition('official initial Model A unavailable: '+str(error))
+
+
+class ModelAOneStepExecution(OneStepExecution):
+    supported_law='model_a_initial_public'
+
+    def __init__(self,engine):
+        if type(engine) is not ModelAInitialGroups:raise TypeError('constructed initial Model A adapter required')
+        self.engine=engine
+        self.stats=Counter(candidate_evaluations=0,legal_candidates=0,hypotheses_scanned=0,
+                           posterior_normalizations=0,materialized_targets=0,
+                           materialization_hypotheses=0,generator_checks=0)
+
+    def evaluate(self,context,*,view='public',law_semantics='model_a_initial_public',representatives=True):
+        if context is not self.engine.start() or view!='public':
+            return UnsupportedPartition('issued formal initial public context only; no arbitrary or private law')
+        return super().evaluate(context,view=view,law_semantics=law_semantics,representatives=representatives)

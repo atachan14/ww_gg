@@ -52,6 +52,7 @@ def _role(h,target):
 
 
 class OneStepExecution:
+    supported_law = 'prototype_joint_support'
     def __init__(self, engine):
         if type(engine) is not ConstructiveCutOutGroups:
             raise TypeError('Constructive small-law engine required')
@@ -67,8 +68,8 @@ class OneStepExecution:
 
     def _evaluate(self,context,view,law_semantics,representatives):
         if type(representatives) is not bool:return UnsupportedPartition('explicit representative/full-labelled comparison mode required')
-        if law_semantics!='prototype_joint_support':
-            return UnsupportedPartition('Model A weights/physical law not connected; joint-support fixture only')
+        if law_semantics!=self.supported_law:
+            return UnsupportedPartition('expected '+self.supported_law+'; no implicit law conversion')
         if type(context) is not SharedContext or context.baseline is not self.engine.baseline:
             return UnsupportedPartition('different complete context')
         if view not in ('public','private') or (view=='public')!=(context.scope=='public'):
@@ -112,7 +113,7 @@ class OneStepExecution:
                 for r,q in enumerate(roles):
                     aggregate[winner,r]=aggregate.get((winner,r),F())+choice.mass*q
             actions.append(RepresentativeAction(choice.targets,choice.mass,tuple(branches)))
-        return OneStepResult(context,view,tuple(actions),tuple(sorted(aggregate.items(),key=repr)))
+        return OneStepResult(context,view,tuple(actions),tuple(sorted(aggregate.items(),key=repr)),law_semantics=law_semantics)
 
     def materialize(self,result,target):
         """Explicit optional label transport, separately charged from evaluation.

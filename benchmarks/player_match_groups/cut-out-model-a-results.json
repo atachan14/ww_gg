@@ -1,0 +1,2691 @@
+{
+  "recorded_utc": "2026-10-18T07:23:41.879950+00:00",
+  "head_before_evidence_commit": "20c7616146de2c627e702391f786133407654a0e",
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_model_a.py": "1e3e3b04404b55508adb919b09c738dd59e45a426af66bcdc8cab5ea0191f2fa",
+    "benchmarks/player_match_groups/cut_out_one_step.py": "d265355db0ead5a2161df1e3f93ddd9d85556ed00a1c49947c6610242c09ec01",
+    "tests/test_cut_out_model_a.py": "6f1ebea92e7457db12f8c28dcab334335e44faa85e034f941ed18109ea076d4a"
+  },
+  "tests": [
+    {
+      "pattern": "test_cut_out_model_a.py",
+      "count": 6,
+      "exit": 0,
+      "seconds_limit": 20,
+      "log": ".artifacts\\test_cut_out_model_a-adapter-final.log"
+    },
+    {
+      "pattern": "test_cut_out_independent.py",
+      "count": 4,
+      "exit": 0,
+      "seconds_limit": 20,
+      "log": ".artifacts\\test_cut_out_independent-adapter-final.log"
+    }
+  ],
+  "cases": [
+    {
+      "players": 4,
+      "case": "witness",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "latent",
+        "latent",
+        "latent",
+        "seer"
+      ],
+      "groups": [
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "tracked_seers": [
+        4
+      ],
+      "observed_prefix": 1,
+      "past_order": [],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0033492999791633338,
+        "official_prior_seconds": 0.007061499985866249,
+        "nominal_initial_worlds": 24,
+        "public_worlds": 12,
+        "public_hypotheses": 12,
+        "constructive_events": 1,
+        "event_rows_read": 1,
+        "partition_positions_read": 4,
+        "partition_seconds": 1.4199991710484028e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 2,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 24,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.0001323999895248562,
+        "posterior_seconds": 0.00040740001713857055,
+        "evaluation_seconds": 0.0006584999791812152
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 24,
+        "materialization_seconds": 0.0005302999634295702
+      },
+      "wolf_rates": {
+        "1": "1/4",
+        "2": "1/4",
+        "3": "1/4",
+        "4": "1/4"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            1,
+            2,
+            8,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            1,
+            4,
+            8,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            2,
+            1,
+            8,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            2,
+            4,
+            8,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            4,
+            1,
+            8,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            4,
+            2,
+            8,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            8,
+            1,
+            2,
+            0
+          ],
+          "1/24"
+        ],
+        [
+          [
+            8,
+            1,
+            4,
+            0
+          ],
+          "1/24"
+        ],
+        [
+          [
+            8,
+            2,
+            1,
+            0
+          ],
+          "1/24"
+        ],
+        [
+          [
+            8,
+            2,
+            4,
+            0
+          ],
+          "1/24"
+        ],
+        [
+          [
+            8,
+            4,
+            1,
+            0
+          ],
+          "1/24"
+        ],
+        [
+          [
+            8,
+            4,
+            2,
+            0
+          ],
+          "1/24"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "1/4"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 4,
+      "case": "single",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3
+        ]
+      ],
+      "tracked_seers": [
+        1
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        1
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0012310000020079315,
+        "official_prior_seconds": 0.0002548999909777194,
+        "nominal_initial_worlds": 24,
+        "public_worlds": 4,
+        "public_hypotheses": 4,
+        "constructive_events": 2,
+        "event_rows_read": 2,
+        "partition_positions_read": 8,
+        "partition_seconds": 1.6200006939470768e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 12,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 6.839999696239829e-05,
+        "posterior_seconds": 0.00020439998479560018,
+        "evaluation_seconds": 0.00036769997677765787
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 4,
+        "materialization_seconds": 0.00015569996321573853
+      },
+      "wolf_rates": {
+        "1": "0",
+        "2": "1/2",
+        "3": "0",
+        "4": "1/2"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            2,
+            4,
+            1,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            2,
+            8,
+            1,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            8,
+            2,
+            1,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            8,
+            4,
+            1,
+            0
+          ],
+          "1/4"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "1/4"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 4,
+      "case": "insufficient",
+      "seers": 2,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2,
+          3,
+          4
+        ]
+      ],
+      "tracked_seers": [
+        1
+      ],
+      "observed_prefix": 1,
+      "past_order": [],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0010578999936114997,
+        "official_prior_seconds": 0.0003031000087503344,
+        "nominal_initial_worlds": 12,
+        "public_worlds": 9,
+        "public_hypotheses": 9,
+        "constructive_events": 1,
+        "event_rows_read": 1,
+        "partition_positions_read": 4,
+        "partition_seconds": 7.599999662488699e-06
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 2,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 18,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 9.379998664371669e-05,
+        "posterior_seconds": 0.00028810001094825566,
+        "evaluation_seconds": 0.0004726999904960394
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 18,
+        "materialization_seconds": 0.0004273999948054552
+      },
+      "wolf_rates": {
+        "1": "1/4",
+        "2": "1/4",
+        "3": "1/4",
+        "4": "1/4"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            1,
+            2,
+            12,
+            0
+          ],
+          "1/12"
+        ],
+        [
+          [
+            1,
+            4,
+            10,
+            0
+          ],
+          "1/12"
+        ],
+        [
+          [
+            1,
+            8,
+            6,
+            0
+          ],
+          "1/12"
+        ],
+        [
+          [
+            2,
+            4,
+            9,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            2,
+            8,
+            5,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            4,
+            2,
+            9,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            4,
+            8,
+            3,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            8,
+            2,
+            5,
+            0
+          ],
+          "1/8"
+        ],
+        [
+          [
+            8,
+            4,
+            3,
+            0
+          ],
+          "1/8"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/2"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "0"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 4,
+      "case": "same_reports",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "tracked_seers": [
+        1,
+        2
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        1,
+        2
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0010888999968301505,
+        "official_prior_seconds": 0.00022780001745559275,
+        "nominal_initial_worlds": 24,
+        "public_worlds": 4,
+        "public_hypotheses": 4,
+        "constructive_events": 2,
+        "event_rows_read": 4,
+        "partition_positions_read": 8,
+        "partition_seconds": 1.4599994756281376e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 12,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 6.749999010935426e-05,
+        "posterior_seconds": 0.00019600000814534724,
+        "evaluation_seconds": 0.00035949997254647315
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 4,
+        "materialization_seconds": 0.00015319997328333557
+      },
+      "wolf_rates": {
+        "1": "1/2",
+        "2": "1/2",
+        "3": "0",
+        "4": "0"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            1,
+            4,
+            2,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            1,
+            8,
+            2,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            2,
+            4,
+            1,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            2,
+            8,
+            1,
+            0
+          ],
+          "1/4"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "1/4"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 4,
+      "case": "one_side_received",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "latent",
+        "latent",
+        "seer",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3
+        ]
+      ],
+      "tracked_seers": [
+        3
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        3
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0019043000065721571,
+        "official_prior_seconds": 0.00024920000578276813,
+        "nominal_initial_worlds": 24,
+        "public_worlds": 4,
+        "public_hypotheses": 4,
+        "constructive_events": 2,
+        "event_rows_read": 2,
+        "partition_positions_read": 8,
+        "partition_seconds": 1.580000389367342e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 12,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 7.03000114299357e-05,
+        "posterior_seconds": 0.0002004000125452876,
+        "evaluation_seconds": 0.0003740000247489661
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 4,
+        "materialization_hypotheses": 4,
+        "materialization_seconds": 0.00015159999020397663
+      },
+      "wolf_rates": {
+        "1": "0",
+        "2": "1/2",
+        "3": "0",
+        "4": "1/2"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            2,
+            1,
+            4,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            2,
+            8,
+            4,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            8,
+            1,
+            4,
+            0
+          ],
+          "1/4"
+        ],
+        [
+          [
+            8,
+            2,
+            4,
+            0
+          ],
+          "1/4"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "1/4"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 4,
+      "case": "omitted_result",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ]
+      ],
+      "tracked_seers": [
+        1,
+        2
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        1
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0011272999981883913,
+        "official_prior_seconds": 0.00017330000991933048,
+        "nominal_initial_worlds": 24,
+        "public_worlds": 2,
+        "public_hypotheses": 2,
+        "constructive_events": 2,
+        "event_rows_read": 3,
+        "partition_positions_read": 8,
+        "partition_seconds": 1.3599987141788006e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 4,
+        "hypotheses_scanned": 8,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 5.110001075081527e-05,
+        "posterior_seconds": 0.0001336999994236976,
+        "evaluation_seconds": 0.00028539999038912356
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 4,
+        "materialization_seconds": 2.0999868866056204e-06
+      },
+      "wolf_rates": {
+        "1": "0",
+        "2": "1",
+        "3": "0",
+        "4": "0"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            2,
+            4,
+            1,
+            0
+          ],
+          "1/2"
+        ],
+        [
+          [
+            2,
+            8,
+            1,
+            0
+          ],
+          "1/2"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/4"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/4"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "1/4"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 5,
+      "case": "witness",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "latent",
+        "latent",
+        "latent",
+        "latent",
+        "seer"
+      ],
+      "groups": [
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          5
+        ]
+      ],
+      "tracked_seers": [
+        5
+      ],
+      "observed_prefix": 1,
+      "past_order": [],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.002209800004493445,
+        "official_prior_seconds": 0.0006394000083673745,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 24,
+        "public_hypotheses": 24,
+        "constructive_events": 1,
+        "event_rows_read": 1,
+        "partition_positions_read": 5,
+        "partition_seconds": 7.90000194683671e-06
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 2,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 48,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.00023630002397112548,
+        "posterior_seconds": 0.0006711000169161707,
+        "evaluation_seconds": 0.0009994000138249248
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 72,
+        "materialization_seconds": 0.0014107000024523586
+      },
+      "wolf_rates": {
+        "1": "1/5",
+        "2": "1/5",
+        "3": "1/5",
+        "4": "1/5",
+        "5": "1/5"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            1,
+            2,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            1,
+            4,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            1,
+            8,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            2,
+            1,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            2,
+            4,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            2,
+            8,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            4,
+            1,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            4,
+            2,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            4,
+            8,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            8,
+            1,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            8,
+            2,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            8,
+            4,
+            16,
+            0
+          ],
+          "1/15"
+        ],
+        [
+          [
+            16,
+            1,
+            2,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            1,
+            4,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            1,
+            8,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            2,
+            1,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            2,
+            4,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            2,
+            8,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            4,
+            1,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            4,
+            2,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            4,
+            8,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            8,
+            1,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            8,
+            2,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            16,
+            8,
+            4,
+            0
+          ],
+          "1/60"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "2/5"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 5,
+      "case": "single",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5
+        ],
+        [
+          3
+        ]
+      ],
+      "tracked_seers": [
+        1
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        1
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0016826000064611435,
+        "official_prior_seconds": 0.00036589999217540026,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 9,
+        "public_hypotheses": 9,
+        "constructive_events": 2,
+        "event_rows_read": 2,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.4199991710484028e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 27,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.0001412999990861863,
+        "posterior_seconds": 0.00034339993726462126,
+        "evaluation_seconds": 0.0005810000002384186
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 18,
+        "materialization_seconds": 0.002038799982983619
+      },
+      "wolf_rates": {
+        "1": "0",
+        "2": "1/3",
+        "3": "0",
+        "4": "1/3",
+        "5": "1/3"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            2,
+            4,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            2,
+            8,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            2,
+            16,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            8,
+            2,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            8,
+            4,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            8,
+            16,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            16,
+            2,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            16,
+            4,
+            1,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            16,
+            8,
+            1,
+            0
+          ],
+          "1/9"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "2/5"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 5,
+      "case": "insufficient",
+      "seers": 2,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "tracked_seers": [
+        1
+      ],
+      "observed_prefix": 1,
+      "past_order": [],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.003088099998421967,
+        "official_prior_seconds": 0.0009859000274445862,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 36,
+        "public_hypotheses": 36,
+        "constructive_events": 1,
+        "event_rows_read": 1,
+        "partition_positions_read": 5,
+        "partition_seconds": 8.99998121894896e-06
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 2,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 72,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.0003494999837130308,
+        "posterior_seconds": 0.0008791000000201166,
+        "evaluation_seconds": 0.0013293999945744872
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 108,
+        "materialization_seconds": 0.00196309998864308
+      },
+      "wolf_rates": {
+        "1": "1/5",
+        "2": "1/5",
+        "3": "1/5",
+        "4": "1/5",
+        "5": "1/5"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            1,
+            2,
+            12,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            2,
+            20,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            2,
+            24,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            4,
+            10,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            4,
+            18,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            4,
+            24,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            8,
+            6,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            8,
+            18,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            8,
+            20,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            16,
+            6,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            16,
+            10,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            1,
+            16,
+            12,
+            0
+          ],
+          "1/60"
+        ],
+        [
+          [
+            2,
+            4,
+            9,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            2,
+            4,
+            17,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            2,
+            8,
+            5,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            2,
+            8,
+            17,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            2,
+            16,
+            5,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            2,
+            16,
+            9,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            4,
+            2,
+            9,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            4,
+            2,
+            17,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            4,
+            8,
+            3,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            4,
+            8,
+            17,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            4,
+            16,
+            3,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            4,
+            16,
+            9,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            8,
+            2,
+            5,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            8,
+            2,
+            17,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            8,
+            4,
+            3,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            8,
+            4,
+            17,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            8,
+            16,
+            3,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            8,
+            16,
+            5,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            16,
+            2,
+            5,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            16,
+            2,
+            9,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            16,
+            4,
+            3,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            16,
+            4,
+            9,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            16,
+            8,
+            3,
+            0
+          ],
+          "1/30"
+        ],
+        [
+          [
+            16,
+            8,
+            5,
+            0
+          ],
+          "1/30"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "2/5"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "1/5"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 5,
+      "case": "same_reports",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "tracked_seers": [
+        1,
+        2
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        1,
+        2
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0015072999813128263,
+        "official_prior_seconds": 0.00028730000485666096,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 6,
+        "public_hypotheses": 6,
+        "constructive_events": 2,
+        "event_rows_read": 4,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.479999627918005e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 18,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 9.659997886046767e-05,
+        "posterior_seconds": 0.00025260000256821513,
+        "evaluation_seconds": 0.00044249999336898327
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 12,
+        "materialization_seconds": 0.0003480000013951212
+      },
+      "wolf_rates": {
+        "1": "1/2",
+        "2": "1/2",
+        "3": "0",
+        "4": "0",
+        "5": "0"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            1,
+            4,
+            2,
+            0
+          ],
+          "1/6"
+        ],
+        [
+          [
+            1,
+            8,
+            2,
+            0
+          ],
+          "1/6"
+        ],
+        [
+          [
+            1,
+            16,
+            2,
+            0
+          ],
+          "1/6"
+        ],
+        [
+          [
+            2,
+            4,
+            1,
+            0
+          ],
+          "1/6"
+        ],
+        [
+          [
+            2,
+            8,
+            1,
+            0
+          ],
+          "1/6"
+        ],
+        [
+          [
+            2,
+            16,
+            1,
+            0
+          ],
+          "1/6"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "2/5"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 5,
+      "case": "one_side_received",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "latent",
+        "latent",
+        "seer",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2,
+          4,
+          5
+        ],
+        [
+          3
+        ]
+      ],
+      "tracked_seers": [
+        3
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        3
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0029968000017106533,
+        "official_prior_seconds": 0.0004169000021647662,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 9,
+        "public_hypotheses": 9,
+        "constructive_events": 2,
+        "event_rows_read": 2,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.6300007700920105e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 3,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 27,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 0.00018740002997219563,
+        "posterior_seconds": 0.00037640001391991973,
+        "evaluation_seconds": 0.0006809000042267144
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 18,
+        "materialization_seconds": 0.0006828999612480402
+      },
+      "wolf_rates": {
+        "1": "0",
+        "2": "1/3",
+        "3": "0",
+        "4": "1/3",
+        "5": "1/3"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            2,
+            1,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            2,
+            8,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            2,
+            16,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            8,
+            1,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            8,
+            2,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            8,
+            16,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            16,
+            1,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            16,
+            2,
+            4,
+            0
+          ],
+          "1/9"
+        ],
+        [
+          [
+            16,
+            8,
+            4,
+            0
+          ],
+          "1/9"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "2/5"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    },
+    {
+      "players": 5,
+      "case": "omitted_result",
+      "seers": 1,
+      "mediums": 1,
+      "claims": [
+        "seer",
+        "seer",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "tracked_seers": [
+        1,
+        2
+      ],
+      "observed_prefix": 1,
+      "past_order": [
+        1
+      ],
+      "construction_stats": {
+        "generator_checks": 0,
+        "symmetry_history_rows_read": 0,
+        "full_permutation_searches": 0,
+        "upstream_permutation_checks": 0,
+        "comparisons": 0,
+        "official_board_builds": 1,
+        "official_prior_builds": 1,
+        "official_board_seconds": 0.0016171000024769455,
+        "official_prior_seconds": 0.00021329999435693026,
+        "nominal_initial_worlds": 60,
+        "public_worlds": 3,
+        "public_hypotheses": 3,
+        "constructive_events": 2,
+        "event_rows_read": 3,
+        "partition_positions_read": 10,
+        "partition_seconds": 1.5199999324977398e-05
+      },
+      "evaluation_stats": {
+        "candidate_evaluations": 4,
+        "legal_candidates": 5,
+        "hypotheses_scanned": 12,
+        "posterior_normalizations": 4,
+        "materialized_targets": 0,
+        "materialization_hypotheses": 0,
+        "generator_checks": 0,
+        "joint_scan_seconds": 7.100001676008105e-05,
+        "posterior_seconds": 0.00016539994976483285,
+        "evaluation_seconds": 0.0003349000180605799
+      },
+      "optional_transport_stats": {
+        "materialized_targets": 5,
+        "materialization_hypotheses": 3,
+        "materialization_seconds": 0.00010070001007989049
+      },
+      "wolf_rates": {
+        "1": "0",
+        "2": "1",
+        "3": "0",
+        "4": "0",
+        "5": "0"
+      },
+      "joint_total_mass": "1",
+      "weighted_worlds": [
+        [
+          [
+            2,
+            4,
+            1,
+            0
+          ],
+          "1/3"
+        ],
+        [
+          [
+            2,
+            8,
+            1,
+            0
+          ],
+          "1/3"
+        ],
+        [
+          [
+            2,
+            16,
+            1,
+            0
+          ],
+          "1/3"
+        ]
+      ],
+      "aggregate": [
+        {
+          "winner": "village",
+          "role": 0,
+          "mass": "1/5"
+        },
+        {
+          "winner": "village",
+          "role": 1,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 2,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": "village",
+          "role": 4,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 0,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 1,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 2,
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "role": 3,
+          "mass": "0"
+        },
+        {
+          "winner": null,
+          "role": 4,
+          "mass": "2/5"
+        }
+      ],
+      "law_semantics": "model_a_initial_public",
+      "complete_step_branches_equal": true
+    }
+  ],
+  "formal_source": "board_roles.reconstruct_saved + public_prior.prepare_public_prior",
+  "proof_scope": "constructed simultaneous initial public joint law and one day execution only",
+  "arbitrary_distribution_accepted": false,
+  "upstream_permutation_audit": false,
+  "private_or_future_connected": false,
+  "ordinary_route_changed": false,
+  "performance_claim": false
+}
