@@ -1,5 +1,7 @@
 # Matching-group acceptance status
 
+Current concise scope/design: [matching-groups-final-scope.md](matching-groups-final-scope.md). Earlier counts, PIDs and limits below are historical stage records; latest completed numerical quality gate is c97f630 / 860 tests.
+
 Current numerical semantics include the user-specified corpse scan rule (c3d3163). Values from older engines are historical, not targets to fit. No push/deploy; normal startup remains OFF.
 
 ## Reference hierarchy
