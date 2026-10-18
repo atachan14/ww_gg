@@ -149,7 +149,7 @@ def simulate(cap,roster,target):
 
 def move_law(law,mapping):
     def player(p):return mapping[p-1]
-    def mask(m):return sum(1<<(player(p)-1) for p in range(1,8) if m&(1<<(p-1)))
+    def mask(m):return sum(1<<(player(p)-1) for p in range(1,len(mapping)+1) if m&(1<<(p-1)))
     hs=tuple(Hypothesis(tuple(mask(m) for m in h.roles),tuple(sorted(replace(a,player=player(a.player),target=player(a.target)) for a in h.acquisitions)),h.mass,(),tuple(replace(a,target=player(a.target)) for a in h.attacks)) for h in law.hypotheses)
     return replace(law,hypotheses=normalize(hs),rosters=tuple(tuple(sorted(player(p) for p in r)) for r in law.rosters),tracked=None if law.tracked is None else tuple(sorted(player(p) for p in law.tracked)))
 
@@ -157,8 +157,8 @@ def move_law(law,mapping):
 def move_board(b,law,mapping):
     from werewolf.exact import replace_worlds
     player=lambda p:mapping[p-1]
-    claims=['']*7
-    for p in range(1,8):claims[player(p)-1]=b.claims[p-1]
+    claims=['']*len(mapping)
+    for p in range(1,len(mapping)+1):claims[player(p)-1]=b.claims[p-1]
     return replace_worlds(b,law.public_roles,wolf_count=None,alive=tuple(sorted(player(p) for p in b.alive)),claims=tuple(claims),
         history=tuple(replace(v,target=player(v.target)) for v in b.history),
         medium_opportunities=tuple(sorted((d,player(p),player(t)) for d,p,t in b.medium_opportunities)),

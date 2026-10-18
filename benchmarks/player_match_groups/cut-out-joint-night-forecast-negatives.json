@@ -1,0 +1,22 @@
+{
+  "status": "verified",
+  "rejected": [
+    "copied_certificate",
+    "one_sided_public_state",
+    "producer_skew_public_state",
+    "one_sided_private",
+    "producer_skew_private",
+    "private_changed_without_view",
+    "view_changed_without_private",
+    "copied_transport",
+    "transport_other_private_source",
+    "transport_outside_inherited_group",
+    "transport_changes_own_owner",
+    "other_owner_origin",
+    "stale_revision_forecast",
+    "stale_revision_saved_read",
+    "max",
+    "second_generated_night",
+    "unsupported_large_initial_case"
+  ]
+}
