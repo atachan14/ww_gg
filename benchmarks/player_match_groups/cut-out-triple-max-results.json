@@ -1,0 +1,392 @@
+{
+  "cases": [
+    {
+      "players": 4,
+      "mediums": 1,
+      "initial": "random_white",
+      "view": "white",
+      "medium_co": false,
+      "initial_hypotheses": 48,
+      "own_initial_hypotheses": 4,
+      "village_win": "1/4",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 35,
+      "scalar_context_comparisons": 34,
+      "own_scan_targets": [
+        2,
+        4
+      ],
+      "private_intervention_contexts": 0,
+      "public_unforced_scan_contexts": 0,
+      "own_scan_group_swap_audits": 5,
+      "grouped": {
+        "cut_out_builds": 4,
+        "cut_out_seconds": 0.0005481999542098492,
+        "key_seconds": 0.006224099866813049,
+        "action_requests": 100,
+        "action_evaluations": 34,
+        "law_seconds": 0.028693400032352656,
+        "acquisition_calls": 80,
+        "inclusive_action_seconds": 0.10641270014457405,
+        "representative_hits": 66,
+        "label_scalar_restores": 9,
+        "label_restore_seconds": 0.00038499999209307134,
+        "total_seconds": 0.0936173000081908,
+        "evaluation_other_seconds": 0.05776660016272217,
+        "saved_origins": 1,
+        "generated_boards": 39,
+        "law_hypotheses_retained": 264
+      },
+      "labelled": {
+        "action_requests": 106,
+        "action_evaluations": 71,
+        "law_seconds": 0.039754100143909454,
+        "acquisition_calls": 144,
+        "total_seconds": 0.10309819999383762,
+        "evaluation_other_seconds": 0.06778519990621135,
+        "saved_origins": 1,
+        "generated_boards": 44,
+        "law_hypotheses_retained": 336
+      },
+      "seconds": 0.8850554999953602,
+      "case": "terminal",
+      "three_max_preserved": true,
+      "medium_report_selection_inactive": true,
+      "fake_seer_policy": [
+        "noncontradictory",
+        "uniform"
+      ],
+      "worker_seconds": 1.0939999999827705,
+      "peak_working_set_bytes": 31412224
+    },
+    {
+      "players": 5,
+      "mediums": 0,
+      "initial": "none",
+      "view": "role",
+      "medium_co": false,
+      "initial_hypotheses": 20,
+      "own_initial_hypotheses": 4,
+      "village_win": "7/15",
+      "public_policy": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "complete_table_action_joint_physical_history_branch_equal": true,
+      "independently_generated_initial_and_terminal_joint_equal": true,
+      "terminal_readbacks": 68,
+      "scalar_context_comparisons": 80,
+      "own_scan_targets": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "private_intervention_contexts": 56,
+      "public_unforced_scan_contexts": 56,
+      "own_scan_group_swap_audits": 226,
+      "grouped": {
+        "cut_out_builds": 10,
+        "cut_out_seconds": 0.0006953999982215464,
+        "key_seconds": 0.006893300014780834,
+        "action_requests": 138,
+        "action_evaluations": 80,
+        "law_seconds": 0.0713137999700848,
+        "acquisition_calls": 138,
+        "morning_calls": 21,
+        "inclusive_action_seconds": 0.47973630009801127,
+        "representative_hits": 58,
+        "label_scalar_restores": 56,
+        "label_restore_seconds": 0.0015346999280154705,
+        "total_seconds": 0.7290171000058763,
+        "evaluation_other_seconds": 0.6485799000947736,
+        "saved_origins": 1,
+        "generated_boards": 83,
+        "law_hypotheses_retained": 903
+      },
+      "labelled": {
+        "action_requests": 647,
+        "action_evaluations": 571,
+        "law_seconds": 0.4407523001136724,
+        "acquisition_calls": 432,
+        "morning_calls": 168,
+        "total_seconds": 0.7892403000150807,
+        "evaluation_other_seconds": 0.3497898999194149,
+        "saved_origins": 1,
+        "generated_boards": 212,
+        "law_hypotheses_retained": 4392
+      },
+      "seconds": 5.283128200011561,
+      "case": "no-read",
+      "three_max_preserved": true,
+      "medium_report_selection_inactive": true,
+      "fake_seer_policy": [
+        "noncontradictory",
+        "uniform"
+      ],
+      "worker_seconds": 5.437999999994645,
+      "peak_working_set_bytes": 59674624
+    },
+    {
+      "players": 5,
+      "mediums": 1,
+      "night": "max",
+      "view": "medium2",
+      "village_win": "2/3",
+      "public_policy": [
+        2,
+        4,
+        5
+      ],
+      "private_best": "3/4",
+      "scalar_context_comparisons": 250,
+      "terminal_readbacks": 232,
+      "unknown_medium_wolf_information_sets": 11,
+      "complete_table_action_horizon_joint_physical_history_equal": true,
+      "grouped": {
+        "cut_out_builds": 4,
+        "cut_out_seconds": 0.0014763001236133277,
+        "key_seconds": 0.008970299881184474,
+        "action_requests": 275,
+        "action_evaluations": 250,
+        "law_seconds": 0.07056130020646378,
+        "acquisition_calls": 92,
+        "morning_calls": 38,
+        "inclusive_action_seconds": 0.33356359996832907,
+        "representative_hits": 25,
+        "label_scalar_restores": 13,
+        "label_restore_seconds": 0.00028940002084709704,
+        "total_seconds": 0.1704707999888342,
+        "evaluation_other_seconds": 0.0891734997567255,
+        "saved_origins": 1,
+        "generated_boards": 154,
+        "law_hypotheses_retained": 588
+      },
+      "labelled": {
+        "action_requests": 555,
+        "action_evaluations": 456,
+        "law_seconds": 0.11174330033827573,
+        "acquisition_calls": 168,
+        "morning_calls": 76,
+        "total_seconds": 0.203981600003317,
+        "evaluation_other_seconds": 0.11490249968483113,
+        "saved_origins": 1,
+        "generated_boards": 168,
+        "law_hypotheses_retained": 675
+      },
+      "seconds": 0.7903865000116639,
+      "case": "sealed",
+      "three_max_preserved": true,
+      "medium_report_selection_inactive": true,
+      "fake_seer_policy": [
+        "noncontradictory",
+        "uniform"
+      ],
+      "worker_seconds": 0.9370000000053551,
+      "peak_working_set_bytes": 35528704
+    },
+    {
+      "case": "active-medium-report",
+      "comparison_first_boundary": "active_medium_report_max_outside_comparison_scope",
+      "formal_full_root_first_boundary": "root_secret_max_unimplemented",
+      "formal_fake_only_root_boundary": "root_secret_max_unimplemented",
+      "counterfactual_execution": 3,
+      "counterfactual_bite": 4,
+      "existing_report_action_scores": [
+        {
+          "fake_colors": [
+            [
+              1,
+              "white"
+            ],
+            [
+              2,
+              "white"
+            ]
+          ],
+          "value": "1/2"
+        },
+        {
+          "fake_colors": [
+            [
+              1,
+              "white"
+            ],
+            [
+              2,
+              "black"
+            ]
+          ],
+          "value": "1"
+        },
+        {
+          "fake_colors": [
+            [
+              1,
+              "black"
+            ],
+            [
+              2,
+              "white"
+            ]
+          ],
+          "value": "1"
+        },
+        {
+          "fake_colors": [
+            [
+              1,
+              "black"
+            ],
+            [
+              2,
+              "black"
+            ]
+          ],
+          "value": "1"
+        }
+      ],
+      "existing_selected_colors": [
+        [
+          1,
+          "white"
+        ],
+        [
+          2,
+          "white"
+        ]
+      ],
+      "existing_report_min_value": "1/2",
+      "fake_seer_policy": [
+        "noncontradictory",
+        "uniform"
+      ],
+      "active_report_entry_adopted": false,
+      "worker_seconds": 0.15599999998812564,
+      "peak_working_set_bytes": 29302784
+    },
+    {
+      "case": "residual",
+      "first_boundary": "five_player_no_read_requires_M0_initial_none_all_latent",
+      "fake_report_setting_preserved": "max",
+      "approximation_used": false,
+      "worker_seconds": 0.14000000001396984,
+      "peak_working_set_bytes": 29466624
+    }
+  ],
+  "checks": [
+    [
+      "pattern",
+      "test_withdraw_prefix_diagnostic.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_six_registry.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_saved_recipes.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_two_nights.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_uniform_game.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_model_a.py"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal"
+    ],
+    [
+      "named",
+      "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization"
+    ],
+    [
+      "named",
+      "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max"
+    ],
+    [
+      "named",
+      "tests.test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation"
+    ],
+    [
+      "pattern",
+      "test_cut_out_seven_minimal.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_max_game.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_latent_max.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_terminal_night_max.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_no_read_night_max.py"
+    ],
+    [
+      "pattern",
+      "test_cut_out_triple_max.py"
+    ]
+  ],
+  "existing53_preserved": true,
+  "regression_tests": 56,
+  "timing_interpretation": "bounded correctness run; not a speed comparison",
+  "overall_seconds": 53.89000000001397,
+  "baseline_commit": "c8437cce00984fbf471b8b50924f4833ac4aabdd",
+  "baseline_first_comparison_boundary": "fixed supported uniform/full-disclosure configuration only: fake_reports had to be random",
+  "concurrent_work_notice": "Morishi COW timing notice received during correctness run; no extra speed measurements"
+}

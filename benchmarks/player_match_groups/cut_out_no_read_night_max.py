@@ -55,7 +55,7 @@ def certify_night(b,s,past,rules,strategy):
     if (b.player_count!=5 or len(b.alive)!=4 or b.phase!='night' or b.day!=1 or b.winner
         or b.initial_hunter_count or b.initial_medium_count or b.initial_seer_count!=1
         or b.claims!=('latent',)*5 or b.wolf_count_distribution!={1:F(1)}
-        or rules!=Rules(initial_seer='none') or strategy!=Strategy(day='max',night='max',fake_reports='random')
+        or rules!=Rules(initial_seer='none') or strategy!=Strategy(day='max',night='max',fake_reports=strategy.fake_reports)
         or len(b.history)!=1 or b.history[0].phase!='day' or past or len(s.rosters)!=1):
         return ProfileSearch('dependency_unfinished',0,0,reason='five_player_no_read_structure_unproved'),{}
     return guarded_profile_probe(b,s,past,rules,strategy)
@@ -78,8 +78,8 @@ class NoReadNightMaxEngine(CutOutMaxEngine):
         return policy
 
 
-def graph():
-    spec=replace(random_graph(5,0,'none').engine.baseline.spec,strategy=Strategy(day='max',night='max',fake_reports='random'))
+def graph(fake_reports='random'):
+    spec=replace(random_graph(5,0,'none').engine.baseline.spec,strategy=Strategy(day='max',night='max',fake_reports=fake_reports))
     adapter=adapt_no_read_night_max_model_a(spec)
     if isinstance(adapter,UnsupportedPartition):raise ValueError(adapter.reason)
     return SavedCutOutGraph(adapter,origin_factory=LatentMaxOrigin)

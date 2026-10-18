@@ -18,8 +18,9 @@ class LatentMaxOrigin(SavedOrigin):
         if (game.get('history') or b.history or b.day!=1 or b.phase!='day'
             or b.player_count not in (4,5) or b.initial_hunter_count or b.initial_seer_count!=1
             or b.initial_medium_count not in (0,1) or b.claims not in (('latent',)*b.player_count,('medium',)+('latent',)*(b.player_count-1))
-            or not (self.strategy==Strategy(day='max',night='random',fake_reports='random') or
-                (b.player_count==4 and b.claims==('latent',)*4 or b.player_count==5 and not b.initial_medium_count and self.rules.initial_seer=='none' and b.claims==('latent',)*5) and self.strategy==Strategy(day='max',night='max',fake_reports='random'))
+            or self.strategy.fake_reports=='max' and 'medium' in b.claims
+            or not (self.strategy==Strategy(day='max',night='random',fake_reports=self.strategy.fake_reports) or
+                (b.player_count==4 and b.claims==('latent',)*4 or b.player_count==5 and not b.initial_medium_count and self.rules.initial_seer=='none' and b.claims==('latent',)*5) and self.strategy==Strategy(day='max',night='max',fake_reports=self.strategy.fake_reports))
             or self.rules not in (Rules(initial_seer='none'),Rules(initial_seer='random_white'))):
             raise Pending('latent_max_initial_comparison_scope')
         root=prepare_root_secrets(b,self.rules,max_work=100000)
@@ -27,10 +28,10 @@ class LatentMaxOrigin(SavedOrigin):
         return ContinuationInputs(root.public,root.public_law,root.past,root.physical_law,None,root.physical)
 
 
-def graph(players=5,mediums=1,initial='random_white',medium_co=False):
+def graph(players=5,mediums=1,initial='random_white',medium_co=False,fake_reports='random'):
     claims=('medium',)+('latent',)*(players-1) if medium_co else ('latent',)*players
     spec=InitialModelASpec(players,claims,True,mediums=mediums,seers=1,
-        rules=Rules(initial_seer=initial),strategy=Strategy(day='max',night='random',fake_reports='random'))
+        rules=Rules(initial_seer=initial),strategy=Strategy(day='max',night='random',fake_reports=fake_reports))
     adapter=adapt_latent_max_model_a(spec)
     if isinstance(adapter,UnsupportedPartition):raise ValueError(adapter.reason)
     return SavedCutOutGraph(adapter,origin_factory=LatentMaxOrigin)

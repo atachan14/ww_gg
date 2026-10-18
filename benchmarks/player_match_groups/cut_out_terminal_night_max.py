@@ -25,9 +25,9 @@ class TerminalNightMaxEngine(CutOutMaxEngine):
         return result
 
 
-def graph(mediums=0,initial='none'):
+def graph(mediums=0,initial='none',fake_reports='random'):
     spec=replace(uniform_night_graph(4,mediums,initial).engine.baseline.spec,
-        strategy=Strategy(day='max',night='max',fake_reports='random'))
+        strategy=Strategy(day='max',night='max',fake_reports=fake_reports))
     adapter=adapt_terminal_night_max_model_a(spec)
     if isinstance(adapter,UnsupportedPartition):raise ValueError(adapter.reason)
     return SavedCutOutGraph(adapter,origin_factory=LatentMaxOrigin)

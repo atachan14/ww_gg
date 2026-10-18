@@ -24,11 +24,11 @@ class CutOutMaxEngine(CutOutUniformEngine):
         return groups
 
 
-def graph(players=5,mediums=0,night='random'):
+def graph(players=5,mediums=0,night='random',fake_reports='random'):
     spec=InitialModelASpec(players,('seer',)+('latent',)*(players-1),True,
         mediums=mediums,seers=1,reports=(SeerReport(1,1,1,3,'white'),),
         rules=Rules(initial_seer='random_white'),
-        strategy=Strategy(day='max',night=night,fake_reports='random'))
+        strategy=Strategy(day='max',night=night,fake_reports=fake_reports))
     adapter=adapt_max_model_a(spec)
     if isinstance(adapter,UnsupportedPartition):raise ValueError(adapter.reason)
     return SavedCutOutGraph(adapter)

@@ -49,7 +49,7 @@ def independent_terminal(initial,state,view=None,wolf_mask=None):
     return normalize(rows)
 
 
-def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_terminal_night_max=False,_no_read_night_max=False):
+def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_terminal_night_max=False,_no_read_night_max=False,_fake_reports='random'):
     from .cut_out_two_nights import restore_terminals
     from werewolf.board_future import same_role_board
     from werewolf.information_set_forecast import optimal_targets
@@ -57,12 +57,12 @@ def audit(n=5,mediums=1,initial='random_white',kind='public',medium_co=False,_te
     if _no_read_night_max:
         if n!=5 or mediums or initial!='none' or medium_co:raise ValueError('five-player no-read closed scope')
         from .cut_out_no_read_night_max import graph as build,evaluate as calculate
-        source=build()
+        source=build(fake_reports=_fake_reports)
     elif _terminal_night_max:
         if n!=4 or medium_co:raise ValueError('terminal-night comparison is four-player all-latent only')
         from .cut_out_terminal_night_max import graph as build,evaluate as calculate
-        source=build(mediums,initial)
-    else:source=graph(n,mediums,initial,medium_co);calculate=evaluate
+        source=build(mediums,initial,fake_reports=_fake_reports)
+    else:source=graph(n,mediums,initial,medium_co,fake_reports=_fake_reports);calculate=evaluate
     root=source.origin()
     owner=2 if medium_co else 1
     view=None if kind=='public' else OwnView(owner,'seer',() if kind=='role' else (Acquisition(1,owner,3,'white'),))

@@ -26,11 +26,11 @@ def complete_table(source,forecast,view):
     return table,primary,source.data.roles().progress.total_values(primary)
 
 
-def audit(players=5,mediums=0,night='random',private=False):
+def audit(players=5,mediums=0,night='random',private=False,_fake_reports='random'):
     from .cut_out_two_nights import restore_terminals
     from werewolf.board_future import same_role_board
     from werewolf.actor_information import WolfInformation
-    start=time.perf_counter();source=graph(players,mediums,night);root=source.origin()
+    start=time.perf_counter();source=graph(players,mediums,night,fake_reports=_fake_reports);root=source.origin()
     view=OwnView(2,'medium') if private else None
     actual=evaluate(source,view=view,capture_terminal=True)
     expected=evaluate(source,view=view,official_reference=True,capture_terminal=True)

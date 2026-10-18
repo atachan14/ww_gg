@@ -48,10 +48,11 @@ def _reason(spec,*,six=False,seven=False,max_trial=False,latent_max=False,termin
     if spec.simultaneous_snapshot is not True:return 'explicit simultaneous initial snapshot required; no inferred CCO timing'
     if (type(spec.rules) is not Rules or spec.rules.allow_self_bite or type(spec.strategy) is not Strategy
         or (not max_trial and (spec.strategy.day,spec.strategy.night,spec.strategy.fake_reports)!=('random',)*3)
-        or (max_trial and (spec.strategy.day!='max' or spec.strategy.night not in ('random','max') or spec.strategy.fake_reports!='random'))
+        or (max_trial and (spec.strategy.day!='max' or spec.strategy.night not in ('random','max') or spec.strategy.fake_reports not in ('random','max')))
         or spec.strategy.include_self_bite or spec.strategy.disclosure_for('seer')!='all'
         or spec.strategy.disclosure_for('medium')!='all' or type(spec.claim_policy) is not ClaimPolicy):return 'fixed supported uniform/full-disclosure configuration only'
     if type(spec.claims) is not tuple or len(spec.claims)!=spec.players or any(type(c) is not str or c not in ('latent','villager','seer','medium','wolf') for c in spec.claims):return 'explicit original-player CO snapshot required'
+    if max_trial and spec.strategy.fake_reports=='max' and 'medium' in spec.claims:return 'active_medium_report_max_outside_comparison_scope'
     if type(spec.reports) is not tuple or any(type(r) is not SeerReport for r in spec.reports):return 'exact initial SeerReport records only'
     if len({r.player for r in spec.reports})!=len(spec.reports):return 'one initial result per reporter'
     for r in spec.reports:
@@ -60,7 +61,7 @@ def _reason(spec,*,six=False,seven=False,max_trial=False,latent_max=False,termin
     if spec.rules.initial_seer=='none' and spec.reports:return 'no initial result when initial acquisition is none'
     if max_trial and not latent_max and (spec.seers!=1 or spec.rules!=Rules(initial_seer='random_white')
         or spec.claim_policy!=ClaimPolicy()
-        or spec.strategy!=Strategy(day='max',night=spec.strategy.night,fake_reports='random')
+        or spec.strategy!=Strategy(day='max',night=spec.strategy.night,fake_reports=spec.strategy.fake_reports)
         or spec.claims!=('seer',)+('latent',)*(spec.players-1)
         or len(spec.reports)!=1 or spec.reports[0]!=SeerReport(1,1,1,3,'white')):
         return 'max trial requires true seer1 CO, initial white3, other players latent'
@@ -68,9 +69,11 @@ def _reason(spec,*,six=False,seven=False,max_trial=False,latent_max=False,termin
     if spec.mediums==1:latent_claims+=(('medium',)+('latent',)*(spec.players-1),)
     if latent_max and (spec.seers!=1 or spec.rules not in (Rules(initial_seer='none'),Rules(initial_seer='random_white'))
         or spec.claim_policy!=ClaimPolicy() or spec.claims not in latent_claims or spec.reports
-        or spec.strategy!=Strategy(day='max',night='max' if terminal_night_max or no_read_night_max else 'random',fake_reports='random')
+        or spec.strategy!=Strategy(day='max',night='max' if terminal_night_max or no_read_night_max else 'random',fake_reports=spec.strategy.fake_reports)
         or terminal_night_max and (spec.players!=4 or spec.claims!=('latent',)*4)
         or no_read_night_max and (spec.players!=5 or spec.mediums or spec.rules.initial_seer!='none' or spec.claims!=('latent',)*5)):
+        if no_read_night_max:return 'five_player_no_read_requires_M0_initial_none_all_latent'
+        if terminal_night_max:return 'terminal_night_max_requires_four_all_latent'
         return 'latent max comparison requires 4/5 W1 S1 H0 M0/1, latent seer/no reports, optional medium1 CO, initial none/white, public day max/random night'
     return None
 
