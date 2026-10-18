@@ -1,5 +1,7 @@
 # Bounded-key plan: first numerical comparison
 
+Follow-up [light reachability diagnostic](bounded-key-plan-reachability.md) found real over-cap inputs. The negative adoption decision below applies to the measured workloads, not to the rescue design itself.
+
 Decision: do NOT adopt into application factories or extend to7 on this evidence. Numerical agreement passes; measured current shared evaluator is faster than this prototype. The comparison hook is `planned_reuse.py`, explicitly constructed only by tests/benchmark. Production admission/default OFF remain unchanged.
 
 Three real small fixtures: five-player two-seer initial-white; six-player/two-wolf two-seer initial-white; five-player with medium and different public white recipients. Each ran original / current complete-key / planned-key, twice in alternating order, with an empty evaluator followed by the same warm evaluator:36 complete runs in27.84s. Every run exactly matched complete Forecast (including all action/dawn values), every legacy Table row, all personal seer-target values, wolf-owner action values, and complete immediate public/physical branch probabilities AND Boards. Each branch family summed to1 and input game/joint state were unchanged. 30-second/run,300-second stage,1.5GB worker RSS/commit guard; no stage/request stop. Peak RSS142,684,160bytes. Raw output in `bounded-plan-comparison.json`; summaries in `bounded-plan-comparison-summary.json`.

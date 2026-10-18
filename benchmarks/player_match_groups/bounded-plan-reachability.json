@@ -1,0 +1,244 @@
+{
+  "scope": "normal UI setup and first-key interception; no nontrivial Forecast evaluated",
+  "results": [
+    {
+      "role": "plain",
+      "start_http": 303,
+      "publish_http": null,
+      "prepared_kind": "exchangeable",
+      "exchangeable": true,
+      "normal_http_key_reached": false,
+      "http": 200,
+      "worlds": 6,
+      "nontrivial_future_not_run": true
+    },
+    {
+      "role": "medium",
+      "start_http": 303,
+      "publish_http": 200,
+      "prepared_kind": "prior",
+      "exchangeable": false,
+      "normal_http_key_reached": true,
+      "http": "diagnostic stop at first ordinary key",
+      "worlds": 6,
+      "nontrivial_future_not_run": true,
+      "engine": "GeneralReuseForecast",
+      "current_key_none": true,
+      "current_decline_seconds": 0.00014630000805482268,
+      "hypotheses": 6,
+      "trials": [
+        {
+          "kind": "full-enumeration",
+          "repeat": 0,
+          "seconds": 0.08623409998835996,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "original-uncapped-pruned",
+          "repeat": 0,
+          "seconds": 0.0008519999973941594,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "planned",
+          "repeat": 0,
+          "seconds": 0.000894299999345094,
+          "equal_complete_key": true,
+          "plan": {
+            "reason": "complete",
+            "source_cells": 144,
+            "serialized_cells": 1008,
+            "snapshots": 7,
+            "swaps": 5,
+            "initial_count": 720,
+            "residual_count": 1,
+            "certified_block_sizes": [
+              6
+            ]
+          }
+        },
+        {
+          "kind": "full-enumeration",
+          "repeat": 1,
+          "seconds": 0.08552969997981563,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "original-uncapped-pruned",
+          "repeat": 1,
+          "seconds": 0.0010661999986041337,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "planned",
+          "repeat": 1,
+          "seconds": 0.000905699998838827,
+          "equal_complete_key": true,
+          "plan": {
+            "reason": "complete",
+            "source_cells": 144,
+            "serialized_cells": 1008,
+            "snapshots": 7,
+            "swaps": 5,
+            "initial_count": 720,
+            "residual_count": 1,
+            "certified_block_sizes": [
+              6
+            ]
+          }
+        },
+        {
+          "kind": "full-enumeration",
+          "repeat": 2,
+          "seconds": 0.08411359999445267,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "original-uncapped-pruned",
+          "repeat": 2,
+          "seconds": 0.0008059999963734299,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "planned",
+          "repeat": 2,
+          "seconds": 0.000843599991640076,
+          "equal_complete_key": true,
+          "plan": {
+            "reason": "complete",
+            "source_cells": 144,
+            "serialized_cells": 1008,
+            "snapshots": 7,
+            "swaps": 5,
+            "initial_count": 720,
+            "residual_count": 1,
+            "certified_block_sizes": [
+              6
+            ]
+          }
+        }
+      ],
+      "existing_reduced_key": "party-scalar",
+      "existing_private_reduced_key": true
+    },
+    {
+      "role": "seer",
+      "start_http": 303,
+      "publish_http": 200,
+      "prepared_kind": "prior",
+      "exchangeable": false,
+      "normal_http_key_reached": true,
+      "http": "diagnostic stop at first ordinary key",
+      "worlds": 6,
+      "nontrivial_future_not_run": true,
+      "engine": "GeneralReuseForecast",
+      "current_key_none": true,
+      "current_decline_seconds": 0.00019869999960064888,
+      "hypotheses": 6,
+      "trials": [
+        {
+          "kind": "full-enumeration",
+          "repeat": 0,
+          "seconds": 0.08809599999221973,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "original-uncapped-pruned",
+          "repeat": 0,
+          "seconds": 0.0008274999854620546,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "planned",
+          "repeat": 0,
+          "seconds": 0.0008590999932494015,
+          "equal_complete_key": true,
+          "plan": {
+            "reason": "complete",
+            "source_cells": 144,
+            "serialized_cells": 1008,
+            "snapshots": 7,
+            "swaps": 5,
+            "initial_count": 720,
+            "residual_count": 1,
+            "certified_block_sizes": [
+              6
+            ]
+          }
+        },
+        {
+          "kind": "full-enumeration",
+          "repeat": 1,
+          "seconds": 0.08763039999757893,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "original-uncapped-pruned",
+          "repeat": 1,
+          "seconds": 0.0008328000258188695,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "planned",
+          "repeat": 1,
+          "seconds": 0.0008546000171918422,
+          "equal_complete_key": true,
+          "plan": {
+            "reason": "complete",
+            "source_cells": 144,
+            "serialized_cells": 1008,
+            "snapshots": 7,
+            "swaps": 5,
+            "initial_count": 720,
+            "residual_count": 1,
+            "certified_block_sizes": [
+              6
+            ]
+          }
+        },
+        {
+          "kind": "full-enumeration",
+          "repeat": 2,
+          "seconds": 0.08730610000202432,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "original-uncapped-pruned",
+          "repeat": 2,
+          "seconds": 0.0008251999970525503,
+          "equal_complete_key": true,
+          "plan": null
+        },
+        {
+          "kind": "planned",
+          "repeat": 2,
+          "seconds": 0.0009017999982461333,
+          "equal_complete_key": true,
+          "plan": {
+            "reason": "complete",
+            "source_cells": 144,
+            "serialized_cells": 1008,
+            "snapshots": 7,
+            "swaps": 5,
+            "initial_count": 720,
+            "residual_count": 1,
+            "certified_block_sizes": [
+              6
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
