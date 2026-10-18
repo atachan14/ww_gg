@@ -226,3 +226,22 @@ class StructuralDeathTests(unittest.TestCase):
         with patch.object(InformationSetActionPolicy,'outcomes',return_value=()):
             with self.assertRaises(Pending) as error:known_villager_death(seed,3)
         self.assertEqual(error.exception.reason,'structural_known_villager_death_kernel_contract')
+
+
+class ActualSevenCoverageTests(unittest.TestCase):
+    def test_role_uncertain_full_acquisition_kernel_against_instruction_mixture(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import seven_coverage_audit
+        with calculation_budget(4000000,max_seconds=20):result=seven_coverage_audit()
+        self.assertEqual(result['status'],'verified')
+        self.assertEqual(result['cast'],dict(villagers=3,mediums=1,seers=1,wolves=2,hunters=0))
+        self.assertEqual(result['first_execution_targets'],7)
+        self.assertEqual(result['QP_acquisition_contexts'],14)
+        self.assertEqual(result['independent_deterministic_instructions'],651)
+        self.assertEqual(result['complete_source_and_output_symmetry_generators'],27)
+        self.assertEqual(result['original_strategy']['day'],'max')
+        self.assertEqual(result['tested_strategy']['day'],'random')
+        self.assertTrue(result['observed_target6_same_role_marginal_breaks_swap67'])
+        self.assertTrue(result['observed_target6_preserves_swap57'])
+        self.assertFalse(result['typed_acquisition_receipt_implemented'])
+        self.assertFalse(result['parent_replay_avoidance_implemented'])
+        self.assertEqual((result['solve_calls'],result['act_calls']),(0,0))

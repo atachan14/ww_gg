@@ -1,0 +1,12 @@
+{
+  "status": "verified",
+  "tests": 18,
+  "errors": 0,
+  "failures": 0,
+  "seconds": 11.054447100032121,
+  "peak_working_set_bytes": 65449984,
+  "verification_only": true,
+  "MAX_evaluated": false,
+  "immutable_sharing": false,
+  "full_initial7_search": false
+}

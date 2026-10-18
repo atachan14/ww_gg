@@ -1,5 +1,32 @@
 # Publication continuation orbit audit and bounded prototype
 
+## Current status and entry points (2026-10-18)
+
+The actual user case is **villagers3 / medium1 / seer1 / wolves2 / hunter0**, with P1/P2 seer CO and Day1 white4 reports, P3 medium CO. Its saved day/night/fake-report strategy is **MAX**. Every new symmetry/provenance experiment in this document is an **explicit uniform comparison**, not a completed implementation or validation of that original MAX game. No ordinary UI, HELP, public edition or MAX behavior has changed.
+
+| Work | Status | Scope / operational meaning |
+| --- | --- | --- |
+| Existing common numerical flow | Retained | Ordinary selection, separate Q/P histories, physical resolution and reporting remain authoritative; this audit does not change their supported scopes |
+| Generic publication patterns (addb639 and related work) | Bounded distribution tests completed | Generic first-cycle generation passed 40 nonvacuous plus 2 no-report cases; still requires full checks and named restoration before ordinary continuation |
+| One-boundary publication representative value (e0b00ba) | Bounded prototype completed; no ordinary dispatch | Finite cases only; public64 aggregate unverified |
+| Multiple-boundary representative evaluator (9998098) | **Unadopted: slower** | Kept for reference; sampled detail validation only; no new execution requested |
+| Immutable complete-law pooling (8383206) | **Unadopted, OFF** | Slower in its measured checkpoint |
+| Exact own-role structural filter (ae0d19d) | Narrow proof/tests completed | One typed private observation; shared receipt foundation, not a complete game pipeline |
+| Certain-villager daytime death (0df02e5) | Narrow proof/tests completed | W1/S1/V3/H0/M0 five-alive example; does not cover ordinary seven-player deaths; retained as a reference test, not extended with more cast-specific examples |
+| Actual-seven acquisition coverage audit (current) | **Verification only** | All first executions plus complete uniform acquisition mixtures checked without role certainty; no typed acquisition receipt, replay shortcut or new evaluator implemented |
+
+The current bounded inspection entry is:
+
+```text
+python -m benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture seven-coverage
+```
+
+It has a 20-second calculation cap and forbids solve/act; the observed run took about 0.17 seconds. It prepares the actual source but does not search the initial game. Its evidence is `publication-orbit-seven-coverage-results.json`. Regression entry: `python -m unittest discover -s tests -p test_publication_orbit_value.py` (18 tests). Historical `structural-role` and `structural-death` modes are the existing small reference tests. The `recursive` mode remains an unadopted experiment; it is not the current optimization entry. Initial7 searches and the unverified public64 aggregate are not to be rerun as part of this audit.
+
+The following sections preserve earlier checkpoints as historical evidence; later status tables take precedence over their then-current wording.
+
+## Historical checkpoint e0b00ba
+
 The immutable-sharing experiment at 8383206 remains disabled. This checkpoint adds benchmark code and tests only: no normal UI, HELP, MAX policy, public edition, or production dispatch changes.
 
 ## Existing representation and the eager boundary
@@ -163,3 +190,52 @@ The shared verification fixture now uses the existing `legal_targets` when const
 Seventeen regression tests pass in 10.752 seconds runner time (`publication-orbit-structural-death-tests.json`). They include unsupported target/phase handling and broken common-kernel contract propagation, plus all earlier role-filter/orbit/secret-asymmetry tests. Normal UI, HELP, MAX, public edition, server processes and immutable-sharing defaults are untouched; no initial7/public64 long run or retry occurred.
 
 A broader integration still needs typed acquisition/report/uncertain-death likelihood provenance and automatic dispatcher fallback, plus general output-path composition. None of those changes are necessary to establish this narrow operation, so they were not expanded here. This result provides a working example of a generated child carrying a change-only guarantee, while keeping its limits and remaining scans explicit.
+
+
+## Actual seven-player pipeline coverage and required common changes
+
+### The numerical flow and the new guarantee are different layers
+
+The saved original MAX snapshot is read from `actual-seven-max-results.json`; `comparison_game` copies it and changes only day/night/fake-report choices to random, checking that restoring those fields gives the exact original input. This audit has not proved that the new representative/provenance route can evaluate the saved original MAX configuration.
+
+The common machinery already separates choice, ability acquisition, physical death, belief projection and morning reports. The missing layer is a **trusted full joint-law provenance chain** across those existing operations. This does not require replacing the numerical game model. It does require coordinated carrier, transition, cache and evidence changes; a new collection of role/cast-specific constructors would leave the gap intact.
+
+| Ordinary operation in the actual game | What currently exists | Structural guarantee still missing | Role-certainty-free common fact |
+| --- | --- | --- | --- |
+| Public execution choice | `solve`, `day_scores` and existing MAX/rand selection | Full continuation/policy equivariance and map-aware value reuse for the original MAX strategy | A fixed target is distinct from choosing it. Permutation-invariant legal sets and exact scores/ties must be preserved; viewer P must not change Q rankings |
+| Daytime death | Common `outcomes` and `project_generated`; public endpoint trace | General branch-specific Q/P likelihood receipts and positive-support/terminal handling; five-player certain-villager receipt is insufficient | A fixed-target daytime casualty kernel commutes with permutations fixing the target. Winner/parity and role counts are invariant predicates even when the target's role is unknown |
+| Uniform seer acquisition before casualties | `acquire_uniform`, `acquire_laws`, complete histories and own-unvisited policy | Typed receipt for the intermediate acquired `ActionInputs`, bound to exact configured generator and observer condition | Complete uniform instruction mixtures commute with relabelling for any role assignment, including latent/dead possible seers, if the original target domain, alive/tracked sets and own histories are transformed consistently |
+| Wolf roster/owned history conditioning and bite choice | `wolf_information_groups`, `WolfInformation.condition_public`, `wolf_policy`; limited orbit prototypes | Complete actor-information conditioning plus policy-choice and actual mass receipts; no general MAX orbits chain | Each roster policy is derived from Q conditioned on that team's own roster/attacks. Physical P supplies its team mass; viewer-only secrets never enter selection |
+| Night corpse/continuation | `night_observation_outcomes`, common night frame/projection; fixed-choice helper | Composition of acquisition, choice likelihood, actual corpse/termination observation and attack-history updates | Public compatibility and actual team-choice/casualty mass are separate. A named corpse fixes endpoints; it does not imply equal Q/P mass or a known executed role |
+| Medium result/report | `generate_morning`, `report_flow`, common role projection | Typed medium observation/filter likelihood and continuation receipt | Condition by the exact reported event, fixing reporter/execution endpoints and preserving distinct normalized Q/P. Dead P3 produces no surviving public medium report |
+| True/fake seer publication | Generic `produce`, candidate/history checks, ordinary `publications` and `push` | Producer-to-conditioned-child provenance, full private stabilizer transfer and lazy label/map composition | Full-history report likelihoods commute after appropriate endpoint fixing only for the actual configured joint report policy; unknown backlogs/zero support cannot be uniformly filled |
+| Personal result/intervention | Existing observer filtering and complete private records | Typed predicate/likelihood proof and its fixed endpoints across carrier/cache boundaries | An unobserved acquisition mixture and a personally observed result are different operations. The latter can break symmetry despite identical role marginals |
+| Past edit/cancel/recalculate/cache | Saved ownership and existing ordinary replay | Receipt invalidation/reissue and explicit cache receipt binding | Replaced inputs/policies cannot inherit an old certificate; an unexplained cache result must fall back rather than gain a proof by equality guess |
+
+The first execution in the actual seven-player root has no terminal branch for **any** target: with six survivors and one or two wolves, play continues. The new finite audit checks all seven target labels and preserves the complete old Q/P laws at that step; it does not require the target to be a known villager. Later executions can condition on different winner/count classes, so they need the general branch likelihood receipt, not this first-step fact.
+
+### Most useful next common seam: full uniform acquisition mixture
+
+This is the clearest role-certainty-free generation theorem to establish before further continuation optimization. For a parent permutation g, eligible true owners, original target domain, each owner's visited set, available target count and colour all transform consistently. Thus the complete mixture satisfies `K(g h, g new_history) = K(h, new_history)`. Each hypothesis's own instruction denominator is retained; no assumption of one global target count or public/actual history distribution is made. Q and P each pass through the kernel with their own exact masses. Existing guard/attack records and metadata are retained. If there is no live eligible seer in a world, that world's no-new-record branch is retained as well.
+
+The guarantee would keep the parent group for an unobserved full mixture. It must refine the group for a named intervention/own-result observation. It cannot be minted for an arbitrary `generate` callback, a selected representative record presented as a mixture, a changed position strategy or omitted acquisition history.
+
+**Finite verification completed, not a runtime receipt implementation:** all seven first executions, then public and true-seer1-with-initial-white4 private contexts give 14 separate Q/P acquisition comparisons. An independent reference enumerates 651 deterministic legal instructions and calls the existing deterministic `seer_acquisition.acquire`, then mixes exact instruction/world masses; it never calls `acquire_uniform` or its candidate helper. Complete states/metadata, Q/P role marginals, retained physical Board and observer match the common acquisition result. Twenty-seven group generators are checked on both complete input and complete output sources. These actual-snapshot tests have possible true-owner positions1/2; latent true-owner and multiple-seer cases are not newly validated by this dataset. The Board comparison uses existing `same_role_board`, preserving exact weighted worlds and observable fields while ignoring only alternative storage order/encoding; an ordinary projected public Board's stored world-row order can differ from the relabelled canonical order.
+
+A concrete actual-seven counterexample uses the source after executing3 with true seer1. Observing only that the next own acquisition targets6 leaves the same role marginal, but breaks the 6/7 swap. Fixing6 leaves the 5/7 swap valid. This directly demonstrates why the kernel's full-mixture guarantee cannot be reused unchanged for a newly observed private result.
+
+The run processed 147 Q/P input hypothesis occurrences into 651 output occurrences, including duplicate contexts intentionally checked independently. Common acquisition took about 15.51 ms; the independent deterministic reference took 45.31 ms. The whole verification-only run took 0.174 seconds, about 33 MB peak. solve/act are forbidden by callbacks; both counts are zero. There is no recursive Forecast, MAX ranking, public64 aggregate evaluation or initial7 game search. No full-compare/replay avoidance is claimed for this audit: both runtime receipt flags are explicitly false. Eighteen targeted regressions pass in 10.787 seconds.
+
+### Why the next production change spans the shared structure
+
+Acquisition returns `ActionInputs` **before** casualty resolution, with a new acquisition roster while the public Board remains the predeath night Board. Existing structural receipts are attached to completed `ContinuationInputs`/Board examples. Existing ActionEvidence replays acquisition as part of the whole action; ContextEvidence only applies continuation projection and does not represent an independent acquisition event. Pretending the acquired frame is another normal Board or saved observation would either acquire twice, lose the before-casualty owner roster, or create a second source of truth. That is why this checkpoint adds verification and the coverage map instead of another isolated acquired-Board prototype.
+
+A practical staged refactor can keep all numerical kernels and ordinary fallback:
+
+1. Define one optional transition-proof carrier alongside the existing `ActionInputs`/`ContinuationInputs`, with owner/revision, exact immutable Q/P references, physical/observer dependencies, parent receipt, typed kernel/configuration and event masses. Do not use full-law equality/hashing as a substitute for that provenance, and do not assume a proof excluded from value keys is automatically safe on every cache hit.
+2. Issue an acquisition receipt only inside the trusted `night_acquisition.acquire_laws` / `InformationSetActionPolicy.acquire` path after successful generation, preserving before-casualty semantics. Bind the known generator/configuration; arbitrary callbacks keep the ordinary path. Preserve separate Q and P generation, and record any observer filter as a second typed operation with its own endpoints and support.
+3. Carry it through `action_flow.resolve_action` and `board_roles.project_generated`, recording selected-action probability separately from Q/P casualty/continuation likelihoods and normalization. Existing terminal-preflight skips and new attack records need explicit event types; a missing proof falls back.
+4. Extend `morning_flow.report_flow`, medium observations, publication production and `information_weights.observer_report_weights` with trusted event receipts, then connect representative continuation backup and named evidence restoration. Q-positive/P-zero public details remain distinct from actual private continuation; they never acquire invented P.
+5. Bind cached flows and cold evidence to these receipts. Unknown/old receipts invalidate conservatively. Only after the uniform path is complete should policy/value equivariance for existing MAX be assessed: exact continuation scores, complete ties, public rankings and roster-owned policies must commute without adding a new optimal CO/report convention or assuming an unimplemented simultaneous-MAX equilibrium.
+
+This is a coordinated change across several shared boundaries, not a whole new game engine. Implementing only a standalone acquisition receipt now would not remove repeated checks from the actual execution→night→report cycle. The realistic next implementation unit is the shared carrier plus trusted acquisition seam, with explicit fallback and cache/evidence rules agreed in that design; more special-case death or cast prototypes are not a substitute. The existing original MAX behavior remains untouched and outside the new guarantee's validated scope.

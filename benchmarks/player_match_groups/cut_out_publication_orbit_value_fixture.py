@@ -359,8 +359,105 @@ def death_worker():
     print(json.dumps(row),flush=True)
 
 
+def seven_coverage_audit():
+    """Verification-only census of physical kernels; never Forecast/solve/MAX."""
+    from .cut_out_first_cycle_coverage import base
+    from .cut_out_joint_night_forecast_fixture import moved_source
+    from .cut_out_user_seven_source import ROOT_GROUPS
+    from .cut_out_day_night import point_fix
+    from werewolf.action_flow import resolve_action
+    from werewolf.evaluation_branch import ActionInputs
+    from werewolf.seer_acquisition import acquire,normalize
+    from werewolf.information_set_forecast import InformationSetForecast
+    from itertools import product
+    from .cut_out_user_seven_uniform_preparation import comparison_game
+    original,uniform=comparison_game()
+    registry,witness=base();root=registry.origin()
+    def no_value(*args,**kwargs):raise AssertionError('coverage audit must not solve/act')
+    def ordinary_engine():
+        e=InformationSetForecast(registry.engine.baseline.rules,registry.engine.baseline.strategy,exact_renaming=False,retire_uninformative_scans=False)
+        e.retain_joint_guard_history=True;e.solve=e.act=no_value;return e
+    def instructed_reference(law,alive):
+        # Independent route: exhaustively select each deterministic legal
+        # instruction, call acquire(), then mix instruction masses. Never call
+        # acquire_uniform or its candidate helper in this reference.
+        records=[];instructions=0;domain=law.rosters[0]
+        for h in law.hypotheses:
+            owners=tuple(p for p in alive if h.roles[2]&(1<<(p-1)))
+            assert law.tracked is None or all(p in law.tracked for p in owners)
+            options=[]
+            for player in owners:
+                legal=set(domain)-{player};seen={a.target for a in h.acquisitions if a.player==player}
+                options.append(tuple(sorted(legal-seen or legal)))
+            count=1
+            for choices in options:count*=len(choices)
+            for targets in product(*options):
+                row=acquire((replace(h,mass=F(1)),),len(law.rosters)+1,alive,dict(zip(owners,targets)),target_players=domain)
+                records.extend(replace(v,mass=v.mass*h.mass/count) for v in row);instructions+=1
+        return replace(law,hypotheses=normalize(records),rosters=law.rosters+(alive,)),instructions
+    def same_source(left,right):
+        return (same_role_board(left.public,right.public) and same_role_board(left.physical,right.physical)
+            and all(getattr(left,k)==getattr(right,k) for k in ('public_state','private','past','observer')))
+    seer1_record=next(a for h in root.private.hypotheses if h.roles[2]&1 for a in h.acquisitions if a.player==1)
+    contexts=[];day_checks=0;kernel_checks=0;symmetry_checks=0;instruction_count=0;input_rows=0;output_rows=0;seconds=Counter();negative=None
+    with calculation_origin(registry.data):
+        for target in range(1,8):
+            e=ordinary_engine();remember(e,registry.root,root)
+            payload=ActionInputs(root.public_state,root.past,root.private,None,root.physical)
+            acquired,outcomes=resolve_action(root.public,payload,target,e.action_policy,terminal_payoffs=False)
+            assert acquired==payload and len(outcomes)==1 and outcomes[0].probability==1 and outcomes[0].board.winner is None
+            night=e.action_policy.project(root.public,acquired,outcomes[0],target)
+            assert night.public_state==root.public_state and night.private==root.private
+            groups=point_fix(ROOT_GROUPS,target);day_checks+=1
+            for view in (None,OwnView(1,'seer',(seer1_record,))):
+                if view is None:source=night;private_groups=groups
+                else:
+                    # All true-seer1 initial records are the published white4.
+                    own=condition_actor_state(night.private,view.accepts)
+                    source=replace(night,private=own,observer=view,physical=physical_board(night.public,own,night.physical),board_data=None)
+                    private_groups=point_fix(groups,1,4)
+                e=ordinary_engine();payload=ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical)
+                start=time.perf_counter();actual=e.action_policy.acquire(source.public,payload);seconds['common_acquisition']+=time.perf_counter()-start
+                start=time.perf_counter();q,qn=instructed_reference(source.public_state,source.public.alive);p,pn=instructed_reference(source.private,source.public.alive);seconds['deterministic_instruction_reference']+=time.perf_counter()-start
+                instruction_count+=qn+pn
+                assert actual.public_state==q and actual.private==p and actual.physical==source.physical and actual.observer==source.observer
+                assert q.public_roles==source.public_state.public_roles and p.public_roles==source.private.public_roles
+                input_rows+=len(source.public_state.hypotheses)+len(source.private.hypotheses);output_rows+=len(q.hypotheses)+len(p.hypotheses);kernel_checks+=1
+                generated=replace(source,public_state=q,private=p,physical=actual.physical,board_data=None)
+                for group in private_groups:
+                    for position in group[1:]:
+                        mapping=list(range(1,8));mapping[group[0]-1],mapping[position-1]=position,group[0];mapping=tuple(mapping)
+                        moved=moved_source(source,mapping)
+                        assert same_source(moved,source),(target,view,group)
+                        assert same_source(moved_source(generated,mapping),generated);symmetry_checks+=1
+                contexts.append(dict(executed=target,view='public' if view is None else 'true_seer1_with_initial_white4',groups=private_groups,Q_before=len(source.public_state.hypotheses),P_before=len(source.private.hypotheses),Q_after=len(q.hypotheses),P_after=len(p.hypotheses)))
+                if target==3 and view is not None:negative=generated
+        # Observing a privately selected target is NOT the unobserved mixture.
+        observed=condition_actor_state(negative.private,lambda h:any(a.day==2 and a.player==1 and a.target==6 for a in h.acquisitions))
+        mapping=(1,2,3,4,5,7,6)
+        assert observed.public_roles==negative.private.public_roles
+        assert move_law(observed,mapping).public_roles==observed.public_roles and move_law(observed,mapping)!=observed
+        assert move_law(observed,(1,2,3,4,7,6,5))==observed
+    return dict(status='verified',scope='actual seven-player cast/CO/white4 snapshot; explicit uniform comparison only',cast=dict(villagers=3,mediums=1,seers=1,wolves=2,hunters=0),
+        original_strategy=original['policy'],tested_strategy=uniform['policy'],first_execution_targets=7,day_full_law_continuations=day_checks,
+        QP_acquisition_contexts=kernel_checks,independent_deterministic_instructions=instruction_count,complete_source_and_output_symmetry_generators=symmetry_checks,
+        input_hypotheses=input_rows,output_hypotheses=output_rows,timings=dict(seconds),contexts=contexts,
+        observed_target6_same_role_marginal_breaks_swap67=True,observed_target6_preserves_swap57=True,
+        role_certainty_required=False,typed_acquisition_receipt_implemented=False,parent_replay_avoidance_implemented=False,
+        new_evaluator_implemented=False,solve_calls=0,act_calls=0,MAX_evaluated=False,full_initial7_search=False,public64_aggregate_retried=False,immutable_sharing=False)
+
+
+def seven_coverage_worker():
+    start=time.perf_counter()
+    with calculation_budget(4000000,max_seconds=20),independent_joint_values():row=seven_coverage_audit()
+    row.update(seconds=time.perf_counter()-start,peak_working_set_bytes=peak_bytes())
+    Path('benchmarks/player_match_groups/publication-orbit-seven-coverage-results.json').write_text(json.dumps(row,indent=2)+'\n')
+    print(json.dumps({k:v for k,v in row.items() if k!='contexts'}),flush=True)
+
+
 if __name__=='__main__':
     if len(sys.argv)>1 and sys.argv[1]=='recursive':recursive_worker(sys.argv[2])
     elif len(sys.argv)>1 and sys.argv[1]=='structural-role':structural_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='structural-death':death_worker()
+    elif len(sys.argv)>1 and sys.argv[1]=='seven-coverage':seven_coverage_worker()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

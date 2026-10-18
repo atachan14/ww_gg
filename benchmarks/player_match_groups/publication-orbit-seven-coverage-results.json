@@ -1,0 +1,430 @@
+{
+  "status": "verified",
+  "scope": "actual seven-player cast/CO/white4 snapshot; explicit uniform comparison only",
+  "cast": {
+    "villagers": 3,
+    "mediums": 1,
+    "seers": 1,
+    "wolves": 2,
+    "hunters": 0
+  },
+  "original_strategy": {
+    "day": "max",
+    "fake_reports": "max",
+    "include_self_bite": false,
+    "night": "max"
+  },
+  "tested_strategy": {
+    "day": "random",
+    "fake_reports": "random",
+    "include_self_bite": false,
+    "night": "random"
+  },
+  "first_execution_targets": 7,
+  "day_full_law_continuations": 7,
+  "QP_acquisition_contexts": 14,
+  "independent_deterministic_instructions": 651,
+  "complete_source_and_output_symmetry_generators": 27,
+  "input_hypotheses": 147,
+  "output_hypotheses": 651,
+  "timings": {
+    "common_acquisition": 0.015510300057940185,
+    "deterministic_instruction_reference": 0.04530860000522807
+  },
+  "contexts": [
+    {
+      "executed": 1,
+      "view": "public",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 6,
+      "Q_after": 18,
+      "P_after": 18
+    },
+    {
+      "executed": 1,
+      "view": "true_seer1_with_initial_white4",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 3,
+      "Q_after": 18,
+      "P_after": 3
+    },
+    {
+      "executed": 2,
+      "view": "public",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 6,
+      "Q_after": 18,
+      "P_after": 18
+    },
+    {
+      "executed": 2,
+      "view": "true_seer1_with_initial_white4",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 3,
+      "Q_after": 18,
+      "P_after": 15
+    },
+    {
+      "executed": 3,
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 6,
+      "Q_after": 30,
+      "P_after": 30
+    },
+    {
+      "executed": 3,
+      "view": "true_seer1_with_initial_white4",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 3,
+      "Q_after": 30,
+      "P_after": 15
+    },
+    {
+      "executed": 4,
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 6,
+      "Q_after": 30,
+      "P_after": 30
+    },
+    {
+      "executed": 4,
+      "view": "true_seer1_with_initial_white4",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 3,
+      "Q_after": 30,
+      "P_after": 15
+    },
+    {
+      "executed": 5,
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 6,
+      "Q_after": 30,
+      "P_after": 30
+    },
+    {
+      "executed": 5,
+      "view": "true_seer1_with_initial_white4",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ],
+        [
+          6,
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 3,
+      "Q_after": 30,
+      "P_after": 15
+    },
+    {
+      "executed": 6,
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 6,
+      "Q_after": 30,
+      "P_after": 30
+    },
+    {
+      "executed": 6,
+      "view": "true_seer1_with_initial_white4",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 3,
+      "Q_after": 30,
+      "P_after": 15
+    },
+    {
+      "executed": 7,
+      "view": "public",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 6,
+      "Q_after": 30,
+      "P_after": 30
+    },
+    {
+      "executed": 7,
+      "view": "true_seer1_with_initial_white4",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          7
+        ]
+      ],
+      "Q_before": 6,
+      "P_before": 3,
+      "Q_after": 30,
+      "P_after": 15
+    }
+  ],
+  "observed_target6_same_role_marginal_breaks_swap67": true,
+  "observed_target6_preserves_swap57": true,
+  "role_certainty_required": false,
+  "typed_acquisition_receipt_implemented": false,
+  "parent_replay_avoidance_implemented": false,
+  "new_evaluator_implemented": false,
+  "solve_calls": 0,
+  "act_calls": 0,
+  "MAX_evaluated": false,
+  "full_initial7_search": false,
+  "public64_aggregate_retried": false,
+  "immutable_sharing": false,
+  "seconds": 0.1741267000325024,
+  "peak_working_set_bytes": 33304576
+}
