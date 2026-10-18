@@ -188,16 +188,21 @@ class RootProfileEntryTests(unittest.TestCase):
             if seer:self.assertTrue(any(h.acquisitions for h in later.public_law.hypotheses))
 
     def test_five_six_candidate_search_does_not_misclassify_legal_alternatives(self):
-        for n in (5,6):
-            g=fixtures.RootGuardMaxTests().game(players=n)
-            g['policy']['day']=g['history'][0]['policy']['day']='max'
-            r,p=replay(g);s=Strategy(**g['policy']);root=prepare_root_entry(g,p.board,r,s)
-            resolver=WolfProfileResolver(r,s);result=resolver.resolve(root.public,root.public_law)
-            self.assertNotEqual(result.status,'undefined_observations')
-            self.assertTrue(all(issue.kind!='undefined_observation' for issue in result.issues))
-            if result.status!='unique':
-                self.assertIsNone(result.selected)
-                self.assertNotIn((root.public,root.public_law,()),resolver.cache)
+        from werewolf.local_reuse import reuse_scope
+        for mode in (False,True):
+            with reuse_scope(mode):
+                for n in (5,6):
+                    g=fixtures.RootGuardMaxTests().game(players=n)
+                    g['policy']['day']=g['history'][0]['policy']['day']='max'
+                    r,p=replay(g);s=Strategy(**g['policy']);root=prepare_root_entry(g,p.board,r,s)
+                    # This regression checks classification and safe refusal, not root convergence.
+                    resolver=WolfProfileResolver(r,s,max_profiles=64,max_work=100000,max_seconds=2)
+                    result=resolver.resolve(root.public,root.public_law)
+                    self.assertNotEqual(result.status,'undefined_observations')
+                    self.assertTrue(all(issue.kind!='undefined_observation' for issue in result.issues))
+                    if result.status!='unique':
+                        self.assertIsNone(result.selected)
+                        self.assertNotIn((root.public,root.public_law,()),resolver.cache)
 
     def test_public_known_live_hunter_legal_candidates_are_not_off_path(self):
         from werewolf.wolf_profile_certificate import certify_wolf_profiles

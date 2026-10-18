@@ -116,3 +116,37 @@ class GeneralReuseTests(unittest.TestCase):
         with reuse_scope(True),patch.object(InformationSetForecast,'evaluate',checked):
             seer_forecast(b,1,own,rules,strategy,scan_state=s,past=past)
         self.assertTrue(observations)
+
+    def test_factory_limits_and_root_original_class_guard(self):
+        from werewolf.exact import Rules,Strategy,initial_board
+        from werewolf.information_set_forecast import InformationSetForecast
+        from werewolf.root_secret_flow import RootSecretEngine
+        from werewolf.local_reuse import make_view_engine,make_root_engine
+        from benchmarks.player_match_groups.local_root import LocalRootEngine
+        rules=Rules();strategy=Strategy()
+        with reuse_scope(True):
+            self.assertIs(type(make_view_engine(InformationSetForecast,initial_board(6,1),rules,strategy)),GeneralReuseForecast)
+            self.assertIs(type(make_view_engine(InformationSetForecast,initial_board(7,1),rules,strategy)),InformationSetForecast)
+            self.assertIs(type(make_root_engine(RootSecretEngine,initial_board(6,1,0,0,1),rules,strategy)),LocalRootEngine)
+            self.assertIs(type(make_root_engine(RootSecretEngine,initial_board(7,1,0,0,1),rules,strategy)),RootSecretEngine)
+            self.assertIs(type(make_root_engine(RootSecretEngine,initial_board(6,1,0,0,2),rules,strategy)),RootSecretEngine)
+            self.assertIs(type(make_root_engine(InformationSetForecast,initial_board(6,1),rules,strategy)),InformationSetForecast)
+
+    def test_two_gj_public_and_hunter_owner_match_corrected_original(self):
+        from tests.test_guard_no_repeat import NoRepeatGuardTests
+        from werewolf.seer_manual import replay
+        from werewolf.exact import Strategy
+        from werewolf.model_a_public import evaluate_public_game,clear_public_cache
+        from werewolf.private_adapter import evaluate_private_table
+        for repeat in(False,True):
+            game=NoRepeatGuardTests().fixture(repeat=repeat)
+            rules,p=replay(game);strategy=Strategy(**game['policy']);before=copy.deepcopy(game)
+            results=[]
+            for mode in(False,True):
+                clear_public_cache()
+                with reuse_scope(mode):
+                    public=evaluate_public_game(game,p.board,rules,strategy,max_seconds=5)
+                    own=evaluate_private_table(p.board,'hunter',[1],[],rules,strategy,game_state=game)
+                self.assertNotIsInstance(public,FuturePending)
+                results.append((public,own['players']))
+            self.assertEqual(*results);self.assertEqual(game,before)
