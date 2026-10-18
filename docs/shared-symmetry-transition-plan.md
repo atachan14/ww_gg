@@ -72,3 +72,10 @@ Measured verification savings across this diagnostic: 11 information parent repl
 Unsupported: arbitrary observer predicates, H1/GJ, scan retirement/other disclosure or strategy settings, unknown generated-policy/report aliases and MAX certificates. The typed owner entry currently covers villager/medium role knowledge and seer role/own scan records; secret medium-result observations beyond the existing full-public-report rule are not introduced. General merged-mixture guarantees and broader cache/cold map composition remain separate work. Normal UI, HELP, MAX, public edition, server processes and immutable sharing remain unchanged.
 
 Validation for the owner increment: 57 combined existing/new tests passed in 122.598 seconds; the latest extended owner/transition rerun passes 8 tests, bringing coverage to 58 unique tests. It additionally checks an explicit known-wolf-roster personal entry keeps Q unchanged and matches an independent cold read. Results are saved in owner-information-tests.json.
+
+
+## Measurement gate after b8e7f0e
+
+Five fresh-process pairs on the completed small owner night show 62.55 → 69.59 ms body median (+11.3%), with every paired inherited run slower. Seven finite-chain total medians are noisy (143.33 → 125.73 ms), while root-plus-computation medians worsen 46.28 → 70.58 ms. Peak memory and numeric state/action counts do not improve. Roles/hash/equality calls decline, but condition_recipe counts remain unchanged and ledger owner/group validation repeats hundreds of times. See publication-orbit-value-checkpoint.md and shared-transition-performance-results.json for raw runs, explicit timing/memory boundaries and separate instrumented/cold comparisons.
+
+Do not add supported cases now. The next proposed work is to consolidate duplicate validation inside each transition boundary and review retained metadata, while preserving all external ownership/revision/copy checks. Keep default OFF; require the same result/cold equality and paired measurements before claiming speedup. H1/GJ/MAX and production/UI/HELP/public changes remain deferred.

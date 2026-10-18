@@ -312,3 +312,38 @@ Four public/private roots give 76 complete-law/physical/cold matches and 37 inde
 ## Follow-up: owner observations and uniform wolf information
 
 The inherited-groups entry now uses typed owner conditions and the existing SeerObserver through common acquisition/death/report receipt chains. Existing wolf information partitions retain their P mass while policies remain generated solely from Q and wolf-owned information. Separate choice receipts preserve Q information likelihood, P information mass and uniform target probability. Unknown callback/cache/configuration cases retain ordinary evaluation. Full details and precise counters are in shared-symmetry-transition-plan.md; the owner_information section of shared-transition-groups-results.json records 41 complete-law/cold and 8 Forecast/Table matches plus 21 independent selection coefficients. This establishes correctness and omitted verification work, not overall runtime improvement.
+
+
+## Fresh-process performance checkpoint after b8e7f0e
+
+The current guarantee path has no demonstrated overall speed or memory benefit on the measured completed tasks. Stop adding supported cases until the guarantee-maintenance overhead is addressed. No evaluator or production setting changes were made in this checkpoint.
+
+Reproduce through the same entry: `python -m benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture inherited-groups --measure`. Each case/mode has five alternating-order fresh processes (20 timed children total), followed by separate instrumented/cold runs. Each child has a 25-second external bound and a 20-second calculation budget; the batch has a 180-second admission bound. The small case reaches a four-alive own-seer night and completes Forecast/Table. The seven case follows the already verified finite owner2 chain to three alive, then completes Forecast/Table; it never solves the initial or five/six-alive seven-player states.
+
+Timed body includes common source setup, root audit/registration when enabled, owner/wolf information readouts, finite death/report kernels and named Forecast/Table. Imports/process launch and digest/cold validation are excluded from that body and reported separately where applicable. The normal path performs the same named task without fabricated extra permutation tests. The current path does not reduce recursive named states/actions; scope-preparation proof savings from earlier correctness diagnostics are not treated as new solver pruning here. Process peak working set includes common imports/source setup up to timed end; it is not Python heap usage. Instrumentation and cProfile only run in separate diagnostic children.
+
+| Task | Ordinary body median (range), ms | Inherited body median (range), ms | Ordinary → inherited peak median, MiB | value/action cache entries |
+| --- | --- | --- | --- | --- |
+| Five-player owner night, four alive | 62.55 (54.02–79.82) | 69.59 (58.80–91.22) | 32.402 → 32.477 | 8/31 → 8/31 |
+| Seven-player finite owner chain, final three alive | 143.33 (95.71–156.44) | 125.73 (123.38–216.48) | 32.664 → 32.750 | 6/18 → 6/18 |
+
+Small-case inherited/ordinary body ratios in paired order are 1.143, 1.154, 1.021, 1.085 and 1.343: all five inherited runs are slower. The seven total-body ratio of medians is 0.877, but paired ratios range 0.842–2.262. Common setup medians differ substantially (89.89 versus 76.35 ms), while the median of each run's root-plus-computation segment is 46.28 → 70.58 ms (+52.5%). The corresponding small segment is 38.22 → 44.88 ms (+17.4%). Thus the seven total median is not evidence of a reliable algorithmic gain. Median process wall times, including interpreter/import/start/exit overhead, are 1.615 → 1.687 seconds (small) and 1.643 → 2.420 seconds (seven). These tiny computations and large startup/setup variation limit timing attribution.
+
+Peak maxima are 32.465 → 32.605 MiB (small) and 32.742 → 32.848 MiB (seven). The median increases of about 0.074 and 0.086 MiB are small relative to the process/import floor; memory reduction is not established. Saved numeric source keys remain 36 → 36 and 48 → 48; acquired/morning/publication/policy cache sizes and action/value expansion counts also match. Readout entry counts (10 and 29) may repeat the same information frame and are not unique object allocations.
+
+| Separate diagnostic call count | Small ordinary → inherited | Seven ordinary → inherited |
+| --- | --- | --- |
+| GeneratedBoard.roles | 26 → 9 | 17 → 0 |
+| TrueScanState equality | 180 → 135 | 72 → 50 |
+| TrueScanState hash | 348 → 310 | 245 → 239 |
+| condition_recipe | 3 → 3 | 2 → 2 |
+| Added _groups_record | 0 → 244 | 0 → 156 |
+| Added _owner_current | 0 → 237 | 0 → 156 |
+
+Equality/hash counts include ordinary numerical cache/support work, not only proof revalidation. Roles calls often hit completed recipe caches, so omitting one is not equivalent to omitting a full cold reconstruction. The expensive general condition_recipe search count did not decrease. Meanwhile the ledger adds repeated weak-map/frame/configuration/owner lookups and retains operation records/canonical identities; it does not remove numerical states. Separate profiled ledger self times are about 6.23 ms (small) and 4.59 ms (seven), with instrumentation overhead; these are diagnostic indicators, not numbers to subtract from uninstrumented timing. The repeated _groups_record/_owner_current calls and retained maps identify maintenance overhead as a concrete next target, while setup noise prevents attributing the whole seven timing difference to that overhead.
+
+All 20 timed semantic digests and the separate diagnostic digests match by case across both modes. Digests cover complete Q/P hypotheses/secret histories, physical Boards, observation/branch/choice weights, Forecast and Table, excluding receipt/recipe carrier metadata. Separate diagnostics cold-read all 10/29 saved readout entries in both modes from fresh origin with reuse disabled. A permanent harness check verifies same semantics/state counts/cold entries and that counted roles calls actually decrease. Full raw runs, phases, maxima, profile and retained-map counts are saved in `benchmarks/player_match_groups/shared-transition-performance-results.json`.
+
+Next: keep the feature OFF and do not expand MAX/H1/GJ or observation cases. First consolidate repeated receipt/frame/owner validation within each transition boundary, carrying an already checked row to mint/evidence attachment without repeating the same checks. Preserve revision/configuration/copy guards at every external consumption boundary; do not replace them with full-law equality. Review strong retained output/canonical maps and the numerical-cache alias fallback cost. Re-run this exact paired benchmark before accepting another optimization; state/action reduction through inherited groups is a separate measured goal, not an assumed consequence of certificates. Normal UI, HELP, public edition and server processes remain unchanged.
+
+Final targeted validation: measurement harness, shared-transition and owner-information modules pass 9 tests in 3.684 seconds. This checkpoint changes only benchmark instrumentation/entry routing and documentation; core numeric/guarantee implementation is unchanged.

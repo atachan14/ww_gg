@@ -808,5 +808,9 @@ if __name__=='__main__':
     elif len(sys.argv)>1 and sys.argv[1]=='structural-role':structural_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='structural-death':death_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='seven-coverage':seven_coverage_worker()
-    elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':shared_transition_worker()
+    elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':
+        if '--measure' in sys.argv:
+            from .measure_shared_transition import run
+            run()
+        else:shared_transition_worker()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')
