@@ -40,3 +40,5 @@
 全joint生成・完全sourceのcacheキー・候補/物理枝の厳密評価・全ラベル表示木の任意出力は引き続き別のコストを持つ。通常UI統合や任意の途中Board編集へ適用したという主張はしていない。6人の既定経路は比較参照としてそのまま保持し、採用変更は次の工程とする。
 
 結果: `benchmarks/player_match_groups/cut-out-six-inherited-results.json`。回帰log: `.artifacts/six-inherited-focused-final.log`。worker60秒/RSS1.5GBを超えるheavy aggregate、速度計測、サーバー操作、push/deployは行っていない。
+
+後続の[独立プロセス反復比較](cut-out-six-repeated-benchmark.md)と[途中source橋渡しの設計案（未実装）](cut-out-six-source-bridge-proposal.md)を参照。新方式は旧root群比の維持コスト削減を達成していない。

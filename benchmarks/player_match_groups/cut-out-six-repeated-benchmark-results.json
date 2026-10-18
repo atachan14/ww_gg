@@ -1,0 +1,1346 @@
+{
+  "recorded_utc": "2026-10-18T13:26:21.436971+00:00",
+  "tested_head": "a585162d5ec794fd00e7422fa5e982bfed0ec9f2",
+  "cases": [
+    {
+      "case": "public",
+      "mode": "new",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.6180264999857172,
+      "phases": {
+        "startup_import_seconds": 0.2616268999991007,
+        "prior_and_initial_group_seconds": 0.017620300000999123,
+        "forecast_total_seconds": 0.33225119998678565,
+        "Table_seconds": 0.004223600000841543,
+        "individual_branch_request_seconds": 0.00018090000958181918,
+        "individual_branch_cold_seconds": 0.0021235999884083867
+      },
+      "initial_group_subset_seconds": 2.260002656839788e-05,
+      "native_partial_group_counter_seconds": 0.010645700094755739,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 29794304,
+      "post_fingerprint_peak_working_set_bytes": 29798400,
+      "post_import_peak_working_set_bytes": 26824704,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.6488546999753453
+    },
+    {
+      "case": "public",
+      "mode": "old-root",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.5568817000021227,
+      "phases": {
+        "startup_import_seconds": 0.2871240000240505,
+        "prior_and_initial_group_seconds": 0.017582799977390096,
+        "forecast_total_seconds": 0.24685550000867806,
+        "Table_seconds": 0.0033682000066619366,
+        "individual_branch_request_seconds": 0.0001109000004362315,
+        "individual_branch_cold_seconds": 0.0018402999849058688
+      },
+      "initial_group_subset_seconds": 2.400000812485814e-05,
+      "native_partial_group_counter_seconds": 0.0031475998112000525,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 30089216,
+      "post_fingerprint_peak_working_set_bytes": 30089216,
+      "post_import_peak_working_set_bytes": 26796032,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.5761819000181276
+    },
+    {
+      "case": "public",
+      "mode": "labelled",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.3469275000097696,
+      "phases": {
+        "startup_import_seconds": 0.273848300013924,
+        "prior_and_initial_group_seconds": 0.018362400005571544,
+        "forecast_total_seconds": 1.0493018999986816,
+        "Table_seconds": 0.003438499988988042,
+        "individual_branch_request_seconds": 0.00010430000838823617,
+        "individual_branch_cold_seconds": 0.0018720999942161143
+      },
+      "initial_group_subset_seconds": 2.3800006601959467e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 42434560,
+      "post_fingerprint_peak_working_set_bytes": 42442752,
+      "post_import_peak_working_set_bytes": 26611712,
+      "action_requests": 2332,
+      "action_evaluations": 2326,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 1.3921939000138082
+    },
+    {
+      "case": "public",
+      "mode": "old-root",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.5226790999877267,
+      "phases": {
+        "startup_import_seconds": 0.26180000000749715,
+        "prior_and_initial_group_seconds": 0.017769300000509247,
+        "forecast_total_seconds": 0.23804490000475198,
+        "Table_seconds": 0.003224699990823865,
+        "individual_branch_request_seconds": 0.00010599999222904444,
+        "individual_branch_cold_seconds": 0.001734199991915375
+      },
+      "initial_group_subset_seconds": 2.2700027329847217e-05,
+      "native_partial_group_counter_seconds": 0.0030846001172903925,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 30105600,
+      "post_fingerprint_peak_working_set_bytes": 30105600,
+      "post_import_peak_working_set_bytes": 26632192,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 2,
+      "process_wall_seconds": 0.5408958999905735
+    },
+    {
+      "case": "public",
+      "mode": "labelled",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.3147409999801312,
+      "phases": {
+        "startup_import_seconds": 0.25273700000252575,
+        "prior_and_initial_group_seconds": 0.01753769998322241,
+        "forecast_total_seconds": 1.0393458000035025,
+        "Table_seconds": 0.0032587999885436147,
+        "individual_branch_request_seconds": 0.00010280002607032657,
+        "individual_branch_cold_seconds": 0.001758899976266548
+      },
+      "initial_group_subset_seconds": 2.2799998987466097e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 42500096,
+      "post_fingerprint_peak_working_set_bytes": 42508288,
+      "post_import_peak_working_set_bytes": 27000832,
+      "action_requests": 2332,
+      "action_evaluations": 2326,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 2,
+      "process_wall_seconds": 1.3611360999930184
+    },
+    {
+      "case": "public",
+      "mode": "new",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.5582149999972899,
+      "phases": {
+        "startup_import_seconds": 0.26502890000119805,
+        "prior_and_initial_group_seconds": 0.017137299990281463,
+        "forecast_total_seconds": 0.2709352000092622,
+        "Table_seconds": 0.0032318999874405563,
+        "individual_branch_request_seconds": 0.00010710000060498714,
+        "individual_branch_cold_seconds": 0.0017746000085026026
+      },
+      "initial_group_subset_seconds": 2.19999928958714e-05,
+      "native_partial_group_counter_seconds": 0.008616300008725375,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 29683712,
+      "post_fingerprint_peak_working_set_bytes": 29683712,
+      "post_import_peak_working_set_bytes": 26476544,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 2,
+      "process_wall_seconds": 0.5762676000013016
+    },
+    {
+      "case": "public",
+      "mode": "labelled",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.3237025999987964,
+      "phases": {
+        "startup_import_seconds": 0.2573499999998603,
+        "prior_and_initial_group_seconds": 0.017328000016277656,
+        "forecast_total_seconds": 1.0438437999982852,
+        "Table_seconds": 0.003283400001237169,
+        "individual_branch_request_seconds": 0.00010129998554475605,
+        "individual_branch_cold_seconds": 0.0017960999975912273
+      },
+      "initial_group_subset_seconds": 2.2099993657320738e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 42221568,
+      "post_fingerprint_peak_working_set_bytes": 42246144,
+      "post_import_peak_working_set_bytes": 26714112,
+      "action_requests": 2332,
+      "action_evaluations": 2326,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 3,
+      "process_wall_seconds": 1.3741274999920279
+    },
+    {
+      "case": "public",
+      "mode": "new",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.5550610999925993,
+      "phases": {
+        "startup_import_seconds": 0.26267149997875094,
+        "prior_and_initial_group_seconds": 0.01824140001554042,
+        "forecast_total_seconds": 0.268753199983621,
+        "Table_seconds": 0.0033290999999735504,
+        "individual_branch_request_seconds": 0.00011260001338087022,
+        "individual_branch_cold_seconds": 0.0019533000013325363
+      },
+      "initial_group_subset_seconds": 2.269999822601676e-05,
+      "native_partial_group_counter_seconds": 0.008547300123609602,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 29859840,
+      "post_fingerprint_peak_working_set_bytes": 29859840,
+      "post_import_peak_working_set_bytes": 27185152,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 3,
+      "process_wall_seconds": 0.5774712999991607
+    },
+    {
+      "case": "public",
+      "mode": "old-root",
+      "profile": false,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.5229341000085697,
+      "phases": {
+        "startup_import_seconds": 0.25970359999337234,
+        "prior_and_initial_group_seconds": 0.017731200001435354,
+        "forecast_total_seconds": 0.23948570000356995,
+        "Table_seconds": 0.0035376999876461923,
+        "individual_branch_request_seconds": 0.00013000000035390258,
+        "individual_branch_cold_seconds": 0.002345900022191927
+      },
+      "initial_group_subset_seconds": 2.2799998987466097e-05,
+      "native_partial_group_counter_seconds": 0.0030951990047469735,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 30146560,
+      "post_fingerprint_peak_working_set_bytes": 30146560,
+      "post_import_peak_working_set_bytes": 26927104,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 3,
+      "process_wall_seconds": 0.545409499987727
+    },
+    {
+      "case": "medium",
+      "mode": "old-root",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.8281082999892533,
+      "phases": {
+        "startup_import_seconds": 0.29367899999488145,
+        "prior_and_initial_group_seconds": 0.01986100000794977,
+        "forecast_total_seconds": 0.5069779999903403,
+        "Table_seconds": 0.004721200006315485,
+        "individual_branch_request_seconds": 6.779999239370227e-05,
+        "individual_branch_cold_seconds": 0.0028012999973725528
+      },
+      "initial_group_subset_seconds": 2.47000134550035e-05,
+      "native_partial_group_counter_seconds": 0.007875500043155625,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 33873920,
+      "post_fingerprint_peak_working_set_bytes": 34009088,
+      "post_import_peak_working_set_bytes": 27070464,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.8521965999971144
+    },
+    {
+      "case": "medium",
+      "mode": "labelled",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.2493947000184562,
+      "phases": {
+        "startup_import_seconds": 0.25896480001392774,
+        "prior_and_initial_group_seconds": 0.02011290000518784,
+        "forecast_total_seconds": 0.9624244999722578,
+        "Table_seconds": 0.004894200013950467,
+        "individual_branch_request_seconds": 7.069998537190259e-05,
+        "individual_branch_cold_seconds": 0.0029276000277604908
+      },
+      "initial_group_subset_seconds": 2.4699984351173043e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 41562112,
+      "post_fingerprint_peak_working_set_bytes": 41603072,
+      "post_import_peak_working_set_bytes": 26648576,
+      "action_requests": 2292,
+      "action_evaluations": 2286,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 1.2962178000016138
+    },
+    {
+      "case": "medium",
+      "mode": "new",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.8323022999975365,
+      "phases": {
+        "startup_import_seconds": 0.2579293000162579,
+        "prior_and_initial_group_seconds": 0.02001219999510795,
+        "forecast_total_seconds": 0.5466785999888089,
+        "Table_seconds": 0.004619900020770729,
+        "individual_branch_request_seconds": 9.029998909682035e-05,
+        "individual_branch_cold_seconds": 0.0029719999874942005
+      },
+      "initial_group_subset_seconds": 2.4100008886307478e-05,
+      "native_partial_group_counter_seconds": 0.01859020019765012,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 34574336,
+      "post_fingerprint_peak_working_set_bytes": 34578432,
+      "post_import_peak_working_set_bytes": 27381760,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.8577750000113156
+    },
+    {
+      "case": "medium",
+      "mode": "labelled",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.26178629999049,
+      "phases": {
+        "startup_import_seconds": 0.2660135999904014,
+        "prior_and_initial_group_seconds": 0.02085040000383742,
+        "forecast_total_seconds": 0.9670628000167198,
+        "Table_seconds": 0.004923999978927895,
+        "individual_branch_request_seconds": 7.190002361312509e-05,
+        "individual_branch_cold_seconds": 0.002863599976990372
+      },
+      "initial_group_subset_seconds": 2.6399997295811772e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 41959424,
+      "post_fingerprint_peak_working_set_bytes": 41963520,
+      "post_import_peak_working_set_bytes": 26607616,
+      "action_requests": 2292,
+      "action_evaluations": 2286,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 2,
+      "process_wall_seconds": 1.3041403999959584
+    },
+    {
+      "case": "medium",
+      "mode": "new",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.8319192000199109,
+      "phases": {
+        "startup_import_seconds": 0.2568504000082612,
+        "prior_and_initial_group_seconds": 0.01998959999764338,
+        "forecast_total_seconds": 0.5472303999995347,
+        "Table_seconds": 0.004802000010386109,
+        "individual_branch_request_seconds": 7.109998841769993e-05,
+        "individual_branch_cold_seconds": 0.002975700015667826
+      },
+      "initial_group_subset_seconds": 2.3699976736679673e-05,
+      "native_partial_group_counter_seconds": 0.018635999818798155,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 34418688,
+      "post_fingerprint_peak_working_set_bytes": 34422784,
+      "post_import_peak_working_set_bytes": 26304512,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 2,
+      "process_wall_seconds": 0.8599588999932166
+    },
+    {
+      "case": "medium",
+      "mode": "old-root",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.7663393999973778,
+      "phases": {
+        "startup_import_seconds": 0.26072960000601597,
+        "prior_and_initial_group_seconds": 0.020248799992259592,
+        "forecast_total_seconds": 0.47783389998949133,
+        "Table_seconds": 0.004667300003347918,
+        "individual_branch_request_seconds": 6.839999696239829e-05,
+        "individual_branch_cold_seconds": 0.0027914000093005598
+      },
+      "initial_group_subset_seconds": 2.5899993488565087e-05,
+      "native_partial_group_counter_seconds": 0.00783059949753806,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 34246656,
+      "post_fingerprint_peak_working_set_bytes": 34254848,
+      "post_import_peak_working_set_bytes": 26796032,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 2,
+      "process_wall_seconds": 0.7944372000056319
+    },
+    {
+      "case": "medium",
+      "mode": "new",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.8337761999864597,
+      "phases": {
+        "startup_import_seconds": 0.2636020999925677,
+        "prior_and_initial_group_seconds": 0.01971260001300834,
+        "forecast_total_seconds": 0.5429206999833696,
+        "Table_seconds": 0.004625100002158433,
+        "individual_branch_request_seconds": 6.930000381544232e-05,
+        "individual_branch_cold_seconds": 0.0028463999915402383
+      },
+      "initial_group_subset_seconds": 2.340000355616212e-05,
+      "native_partial_group_counter_seconds": 0.018336500215809792,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 34279424,
+      "post_fingerprint_peak_working_set_bytes": 34287616,
+      "post_import_peak_working_set_bytes": 26476544,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 3,
+      "process_wall_seconds": 0.8607654999941587
+    },
+    {
+      "case": "medium",
+      "mode": "old-root",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.7696429999778047,
+      "phases": {
+        "startup_import_seconds": 0.2586507999803871,
+        "prior_and_initial_group_seconds": 0.020460300002014264,
+        "forecast_total_seconds": 0.4825540000165347,
+        "Table_seconds": 0.00471889998880215,
+        "individual_branch_request_seconds": 6.75999908708036e-05,
+        "individual_branch_cold_seconds": 0.00319139999919571
+      },
+      "initial_group_subset_seconds": 2.4900014977902174e-05,
+      "native_partial_group_counter_seconds": 0.007892100082244724,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 33480704,
+      "post_fingerprint_peak_working_set_bytes": 33484800,
+      "post_import_peak_working_set_bytes": 26619904,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 3,
+      "process_wall_seconds": 0.7937362999946345
+    },
+    {
+      "case": "medium",
+      "mode": "labelled",
+      "profile": false,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.2396441999881063,
+      "phases": {
+        "startup_import_seconds": 0.2549610999994911,
+        "prior_and_initial_group_seconds": 0.019849400006933138,
+        "forecast_total_seconds": 0.9571479999867734,
+        "Table_seconds": 0.004818400018848479,
+        "individual_branch_request_seconds": 6.929997471161187e-05,
+        "individual_branch_cold_seconds": 0.002798000001348555
+      },
+      "initial_group_subset_seconds": 2.440001117065549e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": null,
+      "instrumented_group_within_forecast_seconds": null,
+      "instrumented_forecast_other_than_group_seconds": null,
+      "instrumented_group_within_cold_seconds": null,
+      "instrumented_group_calls": null,
+      "peak_working_set_bytes": 41975808,
+      "post_fingerprint_peak_working_set_bytes": 41975808,
+      "post_import_peak_working_set_bytes": 27316224,
+      "action_requests": 2292,
+      "action_evaluations": 2286,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 3,
+      "process_wall_seconds": 1.2821287999977358
+    },
+    {
+      "case": "public",
+      "mode": "new",
+      "profile": true,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.6499035999877378,
+      "phases": {
+        "startup_import_seconds": 0.3550264999794308,
+        "prior_and_initial_group_seconds": 0.017317400022875518,
+        "forecast_total_seconds": 0.27249759997357614,
+        "Table_seconds": 0.003182800021022558,
+        "individual_branch_request_seconds": 9.950000094249845e-05,
+        "individual_branch_cold_seconds": 0.0017797999898903072
+      },
+      "initial_group_subset_seconds": 2.2599997464567423e-05,
+      "native_partial_group_counter_seconds": 0.009201000357279554,
+      "instrumented_group_seconds": 0.03637900043395348,
+      "instrumented_group_within_forecast_seconds": 0.03633130044909194,
+      "instrumented_forecast_other_than_group_seconds": 0.2361662995244842,
+      "instrumented_group_within_cold_seconds": 4.7699984861537814e-05,
+      "instrumented_group_calls": {
+        "InheritedGroupRegistry.__init__": 1,
+        "CutOutUniformEngine.inherited_value_groups": 639,
+        "InheritedGroupRegistry.private_groups": 854,
+        "InheritedGroupRegistry.action": 325,
+        "InheritedGroupRegistry.acquisition": 332,
+        "InheritedGroupRegistry.publication": 120
+      },
+      "peak_working_set_bytes": 35745792,
+      "post_fingerprint_peak_working_set_bytes": 35745792,
+      "post_import_peak_working_set_bytes": 31162368,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.6734275999770034
+    },
+    {
+      "case": "public",
+      "mode": "old-root",
+      "profile": true,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.6118434999953024,
+      "phases": {
+        "startup_import_seconds": 0.3502122999925632,
+        "prior_and_initial_group_seconds": 0.017618400015635416,
+        "forecast_total_seconds": 0.23885530000552535,
+        "Table_seconds": 0.003260299999965355,
+        "individual_branch_request_seconds": 0.00010720000136643648,
+        "individual_branch_cold_seconds": 0.0017899999802466482
+      },
+      "initial_group_subset_seconds": 2.269999822601676e-05,
+      "native_partial_group_counter_seconds": 0.0030948999337852,
+      "instrumented_group_seconds": 0.0041334000416100025,
+      "instrumented_group_within_forecast_seconds": 0.0041334000416100025,
+      "instrumented_forecast_other_than_group_seconds": 0.23472189996391535,
+      "instrumented_group_within_cold_seconds": 0.0,
+      "instrumented_group_calls": {
+        "CutOutUniformEngine.legacy_large_groups": 639
+      },
+      "peak_working_set_bytes": 35348480,
+      "post_fingerprint_peak_working_set_bytes": 35348480,
+      "post_import_peak_working_set_bytes": 30957568,
+      "action_requests": 444,
+      "action_evaluations": 438,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.6347114999953192
+    },
+    {
+      "case": "public",
+      "mode": "labelled",
+      "profile": true,
+      "signatures": {
+        "root_public": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "root_physical": "cdc3e3d1f92a817b903377a0860d1b14737689ecba46dd0d607a37b4eb5db187",
+        "forecast": "d87682bd837e8fa021986e31ab82b2a852d1e92d1294708d89b541d11f16d594",
+        "table": "78b5edf45a6712e15af136006c087b130d61bc6330079355cd4418e44f82f026",
+        "individual_branch": "452f02952c27a26ccea5fe24264005e0519054b0152bb18e9247ce8855b9eebc"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.4299860000028275,
+      "phases": {
+        "startup_import_seconds": 0.36187309998786077,
+        "prior_and_initial_group_seconds": 0.018513100018026307,
+        "forecast_total_seconds": 1.0444304999837186,
+        "Table_seconds": 0.0033014000218827277,
+        "individual_branch_request_seconds": 0.00010139998630620539,
+        "individual_branch_cold_seconds": 0.0017665000050328672
+      },
+      "initial_group_subset_seconds": 2.239999594166875e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": 0.0,
+      "instrumented_group_within_forecast_seconds": 0.0,
+      "instrumented_forecast_other_than_group_seconds": 1.0444304999837186,
+      "instrumented_group_within_cold_seconds": 0.0,
+      "instrumented_group_calls": {},
+      "peak_working_set_bytes": 48160768,
+      "post_fingerprint_peak_working_set_bytes": 48164864,
+      "post_import_peak_working_set_bytes": 31260672,
+      "action_requests": 2332,
+      "action_evaluations": 2326,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "3/4",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 1.4812785999965854
+    },
+    {
+      "case": "medium",
+      "mode": "new",
+      "profile": true,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.9373627999739256,
+      "phases": {
+        "startup_import_seconds": 0.355925899988506,
+        "prior_and_initial_group_seconds": 0.019766499986872077,
+        "forecast_total_seconds": 0.5538117999967653,
+        "Table_seconds": 0.004785800003446639,
+        "individual_branch_request_seconds": 7.330000516958535e-05,
+        "individual_branch_cold_seconds": 0.002999499993165955
+      },
+      "initial_group_subset_seconds": 2.3300002794712782e-05,
+      "native_partial_group_counter_seconds": 0.02014850013074465,
+      "instrumented_group_seconds": 0.0748502011410892,
+      "instrumented_group_within_forecast_seconds": 0.07480450114235282,
+      "instrumented_forecast_other_than_group_seconds": 0.4790072988544125,
+      "instrumented_group_within_cold_seconds": 4.569999873638153e-05,
+      "instrumented_group_calls": {
+        "InheritedGroupRegistry.__init__": 1,
+        "CutOutUniformEngine.inherited_value_groups": 1563,
+        "InheritedGroupRegistry.private_groups": 2070,
+        "InheritedGroupRegistry.action": 723,
+        "InheritedGroupRegistry.acquisition": 693,
+        "InheritedGroupRegistry.publication": 309
+      },
+      "peak_working_set_bytes": 40656896,
+      "post_fingerprint_peak_working_set_bytes": 40656896,
+      "post_import_peak_working_set_bytes": 31186944,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.9694490999972913
+    },
+    {
+      "case": "medium",
+      "mode": "old-root",
+      "profile": true,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 0.8630867000028957,
+      "phases": {
+        "startup_import_seconds": 0.3537967999873217,
+        "prior_and_initial_group_seconds": 0.0198048000165727,
+        "forecast_total_seconds": 0.4819551999971736,
+        "Table_seconds": 0.004664399981265888,
+        "individual_branch_request_seconds": 6.770002073608339e-05,
+        "individual_branch_cold_seconds": 0.0027977999998256564
+      },
+      "initial_group_subset_seconds": 2.3999979021027684e-05,
+      "native_partial_group_counter_seconds": 0.008070799260167405,
+      "instrumented_group_seconds": 0.010594499239232391,
+      "instrumented_group_within_forecast_seconds": 0.010594499239232391,
+      "instrumented_forecast_other_than_group_seconds": 0.47136070075794123,
+      "instrumented_group_within_cold_seconds": 0.0,
+      "instrumented_group_calls": {
+        "CutOutUniformEngine.legacy_large_groups": 1563
+      },
+      "peak_working_set_bytes": 39874560,
+      "post_fingerprint_peak_working_set_bytes": 39878656,
+      "post_import_peak_working_set_bytes": 31121408,
+      "action_requests": 1109,
+      "action_evaluations": 1103,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 0.8935149000026286
+    },
+    {
+      "case": "medium",
+      "mode": "labelled",
+      "profile": true,
+      "signatures": {
+        "root_public": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "root_physical": "0538f9691a52a3c2799415cc4dd67dc9cbdd1bad3d01904e24d6ad164d651a0e",
+        "forecast": "93787818c9437bda01e7b1efe4871fffd88c1d3b5f52b0bfefa0b4bdf22491ab",
+        "table": "95f7adb55a52b8d1c825cc48e31eca4ab5243bb6f8177343a224c155580ace1f",
+        "individual_branch": "3036ee7d71e124cecfe190245f944aa6b9183407046959af0a11513e8e98526d"
+      },
+      "village_win": "3/8",
+      "end_to_end_startup_to_cold_branch_seconds": 1.34415240000817,
+      "phases": {
+        "startup_import_seconds": 0.3617116000095848,
+        "prior_and_initial_group_seconds": 0.020056200010003522,
+        "forecast_total_seconds": 0.9543703999952413,
+        "Table_seconds": 0.004939200007356703,
+        "individual_branch_request_seconds": 9.610000415705144e-05,
+        "individual_branch_cold_seconds": 0.002978899981826544
+      },
+      "initial_group_subset_seconds": 2.4599983589723706e-05,
+      "native_partial_group_counter_seconds": 0,
+      "instrumented_group_seconds": 0.0,
+      "instrumented_group_within_forecast_seconds": 0.0,
+      "instrumented_forecast_other_than_group_seconds": 0.9543703999952413,
+      "instrumented_group_within_cold_seconds": 0.0,
+      "instrumented_group_calls": {},
+      "peak_working_set_bytes": 47980544,
+      "post_fingerprint_peak_working_set_bytes": 47980544,
+      "post_import_peak_working_set_bytes": 30973952,
+      "action_requests": 2292,
+      "action_evaluations": 2286,
+      "terminal_tree_materialized": false,
+      "individual_execution_target": 6,
+      "branch_observation_probability": "1",
+      "scope": "existing6 uniform two-night Forecast + complete public Table + one first-day literalP6 nonterminal cold branch",
+      "group_timing_note": "group maintenance is an overlapping subset of forecast/cold, never additive; complete group clock only in separate profile samples",
+      "repeat": 1,
+      "process_wall_seconds": 1.3938763000187464
+    }
+  ],
+  "summary": {
+    "public": {
+      "new": {
+        "repeats": 3,
+        "end_to_end_seconds": {
+          "min": 0.5550610999925993,
+          "median": 0.5582149999972899,
+          "max": 0.6180264999857172
+        },
+        "process_wall_seconds": {
+          "min": 0.5762676000013016,
+          "median": 0.5774712999991607,
+          "max": 0.6488546999753453
+        },
+        "phases": {
+          "startup_import_seconds": {
+            "min": 0.2616268999991007,
+            "median": 0.26267149997875094,
+            "max": 0.26502890000119805
+          },
+          "prior_and_initial_group_seconds": {
+            "min": 0.017137299990281463,
+            "median": 0.017620300000999123,
+            "max": 0.01824140001554042
+          },
+          "forecast_total_seconds": {
+            "min": 0.268753199983621,
+            "median": 0.2709352000092622,
+            "max": 0.33225119998678565
+          },
+          "Table_seconds": {
+            "min": 0.0032318999874405563,
+            "median": 0.0033290999999735504,
+            "max": 0.004223600000841543
+          },
+          "individual_branch_request_seconds": {
+            "min": 0.00010710000060498714,
+            "median": 0.00011260001338087022,
+            "max": 0.00018090000958181918
+          },
+          "individual_branch_cold_seconds": {
+            "min": 0.0017746000085026026,
+            "median": 0.0019533000013325363,
+            "max": 0.0021235999884083867
+          }
+        },
+        "peak_working_set_bytes": {
+          "min": 29683712,
+          "median": 29794304,
+          "max": 29859840
+        }
+      },
+      "old-root": {
+        "repeats": 3,
+        "end_to_end_seconds": {
+          "min": 0.5226790999877267,
+          "median": 0.5229341000085697,
+          "max": 0.5568817000021227
+        },
+        "process_wall_seconds": {
+          "min": 0.5408958999905735,
+          "median": 0.545409499987727,
+          "max": 0.5761819000181276
+        },
+        "phases": {
+          "startup_import_seconds": {
+            "min": 0.25970359999337234,
+            "median": 0.26180000000749715,
+            "max": 0.2871240000240505
+          },
+          "prior_and_initial_group_seconds": {
+            "min": 0.017582799977390096,
+            "median": 0.017731200001435354,
+            "max": 0.017769300000509247
+          },
+          "forecast_total_seconds": {
+            "min": 0.23804490000475198,
+            "median": 0.23948570000356995,
+            "max": 0.24685550000867806
+          },
+          "Table_seconds": {
+            "min": 0.003224699990823865,
+            "median": 0.0033682000066619366,
+            "max": 0.0035376999876461923
+          },
+          "individual_branch_request_seconds": {
+            "min": 0.00010599999222904444,
+            "median": 0.0001109000004362315,
+            "max": 0.00013000000035390258
+          },
+          "individual_branch_cold_seconds": {
+            "min": 0.001734199991915375,
+            "median": 0.0018402999849058688,
+            "max": 0.002345900022191927
+          }
+        },
+        "peak_working_set_bytes": {
+          "min": 30089216,
+          "median": 30105600,
+          "max": 30146560
+        }
+      },
+      "labelled": {
+        "repeats": 3,
+        "end_to_end_seconds": {
+          "min": 1.3147409999801312,
+          "median": 1.3237025999987964,
+          "max": 1.3469275000097696
+        },
+        "process_wall_seconds": {
+          "min": 1.3611360999930184,
+          "median": 1.3741274999920279,
+          "max": 1.3921939000138082
+        },
+        "phases": {
+          "startup_import_seconds": {
+            "min": 0.25273700000252575,
+            "median": 0.2573499999998603,
+            "max": 0.273848300013924
+          },
+          "prior_and_initial_group_seconds": {
+            "min": 0.017328000016277656,
+            "median": 0.01753769998322241,
+            "max": 0.018362400005571544
+          },
+          "forecast_total_seconds": {
+            "min": 1.0393458000035025,
+            "median": 1.0438437999982852,
+            "max": 1.0493018999986816
+          },
+          "Table_seconds": {
+            "min": 0.0032587999885436147,
+            "median": 0.003283400001237169,
+            "max": 0.003438499988988042
+          },
+          "individual_branch_request_seconds": {
+            "min": 0.00010129998554475605,
+            "median": 0.00010280002607032657,
+            "max": 0.00010430000838823617
+          },
+          "individual_branch_cold_seconds": {
+            "min": 0.001758899976266548,
+            "median": 0.0017960999975912273,
+            "max": 0.0018720999942161143
+          }
+        },
+        "peak_working_set_bytes": {
+          "min": 42221568,
+          "median": 42434560,
+          "max": 42500096
+        }
+      }
+    },
+    "medium": {
+      "new": {
+        "repeats": 3,
+        "end_to_end_seconds": {
+          "min": 0.8319192000199109,
+          "median": 0.8323022999975365,
+          "max": 0.8337761999864597
+        },
+        "process_wall_seconds": {
+          "min": 0.8577750000113156,
+          "median": 0.8599588999932166,
+          "max": 0.8607654999941587
+        },
+        "phases": {
+          "startup_import_seconds": {
+            "min": 0.2568504000082612,
+            "median": 0.2579293000162579,
+            "max": 0.2636020999925677
+          },
+          "prior_and_initial_group_seconds": {
+            "min": 0.01971260001300834,
+            "median": 0.01998959999764338,
+            "max": 0.02001219999510795
+          },
+          "forecast_total_seconds": {
+            "min": 0.5429206999833696,
+            "median": 0.5466785999888089,
+            "max": 0.5472303999995347
+          },
+          "Table_seconds": {
+            "min": 0.004619900020770729,
+            "median": 0.004625100002158433,
+            "max": 0.004802000010386109
+          },
+          "individual_branch_request_seconds": {
+            "min": 6.930000381544232e-05,
+            "median": 7.109998841769993e-05,
+            "max": 9.029998909682035e-05
+          },
+          "individual_branch_cold_seconds": {
+            "min": 0.0028463999915402383,
+            "median": 0.0029719999874942005,
+            "max": 0.002975700015667826
+          }
+        },
+        "peak_working_set_bytes": {
+          "min": 34279424,
+          "median": 34418688,
+          "max": 34574336
+        }
+      },
+      "old-root": {
+        "repeats": 3,
+        "end_to_end_seconds": {
+          "min": 0.7663393999973778,
+          "median": 0.7696429999778047,
+          "max": 0.8281082999892533
+        },
+        "process_wall_seconds": {
+          "min": 0.7937362999946345,
+          "median": 0.7944372000056319,
+          "max": 0.8521965999971144
+        },
+        "phases": {
+          "startup_import_seconds": {
+            "min": 0.2586507999803871,
+            "median": 0.26072960000601597,
+            "max": 0.29367899999488145
+          },
+          "prior_and_initial_group_seconds": {
+            "min": 0.01986100000794977,
+            "median": 0.020248799992259592,
+            "max": 0.020460300002014264
+          },
+          "forecast_total_seconds": {
+            "min": 0.47783389998949133,
+            "median": 0.4825540000165347,
+            "max": 0.5069779999903403
+          },
+          "Table_seconds": {
+            "min": 0.004667300003347918,
+            "median": 0.00471889998880215,
+            "max": 0.004721200006315485
+          },
+          "individual_branch_request_seconds": {
+            "min": 6.75999908708036e-05,
+            "median": 6.779999239370227e-05,
+            "max": 6.839999696239829e-05
+          },
+          "individual_branch_cold_seconds": {
+            "min": 0.0027914000093005598,
+            "median": 0.0028012999973725528,
+            "max": 0.00319139999919571
+          }
+        },
+        "peak_working_set_bytes": {
+          "min": 33480704,
+          "median": 33873920,
+          "max": 34246656
+        }
+      },
+      "labelled": {
+        "repeats": 3,
+        "end_to_end_seconds": {
+          "min": 1.2396441999881063,
+          "median": 1.2493947000184562,
+          "max": 1.26178629999049
+        },
+        "process_wall_seconds": {
+          "min": 1.2821287999977358,
+          "median": 1.2962178000016138,
+          "max": 1.3041403999959584
+        },
+        "phases": {
+          "startup_import_seconds": {
+            "min": 0.2549610999994911,
+            "median": 0.25896480001392774,
+            "max": 0.2660135999904014
+          },
+          "prior_and_initial_group_seconds": {
+            "min": 0.019849400006933138,
+            "median": 0.02011290000518784,
+            "max": 0.02085040000383742
+          },
+          "forecast_total_seconds": {
+            "min": 0.9571479999867734,
+            "median": 0.9624244999722578,
+            "max": 0.9670628000167198
+          },
+          "Table_seconds": {
+            "min": 0.004818400018848479,
+            "median": 0.004894200013950467,
+            "max": 0.004923999978927895
+          },
+          "individual_branch_request_seconds": {
+            "min": 6.929997471161187e-05,
+            "median": 7.069998537190259e-05,
+            "max": 7.190002361312509e-05
+          },
+          "individual_branch_cold_seconds": {
+            "min": 0.002798000001348555,
+            "median": 0.002863599976990372,
+            "max": 0.0029276000277604908
+          }
+        },
+        "peak_working_set_bytes": {
+          "min": 41562112,
+          "median": 41959424,
+          "max": 41975808
+        }
+      }
+    }
+  },
+  "all_outputs_equal_per_case": true,
+  "limits": {
+    "per_process_seconds": 60,
+    "overall_seconds": 300,
+    "peak_working_set_bytes": 1500000000
+  },
+  "total_driver_seconds": 22.578000000008615,
+  "native_processes": 18,
+  "separate_profile_processes": 6,
+  "clock": "Windows shared monotonic perf_counter; parent launch marker is passed to each child",
+  "memory_scope": "primary peak is captured at cold endpoint before output fingerprints; later diagnostic peak recorded separately; Windows PeakWorkingSet is RSS-equivalent",
+  "interpretation": "3 independent fresh-process samples per case/mode, rotated order. Native speed/RSS and instrumented maintenance profiles are separate. No cross-mode engine/cache memory sharing.",
+  "excluded": "all terminal tree/reference assertions/full suite; no UI/server/deploy; no registry bridge implementation",
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_six_repeated_benchmark.py": "0d753d20974716148971326b85a4b2494d041d9377e356889c9562596f9d936f",
+    "benchmarks/player_match_groups/cut_out_six_inherited.py": "a6959af073d878a1dab3afe1ac97589d0c77a586c5679e76da366ef2eba9d86e",
+    "benchmarks/player_match_groups/cut_out_uniform_game.py": "5d01d9d61bd9b6c23f7945e8aa55cab8aab7e36335418386ef27d6484e5cfe40",
+    "benchmarks/player_match_groups/cut_out_inherited_groups.py": "f09820c1540cb698780ec80878cee61fbeef0d2df20463d025d2dd813c5e0311"
+  },
+  "measurement_refinement_note": "First24-process pass captured peak after fingerprint generation. Primary peak moved to the cold endpoint and all24 re-run. Only final pass summarized; earlier pass not pooled.",
+  "discarded_pass_driver_seconds": 22.688,
+  "combined_measurement_driver_seconds": 45.266,
+  "descriptive_comparisons": {
+    "public": {
+      "new_vs_old_root_median_percent": 6.74672009114381,
+      "labelled_over_new_median_ratio": 2.3713132037032736
+    },
+    "medium": {
+      "new_vs_old_root_median_percent": 8.141346055448917,
+      "labelled_over_new_median_ratio": 1.5011308992203365
+    }
+  }
+}
