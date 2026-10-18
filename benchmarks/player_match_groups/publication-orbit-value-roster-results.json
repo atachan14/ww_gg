@@ -1,0 +1,73 @@
+{
+  "status": "verified",
+  "case": "roster",
+  "village_win": "2/15",
+  "public_groups": [
+    [
+      1,
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5,
+      6,
+      7
+    ]
+  ],
+  "private_stabilizer": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6,
+      7
+    ]
+  ],
+  "split_groups": [],
+  "q_patterns": 40,
+  "q_named_vectors": 64,
+  "p_zero_patterns": 14,
+  "value_only": {
+    "named_root_Boards": 64,
+    "representative_root_Boards": 40,
+    "named_positive_P_solve_roots": 40,
+    "representative_positive_P_solve_roots": 26,
+    "named_solve_requests": 2560,
+    "orbit_solve_requests": 1640,
+    "named_actions": 7760,
+    "orbit_actions": 4972,
+    "named_value_states": 2560,
+    "orbit_value_states": 1640,
+    "named_future_Boards": 2536,
+    "orbit_future_Boards": 1626
+  },
+  "value_only_named_restorations": 0,
+  "value_only_root_named_Boards": 0,
+  "baseline_value_seconds": 12.726794400019571,
+  "orbit_value_seconds": 8.005041599972174,
+  "requested_label_restorations": 40,
+  "full_label_Forecast_QP_Table_checks": 40,
+  "independent_saved_origin_cold_reads": 40,
+  "full_QP_mass_and_forecast_equal": true,
+  "future_publication_backup": "ordinary independent labelled recursion; prototype compresses ONE boundary only",
+  "full_initial7_search": false,
+  "seconds": 23.70299999997951,
+  "peak_working_set_bytes": 137748480
+}

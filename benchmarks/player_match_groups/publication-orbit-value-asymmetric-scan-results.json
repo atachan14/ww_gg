@@ -1,0 +1,80 @@
+{
+  "status": "verified",
+  "case": "asymmetric-scan",
+  "village_win": "2/15",
+  "public_groups": [
+    [
+      1,
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5,
+      6,
+      7
+    ]
+  ],
+  "private_stabilizer": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ]
+  ],
+  "split_groups": [
+    [
+      6,
+      7
+    ]
+  ],
+  "q_patterns": 64,
+  "q_named_vectors": 64,
+  "p_zero_patterns": 56,
+  "value_only": {
+    "named_root_Boards": 64,
+    "representative_root_Boards": 64,
+    "named_positive_P_solve_roots": 8,
+    "representative_positive_P_solve_roots": 8,
+    "named_solve_requests": 512,
+    "orbit_solve_requests": 512,
+    "named_actions": 1552,
+    "orbit_actions": 1552,
+    "named_value_states": 512,
+    "orbit_value_states": 512,
+    "named_future_Boards": 504,
+    "orbit_future_Boards": 504
+  },
+  "value_only_named_restorations": 0,
+  "value_only_root_named_Boards": 0,
+  "baseline_value_seconds": 2.4677475999924354,
+  "orbit_value_seconds": 2.5352579999598674,
+  "requested_label_restorations": 8,
+  "full_label_Forecast_QP_Table_checks": 8,
+  "independent_saved_origin_cold_reads": 8,
+  "full_QP_mass_and_forecast_equal": true,
+  "future_publication_backup": "ordinary independent labelled recursion; prototype compresses ONE boundary only",
+  "full_initial7_search": false,
+  "seconds": 5.704000000027008,
+  "peak_working_set_bytes": 58867712
+}

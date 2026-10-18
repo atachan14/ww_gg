@@ -1,0 +1,73 @@
+{
+  "status": "verified",
+  "case": "observer",
+  "village_win": "2/15",
+  "public_groups": [
+    [
+      1,
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5,
+      6,
+      7
+    ]
+  ],
+  "private_stabilizer": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5,
+      7
+    ],
+    [
+      6
+    ]
+  ],
+  "split_groups": [],
+  "q_patterns": 40,
+  "q_named_vectors": 64,
+  "p_zero_patterns": 28,
+  "value_only": {
+    "named_root_Boards": 64,
+    "representative_root_Boards": 40,
+    "named_positive_P_solve_roots": 16,
+    "representative_positive_P_solve_roots": 12,
+    "named_solve_requests": 1520,
+    "orbit_solve_requests": 1116,
+    "named_actions": 4616,
+    "orbit_actions": 3390,
+    "named_value_states": 1520,
+    "orbit_value_states": 1116,
+    "named_future_Boards": 1440,
+    "orbit_future_Boards": 1056
+  },
+  "value_only_named_restorations": 0,
+  "value_only_root_named_Boards": 0,
+  "baseline_value_seconds": 7.411320899962448,
+  "orbit_value_seconds": 5.747784600011073,
+  "requested_label_restorations": 16,
+  "full_label_Forecast_QP_Table_checks": 16,
+  "independent_saved_origin_cold_reads": 16,
+  "full_QP_mass_and_forecast_equal": true,
+  "future_publication_backup": "ordinary independent labelled recursion; prototype compresses ONE boundary only",
+  "full_initial7_search": false,
+  "seconds": 14.405999999959022,
+  "peak_working_set_bytes": 102162432
+}

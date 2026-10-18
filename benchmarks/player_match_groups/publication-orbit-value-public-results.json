@@ -1,0 +1,16 @@
+{
+  "status": "unverified",
+  "case": "public",
+  "reason": "case_calculation_budget",
+  "budget_stop": {
+    "kind": "time",
+    "work": 45696,
+    "max_work": 4000000,
+    "elapsed_seconds": 30.0
+  },
+  "stage": "named independent baseline before prototype construction",
+  "prototype_started": false,
+  "full_QP_mass_and_forecast_equal": false,
+  "full_initial7_search": false,
+  "note": "one30s bounded intermediate-case baseline attempt; no retry, no limit expansion; state/peak census was not persisted by the original failing worker"
+}
