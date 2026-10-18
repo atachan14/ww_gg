@@ -1,0 +1,332 @@
+{
+  "recorded_utc": "2026-10-18T07:58:18.792740+00:00",
+  "head_before_evidence_commit": "183dbe4355684cd3cf01885a8f4e58c5e3fd22a7",
+  "sources_sha256": {
+    "benchmarks/player_match_groups/cut_out_morning.py": "e688d9844a3e2fd360938be0143e56502f42665606df925a8c46c5ec620ba18e",
+    "benchmarks/player_match_groups/cut_out_day_night.py": "c4706b77a83c0b82f13b2b9cdaebb881416aa1bd65298ea01d51dac9bcaf4d29",
+    "tests/test_cut_out_morning.py": "77e3c47eb2086e3448a89a1c6d53c6c981a42e608908b97d846d3ee5008e6dd6"
+  },
+  "tests": [
+    {
+      "pattern": "test_cut_out_morning.py",
+      "count": 4,
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_morning-morning-final.log",
+      "seconds_limit": 20
+    },
+    {
+      "pattern": "test_cut_out_day_night.py",
+      "count": 4,
+      "exit": 0,
+      "log": ".artifacts\\test_cut_out_day_night-morning-final.log",
+      "seconds_limit": 20
+    }
+  ],
+  "cases": [
+    {
+      "case": "terminal-four",
+      "players": 4,
+      "grouped_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 0,
+        "generated_observations": 0,
+        "public_fact_positions": 0,
+        "evaluation_seconds": 0.008600000001024455
+      },
+      "full_labelled_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 0,
+        "generated_observations": 0,
+        "public_fact_positions": 0,
+        "evaluation_seconds": 0.011709500016877428
+      },
+      "day_night_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 3,
+        "wolf_information_groups": 5,
+        "night_candidates": 10,
+        "full_night_candidates": 10,
+        "labelled_night_choices": 10,
+        "transport_hypotheses": 0,
+        "day_joint_hypotheses_scanned": 12,
+        "day_kernel_seconds": 0.00046270000166259706,
+        "day_posterior_seconds": 0.0002454000059515238,
+        "day_template_seconds": 0.0002614000113680959,
+        "partition_positions": 68,
+        "partition_seconds": 0.00010059995111078024,
+        "actor_condition_seconds": 0.00031359997228719294,
+        "actor_condition_input_hypotheses": 10,
+        "night_policy_calls": 5,
+        "night_policy_seconds": 0.0005233999399933964,
+        "physical_kernel_seconds": 0.004531999962637201,
+        "kernel_input_hypotheses": 20,
+        "kernel_output_hypotheses": 36,
+        "transport_seconds": 1.0899966582655907e-05,
+        "public_merge_input_hypotheses": 36,
+        "public_observation_merge_seconds": 0.0015755000058561563,
+        "acquisition_cache_entries": 5,
+        "evaluation_seconds": 0.008500699972501025
+      },
+      "optional_label_transport": {
+        "transport_hypotheses": 6,
+        "transport_seconds": 0.00042640004539862275
+      },
+      "grouped_leaves": 9,
+      "full_labelled_leaves": 12,
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/4"
+        },
+        {
+          "winner": "wolf",
+          "mass": "3/4"
+        }
+      ],
+      "complete_labelled_board_law_past_mass_equal": true
+    },
+    {
+      "case": "single-seer",
+      "players": 5,
+      "grouped_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 12,
+        "generated_observations": 32,
+        "public_fact_positions": 52,
+        "morning_input_hypotheses": 162,
+        "formal_morning_seconds": 0.012335100007476285,
+        "observer_weight_seconds": 0.006511899962788448,
+        "morning_output_hypotheses": 162,
+        "evaluation_seconds": 0.044152599992230535
+      },
+      "full_labelled_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 20,
+        "generated_observations": 56,
+        "public_fact_positions": 96,
+        "morning_input_hypotheses": 270,
+        "formal_morning_seconds": 0.014846499951090664,
+        "observer_weight_seconds": 0.009639800002332777,
+        "morning_output_hypotheses": 270,
+        "evaluation_seconds": 0.06643980002263561
+      },
+      "day_night_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 3,
+        "wolf_information_groups": 8,
+        "night_candidates": 18,
+        "full_night_candidates": 24,
+        "labelled_night_choices": 24,
+        "transport_hypotheses": 36,
+        "day_joint_hypotheses_scanned": 27,
+        "day_kernel_seconds": 0.0006134000141173601,
+        "day_posterior_seconds": 0.00035479996586218476,
+        "day_template_seconds": 0.0002350000140722841,
+        "partition_positions": 280,
+        "partition_seconds": 0.0003184998349752277,
+        "actor_condition_seconds": 0.0006129000394139439,
+        "actor_condition_input_hypotheses": 24,
+        "night_policy_calls": 8,
+        "night_policy_seconds": 0.0011138000118080527,
+        "physical_kernel_seconds": 0.012468500033719465,
+        "kernel_input_hypotheses": 54,
+        "kernel_output_hypotheses": 126,
+        "transport_seconds": 0.001970799989067018,
+        "public_merge_input_hypotheses": 162,
+        "public_observation_merge_seconds": 0.004978299984941259,
+        "acquisition_cache_entries": 8,
+        "evaluation_seconds": 0.02436199999647215
+      },
+      "optional_label_transport": {
+        "transport_hypotheses": 114,
+        "transport_seconds": 0.0061938000144436955
+      },
+      "grouped_leaves": 33,
+      "full_labelled_leaves": 59,
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "mass": "4/5"
+        }
+      ],
+      "complete_labelled_board_law_past_mass_equal": true
+    },
+    {
+      "case": "two-seer-co",
+      "players": 5,
+      "grouped_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 11,
+        "generated_observations": 78,
+        "public_fact_positions": 196,
+        "morning_input_hypotheses": 117,
+        "formal_morning_seconds": 0.02394109996384941,
+        "observer_weight_seconds": 0.016987400013022125,
+        "morning_output_hypotheses": 486,
+        "evaluation_seconds": 0.05914170001051389
+      },
+      "full_labelled_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 18,
+        "generated_observations": 126,
+        "public_fact_positions": 312,
+        "morning_input_hypotheses": 180,
+        "formal_morning_seconds": 0.04134659995906986,
+        "observer_weight_seconds": 0.02660079998895526,
+        "morning_output_hypotheses": 756,
+        "evaluation_seconds": 0.12243790001957677
+      },
+      "day_night_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 3,
+        "wolf_information_groups": 5,
+        "night_candidates": 12,
+        "full_night_candidates": 15,
+        "labelled_night_choices": 15,
+        "transport_hypotheses": 21,
+        "day_joint_hypotheses_scanned": 18,
+        "day_kernel_seconds": 0.0004665000014938414,
+        "day_posterior_seconds": 0.0002584000176284462,
+        "day_template_seconds": 0.00022609997540712357,
+        "partition_positions": 490,
+        "partition_seconds": 0.0004937998892273754,
+        "actor_condition_seconds": 0.00037099997280165553,
+        "actor_condition_input_hypotheses": 15,
+        "night_policy_calls": 5,
+        "night_policy_seconds": 0.0006170999549794942,
+        "physical_kernel_seconds": 0.008013499900698662,
+        "kernel_input_hypotheses": 36,
+        "kernel_output_hypotheses": 96,
+        "transport_seconds": 0.0009183999500237405,
+        "public_merge_input_hypotheses": 117,
+        "public_observation_merge_seconds": 0.004120199999306351,
+        "acquisition_cache_entries": 5,
+        "evaluation_seconds": 0.01641760001075454
+      },
+      "optional_label_transport": {
+        "transport_hypotheses": 273,
+        "transport_seconds": 0.012932999961776659
+      },
+      "grouped_leaves": 79,
+      "full_labelled_leaves": 128,
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "mass": "4/5"
+        }
+      ],
+      "complete_labelled_board_law_past_mass_equal": true
+    },
+    {
+      "case": "true-fake-medium",
+      "players": 5,
+      "grouped_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 15,
+        "generated_observations": 76,
+        "public_fact_positions": 263,
+        "morning_input_hypotheses": 51,
+        "formal_morning_seconds": 0.027327300020260736,
+        "observer_weight_seconds": 0.005394100007833913,
+        "morning_output_hypotheses": 102,
+        "evaluation_seconds": 0.04573260000324808
+      },
+      "full_labelled_morning_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "morning_calls": 18,
+        "generated_observations": 90,
+        "public_fact_positions": 307,
+        "morning_input_hypotheses": 60,
+        "formal_morning_seconds": 0.031065099959960207,
+        "observer_weight_seconds": 0.005999700049869716,
+        "morning_output_hypotheses": 120,
+        "evaluation_seconds": 0.05222240000148304
+      },
+      "day_night_stats": {
+        "generator_checks": 0,
+        "full_permutation_searches": 0,
+        "initial_reallocations": 0,
+        "day_candidates": 4,
+        "wolf_information_groups": 7,
+        "night_candidates": 21,
+        "full_night_candidates": 21,
+        "labelled_night_choices": 21,
+        "transport_hypotheses": 0,
+        "day_joint_hypotheses_scanned": 8,
+        "day_kernel_seconds": 0.00033459998667240143,
+        "day_posterior_seconds": 0.00016079997294582427,
+        "day_template_seconds": 0.00020629997015930712,
+        "partition_positions": 515,
+        "partition_seconds": 0.0005578998243436217,
+        "actor_condition_seconds": 0.0003171000280417502,
+        "actor_condition_input_hypotheses": 7,
+        "night_policy_calls": 7,
+        "night_policy_seconds": 0.000512500002514571,
+        "physical_kernel_seconds": 0.006527700024889782,
+        "kernel_input_hypotheses": 21,
+        "kernel_output_hypotheses": 51,
+        "transport_seconds": 1.8099963199347258e-05,
+        "public_merge_input_hypotheses": 51,
+        "public_observation_merge_seconds": 0.002317899983609095,
+        "acquisition_cache_entries": 7,
+        "evaluation_seconds": 0.011417100002290681
+      },
+      "optional_label_transport": {
+        "transport_hypotheses": 19,
+        "transport_seconds": 0.0017115000518970191
+      },
+      "grouped_leaves": 77,
+      "full_labelled_leaves": 92,
+      "terminal_mass": [
+        {
+          "winner": "village",
+          "mass": "1/5"
+        },
+        {
+          "winner": null,
+          "mass": "4/5"
+        }
+      ],
+      "complete_labelled_board_law_past_mass_equal": true
+    }
+  ],
+  "full_record_mode": "existing retire_uninformative_scans=False, uniform policies unchanged",
+  "common_boundary": "morning/report_flow/publications -> observer_report_weights -> representative GeneratedBoard.roles readback",
+  "limitations": "KernelOrigin for representative morning recipes; transported-label recipe registration and SavedOrigin chain not connected",
+  "preserve_acquired_dead_owner_results": true,
+  "dead_reporter_new_publication": false,
+  "corpse_target_result_published": true,
+  "ordinary_route_changed": false,
+  "full_future_solver": false,
+  "performance_claim": false
+}

@@ -10,7 +10,7 @@ from fractions import Fraction as F
 from time import perf_counter
 from .cut_out_model_a import ModelAInitialGroups,ModelAOneStepExecution
 from .partitioned_match_groups import UnsupportedPartition
-from werewolf.exact import action_outcomes,replace_worlds
+from werewolf.exact import action_outcomes,replace_worlds,MediumReport
 from werewolf.actor_information import wolf_information_groups
 from werewolf.fixed_actor_continuation import physical_actor_outcomes
 from werewolf.information_set_forecast import InformationSetForecast
@@ -46,13 +46,16 @@ def moved_law(law,a,b,n):
 
 def moved_board(board,law,a,b):
     if a==b:return board
-    if {f.name for f in fields(board)}!=BOARD_FIELDS or board.reports or board.guard_prior_roster is not None:
+    if ({f.name for f in fields(board)}!=BOARD_FIELDS or board.guard_prior_roster is not None
+        or any(type(r) is not MediumReport or r.day!=2 for r in board.reports)):
         raise ValueError('unknown Board/report/guard transport schema')
     def player(p):return b if p==a else a if p==b else p
     claims=dict((player(p),c) for p,c in enumerate(board.claims,1))
     return replace_worlds(board,law.public_roles,wolf_count=None,
         alive=tuple(sorted(player(p) for p in board.alive)),claims=tuple(claims[p] for p in range(1,board.player_count+1)),
         history=tuple(replace(e,target=player(e.target)) for e in board.history),
+        # First generated medium vector follows the existing opportunity order.
+        reports=tuple(sorted((MediumReport(r.day,player(r.reporter),player(r.target),r.color) for r in board.reports),key=lambda r:(r.day,r.reporter,r.target))),
         medium_opportunities=tuple(sorted((d,player(p),player(t)) for d,p,t in board.medium_opportunities)),
         report_resolved=tuple(sorted((d,player(p),player(t)) for d,p,t in board.report_resolved)))
 
