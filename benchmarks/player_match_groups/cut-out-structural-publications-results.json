@@ -1,0 +1,1509 @@
+{
+  "status": "verified",
+  "scope": "actual-first-cycle-general-publication-patterns",
+  "distributions": [
+    {
+      "status": "verified",
+      "executed": 1,
+      "victim": 2,
+      "reporters": 0,
+      "old_supported": false,
+      "patterns": 1,
+      "named_vectors": 1,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 1,
+          "retained_Q": 1,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 1,
+          "retained_Q": 1,
+          "zero_P": 0
+        },
+        "scan": {
+          "positive_P": 1,
+          "retained_Q": 1,
+          "zero_P": 0
+        }
+      },
+      "all_named_actual_cold_reads": 1,
+      "total_independent_cold_reads": 3,
+      "diagnostic_zero_P_cold_reads": 0,
+      "total_comparison_seconds": 0.16670480000902899,
+      "peak_working_set_bytes": 32509952
+    },
+    {
+      "status": "verified",
+      "executed": 1,
+      "victim": 3,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 4,
+      "named_vectors": 8,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 8,
+          "retained_Q": 8,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 5,
+          "retained_Q": 8,
+          "zero_P": 3
+        },
+        "scan": {
+          "positive_P": 1,
+          "retained_Q": 8,
+          "zero_P": 7
+        }
+      },
+      "all_named_actual_cold_reads": 8,
+      "total_independent_cold_reads": 12,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.4454801000247244,
+      "peak_working_set_bytes": 32919552
+    },
+    {
+      "status": "verified",
+      "executed": 1,
+      "victim": 4,
+      "reporters": 1,
+      "old_supported": true,
+      "patterns": 10,
+      "named_vectors": 18,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 18,
+          "retained_Q": 18,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 5,
+          "retained_Q": 18,
+          "zero_P": 13
+        },
+        "scan": {
+          "positive_P": 1,
+          "retained_Q": 18,
+          "zero_P": 17
+        }
+      },
+      "all_named_actual_cold_reads": 18,
+      "total_independent_cold_reads": 22,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.8112995999981649,
+      "peak_working_set_bytes": 33427456
+    },
+    {
+      "status": "verified",
+      "executed": 1,
+      "victim": 5,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 13,
+      "named_vectors": 17,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 17,
+          "retained_Q": 17,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 5,
+          "retained_Q": 17,
+          "zero_P": 12
+        },
+        "scan": {
+          "positive_P": 1,
+          "retained_Q": 17,
+          "zero_P": 16
+        }
+      },
+      "all_named_actual_cold_reads": 17,
+      "total_independent_cold_reads": 21,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.733275299979141,
+      "peak_working_set_bytes": 33632256
+    },
+    {
+      "status": "verified",
+      "executed": 1,
+      "victim": 6,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 13,
+      "named_vectors": 17,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 17,
+          "retained_Q": 17,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 5,
+          "retained_Q": 17,
+          "zero_P": 12
+        },
+        "scan": {
+          "positive_P": 1,
+          "retained_Q": 17,
+          "zero_P": 16
+        }
+      },
+      "all_named_actual_cold_reads": 17,
+      "total_independent_cold_reads": 21,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.7356689000152983,
+      "peak_working_set_bytes": 33488896
+    },
+    {
+      "status": "verified",
+      "executed": 1,
+      "victim": 7,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 13,
+      "named_vectors": 17,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 17,
+          "retained_Q": 17,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 5,
+          "retained_Q": 17,
+          "zero_P": 12
+        },
+        "scan": {
+          "positive_P": 1,
+          "retained_Q": 17,
+          "zero_P": 16
+        }
+      },
+      "all_named_actual_cold_reads": 17,
+      "total_independent_cold_reads": 21,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.7308677000110038,
+      "peak_working_set_bytes": 33472512
+    },
+    {
+      "status": "verified",
+      "executed": 2,
+      "victim": 1,
+      "reporters": 0,
+      "old_supported": false,
+      "patterns": 1,
+      "named_vectors": 1,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 1,
+          "retained_Q": 1,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 1,
+          "retained_Q": 1,
+          "zero_P": 0
+        },
+        "scan": {
+          "positive_P": 1,
+          "retained_Q": 1,
+          "zero_P": 0
+        }
+      },
+      "all_named_actual_cold_reads": 1,
+      "total_independent_cold_reads": 3,
+      "diagnostic_zero_P_cold_reads": 0,
+      "total_comparison_seconds": 0.1670338999829255,
+      "peak_working_set_bytes": 32448512
+    },
+    {
+      "status": "verified",
+      "executed": 2,
+      "victim": 3,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 4,
+      "named_vectors": 8,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 8,
+          "retained_Q": 8,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 8,
+          "retained_Q": 8,
+          "zero_P": 0
+        },
+        "scan": {
+          "positive_P": 8,
+          "retained_Q": 8,
+          "zero_P": 0
+        }
+      },
+      "all_named_actual_cold_reads": 8,
+      "total_independent_cold_reads": 10,
+      "diagnostic_zero_P_cold_reads": 0,
+      "total_comparison_seconds": 0.39267000000108965,
+      "peak_working_set_bytes": 32890880
+    },
+    {
+      "status": "verified",
+      "executed": 2,
+      "victim": 4,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 10,
+      "named_vectors": 18,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 18,
+          "retained_Q": 18,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 18,
+          "zero_P": 8
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 18,
+          "zero_P": 8
+        }
+      },
+      "all_named_actual_cold_reads": 18,
+      "total_independent_cold_reads": 22,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.8050039999943692,
+      "peak_working_set_bytes": 33648640
+    },
+    {
+      "status": "verified",
+      "executed": 2,
+      "victim": 5,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 13,
+      "named_vectors": 17,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 17,
+          "retained_Q": 17,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 17,
+          "zero_P": 7
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 17,
+          "zero_P": 7
+        }
+      },
+      "all_named_actual_cold_reads": 17,
+      "total_independent_cold_reads": 21,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.7419264999916777,
+      "peak_working_set_bytes": 33562624
+    },
+    {
+      "status": "verified",
+      "executed": 2,
+      "victim": 6,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 13,
+      "named_vectors": 17,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 17,
+          "retained_Q": 17,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 17,
+          "zero_P": 7
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 17,
+          "zero_P": 7
+        }
+      },
+      "all_named_actual_cold_reads": 17,
+      "total_independent_cold_reads": 21,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.7348678999987897,
+      "peak_working_set_bytes": 33529856
+    },
+    {
+      "status": "verified",
+      "executed": 2,
+      "victim": 7,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 13,
+      "named_vectors": 17,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 17,
+          "retained_Q": 17,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 17,
+          "zero_P": 7
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 17,
+          "zero_P": 7
+        }
+      },
+      "all_named_actual_cold_reads": 17,
+      "total_independent_cold_reads": 21,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 0.73283240001183,
+      "peak_working_set_bytes": 33521664
+    },
+    {
+      "status": "verified",
+      "executed": 3,
+      "victim": 1,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 6,
+      "named_vectors": 10,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        }
+      },
+      "all_named_actual_cold_reads": 10,
+      "total_independent_cold_reads": 12,
+      "diagnostic_zero_P_cold_reads": 0,
+      "total_comparison_seconds": 0.5838627000048291,
+      "peak_working_set_bytes": 33271808
+    },
+    {
+      "status": "verified",
+      "executed": 3,
+      "victim": 2,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 6,
+      "named_vectors": 10,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        }
+      },
+      "all_named_actual_cold_reads": 10,
+      "total_independent_cold_reads": 12,
+      "diagnostic_zero_P_cold_reads": 0,
+      "total_comparison_seconds": 0.5851747999840882,
+      "peak_working_set_bytes": 33226752
+    },
+    {
+      "status": "verified",
+      "executed": 3,
+      "victim": 4,
+      "reporters": 2,
+      "old_supported": true,
+      "patterns": 13,
+      "named_vectors": 64,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 64,
+          "retained_Q": 64,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 40,
+          "retained_Q": 64,
+          "zero_P": 24
+        },
+        "scan": {
+          "positive_P": 8,
+          "retained_Q": 64,
+          "zero_P": 56
+        }
+      },
+      "all_named_actual_cold_reads": 64,
+      "total_independent_cold_reads": 68,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 3.9685017000010703,
+      "peak_working_set_bytes": 36384768
+    },
+    {
+      "status": "verified",
+      "executed": 3,
+      "victim": 5,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 18,
+      "named_vectors": 49,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 49,
+          "retained_Q": 49,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 49,
+          "zero_P": 14
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 49,
+          "zero_P": 42
+        }
+      },
+      "all_named_actual_cold_reads": 49,
+      "total_independent_cold_reads": 53,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.5260016999964137,
+      "peak_working_set_bytes": 35635200
+    },
+    {
+      "status": "verified",
+      "executed": 3,
+      "victim": 6,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 18,
+      "named_vectors": 49,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 49,
+          "retained_Q": 49,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 49,
+          "zero_P": 14
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 49,
+          "zero_P": 42
+        }
+      },
+      "all_named_actual_cold_reads": 49,
+      "total_independent_cold_reads": 53,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.542947500012815,
+      "peak_working_set_bytes": 35684352
+    },
+    {
+      "status": "verified",
+      "executed": 3,
+      "victim": 7,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 18,
+      "named_vectors": 49,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 49,
+          "retained_Q": 49,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 49,
+          "zero_P": 14
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 49,
+          "zero_P": 42
+        }
+      },
+      "all_named_actual_cold_reads": 49,
+      "total_independent_cold_reads": 53,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.519696200004546,
+      "peak_working_set_bytes": 35868672
+    },
+    {
+      "status": "verified",
+      "executed": 4,
+      "victim": 1,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 6,
+      "named_vectors": 10,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        }
+      },
+      "all_named_actual_cold_reads": 10,
+      "total_independent_cold_reads": 12,
+      "diagnostic_zero_P_cold_reads": 0,
+      "total_comparison_seconds": 0.5918695000000298,
+      "peak_working_set_bytes": 33312768
+    },
+    {
+      "status": "verified",
+      "executed": 4,
+      "victim": 2,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 6,
+      "named_vectors": 10,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 10,
+          "zero_P": 0
+        }
+      },
+      "all_named_actual_cold_reads": 10,
+      "total_independent_cold_reads": 12,
+      "diagnostic_zero_P_cold_reads": 0,
+      "total_comparison_seconds": 0.6003819000034127,
+      "peak_working_set_bytes": 33337344
+    },
+    {
+      "status": "verified",
+      "executed": 4,
+      "victim": 3,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 13,
+      "named_vectors": 64,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 64,
+          "retained_Q": 64,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 40,
+          "retained_Q": 64,
+          "zero_P": 24
+        },
+        "scan": {
+          "positive_P": 8,
+          "retained_Q": 64,
+          "zero_P": 56
+        }
+      },
+      "all_named_actual_cold_reads": 64,
+      "total_independent_cold_reads": 68,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 4.003864199999953,
+      "peak_working_set_bytes": 35840000
+    },
+    {
+      "status": "verified",
+      "executed": 4,
+      "victim": 5,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 18,
+      "named_vectors": 49,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 49,
+          "retained_Q": 49,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 49,
+          "zero_P": 14
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 49,
+          "zero_P": 42
+        }
+      },
+      "all_named_actual_cold_reads": 49,
+      "total_independent_cold_reads": 53,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.557339499995578,
+      "peak_working_set_bytes": 35631104
+    },
+    {
+      "status": "verified",
+      "executed": 4,
+      "victim": 6,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 18,
+      "named_vectors": 49,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 49,
+          "retained_Q": 49,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 49,
+          "zero_P": 14
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 49,
+          "zero_P": 42
+        }
+      },
+      "all_named_actual_cold_reads": 49,
+      "total_independent_cold_reads": 53,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.5635742000013124,
+      "peak_working_set_bytes": 35684352
+    },
+    {
+      "status": "verified",
+      "executed": 4,
+      "victim": 7,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 18,
+      "named_vectors": 49,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 49,
+          "retained_Q": 49,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 49,
+          "zero_P": 14
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 49,
+          "zero_P": 42
+        }
+      },
+      "all_named_actual_cold_reads": 49,
+      "total_independent_cold_reads": 53,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.552361000009114,
+      "peak_working_set_bytes": 35782656
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 1,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 16,
+      "named_vectors": 20,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 20,
+          "retained_Q": 20,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        }
+      },
+      "all_named_actual_cold_reads": 20,
+      "total_independent_cold_reads": 24,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 1.1304452999902423,
+      "peak_working_set_bytes": 33914880
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 2,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 16,
+      "named_vectors": 20,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 20,
+          "retained_Q": 20,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        }
+      },
+      "all_named_actual_cold_reads": 20,
+      "total_independent_cold_reads": 24,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 1.118919200001983,
+      "peak_working_set_bytes": 33726464
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 3,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 24,
+      "named_vectors": 64,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 64,
+          "retained_Q": 64,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 40,
+          "retained_Q": 64,
+          "zero_P": 24
+        },
+        "scan": {
+          "positive_P": 8,
+          "retained_Q": 64,
+          "zero_P": 56
+        }
+      },
+      "all_named_actual_cold_reads": 64,
+      "total_independent_cold_reads": 68,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 4.076742299977923,
+      "peak_working_set_bytes": 36814848
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 4,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 29,
+      "named_vectors": 74,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 74,
+          "retained_Q": 74,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 25,
+          "retained_Q": 74,
+          "zero_P": 49
+        },
+        "scan": {
+          "positive_P": 5,
+          "retained_Q": 74,
+          "zero_P": 69
+        }
+      },
+      "all_named_actual_cold_reads": 74,
+      "total_independent_cold_reads": 78,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 4.454149800003506,
+      "peak_working_set_bytes": 37187584
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 6,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 30,
+      "named_vectors": 50,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 50,
+          "retained_Q": 50,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 25,
+          "retained_Q": 50,
+          "zero_P": 25
+        },
+        "scan": {
+          "positive_P": 5,
+          "retained_Q": 50,
+          "zero_P": 45
+        }
+      },
+      "all_named_actual_cold_reads": 50,
+      "total_independent_cold_reads": 54,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.470487200014759,
+      "peak_working_set_bytes": 35782656
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 7,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 30,
+      "named_vectors": 50,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 50,
+          "retained_Q": 50,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 25,
+          "retained_Q": 50,
+          "zero_P": 25
+        },
+        "scan": {
+          "positive_P": 5,
+          "retained_Q": 50,
+          "zero_P": 45
+        }
+      },
+      "all_named_actual_cold_reads": 50,
+      "total_independent_cold_reads": 54,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.447661199985305,
+      "peak_working_set_bytes": 35880960
+    },
+    {
+      "status": "verified",
+      "executed": 6,
+      "victim": 1,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 16,
+      "named_vectors": 20,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 20,
+          "retained_Q": 20,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        }
+      },
+      "all_named_actual_cold_reads": 20,
+      "total_independent_cold_reads": 24,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 1.1200872999907006,
+      "peak_working_set_bytes": 33832960
+    },
+    {
+      "status": "verified",
+      "executed": 6,
+      "victim": 2,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 16,
+      "named_vectors": 20,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 20,
+          "retained_Q": 20,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        }
+      },
+      "all_named_actual_cold_reads": 20,
+      "total_independent_cold_reads": 24,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 1.1229982000077143,
+      "peak_working_set_bytes": 33951744
+    },
+    {
+      "status": "verified",
+      "executed": 6,
+      "victim": 3,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 24,
+      "named_vectors": 64,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 64,
+          "retained_Q": 64,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 40,
+          "retained_Q": 64,
+          "zero_P": 24
+        },
+        "scan": {
+          "positive_P": 8,
+          "retained_Q": 64,
+          "zero_P": 56
+        }
+      },
+      "all_named_actual_cold_reads": 64,
+      "total_independent_cold_reads": 68,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 4.090227200009394,
+      "peak_working_set_bytes": 36827136
+    },
+    {
+      "status": "verified",
+      "executed": 6,
+      "victim": 4,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 29,
+      "named_vectors": 74,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 74,
+          "retained_Q": 74,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 74,
+          "zero_P": 39
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 74,
+          "zero_P": 67
+        }
+      },
+      "all_named_actual_cold_reads": 74,
+      "total_independent_cold_reads": 78,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 4.477365500002634,
+      "peak_working_set_bytes": 37093376
+    },
+    {
+      "status": "verified",
+      "executed": 6,
+      "victim": 5,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 30,
+      "named_vectors": 50,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 50,
+          "retained_Q": 50,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 25,
+          "retained_Q": 50,
+          "zero_P": 25
+        },
+        "scan": {
+          "positive_P": 5,
+          "retained_Q": 50,
+          "zero_P": 45
+        }
+      },
+      "all_named_actual_cold_reads": 50,
+      "total_independent_cold_reads": 54,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.4488470000214875,
+      "peak_working_set_bytes": 35876864
+    },
+    {
+      "status": "verified",
+      "executed": 6,
+      "victim": 7,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 30,
+      "named_vectors": 50,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 50,
+          "retained_Q": 50,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 25,
+          "retained_Q": 50,
+          "zero_P": 25
+        },
+        "scan": {
+          "positive_P": 5,
+          "retained_Q": 50,
+          "zero_P": 45
+        }
+      },
+      "all_named_actual_cold_reads": 50,
+      "total_independent_cold_reads": 54,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.447934299998451,
+      "peak_working_set_bytes": 35831808
+    },
+    {
+      "status": "verified",
+      "executed": 7,
+      "victim": 1,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 16,
+      "named_vectors": 20,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 20,
+          "retained_Q": 20,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        }
+      },
+      "all_named_actual_cold_reads": 20,
+      "total_independent_cold_reads": 24,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 1.1235058000020217,
+      "peak_working_set_bytes": 33718272
+    },
+    {
+      "status": "verified",
+      "executed": 7,
+      "victim": 2,
+      "reporters": 1,
+      "old_supported": false,
+      "patterns": 16,
+      "named_vectors": 20,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 20,
+          "retained_Q": 20,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        },
+        "scan": {
+          "positive_P": 10,
+          "retained_Q": 20,
+          "zero_P": 10
+        }
+      },
+      "all_named_actual_cold_reads": 20,
+      "total_independent_cold_reads": 24,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 1.1235121999925468,
+      "peak_working_set_bytes": 33652736
+    },
+    {
+      "status": "verified",
+      "executed": 7,
+      "victim": 3,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 24,
+      "named_vectors": 64,
+      "medium_conditioned_laws": 1,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 64,
+          "retained_Q": 64,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 40,
+          "retained_Q": 64,
+          "zero_P": 24
+        },
+        "scan": {
+          "positive_P": 8,
+          "retained_Q": 64,
+          "zero_P": 56
+        }
+      },
+      "all_named_actual_cold_reads": 64,
+      "total_independent_cold_reads": 68,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 4.0825845999934245,
+      "peak_working_set_bytes": 36671488
+    },
+    {
+      "status": "verified",
+      "executed": 7,
+      "victim": 4,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 29,
+      "named_vectors": 74,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 74,
+          "retained_Q": 74,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 35,
+          "retained_Q": 74,
+          "zero_P": 39
+        },
+        "scan": {
+          "positive_P": 7,
+          "retained_Q": 74,
+          "zero_P": 67
+        }
+      },
+      "all_named_actual_cold_reads": 74,
+      "total_independent_cold_reads": 78,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 4.464477200002875,
+      "peak_working_set_bytes": 36888576
+    },
+    {
+      "status": "verified",
+      "executed": 7,
+      "victim": 5,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 30,
+      "named_vectors": 50,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 50,
+          "retained_Q": 50,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 25,
+          "retained_Q": 50,
+          "zero_P": 25
+        },
+        "scan": {
+          "positive_P": 5,
+          "retained_Q": 50,
+          "zero_P": 45
+        }
+      },
+      "all_named_actual_cold_reads": 50,
+      "total_independent_cold_reads": 54,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.4469410000019707,
+      "peak_working_set_bytes": 35786752
+    },
+    {
+      "status": "verified",
+      "executed": 7,
+      "victim": 6,
+      "reporters": 2,
+      "old_supported": false,
+      "patterns": 30,
+      "named_vectors": 50,
+      "medium_conditioned_laws": 2,
+      "complete_QP_and_legal_reports_equal": true,
+      "variants": {
+        "actual": {
+          "positive_P": 50,
+          "retained_Q": 50,
+          "zero_P": 0
+        },
+        "roster": {
+          "positive_P": 25,
+          "retained_Q": 50,
+          "zero_P": 25
+        },
+        "scan": {
+          "positive_P": 5,
+          "retained_Q": 50,
+          "zero_P": 45
+        }
+      },
+      "all_named_actual_cold_reads": 50,
+      "total_independent_cold_reads": 54,
+      "diagnostic_zero_P_cold_reads": 2,
+      "total_comparison_seconds": 2.447606800007634,
+      "peak_working_set_bytes": 35594240
+    }
+  ],
+  "forecasts": [
+    {
+      "status": "verified",
+      "executed": 1,
+      "victim": 3,
+      "mode": "actual",
+      "medium": null,
+      "Q_mass": "13/80",
+      "P_mass": "19/120",
+      "village_win": "274/855",
+      "full_Forecast_Table_joint_branches_equal": true,
+      "labelled_branches": 482,
+      "terminal_transitions": 430,
+      "selection_pairs": 54,
+      "independent_cold": true,
+      "total_comparison_seconds": 8.372417999984464,
+      "peak_working_set_bytes": 68272128
+    },
+    {
+      "status": "verified",
+      "executed": 2,
+      "victim": 4,
+      "mode": "actual",
+      "medium": null,
+      "Q_mass": "1/10",
+      "P_mass": "4/45",
+      "village_win": "7/15",
+      "full_Forecast_Table_joint_branches_equal": true,
+      "labelled_branches": 311,
+      "terminal_transitions": 273,
+      "selection_pairs": 36,
+      "independent_cold": true,
+      "total_comparison_seconds": 5.456213400000706,
+      "peak_working_set_bytes": 57065472
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 1,
+      "mode": "actual",
+      "medium": null,
+      "Q_mass": "1/30",
+      "P_mass": "1/35",
+      "village_win": "7/15",
+      "full_Forecast_Table_joint_branches_equal": true,
+      "labelled_branches": 305,
+      "terminal_transitions": 289,
+      "selection_pairs": 12,
+      "independent_cold": true,
+      "total_comparison_seconds": 6.631148699991172,
+      "peak_working_set_bytes": 65294336
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 4,
+      "mode": "actual",
+      "medium": "black",
+      "Q_mass": "1/75",
+      "P_mass": "2/175",
+      "village_win": "7/15",
+      "full_Forecast_Table_joint_branches_equal": true,
+      "labelled_branches": 893,
+      "terminal_transitions": 866,
+      "selection_pairs": 24,
+      "independent_cold": true,
+      "total_comparison_seconds": 18.46158390000346,
+      "peak_working_set_bytes": 110551040
+    },
+    {
+      "status": "verified",
+      "executed": 5,
+      "victim": 6,
+      "mode": "actual",
+      "medium": "white",
+      "Q_mass": "1/50",
+      "P_mass": "1/45",
+      "village_win": "2/15",
+      "full_Forecast_Table_joint_branches_equal": true,
+      "labelled_branches": 311,
+      "terminal_transitions": 298,
+      "selection_pairs": 12,
+      "independent_cold": true,
+      "total_comparison_seconds": 6.838475099997595,
+      "peak_working_set_bytes": 62357504
+    },
+    {
+      "status": "verified",
+      "executed": 4,
+      "victim": 3,
+      "mode": "actual",
+      "medium": null,
+      "Q_mass": "1/40",
+      "P_mass": "1/40",
+      "village_win": "2/15",
+      "full_Forecast_Table_joint_branches_equal": true,
+      "labelled_branches": 923,
+      "terminal_transitions": 887,
+      "selection_pairs": 36,
+      "independent_cold": true,
+      "total_comparison_seconds": 17.84562619999633,
+      "peak_working_set_bytes": 102801408
+    }
+  ],
+  "nonvacuous_supported": 40,
+  "vacuous_no_report": 2,
+  "previous_nonvacuous_supported": 2,
+  "pending_first_morning": 0,
+  "total_patterns": 701,
+  "total_named_vectors": 1452,
+  "all_named_actual_cold_reads": 1452,
+  "total_independent_cold_reads": 1606,
+  "max_distribution_seconds": 4.477365500002634,
+  "max_forecast_seconds": 18.46158390000346,
+  "max_peak_working_set_bytes": 110551040,
+  "automatic_initial_solver_fast_dispatch": false,
+  "full_initial_search": false
+}

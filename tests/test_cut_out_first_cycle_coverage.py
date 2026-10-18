@@ -16,7 +16,7 @@ class FirstCycleCoverageTests(unittest.TestCase):
         self.assertEqual(row['legal_information_action_branches'],180)
         self.assertEqual(row['illegal_wolf_self_bite_branches'],72)
         self.assertEqual(row['unknown_corpse_physical_mass'],'3/5')
-        self.assertEqual(row['report_aggregation_classification'],{'supported':2,'structure_unproved':38,'legitimate_exclusion':2})
+        self.assertEqual(row['report_aggregation_classification'],{'supported':40,'structure_unproved':0,'legitimate_exclusion':2})
         self.assertEqual(row['observed_mixture_certificate_after'],42)
         self.assertFalse(row['automatic_initial_solver_fast_dispatch'])
 

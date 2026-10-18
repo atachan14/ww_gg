@@ -101,7 +101,7 @@ def classification(executed,victim):
     return 'structure_unproved',('unknown-corpse-team-mixture' if victim not in (3,4) else 'other-owned-history/no structural report selector')
 
 
-def probe_aggregation(cap):
+def probe_legacy_aggregation(cap):
     """Run existing producer guards, not a hand-maintained coverage whitelist."""
     from .cut_out_joint_reports import produce,restore
     from .cut_out_live_medium_reports import single_report_orbits,restore_reports
@@ -128,6 +128,21 @@ def probe_aggregation(cap):
         except Pending as error:refusals.append(error.reason)
     else:refusals.append('no-supported-single-reporter-medium-observation')
     return 'unproved',(),tuple(refusals)
+
+def probe_aggregation(cap):
+    """Current generic route, based on the issued context rather than labels."""
+    from .cut_out_structural_publications import StructuralPublicationKernel
+    source=check(cap).source
+    engine=StructuralPublicationKernel(cap.engine.rules,cap.engine.strategy,exact_renaming=False,retire_uninformative_scans=False)
+    engine.retain_joint_guard_history=True
+    def no_value(*args,**kwargs):raise AssertionError('publication probe must not solve/act')
+    engine.solve=engine.act=no_value
+    try:
+        engine.bind(cap)
+        rows=engine.morning(source.public,source.public_state,source.past)
+    except Pending as error:return 'unproved',(),(error.reason,)
+    living=tuple(p for p in source.public.alive if source.public.claims[p-1]=='seer')
+    return ('generic-structural-publication' if living else 'no-seer-opportunity'),rows,()
 
 def census():
     import gc
@@ -169,9 +184,12 @@ def census():
             actual=cap.engine.morning(source.public,source.public_state,source.past)
             assert old==actual
             assert e.push(rebuilt.public_state,rebuilt.private,old)==cap.engine.push(source.public_state,source.private,actual)
-            status,reason=classification(executed,victim)
+            legacy_status,legacy_reason=classification(executed,victim)
+            legacy_route,_,legacy_refusals=probe_legacy_aggregation(cap)
+            assert (legacy_route in ('joint-reports','single-reporter'))==(legacy_status=='supported')
             route,aggregated,refusals=probe_aggregation(cap)
-            assert (route in ('joint-reports','single-reporter'))==(status=='supported')
+            status='supported' if route=='generic-structural-publication' else 'legitimate_exclusion' if route=='no-seer-opportunity' else 'structure_unproved'
+            reason='derived certified reporter/target patterns' if status=='supported' else legacy_reason
             assert (route=='no-seer-opportunity')==(status=='legitimate_exclusion')
             if route=='no-seer-opportunity':assert len(actual)==1
             if aggregated:
@@ -184,11 +202,11 @@ def census():
             for h in source.public_state.hypotheses:qcounts[(h.roles[0]&source.public.alive_mask).bit_count()]+=h.mass
             for h in source.private.hypotheses:pcounts[(h.roles[0]&source.public.alive_mask).bit_count()]+=h.mass
             rows.append(dict(executed=executed,victim=victim,structure_class=[group_of(executed),group_of(victim)],
-                status=status,reason_before=reason,report_reason_after=(reason if status!='structure_unproved' else 'complete structural publication recipe not issued for this event'),night_micro_legal=legal_count,physical_path_mass=str(cap.physical_mass),
+                status=status,reason_before=legacy_reason,report_reason_after=(reason if status!='structure_unproved' else 'complete structural publication recipe not issued for this event'),night_micro_legal=legal_count,physical_path_mass=str(cap.physical_mass),
                 unknown_corpse=victim not in (3,4),old_night_roster_action_scope=executed in (1,3),
-                direct_full_report_aggregation=status=='supported',alpha_possible_not_auto=(executed,victim)==(2,4),
+                direct_full_report_aggregation=status=='supported',legacy_direct_full_report_aggregation=legacy_status=='supported',legacy_alpha_possible_not_auto=(executed,victim)==(2,4),
                 generalized_observed_transition=True,observed_transition_status_after='supported',common_morning_Q_vectors=len(actual),
-                producer_guard_route=route,producer_guard_refusals=refusals,
+                producer_guard_route=route,producer_guard_refusals=refusals,legacy_producer_guard_route=legacy_route,legacy_producer_refusals=legacy_refusals,
                 Q_live_counts={k:str(v) for k,v in qcounts.items()},P_live_counts={k:str(v) for k,v in pcounts.items()},
                 cold_full_source_equal=True,event_derived_groups_full_QP_verified=True,complete_common_morning_equal=True))
             del cap,source,e,rebuilt,old,actual;gc.collect()
@@ -199,7 +217,7 @@ def census():
         legal_labelled_histories=42,invalid_repeat_death_histories=7,legal_information_action_branches=micros,
         illegal_wolf_self_bite_branches=illegal,unknown_corpse_histories=30,unknown_corpse_physical_mass=str(unknown_mass),
         report_aggregation_classification={status:sum(row['status']==status for row in rows) for status in ('supported','structure_unproved','legitimate_exclusion')},
-        full_report_aggregation_before_and_after=len(covered),full_report_coverage_physical_mass=str(sum((F(r['physical_path_mass']) for r in covered),F())),
+        full_report_aggregation_before=2,full_report_aggregation_after=len(covered),legacy_report_coverage_physical_mass='19/280',full_report_coverage_physical_mass=str(sum((F(r['physical_path_mass']) for r in covered),F())),
         observed_mixture_certificate_before=3,observed_mixture_certificate_after=42,
         old_observed_mixture_physical_mass='1/10',new_observed_mixture_physical_mass='1',
         no_seer_report_mass=str(sum((F(r['physical_path_mass']) for r in rows if r['status']=='legitimate_exclusion'),F())),
@@ -219,4 +237,7 @@ def worker():
     row['peak_working_set_bytes']=peak_bytes();print(json.dumps(row),flush=True)
 
 
-if __name__=='__main__':worker()
+if __name__=='__main__':
+    import sys
+    sys.modules[__spec__.name]=sys.modules[__name__]
+    worker()
