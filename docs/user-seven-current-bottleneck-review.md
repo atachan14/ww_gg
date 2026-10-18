@@ -1,5 +1,7 @@
 # Actual initial-seven case: current evidence and one priority
 
+Follow-up: [same-input cold experiment and corrected key-phase measurements](component-seven-results.md) refined the hypothesis below. Final-key hashing was only~0.7s; tuple-hash memo brought no material total gain. The next named target is exact colour/marginal construction, with full-joint equality unchanged.
+
 Read-only numerical review, no new Forecast/profile run. Target: citizens3, medium1, seer1, wolves2, no hunter; all alive; P1/P2 seer CO and both Day1 whiteP4, P3 medium CO. The retained measurement uses ALL THREE selectors max (day/night/fake reports), initial random-white, unvisited/uniform seer target rule and existing noncontradictory/uniform fake-seer choices. It is not an optimization of undefined CO/report policies.
 
 ## Best corrected evidence, not a new timing

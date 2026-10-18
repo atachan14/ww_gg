@@ -1,5 +1,7 @@
 # Complete-key component hash preparation
 
+Follow-up [actual-seven comparison and phase breakdown](component-seven-results.md) completed all keys/results, but found no material speed gain and increased RSS. This adapter remains comparison-only and is NOT adopted. The proposed stage below is now historical.
+
 Comparison-only `component_key.py` changes no factory/default/scope and preserves the CURRENT120 cap and original canonical permutation search. It uses the SAME cached fast mask builder as current ExtensionForecast. A separate ComponentReuseForecast exists only for explicit measurement.
 
 Existing layers: identity hash memo of immutable source inputs (`board_future.evidence_key`); whole source->key LRU2048; mapped Board/state serialization LRUs128 each; record/field metadata cache8192; mask-map LRU256; final complete-key EvidenceKey wrapper. The last wrapper already caches the FINAL key's hash. It does not prevent construction of many new final keys from recursively rehashing their reused serialized Board/state tuples and Fraction leaves.

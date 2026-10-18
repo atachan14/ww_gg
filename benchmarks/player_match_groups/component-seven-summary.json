@@ -1,0 +1,71 @@
+{
+  "all_value_tables_equal": true,
+  "summary": [
+    {
+      "mode": "current",
+      "solver_seconds": [
+        48.73799909997615,
+        50.59513309999602
+      ],
+      "median_seconds": 49.666566099986085,
+      "key_seconds": [
+        25.221673098800238,
+        27.148849797231378
+      ],
+      "median_key_seconds": 26.185261448015808,
+      "peak_rss": 769458176
+    },
+    {
+      "mode": "candidate",
+      "solver_seconds": [
+        49.50381739999284,
+        49.50245840000571
+      ],
+      "median_seconds": 49.503137899999274,
+      "key_seconds": [
+        25.482749398885062,
+        23.406328302720794
+      ],
+      "median_key_seconds": 24.444538850802928,
+      "peak_rss": 826433536
+    }
+  ],
+  "audit_keys": {
+    "keys_compared": 113178
+  },
+  "audit_seconds": 74.82718669998576,
+  "phase_full_results_equal": true,
+  "phase_stats": {
+    "source_hash_seconds": 0.482473505922826,
+    "source_hash_calls": 121693,
+    "source_dictionary_seconds": 0.254446106555406,
+    "colors_seconds": 7.267419601295842,
+    "colors_calls": 113178,
+    "group_hash_seconds": 1.3987287979689427,
+    "group_hash_calls": 792246,
+    "group_sort_seconds": 1.0146983978629578,
+    "group_sort_calls": 113178,
+    "configuration_seconds": 1.2642102026147768,
+    "configuration_calls": 226356,
+    "board_signature_seconds": 2.876922103081597,
+    "board_signature_calls": 60148,
+    "state_signature_seconds": 2.3780822949192952,
+    "state_signature_calls": 90284,
+    "private_equal_seconds": 0.20706989700556733,
+    "private_equal_calls": 126905,
+    "physical_equal_seconds": 0.2454654016182758,
+    "physical_equal_calls": 126905,
+    "past_record_seconds": 0.9637695899873506,
+    "past_record_calls": 691048,
+    "mask_map_seconds": 0.21999580401461571,
+    "mask_map_calls": 126735,
+    "canonical_seconds": 25.61623619607417,
+    "canonical_calls": 113178,
+    "final_hash_seconds": 0.6949574997706804,
+    "final_hash_calls": 113178,
+    "value_key_membership_seconds": 0.1497042917762883,
+    "value_key_membership_calls": 121693
+  },
+  "combined_elapsed_at_last_finish": 597.116803309531,
+  "decision": "No material speed gain; no adoption, extra retained metadata increases RSS. Final structural hash is under1s; colors/serialization/construction dominate."
+}

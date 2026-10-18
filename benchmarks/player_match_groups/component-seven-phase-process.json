@@ -1,0 +1,9 @@
+{
+  "status": "finished",
+  "process_seconds": 54.88074619998224,
+  "peak_rss": 769822720,
+  "peak_commit": 762507264,
+  "remaining_at_start": 231.1087201217597,
+  "limit": 120,
+  "log": ".artifacts\\component-seven\\current-phases.log"
+}
