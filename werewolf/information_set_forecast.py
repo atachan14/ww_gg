@@ -46,14 +46,14 @@ class InformationSetForecast:
     def __init__(self, rules, strategy, *, max_work=DEFAULT_MAX_WORK, trace=None, memoize_flows=True,
                  retire_uninformative_scans=True, exact_renaming=True, track_acquisition_provenance=False):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
-        from .acquisition_provenance import AcquisitionLedger
+        from .acquisition_provenance import AcquisitionLedger,UniformAcquisitionCache
         self.acquisition_provenance=AcquisitionLedger(self) if track_acquisition_provenance else None
         self.board_sources={}
         self.board_action_options={}
         self.board_action_kernels={}
         self.board_key_hashes={}
         self.board_replay_stats={"requests":0,"hits":0}
-        self.values={};self.scores={};self.policies={};self.acquired={}
+        self.values={};self.scores={};self.policies={};self.acquired=UniformAcquisitionCache() if track_acquisition_provenance else {}
         self.symmetries={}
         self.reduced_descriptors={}
         self.action_values={}
@@ -144,6 +144,17 @@ class InformationSetForecast:
 
     def acquire(self,b,state):
         key=(b,state)
+        from .acquisition_provenance import UniformAcquisitionCache
+        if type(self.acquired)is UniformAcquisitionCache:
+            try:
+                result,ticket=self.acquired._lookup(key)
+            except KeyError:
+                result=self.checked(acquire_uniform(state,b.alive,max_work=self.max_work,position=self.strategy.seer_position))
+                ticket=None if self.acquisition_provenance is None else self.acquisition_provenance._record_uniform(b,state,result)
+                self.acquired._store_generated(key,result,ticket)
+            else:
+                if self.acquisition_provenance is not None:self.acquisition_provenance._record_cache_equivalence(b,state,result,ticket)
+            return result
         if key not in self.acquired:
             generated=self.checked(acquire_uniform(state,b.alive,max_work=self.max_work,
                                                     position=self.strategy.seer_position))
@@ -220,8 +231,11 @@ class InformationSetForecast:
     def publications(self,b,s,past):
         # Public law only: never key or generate this cache with viewer evidence.
         from .board_future import record_publications
-        branches=self.cached_flow(self.publication_values,(b,s,past),
-                                  lambda:self.generate_publications(b,s,past),'publication')
+        def generate():
+            rows=self.generate_publications(b,s,past)
+            if self.acquisition_provenance is not None:self.acquisition_provenance._record_publications(b,s,past,rows)
+            return rows
+        branches=self.cached_flow(self.publication_values,(b,s,past),generate,'publication')
         for q,child,law,history in branches:
             self.record_group_publication(b,s,past,child,law,history,'seer')
         return record_publications(self,b,s,past,branches,provider='publications')
@@ -259,9 +273,17 @@ class InformationSetForecast:
 
     def morning(self,b,s,past):
         from .board_future import record_publications
-        branches=self.cached_flow(self.mornings,(b,s,past),
-                                  lambda:self.generate_morning(b,s,past),'morning')
+        def generate():
+            ledger=self.acquisition_provenance
+            if ledger is not None:ledger._begin_morning(b,s,past)
+            rows=self.generate_morning(b,s,past)
+            if ledger is not None:ledger._record_morning(b,s,past,rows)
+            return rows
+        branches=self.cached_flow(self.mornings,(b,s,past),generate,'morning')
         return record_publications(self,b,s,past,branches)
+
+    def record_report_component(self,b,s,past,outcome,state,rows):
+        if self.acquisition_provenance is not None:self.acquisition_provenance._record_component(b,s,past,outcome,state,rows)
 
     def record_report_choices(self,b,s,past,scored,chosen):
         """Optional exact-choice audit; no observation or selection changes."""
@@ -284,8 +306,35 @@ class InformationSetForecast:
         return tuple(report_flow(outcomes,s,past,self,source_board=b))
 
     def push(self,source,private,branches):
-        return observer_report_weights(source,private,branches,
+        result=observer_report_weights(source,private,branches,
             incomplete=lambda:Pending('information_set_report_likelihood_incomplete'))
+        if self.acquisition_provenance is not None:self.acquisition_provenance._record_push(source,private,branches,result)
+        return result
+
+    def report_children(self,payload):
+        """Existing morning kernels, actual masses and ordinary evidence.
+
+        Optional provenance never changes the public or private distribution.
+        Q-only counterfactual rows remain in morning(), not normalized as P.
+        """
+        child,st,past,own,observer=self.continuation_context(*payload)
+        rows=self.morning(child,st,past)
+        if rows==((F(1),child,st,past),):
+            if all(a is b for a,b in zip((child,st,past,own,observer),tuple(payload))):result=payload
+            else:result=ContinuationInputs(child,st,past,own,observer,physical_board(child,own,payload.physical))
+            return ((F(1),F(1),result),)
+        weighted=self.push(st,own,rows)
+        from .board_future import reconstruct_publication,publication_key
+        counts={}
+        for mass,b,q,p,private in weighted:
+            key=publication_key(b,p);counts[key]=counts.get(key,0)+1
+        result=[]
+        for mass,b,q,p,private in weighted:
+            public=[r[0] for r in rows if r[1] is b and r[2] is q and r[3] is p]
+            rebuilt=reconstruct_publication(self,payload,b,q,p,private,physical_board(b,private,payload.physical),
+                replay_unique=counts[publication_key(b,p)]==1)
+            result.append((public[0] if len(public)==1 else None,mass,rebuilt))
+        return tuple(result)
 
     def act(self,b,s,past,target,private,observer,*,physical=None):
         if type(target)is not int or target not in b.alive:
@@ -320,7 +369,11 @@ class InformationSetForecast:
         if target not in legal_targets(private_board,self.rules,self.strategy):
             raise Pending('information_set_internal_illegal_action')
         self.expansions["actions"]+=1
-        value=action_flow(b,ActionInputs(s,past,private,observer,private_board),target,self.action_policy)
+        payload=ActionInputs(s,past,private,observer,private_board)
+        if self.acquisition_provenance is not None:
+            receipt=self.acquisition_provenance.receipt_for_frame(b,payload)
+            if receipt is not None:payload=replace(payload,provenance=receipt)
+        value=action_flow(b,payload,target,self.action_policy)
         if action_key is not None:self.action_values[action_key]=value
         return value
 
@@ -474,9 +527,13 @@ class InformationSetActionPolicy:
 
     def outcomes(self,b,payload,target):
         s,past,private,observer,physical=payload;e=self.engine
-        public={o.board.winner:o.board for o in e.public_children(b,target,s)}
-        return tuple(FlowOutcome(o.probability,o.board,public.get(o.board.winner))
+        public_rows=e.public_children(b,target,s)
+        public={o.board.winner:o.board for o in public_rows}
+        result=tuple(FlowOutcome(o.probability,o.board,public.get(o.board.winner))
                      for o in e.physical_children(physical,target))
+        ledger=getattr(e,'acquisition_provenance',None)
+        if ledger is not None:ledger._record_deaths(b,payload,target,public_rows,result)
+        return result
 
     def project(self,b,payload,outcome,target):
         from .board_future import reconstruct_child
@@ -489,6 +546,9 @@ class InformationSetActionPolicy:
 
     def morning_value(self,payload):
         child,st,past,own,observer=payload;e=self.engine
+        ledger=getattr(e,'acquisition_provenance',None)
+        if ledger is not None and ledger._reports_supported() and ledger.groups_for(payload.provenance,child,payload) is not None:
+            return sum((mass*e.solve(*source,physical=source.physical) for q,mass,source in e.report_children(payload)),F())
         child,st,past,own,observer=e.continuation_context(child,st,past,own,observer)
         published=e.morning(child,st,past)
         if published==((F(1),child,st,past),):

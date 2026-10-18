@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "existing_regression": {
+    "tests": 50,
+    "seconds": 146.413,
+    "modules": [
+      "test_acquisition_provenance",
+      "test_inherited_group_consumption",
+      "test_action_flow",
+      "test_board_future",
+      "test_morning_flow",
+      "test_information_set_model_a",
+      "test_wolf_information_set_characterization",
+      "test_cut_out_inherited_groups",
+      "test_cut_out_six_inherited"
+    ]
+  },
+  "new_regression": {
+    "tests": 4,
+    "failures": 0,
+    "errors": 0
+  },
+  "total_tests": 54,
+  "full_initial7_search": false
+}

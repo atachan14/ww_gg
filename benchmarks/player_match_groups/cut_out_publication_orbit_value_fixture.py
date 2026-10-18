@@ -497,10 +497,170 @@ def seven_coverage_worker():
     print(json.dumps({k:v for k,v in row.items() if k!='contexts'}),flush=True)
 
 
+def shared_transition_audit():
+    """One common H0 transition implementation, independent named oracles.
+
+    Five-player branches finish; actual-seven paths use finite observations and
+    only forecast final three-alive nodes. No initial-seven value recursion.
+    """
+    from .cut_out_publication_orbit_value import seed_structural,scope_from_inherited,prepare,private_stabilizer
+    from .cut_out_first_cycle_coverage import base
+    from .cut_out_user_seven_source import ROOT_GROUPS
+    from .cut_out_day_night import point_fix
+    from .cut_out_joint_night_forecast_fixture import moved_source
+    from . import cut_out_publication_orbit_value as value_module
+    from . import cut_out_structural_publications as producer_module
+    from werewolf.action_flow import resolve_action
+    from werewolf.evaluation_branch import ActionInputs
+    from werewolf.board_future import condition_recipe,PublicViewEvidence,PublicationEvidence,GeneratedBoard,kernel_snapshot,publication_key
+    from werewolf.exact import legal_targets,report_actions
+    from unittest.mock import patch
+    from werewolf.seer_future_uniform import TrueScanState
+    counts=Counter();totals=Counter();cases=[];forecast_jobs=[]
+    def same(a,b):
+        return (same_role_board(a.public,b.public) and same_role_board(a.physical,b.physical)
+            and all(getattr(a,k)==getattr(b,k) for k in ('public_state','private','past','observer')))
+    def engine(graph,tracked):
+        e=InformationSetForecast(graph.engine.baseline.rules,graph.engine.baseline.strategy,exact_renaming=False,
+            retire_uninformative_scans=False,track_acquisition_provenance=tracked)
+        e.retain_joint_guard_history=True;return e
+    def build(graph,source,request,groups,private_filter=None):
+        if private_filter is not None:
+            own=condition_actor_state(source.private,private_filter)
+            desired=replace(source,private=own,physical=physical_board(source.public,own,source.physical),board_data=None)
+            op=condition_recipe(source,desired);assert op is not None
+            request=request.child(op,None);source=desired
+        rebuilt=request.roles();assert same(rebuilt,source);source=rebuilt
+        for group in groups:
+            for p in group[1:]:
+                m=list(range(1,source.public.player_count+1));m[group[0]-1],m[p-1]=p,group[0]
+                assert same(moved_source(source,tuple(m)),source);counts['root_full_generators']+=1
+        a=engine(graph,True);r=engine(graph,False)
+        token=a.acquisition_provenance._register_audited_root(source.public,source,groups,(graph,graph.data),request=request)
+        actual=replace(source,provenance=token,board_data=request);reference=replace(source,provenance=None,board_data=request)
+        remember(a,request,actual);remember(r,request,reference);counts['audited_roots']+=1
+        return a,r,actual,reference
+    def inspect(graph,a,actual,expected,*,value=False):
+        assert same(actual,expected);counts['complete_QP_history_physical_checks']+=1
+        groups=a.acquisition_provenance.groups_for(actual.provenance,actual.public,actual)
+        assert groups is not None
+        for group in groups:
+            for p in group[1:]:
+                m=list(range(1,actual.public.player_count+1));m[group[0]-1],m[p-1]=p,group[0]
+                assert same(moved_source(actual,tuple(m)),actual);counts['independent_child_symmetry_generators']+=1
+        assert same(independent_cold(graph,actual.board_data),actual);counts['cold_reads']+=1
+        with patch.object(TrueScanState,'__eq__',side_effect=AssertionError('proof full equality')),patch.object(TrueScanState,'__hash__',side_effect=AssertionError('proof full hashing')),patch.object(value_module,'move_law',side_effect=AssertionError('private recheck')),patch.object(GeneratedBoard,'roles',side_effect=AssertionError('parent replay')):
+            cap=scope_from_inherited(graph,a,actual);assert cap is not None
+            private_stabilizer(cap)
+        if value:forecast_jobs.append((graph,a,actual,expected))
+    def step(graph,a,r,actual,expected,target,*,values=False):
+        p=ActionInputs(actual.public_state,actual.past,actual.private,actual.observer,actual.physical,provenance=actual.provenance)
+        rp=ActionInputs(expected.public_state,expected.past,expected.private,expected.observer,expected.physical)
+        with patch.object(GeneratedBoard,'roles',side_effect=AssertionError('live death replay')):
+            acquired,outcomes=resolve_action(actual.public,p,target,a.action_policy,terminal_payoffs=False)
+            children=[a.action_policy.project(actual.public,acquired,o,target) for o in outcomes]
+        ra,reference_outcomes=resolve_action(expected.public,rp,target,r.action_policy,terminal_payoffs=False)
+        assert acquired.public_state==ra.public_state and acquired.private==ra.private
+        result=[];qout={o.board.winner:o for o in r.public_children(expected.public,target,expected.public_state)}
+        for o,c in zip(outcomes,children):
+            ro=next(v for v in reference_outcomes if v.board.winner==o.board.winner)
+            assert o.probability==ro.probability
+            rc=r.action_policy.project(expected.public,ra,ro,target)
+            assert c.provenance.public_mass==qout[o.board.winner].probability
+            assert c.provenance.private_mass==ro.probability
+            inspect(graph,a,c,rc,value=values)
+            counts['day_deaths' if actual.public.phase=='day' else 'night_deaths']+=1
+            result.append((o,c,rc))
+        counts['public_only_death_rows']+=len(a.acquisition_provenance.public_only_deaths(actual.public,acquired,target))
+        return result
+    def reports(graph,a,r,actual,expected,*,values=False,prepare_input=False):
+        if prepare_input:
+            cap=scope_from_inherited(graph,a,actual);assert cap is not None
+            with patch.object(value_module,'move_law',side_effect=AssertionError('private recheck')),patch.object(producer_module,'move_law',side_effect=AssertionError('public recheck')),patch.object(GeneratedBoard,'roles',side_effect=AssertionError('live preparation replay')):
+                prepare(cap);prepare(cap)
+        with patch.object(GeneratedBoard,'roles',side_effect=AssertionError('live report replay')):
+            rows=a.report_children(actual)
+        reference=r.report_children(expected)
+        assert len(rows)==len(reference)
+        bykey={publication_key(c.public,c.past):(q,p,c) for q,p,c in reference}
+        for q,p,c in rows:
+            rq,rp,rc=bykey[publication_key(c.public,c.past)]
+            assert q==rq and p==rp
+            if c is actual:counts['identity_mornings']+=1
+            else:
+                assert c.provenance.public_mass==q and c.provenance.private_mass==p
+                counts['report_children']+=1
+            inspect(graph,a,c,rc,value=values)
+        raw=a.morning(actual.public,actual.public_state,actual.past)
+        only=a.acquisition_provenance.public_only_reports(actual,raw)
+        counts['public_only_report_rows']+=len(only)
+        if only:
+            # Ordinary explicit public counterfactual, never invented actual P.
+            q,b,law,past=only[0]
+            request=actual.board_data.child(PublicViewEvidence(),None).child(PublicationEvidence(kernel_snapshot(r),publication_key(b,past)),None)
+            public=independent_cold(graph,request)
+            assert public.public_state==law and public.private==law;counts['public_only_cold_reads']+=1
+        return rows,bykey
+    small=make_role_filter_scope();seed=seed_structural(small)
+    for private in (False,True):
+        with calculation_origin(small.graph.data):
+            groups=point_fix(seed.groups,2) if private else seed.groups
+            a,r,source,reference=build(small.graph,seed.source,small.request,groups,
+                (lambda h:not h.roles[0]&2) if private else None)
+            day=step(small.graph,a,r,source,reference,2,values=True)
+            continuing=next((c,rc) for o,c,rc in day if c.public.winner is None)
+            for target in legal_targets(continuing[0].physical,a.rules,a.strategy):
+                night=step(small.graph,a,r,*continuing,target)
+                for o,c,rc in night:
+                    assert all(any(v.day==2 for v in h.acquisitions) for h in c.private.hypotheses)
+                    reports(small.graph,a,r,c,rc,values=True,prepare_input=True)
+            cases.append(dict(case='five-private-city2' if private else 'five-public',stats=dict(a.acquisition_provenance.stats)))
+    for private in (False,True):
+        graph,witness=base();source=graph.origin();groups=point_fix(ROOT_GROUPS,1,6) if private else ROOT_GROUPS
+        with calculation_origin(graph.data):
+            a,r,source,reference=build(graph,source,graph.root,groups,(lambda h:h.roles[0]==33) if private else None)
+            _,source,reference=next(v for v in step(graph,a,r,source,reference,1) if v[1].public.winner is None)
+            _,source,reference=next(v for v in step(graph,a,r,source,reference,4) if v[1].public.winner is None)
+            rows,lookup=reports(graph,a,r,source,reference)
+            selected=next((q,p,c) for q,p,c in rows if any(v.reporter==3 and v.target==1 and v.color=='black' for v in c.public.reports)
+                and any(v.player==2 and v.acquired_day==2 and v.target==5 and v.color=='white' for v in c.past))
+            q,p,source=selected;reference=lookup[publication_key(source.public,source.past)][2]
+            cases.append(dict(case='seven-private-W1-6' if private else 'seven-public',selected_first_report_Q=str(q),selected_first_report_P=str(p)))
+            _,source,reference=next(v for v in step(graph,a,r,source,reference,5) if v[1].public.winner is None)
+            _,source,reference=next(v for v in step(graph,a,r,source,reference,3) if v[1].public.winner is None)
+            assert len(source.public.alive)==3 and len(source.public_state.rosters)==3
+            assert all(any(v.day==3 for v in h.acquisitions) and len(h.attacks)==2 for h in source.private.hypotheses)
+            reports(graph,a,r,source,reference,values=True,prepare_input=True)
+            cases[-1]['stats']=dict(a.acquisition_provenance.stats)
+    # Only completed tiny continuations are valued, after the raw chain was
+    # checked. Actual-seven initial/intermediate states are never forecast.
+    for graph,a,source,expected in forecast_jobs:
+        with calculation_origin(graph.data):
+            fresh=engine(graph,False)
+            remember(fresh,expected.board_data,expected)
+            remember(a,source.board_data,source)
+            want=forecast(fresh,expected);got=forecast(a,source)
+            assert got==want and tables(source,got)==tables(expected,want)
+            counts['independent_Forecast_Table_checks']+=1
+    for case in cases:totals.update(case.get('stats',{}))
+    return dict(status='verified',counts=dict(counts),proof_counts=dict(totals),cases=cases,
+        generated_operations='generic H0 fixed-target day/night kernels and configured uniform medium/seer reports',
+        choice_probability='not certified; fixed-target resolution kept separate from actor selection',
+        whole_initial7_search=False,MAX_evaluated=False,default_provenance=False,immutable_sharing=False)
+
+
+def shared_transition_worker():
+    start=time.perf_counter()
+    with calculation_budget(4000000,max_seconds=30),independent_joint_values():row=shared_transition_audit()
+    row.update(seconds=time.perf_counter()-start,peak_working_set_bytes=peak_bytes())
+    Path('benchmarks/player_match_groups/shared-transition-groups-results.json').write_text(json.dumps(row,indent=2)+'\n')
+    print(json.dumps(row),flush=True)
+
+
 if __name__=='__main__':
     if len(sys.argv)>1 and sys.argv[1]=='recursive':recursive_worker(sys.argv[2])
     elif len(sys.argv)>1 and sys.argv[1]=='structural-role':structural_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='structural-death':death_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='seven-coverage':seven_coverage_worker()
-    elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':worker('five',inherited_groups=True)
+    elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':shared_transition_worker()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

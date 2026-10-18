@@ -239,6 +239,24 @@ def register_origin(engine,board,payload):
 
 def reconstruct_child(engine,board,payload,outcome,target,legacy):
     if _rebuilding.get():return legacy()
+    ledger=getattr(engine,'acquisition_provenance',None)
+    evidence=None
+    if _reuse_kernels.get() and ledger is not None and ledger.can_project(board,payload,outcome,target):
+        evidence=ledger.evidence_parent(board,payload)
+    if evidence is not None:
+        parent,parent_state=evidence
+        options=engine.board_action_options.get((source_key(board,payload,engine),target),(True,None))
+        operation=ActionEvidence(kernel_snapshot(engine),target,outcome_key(outcome),*options)
+        state=legacy()
+        receipt=ledger.finish_death(board,payload,outcome,target,state)
+        state=replace(state,provenance=receipt)
+        operation._completed[:]=(parent_state,state,0)
+        request=parent.child(operation,(outcome.board.day,outcome.board.phase,outcome.board.alive))
+        ledger._attach_request(receipt,request)
+        ledger.stats['death_parent_replays_avoided']+=1
+        remember(engine,request,state)
+        return replace(state,board_data=request)
+    if ledger is not None:ledger.stats['death_ordinary_fallbacks']+=1
     parent=register_origin(engine,board,payload)
     options=engine.board_action_options.get((source_key(board,payload,engine),target),(True,None))
     request=parent.child(ActionEvidence(kernel_snapshot(engine),target,outcome_key(outcome),*options),
@@ -252,12 +270,32 @@ def reconstruct_child(engine,board,payload,outcome,target,legacy):
         engine.trace.setdefault('public_updates',[]).append({'history':board.history,'target':target,
             'prior_counts':board.wolf_count_distribution,'child_counts':state.public.wolf_count_distribution})
     remember(engine,request,state)
+    if ledger is not None:
+        receipt=ledger.finish_death(board,payload,outcome,target,state)
+        if receipt is not None:
+            state=replace(state,provenance=receipt)
+            ledger._attach_request(receipt,request)
     return replace(state,board_data=request)
 
 
 def reconstruct_publication(engine,payload,child,public,past,private,physical,*,replay_unique=False):
     from .evaluation_branch import ContinuationInputs,physical_board
     if _rebuilding.get():return ContinuationInputs(child,public,past,private,payload.observer,physical)
+    ledger=getattr(engine,'acquisition_provenance',None)
+    completed=ContinuationInputs(child,public,past,private,payload.observer,physical)
+    if _reuse_kernels.get() and replay_unique and ledger is not None and ledger.can_report(payload,completed):
+        source=ledger.request_for(payload.provenance)
+        if source is not None:
+            operation=PublicationEvidence(kernel_snapshot(engine),publication_key(child,past))
+            receipt=ledger.finish_report(payload,completed)
+            completed=replace(completed,provenance=receipt)
+            operation._completed[:]=(payload,completed,0)
+            request=source.child(operation,(child.day,child.phase,child.alive))
+            ledger._attach_request(receipt,request)
+            ledger.stats['report_parent_replays_avoided']+=1
+            remember(engine,request,completed)
+            return replace(completed,board_data=request)
+    if ledger is not None:ledger.stats['report_ordinary_fallbacks']+=1
     source=payload.board_data
     if source is None:
         from .evaluation_branch import ActionInputs
@@ -273,6 +311,11 @@ def reconstruct_publication(engine,payload,child,public,past,private,physical,*,
     result=request.roles()
     if same_role_board(result.physical,physical):result=replace(result,physical=physical)
     remember(engine,request,result)
+    if ledger is not None:
+        receipt=ledger.finish_report(payload,result)
+        if receipt is not None:
+            result=replace(result,provenance=receipt)
+            ledger._attach_request(receipt,request)
     return replace(result,board_data=request)
 
 
@@ -293,6 +336,11 @@ def calculation_origin(board):
     token=_active_origin.set((board,{},{},{}))
     try:yield
     finally:_active_origin.reset(token)
+
+
+def active_calculation_data():
+    context=_active_origin.get()
+    return None if context is None else context[0]
 
 @dataclass(frozen=True)
 class SavedOrigin:

@@ -300,3 +300,10 @@ The updated actual-seven finite coverage audit still matches all 14 Q/P contexts
 The earlier normal-shell work-tree errors and JSON PermissionErrors are resolved for saving in the explicitly authorized execution context. The failed artifact writes were not retried through an unapproved alternative route. This checkpoint includes the source, permanent tests, saved JSON and this record in a local commit; no push/deploy is included.
 
 Next implementation remains the shared general death/report receipt chain, with public compatibility versus physical target intervention/actor choice kept distinct, terminal/P-zero cases preserved, report-conditioned children and cache/cold ownership handled explicitly. No new cast-specific death example was added. Ordinary UI, HELP, MAX, public edition and server processes remain unchanged; immutable sharing stays OFF. No long actual initial-seven or public64 aggregate rerun occurred.
+
+
+## Follow-up: common generated death and report children
+
+The former remaining-death/report statements above describe the preceding checkpoint. The next default-OFF increment now implements the shared H0 fixed-target death and configured uniform full medium/seer report-child receipt chain in the common kernels. The full scope, Q/P mass semantics, ordinary fallback boundaries and counts are recorded in shared-symmetry-transition-plan.md. The inherited-groups command now runs the generic finite-chain audit; its saved evidence is benchmarks/player_match_groups/shared-transition-groups-results.json. Existing isolated nine-label audit remains a regression, not a new mode.
+
+Four public/private roots give 76 complete-law/physical/cold matches and 37 independent Forecast/Table matches, including two nights on the actual seven-player source. Runtime proof consumption skips repeated permutations and live parent replay; root canonical validation, semantic support scans and ordinary numerical cache lookup remain. Actor choice, personal observation, H1/GJ, unknown report aliases and MAX remain ordinary/unproved. No whole-game speedup is claimed.

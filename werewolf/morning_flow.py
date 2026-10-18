@@ -19,7 +19,10 @@ def report_flow(outcomes, source, past, policy, *, source_board=None, fake_color
             if hook is not None:hook(source_board,source,past,outcome.board,state,past,'medium')
             from .board_future import record_medium_instruction
             record_medium_instruction(policy,source_board,source,past,outcome,fake_colors,law=state)
-        for probability, board, joint, reports in policy.publications(outcome.board, state, past):
+        publications=policy.publications(outcome.board,state,past)
+        component=getattr(policy,'record_report_component',None)
+        if component is not None and source_board is not None:component(source_board,source,past,outcome,state,publications)
+        for probability, board, joint, reports in publications:
             yield outcome.probability * probability, board, joint, reports
 
 

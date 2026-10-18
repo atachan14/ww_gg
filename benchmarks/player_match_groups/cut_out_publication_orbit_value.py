@@ -145,13 +145,32 @@ def with_audited_groups(scope):
             return scope  # Keep the ordinary full-check path for this source.
         raise
     ledger=AcquisitionLedger(scope.builder)
+    previous=scope.builder.acquisition_provenance
     scope.builder.acquisition_provenance=ledger
     source=audited.source
-    receipt=ledger._register_audited_root(source.public,source,audited.groups,(scope.graph,scope.graph.data))
+    try:receipt=ledger._register_audited_root(source.public,source,audited.groups,(scope.graph,scope.graph.data),request=scope.request)
+    except ValueError as error:
+        scope.builder.acquisition_provenance=previous
+        if str(error) in ('Canonical complete root law required','Canonical root Boards required'):return scope
+        raise
     if receipt is None:raise Pending('orbit_value_audited_root_not_supported')
     source=replace(source,provenance=receipt)
     result=MorningScope(scope.graph,scope.builder,scope.request,source,audited.groups,ledger)
     _scopes[result]=(scope.graph.data,scope.builder.rules,scope.builder.strategy,tuple(vars(result).values()))
+    check_scope(result)
+    return result
+
+
+def scope_from_inherited(graph,engine,source):
+    """Consume an already bound common death/report child; never audit again."""
+    from werewolf.acquisition_provenance import UniformAcquisitionReceipt
+    ledger=getattr(engine,'acquisition_provenance',None)
+    if ledger is None or type(source.provenance)is UniformAcquisitionReceipt:return None
+    groups=ledger.groups_for(source.provenance,source.public,source)
+    request=ledger.request_for(source.provenance)
+    if groups is None or request is None or source.board_data is not request or ledger.owner_for(source.provenance) is not graph:return None
+    result=MorningScope(graph,engine,request,source,groups,ledger)
+    _scopes[result]=(graph.data,engine.rules,engine.strategy,tuple(vars(result).values()))
     check_scope(result)
     return result
 

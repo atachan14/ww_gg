@@ -1,0 +1,128 @@
+{
+  "status": "verified",
+  "counts": {
+    "root_full_generators": 7,
+    "audited_roots": 4,
+    "complete_QP_history_physical_checks": 76,
+    "independent_child_symmetry_generators": 48,
+    "cold_reads": 76,
+    "day_deaths": 7,
+    "public_only_death_rows": 1,
+    "night_deaths": 12,
+    "identity_mornings": 2,
+    "public_only_report_rows": 15,
+    "report_children": 55,
+    "public_only_cold_reads": 2,
+    "independent_Forecast_Table_checks": 37
+  },
+  "proof_counts": {
+    "root_canonical_hypothesis_visits": 21,
+    "audited_roots": 4,
+    "group_consumptions": 597,
+    "death_group_receipts": 19,
+    "death_parent_replays_avoided": 19,
+    "scope_parent_replays_avoided": 182,
+    "private_permutation_checks_avoided": 58,
+    "generation_records": 8,
+    "trusted_cache_equivalence_links": 3,
+    "paired_receipts": 12,
+    "inherited_groups": 12,
+    "public_semantic_hypothesis_visits": 104,
+    "public_permutation_checks_avoided": 10,
+    "report_group_receipts": 55,
+    "report_parent_replays_avoided": 55
+  },
+  "cases": [
+    {
+      "case": "five-public",
+      "stats": {
+        "root_canonical_hypothesis_visits": 3,
+        "audited_roots": 1,
+        "group_consumptions": 149,
+        "death_group_receipts": 6,
+        "death_parent_replays_avoided": 6,
+        "scope_parent_replays_avoided": 48,
+        "private_permutation_checks_avoided": 10,
+        "generation_records": 1,
+        "trusted_cache_equivalence_links": 1,
+        "paired_receipts": 4,
+        "inherited_groups": 4,
+        "public_semantic_hypothesis_visits": 36,
+        "public_permutation_checks_avoided": 4,
+        "report_group_receipts": 11,
+        "report_parent_replays_avoided": 11
+      }
+    },
+    {
+      "case": "five-private-city2",
+      "stats": {
+        "root_canonical_hypothesis_visits": 5,
+        "audited_roots": 1,
+        "group_consumptions": 141,
+        "death_group_receipts": 5,
+        "death_parent_replays_avoided": 5,
+        "scope_parent_replays_avoided": 46,
+        "private_permutation_checks_avoided": 9,
+        "generation_records": 1,
+        "trusted_cache_equivalence_links": 1,
+        "paired_receipts": 4,
+        "inherited_groups": 4,
+        "public_semantic_hypothesis_visits": 36,
+        "public_permutation_checks_avoided": 4,
+        "report_group_receipts": 11,
+        "report_parent_replays_avoided": 11
+      }
+    },
+    {
+      "case": "seven-public",
+      "selected_first_report_Q": "1/15",
+      "selected_first_report_P": "1/15",
+      "stats": {
+        "root_canonical_hypothesis_visits": 6,
+        "audited_roots": 1,
+        "group_consumptions": 206,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "scope_parent_replays_avoided": 59,
+        "private_permutation_checks_avoided": 34,
+        "generation_records": 2,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 24,
+        "report_parent_replays_avoided": 24,
+        "trusted_cache_equivalence_links": 1,
+        "public_semantic_hypothesis_visits": 16,
+        "public_permutation_checks_avoided": 2
+      }
+    },
+    {
+      "case": "seven-private-W1-6",
+      "selected_first_report_Q": "1/15",
+      "selected_first_report_P": "1/5",
+      "stats": {
+        "root_canonical_hypothesis_visits": 7,
+        "audited_roots": 1,
+        "group_consumptions": 101,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "scope_parent_replays_avoided": 29,
+        "private_permutation_checks_avoided": 5,
+        "generation_records": 4,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 9,
+        "report_parent_replays_avoided": 9,
+        "public_semantic_hypothesis_visits": 16,
+        "public_permutation_checks_avoided": 0
+      }
+    }
+  ],
+  "generated_operations": "generic H0 fixed-target day/night kernels and configured uniform medium/seer reports",
+  "choice_probability": "not certified; fixed-target resolution kept separate from actor selection",
+  "whole_initial7_search": false,
+  "MAX_evaluated": false,
+  "default_provenance": false,
+  "immutable_sharing": false,
+  "seconds": 1.7023414999712259,
+  "peak_working_set_bytes": 38711296
+}
