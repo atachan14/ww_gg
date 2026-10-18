@@ -4,8 +4,8 @@ Receipts attest a trusted generator invocation and exact carrier references.
 Root audits remain a trusted adapter obligation; the ledger never infers a root
 from marginal roles, endpoint metadata or an arbitrary callback. Receipts do not
 alter numerical keys or automatically authorize a merge.
-Observer-free uniform acquisition, H0 fixed-target death and configured full
-uniform morning observations are supported; actor selection is not certified.
+Typed owner observations, H0 uniform acquisition/death/report transitions and
+uniform wolf information/choice are supported. Unknown observers decline.
 Unknown cache identities and replay snapshots retain ordinary results unproved.
 """
 from collections import Counter
@@ -27,6 +27,7 @@ class UniformAcquisitionReceipt:
     parent:object
     operation:str='unobserved_uniform_acquisition'
     groups:object=None
+    observation_mass:object=1
 
 
 @dataclass(frozen=True,eq=False)
@@ -82,6 +83,11 @@ class AcquisitionLedger:
         self._canonical_laws={}
         self._canonical_boards={}
         self._cache_tickets={}
+        self._observed_generations={}
+        self._selections=WeakKeyDictionary()
+        self._information_outputs={}
+        self._policy_generations={}
+        self._observation_masses=WeakKeyDictionary()
         self.stats=Counter()
 
     def _supported(self):
@@ -122,19 +128,22 @@ class AcquisitionLedger:
     def _bind(self,board,before,after):
         if not self._supported():
             self.stats['configuration_declines']+=1;return None
-        if before.observer is not None:
+        if not self._observer_supported(before.observer) or after.observer is not before.observer:
             # A caller predicate is an observation operation with a separate
             # proof obligation, even if it happens to retain every hypothesis.
             self.stats['observer_declines']+=1;return None
         if board.phase!='night' or board.initial_hunter_count:
             self.stats['scope_declines']+=1;return None
         if not (self._generation(board,before.public_state,after.public_state)
-                and self._generation(board,before.private,after.private)):
+                and (self._generation(board,before.private,after.private) or self._observed_generation(board,before.private,after.private,before.observer))):
             self.stats['unknown_generation_declines']+=1;return None
         groups=self.groups_for(before.provenance,board,before)
+        if groups is not None:groups=self._fix(groups,self._observer_positions(before.observer))
         inherited=self._groups_record(before.provenance) if groups is not None else None
         owner=None if inherited is None else inherited[2]
-        receipt=UniformAcquisitionReceipt(before.provenance,groups=groups)
+        observation=self._observed_generations.get((id(board),id(before.private),id(after.private),id(before.observer)))
+        receipt=UniformAcquisitionReceipt(before.provenance,groups=groups,observation_mass=1 if observation is None else observation[4])
+        self._observation_masses[receipt]=receipt.observation_mass
         self._issued[receipt]=(_frame(board,before),_frame(board,after),receipt.parent,receipt.operation,groups,owner)
         self.stats['paired_receipts']+=1
         if groups is not None:self.stats['inherited_groups']+=1
@@ -149,7 +158,7 @@ class AcquisitionLedger:
         self.stats['validation_requests']+=1
         if not self._supported() or type(receipt)is not UniformAcquisitionReceipt:return False
         row=self._issued.get(receipt)
-        if row is None:return False
+        if row is None or receipt.observation_mass is not self._observation_masses.get(receipt):return False
         parent,child,prior,operation,groups,owner=row
         if groups is not None and (owner is None or not self._owner_current(owner)):return False
         return (after.provenance is receipt and before.provenance is prior and receipt.parent is prior and receipt.operation is operation
@@ -196,7 +205,7 @@ class AcquisitionLedger:
             return frame,groups,owner
         if type(receipt)is UniformAcquisitionReceipt:
             row=self._issued.get(receipt)
-            if row is None:return None
+            if row is None or receipt.observation_mass is not self._observation_masses.get(receipt):return None
             parent,child,prior,operation,groups,owner=row
             # Owner was sealed at issue time. No parent walk, full-state
             # equality or replay is needed at consumption.
@@ -303,7 +312,7 @@ class AcquisitionLedger:
             and getattr(e.action_policy._project_roles,'__func__',None)is InformationSetActionPolicy._project_roles)
 
     def _record_deaths(self,board,payload,target,public,outcomes):
-        if not self._canonical_death() or board.initial_hunter_count or payload.observer is not None:return
+        if not self._canonical_death() or board.initial_hunter_count or not self._observer_supported(payload.observer):return
         qbywinner={o.board.winner:o for o in public}
         self._public_deaths[id(board),id(payload.public_state),id(payload.private),target]=(board,payload,target,public,outcomes)
         for outcome in outcomes:
@@ -379,7 +388,7 @@ class AcquisitionLedger:
                 self._weighted_reports[id(c),id(law),id(past),id(own)]=(source,p,matches[0][0],mass,(c,law,past,own))
 
     def can_report(self,source,child):
-        if not self._reports_supported() or source.observer is not None:return False
+        if not self._reports_supported() or not self._observer_supported(source.observer):return False
         if self.groups_for(source.provenance,source.public,source) is None:return False
         row=self._weighted_reports.get((id(child.public),id(child.public_state),id(child.past),id(child.private)))
         return (row is not None and _same_references(row[0][:3],(source.public,source.public_state,source.past))
@@ -406,3 +415,91 @@ class AcquisitionLedger:
         if record is None or not _same_references(record[:3],(source.public_state,source.private,rows)):return ()
         positive={(id(c),id(law),id(past)) for mass,c,law,past,p in record[3]}
         return tuple(r for r in rows if tuple(map(id,r[1:])) not in positive)
+
+
+    @staticmethod
+    def _observer_supported(observer):
+        from .actor_information import PersonalInformation
+        from .seer_intervention import SeerObserver
+        from .seer_acquisition import Acquisition
+        if observer is None:return True
+        return (type(observer) in (PersonalInformation,SeerObserver)
+            and type(observer.acquisitions)is tuple
+            and all(type(a)is Acquisition and a.player==observer.actor for a in observer.acquisitions)
+            and type(observer.actor)is int and observer.actor>0
+            and (type(observer)is PersonalInformation or type(observer.target)is int and observer.target>0))
+
+    @staticmethod
+    def _observer_positions(observer):
+        if observer is None:return ()
+        return (observer.actor,*(a.target for a in observer.acquisitions),*((observer.target,) if hasattr(observer,'target') else ()))
+
+    def _record_observed(self,board,before,generated,after,observer,mass):
+        if not self._supported() or not self._observer_supported(observer) or not self._generation(board,before,generated):return
+        self._observed_generations[id(board),id(before),id(after),id(observer)]=(board,before,after,observer,mass)
+        if self._canonical_laws.get(id(generated)) is generated:self._canonical_laws[id(after)]=after
+        self.stats['observed_acquisition_records']+=1
+
+    def _observed_generation(self,board,before,after,observer):
+        row=self._observed_generations.get((id(board),id(before),id(after),id(observer)))
+        return row is not None and _same_references(row[:4],(board,before,after,observer))
+
+    def _record_information_output(self,source,child,information,mass):
+        self._information_outputs[id(child)]=(source,child,information,mass)
+        self.stats['information_semantic_hypothesis_visits']+=len(source.private.hypotheses)
+
+    def finish_information(self,source,child,information,mass):
+        from .actor_information import WolfInformation,PersonalInformation
+        from .seer_intervention import SeerObserver
+        record=self._information_outputs.get(id(child))
+        if record is None or not _same_references(record,(source,child,information,mass)):return None
+        if self.groups_for(source.provenance,source.public,source) is None:return None
+        if source.public.initial_hunter_count or not self._observer_supported(source.observer) or type(information) not in (WolfInformation,PersonalInformation,SeerObserver):return None
+        if type(information)is WolfInformation:
+            positions=tuple(p for p in range(1,source.public.player_count+1) if information.initial_roster&(1<<(p-1)))+tuple(a.target for a in information.attacks)
+        else:
+            if not self._observer_supported(information):return None
+            positions=self._observer_positions(information)
+        groups=self._fix(self.groups_for(source.provenance,source.public,source),positions)
+        receipt=self._mint_transition(source,child,groups,'owner_information_condition',1,mass,
+            'unchanged_public_prior','normalized_owner_information_event')
+        if receipt is not None:self.stats['information_group_receipts']+=1
+        return receipt
+
+
+    def _record_policy(self,b,q,past,information,mass,policy):
+        self._policy_generations[id(policy)]=(b,q,past,information,mass,policy)
+        self.stats['wolf_policy_public_hypothesis_visits']+=len(q.hypotheses)
+
+    def _record_choice(self,source,information,information_mass,target,probability,policy):
+        from .information_set_forecast import InformationSetForecast
+        e=self._engine()
+        if (not self._supported() or e.strategy.night!='random'
+            or getattr(e.wolf_policy,'__func__',None)is not InformationSetForecast.wolf_policy
+            or self.groups_for(source.provenance,source.public,source) is None):return None
+        generated=self._policy_generations.get(id(policy))
+        if (generated is None or not _same_references(generated[:3],(source.public,source.public_state,source.past))
+            or generated[3]!=information or generated[5] is not policy or (target,probability) not in policy):
+            self.stats['unknown_policy_declines']+=1;return None
+        receipt=ActorChoiceReceipt(information,information_mass,target,probability,policy,generated[4])
+        row=self._groups_record(source.provenance)
+        self._selections[receipt]=(_frame(source.public,source),row[2],tuple(vars(receipt).values()))
+        self.stats['uniform_choice_receipts']+=1
+        return receipt
+
+    def validates_choice(self,receipt,source):
+        if type(receipt)is not ActorChoiceReceipt or not self._supported():return False
+        row=self._selections.get(receipt)
+        return (row is not None and self._owner_current(row[1])
+            and _same_references(row[0],_frame(source.public,source))
+            and _same_references(row[2],tuple(vars(receipt).values())))
+
+
+@dataclass(frozen=True,eq=False)
+class ActorChoiceReceipt:
+    information:object
+    information_mass:object
+    target:int
+    probability:object
+    policy:tuple
+    public_information_mass:object

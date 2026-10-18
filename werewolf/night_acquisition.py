@@ -9,7 +9,7 @@ class AcquiredLaws:
     private: object = None
 
 
-def acquire_laws(board, public, generate, *, private=None, observer=None, inconsistent=None):
+def acquire_laws(board, public, generate, *, private=None, observer=None, inconsistent=None, record_observer=None):
     """generate(state, alive) receives no observer; observer filters own law only.
 
     Generation/Pending budgets are owned by the caller. This preserves legacy
@@ -25,5 +25,7 @@ def acquire_laws(board, public, generate, *, private=None, observer=None, incons
         kept = tuple(h for h in own.hypotheses if observer(h,own))
         if not kept:
             raise inconsistent()
+        generated=own
         own = replace(own,hypotheses=normalize(kept))
+        if record_observer is not None:record_observer(private,generated,own,observer,sum(h.mass for h in kept))
     return AcquiredLaws(public_next,own)

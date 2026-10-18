@@ -58,3 +58,41 @@ def wolf_information_keys(state):
     """Owned keys only; fixed policies do not need conditional probability laws."""
     histories=dict.fromkeys((h.roles[0],h.attacks) for h in state.hypotheses)
     return tuple(dict.fromkeys(WolfInformation(mask,attacks) for mask,attacks in histories))
+
+
+@dataclass(frozen=True)
+class PersonalInformation:
+    """Known owner role/results; no other actor's secret records."""
+    actor:int
+    role:str
+    acquisitions:tuple=()
+
+    def __post_init__(self):
+        from .seer_acquisition import Acquisition
+        if type(self.actor)is not int or self.actor<1 or self.role not in ('villager','medium','seer'):
+            raise ValueError('Supported owner role and player required')
+        if type(self.acquisitions)is not tuple or any(type(a)is not Acquisition or a.player!=self.actor for a in self.acquisitions):
+            raise ValueError('Only owner acquisition records allowed')
+        if self.acquisitions and self.role!='seer':raise ValueError('Only seer owns scan records')
+
+    def __call__(self,h,state):
+        bit=1<<(self.actor-1)
+        owns=(not any(m&bit for m in h.roles)) if self.role=='villager' else bool(h.roles[{'medium':1,'seer':2}[self.role]]&bit)
+        return owns and all(a in h.acquisitions for a in self.acquisitions)
+
+
+def condition_personal(state,observation):
+    """One semantic filtering pass, normalized complete histories and mass."""
+    from .seer_intervention import SeerObserver
+    if type(observation) not in (PersonalInformation,SeerObserver,WolfInformation):
+        raise ValueError('Typed owner information required')
+    if type(observation)is WolfInformation:
+        known={a.night:a.target for a in observation.attacks}
+        accepts=lambda h:h.roles[0]==observation.initial_roster and all(known.get(a.night)==a.target for a in h.attacks)
+    else:accepts=lambda h:observation(h,state)
+    entries=tuple(h for h in state.hypotheses if accepts(h))
+    mass=sum((h.mass for h in entries),F())
+    if not mass:raise ValueError('Owner information outside source support')
+    if type(observation)is WolfInformation:
+        entries=tuple(replace(h,attacks=merge_night_records(h.attacks,observation.attacks)) for h in entries)
+    return mass,replace(state,hypotheses=normalize(entries))

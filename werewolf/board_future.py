@@ -655,3 +655,41 @@ def remember_resolution(policy,board,payload,target,terminal_payoffs,observed_al
     if not _reuse_kernels.get():return
     key=resolution_key(policy,board,payload,target,terminal_payoffs,observed_alive)
     if key is not None:policy.engine.board_action_kernels[key]=result
+
+
+@dataclass(frozen=True)
+class OwnerInformationEvidence:
+    information:object
+    observer:object
+
+    def __call__(self,source):
+        from .actor_information import condition_personal
+        from .evaluation_branch import ContinuationInputs,physical_board
+        mass,own=condition_personal(source.private,self.information)
+        return ContinuationInputs(source.public,source.public_state,source.past,own,self.observer,
+            physical_board(source.public,own,source.physical))
+
+
+def reconstruct_information(engine,source,child,information,mass):
+    """Generated semantic filter, no reconstructed-law comparison to certify it."""
+    if _rebuilding.get():return child
+    ledger=getattr(engine,'acquisition_provenance',None)
+    receipt=None if ledger is None else ledger.finish_information(source,child,information,mass)
+    parent=None if receipt is None else ledger.request_for(source.provenance)
+    operation=OwnerInformationEvidence(information,child.observer)
+    if parent is not None and _reuse_kernels.get():
+        child=replace(child,provenance=receipt)
+        request=parent.child(operation,(child.public.day,child.public.phase,child.public.alive))
+        ledger._attach_request(receipt,request)
+        ledger.stats['information_parent_replays_avoided']+=1
+        remember(engine,request,child)
+        return replace(child,board_data=request)
+    if ledger is not None:ledger.stats['information_ordinary_fallbacks']+=1
+    parent=source.board_data
+    if parent is None:
+        from .evaluation_branch import ActionInputs
+        parent=register_origin(engine,source.public,ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical))
+    request=parent.child(operation,(child.public.day,child.public.phase,child.public.alive))
+    result=request.roles()
+    remember(engine,request,result)
+    return replace(result,board_data=request)

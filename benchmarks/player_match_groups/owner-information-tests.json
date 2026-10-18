@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "tests": 57,
+  "seconds": 123.11185270000715,
+  "failures": 0,
+  "errors": 0,
+  "modules": [
+    "test_acquisition_provenance",
+    "test_inherited_group_consumption",
+    "test_action_flow",
+    "test_board_future",
+    "test_morning_flow",
+    "test_information_set_model_a",
+    "test_wolf_information_set_characterization",
+    "test_cut_out_inherited_groups",
+    "test_cut_out_six_inherited",
+    "test_shared_transition_provenance",
+    "test_owner_information_provenance"
+  ],
+  "full_initial7_search": false,
+  "latest_extended_owner_and_transition_rerun": {
+    "status": "passed",
+    "tests": 8,
+    "seconds": 2.6699077000375837
+  },
+  "unique_tests": 58
+}

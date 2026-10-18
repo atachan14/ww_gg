@@ -23,13 +23,24 @@ def independent_cold(graph,request):
     from dataclasses import replace
     from werewolf.information_set_forecast import InformationSetForecast,Pending
     from werewolf.board_future import (SavedOrigin,GeneratedBoard,ActionEvidence,PublicationEvidence,PublicReportEvidence,
-        MediumInstructionEvidence,ContextEvidence,ConditionEvidence,PublicViewEvidence,reconstruction_kernel_reuse)
+        MediumInstructionEvidence,ContextEvidence,ConditionEvidence,PublicViewEvidence,OwnerInformationEvidence,reconstruction_kernel_reuse)
     fresh=InformationSetForecast(graph.engine.baseline.rules,graph.engine.baseline.strategy,exact_renaming=False,retire_uninformative_scans=False)
     fresh.retain_joint_guard_history=True
     origin=SavedOrigin(graph.data,fresh.rules,fresh.strategy,project_public=False);ops=[]
     for op in request.history:
         if type(op) in (ActionEvidence,PublicationEvidence,PublicReportEvidence,MediumInstructionEvidence,ContextEvidence):ops.append(replace(op,engine=fresh))
         elif type(op) in (ConditionEvidence,PublicViewEvidence):ops.append(replace(op))
+        elif type(op)is OwnerInformationEvidence:
+            def owner_filter(source,info=op.information,observer=op.observer):
+                from werewolf.actor_information import WolfInformation,condition_actor_state
+                from werewolf.evaluation_branch import ContinuationInputs,physical_board
+                if type(info)is WolfInformation:
+                    known={a.night:a.target for a in info.attacks}
+                    predicate=lambda h:h.roles[0]==info.initial_roster and all(known.get(a.night)==a.target for a in h.attacks)
+                    law=condition_actor_state(source.private,predicate,attacks=info.attacks)
+                else:law=condition_actor_state(source.private,lambda h:info(h,source.private))
+                return ContinuationInputs(source.public,source.public_state,source.past,law,observer,physical_board(source.public,law,source.physical))
+            ops.append(owner_filter)
         else:raise Pending('compact_terminal_cold_unknown_evidence:'+type(op).__name__)
     with reconstruction_kernel_reuse(False):result=GeneratedBoard(origin,tuple(ops)).roles()
     assert fresh.values=={} and origin is not request.origin

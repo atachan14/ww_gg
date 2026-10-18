@@ -645,13 +645,159 @@ def shared_transition_audit():
     for case in cases:totals.update(case.get('stats',{}))
     return dict(status='verified',counts=dict(counts),proof_counts=dict(totals),cases=cases,
         generated_operations='generic H0 fixed-target day/night kernels and configured uniform medium/seer reports',
-        choice_probability='not certified; fixed-target resolution kept separate from actor selection',
+        choice_probability='fixed-target receipt excludes selection; typed H0 uniform actor choices certified separately in owner_information',
         whole_initial7_search=False,MAX_evaluated=False,default_provenance=False,immutable_sharing=False)
+
+
+
+def owner_information_audit():
+    """Finite owner/wolf kernels, no initial-seven scalar search."""
+    from .cut_out_publication_orbit_value import seed_structural,scope_from_inherited,private_stabilizer
+    from .cut_out_first_cycle_coverage import base
+    from .cut_out_user_seven_source import ROOT_GROUPS
+    from .cut_out_joint_night_forecast_fixture import moved_source
+    from . import cut_out_publication_orbit_value as value_module
+    from werewolf.actor_information import PersonalInformation,WolfInformation,condition_personal,wolf_information_groups
+    from werewolf.seer_intervention import SeerObserver
+    from werewolf.action_flow import resolve_action
+    from werewolf.evaluation_branch import ActionInputs
+    from werewolf.board_future import GeneratedBoard,publication_key
+    from werewolf.seer_future_uniform import TrueScanState
+    from unittest.mock import patch
+    counts=Counter();stats=Counter();cases=[]
+    def same(a,b):
+        return (same_role_board(a.public,b.public) and same_role_board(a.physical,b.physical)
+            and all(getattr(a,k)==getattr(b,k) for k in ('public_state','private','past','observer')))
+    def engine(graph,track):
+        e=InformationSetForecast(graph.engine.baseline.rules,graph.engine.baseline.strategy,exact_renaming=False,
+            retire_uninformative_scans=False,track_acquisition_provenance=track)
+        e.retain_joint_guard_history=True;return e
+    def check(graph,e,a,b):
+        assert same(a,b);counts['complete_QP_history_physical_checks']+=1
+        assert same(independent_cold(graph,a.board_data),a);counts['cold_reads']+=1
+        assert e.acquisition_provenance.groups_for(a.provenance,a.public,a) is not None
+        # Complete law comparisons belong only to this independent oracle.
+        groups=e.acquisition_provenance.groups_for(a.provenance,a.public,a)
+        for group in groups:
+            for p in group[1:]:
+                m=list(range(1,a.public.player_count+1));m[group[0]-1],m[p-1]=p,group[0]
+                assert same(moved_source(a,tuple(m)),a);counts['independent_symmetry_generators']+=1
+        with patch.object(TrueScanState,'__eq__',side_effect=AssertionError('proof equality')),patch.object(TrueScanState,'__hash__',side_effect=AssertionError('proof hash')),patch.object(value_module,'move_law',side_effect=AssertionError('private permutation')),patch.object(GeneratedBoard,'roles',side_effect=AssertionError('parent replay')):
+            cap=scope_from_inherited(graph,e,a);assert cap is not None
+            private_stabilizer(cap)
+    def death(graph,e,r,a,b,target):
+        pa=ActionInputs(a.public_state,a.past,a.private,a.observer,a.physical,provenance=a.provenance)
+        pb=ActionInputs(b.public_state,b.past,b.private,b.observer,b.physical)
+        with patch.object(GeneratedBoard,'roles',side_effect=AssertionError('death replay')):
+            ac,outs=resolve_action(a.public,pa,target,e.action_policy,terminal_payoffs=False)
+            rows=[(o,e.action_policy.project(a.public,ac,o,target)) for o in outs]
+        rc,ros=resolve_action(b.public,pb,target,r.action_policy,terminal_payoffs=False)
+        if ac.provenance is not None and a.public.phase=='night':
+            generated=r.acquire(b.public,b.private)
+            expected_mass=sum((h.mass for h in generated.hypotheses if b.observer is None or b.observer(h,generated)),F())
+            assert ac.provenance.observation_mass==expected_mass
+            counts['observed_or_unobserved_acquisitions']+=1
+        result=[]
+        for o,c in rows:
+            ro=next(v for v in ros if v.board.winner==o.board.winner)
+            assert o.probability==ro.probability
+            ref=r.action_policy.project(b.public,rc,ro,target)
+            check(graph,e,c,ref);result.append((c,ref))
+        return result
+    def reports(graph,e,r,a,b):
+        with patch.object(GeneratedBoard,'roles',side_effect=AssertionError('report replay')):rows=e.report_children(a)
+        refs={publication_key(c.public,c.past):(q,p,c) for q,p,c in r.report_children(b)}
+        for q,p,c in rows:
+            rq,rp,ref=refs[publication_key(c.public,c.past)];assert(q,p)==(rq,rp)
+            check(graph,e,c,ref)
+        return rows,refs
+    small=make_role_filter_scope();seed=seed_structural(small)
+    graph7,witness=base()
+    sources=[('five',small.graph,seed.source,small.request,seed.groups),('seven',graph7,graph7.origin(),graph7.root,ROOT_GROUPS)]
+    for name,graph,root,request,groups in sources:
+        with calculation_origin(graph.data):
+            for group in groups:
+                for p in group[1:]:
+                    m=list(range(1,root.public.player_count+1));m[group[0]-1],m[p-1]=p,group[0]
+                    assert same(moved_source(root,tuple(m)),root)
+            e=engine(graph,True);r=engine(graph,False)
+            token=e.acquisition_provenance._register_audited_root(root.public,root,groups,(graph,graph.data),request=request)
+            actual=replace(root,provenance=token,board_data=request);reference=replace(root,board_data=request)
+            remember(e,request,actual);remember(r,request,reference)
+            owner=1 if name=='five' else 2
+            h=next(h for h in root.private.hypotheses if h.roles[2]&(1<<(owner-1)))
+            known=tuple(a for a in h.acquisitions if a.player==owner)
+            information=PersonalInformation(owner,'seer',known)
+            with patch.object(GeneratedBoard,'roles',side_effect=AssertionError('information replay')):
+                mass,own=e.personal_view(actual,information)
+            rmass,law=condition_personal(reference.private,information);assert mass==rmass
+            ref=replace(reference,private=law,observer=information,physical=physical_board(reference.public,law,reference.physical))
+            remember(r,own.board_data,ref);check(graph,e,own,ref)
+            assert own.public_state is actual.public_state
+            own,ref=next((c,rc) for c,rc in death(graph,e,r,own,ref,2 if name=='five' else 1) if c.public.winner is None)
+            # Existing intervention type: predeath owner scan; no secret from
+            # another actor enters either the public acquisition or wolf policy.
+            intervention=SeerObserver(owner,known,2,4 if name=='five' else 5)
+            mass,own=e.personal_view(own,intervention)
+            rmass,law=condition_personal(ref.private,intervention);assert mass==rmass
+            ref=replace(ref,private=law,observer=intervention,physical=physical_board(ref.public,law,ref.physical))
+            remember(r,own.board_data,ref);check(graph,e,own,ref)
+            night_owner,night_reference=own,ref
+            with patch.object(GeneratedBoard,'roles',side_effect=AssertionError('wolf information replay')):choices=e.wolf_choices(own)
+            expected=[]
+            for info,p_mass,group in wolf_information_groups(ref.private):
+                for target,q in r.wolf_policy(ref.public,ref.public_state,ref.past,info.initial_roster,info.attacks):
+                    expected.append((p_mass*q,info,target,q,group))
+            assert len(choices)==len(expected)
+            for (mass,c,target,proof),(want,info,rt,q,group) in zip(choices,expected):
+                assert(mass,target,c.private)==(want,rt,group)
+                assert proof is not None and proof.probability==q
+                assert proof.information_mass*q==mass
+                qmass,qgroup=condition_personal(ref.public_state,info)
+                assert proof.public_information_mass==qmass
+                # Only reference fields/short descriptors checked at consumption.
+                with patch.object(TrueScanState,'__eq__',side_effect=AssertionError('choice equality')),patch.object(TrueScanState,'__hash__',side_effect=AssertionError('choice hash')),patch.object(GeneratedBoard,'roles',side_effect=AssertionError('choice replay')):
+                    assert e.acquisition_provenance.validates_choice(proof,c)
+                counts['independent_wolf_choice_mass_checks']+=1
+                if proof.public_information_mass!=proof.information_mass:counts['distinct_QP_information_weights']+=1
+                refgroup=replace(ref,private=group,physical=physical_board(ref.public,group,ref.physical))
+                check(graph,e,c,refgroup)
+            # Continue on the unpartitioned owner law: choice is separate from
+            # fixed-target resolution; day/night receipts retain that contract.
+            own,ref=next((c,rc) for c,rc in death(graph,e,r,own,ref,owner if name=='five' else 4) if c.public.winner is None)
+            assert any(a.player==owner and a.day==2 for h in own.private.hypotheses for a in h.acquisitions)
+            rows,refs=reports(graph,e,r,own,ref)
+            if name=='seven':
+                q,p,own=next(row for row in rows if any(v.reporter==3 and v.target==1 and v.color=='black' for v in row[2].public.reports)
+                    and any(v.player==2 and v.acquired_day==2 and v.target==5 and v.color=='white' for v in row[2].past))
+                ref=refs[publication_key(own.public,own.past)][2]
+                own,ref=next((c,rc) for c,rc in death(graph,e,r,own,ref,5) if c.public.winner is None)
+                own,ref=next((c,rc) for c,rc in death(graph,e,r,own,ref,3) if c.public.winner is None)
+                rows,refs=reports(graph,e,r,own,ref)
+            for q,p,own in rows:
+                ref=refs[publication_key(own.public,own.past)][2]
+                if own.public.winner is None and len(own.public.alive)>4:continue
+                remember(r,own.board_data,ref)
+                got=forecast(e,own);want=forecast(r,ref)
+                assert got==want and tables(own,got)==tables(ref,want)
+                counts['independent_Forecast_Table_checks']+=1
+            if name=='five':
+                got=forecast(e,night_owner);want=forecast(r,night_reference)
+                assert got==want and tables(night_owner,got)==tables(night_reference,want)
+                counts['independent_Forecast_Table_checks']+=1
+                assert e.acquisition_provenance.stats['uniform_wolf_solve_uses']>0
+            stats.update(e.acquisition_provenance.stats)
+            cases.append(dict(case=name,owner=owner,stats=dict(e.acquisition_provenance.stats)))
+    return dict(status='verified',counts=dict(counts),proof_counts=dict(stats),cases=cases,
+        scope='typed role/own-result observation, existing own scan intervention, H0 uniform wolf information/choice',
+        full_initial7_search=False,MAX_evaluated=False,default_provenance=False)
 
 
 def shared_transition_worker():
     start=time.perf_counter()
-    with calculation_budget(4000000,max_seconds=30),independent_joint_values():row=shared_transition_audit()
+    with calculation_budget(4000000,max_seconds=30),independent_joint_values():
+        row=shared_transition_audit()
+        row['owner_information']=owner_information_audit()
     row.update(seconds=time.perf_counter()-start,peak_working_set_bytes=peak_bytes())
     Path('benchmarks/player_match_groups/shared-transition-groups-results.json').write_text(json.dumps(row,indent=2)+'\n')
     print(json.dumps(row),flush=True)

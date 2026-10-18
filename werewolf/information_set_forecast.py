@@ -377,6 +377,38 @@ class InformationSetForecast:
         if action_key is not None:self.action_values[action_key]=value
         return value
 
+    def personal_view(self,payload,information):
+        from .actor_information import condition_personal,WolfInformation
+        from .board_future import reconstruct_information
+        mass,own=condition_personal(payload.private,information)
+        observer=payload.observer if type(information)is WolfInformation else information
+        child=ContinuationInputs(payload.public,payload.public_state,payload.past,own,observer,
+            physical_board(payload.public,own,payload.physical))
+        if self.acquisition_provenance is not None:self.acquisition_provenance._record_information_output(payload,child,information,mass)
+        return mass,reconstruct_information(self,payload,child,information,mass)
+
+    def wolf_choices(self,payload):
+        """Actual P partition masses; policies computed only from public Q."""
+        from .board_future import reconstruct_information
+        if payload.public.phase!='night':raise ValueError('Wolf choice requires night')
+        rows=wolf_information_groups(payload.private)
+        ledger=self.acquisition_provenance
+        if ledger is not None:ledger.stats['wolf_partition_hypothesis_visits']+=len(payload.private.hypotheses)
+        result=[]
+        for info,mass,group in rows:
+            child=ContinuationInputs(payload.public,payload.public_state,payload.past,group,payload.observer,
+                physical_board(payload.public,group,payload.physical))
+            if ledger is not None:
+                ledger._record_information_output(payload,child,info,mass)
+                # Partition visits are counted once above, not once per row.
+                ledger.stats['information_semantic_hypothesis_visits']-=len(payload.private.hypotheses)
+            child=reconstruct_information(self,payload,child,info,mass)
+            policy=self.wolf_policy(payload.public,payload.public_state,payload.past,info.initial_roster,info.attacks)
+            for target,q in policy:
+                receipt=None if ledger is None else ledger._record_choice(child,info,mass,target,q,policy)
+                result.append((mass*q,child,target,receipt))
+        return tuple(result)
+
     def wolf_policy(self,b,s,past,mask,history=()):
         if s.public_roles!=tuple(sorted(b.worlds)):
             raise ValueError('Wolf policy requires the public role prior')
@@ -384,7 +416,11 @@ class InformationSetForecast:
         key=(b,s,past,info)
         if key in self.policies:return self.policies[key]
         # This conditional law starts from the PUBLIC joint prior, never the viewer.
-        try:group=info.condition_public(s)
+        try:
+            if self.acquisition_provenance is None:group=info.condition_public(s)
+            else:
+                from .actor_information import condition_personal
+                information_mass,group=condition_personal(s,info)
         except ValueError:raise Pending('information_set_roster_missing')
         targets=tuple(p for p in b.alive if self.strategy.include_self_bite or not mask&(1<<(p-1)))
         if self.strategy.night=='random':scores=();chosen=targets
@@ -404,6 +440,8 @@ class InformationSetForecast:
             chosen=optimal_targets(scores,maximize=False)
         if not chosen:raise Pending('information_set_no_legal_bite')
         result=uniform_policy(chosen);self.policies[key]=result
+        if self.acquisition_provenance is not None and self.strategy.night=='random':
+            self.acquisition_provenance._record_policy(b,s,past,info,information_mass,result)
         if self.trace is not None:
             self.trace.setdefault('wolf_policies',[]).append({'history':b.history,'mask':mask,'scores':scores,'policy':result})
         return result
@@ -483,10 +521,19 @@ class InformationSetForecast:
             value=sum((self.act(b,s,past,p,private,observer,physical=physical) for p in targets),F())/len(targets)
         else:
             value=F()
-            for info,mass,group in wolf_information_groups(private):
-                group_board=physical_board(b,group,physical)
-                value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
-                                for p,q in self.wolf_policy(b,s,past,info.initial_roster,info.attacks)),F())
+            ledger=self.acquisition_provenance
+            frame=ContinuationInputs(b,s,past,private,observer,physical)
+            receipt=None if ledger is None else ledger.receipt_for_frame(b,frame)
+            if receipt is not None and self.strategy.night=='random':
+                ledger.stats['uniform_wolf_solve_uses']+=1
+                frame=replace(frame,provenance=receipt,board_data=ledger.request_for(receipt))
+                value=sum((mass*self.act(*child[:3],target,child.private,child.observer,physical=child.physical)
+                    for mass,child,target,proof in self.wolf_choices(frame)),F())
+            else:
+                for info,mass,group in wolf_information_groups(private):
+                    group_board=physical_board(b,group,physical)
+                    value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
+                                    for p,q in self.wolf_policy(b,s,past,info.initial_roster,info.attacks)),F())
         self.values[key]=value
         return value
 
@@ -513,7 +560,9 @@ class InformationSetActionPolicy:
     def acquire(self,b,payload):
         s,past,private,observer,physical=payload;e=self.engine
         laws=acquire_laws(b,s,lambda source,alive:e.acquire(b,source),private=private,observer=observer,
-                          inconsistent=lambda:Pending('seer_view_scan_outside_public_support'))
+                          inconsistent=lambda:Pending('seer_view_scan_outside_public_support'),
+                          record_observer=(None if getattr(e,'acquisition_provenance',None) is None else
+                              lambda before,generated,after,obs,mass:e.acquisition_provenance._record_observed(b,before,generated,after,obs,mass)))
         result=ActionInputs(laws.public,past,laws.private,observer,physical_board(b,laws.private,physical))
         ledger=getattr(e,'acquisition_provenance',None)
         if ledger is not None:
