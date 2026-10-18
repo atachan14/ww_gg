@@ -306,3 +306,88 @@ def labelled_descendant(root_plan,root_row,mapping,request):
         else:moved=PublicationEvidence(kernel_snapshot(ordinary),publication_key(expected.public,expected.past))
         restored=restored.child(moved,None)
     return restored
+
+
+# A separate, narrow provenance experiment: no recursive evaluator adoption.
+# Full joint symmetry is audited once at seed issuance. Only this module's
+# fixed-role filter may mint a derived receipt; no supplied posterior accepted.
+_structural=WeakKeyDictionary()
+
+
+@dataclass(frozen=True,eq=False)
+class RoleFilterWitness:
+    source:object
+    groups:tuple
+    owner:tuple
+    parent:object=None
+    selector:object=None
+    private_mass:F=F(1)
+    root_request:object=None
+
+
+def _mint_role_witness(source,groups,owner,**kwargs):
+    proof=RoleFilterWitness(source,groups,owner,**kwargs)
+    _structural[proof]=tuple(vars(proof).values())
+    return proof
+
+
+def seed_role_filter(scope):
+    """One full audit, including full public/private histories, before reuse."""
+    from .cut_out_structural_publications import require_groups
+    from werewolf.board_future import canonical_hypothesis
+    from werewolf.seer_future_uniform import TrueScanState
+    from werewolf.exact import Board
+    source=check_scope(scope)
+    if source.observer is not None:raise Pending('role_filter_seed_public_observer_only')
+    if type(source.public)is not Board or type(source.physical)is not Board or any(type(law)is not TrueScanState or type(law.hypotheses)is not tuple or not all(canonical_hypothesis(h) for h in law.hypotheses) for law in (source.public_state,source.private)):
+        raise Pending('role_filter_exact_immutable_carriers_required')
+    groups,_=private_stabilizer(scope)
+    require_groups(source.public,source.public_state,source.past,groups)
+    owner=(scope.graph,scope.graph.data,scope.graph.engine,scope.graph.root,scope.builder,scope.builder.rules,scope.builder.strategy,scope.graph.engine.baseline,scope.graph.engine.baseline.rules,scope.graph.engine.baseline.strategy)
+    return _mint_role_witness(source,groups,owner,root_request=scope.request)
+
+
+def require_role_filter(proof):
+    """Constant-field checks: no law hashing, equality, replay, or parent walk."""
+    if type(proof)is not RoleFilterWitness or proof not in _structural:
+        raise Pending('role_filter_minted_receipt_required')
+    if any(a is not b for a,b in zip(tuple(vars(proof).values()),_structural[proof])):
+        raise Pending('role_filter_receipt_changed')
+    graph,data,engine,root,builder,rules,strategy,baseline,base_rules,base_strategy=proof.owner
+    if graph.data is not data or graph.engine is not engine or graph.root is not root or builder.rules is not rules or builder.strategy is not strategy or engine.baseline is not baseline or baseline.rules is not base_rules or baseline.strategy is not base_strategy:
+        raise Pending('role_filter_owner_or_configuration_changed')
+    return proof.source
+
+
+def condition_known_role(proof,player,role):
+    """P restricted by role(player), Q unchanged; split only the named player.
+
+    For every permutation fixing player, its role indicator commutes with the
+    permutation. Restriction and separate P normalization preserve all remaining
+    complete-history invariance. Marginalizing P gives equivariant physical
+    weights. This theorem says nothing about arbitrary predicates or policies.
+    """
+    from werewolf.actor_information import condition_actor_state
+    source=require_role_filter(proof)
+    if type(player)is not int or player not in range(1,source.public.player_count+1) or type(role)is not str or role not in ('wolf','medium','seer','villager'):
+        raise Pending('role_filter_explicit_supported_role_required')
+    if source.observer is not None and source.observer!=OwnView(player,role):
+        raise Pending('role_filter_new_or_changed_observer_unproved')
+    observer=OwnView(player,role)
+    mass=sum((h.mass for h in source.private.hypotheses if observer.accepts(h)),F())
+    if not mass:raise Pending('role_filter_zero_private_support')
+    private=condition_actor_state(source.private,observer.accepts)
+    child=replace(source,private=private,observer=observer,physical=physical_board(source.public,private,source.physical),board_data=None)
+    groups=point_fix(proof.groups,player)
+    return _mint_role_witness(child,groups,proof.owner,parent=proof,selector=(player,role),private_mass=mass)
+
+
+def role_filter_request(proof):
+    """Ordinary cold evidence only when detail is explicitly requested."""
+    from werewolf.board_future import condition_recipe
+    source=require_role_filter(proof)
+    if proof.parent is None:return proof.root_request
+    parent=role_filter_request(proof.parent)
+    recipe=condition_recipe(proof.parent.source,source)
+    if recipe is None:raise Pending('role_filter_condition_receipt_unproved')
+    return parent.child(recipe,None)

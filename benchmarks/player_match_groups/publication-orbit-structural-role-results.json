@@ -1,0 +1,39 @@
+{
+  "status": "verified",
+  "scope": "five original players; exact known-role private conditioning only",
+  "seed_full_audits": 1,
+  "seed_seconds": 0.0008470999891869724,
+  "positive_role_conditions": 8,
+  "zero_support_declined": 12,
+  "complete_symmetry_validation_generators": 10,
+  "independent_Forecast_Table_checks": 8,
+  "independent_cold_reads": 8,
+  "structural_carry_operations": 32,
+  "structural_carry_seconds": 0.004011599987279624,
+  "carry_full_law_comparisons": 0,
+  "carry_seed_replays": 0,
+  "remaining_group": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      3
+    ]
+  ],
+  "private_role_mass": "2/3",
+  "Q_unchanged": true,
+  "asymmetric_same_role_marginal_rejected": true,
+  "recursive_engine_adopted": false,
+  "full_initial7_search": false,
+  "public64_aggregate_retried": false,
+  "immutable_sharing": false,
+  "seconds": 1.1971559999510646,
+  "peak_working_set_bytes": 50962432
+}

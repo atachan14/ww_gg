@@ -63,3 +63,58 @@ Eleven regression tests pass (8.951 seconds runner time): the original six plus 
 A representative branch can remain in its label frame across common actions and later publication boundaries, with renewed certificates and explicit output-map composition. This is now demonstrated locally across D2 and D3, including a fixed private observer. It is not evidence of a useful whole-initial performance improvement. Later history breaks most symmetry, and full-law checks, repeated receipt reconstruction and audit retention cost more than the few remaining reductions save. Before further expansion, the useful next design question is whether existing inherited transition proofs can cheaply certify the full private stabilizer without repeatedly reconstructing complete sources; replacing those checks requires a new sound certificate, not role-marginal heuristics.
 
 The ordinary UI, HELP, MAX logic, public edition and server processes remain unchanged. No push/deploy. Machine-readable extension evidence is in `publication-orbit-recursive-*-results.json`, `publication-orbit-recursive-tests.json` and the explicitly unverified exhaustive artifact.
+
+## Structural guarantee update: known-role restriction only
+
+The slower 9998098 recursive evaluator remains an unadopted local experiment. This follow-up does not enable it or change any ordinary dispatch. It investigates which checks can be replaced by provenance, and adds exactly one typed conditioning operation to the same benchmark module.
+
+### What the repeated checks currently do
+
+| Check | Purpose | When a structural receipt can replace it |
+| --- | --- | --- |
+| Owner, saved revision, rules and strategy | Confirm the existing guarantee still belongs to these inputs | Constant-field identity/version checks on immutable saved inputs and configuration; invalidate on replacement |
+| Replaying `request.roles()` and comparing the complete source | Detect a supplied/reconstructed source different from the certified source | A trusted constructor must mint the exact immutable child and its receipt; external posterior replacement is not accepted |
+| Full Q/history and physical Board permutation checks | Detect public weighting, reports, deaths or metadata that broke symmetry | Only after a proved equivariant transition, with all newly observed named endpoints fixed |
+| Full private P/history permutation checks | Detect asymmetric scan/guard/attack mixtures, including ones invisible in role marginals | Only after a proved operation on the complete private law, not an endpoint list or role-marginal cache alone |
+| Observer endpoint fixation | Account for new personal information or intervention | Split the newly named actor/targets and prove the exact observation predicate is invariant under the residual subgroup |
+| Report primitive legality, support, Q likelihood and P mass transfer | Construct the actual distribution and enforce defined positive support | These are semantic generation/normalization checks; symmetry provenance alone does not remove them |
+
+The inherited registry is useful as a dependency trace, but is not yet a complete private-law proof. In particular, its acquisition hook checks phase and `after.rosters == before.rosters + (alive,)`; it does not establish that `after.hypotheses` came from the configured full acquisition kernel. Its action/publication hooks primarily check visible transition shape and new endpoints. Treating those records as sufficient to skip all Q/P checks would accept an arbitrary biased posterior with the same metadata. Private conditioning is also absent from that public-only trace.
+
+### Operation classification
+
+These are preservation obligations, not newly implemented dispatch rules:
+
+| Generated change | Residual guarantee and required dependency |
+| --- | --- |
+| No changed immutable input | Keep the existing receipt; do not compare laws again |
+| Known role of player p | Split p; restrict only P by that exact role indicator and normalize P independently. Implemented below |
+| Uniform complete acquisition mixture | Can preserve the group if alive/eligible rosters, the complete own-history-dependent target rule and every kernel weight commute with the group. A hidden mixture target is not automatically a public endpoint to split. A selected intervention or observed result must fix its actor/target instead |
+| Execution/bite and casualty observation | Fix the chosen target and other named observation endpoints, then prove both the selection likelihood and physical transition commute. Wolf-information conditioning and new private attack records need their own complete-law dependencies |
+| Public report or newly disclosed own result | Fix newly named reporter/actor and target endpoints, then prove the exact report/filter likelihood is invariant. Fake-backlog weighting and own-history legality remain part of that kernel; positive Q with zero private support stays an explicit public-only event/error as appropriate |
+| A batch of named observations | Fix the union of named endpoints; use only certified constituent operations, in order. Do not infer correctness from the final shape alone |
+| Past Board edit, cancellation, replacement posterior, unknown callback or changed policy | Invalidate the receipt and use ordinary processing/new audit. MAX need not be intrinsically asymmetric, but this experiment has no certificate for its recursive choices and does not change it |
+
+A sufficient general theorem is: if a parent complete law is G-invariant, a generated kernel K satisfies `K(g h, g event) = K(h, event)`, and the chosen observation is fixed by subgroup H of G, then the normalized positive-support child is H-invariant. This must cover the full history-bearing hypothesis, public/actual likelihoods separately, metadata, physical Board and observer. Endpoint splitting alone proves the observation is fixed; it does not prove K is equivariant.
+
+### The single implemented structural operation
+
+`seed_role_filter` performs one complete public/private/history/physical audit and accepts exact immutable carriers. `condition_known_role` then accepts only a minted receipt plus an integer player and one supported role. It constructs the filtered P itself using the existing common conditioner; no callback or supplied child posterior is accepted. It fixes that player, leaves Q and all public evidence unchanged, and creates the matching own-role observer. The narrow scope permits an initially public observer or repetition of the same own-role condition, not arbitrary additional observers or mixed observations.
+
+For a permutation g fixing p, `1[role(g h,p)=r] = 1[role(h,p)=r]`. Consequently restriction by this event and independent normalization of P preserve the complete private histories under the residual group. Physical role weights are the marginal of that same P, so physical projection also commutes. No private mass is transferred into Q. The receipt records the step's private event mass separately; source role marginals alone are never used to establish the theorem.
+
+Receipt validation checks only minted identity and a fixed number of owner/configuration/source references. It does not hash a complete state, compare laws, walk parent receipts or replay SavedOrigin. Equivalent-but-replaced configuration also invalidates the receipt conservatively. Ordinary ConditionEvidence is built lazily for an explicit detail request, where full normal reconstruction remains available.
+
+Concrete five-player example (W1/S1/V3, no medium/hunter): true seer1 has initial white3, with certified group `(2,4,5)`. Learning that player2 is a villager has private event mass 2/3 and splits only player2, retaining `(4,5)`. Public wolf probabilities for 2/4/5 remain 1/3 each; actual P assigns 0 to wolf2 and 1/2 each to wolf4/5. The operation preserves all weighted secret histories, not merely those role rates.
+
+Counterexample: fix the roles (wolf2, seer1; 4/5 both villagers), and mix seer1's next white scan of 4 or 5 equally. Swapping 4/5 preserves the complete mixture. Selecting only the record targeting4 leaves the same role marginal and physical role weights but breaks complete-history symmetry. The old `(4,5)` group cannot be carried through that arbitrary filter. The test constructs this law and rejects a substituted/copy receipt; the API never accepts an arbitrary predicate or posterior. A future *typed* own-result operation would have to fix actor1 and target4 and prove its own filter, rather than reuse the role-only receipt unchanged.
+
+### Evidence and practical limit
+
+`publication-orbit-structural-role-results.json`: one seed audit; all 8 positive role conditions independently match complete Q/P/physical states, full Forecast, individual Table and fresh SavedOrigin cold reconstruction; 12 zero-support conditions are explicitly declined. Ten residual permutation generators are independently checked. A 32-operation same-owner carry test forbids the full comparison and seed replay functions: zero calls, approximately 0.0040 seconds for the actual filtering plus receipt checks. Entire audit approximately 1.20 seconds, peak about 51 MB. These tiny diagnostic timings establish no solver speedup.
+
+The important distinction is **zero repeated symmetry comparisons**, not zero work over hypotheses. The common filter, normalization and physical marginal still enumerate the explicit private law. The role-only receipt is not connected to the recursive morning evaluator. Acquisition, publication, death, observer composition and history editing remain uncertified by this new path; the existing ordinary/refusal behavior stays in place. Thus this is evidence that change-only guarantees are possible for a narrow typed operation, not a completed replacement for the 9998098 per-boundary audits.
+
+The essential remaining work is a trusted complete-law transition provenance chain: immutable parent references, exact kernel/version/strategy, changed observation endpoints, private and public normalization masses, and physical/observer dependencies. Existing public inherited groups can supply the endpoint trace but cannot substitute for the missing private/kernel provenance. Realistic choices are to stop with this result; incrementally certify one existing common generator next (preferably the uniform acquisition mixture, before optimizing its representation); or retain ordinary evaluation until that chain exists. Repeating more global full-state checks or silently skipping them does not solve this structural gap. No new recursive evaluator or additional long-search prototype was added.
+
+Regression suite for this checkpoint: 14 tests, zero errors/failures, 9.947 seconds runner time (`publication-orbit-structural-role-tests.json`). It includes copied/substituted receipt refusal, arbitrary predicate and observer-change refusal, saved-revision/builder-strategy/baseline replacement invalidation, and all earlier orbit regressions. No initial7/public64 searches were rerun, and normal UI/HELP/MAX/public edition remain unchanged; immutable sharing stays OFF.

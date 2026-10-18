@@ -191,6 +191,86 @@ def recursive_worker(case):
     print(json.dumps(row),flush=True)
 
 
+def make_role_filter_scope():
+    from .cut_out_model_a import InitialModelASpec
+    from werewolf.exact import Rules
+    from werewolf.seer_acquisition import SeerReport
+    spec=InitialModelASpec(5,('seer',)+('latent',)*4,True,mediums=0,rules=Rules(initial_seer='random_white'),reports=(SeerReport(1,1,1,3,'white'),))
+    graph=SavedCutOutGraph(adapt_model_a(spec));builder=CompactTerminalSmallEngine(graph)
+    return issue_scope(graph,builder,graph.root,graph.origin())
+
+
+def structural_audit():
+    from .cut_out_publication_orbit_value import seed_role_filter,condition_known_role,require_role_filter,role_filter_request
+    from .cut_out_structural_publications import require_groups
+    from .cut_out_joint_night_forecast_fixture import moved_source
+    from unittest.mock import patch
+    from . import cut_out_publication_orbit_value as module
+    from werewolf.seer_acquisition import Acquisition,Hypothesis,normalize
+    scope=make_role_filter_scope();start=time.perf_counter();seed=seed_role_filter(scope);seed_seconds=time.perf_counter()-start
+    full_checks=0;cold_reads=0;positive=0;zero=0;checks=0
+    old=InitialReferenceEngine(scope.graph)
+    with calculation_origin(scope.graph.data):
+        for player in range(1,6):
+            for role in ('wolf','medium','seer','villager'):
+                view=OwnView(player,role)
+                mass=sum((h.mass for h in scope.source.private.hypotheses if view.accepts(h)),F())
+                if not mass:
+                    try:condition_known_role(seed,player,role)
+                    except Pending as error:assert error.reason=='role_filter_zero_private_support';zero+=1
+                    else:raise AssertionError('zero support accepted')
+                    continue
+                proof=condition_known_role(seed,player,role);source=require_role_filter(proof)
+                expected_private=condition_actor_state(scope.source.private,view.accepts)
+                expected=replace(scope.source,private=expected_private,observer=view,physical=physical_board(scope.source.public,expected_private,scope.source.physical),board_data=None)
+                assert source==expected and proof.private_mass==mass and source.public_state is scope.source.public_state
+                # Independent complete comparisons are validation only, never
+                # invoked by the structurally certified filter operation.
+                require_groups(source.public,source.public_state,source.past,proof.groups)
+                for group in proof.groups:
+                    for p in group[1:]:
+                        mapping=list(range(1,6));mapping[group[0]-1],mapping[p-1]=p,group[0];mapping=tuple(mapping)
+                        assert moved_source(source,mapping)==source;full_checks+=1
+                request=role_filter_request(proof);assert independent_cold(scope.graph,request)==source;cold_reads+=1
+                result=forecast(old,expected)
+                # Fresh common engine evaluates the certified carrier unchanged.
+                fresh=InitialReferenceEngine(scope.graph);actual=forecast(fresh,source)
+                assert actual==result and tables(source,actual)==tables(expected,result);checks+=1
+                positive+=1
+        # Prove that carrying/validating a receipt cannot invoke full symmetry
+        # functions or replay the seed scope. Actual Bayesian filtering remains.
+        proof=seed;start=time.perf_counter()
+        with patch.object(module,'move_law',side_effect=AssertionError('full law comparison')),patch.object(module,'same_role_board',side_effect=AssertionError('physical comparison')),patch.object(module,'check_scope',side_effect=AssertionError('seed replay')):
+            for i in range(32):proof=condition_known_role(proof,2,'villager');require_role_filter(proof)
+        carry_seconds=time.perf_counter()-start
+        assert set(proof.groups)=={(1,),(2,),(3,),(4,5)}
+        # Concrete counterexample: fixed roles and physical marginal, unequal
+        # own scan histories. A raw posterior cannot inherit a receipt.
+        source=scope.source;h=next(h for h in source.private.hypotheses if h.roles[0]==2)
+        history=tuple(replace(h,acquisitions=h.acquisitions+(Acquisition(2,1,t,'white'),),mass=F(1,2)) for t in (4,5))
+        symmetric=replace(source.private,hypotheses=normalize(history),rosters=source.private.rosters+(source.public.alive,))
+        asymmetric=condition_actor_state(symmetric,lambda h:h.acquisitions[-1].target==4)
+        mapping=(1,2,3,5,4)
+        assert move_law(asymmetric,mapping).public_roles==asymmetric.public_roles and move_law(asymmetric,mapping)!=asymmetric
+        try:require_role_filter(replace(proof,source=replace(proof.source,private=asymmetric)))
+        except Pending as error:assert error.reason=='role_filter_minted_receipt_required'
+        else:raise AssertionError('arbitrary posterior certified')
+    return dict(status='verified',scope='five original players; exact known-role private conditioning only',seed_full_audits=1,seed_seconds=seed_seconds,
+        positive_role_conditions=positive,zero_support_declined=zero,complete_symmetry_validation_generators=full_checks,independent_Forecast_Table_checks=checks,independent_cold_reads=cold_reads,
+        structural_carry_operations=32,structural_carry_seconds=carry_seconds,carry_full_law_comparisons=0,carry_seed_replays=0,remaining_group=proof.groups,
+        private_role_mass=str(condition_known_role(seed,2,'villager').private_mass),Q_unchanged=True,asymmetric_same_role_marginal_rejected=True,
+        recursive_engine_adopted=False,full_initial7_search=False,public64_aggregate_retried=False,immutable_sharing=False)
+
+
+def structural_worker():
+    start=time.perf_counter()
+    with calculation_budget(4000000,max_seconds=20),independent_joint_values():row=structural_audit()
+    row.update(seconds=time.perf_counter()-start,peak_working_set_bytes=peak_bytes())
+    Path('benchmarks/player_match_groups/publication-orbit-structural-role-results.json').write_text(json.dumps(row,indent=2)+'\n')
+    print(json.dumps(row),flush=True)
+
+
 if __name__=='__main__':
     if len(sys.argv)>1 and sys.argv[1]=='recursive':recursive_worker(sys.argv[2])
+    elif len(sys.argv)>1 and sys.argv[1]=='structural-role':structural_worker()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

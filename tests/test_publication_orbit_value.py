@@ -152,3 +152,44 @@ class RecursivePublicationTests(unittest.TestCase):
         row=plan.representatives[0];mapping=next(mappings(row.pattern,5))
         with self.assertRaises(Pending) as error:labelled_descendant(plan,row,mapping,row.request.child(object(),None))
         self.assertEqual(error.exception.reason,'orbit_value_descendant_operation_transport_unproved')
+
+
+class StructuralRoleFilterTests(unittest.TestCase):
+    def test_fixed_role_filter_full_joint_forecast_table_and_cold(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import structural_audit
+        with calculation_budget(4000000,max_seconds=20):result=structural_audit()
+        self.assertEqual(result['status'],'verified')
+        self.assertEqual(result['seed_full_audits'],1)
+        self.assertEqual(result['carry_full_law_comparisons'],0)
+        self.assertEqual(result['carry_seed_replays'],0)
+        self.assertEqual(result['independent_Forecast_Table_checks'],result['positive_role_conditions'])
+        self.assertEqual(result['independent_cold_reads'],result['positive_role_conditions'])
+        self.assertTrue(result['asymmetric_same_role_marginal_rejected'])
+
+    def test_minted_receipt_revision_and_configuration_guards(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import make_role_filter_scope
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_role_filter,require_role_filter,condition_known_role
+        scope=make_role_filter_scope();proof=seed_role_filter(scope)
+        with self.assertRaises(Pending):require_role_filter(replace(proof))
+        data=scope.graph.data;scope.graph.data=data.updated(revision=data.to_game().get('revision',0)+1)
+        try:
+            with self.assertRaises(Pending):condition_known_role(proof,2,'villager')
+        finally:scope.graph.data=data
+        strategy=scope.builder.strategy;scope.builder.strategy=replace(strategy,night='max')
+        try:
+            with self.assertRaises(Pending):condition_known_role(proof,2,'villager')
+        finally:scope.builder.strategy=strategy
+        baseline=scope.graph.engine.baseline;scope.graph.engine.baseline=replace(baseline,strategy=replace(baseline.strategy,night='max'))
+        try:
+            with self.assertRaises(Pending):require_role_filter(proof)
+        finally:scope.graph.engine.baseline=baseline
+
+    def test_no_arbitrary_predicate_observer_or_new_posterior(self):
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture import make_role_filter_scope
+        from benchmarks.player_match_groups.cut_out_publication_orbit_value import seed_role_filter,require_role_filter,condition_known_role
+        scope=make_role_filter_scope();proof=seed_role_filter(scope)
+        for player,role in ((2,lambda h:True),(True,'villager'),(2,'hunter')):
+            with self.assertRaises(Pending):condition_known_role(proof,player,role)
+        own=condition_known_role(proof,2,'villager')
+        with self.assertRaises(Pending):condition_known_role(own,4,'villager')
+        with self.assertRaises(Pending):require_role_filter(replace(own,source=scope.source))
