@@ -1,0 +1,316 @@
+{
+  "recorded_utc": "2026-10-18T06:52:36.809842+00:00",
+  "head_before_evidence_commit": "e36e94fd2a43609007b8c1062b88690058331adc",
+  "source_sha256": "c61b2ffeae3b7624c1662a0d762d222b49347bd1bc9c1b4de9239867bec866f7",
+  "test_command": [
+    "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tests",
+    "-p",
+    "test_partitioned_match_groups.py",
+    "-v"
+  ],
+  "test_exit": 0,
+  "tests": 9,
+  "test_log": ".artifacts\\partitioned-fixture-tests.log",
+  "test_seconds_limit": 20,
+  "scope": "4/5 player W1 S1 H0, M0/1, constructed uniform initial law; joint-support observations only",
+  "legacy_oracle": "complete labelled allocation/secret enumeration; n! state_signature audit; existing full canonical target keys",
+  "initial_variants": 12,
+  "all_report_position_fixtures": 42,
+  "comparison_delta": {
+    "comparisons": 200
+  },
+  "stats": {
+    "baseline_constructions": 1,
+    "joint_normalizations": 5,
+    "generator_checks": 23,
+    "full_permutation_searches": 0,
+    "comparisons": 200,
+    "rebuilds": 2,
+    "updates": 7,
+    "support_mass_scans": 10,
+    "role_rate_builds": 1
+  },
+  "steps": [
+    {
+      "name": "symmetric baseline",
+      "groups": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "public_roles": 60,
+      "public_secrets": 180,
+      "private_secrets": 180,
+      "public_support_mass": "1",
+      "private_support_mass": "1",
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "simultaneous CO",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3,
+          4,
+          5
+        ]
+      ],
+      "public_roles": 6,
+      "public_secrets": 18,
+      "private_secrets": 18,
+      "public_support_mass": "1/10",
+      "private_support_mass": "1/10",
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "simultaneous P3 white",
+      "groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "public_roles": 6,
+      "public_secrets": 6,
+      "private_secrets": 6,
+      "public_support_mass": "1/30",
+      "private_support_mass": "1/30",
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "P4 selects P1",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ]
+      ],
+      "public_roles": 6,
+      "public_secrets": 6,
+      "private_secrets": 6,
+      "public_support_mass": "1/30",
+      "private_support_mass": "1/30",
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "private P1 seer and own result; later death",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4,
+          5
+        ]
+      ],
+      "public_roles": 6,
+      "public_secrets": 6,
+      "private_secrets": 3,
+      "public_support_mass": "1/30",
+      "private_support_mass": "1/60",
+      "alive": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "withdraw P2 and reports by rebuilding active program",
+      "groups": [
+        [
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "public_roles": 12,
+      "public_secrets": 36,
+      "private_secrets": 36,
+      "public_support_mass": "1/5",
+      "private_support_mass": "1/5",
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "name": "withdraw all by rebuilding",
+      "groups": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "public_roles": 60,
+      "public_secrets": 180,
+      "private_secrets": 180,
+      "public_support_mass": "1",
+      "private_support_mass": "1",
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "p3_white_uniform_choices": [
+    {
+      "targets": [
+        1,
+        2
+      ],
+      "multiplicity": 2,
+      "mass": "2/5"
+    },
+    {
+      "targets": [
+        3
+      ],
+      "multiplicity": 1,
+      "mass": "1/5"
+    },
+    {
+      "targets": [
+        4,
+        5
+      ],
+      "multiplicity": 2,
+      "mass": "2/5"
+    }
+  ],
+  "p3_white_role_cells": [
+    {
+      "composition": [
+        [
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          1
+        ]
+      ],
+      "world_multiplicity": 4,
+      "secret_multiplicity": 4,
+      "mass": "2/3"
+    },
+    {
+      "composition": [
+        [
+          1,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2
+        ]
+      ],
+      "world_multiplicity": 2,
+      "secret_multiplicity": 2,
+      "mass": "1/3"
+    }
+  ],
+  "ordinary_factory_changed": false,
+  "full_game_solver": false,
+  "performance_claim": false
+}
