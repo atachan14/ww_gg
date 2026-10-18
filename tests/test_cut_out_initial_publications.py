@@ -31,8 +31,9 @@ class InitialPublicationsTests(unittest.TestCase):
                 self.assertEqual(len(rows),64)
                 self.assertEqual(e.values,{})
                 self.assertEqual(len(e.publication_patterns),1)
-                # Conservative published-event inheritance split the two COs.
-                # The experiment cannot silently re-form an exchangeable group.
+                # Published endpoints remain split; the product path is exact.
                 _,b,s,p=rows[0]
+                groups=e.inherited_groups.require(b,s,p).groups
+                self.assertNotIn((1,2),groups)
                 with self.assertRaises(Pending) as caught:e.generate_publications(b,s,p)
-                self.assertIn('certified_group',caught.exception.reason)
+                self.assertIn("exactly_one_pending_report",caught.exception.reason)

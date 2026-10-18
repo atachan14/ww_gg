@@ -1,4 +1,4 @@
-"""One pending publication day, <=2 exchangeable reporters, <=1 fake per world.
+"""One pending publication day, <=2 certified reporters, <=1 fake per world.
 
 Candidate primitives and complete posterior weights use the existing laws.
 Only public category/equality patterns are generated before named restoration.
@@ -17,6 +17,7 @@ from werewolf.seer_future_uniform import true_reports,FuturePending
 from werewolf.seer_acquisition import normalize
 from werewolf.board_future import same_role_board
 from werewolf.exact import report_actions
+from werewolf.calculation_budget import tick
 
 
 @dataclass(frozen=True)
@@ -65,8 +66,8 @@ def require_groups(board,state,past,groups):
             if h.roles[2]&(1<<(row.player-1)) and not any(a.day==row.acquired_day and a.player==row.player and a.target==row.target and a.color==row.color for a in h.acquisitions):
                 raise Pending('publication_past_true_report_inconsistent')
     reporters=tuple(p for p in board.alive if board.claims[p-1]=='seer')
-    if len(reporters)>2 or reporters and reporters not in groups:
-        raise Pending('publication_reporters_must_be_one_certified_group_size_at_most_two')
+    if len(reporters)>2:
+        raise Pending('publication_at_most_two_reporters_required')
     if any(sum(not h.roles[2]&(1<<(p-1)) for p in reporters)>1 for h in state.hypotheses):
         raise Pending('publication_multiple_fake_joint_law_unselected')
     for group in groups:
@@ -82,6 +83,8 @@ def produce(board,state,past,groups,*,fake_policy=('noncontradictory','uniform')
     reporters=require_groups(board,state,past,groups)
     if not reporters:return (PublicationPattern((),groups,(),(),1,1,GeneratedPublication((),F(1),state)),)
     candidates,fake=primitive_laws(board,state,past,reporters,fake_policy)
+    if reporters not in groups:
+        return produce_product(board,state,past,groups,reporters,candidates,fake)
     first=reporters[0];cats={}
     for row in candidates[first]:
         r=row[0];block=next(g for g in groups if r.target in g)
@@ -124,6 +127,60 @@ def produce(board,state,past,groups,*,fake_policy=('noncontradictory','uniform')
             multiplicity=factor*prod(perm(len(g),len(points)) for g,points in endpoints)
             branch=GeneratedPublication(reports,one,replace(state,hypotheses=normalize(tuple(entries))))
             result.append(PublicationPattern(reporters,groups,categories,endpoints,factor,multiplicity,branch))
+    if sum((p.branch.probability*p.multiplicity for p in result),F())!=1:
+        raise Pending('publication_pattern_mass_not_complete')
+    return tuple(result)
+
+
+def produce_product(board,state,past,groups,reporters,candidates,fake):
+    """Ordered reporter product under the subgroup fixing each reporter.
+
+    Never identify reporters across certified blocks. Target blocks are only
+    split, and exact Q history and configured fake weights certify each action.
+    """
+    fixed=set(reporters)
+    blocks=tuple(part for g in groups for part in
+        (tuple(p for p in g if p not in fixed),*((p,) for p in g if p in fixed)) if part)
+    cats=[]
+    for p in reporters:
+        local={}
+        for row in candidates[p]:
+            r=row[0];g=next(g for g in blocks if r.target in g)
+            local.setdefault((g,r.color),set()).add(r.target)
+        for (g,color),targets in local.items():
+            if targets!=set(g):raise Pending('publication_primitive_support_not_constant_inside_group')
+            # Q invariance alone is insufficient if the configured primitive
+            # weights are not equivariant. Prove both support and weights.
+            for target in g[1:]:
+                mapping=list(range(1,board.player_count+1));mapping[g[0]-1],mapping[target-1]=target,g[0]
+                moved=lambda row:tuple(sorted(replace(r,player=mapping[r.player-1],target=mapping[r.target-1]) for r in row))
+                if {moved(row) for row in candidates[p]}!=candidates[p] or {moved(row):q for row,q in fake[p].items()}!=fake[p]:
+                    raise Pending('publication_target_primitive_laws_not_equivariant')
+        cats.append(tuple(sorted(local,key=repr)))
+    result=[]
+    for categories in product(*cats):
+        tick()
+        shared=len(reporters)==2 and categories[0][0]==categories[1][0]
+        for distinct in ((False,True) if shared and len(categories[0][0])>1 else (False,)):
+            reports=[];endpoint_map={}
+            for i,(p,(g,color)) in enumerate(zip(reporters,categories)):
+                target=g[1 if i and distinct else 0]
+                reports.append(next(row[0] for row in candidates[p] if row[0].target==target and row[0].color==color))
+                if target not in endpoint_map.setdefault(g,[]):endpoint_map[g].append(target)
+            reports=tuple(reports);entries=[]
+            for h in state.hypotheses:
+                actual=true_reports(h,past,board.alive,board.claims,board.day)
+                if actual!=tuple(r for r in reports if h.roles[2]&(1<<(r.player-1))):continue
+                q=F(1)
+                for r in reports:
+                    if not h.roles[2]&(1<<(r.player-1)):q*=fake[r.player].get((r,),F())
+                if q:entries.append(replace(h,mass=h.mass*q))
+            if not entries:continue
+            mass=sum((h.mass for h in entries),F())
+            endpoints=tuple((g,tuple(points)) for g,points in endpoint_map.items())
+            multiplicity=prod(perm(len(g),len(points)) for g,points in endpoints)
+            branch=GeneratedPublication(reports,mass,replace(state,hypotheses=normalize(tuple(entries))))
+            result.append(PublicationPattern(reporters,blocks,categories,endpoints,1,multiplicity,branch))
     if sum((p.branch.probability*p.multiplicity for p in result),F())!=1:
         raise Pending('publication_pattern_mass_not_complete')
     return tuple(result)

@@ -1,0 +1,78 @@
+{
+  "status": "verified",
+  "scope": "local_day3_separate_reporter_product",
+  "history": [
+    {
+      "day": 1,
+      "phase": "day",
+      "target": 3
+    },
+    {
+      "day": 1,
+      "phase": "night",
+      "target": 4
+    },
+    {
+      "day": 2,
+      "phase": "day",
+      "target": 5
+    },
+    {
+      "day": 2,
+      "phase": "night",
+      "target": 6
+    }
+  ],
+  "groups": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ]
+  ],
+  "patterns": 16,
+  "named_vectors": 16,
+  "variants": {
+    "actual": {
+      "positive_P": 16,
+      "zero_P": 0,
+      "initial_origin_cold": true
+    },
+    "public": {
+      "positive_P": 16,
+      "zero_P": 0,
+      "initial_origin_cold": true
+    },
+    "scan": {
+      "positive_P": 4,
+      "zero_P": 12,
+      "initial_origin_cold": true
+    },
+    "biased": {
+      "positive_P": 16,
+      "zero_P": 0,
+      "initial_origin_cold": false
+    }
+  },
+  "initial_value_search": false,
+  "independent_initial_origin_cold_reads": 49,
+  "full_QP_legal_reports_equal": true,
+  "seconds": 1.6983160999952815,
+  "peak_working_set_bytes": 37150720
+}
