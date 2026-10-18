@@ -59,10 +59,12 @@ class FutureBridgeTests(unittest.TestCase):
   self.assertEqual(morning.alive,(1,2,5));self.assertEqual({w[0] for w in morning.worlds},{9,10});self.assertEqual({w[-1] for w in morning.worlds},{F(1,2)})
   prior=TrueScanState(tuple(Hypothesis(w[:-1],(Acquisition(1,1 if w[2]==1 else 2,3,'white'),),w[-1]) for w in morning.worlds),((1,2,3,4,5),))
   generated=acquire_uniform(prior,(1,2,3,5));past=tuple(SeerReport(1,1,p,3,'white') for p in (1,2));branches=future_publications(generated,past,morning.alive,morning.claims)
-  self.assertEqual(len(branches),4);self.assertEqual(sum(v.probability for v in branches),1);self.assertEqual({v.probability for v in branches},{F(1,4)})
+  # Three legal targets per reporter now include corpse4: 3*3 vectors.
+  self.assertEqual(len(branches),9);self.assertEqual(sum(v.probability for v in branches),1);self.assertEqual({v.probability for v in branches},{F(1,9)})
+  self.assertTrue(any(r.target==4 and r.color=='black'for v in branches for r in v.reports))
   # Public vector shared by both truth owners is grouped, not selected using secrets.
   common=next(v for v in branches if {(r.player,r.target,r.color) for r in v.reports}=={(1,2,'black'),(2,1,'black')})
-  self.assertEqual(common.probability,F(1,4));self.assertEqual({w[0] for w in common.state.public_roles},{9,10});self.assertEqual({w[-1] for w in common.state.public_roles},{F(1,2)})
+  self.assertEqual(common.probability,F(1,9));self.assertEqual({w[0] for w in common.state.public_roles},{9,10});self.assertEqual({w[-1] for w in common.state.public_roles},{F(1,2)})
   # Generated fakes avoid publicly impossible black on citizen5; manual input
   # below deliberately remains free to report such a contradiction.
   self.assertTrue(all(r.color=='white' for v in branches for r in v.reports if r.target==5))

@@ -156,7 +156,8 @@ class GeneratedBoardTests(unittest.TestCase):
 
     def test_saved_seven_player_mixed_board_preserves_previous_complete_table(self):
         # Saved public Board, not the standalone public_forecast kernel route.
-        # Frozen ec513c2 result, including rows and dawn horizon; default budgets.
+        # Corrected corpse rule: original shared-OFF and complete-key trial agree
+        # on all rows (saved-corpse-comparisons.json); default budgets.
         from werewolf.by_dawn import HorizonValues
         source=game(players=7,wolves=2,mediums=2,seers=1,
             claims=['seer','medium','medium']+['latent']*4,
@@ -166,9 +167,9 @@ class GeneratedBoardTests(unittest.TestCase):
             seer_options={'initial_rule':'none','likelihood':'compatibility'},seer_inputs=[])
         result=BoardData.from_game(source).roles().forecast()
         self.assertTrue(hasattr(result,'village_win'),result)
-        self.assertEqual(result.village_win,F(149,324))
-        self.assertEqual(result.action_values,((1,F(47,108)),(2,F(149,324)),
-            (3,F(149,324)),*((p,F(119,360)) for p in range(4,8))))
+        self.assertEqual(result.village_win,F(61,132))
+        self.assertEqual(result.action_values,((1,F(47,108)),(2,F(61,132)),
+            (3,F(61,132)),*((p,F(323,1008)) for p in range(4,8))))
         self.assertEqual(result.by_dawn_values,
             tuple((p,HorizonValues(F(0),F(0))) for p in range(1,8)))
         self.assertEqual(result.pending_metrics,())
@@ -204,7 +205,7 @@ class GeneratedBoardTests(unittest.TestCase):
         with client.session_transaction() as session:session['game']=source
         response=client.get('/main')
         self.assertEqual(response.status_code,200)
-        self.assertIn('data-fraction="113/504"',response.get_data(as_text=True))
+        self.assertIn('data-fraction="157/693"',response.get_data(as_text=True))
 
     def test_count_sum_reuse_is_exact_and_caller_mutation_cannot_change_it(self):
         from dataclasses import replace

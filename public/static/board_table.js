@@ -53,7 +53,7 @@
     if(role==='seer')for(let day=1;day<=seed.day;day++){
       const row=current.seers.find(r=>r.day===day&&r.reporter===player)||{day,reporter:player,target:null,color:null};
       const span=document.createElement('span');span.className='co-day';span.append(`Day${day}: `);
-      const dead=seed.targets.slice(0,day===1?0:2*day-3);const targets=Array.from({length:seed.players},(_,i)=>i+1).filter(p=>p!==player&&!dead.includes(p));
+      const targets=Array.from({length:seed.players},(_,i)=>i+1).filter(p=>p!==player);
       const change=(key,value)=>mutate(next=>{if(key==='color'&&!value){next.seers=next.seers.filter(x=>!(x.day===day&&x.reporter===player));return;}let r=next.seers.find(x=>x.day===day&&x.reporter===player);if(!r){r={...row};next.seers.push(r);}r[key]=key==='target'?(value?Number(value):null):(value||null);if(r.target===null&&r.color===null)next.seers=next.seers.filter(x=>x!==r);});
       const target=select([['','対象'],...targets.map(p=>[String(p),`Player${p}`])],row.target,(v)=>change('target',v));target.dataset.tableTarget=`${day}:${player}`;
       target.disabled=seed.finished||!seed.alive.includes(player);

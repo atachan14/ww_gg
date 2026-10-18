@@ -120,7 +120,11 @@ class GuardMaxHistoryTests(unittest.TestCase):
         game={'players':5,'rules':{'initial_seer':'none'},'seer_options':{'initial_rule':'none'},'seer_inputs':[],'public_log':{'version':2}}
         s,past=prepare_public_prior(game,b,self.rules)
         result=public_forecast(b,s,past,self.rules,self.strategy)
-        self.assertEqual(result.village_win,F(11,18))
+        # Corpse5 remains a legal scan. On a GJ (1/3), two of four
+        # targets identify the wolf/hunter and the other two give no information.
+        # GJ continuation = 1/2*1 + 1/2*1/2 = 3/4; death continuation=1/2.
+        self.assertEqual(result.village_win,F(1,3)*F(3,4)+F(2,3)*F(1,2))
+        self.assertEqual(result.village_win,F(7,12))
         engine=InformationSetForecast(self.rules,self.strategy)
         self.assertEqual(engine.wolf_policy(b,s,past,1),((3,F(1)),))
         self.assertEqual(b.role_probability(2,'hunter'),F(1,2))

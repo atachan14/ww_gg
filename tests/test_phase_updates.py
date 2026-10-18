@@ -19,7 +19,10 @@ class PhaseBoundaryTests(unittest.TestCase):
         self.assertEqual(acquisition_rosters(board),((1,2,3,4,5,6,7),(1,2,3,4,5,6),(1,2,3,4)))
         self.assertEqual(acquisition_roster(7,history,2),(1,2,3,4,5,6))
         self.assertEqual(private_slots(board,1,Rules(initial_seer='normal')),
-                         [{'day':1,'targets':[2,3,4,5,6,7]}, {'day':2,'targets':[2,3,4,5,6]}, {'day':3,'targets':[2,3,4]}])
+                         [{'day':day,'targets':[2,3,4,5,6,7]}for day in(1,2,3)]
+        )
+        self.assertEqual(private_slots(board,1,Rules(),role='hunter'),
+                         [{'day':1,'targets':[2,3,4,5,6]}, {'day':2,'targets':[2,3,4]}])
 
     def test_observed_update_matches_progress_for_both_self_bite_rules(self):
         board=replace(initial_board(5,1),phase='night')

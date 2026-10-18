@@ -44,7 +44,7 @@ class FullDisclosureObservedTests(unittest.TestCase):
  def test_true_fake_backlog_same_days_and_no_report_count_truth_leak(self):
   b=replace_worlds(initial_board(5,2,0,1,experimental_cast=True),((9,0,2,0,F(3,4)),(10,0,1,0,F(1,4))));s=acquire_uniform(TrueScanState(from_board(b),initial_rule='random_white',tracked=(1,2)),b.alive);self.assertEqual(s.public_roles,tuple(sorted(b.worlds)));s=acquire_uniform(s,(1,2,3,5));branches=future_publications(s,(),(1,2,5),('seer','seer','latent','latent','latent'));self.assertEqual(sum(v.probability for v in branches),1);self.assertTrue(all({(r.player,r.acquired_day) for r in v.reports}=={(1,1),(1,2),(2,1),(2,2)} for v in branches));self.assertTrue(any(len(v.state.public_roles)>1 for v in branches))
   for v in branches:
-   for r in v.reports:self.assertNotEqual(r.target,r.player);self.assertIn(r.target,s.rosters[r.acquired_day-1])
+   for r in v.reports:self.assertNotEqual(r.target,r.player);self.assertIn(r.target,s.rosters[0])
  def test_initial_none_fake_does_not_invent_day1_and_world_plan_mass_one(self):
   s=acquire_uniform(TrueScanState((Hypothesis((9,0,2,0),(),F(1)),),initial_rule='none',tracked=(1,2)),(1,2,3,4,5));s=acquire_uniform(s,(1,2,3,5));options=fake_backlog_options(s,(1,),());self.assertEqual(sum(q for _,q in options),1);self.assertTrue(all(all(r.acquired_day==2 for r in rs) for rs,q in options))
  def test_full_medium_current_missing_excludes_true_medium(self):

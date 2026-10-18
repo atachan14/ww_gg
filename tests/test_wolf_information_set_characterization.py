@@ -27,7 +27,7 @@ class WolfInformationSetCharacterizationTests(unittest.TestCase):
         s=project_private(TrueScanState(from_board(seed),((1,2,3,4),),initial_rule='none',tracked=(1,)),b)
         self.assertEqual(legal_targets(b,Rules(),Strategy()),(1,2,3))
         result=seer_forecast(b,1,(),Rules(initial_seer='none'),Strategy('max','random'),scan_state=s)
-        self.assertEqual(dict(result),{2:F(0),3:F(0)})
+        self.assertEqual(dict(result),{2:F(0),3:F(0),4:F(0)})  # corpse4 remains scannable
         masses,policies=roster_random_kernel(b);actual=defaultdict(F)
         for mask,policy in policies.items():
             for p,q in policy.items():actual[p]+=masses[mask]*q
