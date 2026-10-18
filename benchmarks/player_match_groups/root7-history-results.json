@@ -1,0 +1,740 @@
+{
+  "cases": [
+    {
+      "repeat": true,
+      "game": {
+        "players": 7,
+        "wolves": 1,
+        "mediums": 0,
+        "seers": 0,
+        "hunters": 1,
+        "claims": [
+          "hunter",
+          "latent",
+          "latent",
+          "latent",
+          "latent",
+          "latent",
+          "latent"
+        ],
+        "claim_policy": {
+          "hunter": "none"
+        },
+        "policy": {
+          "day": "random",
+          "night": "max",
+          "include_self_bite": false,
+          "fake_reports": "random",
+          "disclosure_common": "none",
+          "seer_disclosure": "inherit",
+          "medium_disclosure": "inherit",
+          "seer_position": [
+            "unvisited",
+            "uniform"
+          ],
+          "fake_seer_policy": [
+            "noncontradictory",
+            "uniform"
+          ],
+          "guard_position": [
+            "uniform"
+          ]
+        },
+        "rules": {
+          "allow_self_bite": false,
+          "initial_seer": "random_white",
+          "allow_repeat_guard": true
+        },
+        "seer_mode": "information-fixed-v1",
+        "seer_inputs": [],
+        "history": [
+          {
+            "target": 7,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": 6,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "observation": "night-deaths-v1",
+            "deaths": [
+              6
+            ],
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": 5,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": null,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "observation": "night-deaths-v1",
+            "deaths": [],
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": 4,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          }
+        ],
+        "seer_options": {
+          "initial_rule": "random_white",
+          "likelihood": "compatibility"
+        }
+      },
+      "alive": [
+        1,
+        2,
+        3
+      ],
+      "public_hypotheses": 40,
+      "physical_hypotheses": 40,
+      "rows": [
+        {
+          "engine": "RootSecretEngine",
+          "seconds": 0.1742693000123836,
+          "complete": true,
+          "forecast": {
+            "village_win": "1/60",
+            "action_values": [
+              [
+                1,
+                "0"
+              ],
+              [
+                2,
+                "1/12"
+              ],
+              [
+                3,
+                "1/12"
+              ]
+            ],
+            "by_dawn_values": [
+              [
+                1,
+                {
+                  "village_win": "0",
+                  "wolf_win": "1"
+                }
+              ],
+              [
+                2,
+                {
+                  "village_win": "0",
+                  "wolf_win": "3/4"
+                }
+              ],
+              [
+                3,
+                {
+                  "village_win": "0",
+                  "wolf_win": "3/4"
+                }
+              ]
+            ],
+            "pending_metrics": []
+          },
+          "key_calls": null,
+          "mask_stats": null
+        },
+        {
+          "engine": "LocalRootEngine",
+          "seconds": 0.1588603999989573,
+          "complete": true,
+          "forecast": {
+            "village_win": "1/60",
+            "action_values": [
+              [
+                1,
+                "0"
+              ],
+              [
+                2,
+                "1/12"
+              ],
+              [
+                3,
+                "1/12"
+              ]
+            ],
+            "by_dawn_values": [
+              [
+                1,
+                {
+                  "village_win": "0",
+                  "wolf_win": "1"
+                }
+              ],
+              [
+                2,
+                {
+                  "village_win": "0",
+                  "wolf_win": "3/4"
+                }
+              ],
+              [
+                3,
+                {
+                  "village_win": "0",
+                  "wolf_win": "3/4"
+                }
+              ]
+            ],
+            "pending_metrics": []
+          },
+          "key_calls": 7,
+          "mask_stats": {
+            "mask_requests": 8,
+            "mask_hits": 6
+          }
+        }
+      ],
+      "exact_equal": true
+    },
+    {
+      "repeat": false,
+      "game": {
+        "players": 7,
+        "wolves": 1,
+        "mediums": 0,
+        "seers": 0,
+        "hunters": 1,
+        "claims": [
+          "hunter",
+          "latent",
+          "latent",
+          "latent",
+          "latent",
+          "latent",
+          "latent"
+        ],
+        "claim_policy": {
+          "hunter": "none"
+        },
+        "policy": {
+          "day": "random",
+          "night": "max",
+          "include_self_bite": false,
+          "fake_reports": "random",
+          "disclosure_common": "none",
+          "seer_disclosure": "inherit",
+          "medium_disclosure": "inherit",
+          "seer_position": [
+            "unvisited",
+            "uniform"
+          ],
+          "fake_seer_policy": [
+            "noncontradictory",
+            "uniform"
+          ],
+          "guard_position": [
+            "uniform"
+          ]
+        },
+        "rules": {
+          "allow_self_bite": false,
+          "initial_seer": "random_white",
+          "allow_repeat_guard": false
+        },
+        "seer_mode": "information-fixed-v1",
+        "seer_inputs": [],
+        "history": [
+          {
+            "target": 7,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": 6,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "observation": "night-deaths-v1",
+            "deaths": [
+              6
+            ],
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": 5,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": null,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "observation": "night-deaths-v1",
+            "deaths": [],
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          },
+          {
+            "target": 4,
+            "claims": [
+              "hunter",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "claim_policy": {
+              "hunter": "none"
+            },
+            "policy": {
+              "day": "random",
+              "night": "random",
+              "include_self_bite": false,
+              "fake_reports": "random",
+              "disclosure_common": "none",
+              "seer_disclosure": "inherit",
+              "medium_disclosure": "inherit",
+              "seer_position": [
+                "unvisited",
+                "uniform"
+              ],
+              "fake_seer_policy": [
+                "noncontradictory",
+                "uniform"
+              ],
+              "guard_position": [
+                "uniform"
+              ]
+            },
+            "seer_options": {
+              "initial_rule": "random_white",
+              "likelihood": "compatibility"
+            }
+          }
+        ],
+        "seer_options": {
+          "initial_rule": "random_white",
+          "likelihood": "compatibility"
+        }
+      },
+      "alive": [
+        1,
+        2,
+        3
+      ],
+      "public_hypotheses": 30,
+      "physical_hypotheses": 30,
+      "rows": [
+        {
+          "engine": "RootSecretEngine",
+          "seconds": 0.11256830001366325,
+          "complete": true,
+          "forecast": {
+            "village_win": "1/60",
+            "action_values": [
+              [
+                1,
+                "0"
+              ],
+              [
+                2,
+                "1/24"
+              ],
+              [
+                3,
+                "1/24"
+              ]
+            ],
+            "by_dawn_values": [
+              [
+                1,
+                {
+                  "village_win": "0",
+                  "wolf_win": "1"
+                }
+              ],
+              [
+                2,
+                {
+                  "village_win": "0",
+                  "wolf_win": "7/8"
+                }
+              ],
+              [
+                3,
+                {
+                  "village_win": "0",
+                  "wolf_win": "7/8"
+                }
+              ]
+            ],
+            "pending_metrics": []
+          },
+          "key_calls": null,
+          "mask_stats": null
+        },
+        {
+          "engine": "LocalRootEngine",
+          "seconds": 0.11416640001698397,
+          "complete": true,
+          "forecast": {
+            "village_win": "1/60",
+            "action_values": [
+              [
+                1,
+                "0"
+              ],
+              [
+                2,
+                "1/24"
+              ],
+              [
+                3,
+                "1/24"
+              ]
+            ],
+            "by_dawn_values": [
+              [
+                1,
+                {
+                  "village_win": "0",
+                  "wolf_win": "1"
+                }
+              ],
+              [
+                2,
+                {
+                  "village_win": "0",
+                  "wolf_win": "7/8"
+                }
+              ],
+              [
+                3,
+                {
+                  "village_win": "0",
+                  "wolf_win": "7/8"
+                }
+              ]
+            ],
+            "pending_metrics": []
+          },
+          "key_calls": 7,
+          "mask_stats": {
+            "mask_requests": 8,
+            "mask_hits": 6
+          }
+        }
+      ],
+      "exact_equal": true
+    }
+  ],
+  "memory": {
+    "peak_working_set_bytes": 34795520,
+    "peak_process_commit_bytes": 25194496,
+    "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+  },
+  "scope": "constructor acceleration only; no new retirement, physical caching or policy changes"
+}

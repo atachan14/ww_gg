@@ -1,0 +1,256 @@
+{
+  "game": {
+    "players": 7,
+    "wolves": 1,
+    "hunters": 1,
+    "mediums": 0,
+    "seers": 0,
+    "claims": [
+      "hunter",
+      "latent",
+      "latent",
+      "latent",
+      "latent",
+      "latent",
+      "latent"
+    ],
+    "claim_policy": {
+      "hunter": "filled"
+    },
+    "policy": {
+      "day": "random",
+      "night": "max",
+      "include_self_bite": false,
+      "fake_reports": "random",
+      "disclosure_common": "none",
+      "seer_disclosure": "inherit",
+      "medium_disclosure": "inherit",
+      "seer_position": [
+        "unvisited",
+        "uniform"
+      ],
+      "fake_seer_policy": [
+        "noncontradictory",
+        "uniform"
+      ],
+      "guard_position": [
+        "uniform"
+      ]
+    },
+    "rules": {
+      "allow_self_bite": false,
+      "initial_seer": "random_white",
+      "allow_repeat_guard": true
+    },
+    "seer_mode": "information-fixed-v1",
+    "seer_inputs": [],
+    "history": [
+      {
+        "target": 7,
+        "claims": [
+          "hunter",
+          "latent",
+          "latent",
+          "latent",
+          "latent",
+          "latent",
+          "latent"
+        ],
+        "claim_policy": {
+          "hunter": "filled"
+        },
+        "policy": {
+          "day": "random",
+          "night": "max",
+          "include_self_bite": false,
+          "fake_reports": "random",
+          "disclosure_common": "none",
+          "seer_disclosure": "inherit",
+          "medium_disclosure": "inherit",
+          "seer_position": [
+            "unvisited",
+            "uniform"
+          ],
+          "fake_seer_policy": [
+            "noncontradictory",
+            "uniform"
+          ],
+          "guard_position": [
+            "uniform"
+          ]
+        },
+        "seer_options": {
+          "initial_rule": "random_white",
+          "likelihood": "compatibility"
+        }
+      }
+    ],
+    "seer_options": {
+      "initial_rule": "random_white",
+      "likelihood": "compatibility"
+    }
+  },
+  "rows": [
+    {
+      "engine": "RootSecretEngine",
+      "seconds": 17.076422299986007,
+      "complete": true,
+      "forecast": {
+        "village_win": "87/200",
+        "action_values": [
+          [
+            1,
+            "7/15"
+          ],
+          [
+            2,
+            "87/200"
+          ],
+          [
+            3,
+            "87/200"
+          ],
+          [
+            4,
+            "87/200"
+          ],
+          [
+            5,
+            "87/200"
+          ],
+          [
+            6,
+            "87/200"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            6,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "key_calls": null
+    },
+    {
+      "engine": "LocalRootEngine",
+      "seconds": 16.93883430000278,
+      "complete": true,
+      "forecast": {
+        "village_win": "87/200",
+        "action_values": [
+          [
+            1,
+            "7/15"
+          ],
+          [
+            2,
+            "87/200"
+          ],
+          [
+            3,
+            "87/200"
+          ],
+          [
+            4,
+            "87/200"
+          ],
+          [
+            5,
+            "87/200"
+          ],
+          [
+            6,
+            "87/200"
+          ]
+        ],
+        "by_dawn_values": [
+          [
+            1,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            2,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            3,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            4,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            5,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ],
+          [
+            6,
+            {
+              "village_win": "0",
+              "wolf_win": "0"
+            }
+          ]
+        ],
+        "pending_metrics": []
+      },
+      "key_calls": 1
+    }
+  ],
+  "equal": true
+}
