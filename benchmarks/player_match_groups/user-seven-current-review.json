@@ -1,0 +1,116 @@
+{
+  "scope": "read existing evidence; no new forecast/profile run",
+  "input": {
+    "citizens": 3,
+    "mediums": 1,
+    "seers": 1,
+    "wolves": 2,
+    "hunters": 0,
+    "claims": [
+      "seer",
+      "seer",
+      "medium",
+      "latent",
+      "latent",
+      "latent",
+      "latent"
+    ],
+    "seer_inputs": [
+      {
+        "color": "white",
+        "day": 1,
+        "reporter": 1,
+        "target": 4
+      },
+      {
+        "color": "white",
+        "day": 1,
+        "reporter": 2,
+        "target": 4
+      }
+    ],
+    "policy": {
+      "day": "max",
+      "fake_reports": "max",
+      "include_self_bite": false,
+      "night": "max"
+    },
+    "rules": {
+      "allow_repeat_guard": true,
+      "allow_self_bite": false,
+      "initial_seer": "random_white"
+    }
+  },
+  "latest_corrected_complete": {
+    "reference": "corpse-rule-seven-results.json",
+    "value": "3487/7200",
+    "solver_seconds": 49.75512510002591,
+    "key_seconds": 25.38399610450142,
+    "key_fraction": 0.5101785203729334,
+    "key_requests": 121693,
+    "source_hits": 8515,
+    "source_hit_fraction": 0.06997115692767866,
+    "new_key_constructions": 113178,
+    "key_supported": 121693,
+    "complete_key_value_hits": 2892,
+    "complete_key_action_hits": 9517,
+    "complete_key_hit_fraction": 0.10196971066536284,
+    "physical_requests": 150314,
+    "physical_hits": 147549,
+    "physical_hit_fraction": 0.9816051731708291,
+    "physical_computations": 2765,
+    "physical_lookup_seconds": 2.0002599959552754,
+    "mask_requests": 126735,
+    "mask_hits": 126684,
+    "mask_hit_fraction": 0.9995975855130784,
+    "generated_publication_branches": 20271,
+    "acquisition_cache_misses": 939,
+    "expansions": {
+      "actions": 76987,
+      "values": 31675
+    },
+    "retirement_proof_hits": 1193,
+    "memory": {
+      "peak_working_set_bytes": 768892928,
+      "peak_process_commit_bytes": 760635392,
+      "scope": "Whole worker, including startup, semantic output and cold+warm requests; not an isolated per-request allocation count."
+    }
+  },
+  "ui": {
+    "reference": "corpse-rule-ui-seven-results.json",
+    "seconds": 57.45206260000123,
+    "status": 200,
+    "terminal": "3487/7200",
+    "roles_first": true,
+    "table_match": true
+  },
+  "current_light_preparation": {
+    "worlds": 6,
+    "joint_hypotheses": 6,
+    "root_color_block_sizes": [
+      1,
+      1,
+      2,
+      3
+    ],
+    "raw_root_mappings": 12,
+    "eligible": true,
+    "public_engine": "ExtensionForecast",
+    "personal_engine": "InformationSetForecast"
+  },
+  "source_file_hash_matches": {
+    "future_reuse.py": true,
+    "fast_key_parts.py": true,
+    "measure_future_reuse.py": false,
+    "retirement_proof.py": true,
+    "extension_reuse.py": true,
+    "extension_cases.py": true
+  },
+  "profile_limitations": [
+    "No corrected-complete actual-seven cProfile found in retained artifacts",
+    "Old actual-seven 10s profiles are incomplete and predate corpse fix and current matching path",
+    "Old immutability helpers in those profiles are absent from current information_weights.py",
+    "future-compact-profile is a different six-player case, not this input"
+  ],
+  "priority": "reduce repeated full-key component serialization/hash work; first distinguish subcosts, preserve full equality; no implementation now"
+}
