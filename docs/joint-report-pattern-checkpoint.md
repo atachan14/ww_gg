@@ -1,0 +1,31 @@
+# Two surviving reporters: structural generation and bounded continuations
+
+Checkpoint scope: the actual7 input, execute medium P3, bite known-white P4, then P1/P2 both survive and publish Day2 results. The inherited groups are {1,2}, {3}, {4}, {5,6,7}, tied to the existing initial group receipt and complete Q-history symmetry. No full initial solve, ordinary UI/HELP/MAX/hunter change, public deployment or new CO/report strategy is introduced.
+
+## Pattern generation before named vectors
+
+The existing plausible_fake_options supplies legal public-history target/color primitives for either possible fake. It uses the supported public prior, not the actual true player's new scan or the actual wolves. A source world has exactly one true seer among P1/P2, the other a wolf/fake, and one additional wolf in P5/P6/P7. True reports follow the acquired scan. Their joint likelihood is never obtained by multiplying separately normalized reporter marginals.
+
+The generator first forms multisets of reporter categories (peer-black, medium3-white, latent-white, latent-black) and same/distinct target-endpoint shapes. This yields thirteen representative PUBLIC report vectors before any full named vector product is constructed. Each representative is weighted against the complete secret prior, preserving the mixture of possible true owners, original two-wolf roles, acquisitions and attacks. Multiplicity is reporter assignment factor times the falling factorial of the latent target block capacity. Equal and different target/color patterns have different stabilizers: the thirteen multiplicities sum to64. For example, two same-color distinct latent targets have6 labels; different-color distinct targets have12.
+
+Only after representative construction does output restoration emit64 named vectors and transport their entire conditional secret states. It does not rerun the report law or solver and does not discover or recanonicalize groups from full vectors. The old generator's30 true-history states times8 fake primitives (240 microscopic combinations) is a different count; this checkpoint claims a structural representative reduction, not a measured full-search speedup.
+
+Fake choices are computed once BEFORE inspecting a representative's truthful result. A fake may accuse the actual true other seer because its supported public hypothetical truth history allows that accusation. Targets exclude self and previously reported P4, include dead P3, and preserve legal color support. No teammate identity or another player's secret acquisition filters the fake's choice law. A hypothetical change to the configured fake law is explicitly refused.
+
+## Q/P and correlation checks
+
+The complete one-morning public/physical distribution agrees with the unaggregated generator for all64 vectors. With physical roster17 (wolves1/5),40 outputs remain physically supported and24 have P=0. A separate diagnostic condition on roster33 (wolves1/6) and the true P2 private scan5-white leaves8 physical outputs and56 P-zero candidates. All64 remain in Q. Physical transfer uses the FULL actual P law after label restoration; representative Q multiplicity is never substituted for asymmetric P weights.
+
+For P1 black5 / P2 black6, the posterior is exactly worlds18 and33, each with mass1/2, with different true-owner acquisitions. This is not a product of the two report marginals. The report has Q mass1/120 but physical mass0 under roster17. For P1 black6 / P2 white5 under the diagnostic private scan condition, Q is1/80 while P is1/8. No conditional P law is fabricated on a zero-probability event: existing public receipts continue those candidates as Q hypotheticals and their physical contribution remains0.
+
+The same PublicationReceipt issuer, Forecast adapter, joint-night selection, terminal readback and independent cold functions are shared with the earlier single-reporter experiment. New public endpoints conservatively refine future product groups; same complete simultaneous declarations can retain the reporter pair. This does not claim to exploit all coupled reporter/target symmetries during future search.
+
+## Bounded verification
+
+Command: python -m benchmarks.player_match_groups.cut_out_joint_reports_fixture
+
+The ordered driver first verifies all64 one-morning public and three physical distributions, then eight refusal boundaries, then eleven small Forecast cases. Public cases include agreement, same-target disagreement, different-target different-color reports, different-target same-color reports and peer-versus-medium declarations. Physical and zero-P cases cover both role-conditioned and private-scan-conditioned priors. Every Forecast compares the full village/action/horizon result, Table, all labelled joint selection masses, every branch outcome and terminal transition history against the unaggregated common recursion. Each case independently rebuilds its prefix and a subsequent Day3 publication with BOTH P1/P2 alive/reporting, using a fresh ordinary kernel, fresh SavedOrigin, literal team-choice oracle and disabled completed-step reuse. Every terminal is also read back; after the first cold sample the generic terminal audit uses existing completed-step reuse, not a claim that every terminal is independently cold.
+
+All thirteen worker entries (distribution, refusal suite, eleven Forecast cases) verified. Maximum full comparison18.360455 seconds; maximum peak working set102,207,488 bytes. Each fresh worker is bounded at30 comparison seconds,120 wall seconds and1.5GB. Fourteen related tests pass in7.761 seconds. The common uniform continuation value is2/15, but action values and Q/P masses differ and are independently checked; the scalar alone is not the oracle.
+
+Refused: changed inherited groups, secret-acquisition bias with unchanged role marginals, unproved backlog, changed configured fake law, another prefix, self-report, copied receipt and stale owner/revision. Multiple fake reporters, other role casts, arbitrary histories, private-view APIs and new MAX paths remain unproved. Initial full exploration is still deferred to a later coordinated checkpoint. Existing .artifacts and docs/previews remain untracked.

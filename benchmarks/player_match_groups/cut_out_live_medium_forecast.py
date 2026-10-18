@@ -72,26 +72,34 @@ def make_case(target=5,color='white',*,restricted=False,medium='black',roster=No
         if recipe is None:raise Pending('live_medium_private_roster_recipe_unproved')
         request=request.child(recipe,None);before=request.roles()
     rows=e.morning(before.public,before.public_state,before.past)
-    physical=e.push(before.public_state,before.private,rows)
     wanted=lambda b,p:any(x.reporter==3 and x.target==1 and x.color==medium for x in b.reports) and any(x.player==2 and x.acquired_day==2 and (x.target,x.color)==(target,color) for x in p)
     selected=[row for row in rows if wanted(row[1],row[3])]
     if not selected:raise Pending('live_medium_public_vector_support_zero')
     if len(selected)>1:raise Pending('live_medium_public_vector_not_unique')
     q,b,s,past=selected[0];observation=publication_key(b,past)
-    selectedP=[row for row in physical if wanted(row[1],row[3])]
+    return issue_publication_receipt(r,w,before,request,e,observation,point_fix(GROUPS,target),require_equal=not restricted)
+
+
+def issue_publication_receipt(r,w,before,request,e,observation,groups,*,require_equal=False):
+    """Shared Q/P publication receipt; physical zero never creates a fake law."""
+    rows=e.morning(before.public,before.public_state,before.past)
+    selected=[row for row in rows if publication_key(row[1],row[3])==observation]
+    if len(selected)!=1:raise Pending('publication_public_observation_not_unique')
+    q=selected[0][0]
+    physical=e.push(before.public_state,before.private,rows)
+    selectedP=[row for row in physical if publication_key(row[1],row[3])==observation]
     if len(selectedP)>1:raise Pending('live_medium_physical_vector_not_unique')
     p=selectedP[0][0] if selectedP else F()
     public_request=request.child(PublicReportEvidence(kernel_snapshot(e),observation),None)
     public_source=public_request.roles()
     physical_request=request.child(PublicationEvidence(kernel_snapshot(e),observation),None) if p else None
     physical_source=physical_request.roles() if p else None
-    if not restricted and physical_source!=public_source:
+    if require_equal and physical_source!=public_source:
         raise Pending('live_medium_public_Q_not_equal_actual_conditional_P')
     result=PublicationReceipt(r,w,before,observation,q,p,public_request,physical_request,
-        public_source,physical_source,point_fix(GROUPS,target))
+        public_source,physical_source,groups)
     _receipts[result]=(r,r.data,r.data.to_game().get('revision',0),tuple(vars(result).values()))
     return check(result)
-
 
 def certificate(receipt,*,public=False):
     check(receipt)

@@ -1,0 +1,38 @@
+{
+  "status": "verified",
+  "rejected": [
+    {
+      "case": "unproved_group_split",
+      "reason": "joint_report_actual7_execute3_bite4_scope"
+    },
+    {
+      "case": "secret_scan_bias_same_role_marginals",
+      "reason": "joint_report_full_public_history_symmetry_required"
+    },
+    {
+      "case": "unproved_backlog",
+      "reason": "joint_report_one_true_scan_required"
+    },
+    {
+      "case": "changed_configured_fake_law",
+      "reason": "joint_report_configured_policy_scope"
+    },
+    {
+      "case": "wrong_prefix",
+      "reason": "joint_report_actual7_execute3_bite4_scope"
+    },
+    {
+      "case": "self_report",
+      "reason": "joint_report_illegal_report_input"
+    },
+    {
+      "case": "copied_receipt",
+      "reason": "live_medium_publication_receipt_not_issued"
+    },
+    {
+      "case": "stale_receipt",
+      "reason": "live_medium_publication_receipt_changed"
+    }
+  ],
+  "peak_working_set_bytes": 32768000
+}

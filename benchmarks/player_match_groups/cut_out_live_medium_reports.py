@@ -24,14 +24,14 @@ class ReportOrbit:
     representative: GeneratedPublication
 
 
-def prepublication(*, receipt=False, kernel_class=InformationSetForecast):
-    first=initial_night(1);r=first.registry;w=first.witness
+def prepublication(*, receipt=False, kernel_class=InformationSetForecast, executed=1):
+    first=initial_night(executed);r=first.registry;w=first.witness
     e=kernel_class(r.engine.baseline.rules,r.engine.baseline.strategy,
         exact_renaming=False,retire_uninformative_scans=False)
     e.retain_joint_guard_history=True
     root=r.origin()
-    outs=e.physical_children(physical_board(root.public,root.private,root.physical),1)
-    request=r.root.child(ActionEvidence(kernel_snapshot(e),1,outcome_key(outs[0]),False),None)
+    outs=e.physical_children(physical_board(root.public,root.private,root.physical),executed)
+    request=r.root.child(ActionEvidence(kernel_snapshot(e),executed,outcome_key(outs[0]),False),None)
     before=request.roles()
     op=choice_step(r,w,before,4,kernel_snapshot(e))
     request=request.child(op,None);source=request.roles()
