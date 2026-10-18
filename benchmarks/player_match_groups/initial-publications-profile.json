@@ -1,0 +1,775 @@
+{
+  "status": "bounded_profile",
+  "stop": {
+    "kind": "time",
+    "work": 3729,
+    "max_work": null,
+    "elapsed_seconds": 7.0
+  },
+  "stats": {
+    "values": 1256,
+    "actions": 3746,
+    "generated": 2109,
+    "branch_records": 3750,
+    "terminal_records": 3260,
+    "policies": 134,
+    "costs": {
+      "key_seconds": 0.3113217002537567,
+      "cut_out_builds": 1262,
+      "cut_out_seconds": 0.28394249943085015,
+      "inherited_group_requests": 5012,
+      "action_requests": 3750,
+      "action_evaluations": 3750,
+      "law_seconds": 3.917144699866185,
+      "acquisition_calls": 716,
+      "morning_calls": 357,
+      "inclusive_action_seconds": 20.331845099688508
+    },
+    "publication_laws": 327,
+    "pattern_representatives": 1043,
+    "named_public_vectors": 1129,
+    "group_stats": {
+      "seven_issued_source": 1,
+      "root_group_reads": 0,
+      "seven-initial-shared-batch": 1,
+      "max_depth": 10,
+      "private_context_splits": 1697,
+      "new_endpoint_positions": 6057,
+      "death-day": 113,
+      "symmetric-acquisition": 113,
+      "death-night": 325,
+      "publication-medium": 130,
+      "publication-seer": 963
+    },
+    "last_board": {
+      "player_count": 7,
+      "alive": [
+        2,
+        5,
+        6,
+        7
+      ],
+      "wolf_count": 1,
+      "day": 2,
+      "phase": "night",
+      "history": [
+        {
+          "day": 1,
+          "phase": "day",
+          "target": 1
+        },
+        {
+          "day": 1,
+          "phase": "night",
+          "target": 3
+        },
+        {
+          "day": 2,
+          "phase": "day",
+          "target": 4
+        }
+      ],
+      "belief": [
+        [
+          17,
+          "1/2"
+        ],
+        [
+          33,
+          "1/2"
+        ]
+      ],
+      "initial_medium_count": 1,
+      "claims": [
+        "seer",
+        "seer",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "role_belief": [
+        [
+          17,
+          4,
+          "1/2"
+        ],
+        [
+          33,
+          4,
+          "1/2"
+        ]
+      ],
+      "initial_seer_count": 1,
+      "initial_hunter_count": 0,
+      "world_belief": [
+        [
+          17,
+          4,
+          2,
+          0,
+          "1/2"
+        ],
+        [
+          33,
+          4,
+          2,
+          0,
+          "1/2"
+        ]
+      ],
+      "medium_opportunities": [
+        [
+          2,
+          3,
+          1
+        ]
+      ],
+      "reports": [],
+      "report_resolved": [],
+      "guard_prior_roster": null
+    },
+    "last_budget_usage": {
+      "work": 3720,
+      "max_work": null,
+      "elapsed_seconds": 6.984
+    }
+  },
+  "peak_working_set_bytes": 68210688,
+  "top_self": [
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 282,
+      "name": "__post_init__",
+      "primitive_calls": 13617,
+      "calls": 13617,
+      "self_seconds": 0.2078277,
+      "cumulative_seconds": 0.7593254
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 520,
+      "name": "action_outcomes",
+      "primitive_calls": 7500,
+      "calls": 7500,
+      "self_seconds": 0.13044650000000002,
+      "cumulative_seconds": 0.8473467
+    },
+    {
+      "file": "\\werewolf\\board_future.py",
+      "line": 142,
+      "name": "evidence_key",
+      "primitive_calls": 24739,
+      "calls": 24739,
+      "self_seconds": 0.1275725,
+      "cumulative_seconds": 0.2997328
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 390,
+      "name": "wolf_count_distribution",
+      "primitive_calls": 61539,
+      "calls": 61539,
+      "self_seconds": 0.11709820000000001,
+      "cumulative_seconds": 0.26595840000000004
+    },
+    {
+      "file": "\\werewolf\\seer_future_uniform.py",
+      "line": 24,
+      "name": "__post_init__",
+      "primitive_calls": 4700,
+      "calls": 4700,
+      "self_seconds": 0.09416790000000001,
+      "cumulative_seconds": 0.23618650000000002
+    },
+    {
+      "file": "\\werewolf\\seer_acquisition.py",
+      "line": 49,
+      "name": "__post_init__",
+      "primitive_calls": 11479,
+      "calls": 11479,
+      "self_seconds": 0.09290810000000001,
+      "cumulative_seconds": 0.2430266
+    },
+    {
+      "file": "\\werewolf\\seer_acquisition.py",
+      "line": 72,
+      "name": "normalize",
+      "primitive_calls": 4700,
+      "calls": 4700,
+      "self_seconds": 0.0919586,
+      "cumulative_seconds": 0.4130606
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 413,
+      "name": "winner",
+      "primitive_calls": 46487,
+      "calls": 46487,
+      "self_seconds": 0.07463080000000001,
+      "cumulative_seconds": 0.1599681
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_day_night.py",
+      "line": 22,
+      "name": "point_fix",
+      "primitive_calls": 5242,
+      "calls": 5242,
+      "self_seconds": 0.0501189,
+      "cumulative_seconds": 0.10977630000000001
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_uniform_game.py",
+      "line": 160,
+      "name": "act",
+      "primitive_calls": 1,
+      "calls": 3750,
+      "self_seconds": 0.048007100000000004,
+      "cumulative_seconds": 6.865807500000001
+    },
+    {
+      "file": "\\werewolf\\evaluation_branch.py",
+      "line": 20,
+      "name": "<genexpr>",
+      "primitive_calls": 42540,
+      "calls": 42540,
+      "self_seconds": 0.0452738,
+      "cumulative_seconds": 0.0635069
+    },
+    {
+      "file": "\\werewolf\\board_future.py",
+      "line": 568,
+      "name": "resolution_key",
+      "primitive_calls": 4239,
+      "calls": 4239,
+      "self_seconds": 0.0378977,
+      "cumulative_seconds": 0.14706660000000002
+    },
+    {
+      "file": "\\werewolf\\evaluation_branch.py",
+      "line": 6,
+      "name": "physical_board",
+      "primitive_calls": 9844,
+      "calls": 9844,
+      "self_seconds": 0.0370349,
+      "cumulative_seconds": 0.2565469
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 309,
+      "name": "<genexpr>",
+      "primitive_calls": 108936,
+      "calls": 108936,
+      "self_seconds": 0.0324975,
+      "cumulative_seconds": 0.0324975
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_uniform_game.py",
+      "line": 117,
+      "name": "inherited_value_groups",
+      "primitive_calls": 5012,
+      "calls": 5012,
+      "self_seconds": 0.0317177,
+      "cumulative_seconds": 0.2923383
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 121,
+      "name": "replace_worlds",
+      "primitive_calls": 5255,
+      "calls": 5255,
+      "self_seconds": 0.0312171,
+      "cumulative_seconds": 0.44825380000000004
+    },
+    {
+      "file": "\\werewolf\\seer_future_uniform.py",
+      "line": 60,
+      "name": "<genexpr>",
+      "primitive_calls": 106955,
+      "calls": 106955,
+      "self_seconds": 0.028608400000000003,
+      "cumulative_seconds": 0.028709600000000002
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 255,
+      "name": "<genexpr>",
+      "primitive_calls": 34865,
+      "calls": 34865,
+      "self_seconds": 0.027540500000000002,
+      "cumulative_seconds": 0.074808
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_uniform_game.py",
+      "line": 130,
+      "name": "<genexpr>",
+      "primitive_calls": 15030,
+      "calls": 15030,
+      "self_seconds": 0.025069300000000003,
+      "cumulative_seconds": 0.0349831
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_structural_publications.py",
+      "line": 82,
+      "name": "produce",
+      "primitive_calls": 327,
+      "calls": 327,
+      "self_seconds": 0.02483,
+      "cumulative_seconds": 0.44985810000000004
+    },
+    {
+      "file": "\\werewolf\\seer_future_uniform.py",
+      "line": 59,
+      "name": "validate_roster",
+      "primitive_calls": 18519,
+      "calls": 18519,
+      "self_seconds": 0.024705900000000003,
+      "cumulative_seconds": 0.0809782
+    },
+    {
+      "file": "\\werewolf\\board_future.py",
+      "line": 113,
+      "name": "kernel_snapshot",
+      "primitive_calls": 3713,
+      "calls": 3713,
+      "self_seconds": 0.0243369,
+      "cumulative_seconds": 0.06376710000000001
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 256,
+      "name": "<genexpr>",
+      "primitive_calls": 101585,
+      "calls": 101585,
+      "self_seconds": 0.024314000000000002,
+      "cumulative_seconds": 0.024314000000000002
+    },
+    {
+      "file": "\\werewolf\\seer_acquisition.py",
+      "line": 50,
+      "name": "<genexpr>",
+      "primitive_calls": 80353,
+      "calls": 80353,
+      "self_seconds": 0.0242995,
+      "cumulative_seconds": 0.0242995
+    },
+    {
+      "file": "\\werewolf\\exact.py",
+      "line": 299,
+      "name": "<genexpr>",
+      "primitive_calls": 73423,
+      "calls": 73423,
+      "self_seconds": 0.0203591,
+      "cumulative_seconds": 0.0274104
+    }
+  ],
+  "top_cumulative": [
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_initial_publications.py",
+      "line": 47,
+      "name": "solve",
+      "primitive_calls": 1,
+      "calls": 1260,
+      "self_seconds": 0.005098500000000001,
+      "cumulative_seconds": 6.8660326000000005
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_user_seven_source.py",
+      "line": 280,
+      "name": "solve",
+      "primitive_calls": 1,
+      "calls": 1260,
+      "self_seconds": 0.0034760000000000004,
+      "cumulative_seconds": 6.8660075
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_uniform_game.py",
+      "line": 186,
+      "name": "solve",
+      "primitive_calls": 1,
+      "calls": 1260,
+      "self_seconds": 0.0157085,
+      "cumulative_seconds": 6.865995300000001
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_uniform_game.py",
+      "line": 196,
+      "name": "<genexpr>",
+      "primitive_calls": 1,
+      "calls": 4518,
+      "self_seconds": 0.0091077,
+      "cumulative_seconds": 6.8658253
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_user_seven_source.py",
+      "line": 283,
+      "name": "act",
+      "primitive_calls": 1,
+      "calls": 3750,
+      "self_seconds": 0.010164900000000001,
+      "cumulative_seconds": 6.865818300000001
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_uniform_game.py",
+      "line": 160,
+      "name": "act",
+      "primitive_calls": 1,
+      "calls": 3750,
+      "self_seconds": 0.048007100000000004,
+      "cumulative_seconds": 6.865807500000001
+    },
+    {
+      "file": "\\werewolf\\action_flow.py",
+      "line": 70,
+      "name": "action_flow",
+      "primitive_calls": 1,
+      "calls": 3750,
+      "self_seconds": 0.0142307,
+      "cumulative_seconds": 6.8656882
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 501,
+      "name": "day_value",
+      "primitive_calls": 1,
+      "calls": 132,
+      "self_seconds": 0.0003646,
+      "cumulative_seconds": 6.8642652
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_initial_publications.py",
+      "line": 36,
+      "name": "morning_value",
+      "primitive_calls": 9,
+      "calls": 357,
+      "self_seconds": 0.0009901,
+      "cumulative_seconds": 6.8198929
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 480,
+      "name": "morning_value",
+      "primitive_calls": 9,
+      "calls": 357,
+      "self_seconds": 0.0044353000000000005,
+      "cumulative_seconds": 6.8198525000000005
+    },
+    {
+      "file": "\\werewolf\\morning_flow.py",
+      "line": 26,
+      "name": "continuation_value",
+      "primitive_calls": 9,
+      "calls": 244,
+      "self_seconds": 0.0003329,
+      "cumulative_seconds": 6.666566100000001
+    },
+    {
+      "file": "\\werewolf\\morning_flow.py",
+      "line": 28,
+      "name": "<genexpr>",
+      "primitive_calls": 58,
+      "calls": 1257,
+      "self_seconds": 0.0020606,
+      "cumulative_seconds": 6.6663537
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 494,
+      "name": "evaluate",
+      "primitive_calls": 50,
+      "calls": 1014,
+      "self_seconds": 0.006054800000000001,
+      "cumulative_seconds": 6.6660770000000005
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_uniform_game.py",
+      "line": 98,
+      "name": "morning",
+      "primitive_calls": 357,
+      "calls": 357,
+      "self_seconds": 0.0018743000000000002,
+      "cumulative_seconds": 3.2302449
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 255,
+      "name": "morning",
+      "primitive_calls": 357,
+      "calls": 357,
+      "self_seconds": 0.0012571000000000001,
+      "cumulative_seconds": 3.0070356
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 80,
+      "name": "cached_flow",
+      "primitive_calls": 357,
+      "calls": 684,
+      "self_seconds": 0.0026748,
+      "cumulative_seconds": 2.9268343000000003
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 258,
+      "name": "<lambda>",
+      "primitive_calls": 325,
+      "calls": 325,
+      "self_seconds": 0.0003599,
+      "cumulative_seconds": 2.9046593
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 265,
+      "name": "generate_morning",
+      "primitive_calls": 325,
+      "calls": 325,
+      "self_seconds": 0.001198,
+      "cumulative_seconds": 2.9042994
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 215,
+      "name": "publications",
+      "primitive_calls": 327,
+      "calls": 327,
+      "self_seconds": 0.0017589,
+      "cumulative_seconds": 2.7173503
+    },
+    {
+      "file": "\\werewolf\\information_set_forecast.py",
+      "line": 219,
+      "name": "<lambda>",
+      "primitive_calls": 327,
+      "calls": 327,
+      "self_seconds": 0.0006494000000000001,
+      "cumulative_seconds": 2.2806865000000003
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_initial_publications.py",
+      "line": 55,
+      "name": "generate_publications",
+      "primitive_calls": 327,
+      "calls": 327,
+      "self_seconds": 0.0046518,
+      "cumulative_seconds": 2.2800371
+    },
+    {
+      "file": "\\werewolf\\action_flow.py",
+      "line": 40,
+      "name": "resolve_action",
+      "primitive_calls": 4239,
+      "calls": 4239,
+      "self_seconds": 0.0179984,
+      "cumulative_seconds": 1.5827669000000002
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_user_seven_source.py",
+      "line": 257,
+      "name": "require_bound",
+      "primitive_calls": 329,
+      "calls": 329,
+      "self_seconds": 0.0046427000000000005,
+      "cumulative_seconds": 1.365193
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_user_seven_source.py",
+      "line": 61,
+      "name": "_metadata",
+      "primitive_calls": 331,
+      "calls": 331,
+      "self_seconds": 0.0191459,
+      "cumulative_seconds": 1.3524455000000002
+    },
+    {
+      "file": "\\benchmarks\\player_match_groups\\cut_out_user_seven_uniform_preparation.py",
+      "line": 45,
+      "name": "_scope",
+      "primitive_calls": 333,
+      "calls": 333,
+      "self_seconds": 0.0105267,
+      "cumulative_seconds": 1.2581025000000001
+    }
+  ],
+  "search_and_profile_seconds": 7.0,
+  "census": {
+    "source_keys": 2109,
+    "unique_request_objects": 1975,
+    "fields": {
+      "public_Board": {
+        "references": 2109,
+        "distinct_identity": 1626,
+        "distinct_value": 245
+      },
+      "Q": {
+        "references": 2109,
+        "distinct_identity": 1504,
+        "distinct_value": 805
+      },
+      "past": {
+        "references": 2109,
+        "distinct_identity": 964,
+        "distinct_value": 91
+      },
+      "P": {
+        "references": 2109,
+        "distinct_identity": 1896,
+        "distinct_value": 1016
+      },
+      "physical_Board": {
+        "references": 2109,
+        "distinct_identity": 1757,
+        "distinct_value": 241
+      }
+    },
+    "distinct_full_public_keys": 1645,
+    "evidence_history_references": 15254,
+    "unique_evidence_operations": 1977,
+    "evidence_operation_types": {
+      "ActionEvidence": 489,
+      "ConditionEvidence": 103,
+      "PublicReportEvidence": 316,
+      "PublicationEvidence": 1014,
+      "MediumInstructionEvidence": 55
+    },
+    "frozen_kernel_count": 1874,
+    "frozen_kernel_dict_bytes": 2968416,
+    "frozen_empty_board_sources_bytes": 119936,
+    "completed_operation_memos": 1506,
+    "containers": {
+      "board_sources": {
+        "entries": 2109,
+        "shallow_bytes": 73808
+      },
+      "board_action_options": {
+        "entries": 3750,
+        "shallow_bytes": 147544
+      },
+      "board_action_kernels": {
+        "entries": 3750,
+        "shallow_bytes": 147544
+      },
+      "board_key_hashes": {
+        "entries": 10946,
+        "shallow_bytes": 589912
+      },
+      "board_replay_stats": {
+        "entries": 2,
+        "shallow_bytes": 184
+      },
+      "values": {
+        "entries": 1256,
+        "shallow_bytes": 36952
+      },
+      "scores": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "policies": {
+        "entries": 134,
+        "shallow_bytes": 4688
+      },
+      "acquired": {
+        "entries": 149,
+        "shallow_bytes": 4688
+      },
+      "symmetries": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "reduced_descriptors": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "action_values": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "public_support_values": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "public_support_stats": {
+        "entries": 2,
+        "shallow_bytes": 184
+      },
+      "mornings": {
+        "entries": 325,
+        "shallow_bytes": 9304
+      },
+      "publication_values": {
+        "entries": 327,
+        "shallow_bytes": 9304
+      },
+      "exact_keys": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "expansions": {
+        "entries": 2,
+        "shallow_bytes": 184
+      },
+      "renaming_stats": {
+        "entries": 3,
+        "shallow_bytes": 184
+      },
+      "day_bounds": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "joint_descriptors": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "joint_keys": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "costs": {
+        "entries": 10,
+        "shallow_bytes": 288
+      },
+      "scalar_actions": {
+        "entries": 3746,
+        "shallow_bytes": 147544
+      },
+      "group_cache": {
+        "entries": 1697,
+        "shallow_bytes": 73808
+      },
+      "branch_records": {
+        "entries": 3750,
+        "shallow_bytes": 33048
+      },
+      "projected": {
+        "entries": 489,
+        "shallow_bytes": 4216
+      },
+      "terminal_records": {
+        "entries": 3260,
+        "shallow_bytes": 29336
+      },
+      "public_candidate_contexts": {
+        "entries": 0,
+        "shallow_bytes": 64
+      },
+      "full_branch_records": {
+        "entries": 3750,
+        "shallow_bytes": 33048
+      },
+      "publication_patterns": {
+        "entries": 327,
+        "shallow_bytes": 9304
+      },
+      "night_inputs": {
+        "entries": 132,
+        "shallow_bytes": 4688
+      },
+      "last_usage": {
+        "entries": 3,
+        "shallow_bytes": 184
+      }
+    }
+  },
+  "total_worker_seconds": 7.062000000005355
+}

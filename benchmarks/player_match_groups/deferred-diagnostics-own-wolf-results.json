@@ -1,0 +1,19 @@
+{
+  "players": 5,
+  "view": "wolf",
+  "status": "verified",
+  "Forecast_Table_full_branches_terminal_mass_equal": true,
+  "full_branches": 65,
+  "terminal_records": 39,
+  "old_retained_resolutions": 54,
+  "new_retained_resolutions": 16,
+  "terminal_memos_not_retained": 39,
+  "eager_diagnostic_outcome_rows": 65,
+  "deferred_diagnostic_outcome_rows": 0,
+  "diagnostic_materialization_only_after_value": true,
+  "independent_cold_reads": 41,
+  "generated_sources": 41,
+  "note": "Small local equality; no initial7 time or memory speedup measurement",
+  "seconds": 0.42199999999138527,
+  "peak_working_set_bytes": 35508224
+}
