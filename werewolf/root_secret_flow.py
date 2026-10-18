@@ -109,7 +109,7 @@ def root_max_history_needed(game,board):
     return len({w[3] for w in seed.worlds})>1
 
 
-def root_scope(branch,rules,strategy):
+def root_scope(branch,rules,strategy,*,_known_publications=()):
     if not root_strategy_supported(branch.public,strategy):return 'root_secret_max_unimplemented'
     from .guard_model import scope_reason
     reason=scope_reason(branch.public,rules,strategy,True,joint_max=True)
@@ -118,7 +118,10 @@ def root_scope(branch,rules,strategy):
         return 'root_secret_self_bite_policy_support_unimplemented'
     # Initial full-disclosure omissions retain the existing fixed-CO contract.
     if strategy.disclosure_for('seer')=='all':
-        published={(r.player,r.acquired_day) for r in branch.past}
+        # Closed full-disclosure snapshots know that a report occurred even
+        # when its input CONTENT was later withdrawn. This proof carries only
+        # (owner, acquisition-day), never a retired target/color or acquisition.
+        published={(r.player,r.acquired_day) for r in branch.past}|set(_known_publications)
         if any(a.player in branch.public.alive and branch.public.claims[a.player-1]=='seer' and
                (a.player,a.day) not in published for h in branch.public_law.hypotheses for a in h.acquisitions):
             return 'full_disclosure_truth_not_conditioned'
@@ -413,9 +416,9 @@ class RootSecretEngine(InformationSetForecast):
     def value_law(self,state):return state  # No history compression in this entry.
 
 
-def step_root_action(branch,target,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,publish=True,_engine=None,_observed_alive=None):
+def step_root_action(branch,target,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,publish=True,_engine=None,_observed_alive=None,_known_publications=()):
     """Explicit action intervention through the shared ability/death/report flow."""
-    reason=root_scope(branch,rules,strategy)
+    reason=root_scope(branch,rules,strategy,_known_publications=_known_publications)
     if reason:return FuturePending(reason)
     if branch.public.winner:return FuturePending('root_secret_terminal_action')
     try:
@@ -540,7 +543,7 @@ def observe_root_snapshot(branch,game,index,rules,*,guard_priors=None):
         lambda h:(h.roles,h.acquisitions,h.guards,h.attacks) in signatures,past=reports)
 
 
-def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_collect_guard_priors=False):
+def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_collect_guard_priors=False,_historical_disclosure_proof=False):
     """Recreate actual joint histories; observed bites use the configured policy.
 
     Q is restored from the existing public replay only after P is conditioned.
@@ -566,6 +569,11 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,ma
                 branch=observe_root_snapshot(branch,game,index,rules,guard_priors=guard_priors)
                 if isinstance(branch,FuturePending):return branch
                 policy=Strategy(**step['policy']);target=step['target']
+                known_publications=()
+                if _historical_disclosure_proof and step.get('result_disclosure_model')=='full-observed-v1':
+                    from .result_disclosure import snapshot as disclosure_snapshot
+                    _,reported=disclosure_snapshot(game,branch.public,branch.public.claims)
+                    known_publications=tuple((p,day) for kind,day,p in reported if kind=='seer')
                 if branch.public.phase=='night':guard_priors[index]=branch.public_law
                 if not rules.allow_repeat_guard and branch.public.phase=='night' and 'observation' not in step:
                     return FuturePending('guard_saved_observation_required')
@@ -589,7 +597,7 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,ma
                     expected=branch.public.alive if target is None else tuple(p for p in branch.public.alive if p!=target)
                     children=step_root_action(active,action,rules,policy,max_work=max_work,
                                               max_seconds=max_seconds,publish=False,_engine=engine,
-                                              _observed_alive=expected)
+                                              _observed_alive=expected,_known_publications=known_publications)
                     if isinstance(children,FuturePending):return children
                     selected.extend((mass*q,c) for q,c in children if not c.public.winner and c.public.alive==expected)
                 if not selected:

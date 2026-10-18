@@ -37,3 +37,5 @@
 この編集後の候補入力は保持し、評価/recipeは明示的なInvalidated/Pending状態とする。旧snapshotは変更せず、withdraw batchの削除で共同分布が厳密に戻る。旧fake報告を本当の秘密取得として足す補完や、均等化・省略による救済は行わない。承認拒否ではなく共通仕様の未対応であり、今回の通常/公開変更なしの範囲では共通意味を変更しなかった。所有元が二日目のCO取消と、初日所有元の訂正は上記のとおり成功。
 
 夜snapshotでの入力編集、任意の所有元切替/実UI archive統合、latent私有条件を含むすべてのcache projection descriptorの永続再利用、全終端木の効率的復元、7人・max・狩人は未対応。証拠は `cut-out-six-registry-results.json`。途中COのすべての撤回形態が完成したとは扱わない。
+
+このPendingの最小再現と、旧oracleを変えない明示フラグ修正の診断は[次段階の記録](withdraw-prefix-diagnostic.md)を参照。標準入口は未切替。

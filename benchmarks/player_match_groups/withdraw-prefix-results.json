@@ -1,0 +1,133 @@
+{
+  "recorded_utc": "2026-10-18T09:42:57.228352+00:00",
+  "head_before_commit": "8048e62378b5a1bd2f348e5a39b67ba13dd98c01",
+  "cases": [
+    {
+      "default_result": "full_disclosure_truth_not_conditioned",
+      "old_role_oracle_preserved": true,
+      "wolf_rates": {
+        "1": "3/5",
+        "3": "1/5",
+        "4": "1/5"
+      },
+      "public_hypotheses": 10,
+      "physical_hypotheses": 10,
+      "truth1_initial_targets": [
+        2,
+        3,
+        4
+      ],
+      "active_concrete_reports": 0,
+      "retired_report_contents_used": false,
+      "case": "four-reported"
+    },
+    {
+      "default_result": "completed",
+      "old_role_oracle_preserved": true,
+      "wolf_rates": {
+        "1": "1",
+        "3": "0",
+        "4": "0"
+      },
+      "public_hypotheses": 6,
+      "physical_hypotheses": 6,
+      "truth1_initial_targets": [],
+      "active_concrete_reports": 0,
+      "retired_report_contents_used": false,
+      "case": "four-omitted"
+    },
+    {
+      "default_result": "full_disclosure_truth_not_conditioned",
+      "old_role_oracle_preserved": true,
+      "wolf_rates": {
+        "1": "5/8",
+        "4": "1/8",
+        "5": "1/8",
+        "6": "1/8"
+      },
+      "public_hypotheses": 116,
+      "physical_hypotheses": 116,
+      "truth1_initial_targets": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "active_concrete_reports": 0,
+      "retired_report_contents_used": false,
+      "case": "six-two-actions"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "pattern",
+      "target": "test_withdraw_prefix_diagnostic.py",
+      "exit": 0,
+      "peak_working_set_bytes": 28913664
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_six_registry.py",
+      "exit": 0,
+      "peak_working_set_bytes": 41881600
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_saved_recipes.py",
+      "exit": 0,
+      "peak_working_set_bytes": 43065344
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_two_nights.py",
+      "exit": 0,
+      "peak_working_set_bytes": 32374784
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_uniform_game.py",
+      "exit": 0,
+      "peak_working_set_bytes": 56307712
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_model_a.py",
+      "exit": 0,
+      "peak_working_set_bytes": 34222080
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal",
+      "exit": 0,
+      "peak_working_set_bytes": 39301120
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization",
+      "exit": 0,
+      "peak_working_set_bytes": 38178816
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved",
+      "exit": 0,
+      "peak_working_set_bytes": 37318656
+    }
+  ],
+  "tests": 29,
+  "legacy23_unchanged": true,
+  "default_saved_origin_still_pending": true,
+  "opt_in_flag": "_historical_disclosure_proof=True",
+  "wall_seconds": 18.125,
+  "per_run_seconds": 30,
+  "overall_seconds_limit": 300,
+  "memory_limit_bytes": 1500000000,
+  "source_sha256": {
+    "werewolf/root_secret_flow.py": "07b14ab8596fdd14230a8c2b2f0190d364093a9c7f8b2323ab1e8560cf215602",
+    "benchmarks/player_match_groups/withdraw_prefix_diagnostic.py": "6d158ff383fbc7af8275552f1113e08773612b3f859c06dd5fa382dedca47470",
+    "benchmarks/player_match_groups/withdraw_prefix_diagnostic_fixture.py": "66e11873c7b665789778cf4d759aabefe88e4eb6c1ff8346231ab4cee5e20ebf",
+    "tests/test_withdraw_prefix_diagnostic.py": "5f3a2bc14b7366121b9a663d529e9688b1b764c21c630203d4ca3414a47ff9d7"
+  },
+  "ordinary_ui_or_public_changed": false
+}
