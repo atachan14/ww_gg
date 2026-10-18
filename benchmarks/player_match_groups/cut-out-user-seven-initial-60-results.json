@@ -1,0 +1,104 @@
+{
+  "status": "unverified",
+  "exit_code": 137,
+  "error": "wwgg_budget_stop kind=time work=291337 max_work=1000000 elapsed_seconds=60.0\n",
+  "saved_paths": {
+    "inherited": {
+      "seconds": 60.03100000001723,
+      "scale": {
+        "value_cache": 44169,
+        "scalar_actions": 132691,
+        "branch_records": 132695,
+        "terminal_records": 125724,
+        "generated_boards": 60864,
+        "costs": {
+          "key_seconds": 3.8844845078710932,
+          "cut_out_builds": 44185,
+          "cut_out_seconds": 3.5522539037046954,
+          "inherited_group_requests": 176880,
+          "action_requests": 132695,
+          "action_evaluations": 132695,
+          "law_seconds": 21.589960499259178,
+          "acquisition_calls": 10262,
+          "morning_calls": 5131,
+          "inclusive_action_seconds": 234.1365717992012
+        },
+        "inherited_contexts": 42086
+      },
+      "budget_stop": {
+        "kind": "time",
+        "work": 291337,
+        "max_work": 1000000,
+        "elapsed_seconds": 60.0
+      },
+      "status": "unverified",
+      "reason": "comparison evaluation budget exhausted",
+      "canonical_calls": 0,
+      "CandidateRules_calls": 0,
+      "legacy_root_calls": 0
+    },
+    "independent": {
+      "status": "unverified",
+      "reason": "memory_limit",
+      "current": "independent",
+      "scale": {
+        "value_cache": 28677,
+        "scalar_actions": 87412,
+        "branch_records": 87417,
+        "terminal_records": 81069,
+        "generated_boards": 41054,
+        "costs": {
+          "action_requests": 87417,
+          "action_evaluations": 87417,
+          "law_seconds": 10.212130500061903,
+          "acquisition_calls": 9550,
+          "morning_calls": 4775
+        },
+        "inherited_contexts": 0
+      },
+      "seconds": 93.70300000000861,
+      "peak_working_set_bytes": 1503817728,
+      "note": "worker-wide limit included retained incomplete inherited engine; not standalone independent memory",
+      "canonical_calls": null,
+      "CandidateRules_calls": null,
+      "legacy_root_calls": null
+    }
+  },
+  "watchdog": {
+    "status": "unverified",
+    "reason": "memory_limit",
+    "current": "independent",
+    "scale": {
+      "value_cache": 28677,
+      "scalar_actions": 87412,
+      "branch_records": 87417,
+      "terminal_records": 81069,
+      "generated_boards": 41054,
+      "costs": {
+        "action_requests": 87417,
+        "action_evaluations": 87417,
+        "law_seconds": 10.212130500061903,
+        "acquisition_calls": 9550,
+        "morning_calls": 4775
+      },
+      "inherited_contexts": 0
+    },
+    "seconds": 93.70300000000861,
+    "peak_working_set_bytes": 1503817728
+  },
+  "limits": {
+    "evaluation_seconds": 60,
+    "worker_seconds": 150,
+    "peak_working_set_bytes": 1500000000,
+    "readback_seconds": 20
+  },
+  "speed_measurement_executed": false,
+  "remaining_cost": "Board constructor two full-history validation passes; unchanged",
+  "tested_parent": "2b55a5675452854edd2a1fa88a79bb36bce96b93",
+  "forecast_equal": null,
+  "Table_joint_equal": null,
+  "branch_mass_comparisons": null,
+  "terminal_readbacks": null,
+  "postrun_harness_correction": "release incomplete engine before peer; capture watchdog counters; not numerically rerun",
+  "independent_forbidden_call_status": "throwing guards active, but final counters not captured before worker exit"
+}
