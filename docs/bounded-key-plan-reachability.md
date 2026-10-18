@@ -1,5 +1,7 @@
 # Reachable over-cap key requests (light diagnostic)
 
+Follow-up: [actual medium-party numerical comparison](medium-rescue-comparison.md) completed16 equal runs; canonical rescue occurred but did not reduce work versus the existing reducer. No adoption. The proposed comparison below is historical.
+
 The rescue design is NOT disproved by the first three numerical benchmarks. Two actual over-cap inputs were found using the current application's supported setup/SystemLog APIs and existing local opt-in factory. Default OFF and real server settings were not changed.
 
 | Input, six original/live players | Preparation / normal request | Existing120 key | Full720 reference / bounded plan median |

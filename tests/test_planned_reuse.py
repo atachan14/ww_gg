@@ -22,3 +22,32 @@ class PlannedReuseTests(unittest.TestCase):
                 if reference is None:reference=output
                 self.assertEqual(output,reference)
             if cls is PlannedReuseForecast:self.assertGreater(e.plan_stats['complete'],0)
+    def test_over_cap_selector_keeps_current_keys_and_only_proves_missing_case(self):
+        from tests.test_bounded_key_plan import BoundedKeyPlanTests
+        from benchmarks.player_match_groups.planned_reuse import OverCapReuseForecast
+        from werewolf.exact_renaming import canonical_key
+        b,s,rules,strategy=BoundedKeyPlanTests().fixture()
+        e=OverCapReuseForecast(rules,strategy,future_reuse=True,compact_keys=True,fast_parts=True)
+        target=e.full_renamed_key(b,s,(),s,None,target=1)
+        self.assertIsNotNone(target);self.assertEqual(e.plan_stats['calls'],0)
+        scalar=e.full_renamed_key(b,s,(),s,None)
+        self.assertIsNotNone(scalar);self.assertEqual(e.plan_stats['over_cap_completed'],1)
+        expected=canonical_key(b,s,(),s,None,rules,strategy,max_mappings=1000)
+        self.assertEqual(getattr(scalar,'values',scalar),expected)
+        self.assertIsNone(e.full_renamed_key(b,s,(),s,lambda h,s:True))
+        self.assertEqual(e.plan_stats['calls'],1)
+
+    def test_over_cap_selector_does_not_ignore_cyclic_private_correlations(self):
+        from tests.test_bounded_key_plan import BoundedKeyPlanTests
+        from benchmarks.player_match_groups.planned_reuse import OverCapReuseForecast
+        from dataclasses import replace
+        from fractions import Fraction as F
+        from werewolf.night_knowledge import WolfAttack
+        from werewolf.seer_acquisition import normalize
+        b,s,rules,strategy=BoundedKeyPlanTests().fixture()
+        hs=normalize(tuple(replace(h,attacks=(WolfAttack(1,t),),mass=F(1,30))for h in s.hypotheses for t in b.alive if not h.roles[0]&(1<<(t-1))))
+        public=replace(s,hypotheses=hs,rosters=(b.alive,b.alive))
+        private=replace(public,hypotheses=normalize(tuple(h for h in hs if h.attacks[0].target==(h.roles[0].bit_length()%6)+1)))
+        e=OverCapReuseForecast(rules,strategy,future_reuse=True,compact_keys=True,fast_parts=True)
+        self.assertIsNone(e.full_renamed_key(b,public,(),private,None))
+        self.assertEqual(e.plan_stats['residual_mapping_limit'],1)

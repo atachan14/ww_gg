@@ -1,0 +1,191 @@
+{
+  "runs": 16,
+  "all_equal": true,
+  "stop": [],
+  "stage_seconds": 1.5653717999812216,
+  "peak_rss": 53698560,
+  "summary": [
+    {
+      "mode": "original",
+      "cold": {
+        "seconds": 0.08317420000093989,
+        "new_key_seconds": null,
+        "memo": {
+          "value_lookups": 9,
+          "value_hits": 3,
+          "action_lookups": 104,
+          "action_hits": 45
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 6
+        },
+        "plan_calls": 0,
+        "over_cap_completed": 0,
+        "selection": {},
+        "value_key_kinds": {
+          "party-scalar": 6
+        }
+      },
+      "warm": {
+        "seconds": 0.0593527000019094,
+        "new_key_seconds": null,
+        "memo": {
+          "value_lookups": 2,
+          "value_hits": 2,
+          "action_lookups": 17,
+          "action_hits": 17
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 6
+        },
+        "plan_calls": 0,
+        "over_cap_completed": 0,
+        "selection": {},
+        "value_key_kinds": {
+          "party-scalar": 6
+        }
+      }
+    },
+    {
+      "mode": "current",
+      "cold": {
+        "seconds": 0.12932535000436474,
+        "new_key_seconds": 0.024316249939147383,
+        "memo": {
+          "value_lookups": 17,
+          "value_hits": 0,
+          "action_lookups": 179,
+          "action_hits": 135
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 9
+        },
+        "plan_calls": 0,
+        "over_cap_completed": 0,
+        "selection": {},
+        "value_key_kinds": {
+          "exact-full-renaming": 8,
+          "party-scalar": 1
+        }
+      },
+      "warm": {
+        "seconds": 0.06415905000176281,
+        "new_key_seconds": 0.0014758499746676534,
+        "memo": {
+          "value_lookups": 3,
+          "value_hits": 3,
+          "action_lookups": 34,
+          "action_hits": 34
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 9
+        },
+        "plan_calls": 0,
+        "over_cap_completed": 0,
+        "selection": {},
+        "value_key_kinds": {
+          "exact-full-renaming": 8,
+          "party-scalar": 1
+        }
+      }
+    },
+    {
+      "mode": "planned",
+      "cold": {
+        "seconds": 0.13058745001035277,
+        "new_key_seconds": 0.044019150067470036,
+        "memo": {
+          "value_lookups": 18,
+          "value_hits": 0,
+          "action_lookups": 179,
+          "action_hits": 135
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 9
+        },
+        "plan_calls": 78,
+        "over_cap_completed": 1,
+        "selection": {},
+        "value_key_kinds": {
+          "exact-full-renaming": 9
+        }
+      },
+      "warm": {
+        "seconds": 0.06473514999379404,
+        "new_key_seconds": 0.001468550050049089,
+        "memo": {
+          "value_lookups": 4,
+          "value_hits": 4,
+          "action_lookups": 34,
+          "action_hits": 34
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 9
+        },
+        "plan_calls": 0,
+        "over_cap_completed": 0,
+        "selection": {},
+        "value_key_kinds": {
+          "exact-full-renaming": 9
+        }
+      }
+    },
+    {
+      "mode": "selective",
+      "cold": {
+        "seconds": 0.12126464999164455,
+        "new_key_seconds": 0.034754250023979694,
+        "memo": {
+          "value_lookups": 18,
+          "value_hits": 0,
+          "action_lookups": 179,
+          "action_hits": 135
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 9
+        },
+        "plan_calls": 1,
+        "over_cap_completed": 1,
+        "selection": {
+          "calls": 78,
+          "over_cap_proof": 1,
+          "current_key": 77
+        },
+        "value_key_kinds": {
+          "exact-full-renaming": 9
+        }
+      },
+      "warm": {
+        "seconds": 0.06399184999463614,
+        "new_key_seconds": 0.00142454999149777,
+        "memo": {
+          "value_lookups": 4,
+          "value_hits": 4,
+          "action_lookups": 34,
+          "action_hits": 34
+        },
+        "expansions": {
+          "actions": 10,
+          "values": 9
+        },
+        "plan_calls": 0,
+        "over_cap_completed": 0,
+        "selection": {
+          "calls": 0,
+          "over_cap_proof": 0,
+          "current_key": 0
+        },
+        "value_key_kinds": {
+          "exact-full-renaming": 9
+        }
+      }
+    }
+  ]
+}
