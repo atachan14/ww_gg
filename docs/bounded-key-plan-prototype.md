@@ -1,5 +1,7 @@
 # Bounded complete-key planning prototype
 
+Follow-up: [first numerical/performance comparison](bounded-key-plan-comparison.md) completed36 exact runs, but showed no incremental benefit; prototype remains unadopted. The verification-window proposal below is historical.
+
 Comparison-only implementation: `benchmarks/player_match_groups/bounded_key_plan.py`. No app factory imports it; current <=6 / limited-seven admission and default OFF are unchanged. Numerical source remains c97f630. This is a key-construction experiment, not an enabled new evaluator or a completed general-seven rollout.
 
 The adapter derives the current canonical constructor with explicit single-occurrence source guards, preserving its complete snapshot and equality checks. A future constructor edit makes the adapter refuse import until revalidated. Only the cap location changes: original colour factorial count no longer rejects first; the existing full-snapshot leader-swap proofs run within a local plan, then the ORIGINAL mapping limit is applied to the product of unproved block factorials. A proved full symmetric block needs only its one original order. Proofs include public/private joint hypotheses and exact masses, acquisition/attack/guard histories, public relations/rosters, physical Board, observer, rules/strategy, wolf policy contexts and verifying actor mask. Display PlayerData is never read, synthesized or rewritten.

@@ -27,6 +27,7 @@ class KeyReusePlan:
     serialized_cells:int=field(default=0,init=False)
     snapshots:int=field(default=0,init=False)
     swaps:int=field(default=0,init=False)
+    initial_count:int=field(default=0,init=False)
     residual_count:int=field(default=1,init=False)
     certified_blocks:list=field(default_factory=list,init=False,repr=False)
     reason:str=field(default='new',init=False)
@@ -108,14 +109,14 @@ class KeyReusePlan:
     def summary(self):
         # No identities, law contents, observer or policy details in telemetry.
         return dict(reason=self.reason,source_cells=self.source_cells,serialized_cells=self.serialized_cells,
-                    snapshots=self.snapshots,swaps=self.swaps,residual_count=self.residual_count,
+                    snapshots=self.snapshots,swaps=self.swaps,initial_count=self.initial_count,residual_count=self.residual_count,
                     certified_block_sizes=[len(b)for b in self.certified_blocks])
 
 _SOURCE=inspect.getsource(original.canonical_key)
 _CHANGES=(
  ("    if observer is not None and type(observer).__name__ not in ('GuardObserver','SeerObserver'):return None",
   "    proof_plan.admit(b,s,past,private,physical,wolf_profiles,observer)\n    if observer is not None and type(observer).__name__ not in ('GuardObserver','SeerObserver'):return None"),
- ('    if count>max_mappings:return None','    # Comparison-only: cap the residual search after complete proofs.'),
+ ('    if count>max_mappings:return None','    proof_plan.initial_count=count # Cap the residual search after complete proofs.'),
  ('    def snapshot(ids,masks):','    def snapshot(ids,masks):\n        proof_plan.snapshot()'),
  ('                    tick();ids=list(identity);','                    proof_plan.swap();tick();ids=list(identity);'),
  ('            orders_by_block.append((block,) if symmetric else permutations(block))',

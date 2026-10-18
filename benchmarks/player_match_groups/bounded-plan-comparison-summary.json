@@ -1,0 +1,154 @@
+{
+  "all_complete_and_equal": true,
+  "runs": 36,
+  "stage_seconds": 27.823633499996504,
+  "stop": [],
+  "local_key_time_fallbacks": 3,
+  "peak_rss": 142684160,
+  "summary": [
+    {
+      "case": "five-uniform",
+      "mode": "original",
+      "cold": {
+        "seconds": 0.8523448500054656,
+        "new_key_seconds": null,
+        "complete_key_hits": null,
+        "key_requests": null
+      },
+      "warm": {
+        "seconds": 0.09948234999319538,
+        "new_key_seconds": null,
+        "complete_key_hits": null,
+        "key_requests": null
+      }
+    },
+    {
+      "case": "five-uniform",
+      "mode": "current",
+      "cold": {
+        "seconds": 0.46073699998669326,
+        "new_key_seconds": 0.21998944981896784,
+        "complete_key_hits": 297.0,
+        "key_requests": 1008.0
+      },
+      "warm": {
+        "seconds": 0.011823600012576208,
+        "new_key_seconds": 0.00036660002660937607,
+        "complete_key_hits": 13.0,
+        "key_requests": 13.0
+      }
+    },
+    {
+      "case": "five-uniform",
+      "mode": "planned",
+      "cold": {
+        "seconds": 0.5183719499909785,
+        "new_key_seconds": 0.27745264985424,
+        "complete_key_hits": 297.0,
+        "key_requests": 1008.0
+      },
+      "warm": {
+        "seconds": 0.012054449995048344,
+        "new_key_seconds": 0.0003733500052476302,
+        "complete_key_hits": 13.0,
+        "key_requests": 13.0
+      }
+    },
+    {
+      "case": "six-uniform",
+      "mode": "original",
+      "cold": {
+        "seconds": 4.52486730000237,
+        "new_key_seconds": null,
+        "complete_key_hits": null,
+        "key_requests": null
+      },
+      "warm": {
+        "seconds": 1.0494374000118114,
+        "new_key_seconds": null,
+        "complete_key_hits": null,
+        "key_requests": null
+      }
+    },
+    {
+      "case": "six-uniform",
+      "mode": "current",
+      "cold": {
+        "seconds": 1.3699860499909846,
+        "new_key_seconds": 0.7540707498701522,
+        "complete_key_hits": 480.0,
+        "key_requests": 2088.0
+      },
+      "warm": {
+        "seconds": 0.05711099998734426,
+        "new_key_seconds": 0.0008192500245058909,
+        "complete_key_hits": 15.0,
+        "key_requests": 15.0
+      }
+    },
+    {
+      "case": "six-uniform",
+      "mode": "planned",
+      "cold": {
+        "seconds": 1.5517269499978283,
+        "new_key_seconds": 0.8901460999913979,
+        "complete_key_hits": 479.5,
+        "key_requests": 2088.0
+      },
+      "warm": {
+        "seconds": 0.05709775000286754,
+        "new_key_seconds": 0.0008245999488281086,
+        "complete_key_hits": 15.0,
+        "key_requests": 15.0
+      }
+    },
+    {
+      "case": "five-different-reports",
+      "mode": "original",
+      "cold": {
+        "seconds": 1.1612323000008473,
+        "new_key_seconds": null,
+        "complete_key_hits": null,
+        "key_requests": null
+      },
+      "warm": {
+        "seconds": 0.08262595000269357,
+        "new_key_seconds": null,
+        "complete_key_hits": null,
+        "key_requests": null
+      }
+    },
+    {
+      "case": "five-different-reports",
+      "mode": "current",
+      "cold": {
+        "seconds": 0.8670383500138996,
+        "new_key_seconds": 0.3897158002946526,
+        "complete_key_hits": 353.0,
+        "key_requests": 1976.0
+      },
+      "warm": {
+        "seconds": 0.013228349984274246,
+        "new_key_seconds": 0.0003724000707734376,
+        "complete_key_hits": 13.0,
+        "key_requests": 13.0
+      }
+    },
+    {
+      "case": "five-different-reports",
+      "mode": "planned",
+      "cold": {
+        "seconds": 0.9952457499894081,
+        "new_key_seconds": 0.537335399465519,
+        "complete_key_hits": 353.5,
+        "key_requests": 1977.5
+      },
+      "warm": {
+        "seconds": 0.014405800015083514,
+        "new_key_seconds": 0.0004133999900659546,
+        "complete_key_hits": 13.0,
+        "key_requests": 13.0
+      }
+    }
+  ]
+}

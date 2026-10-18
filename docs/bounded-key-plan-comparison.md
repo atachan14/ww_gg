@@ -1,0 +1,23 @@
+# Bounded-key plan: first numerical comparison
+
+Decision: do NOT adopt into application factories or extend to7 on this evidence. Numerical agreement passes; measured current shared evaluator is faster than this prototype. The comparison hook is `planned_reuse.py`, explicitly constructed only by tests/benchmark. Production admission/default OFF remain unchanged.
+
+Three real small fixtures: five-player two-seer initial-white; six-player/two-wolf two-seer initial-white; five-player with medium and different public white recipients. Each ran original / current complete-key / planned-key, twice in alternating order, with an empty evaluator followed by the same warm evaluator:36 complete runs in27.84s. Every run exactly matched complete Forecast (including all action/dawn values), every legacy Table row, all personal seer-target values, wolf-owner action values, and complete immediate public/physical branch probabilities AND Boards. Each branch family summed to1 and input game/joint state were unchanged. 30-second/run,300-second stage,1.5GB worker RSS/commit guard; no stage/request stop. Peak RSS142,684,160bytes. Raw output in `bounded-plan-comparison.json`; summaries in `bounded-plan-comparison-summary.json`.
+
+Times are medians of TWO repetitions, seconds, covering the entire public/Table/private/branch comparison bundle. Cold means an empty evaluator memo, warm the same evaluator reused; engine construction and input preparation are outside these timers. This is not server startup or isolated single-Forecast latency. Small differences are descriptive, not statistically established.
+
+| Case | Original cold / warm | Current shared cold / warm | Prototype cold / warm | Current / prototype cold key-construction time |
+|---|---:|---:|---:|---:|
+| Five uniform |0.852 /0.0995|0.461 /0.0118|0.518 /0.0121|0.220 /0.277|
+| Six uniform |4.525 /1.049|1.370 /0.0571|1.552 /0.0571|0.754 /0.890|
+| Five medium, different reports |1.161 /0.0826|0.867 /0.0132|0.995 /0.0144|0.390 /0.537|
+
+Complete-key value/action hits per request, cold medians: current297/1008 (29.5%),480/2088 (23.0%),353/1976 (17.9%); prototype297/1008,479.5/2088,353.5/1977.5 (same rates after rounding). Warm complete-key hits13/13,15/15,13/13 for both (100%); warm total key cost roughly0.00037–0.00082s current,0.00037–0.00082s prototype. These counters do not measure original evaluator's other memo hits or count probability branches as merged.
+
+Three local50ms key-plan time fallbacks occurred during the timed prototype runs; every enclosing numerical run still completed with identical results. A fallback can change traversal/cache counters slightly. It never caches an unfinished key. Request cancellation/budget propagation remains separately tested. Original engine has no NEW complete-key counters; its key cost/hit rate is not asserted to be zero.
+
+The prototype uses the original mask constructor plus per-call plan/namespace setup, while the current shared evaluator uses the existing cached fast mask adapter. Thus overhead here includes implementation differences as well as bounded preflight/proof accounting; it is NOT proof that all bounded planning must be slower. The decisive lack of benefit is that these workloads do not expose an over-cap continuation to rescue. A short counts-only probe (five uniform/six uniform/five medium, all public+seer+wolf calls) had996/2030/1961 planned constructor calls and ZERO original-count>120 requests (`bounded-plan-cap-probe.json`). The five-player asymmetric case also cannot exceed5!=120 by player count alone. Pure symmetric six-player key tests remain a valid720->1 key-construction proof, but are not evidence of a nontrivial numerical evaluation speedup.
+
+Next useful prerequisite: find one ALREADY supported non-closed-form continuation whose existing key actually declines at>120, using bounded trace counts rather than another large root search. Then reuse the existing fast mask construction and invoke extra proof only for genuinely over-cap cases, comparing full outputs and total cost. If no such workload is found in scope, keep this experiment unadopted rather than widen public guards based on key-only success. No7, backend, hunter/max-policy expansion or full suite was performed in this window.
+
+Post-instrumentation checks:8 key-plan unit tests pass0.246s; one complete cold/warm public+owner/branch integration test passes1.552s. Last production-path full suite remains860/860 at c97f630; these separate tests/runs are not added to it. Worker absence was checked after all runs, allowing the measurement window to return to Morishi.

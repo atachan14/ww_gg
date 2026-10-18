@@ -1,0 +1,35 @@
+[
+  {
+    "case": "five-uniform",
+    "plan": {
+      "calls": 996,
+      "seconds": 0.23896799996146,
+      "complete": 996,
+      "snapshots": 1568,
+      "swaps": 17,
+      "serialized_cells": 166986
+    }
+  },
+  {
+    "case": "six-uniform",
+    "plan": {
+      "calls": 2030,
+      "seconds": 0.809805598895764,
+      "complete": 2030,
+      "snapshots": 4339,
+      "swaps": 372,
+      "serialized_cells": 581200
+    }
+  },
+  {
+    "case": "five-medium",
+    "plan": {
+      "calls": 1961,
+      "seconds": 0.551063899853034,
+      "complete": 1961,
+      "snapshots": 2292,
+      "swaps": 0,
+      "serialized_cells": 284228
+    }
+  }
+]
