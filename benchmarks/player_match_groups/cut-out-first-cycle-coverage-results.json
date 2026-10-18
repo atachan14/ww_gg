@@ -1,0 +1,1517 @@
+{
+  "status": "verified",
+  "rows": [
+    {
+      "executed": 1,
+      "victim": 2,
+      "structure_class": [
+        0,
+        0
+      ],
+      "status": "legitimate_exclusion",
+      "reason_before": "no surviving seer reporter; common medium-only flow",
+      "report_reason_after": "no surviving seer reporter; common medium-only flow",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/70",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 1,
+      "producer_guard_route": "no-seer-opportunity",
+      "producer_guard_refusals": [],
+      "Q_live_counts": {
+        "1": "1"
+      },
+      "P_live_counts": {
+        "1": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 1,
+      "victim": 3,
+      "structure_class": [
+        0,
+        1
+      ],
+      "status": "structure_unproved",
+      "reason_before": "old-specific-vector-only; no complete morning selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "9/280",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 8,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 1,
+      "victim": 4,
+      "structure_class": [
+        0,
+        2
+      ],
+      "status": "supported",
+      "reason_before": "single-reporter-both-medium-results-all18",
+      "report_reason_after": "single-reporter-both-medium-results-all18",
+      "night_micro_legal": 6,
+      "physical_path_mass": "9/280",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": true,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 18,
+      "producer_guard_route": "single-reporter",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 1,
+      "victim": 5,
+      "structure_class": [
+        0,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 17,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 1,
+      "victim": 6,
+      "structure_class": [
+        0,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 17,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 1,
+      "victim": 7,
+      "structure_class": [
+        0,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 17,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 2,
+      "victim": 1,
+      "structure_class": [
+        0,
+        0
+      ],
+      "status": "legitimate_exclusion",
+      "reason_before": "no surviving seer reporter; common medium-only flow",
+      "report_reason_after": "no surviving seer reporter; common medium-only flow",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/70",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 1,
+      "producer_guard_route": "no-seer-opportunity",
+      "producer_guard_refusals": [],
+      "Q_live_counts": {
+        "1": "1"
+      },
+      "P_live_counts": {
+        "1": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 2,
+      "victim": 3,
+      "structure_class": [
+        0,
+        1
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "9/280",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 8,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 2,
+      "victim": 4,
+      "structure_class": [
+        0,
+        2
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "9/280",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": true,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 18,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 2,
+      "victim": 5,
+      "structure_class": [
+        0,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 17,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 2,
+      "victim": 6,
+      "structure_class": [
+        0,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 17,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 2,
+      "victim": 7,
+      "structure_class": [
+        0,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 17,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 3,
+      "victim": 1,
+      "structure_class": [
+        1,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/56",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 10,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 3,
+      "victim": 2,
+      "structure_class": [
+        1,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/56",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 10,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 3,
+      "victim": 4,
+      "structure_class": [
+        1,
+        2
+      ],
+      "status": "supported",
+      "reason_before": "two-surviving-reporters-all64",
+      "report_reason_after": "two-surviving-reporters-all64",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/28",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": true,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 64,
+      "producer_guard_route": "joint-reports",
+      "producer_guard_refusals": [],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 3,
+      "victim": 5,
+      "structure_class": [
+        1,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "1/42",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 49,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 3,
+      "victim": 6,
+      "structure_class": [
+        1,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "1/42",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 49,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 3,
+      "victim": 7,
+      "structure_class": [
+        1,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "1/42",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": true,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 49,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 4,
+      "victim": 1,
+      "structure_class": [
+        2,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/56",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 10,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_observation_unproved"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 4,
+      "victim": 2,
+      "structure_class": [
+        2,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/56",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 10,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 4,
+      "victim": 3,
+      "structure_class": [
+        2,
+        1
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/28",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 64,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 4,
+      "victim": 5,
+      "structure_class": [
+        2,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "1/42",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 49,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 4,
+      "victim": 6,
+      "structure_class": [
+        2,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "1/42",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 49,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 4,
+      "victim": 7,
+      "structure_class": [
+        2,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "1/42",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 49,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1"
+      },
+      "P_live_counts": {
+        "2": "1"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 5,
+      "victim": 1,
+      "structure_class": [
+        3,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/60",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 20,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/3",
+        "2": "2/3"
+      },
+      "P_live_counts": {
+        "1": "2/7",
+        "2": "5/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 5,
+      "victim": 2,
+      "structure_class": [
+        3,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/60",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 20,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/3",
+        "2": "2/3"
+      },
+      "P_live_counts": {
+        "1": "2/7",
+        "2": "5/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 5,
+      "victim": 3,
+      "structure_class": [
+        3,
+        1
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/30",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 64,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "1": "1/3",
+        "2": "2/3"
+      },
+      "P_live_counts": {
+        "1": "2/7",
+        "2": "5/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 5,
+      "victim": 4,
+      "structure_class": [
+        3,
+        2
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/30",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 74,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/3",
+        "2": "2/3"
+      },
+      "P_live_counts": {
+        "1": "2/7",
+        "2": "5/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 5,
+      "victim": 6,
+      "structure_class": [
+        3,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 50,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 5,
+      "victim": 7,
+      "structure_class": [
+        3,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 50,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 6,
+      "victim": 1,
+      "structure_class": [
+        3,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/60",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 20,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 6,
+      "victim": 2,
+      "structure_class": [
+        3,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/60",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 20,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 6,
+      "victim": 3,
+      "structure_class": [
+        3,
+        1
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/30",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 64,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 6,
+      "victim": 4,
+      "structure_class": [
+        3,
+        2
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/30",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 74,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 6,
+      "victim": 5,
+      "structure_class": [
+        3,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 50,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "1": "1/2",
+        "2": "1/2"
+      },
+      "P_live_counts": {
+        "1": "4/9",
+        "2": "5/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 6,
+      "victim": 7,
+      "structure_class": [
+        3,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 50,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 7,
+      "victim": 1,
+      "structure_class": [
+        3,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/60",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 20,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 7,
+      "victim": 2,
+      "structure_class": [
+        3,
+        0
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 3,
+      "physical_path_mass": "1/60",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 20,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 7,
+      "victim": 3,
+      "structure_class": [
+        3,
+        1
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/30",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 64,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "no-supported-single-reporter-medium-observation"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 7,
+      "victim": 4,
+      "structure_class": [
+        3,
+        2
+      ],
+      "status": "structure_unproved",
+      "reason_before": "other-owned-history/no structural report selector",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 6,
+      "physical_path_mass": "1/30",
+      "unknown_corpse": false,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 74,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "2/3",
+        "1": "1/3"
+      },
+      "P_live_counts": {
+        "2": "5/7",
+        "1": "2/7"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 7,
+      "victim": 5,
+      "structure_class": [
+        3,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 50,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    },
+    {
+      "executed": 7,
+      "victim": 6,
+      "structure_class": [
+        3,
+        3
+      ],
+      "status": "structure_unproved",
+      "reason_before": "unknown-corpse-team-mixture",
+      "report_reason_after": "complete structural publication recipe not issued for this event",
+      "night_micro_legal": 4,
+      "physical_path_mass": "3/140",
+      "unknown_corpse": true,
+      "old_night_roster_action_scope": false,
+      "direct_full_report_aggregation": false,
+      "alpha_possible_not_auto": false,
+      "generalized_observed_transition": true,
+      "observed_transition_status_after": "supported",
+      "common_morning_Q_vectors": 50,
+      "producer_guard_route": "unproved",
+      "producer_guard_refusals": [
+        "joint_report_actual7_execute3_bite4_scope",
+        "live_medium_single_report_scope"
+      ],
+      "Q_live_counts": {
+        "2": "1/2",
+        "1": "1/2"
+      },
+      "P_live_counts": {
+        "2": "5/9",
+        "1": "4/9"
+      },
+      "cold_full_source_equal": true,
+      "event_derived_groups_full_QP_verified": true,
+      "complete_common_morning_equal": true
+    }
+  ],
+  "structure_classes": {
+    "(0, 0)": 2,
+    "(0, 1)": 2,
+    "(0, 2)": 2,
+    "(0, 3)": 6,
+    "(1, 0)": 2,
+    "(1, 2)": 1,
+    "(1, 3)": 3,
+    "(2, 0)": 2,
+    "(2, 1)": 1,
+    "(2, 3)": 3,
+    "(3, 0)": 6,
+    "(3, 1)": 3,
+    "(3, 2)": 3,
+    "(3, 3)": 6
+  },
+  "legal_labelled_histories": 42,
+  "invalid_repeat_death_histories": 7,
+  "legal_information_action_branches": 180,
+  "illegal_wolf_self_bite_branches": 72,
+  "unknown_corpse_histories": 30,
+  "unknown_corpse_physical_mass": "3/5",
+  "report_aggregation_classification": {
+    "supported": 2,
+    "structure_unproved": 38,
+    "legitimate_exclusion": 2
+  },
+  "full_report_aggregation_before_and_after": 2,
+  "full_report_coverage_physical_mass": "19/280",
+  "observed_mixture_certificate_before": 3,
+  "observed_mixture_certificate_after": 42,
+  "old_observed_mixture_physical_mass": "1/10",
+  "new_observed_mixture_physical_mass": "1",
+  "no_seer_report_mass": "1/35",
+  "automatic_initial_solver_fast_dispatch": false,
+  "full_initial_search": false,
+  "total_comparison_seconds": 5.15022070001578,
+  "peak_working_set_bytes": 34656256
+}

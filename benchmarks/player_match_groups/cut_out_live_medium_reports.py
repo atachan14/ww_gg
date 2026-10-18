@@ -24,20 +24,12 @@ class ReportOrbit:
     representative: GeneratedPublication
 
 
-def prepublication(*, receipt=False, kernel_class=InformationSetForecast, executed=1):
-    first=initial_night(executed);r=first.registry;w=first.witness
-    e=kernel_class(r.engine.baseline.rules,r.engine.baseline.strategy,
-        exact_renaming=False,retire_uninformative_scans=False)
-    e.retain_joint_guard_history=True
-    root=r.origin()
-    outs=e.physical_children(physical_board(root.public,root.private,root.physical),executed)
-    request=r.root.child(ActionEvidence(kernel_snapshot(e),executed,outcome_key(outs[0]),False),None)
-    before=request.roles()
-    op=choice_step(r,w,before,4,kernel_snapshot(e))
-    request=request.child(op,None);source=request.roles()
-    result=(e,source,op.likelihood(before))
-    return result+(r,w,request) if receipt else result
-
+def prepublication(*, receipt=False, kernel_class=InformationSetForecast, executed=1, victim=4):
+    """Shared first-cycle event receipt; publication scopes remain explicit."""
+    from .cut_out_first_cycle_coverage import make_prefix
+    prefix=make_prefix(executed,victim,kernel_class=kernel_class)
+    result=(prefix.engine,prefix.source,prefix.choice.likelihood(prefix.before))
+    return result+(prefix.registry,prefix.witness,prefix.request) if receipt else result
 
 def single_report_orbits(board,state,past,groups,*,fake_policy=('noncontradictory','uniform')):
     """Reduce acquisition or exposed-fake primitives before making vectors."""
