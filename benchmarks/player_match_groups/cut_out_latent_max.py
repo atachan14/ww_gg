@@ -45,7 +45,7 @@ def evaluate(source,**kwargs):
     return evaluate_common(source,engine_class=CutOutMaxEngine,**kwargs)
 
 
-def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_night_max=False,_no_read_night_max=False):
+def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_night_max=False,_no_read_night_max=False,_active_report_max=False):
     """Existing configured scan interventions; no new max scan/CO strategy."""
     from .cut_out_uniform_game import OwnView,OfficialLabelledEngine
     from werewolf.actor_information import condition_actor_state
@@ -57,7 +57,7 @@ def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_
     from werewolf.information_set_forecast import Pending
     if not isinstance(source,SavedCutOutGraph) or type(view) is not OwnView or view.role!='seer':
         return UnsupportedPartition('explicit latent own seer history required')
-    reason=_reason(source.engine.baseline.spec,max_trial=True,latent_max=True,terminal_night_max=_terminal_night_max,no_read_night_max=_no_read_night_max)
+    reason=_reason(source.engine.baseline.spec,max_trial=True,latent_max=True,terminal_night_max=_terminal_night_max,no_read_night_max=_no_read_night_max,active_report_max=_active_report_max)
     if reason:return UnsupportedPartition(reason)
     if type(max_seconds) not in (int,float) or not 0<max_seconds<=25:
         return UnsupportedPartition('positive <=25s comparison budget required')
@@ -71,7 +71,8 @@ def scan_values(source,view,*,official_reference=False,max_seconds=25,_terminal_
     if len(choices)!=1:return UnsupportedPartition('seer_view_target_generation_support_unresolved')
     from .cut_out_terminal_night_max import TerminalNightMaxEngine
     from .cut_out_no_read_night_max import NoReadNightMaxEngine
-    engine=(OfficialLabelledEngine if official_reference else NoReadNightMaxEngine if _no_read_night_max else TerminalNightMaxEngine if _terminal_night_max else CutOutMaxEngine)(source,view=view)
+    from .cut_out_active_report_max import ActiveReportMaxEngine
+    engine=(OfficialLabelledEngine if official_reference else ActiveReportMaxEngine if _active_report_max else NoReadNightMaxEngine if _no_read_night_max else TerminalNightMaxEngine if _terminal_night_max else CutOutMaxEngine)(source,view=view)
     values=[]
     try:
         with calculation_budget(1000000,max_seconds=max_seconds),calculation_origin(source.data):

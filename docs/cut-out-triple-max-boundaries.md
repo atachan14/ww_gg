@@ -17,6 +17,7 @@ c8437cc時点の比較用 `_reason` は `fake_reports=random` に固定され、
 | adapt_latent_max_model_a | 4/5、M0/1、S1潜伏、初日なし/白、全潜伏または真霊1CO | max/random | 霊COなしで許可。霊COありは拒否 |
 | adapt_terminal_night_max_model_a | 4、M0/1、S1、全潜伏、初日なし/白 | max/max | 霊COなしで許可。初回を外した3人夜は終局 |
 | adapt_no_read_night_max_model_a | 5、M0、S1、全潜伏、初日なし | max/max | 霊COなしで許可。全候補のprofile読取なし完全証明が必須 |
+| adapt_active_report_max_model_a | 4/5、M1/S1、霊CO1/2・他潜伏、初日なし/白 | max/max | 実報告の既存minと同点均等を接続。全候補の完全証明が必須 |
 
 6/7人の別の均等比較scopeは変更していない。上表の入口でカバーできる例をつなげて一般対応と扱わない。
 
@@ -51,3 +52,5 @@ c8437cc時点の比較用 `_reason` は `fake_reports=random` に固定され、
 各worker60秒、評価25秒、証明12秒、全driver300秒、WorkingSet1,500,000,000 bytesの有限予算。開始checkpoint後の正確性検証中にMorishiの計測枠連絡を受け、既存runだけ完了させた。絶対速度測定や追加の大きなrunは行っていない。記録時間は予算内完了の確認だけに使う。
 
 証拠は `benchmarks/player_match_groups/cut-out-triple-max-results.json`、ログは `.artifacts/triple-max-regressions-final.log`。公開・push・通常UI・サーバー変更なし。全project suiteは実行していない。
+
+後続の限定接続: 実報告のある2霊COについては新しい明示entryを追加した。上記の旧独立entryの拒否と、通常rootの未対応判定は残る。現在の詳細と59回帰・候補/事後jointの照合は [cut-out-active-report-max.md](cut-out-active-report-max.md) を参照。

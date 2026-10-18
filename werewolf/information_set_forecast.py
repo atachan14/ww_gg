@@ -252,6 +252,10 @@ class InformationSetForecast:
                                   lambda:self.generate_morning(b,s,past),'morning')
         return record_publications(self,b,s,past,branches)
 
+    def record_report_choices(self,b,s,past,scored,chosen):
+        """Optional exact-choice audit; no observation or selection changes."""
+        pass
+
     def generate_morning(self,b,s,past):
         actions=report_actions(b) if self.strategy.disclosure_for('medium')=='all' else ()
         if not actions:return self.publications(b,s,past)
@@ -262,8 +266,10 @@ class InformationSetForecast:
                 value=continuation_value(report_flow(action.outcomes,s,past,self,source_board=b,fake_colors=action.fake_colors),self.scalar)
                 scored.append((action,value))
             tied=optimal_targets(scored,maximize=False)
+            chosen=uniform_policy(tied)
+            self.record_report_choices(b,s,past,tuple(scored),chosen)
             outcomes=merge_report_outcomes(BoardOutcome(o.probability*q,o.board)
-                                           for action,q in uniform_policy(tied) for o in action.outcomes)
+                                           for action,q in chosen for o in action.outcomes)
         return tuple(report_flow(outcomes,s,past,self,source_board=b))
 
     def push(self,source,private,branches):
