@@ -1,0 +1,31 @@
+{
+  "scope": "key construction only; no numerical/factory changes or heavy measurement",
+  "results": [
+    {
+      "players": 5,
+      "key_complete": true,
+      "reason": "complete",
+      "source_cells": 90,
+      "serialized_cells": 540,
+      "snapshots": 6,
+      "swaps": 4,
+      "residual_count": 1,
+      "certified_block_sizes": [
+        5
+      ]
+    },
+    {
+      "players": 6,
+      "key_complete": true,
+      "reason": "complete",
+      "source_cells": 108,
+      "serialized_cells": 756,
+      "snapshots": 7,
+      "swaps": 5,
+      "residual_count": 1,
+      "certified_block_sizes": [
+        6
+      ]
+    }
+  ]
+}
