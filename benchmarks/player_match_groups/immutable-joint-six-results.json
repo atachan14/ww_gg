@@ -1,0 +1,211 @@
+{
+  "status": "verified",
+  "case": "six",
+  "complete_Forecast_Table_QP_and_full_diagnostics_equal": true,
+  "independent_cold_sharing_disabled": true,
+  "cold_reads": 12,
+  "terminal_QP_display_comparisons": 12,
+  "pool": {
+    "counts": {
+      "record_requests": 5080,
+      "hypothesis_requests": 1783,
+      "record_hits": 5058,
+      "hypothesis_hits": 1209
+    },
+    "live_before_close": {
+      "records": 22,
+      "hypotheses": 534
+    },
+    "indices_empty_after_close": true,
+    "owner_released": true
+  },
+  "census_before": {
+    "laws": {
+      "identity_count": 544,
+      "complete_value_count": 316,
+      "shallow_object_plus_dict_bytes": 91392
+    },
+    "hypotheses": {
+      "identity_count": 1237,
+      "complete_value_count": 534,
+      "shallow_object_plus_dict_bytes": 197920
+    },
+    "hypothesis_tuples": {
+      "identity_count": 544,
+      "complete_value_count": 177
+    },
+    "records": {
+      "acquisitions": {
+        "identity_count": 432,
+        "complete_value_count": 17,
+        "shallow_object_plus_dict_bytes": 65664
+      },
+      "guards": {
+        "identity_count": 0,
+        "complete_value_count": 0,
+        "shallow_object_plus_dict_bytes": 0
+      },
+      "attacks": {
+        "identity_count": 25,
+        "complete_value_count": 5,
+        "shallow_object_plus_dict_bytes": 3400
+      }
+    },
+    "same_role_marginal_but_different_complete_law_groups": 14,
+    "largest_number_of_distinct_complete_laws_with_one_role_marginal": 66,
+    "proof_snapshot_count": 228,
+    "proof_snapshot_dict_bytes": 361152,
+    "proof_snapshot_exact_same_reference_field_count": 43,
+    "proof_snapshot_exact_same_reference_fields": [
+      "_board_evidence_snapshot",
+      "acquired",
+      "action_values",
+      "board_action_kernels",
+      "board_action_options",
+      "board_key_hashes",
+      "board_replay_stats",
+      "branch_records",
+      "capture_terminal",
+      "costs",
+      "day_bounds",
+      "deferred_ledger",
+      "exact_keys",
+      "exact_renaming",
+      "expansions",
+      "full_branch_records",
+      "graph",
+      "group_cache",
+      "inherited_groups",
+      "joint_descriptors",
+      "joint_keys",
+      "max_work",
+      "memoize_flows",
+      "mornings",
+      "policies",
+      "projected",
+      "public_candidate_contexts",
+      "public_support_stats",
+      "public_support_values",
+      "publication_values",
+      "reduced_descriptors",
+      "renaming_stats",
+      "representatives",
+      "retire_uninformative_scans",
+      "rules",
+      "scalar_actions",
+      "scores",
+      "strategy",
+      "symmetries",
+      "terminal_records",
+      "trace",
+      "values",
+      "view"
+    ],
+    "proof_snapshot_varying_fields": [
+      "action_policy",
+      "active_morning",
+      "board_sources",
+      "terminal_compact_actions"
+    ],
+    "memory_scope": "shallow object+__dict__ sizes and exact-value counts in identity-hash joint laws and source-recipe snapshots; not whole heap"
+  },
+  "census_after": {
+    "laws": {
+      "identity_count": 544,
+      "complete_value_count": 316,
+      "shallow_object_plus_dict_bytes": 91392
+    },
+    "hypotheses": {
+      "identity_count": 538,
+      "complete_value_count": 534,
+      "shallow_object_plus_dict_bytes": 86080
+    },
+    "hypothesis_tuples": {
+      "identity_count": 544,
+      "complete_value_count": 177
+    },
+    "records": {
+      "acquisitions": {
+        "identity_count": 20,
+        "complete_value_count": 17,
+        "shallow_object_plus_dict_bytes": 3040
+      },
+      "guards": {
+        "identity_count": 0,
+        "complete_value_count": 0,
+        "shallow_object_plus_dict_bytes": 0
+      },
+      "attacks": {
+        "identity_count": 5,
+        "complete_value_count": 5,
+        "shallow_object_plus_dict_bytes": 680
+      }
+    },
+    "same_role_marginal_but_different_complete_law_groups": 14,
+    "largest_number_of_distinct_complete_laws_with_one_role_marginal": 66,
+    "proof_snapshot_count": 228,
+    "proof_snapshot_dict_bytes": 361152,
+    "proof_snapshot_exact_same_reference_field_count": 43,
+    "proof_snapshot_exact_same_reference_fields": [
+      "_board_evidence_snapshot",
+      "acquired",
+      "action_values",
+      "board_action_kernels",
+      "board_action_options",
+      "board_key_hashes",
+      "board_replay_stats",
+      "branch_records",
+      "capture_terminal",
+      "costs",
+      "day_bounds",
+      "deferred_ledger",
+      "exact_keys",
+      "exact_renaming",
+      "expansions",
+      "full_branch_records",
+      "graph",
+      "group_cache",
+      "inherited_groups",
+      "joint_descriptors",
+      "joint_keys",
+      "max_work",
+      "memoize_flows",
+      "mornings",
+      "policies",
+      "projected",
+      "public_candidate_contexts",
+      "public_support_stats",
+      "public_support_values",
+      "publication_values",
+      "reduced_descriptors",
+      "renaming_stats",
+      "representatives",
+      "retire_uninformative_scans",
+      "rules",
+      "scalar_actions",
+      "scores",
+      "strategy",
+      "symmetries",
+      "terminal_records",
+      "trace",
+      "values",
+      "view"
+    ],
+    "proof_snapshot_varying_fields": [
+      "action_policy",
+      "active_morning",
+      "board_sources",
+      "terminal_compact_actions"
+    ],
+    "memory_scope": "shallow object+__dict__ sizes and exact-value counts in identity-hash joint laws and source-recipe snapshots; not whole heap"
+  },
+  "source_keys_before": 393,
+  "source_keys_after": 393,
+  "values_before": 187,
+  "values_after": 187,
+  "actions_before": 438,
+  "actions_after": 438,
+  "full_initial7_search": false,
+  "seconds": 3.25,
+  "peak_working_set_bytes": 58417152
+}

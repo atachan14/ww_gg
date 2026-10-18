@@ -67,6 +67,8 @@ class Hypothesis:
         if any(not isinstance(a,WolfAttack) for a in self.attacks):raise ValueError('Invalid attack records')
         if len({g.night for g in self.guards})!=len(self.guards) or len({a.night for a in self.attacks})!=len(self.attacks):
             raise ValueError('One personal action per night')
+        from .joint_value_sharing import share_hypothesis_records
+        share_hypothesis_records(self)
 
 
 def normalize(entries):

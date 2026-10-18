@@ -1,0 +1,10 @@
+{
+  "group": "new",
+  "status": "verified",
+  "tests": 20,
+  "failures": 0,
+  "errors": 0,
+  "seconds": 0.8279999999795109,
+  "peak_working_set_bytes": 34971648,
+  "whole_initial7_search": false
+}

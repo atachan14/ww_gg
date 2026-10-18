@@ -44,6 +44,9 @@ class TrueScanState:
                 expected={p for p in alive if h.roles[2]&(1<<(p-1)) and (self.tracked is None or p in self.tracked)} if day!=1 or self.initial_rule!='none' else set()
                 actual={a.player for a in h.acquisitions if a.day==day}
                 if day>self.observed_prefix and expected!=actual:raise ValueError('Missing own acquisition history cannot become unvisited')
+        from .joint_value_sharing import share_hypothesis_tuple
+        shared=share_hypothesis_tuple(self.hypotheses)
+        if shared is not self.hypotheses:object.__setattr__(self,'hypotheses',shared)
     @property
     def public_roles(self):
         cached=self.__dict__.get('_public_roles_cache')

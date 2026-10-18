@@ -1,0 +1,10 @@
+{
+  "group": "legacy",
+  "status": "verified",
+  "tests": 8,
+  "failures": 0,
+  "errors": 0,
+  "seconds": 6.562999999965541,
+  "peak_working_set_bytes": 43663360,
+  "whole_initial7_search": false
+}
