@@ -1,4 +1,4 @@
-"""Minimal reproduction and opt-in closed-disclosure proof; no default change."""
+"""Frozen legacy switch versus standard closed-disclosure proof."""
 from dataclasses import replace
 from fractions import Fraction as F
 from benchmarks.player_match_groups.cut_out_model_a import InitialModelASpec,source_game
@@ -27,18 +27,22 @@ def minimal_four(*,report=True):
 
 def examine(spec,data):
     roles=data.roles();board=roles.board
-    try:
-        SavedOrigin(data,spec.rules,spec.strategy,project_public=False)()
-        previous='completed'
-    except Pending as error:previous=error.reason
+    legacy=replay_root_secrets(data.to_game(),board,spec.rules,spec.strategy,
+        max_work=1000000,max_seconds=20,_historical_disclosure_proof=False)
+    previous=legacy.reason if isinstance(legacy,FuturePending) else 'completed'
+    standard=SavedOrigin(data,spec.rules,spec.strategy,project_public=False)()
+    direct=replay_root_secrets(data.to_game(),board,spec.rules,spec.strategy,max_work=1000000,max_seconds=20)
+    assert not isinstance(direct,FuturePending) and direct.public_law==standard.public_state and direct.physical_law==standard.private
     branch=replay_root_secrets(data.to_game(),board,spec.rules,spec.strategy,
         max_work=1000000,max_seconds=20,_historical_disclosure_proof=True)
     assert not isinstance(branch,FuturePending),branch
     assert branch.public_law.public_roles==tuple(sorted(board.worlds))
     assert sum((h.mass for h in branch.public_law.hypotheses),F())==1
     assert sum((h.mass for h in branch.physical_law.hypotheses),F())==1
+    assert standard.public_state==branch.public_law and standard.private==branch.physical_law
+    assert standard.past==branch.past
     assert not branch.past # No retired concrete report is resurrected.
-    return dict(default_result=previous,old_role_oracle_preserved=True,
+    return dict(default_result='completed',legacy_result=previous,old_role_oracle_preserved=True,
         wolf_rates={str(p):str(board.wolf_probability(p)) for p in board.alive},
         public_hypotheses=len(branch.public_law.hypotheses),physical_hypotheses=len(branch.physical_law.hypotheses),
         truth1_initial_targets=sorted({a.target for h in branch.public_law.hypotheses for a in h.acquisitions if a.player==1}),

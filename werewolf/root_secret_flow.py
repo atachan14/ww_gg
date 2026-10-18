@@ -508,7 +508,8 @@ def prepare_root_entry(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max
     if root_screen_eligible(board,rules,strategy):
         return prepare_root_secrets(board,rules,max_work=max_work)
     if root_replay_eligible(game,board,rules,strategy):
-        return replay_root_secrets(game,board,rules,strategy,max_work=max_work,max_seconds=max_seconds)
+        return replay_root_secrets(game,board,rules,strategy,max_work=max_work,max_seconds=max_seconds,
+                                   _historical_disclosure_proof=True)
     return None
 
 
@@ -543,7 +544,7 @@ def observe_root_snapshot(branch,game,index,rules,*,guard_priors=None):
         lambda h:(h.roles,h.acquisitions,h.guards,h.attacks) in signatures,past=reports)
 
 
-def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_collect_guard_priors=False,_historical_disclosure_proof=False):
+def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_collect_guard_priors=False,_historical_disclosure_proof=True):
     """Recreate actual joint histories; observed bites use the configured policy.
 
     Q is restored from the existing public replay only after P is conditioned.

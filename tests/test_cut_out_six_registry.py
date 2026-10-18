@@ -11,9 +11,10 @@ class SixInputRegistryTests(unittest.TestCase):
         self.assertTrue(result['root_cancel_redo_exact'])
         self.assertTrue(result['physical_public_separate'])
 
-    def test_late_co_common_pending_preserves_input_and_can_be_undone(self):
+    def test_standard_historical_withdraw_resolves_legacy_pending_and_can_be_undone(self):
         result=blocked_case()
-        self.assertEqual(result['reason'],'full_disclosure_truth_not_conditioned')
+        self.assertEqual(result['legacy_reason'],'full_disclosure_truth_not_conditioned')
+        self.assertEqual(result['current_result'],'completed')
         self.assertTrue(result['candidate_input_preserved'])
         self.assertTrue(result['delete_withdraw_batch_recovers_exactly'])
 

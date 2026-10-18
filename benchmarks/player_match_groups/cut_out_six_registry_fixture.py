@@ -117,24 +117,34 @@ def edits_case():
         physical_public_separate=root_before.public_state!=root_before.private,old_private_actor_mass=str(expected_mass))
 
 
-def blocked_case():
-    from .cut_out_saved_recipes import InvalidatedBranch
+def historical_withdraw_case():
+    # Explicit migration of the KNOWN-BUG Pending oracle. The old replay
+    # switch remains exercised below; current public/secret results must work.
     from .cut_out_six_registry import SixInputRegistry
     from werewolf.board_flow import BoardData
     from werewolf.board_future import SavedOrigin
-    from werewolf.information_set_forecast import Pending
+    from werewolf.root_secret_flow import replay_root_secrets
+    from werewolf.seer_future_uniform import FuturePending
     base,registry=setup();before=registry.data.inputs
-    blocked=withdraw(registry,(('co',1),('seer',1,1),('seer',2,1)))
-    assert isinstance(blocked,SixInputRegistry) and isinstance(blocked.problem,InvalidatedBranch)
-    assert blocked.data.inputs!=before and registry.data.inputs==before
-    try:SavedOrigin(BoardData.from_game(blocked.data.to_game()),base.rules,base.strategy,project_public=False)()
-    except Pending as error:assert error.reason==blocked.problem.reason
-    else:raise AssertionError('old official path unexpectedly accepted late CO withdraw')
-    batch=blocked.data.to_game()['public_log']['batches'][-1]['id']
-    recovered=blocked.edited({'delete':batch})
+    changed=withdraw(registry,(('co',1),('seer',1,1),('seer',2,1)))
+    assert isinstance(changed,SixInputRegistry) and changed.problem is None
+    assert changed.data.inputs!=before and registry.data.inputs==before
+    cold=SavedOrigin(BoardData.from_game(changed.data.to_game()),base.rules,base.strategy,project_public=False)()
+    assert cold.public_state==changed.read().public_state and cold.private==changed.read().private
+    legacy=replay_root_secrets(changed.data.to_game(),changed.data.roles().board,base.rules,base.strategy,
+        _historical_disclosure_proof=False)
+    assert isinstance(legacy,FuturePending) and legacy.reason=='full_disclosure_truth_not_conditioned'
+    row,_,_=assert_snapshot(changed)
+    batch=changed.data.to_game()['public_log']['batches'][-1]['id']
+    recovered=changed.edited({'delete':batch})
     assert recovered.problem is None and recovered.read().public_state==registry.read().public_state and recovered.read().private==registry.read().private
-    return dict(blocked_action='late CO+reports withdraw at saved Day2',reason=blocked.problem.reason,
-        candidate_input_preserved=True,old_input_immutable=True,delete_withdraw_batch_recovers_exactly=True)
+    return dict(action='closed Day1 CO+reports withdrawn at saved Day2',legacy_reason=legacy.reason,current_result='completed',
+        candidate_input_preserved=True,old_input_immutable=True,delete_withdraw_batch_recovers_exactly=True,screen=row)
+
+
+# Compatibility name for the prior diagnostic command; the record now exposes
+# both the explicit old result and the successful STANDARD result.
+blocked_case=historical_withdraw_case
 
 
 def own_case():
@@ -254,7 +264,7 @@ def main():
     record=dict(recorded_utc=datetime.now(timezone.utc).isoformat(),head_before_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),cases=rows,
         total_seconds=time.monotonic()-start,per_process_seconds=60,total_budget_seconds=300,memory_limit_bytes=1_500_000_000,
         source_sha256={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths},
-        normal_ui_or_public_changed=False,remaining_blocker='old official late CO withdraw replays old historical CO without active report; Pending, input retained and reversible')
+        normal_ui_or_public_changed=False,resolved_pending='standard closed-report proof enabled; explicit legacy=False switch still reproduces former Pending')
     Path('benchmarks/player_match_groups/cut-out-six-registry-results.json').write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 
 if __name__=='__main__':main()

@@ -1,5 +1,7 @@
 # 撤回後full-disclosure Pendingの最小診断
 
+未解決Pending/未切替という以下の記載は当時の記録。現在は[標準入口修正と回帰移行](withdraw-standard-entry.md)で該当ケースを解消済み。
+
 最小再現は4人（狼1・占い1・狩人/霊なし）、初日P1占CO＋P3白、P2処刑後の夜BoardでCOと報告をwithdrawする例。現在有効なCO/報告は空になるが、標準SavedOriginは `full_disclosure_truth_not_conditioned` になる。6人や二夜目は必要ない。
 
 ## 原因と既存の意味

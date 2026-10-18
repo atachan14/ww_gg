@@ -1,0 +1,193 @@
+{
+  "recorded_utc": "2026-10-18T09:56:17.577524+00:00",
+  "head_before_commit": "430566c7fdfa4e8c24249479e517205f870428f7",
+  "cases": [
+    {
+      "default_result": "completed",
+      "legacy_result": "full_disclosure_truth_not_conditioned",
+      "old_role_oracle_preserved": true,
+      "wolf_rates": {
+        "1": "3/5",
+        "3": "1/5",
+        "4": "1/5"
+      },
+      "public_hypotheses": 10,
+      "physical_hypotheses": 10,
+      "truth1_initial_targets": [
+        2,
+        3,
+        4
+      ],
+      "active_concrete_reports": 0,
+      "retired_report_contents_used": false,
+      "case": "four-reported"
+    },
+    {
+      "default_result": "completed",
+      "legacy_result": "completed",
+      "old_role_oracle_preserved": true,
+      "wolf_rates": {
+        "1": "1",
+        "3": "0",
+        "4": "0"
+      },
+      "public_hypotheses": 6,
+      "physical_hypotheses": 6,
+      "truth1_initial_targets": [],
+      "active_concrete_reports": 0,
+      "retired_report_contents_used": false,
+      "case": "four-omitted"
+    },
+    {
+      "default_result": "completed",
+      "legacy_result": "full_disclosure_truth_not_conditioned",
+      "old_role_oracle_preserved": true,
+      "wolf_rates": {
+        "1": "5/8",
+        "4": "1/8",
+        "5": "1/8",
+        "6": "1/8"
+      },
+      "public_hypotheses": 116,
+      "physical_hypotheses": 116,
+      "truth1_initial_targets": [
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "active_concrete_reports": 0,
+      "retired_report_contents_used": false,
+      "case": "six-two-actions"
+    }
+  ],
+  "checks": [
+    {
+      "kind": "pattern",
+      "target": "test_withdraw_prefix_diagnostic.py",
+      "exit": 0,
+      "peak_working_set_bytes": 41308160
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_six_registry.py",
+      "exit": 0,
+      "peak_working_set_bytes": 41807872
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_saved_recipes.py",
+      "exit": 0,
+      "peak_working_set_bytes": 43130880
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_two_nights.py",
+      "exit": 0,
+      "peak_working_set_bytes": 32468992
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_uniform_game.py",
+      "exit": 0,
+      "peak_working_set_bytes": 55975936
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_model_a.py",
+      "exit": 0,
+      "peak_working_set_bytes": 34127872
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal",
+      "exit": 0,
+      "peak_working_set_bytes": 39436288
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization",
+      "exit": 0,
+      "peak_working_set_bytes": 38178816
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved",
+      "exit": 0,
+      "peak_working_set_bytes": 37175296
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks",
+      "exit": 0,
+      "peak_working_set_bytes": 33042432
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation",
+      "exit": 0,
+      "peak_working_set_bytes": 42999808
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only",
+      "exit": 0,
+      "peak_working_set_bytes": 35102720
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a",
+      "exit": 0,
+      "peak_working_set_bytes": 32800768
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law",
+      "exit": 0,
+      "peak_working_set_bytes": 42201088
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot",
+      "exit": 0,
+      "peak_working_set_bytes": 42164224
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending",
+      "exit": 0,
+      "peak_working_set_bytes": 32903168
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max",
+      "exit": 0,
+      "peak_working_set_bytes": 32931840
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation",
+      "exit": 0,
+      "peak_working_set_bytes": 33083392
+    }
+  ],
+  "tests": 40,
+  "previous23_preserved_except_one_known_bug_expectation_migrated": true,
+  "default_saved_origin_still_pending": false,
+  "legacy_switch": "_historical_disclosure_proof=False",
+  "wall_seconds": 24.23499999998603,
+  "per_run_seconds": 30,
+  "overall_seconds_limit": 300,
+  "memory_limit_bytes": 1500000000,
+  "source_sha256": {
+    "werewolf/root_secret_flow.py": "46b802df14739f62b1fa01e9a2dd9d8f5ec1cad510a03395a7212e953e8ff595",
+    "benchmarks/player_match_groups/withdraw_prefix_diagnostic.py": "48f55578414a4f14e69c3b560bab5918c0f12b5ea59a4b55a9fe0419cb221bf8",
+    "benchmarks/player_match_groups/withdraw_prefix_diagnostic_fixture.py": "885b34283c65bd3ccab83ec80d02d96a6b1e3953d85fd3837c82c5e01e3a91b7",
+    "tests/test_withdraw_prefix_diagnostic.py": "bbdf595cda572733e67482ea8789364589e61b9290528e9d02b21f10d6cf4c3d",
+    "tests/test_cut_out_six_registry.py": "50079072d01ed433ca66603a2cbfd87c2db403851e7beddfe95da14e62a06b9a",
+    "benchmarks/player_match_groups/cut_out_six_registry_fixture.py": "fd66f1535420b2ef66f07166fe7091579cdc742456e06351a2308b417bde425a"
+  },
+  "ordinary_ui_or_public_changed": false,
+  "post_validation_change": "evidence output destination only; preserved previous commit diagnostic JSON unchanged"
+}

@@ -1,5 +1,7 @@
 # 6人入力訂正registryと要求時の個人枝復元（独立試作）
 
+未解決Pending/未切替という以下の記載は当時の記録。現在は[標準入口修正と回帰移行](withdraw-standard-entry.md)で該当ケースを解消済み。
+
 `SixInputRegistry` は明示した6人・狼1・占い1・狩人0・霊0/1の保存入力から作る。初日/二日目の昼snapshotに限定し、既存の公開log transaction、owned change commit、BoardData.updated、SavedOriginを使用する。現在の事後分布を入力とせず、訂正後の有効入力と元の配役・ルール・方針・観測履歴から再構築する。通常UI・共通ルール・公開設定・サーバーは変更していない。
 
 初期 `SavedCutOutGraph` の6人 `corrected/bind` も接続した。途中registryでは `edited(payload)` が現在所有元の既存transaction、`corrected_root(base, reports, medium_reports)` が初日所有元の明示的な入力訂正。後者は構成済みの同じ行動履歴を再生する試作APIで、実アプリのBoard切替/全archive管理との統合ではない。
