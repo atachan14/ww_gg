@@ -48,7 +48,13 @@ def primitive_laws(board,state,past,reporters,fake_policy):
     return candidates,fake
 
 
-def require_groups(board,state,past,groups):
+def require_groups(board,state,past,groups,*,_group_proof=None):
+    proof_ledger=None
+    if _group_proof is not None:
+        from werewolf.acquisition_provenance import AcquisitionLedger
+        ledger,receipt=_group_proof
+        if type(ledger)is AcquisitionLedger and ledger.public_groups_for(receipt,board,state,past)==groups:
+            proof_ledger=ledger
     if board.phase!='day' or board.initial_hunter_count or board.initial_seer_count!=1 or len(state.rosters)!=board.day:
         raise Pending('publication_day_S1_H0_scope')
     if report_actions(board):raise Pending('publication_medium_observation_must_precede_seer')
@@ -57,6 +63,7 @@ def require_groups(board,state,past,groups):
     if tuple(sorted(p for group in groups for p in group))!=tuple(range(1,board.player_count+1)):
         raise Pending('publication_groups_must_partition_players')
     for h in state.hypotheses:
+        if proof_ledger is not None:proof_ledger.stats['public_semantic_hypothesis_visits']+=1
         if h.roles[2].bit_count()!=1:raise Pending('publication_single_true_owner_required')
         for a in h.acquisitions:
             if (a.day>len(state.rosters) or a.player not in state.rosters[a.day-1] or
@@ -70,6 +77,9 @@ def require_groups(board,state,past,groups):
         raise Pending('publication_at_most_two_reporters_required')
     if any(sum(not h.roles[2]&(1<<(p-1)) for p in reporters)>1 for h in state.hypotheses):
         raise Pending('publication_multiple_fake_joint_law_unselected')
+    if proof_ledger is not None:
+        proof_ledger.stats['public_permutation_checks_avoided']+=sum(len(g)-1 for g in groups)
+        return reporters
     for group in groups:
         for p in group[1:]:
             mapping=list(range(1,board.player_count+1));mapping[group[0]-1],mapping[p-1]=p,group[0];mapping=tuple(mapping)
@@ -79,8 +89,8 @@ def require_groups(board,state,past,groups):
     return reporters
 
 
-def produce(board,state,past,groups,*,fake_policy=('noncontradictory','uniform')):
-    reporters=require_groups(board,state,past,groups)
+def produce(board,state,past,groups,*,fake_policy=('noncontradictory','uniform'),_group_proof=None):
+    reporters=require_groups(board,state,past,groups,_group_proof=_group_proof)
     if not reporters:return (PublicationPattern((),groups,(),(),1,1,GeneratedPublication((),F(1),state)),)
     candidates,fake=primitive_laws(board,state,past,reporters,fake_policy)
     if reporters not in groups:

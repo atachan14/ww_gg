@@ -31,6 +31,7 @@ class MorningScope:
     request:object
     source:object
     groups:tuple
+    group_ledger:object=None
 
 
 def _context(scope):
@@ -51,6 +52,12 @@ def check_scope(scope):
     data,rules,strategy,fields=_scopes[scope]
     if scope.graph.data is not data or tuple(vars(scope).values())!=fields:raise Pending('orbit_value_owner_revision_changed')
     if (scope.builder.rules,scope.builder.strategy)!=(rules,strategy):raise Pending('orbit_value_config_changed')
+    if scope.group_ledger is not None:
+        source=scope.source
+        groups=scope.group_ledger.groups_for(source.provenance,source.public,source)
+        if groups is None or groups!=scope.groups:raise Pending('orbit_value_inherited_group_proof_changed')
+        scope.group_ledger.stats['scope_parent_replays_avoided']+=1
+        return source
     validator=getattr(scope.builder,'valid_owner',None)
     if validator is not None:validator()
     if _context(scope).groups!=scope.groups or scope.request.roles()!=scope.source:raise Pending('orbit_value_source_or_proof_changed')
@@ -62,7 +69,11 @@ def check_scope(scope):
 
 
 def private_stabilizer(scope):
-    source=check_scope(scope);observer=source.observer;fixed=set()
+    source=check_scope(scope)
+    if scope.group_ledger is not None:
+        scope.group_ledger.stats['private_permutation_checks_avoided']+=sum(len(g)-1 for g in scope.groups)
+        return scope.groups,()
+    observer=source.observer;fixed=set()
     if observer is not None:
         if type(observer)is OwnView:fixed.add(observer.player)
         elif type(observer)is SeerObserver:fixed.update((observer.actor,observer.target))
@@ -95,7 +106,8 @@ class OrbitOracle(InitialReferenceEngine):
         source=self.scope.source
         if (b,s,past)==(source.public,source.public_state,source.past):
             check_scope(self.scope)
-            patterns=produce(b,s,past,self.scope.groups,fake_policy=self.strategy.fake_seer_policy)
+            proof=None if self.scope.group_ledger is None else (self.scope.group_ledger,source.provenance)
+            patterns=produce(b,s,past,self.scope.groups,fake_policy=self.strategy.fake_seer_policy,_group_proof=proof)
             rows=public_report_branches(b,past,restore(patterns,b.player_count))
             self.audit['root_pattern_templates']+=len(patterns);self.audit['root_named_Boards']+=len(rows)
             return rows
@@ -116,8 +128,32 @@ class Representative:
 
 def prepare(scope):
     groups,splits=private_stabilizer(scope);src=scope.source
-    patterns=produce(src.public,src.public_state,src.past,groups,fake_policy=scope.builder.strategy.fake_seer_policy)
+    proof=None if scope.group_ledger is None else (scope.group_ledger,src.provenance)
+    patterns=produce(src.public,src.public_state,src.past,groups,fake_policy=scope.builder.strategy.fake_seer_policy,_group_proof=proof)
     return groups,splits,patterns
+
+
+def with_audited_groups(scope):
+    """Single trusted adapter: audit first, then bind the exact source frame.
+
+    This does not invent a root from a callback or from endpoint metadata.
+    """
+    from werewolf.acquisition_provenance import AcquisitionLedger
+    try:audited=seed_structural(scope)
+    except Pending as error:
+        if error.reason in ('role_filter_seed_public_observer_only','role_filter_exact_immutable_carriers_required'):
+            return scope  # Keep the ordinary full-check path for this source.
+        raise
+    ledger=AcquisitionLedger(scope.builder)
+    scope.builder.acquisition_provenance=ledger
+    source=audited.source
+    receipt=ledger._register_audited_root(source.public,source,audited.groups,(scope.graph,scope.graph.data))
+    if receipt is None:raise Pending('orbit_value_audited_root_not_supported')
+    source=replace(source,provenance=receipt)
+    result=MorningScope(scope.graph,scope.builder,scope.request,source,audited.groups,ledger)
+    _scopes[result]=(scope.graph.data,scope.builder.rules,scope.builder.strategy,tuple(vars(result).values()))
+    check_scope(result)
+    return result
 
 
 class PublicationOrbitValue:

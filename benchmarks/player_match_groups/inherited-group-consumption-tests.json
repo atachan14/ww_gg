@@ -1,0 +1,17 @@
+{
+  "status": "verified",
+  "tests": 37,
+  "errors": 0,
+  "failures": 0,
+  "seconds": 14.965687600022648,
+  "peak_working_set_bytes": 66691072,
+  "patterns": [
+    "test_acquisition_provenance.py",
+    "test_inherited_group_consumption.py",
+    "test_publication_orbit_value.py",
+    "test_cut_out_structural_publications.py"
+  ],
+  "default_provenance": false,
+  "whole_initial7_search": false,
+  "immutable_sharing": false
+}

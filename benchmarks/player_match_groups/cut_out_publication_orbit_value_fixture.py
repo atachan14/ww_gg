@@ -60,11 +60,28 @@ def tables(source,result):
     return tuple(rows)
 
 
-def audit(case):
+def audit(case,*,inherited_groups=False):
     scope,cold=make_scope(case);src=scope.source
+    original_public_groups=scope.groups
     with calculation_origin(scope.graph.data):
         before=time.perf_counter();baseline,old,public,weighted,children=named_value(scope);baseline_seconds=time.perf_counter()-before
-        before=time.perf_counter();plan=PublicationOrbitValue(scope);value=plan.value();orbit_seconds=time.perf_counter()-before
+        prepared=None;root_audit_seconds=0;inherited_preparation_seconds=0
+        if inherited_groups:
+            from .cut_out_publication_orbit_value import with_audited_groups,prepare
+            from . import cut_out_publication_orbit_value as value_module
+            from . import cut_out_structural_publications as producer_module
+            from werewolf.board_future import GeneratedBoard
+            from unittest.mock import patch
+            before=time.perf_counter();scope=with_audited_groups(scope);root_audit_seconds=time.perf_counter()-before
+            roles=GeneratedBoard.roles
+            def no_parent(request):
+                if request is scope.request:raise AssertionError('scope parent replay')
+                return roles(request)
+            before=time.perf_counter()
+            with patch.object(value_module,'move_law',side_effect=AssertionError('private permutation')),patch.object(producer_module,'move_law',side_effect=AssertionError('public permutation')),patch.object(GeneratedBoard,'roles',no_parent):
+                for i in range(3):prepared=prepare(scope)
+            inherited_preparation_seconds=time.perf_counter()-before
+        before=time.perf_counter();plan=PublicationOrbitValue(scope,prepared=prepared);value=plan.value();orbit_seconds=time.perf_counter()-before
         assert value==baseline
         assert plan.label_restorations==0 and plan.engine.audit['root_named_Boards']==0
         value_counts=dict(named_root_Boards=old.audit['root_named_Boards'],representative_root_Boards=plan.representative_Boards,
@@ -91,16 +108,18 @@ def audit(case):
         # Forecast calls for representatives are lazy inspection work. The plan
         # never solves each transported label; cached representative forecasts
         # and exact target-index transport serve all labels.
-        return dict(status='verified',case=case,village_win=str(value),public_groups=scope.groups,private_stabilizer=plan.groups,split_groups=plan.private_splits,
+        return dict(status='verified',case=case,village_win=str(value),public_groups=original_public_groups,evaluation_scope_groups=scope.groups,private_stabilizer=plan.groups,split_groups=plan.private_splits,
             q_patterns=len(plan.patterns),q_named_vectors=plan.named_Q_vectors,p_zero_patterns=plan.p_zero_patterns,
             value_only=value_counts,value_only_named_restorations=0,value_only_root_named_Boards=0,
             baseline_value_seconds=baseline_seconds,orbit_value_seconds=orbit_seconds,
             requested_label_restorations=plan.label_restorations,full_label_Forecast_QP_Table_checks=table_checks,independent_saved_origin_cold_reads=reads,
             full_QP_mass_and_forecast_equal=True,future_publication_backup='ordinary independent labelled recursion; prototype compresses ONE boundary only',
-            full_initial7_search=False)
+            full_initial7_search=False,inherited_groups_enabled=inherited_groups,
+            root_audit_seconds=root_audit_seconds,inherited_preparation_seconds=inherited_preparation_seconds,
+            inherited_group_counts={} if scope.group_ledger is None else dict(scope.group_ledger.stats))
 
 
-def worker(case):
+def worker(case,*,inherited_groups=False):
     start=time.monotonic()
     def watch():
         while True:
@@ -108,10 +127,11 @@ def worker(case):
             time.sleep(.05)
     threading.Thread(target=watch,daemon=True).start()
     try:
-        with calculation_budget(4000000,max_seconds=30),independent_joint_values():row=audit(case)
+        with calculation_budget(4000000,max_seconds=30),independent_joint_values():row=audit(case,inherited_groups=inherited_groups)
     except CalculationBudgetExceeded:row=dict(status='unverified',case=case,reason='case_calculation_budget',budget_stop=budget_stop(),full_initial7_search=False)
     row.update(seconds=time.monotonic()-start,peak_working_set_bytes=peak_bytes())
-    Path('benchmarks/player_match_groups/publication-orbit-value-'+case+'-results.json').write_text(json.dumps(row,indent=2)+'\n')
+    suffix='-inherited' if inherited_groups else ''
+    Path('benchmarks/player_match_groups/publication-orbit-value-'+case+suffix+'-results.json').write_text(json.dumps(row,indent=2)+'\n')
     print(json.dumps(row),flush=True)
 
 def recursive_audit(case):
@@ -417,6 +437,18 @@ def seven_coverage_audit(*,track_provenance=False):
                     source=replace(night,private=own,observer=view,physical=physical_board(night.public,own,night.physical),board_data=None)
                     private_groups=point_fix(groups,1,4)
                 e=ordinary_engine(track_provenance);payload=ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical)
+                permutations=[]
+                for group in private_groups:
+                    for position in group[1:]:
+                        mapping=list(range(1,8));mapping[group[0]-1],mapping[position-1]=position,group[0]
+                        mapping=tuple(mapping)
+                        assert same_source(moved_source(source,mapping),source)
+                        permutations.append(mapping)
+                if track_provenance:
+                    # This verification adapter has just completed the full
+                    # input audit. The runtime ledger never invents a root.
+                    receipt=e.acquisition_provenance._register_audited_root(source.public,payload,private_groups,(registry,registry.data))
+                    payload=replace(payload,provenance=receipt)
                 start=time.perf_counter();actual=e.action_policy.acquire(source.public,payload);seconds['common_acquisition']+=time.perf_counter()-start
                 if track_provenance:
                     from unittest.mock import patch
@@ -425,7 +457,9 @@ def seven_coverage_audit(*,track_provenance=False):
                     if view is None:
                         assert actual.provenance is not None
                         with patch.object(TrueScanState,'__eq__',side_effect=AssertionError('lineage full equality')),patch.object(TrueScanState,'__hash__',side_effect=AssertionError('lineage full hashing')),patch.object(GeneratedBoard,'roles',side_effect=AssertionError('lineage parent replay')):
-                            for i in range(32):assert e.acquisition_provenance.validates(actual.provenance,source.public,payload,actual)
+                            for i in range(32):
+                                assert e.acquisition_provenance.validates(actual.provenance,source.public,payload,actual)
+                                assert e.acquisition_provenance.groups_for(actual.provenance,source.public,actual)==private_groups
                     else:assert actual.provenance is None
                     lineage.update(e.acquisition_provenance.stats)
                 start=time.perf_counter();q,qn=instructed_reference(source.public_state,source.public.alive);p,pn=instructed_reference(source.private,source.public.alive);seconds['deterministic_instruction_reference']+=time.perf_counter()-start
@@ -434,12 +468,8 @@ def seven_coverage_audit(*,track_provenance=False):
                 assert q.public_roles==source.public_state.public_roles and p.public_roles==source.private.public_roles
                 input_rows+=len(source.public_state.hypotheses)+len(source.private.hypotheses);output_rows+=len(q.hypotheses)+len(p.hypotheses);kernel_checks+=1
                 generated=replace(source,public_state=q,private=p,physical=actual.physical,board_data=None)
-                for group in private_groups:
-                    for position in group[1:]:
-                        mapping=list(range(1,8));mapping[group[0]-1],mapping[position-1]=position,group[0];mapping=tuple(mapping)
-                        moved=moved_source(source,mapping)
-                        assert same_source(moved,source),(target,view,group)
-                        assert same_source(moved_source(generated,mapping),generated);symmetry_checks+=1
+                for mapping in permutations:
+                    assert same_source(moved_source(generated,mapping),generated);symmetry_checks+=1
                 contexts.append(dict(executed=target,view='public' if view is None else 'true_seer1_with_initial_white4',groups=private_groups,Q_before=len(source.public_state.hypotheses),P_before=len(source.private.hypotheses),Q_after=len(q.hypotheses),P_after=len(p.hypotheses)))
                 if target==3 and view is not None:negative=generated
         # Observing a privately selected target is NOT the unobserved mixture.
@@ -453,8 +483,10 @@ def seven_coverage_audit(*,track_provenance=False):
         QP_acquisition_contexts=kernel_checks,independent_deterministic_instructions=instruction_count,complete_source_and_output_symmetry_generators=symmetry_checks,
         input_hypotheses=input_rows,output_hypotheses=output_rows,timings=dict(seconds),contexts=contexts,
         observed_target6_same_role_marginal_breaks_swap67=True,observed_target6_preserves_swap57=True,
-        role_certainty_required=False,typed_acquisition_receipt_implemented=False,parent_replay_avoidance_implemented=False,
-        new_evaluator_implemented=False,kernel_lineage_enabled=track_provenance,kernel_lineage_counts=dict(lineage),kernel_lineage_root_symmetry_proved=False,solve_calls=0,act_calls=0,MAX_evaluated=False,full_initial7_search=False,public64_aggregate_retried=False,immutable_sharing=False)
+        role_certainty_required=False,typed_acquisition_receipt_implemented=track_provenance,parent_replay_avoidance_implemented=False,
+        new_evaluator_implemented=False,kernel_lineage_enabled=track_provenance,kernel_lineage_counts=dict(lineage),
+        parent_groups_audited_before_registration=track_provenance,full_cycle_group_inheritance_implemented=False,
+        kernel_lineage_root_symmetry_proved=False,solve_calls=0,act_calls=0,MAX_evaluated=False,full_initial7_search=False,public64_aggregate_retried=False,immutable_sharing=False)
 
 
 def seven_coverage_worker():
@@ -470,4 +502,5 @@ if __name__=='__main__':
     elif len(sys.argv)>1 and sys.argv[1]=='structural-role':structural_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='structural-death':death_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='seven-coverage':seven_coverage_worker()
+    elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':worker('five',inherited_groups=True)
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

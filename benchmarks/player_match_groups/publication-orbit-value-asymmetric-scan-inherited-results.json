@@ -1,0 +1,109 @@
+{
+  "status": "verified",
+  "case": "asymmetric-scan",
+  "village_win": "2/15",
+  "public_groups": [
+    [
+      1,
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5,
+      6,
+      7
+    ]
+  ],
+  "evaluation_scope_groups": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ]
+  ],
+  "private_stabilizer": [
+    [
+      1
+    ],
+    [
+      2
+    ],
+    [
+      3
+    ],
+    [
+      4
+    ],
+    [
+      5
+    ],
+    [
+      6
+    ],
+    [
+      7
+    ]
+  ],
+  "split_groups": [],
+  "q_patterns": 64,
+  "q_named_vectors": 64,
+  "p_zero_patterns": 56,
+  "value_only": {
+    "named_root_Boards": 64,
+    "representative_root_Boards": 64,
+    "named_positive_P_solve_roots": 8,
+    "representative_positive_P_solve_roots": 8,
+    "named_solve_requests": 512,
+    "orbit_solve_requests": 512,
+    "named_actions": 1552,
+    "orbit_actions": 1552,
+    "named_value_states": 512,
+    "orbit_value_states": 512,
+    "named_future_Boards": 504,
+    "orbit_future_Boards": 504
+  },
+  "value_only_named_restorations": 0,
+  "value_only_root_named_Boards": 0,
+  "baseline_value_seconds": 2.9300531999906525,
+  "orbit_value_seconds": 2.6209748999681324,
+  "requested_label_restorations": 8,
+  "full_label_Forecast_QP_Table_checks": 8,
+  "independent_saved_origin_cold_reads": 8,
+  "full_QP_mass_and_forecast_equal": true,
+  "future_publication_backup": "ordinary independent labelled recursion; prototype compresses ONE boundary only",
+  "full_initial7_search": false,
+  "inherited_groups_enabled": true,
+  "root_audit_seconds": 0.01054459996521473,
+  "inherited_preparation_seconds": 0.06779170001391321,
+  "inherited_group_counts": {
+    "audited_roots": 1,
+    "group_consumptions": 21,
+    "scope_parent_replays_avoided": 21,
+    "private_permutation_checks_avoided": 0,
+    "public_semantic_hypothesis_visits": 90,
+    "public_permutation_checks_avoided": 0
+  },
+  "seconds": 6.282000000006519,
+  "peak_working_set_bytes": 60227584
+}

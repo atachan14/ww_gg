@@ -14,12 +14,13 @@ The actual user case is **villagers3 / medium1 / seer1 / wolves2 / hunter0**, wi
 | Exact own-role structural filter (ae0d19d) | Narrow proof/tests completed | One typed private observation; shared receipt foundation, not a complete game pipeline |
 | Certain-villager daytime death (0df02e5) | Narrow proof/tests completed | W1/S1/V3/H0/M0 five-alive example; does not cover ordinary seven-player deaths; retained as a reference test, not extended with more cast-specific examples |
 | Actual-seven acquisition coverage audit | **Verification only** | All first executions plus complete uniform acquisition mixtures checked without role certainty; no complete symmetry-root receipt or new evaluator |
-| Shared acquisition lineage (current) | **Opt-in common foundation; default OFF** | Exact kernel-fill/pairing metadata reaches predeath ActionInputs; 7 public receipts and 224 identity validations. No group merging, observer proof or death/report propagation |
+| Shared parent groups + acquisition/preparation (current) | **Opt-in common foundation; default OFF** | Audited groups reach 7 public acquired frames; 224 identity queries. Existing report preparation skips repeated Q/P permutation checks. No generic death/report-child propagation or MAX adoption |
 
 The current bounded inspection entry is:
 
 ```text
 python -m benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture seven-coverage
+python -m benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture inherited-groups
 ```
 
 It has a 20-second calculation cap and forbids solve/act. The current run enables optional kernel-lineage inspection and took about 0.20 seconds; the original verification-only run was about 0.17 seconds. It prepares the actual source but does not search the initial game. Its evidence is `publication-orbit-seven-coverage-results.json`. Regression entry: `python -m unittest discover -s tests -p test_publication_orbit_value.py` (18 tests). Historical `structural-role` and `structural-death` modes are the existing small reference tests. The `recursive` mode remains an unadopted experiment; it is not the current optimization entry. Initial7 searches and the unverified public64 aggregate are not to be rerun as part of this audit.
@@ -270,3 +271,32 @@ A combined regression run completed **96 tests with zero failures/errors in 91.4
 ### Remaining shared work
 
 The new token is kernel lineage only. Next layers remain: connect an audited parent group root to it; certify known observer filters/interventions; carry typed Q/P likelihood/normalization through general death and report kernels; bind cache/cold restoration and output maps to those receipts; then assess existing MAX policy/value equivariance. None is implied by this increment. Ordinary UI, HELP, public edition and MAX behavior/defaults are unchanged. No server process was changed for this increment, and no long actual-initial7/public64 run was started.
+
+
+## Audited parent groups consumed by the existing preparation entry
+
+This increment finishes the previously uncommitted parent-group/preparation work and persists its evidence after explicit save/commit authorization. It does not implement the remaining general death/report chain. The plan and precise unfinished boundaries are in `shared-symmetry-transition-plan.md`.
+
+The existing `with_audited_groups` adapter first runs the established complete structural seed audit, including full private hypotheses, physical state and public history. Only then does it internally register an `AuditedGroupReceipt`. A root is never inferred from role marginals or from a group-shaped caller callback. Internal `_register_audited_root` is a trusted assertion seam; it must not be exposed as an input API. It accepts an immutable partition and binds the exact source frame, saved data, graph/engine/root/origin and baseline rule/strategy identities. Root audits remain a real initial cost.
+
+`UniformAcquisitionReceipt` can now inherit that audited group after the canonical generator pairing validates the exact parent frame. Owner facts are sealed at issue time. `groups_for` consumes the exact output frame without walking parents, hashing/equating complete laws or replaying a Board. Data/revision/owner/configuration changes, copied receipts and substituted equal-but-distinct private laws lose the guarantee. General death projection still drops provenance; personal acquisition observers still decline.
+
+In the existing one-boundary publication experiment, the optional ledger-backed MorningScope uses these identity checks instead of `_context` full-key lookup, repeated parent `roles()` and full private stabilizer recomputation. The generic publication producer accepts only this concrete ledger's issued proof to skip its public permutation loop. It still performs phase/cast/roster/history consistency, candidate legality, primitive report-policy checks and complete probability/support calculations. An arbitrary fake producer callback cannot authorize skipping. Unsupported personal observers keep the ordinary scope/full-check path; stale issued scopes fail explicitly rather than silently adopting changed saved inputs.
+
+### Saved results and what was actually omitted
+
+`publication-orbit-value-five-inherited-results.json`: one root audit, three repeated preparations. Full P permutation-generator checks avoided: 3; full Q permutation-generator checks avoided: 3; scope-parent `roles()` calls avoided across preparation/value/detail checks: 23. Semantic hypothesis visits remain 54. The counter's historical name `scope_parent_replays_avoided` counts omitted scope-level roles calls; it does **not** claim ordinary child/cold recipe reconstruction was removed. All nine labelled Q/P/mass/Forecast/Table details and nine fresh SavedOrigin cold reads match the independent named result; village value remains 1/3.
+
+The existing labelled-to-orbit counts (9 to 6 root entries, 27 to 18 actions) are the earlier one-boundary optimization, not additional savings introduced by this proof-consumption increment. The saved run took about 0.187 seconds overall, with a 1.88 ms root audit and 8.92 ms for the three preparations. These tiny diagnostic timings do not demonstrate a whole-solver speedup; generation, normalization and Table/cold work remain.
+
+`publication-orbit-value-asymmetric-scan-inherited-results.json`: the root audit refines to singleton evaluation groups. Public model groups and Q remain separately recorded and unchanged. Eight positive-P labels, full Forecast/Table and eight cold reads match; action evaluations remain 1,552 to 1,552, value 2/15. No permutation checks are counted as avoided for singleton groups. Ninety semantic hypothesis visits remain. This guards against treating equal role marginals as equal secret histories.
+
+The updated actual-seven finite coverage audit still matches all 14 Q/P contexts, 651 deterministic reference instructions and 27 independent full group-generator comparisons. It records 14 externally audited roots, 21 generation records, 7 public group inheritances and 224 reference-only output validations/group queries; 7 seer-observer contexts decline. The source/output full comparisons here are independent validation, not hidden runtime rechecks in `groups_for`. The ledger does not itself prove a root from scratch (`kernel_lineage_root_symmetry_proved=false`); the root audit precedes registration (`parent_groups_audited_before_registration=true`). Typed public acquisition inheritance is now implemented, while `full_cycle_group_inheritance_implemented=false` and the legacy full-pipeline replay flag remain false.
+
+### Durable regression and remaining work
+
+`test_inherited_group_consumption.py` adds six permanent tests: inherited acquisition groups with root lookup/parent walk unavailable and law hash/equality/replay forbidden; owner revision/copy/private-identity rejection; the actual existing publication consumer and all named details; observer ordinary fallback; forged producer-proof refusal; and fast-scope identity/revision guards. Existing acquisition and orbit tests plus four existing structural publication tests also pass: **37 tests, zero errors/failures, 14.966 seconds combined runner time**, recorded in `inherited-group-consumption-tests.json`.
+
+The earlier normal-shell work-tree errors and JSON PermissionErrors are resolved for saving in the explicitly authorized execution context. The failed artifact writes were not retried through an unapproved alternative route. This checkpoint includes the source, permanent tests, saved JSON and this record in a local commit; no push/deploy is included.
+
+Next implementation remains the shared general death/report receipt chain, with public compatibility versus physical target intervention/actor choice kept distinct, terminal/P-zero cases preserved, report-conditioned children and cache/cold ownership handled explicitly. No new cast-specific death example was added. Ordinary UI, HELP, MAX, public edition and server processes remain unchanged; immutable sharing stays OFF. No long actual initial-seven or public64 aggregate rerun occurred.
