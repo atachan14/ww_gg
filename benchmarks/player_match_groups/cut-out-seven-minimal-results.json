@@ -1,0 +1,334 @@
+{
+  "recorded_utc": "2026-10-18T10:20:05.036077+00:00",
+  "head_before_commit": "4ee793dae9633e0baeaa07d9ea9a144232517460",
+  "cases": [
+    {
+      "case": "public-disclosed",
+      "initial_public_hypotheses": 1,
+      "initial_private_hypotheses": 1,
+      "village_win": "19/35",
+      "complete_table_joint_history_branch_mass_equal": true,
+      "independent_win_action_horizon_equal": true,
+      "independent_terminal_joint_equal": true,
+      "unconditional_labelled_terminal_mass_sum": "1",
+      "unconditional_village_terminal_mass": "19/35",
+      "setup_seconds": 0.017644000006839633,
+      "grouped": {
+        "key_seconds": 0.006522100156871602,
+        "cut_out_builds": 11,
+        "cut_out_seconds": 0.0031639999651815742,
+        "action_requests": 296,
+        "action_evaluations": 289,
+        "law_seconds": 0.037558899814030156,
+        "acquisition_calls": 130,
+        "morning_calls": 35,
+        "inclusive_action_seconds": 0.39952980002271943,
+        "representative_hits": 7,
+        "label_scalar_restores": 4,
+        "label_restore_seconds": 1.8900027498602867e-05,
+        "total_seconds": 0.10978949998388998,
+        "evaluation_other_seconds": 0.06365080006071366,
+        "saved_origins": 1,
+        "generated_boards": 148,
+        "law_hypotheses_retained": 159
+      },
+      "full_labelled": {
+        "action_requests": 15574,
+        "action_evaluations": 15567,
+        "law_seconds": 1.7513941991492175,
+        "acquisition_calls": 3240,
+        "morning_calls": 1590,
+        "total_seconds": 5.610347300011199,
+        "evaluation_other_seconds": 3.8589531008619815,
+        "saved_origins": 1,
+        "generated_boards": 6363,
+        "law_hypotheses_retained": 6962
+      },
+      "grouped_terminal_restore": {
+        "terminal_recipes": 235,
+        "second_night_terminal_recipes": 0,
+        "killed_after_scan_witnesses": 0,
+        "executed_owner_old_record_witnesses": 162,
+        "corpse_scan_witnesses": 346,
+        "restore_seconds": 0.06686520000221208
+      },
+      "full_terminal_restore": {
+        "terminal_recipes": 13451,
+        "second_night_terminal_recipes": 0,
+        "killed_after_scan_witnesses": 0,
+        "executed_owner_old_record_witnesses": 9360,
+        "corpse_scan_witnesses": 19800,
+        "restore_seconds": 4.4041657999914605
+      },
+      "all_label_restore_comparison_seconds": 4.471040000003995,
+      "third_day_terminals": 226,
+      "two_night_terminals": 226,
+      "slot3_terminal_witnesses": 201,
+      "group_swap_audits_in_tests_only": 120,
+      "worker_setup_eval_restore_verify_seconds": 10.726734199997736,
+      "private_table_semantics": "public current complete display",
+      "peak_working_set_bytes": 216600576,
+      "startup_and_work_seconds": 11.012431799987098,
+      "fresh_process_seconds": 11.919625400012592
+    },
+    {
+      "case": "public-latent",
+      "initial_public_hypotheses": 6,
+      "initial_private_hypotheses": 6,
+      "village_win": "19/35",
+      "complete_table_joint_history_branch_mass_equal": true,
+      "independent_win_action_horizon_equal": true,
+      "independent_terminal_joint_equal": true,
+      "unconditional_labelled_terminal_mass_sum": "1",
+      "unconditional_village_terminal_mass": "19/35",
+      "setup_seconds": 0.019809599994914606,
+      "grouped": {
+        "key_seconds": 0.0018317998619750142,
+        "cut_out_builds": 5,
+        "cut_out_seconds": 0.00021510003716684878,
+        "action_requests": 15,
+        "action_evaluations": 8,
+        "law_seconds": 0.021781699993880466,
+        "acquisition_calls": 64,
+        "morning_calls": 2,
+        "inclusive_action_seconds": 0.07353690001764335,
+        "representative_hits": 7,
+        "label_scalar_restores": 5,
+        "label_restore_seconds": 4.710000939667225e-05,
+        "total_seconds": 0.0400186000042595,
+        "evaluation_other_seconds": 0.01620590011589229,
+        "saved_origins": 1,
+        "generated_boards": 17,
+        "law_hypotheses_retained": 177
+      },
+      "full_labelled": {
+        "action_requests": 1634,
+        "action_evaluations": 1627,
+        "law_seconds": 3.9091872996941675,
+        "acquisition_calls": 840,
+        "morning_calls": 390,
+        "total_seconds": 5.565336500003468,
+        "evaluation_other_seconds": 1.6561492003093008,
+        "saved_origins": 1,
+        "generated_boards": 643,
+        "law_hypotheses_retained": 41772
+      },
+      "grouped_terminal_restore": {
+        "terminal_recipes": 4,
+        "second_night_terminal_recipes": 0,
+        "killed_after_scan_witnesses": 0,
+        "executed_owner_old_record_witnesses": 84,
+        "corpse_scan_witnesses": 220,
+        "restore_seconds": 0.006961700011743233
+      },
+      "full_terminal_restore": {
+        "terminal_recipes": 1111,
+        "second_night_terminal_recipes": 0,
+        "killed_after_scan_witnesses": 0,
+        "executed_owner_old_record_witnesses": 56160,
+        "corpse_scan_witnesses": 118800,
+        "restore_seconds": 3.241670299990801
+      },
+      "all_label_restore_comparison_seconds": 3.248640700010583,
+      "third_day_terminals": 2,
+      "two_night_terminals": 2,
+      "slot3_terminal_witnesses": 2,
+      "group_swap_audits_in_tests_only": 24,
+      "worker_setup_eval_restore_verify_seconds": 8.943265400012024,
+      "private_table_semantics": "public current complete display",
+      "peak_working_set_bytes": 79192064,
+      "startup_and_work_seconds": 9.215888200007612,
+      "fresh_process_seconds": 9.536354699986987
+    },
+    {
+      "case": "private-latent",
+      "initial_public_hypotheses": 6,
+      "initial_private_hypotheses": 1,
+      "village_win": "19/35",
+      "complete_table_joint_history_branch_mass_equal": true,
+      "independent_win_action_horizon_equal": true,
+      "independent_terminal_joint_equal": true,
+      "unconditional_labelled_terminal_mass_sum": "1",
+      "unconditional_village_terminal_mass": "19/35",
+      "setup_seconds": 0.018669199984287843,
+      "grouped": {
+        "key_seconds": 0.005585400067502633,
+        "cut_out_builds": 5,
+        "cut_out_seconds": 0.0005646999343298376,
+        "action_requests": 36,
+        "action_evaluations": 29,
+        "law_seconds": 0.06388319993857294,
+        "acquisition_calls": 76,
+        "morning_calls": 8,
+        "inclusive_action_seconds": 0.28101040006731637,
+        "representative_hits": 7,
+        "label_scalar_restores": 4,
+        "label_restore_seconds": 2.929999027401209e-05,
+        "total_seconds": 0.0978311000217218,
+        "evaluation_other_seconds": 0.02796120010316372,
+        "saved_origins": 1,
+        "generated_boards": 29,
+        "law_hypotheses_retained": 750
+      },
+      "full_labelled": {
+        "action_requests": 1634,
+        "action_evaluations": 1627,
+        "law_seconds": 3.0830822993884794,
+        "acquisition_calls": 840,
+        "morning_calls": 390,
+        "total_seconds": 4.289939700014656,
+        "evaluation_other_seconds": 1.206857400626177,
+        "saved_origins": 1,
+        "generated_boards": 643,
+        "law_hypotheses_retained": 41772
+      },
+      "grouped_terminal_restore": {
+        "terminal_recipes": 15,
+        "second_night_terminal_recipes": 0,
+        "killed_after_scan_witnesses": 0,
+        "executed_owner_old_record_witnesses": 288,
+        "corpse_scan_witnesses": 695,
+        "restore_seconds": 0.021785099990665913
+      },
+      "full_terminal_restore": {
+        "terminal_recipes": 1111,
+        "second_night_terminal_recipes": 0,
+        "killed_after_scan_witnesses": 0,
+        "executed_owner_old_record_witnesses": 32760,
+        "corpse_scan_witnesses": 69300,
+        "restore_seconds": 1.9043934000073932
+      },
+      "all_label_restore_comparison_seconds": 1.9261867000022903,
+      "third_day_terminals": 11,
+      "two_night_terminals": 11,
+      "slot3_terminal_witnesses": 5,
+      "group_swap_audits_in_tests_only": 56,
+      "worker_setup_eval_restore_verify_seconds": 6.456235099991318,
+      "private_table_semantics": "conditional uniform execution table, not an ability/scan-choice intervention table",
+      "peak_working_set_bytes": 72089600,
+      "startup_and_work_seconds": 6.730868599988753,
+      "fresh_process_seconds": 7.020594600006007
+    }
+  ],
+  "wall_seconds": 28.5,
+  "per_process_limit_seconds": 60,
+  "overall_limit_seconds": 300,
+  "memory_limit_bytes": 1500000000,
+  "source_sha256": {
+    "benchmarks/player_match_groups/cut_out_model_a.py": "36176930d4c0e97cf522d7aade651df05211d1488be9a08de04ccea87d063862",
+    "benchmarks/player_match_groups/cut_out_seven_minimal.py": "6cba1380d862b3531161d51129ca35e3cbdc5aa88d70cf2ffec64fa5ac86e3a3",
+    "benchmarks/player_match_groups/cut_out_seven_minimal_fixture.py": "9e055bbc9cd2134b88f1253a7c4ab1d37a1a4ff7aac455f134952aa7a2f73be0",
+    "benchmarks/player_match_groups/cut_out_two_nights.py": "aee16bf7313ab435e4eb48fd370cec48f094b46805b424bbc8b4dfaddf546138",
+    "tests/test_cut_out_seven_minimal.py": "26d6d127e3f5b6c2a802c278fa78c9d7adca40356869501c2dc1ca72b7791dde"
+  },
+  "normal_ui_connected": false,
+  "unsupported": [
+    "unrestricted seven-player initial support",
+    "seven initial random-white",
+    "seven input-correction registry",
+    "max",
+    "hunter",
+    "ability-choice private table"
+  ],
+  "regression_tests": 42,
+  "existing40_targets_preserved": true,
+  "regression_checks": [
+    {
+      "kind": "pattern",
+      "target": "test_withdraw_prefix_diagnostic.py",
+      "exit": 0
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_six_registry.py",
+      "exit": 0
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_saved_recipes.py",
+      "exit": 0
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_two_nights.py",
+      "exit": 0
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_uniform_game.py",
+      "exit": 0
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_model_a.py",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_closed_full_co_omission_survives_later_withdrawal",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_full_disclosure_observed.FullDisclosureObservedTests.test_direct_unfiltered_truth_cannot_be_rescued_with_private_initialization",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_hybrid_future_active_ledger.ActiveInputLedgerTests.test_active_input_target_only_then_generated_true_history_is_preserved",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_replay_preserves_acquisitions_dead_seers_and_attacks",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_screen_routes_replay_and_cache_matches_recalculation",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_observed_uniform_bite_likelihood_changes_physical_mass_only",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_observed_reports_condition_truth_history_and_preserve_model_a",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_report_edit_cancel_and_cache_rebuild_use_initial_joint_law",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_owned_public_log_and_delayed_publication_survive_cache_snapshot",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_positive_public_truth_with_impossible_repeated_scan_is_pending",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_pending_scope_does_not_replace_max",
+      "exit": 0
+    },
+    {
+      "kind": "named",
+      "target": "tests.test_root_secret_replay.RootReplayTests.test_uniform_guard_only_gj_replay_uses_common_public_observation",
+      "exit": 0
+    },
+    {
+      "kind": "pattern",
+      "target": "test_cut_out_seven_minimal.py",
+      "exit": 0
+    }
+  ],
+  "overall_wall_seconds": 60.20299999997951,
+  "post_validation_change": "rename total elapsed field to overall_wall_seconds; no algorithm or test changes"
+}

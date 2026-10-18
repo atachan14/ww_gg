@@ -17,7 +17,7 @@ def spec():
 def graph(source=None):return SavedCutOutGraph(adapt_six_model_a(spec() if source is None else source))
 
 
-def restore_terminals(engine):
+def restore_terminals(engine,*,max_publication_day=2):
     start=perf_counter();rows={};second=dead_after_scan=dead_before_scan=corpse_target=0
     for board,payload,target,outcomes in engine.terminal_records:
         parent=engine.board_sources[source_key(board,payload,engine)]
@@ -60,7 +60,7 @@ def restore_terminals(engine):
             for report in rebuilt.past:
                 # Generated reports use the morning-survivor roster. Nothing
                 # publishes after the second-night terminal observation.
-                assert report.published_day<=2
+                assert report.published_day<=max_publication_day
                 assert not any(e.target==report.player and (e.day<report.published_day or e.day==report.published_day and e.phase=='day') for e in rebuilt.public.history if e.day<report.published_day)
             rows[key]=(outcome.probability,rebuilt,request)
     return rows,dict(terminal_recipes=len(rows),second_night_terminal_recipes=second,

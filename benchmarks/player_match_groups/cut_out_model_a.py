@@ -36,10 +36,11 @@ class InitialModelASpec:
     claim_policy: ClaimPolicy = ClaimPolicy()
 
 
-def _reason(spec,*,six=False):
+def _reason(spec,*,six=False,seven=False):
+    if six and seven:return 'choose exactly one comparison scope'
     if type(spec) is not InitialModelASpec:return 'constructed InitialModelASpec only; no Board/law/game/callable input'
-    if (type(spec.players) is not int or spec.players not in ((6,) if six else (4,5)) or type(spec.mediums) is not int or spec.mediums not in (0,1)
-        or type(spec.seers) is not int or spec.seers not in ((1,) if six else (1,2)) or 1+spec.mediums+spec.seers>spec.players):return '6-player comparison W1 H0 M0/1 S1 only' if six else '4/5 original players W1 H0 M0/1 S1/2 only'
+    if (type(spec.players) is not int or spec.players not in ((7,) if seven else (6,) if six else (4,5)) or type(spec.mediums) is not int or spec.mediums not in (0,1)
+        or type(spec.seers) is not int or spec.seers not in ((1,) if six or seven else (1,2)) or 1+spec.mediums+spec.seers>spec.players):return '7-player minimal comparison only' if seven else '6-player comparison W1 H0 M0/1 S1 only' if six else '4/5 original players W1 H0 M0/1 S1/2 only'
     if spec.simultaneous_snapshot is not True:return 'explicit simultaneous initial snapshot required; no inferred CCO timing'
     if (type(spec.rules) is not Rules or spec.rules.allow_self_bite or type(spec.strategy) is not Strategy
         or (spec.strategy.day,spec.strategy.night,spec.strategy.fake_reports)!=('random',)*3
@@ -55,9 +56,9 @@ def _reason(spec,*,six=False):
     return None
 
 
-def source_game(spec,*,six=False):
+def source_game(spec,*,six=False,seven=False):
     """Build a NEW narrow snapshot, never reinterpret an existing game/log."""
-    reason=_reason(spec,six=six)
+    reason=_reason(spec,six=six,seven=seven)
     if reason:raise ValueError(reason)
     game=dict(players=spec.players,wolves=1,mediums=spec.mediums,seers=spec.seers,hunters=0,
         model='group',history=[],claims=list(spec.claims),claim_policy=asdict(spec.claim_policy),
@@ -85,12 +86,12 @@ class ModelAReference:
 
 
 class ModelAInitialGroups(ConstructiveCutOutGroups):
-    def __init__(self,spec,*,six=False):
-        reason=_reason(spec,six=six)
+    def __init__(self,spec,*,six=False,seven=False):
+        reason=_reason(spec,six=six,seven=seven)
         if reason:raise ValueError(reason)
         self.stats=Counter(generator_checks=0,symmetry_history_rows_read=0,full_permutation_searches=0,
                            upstream_permutation_checks=0,comparisons=0,official_board_builds=1,official_prior_builds=0,official_root_checks=1)
-        started=perf_counter();game=source_game(spec,six=six)
+        started=perf_counter();game=source_game(spec,six=six,seven=seven)
         rules,progress=reconstruct_saved(game)
         self.stats['official_board_seconds']=perf_counter()-started
         if progress.finished:raise ValueError('terminal snapshot outside initial one-step scope')
@@ -166,3 +167,17 @@ def adapt_six_model_a(spec):
     if reason:return UnsupportedPartition('six-player comparison: '+reason)
     try:return ModelAInitialGroups(spec,six=True)
     except ValueError as error:return UnsupportedPartition('official six-player prior: '+str(error))
+
+
+def adapt_seven_model_a(spec):
+    """Explicit tiny-support seven-player uniform comparison, not a UI entry."""
+    reason=_reason(spec,seven=True)
+    if reason:return UnsupportedPartition('seven-player comparison: '+reason)
+    if (spec.mediums!=0 or spec.rules.initial_seer!='none' or spec.claims.count('wolf')!=1
+        or spec.claims.count('seer')>1 or any(c not in ('latent','villager','seer','wolf') for c in spec.claims)):
+        return UnsupportedPartition('seven comparison requires M0/S1/H0, initial none, one known wolf, <=1 seer CO')
+    try:
+        engine=ModelAInitialGroups(spec,seven=True)
+        if len(engine.baseline.state.hypotheses)>6:return UnsupportedPartition('seven initial public joint support limit6')
+        return engine
+    except ValueError as error:return UnsupportedPartition('official seven-player prior: '+str(error))
