@@ -1,0 +1,289 @@
+{
+  "status": "verified",
+  "cases": [
+    {
+      "case": "five-owner-night",
+      "ordinary": {
+        "diagnostic_group_shapes": [],
+        "profile": [
+          {
+            "file": "board_future.py",
+            "function": "kernel_snapshot",
+            "calls": 58,
+            "self_seconds": 0.0003642,
+            "cumulative_seconds": 0.0011162000000000001
+          },
+          {
+            "file": "board_future.py",
+            "function": "remember",
+            "calls": 66,
+            "self_seconds": 0.0003244,
+            "cumulative_seconds": 0.0027636
+          },
+          {
+            "file": "board_future.py",
+            "function": "register_origin",
+            "calls": 58,
+            "self_seconds": 0.0001944,
+            "cumulative_seconds": 0.0042972
+          },
+          {
+            "file": "board_future.py",
+            "function": "condition_recipe",
+            "calls": 3,
+            "self_seconds": 0.00016600000000000002,
+            "cumulative_seconds": 0.0026820000000000004
+          },
+          {
+            "file": "board_future.py",
+            "function": "reconstruct_child",
+            "calls": 24,
+            "self_seconds": 0.0001395,
+            "cumulative_seconds": 0.019395000000000003
+          },
+          {
+            "file": "board_future.py",
+            "function": "reconstruct_publication",
+            "calls": 8,
+            "self_seconds": 8.75e-05,
+            "cumulative_seconds": 0.0053263
+          },
+          {
+            "file": "board_future.py",
+            "function": "roles",
+            "calls": 26,
+            "self_seconds": 5.33e-05,
+            "cumulative_seconds": 0.023704700000000002
+          },
+          {
+            "file": "board_future.py",
+            "function": "reconstruct_information",
+            "calls": 4,
+            "self_seconds": 2.3500000000000002e-05,
+            "cumulative_seconds": 0.0023184
+          }
+        ],
+        "ledger_retained_entries": {},
+        "case": "five-owner-night",
+        "tracked": false,
+        "diagnostic": true,
+        "body_seconds": 0.10126989998389035,
+        "phase_seconds": {
+          "common_setup_seconds": 0.022732700046617538,
+          "root_guarantee_and_registration_seconds": 6.430002395063639e-05,
+          "finite_common_kernels_seconds": 0.006404200044926256,
+          "Forecast_Table_seconds": 0.07190059998538345
+        },
+        "process_peak_working_set_bytes_until_timed_end": 34693120,
+        "process_peak_before_bytes": 33591296,
+        "states": {
+          "values": 8,
+          "actions": 31,
+          "expansions": {
+            "actions": 31,
+            "values": 8
+          },
+          "acquired": 3,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 2,
+          "saved_sources": 36,
+          "resolution_cache": 32,
+          "readout_entries": 10
+        },
+        "proof_counts": {},
+        "instrumented_calls": {
+          "__eq__": 180,
+          "__hash__": 348,
+          "roles": 26,
+          "condition_recipe": 3
+        },
+        "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+        "cold_reads": 10
+      },
+      "closed": {
+        "case": "five-owner-night",
+        "mode": "closed",
+        "diagnostic": true,
+        "body_seconds": 0.03255629999330267,
+        "phase_seconds": {
+          "common_setup_seconds": 0.0029808999970555305,
+          "closed_open_seconds": 0.0022090999991633,
+          "finite_common_kernels_seconds": 0.0012410999624989927,
+          "Forecast_Table_seconds": 0.01726059999782592
+        },
+        "process_peak_before_bytes": 35987456,
+        "process_peak_working_set_bytes_until_timed_end": 36073472,
+        "states": {
+          "values": 8,
+          "actions": 31,
+          "expansions": {
+            "actions": 31,
+            "values": 8
+          },
+          "acquired": 3,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 2,
+          "saved_sources": 0,
+          "resolution_cache": 32,
+          "readout_entries": 10
+        },
+        "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+        "instrumented_calls": {
+          "__eq__": 33,
+          "__hash__": 275,
+          "roles": 2
+        },
+        "cold_reads": 10,
+        "independent_group_generators": 4,
+        "ledger_required": false,
+        "initial7_value_search": false
+      },
+      "complete_named_results_equal": true
+    },
+    {
+      "case": "seven-owner-three",
+      "ordinary": {
+        "diagnostic_group_shapes": [],
+        "profile": [
+          {
+            "file": "board_future.py",
+            "function": "kernel_snapshot",
+            "calls": 62,
+            "self_seconds": 0.000371,
+            "cumulative_seconds": 0.0011645000000000002
+          },
+          {
+            "file": "board_future.py",
+            "function": "remember",
+            "calls": 70,
+            "self_seconds": 0.00033190000000000004,
+            "cumulative_seconds": 0.0028994000000000003
+          },
+          {
+            "file": "board_future.py",
+            "function": "condition_recipe",
+            "calls": 2,
+            "self_seconds": 0.0002969,
+            "cumulative_seconds": 0.0044476
+          },
+          {
+            "file": "board_future.py",
+            "function": "register_origin",
+            "calls": 51,
+            "self_seconds": 0.0002946,
+            "cumulative_seconds": 0.0058363
+          },
+          {
+            "file": "board_future.py",
+            "function": "reconstruct_publication",
+            "calls": 8,
+            "self_seconds": 9.27e-05,
+            "cumulative_seconds": 0.0063374
+          },
+          {
+            "file": "board_future.py",
+            "function": "reconstruct_child",
+            "calls": 8,
+            "self_seconds": 4.85e-05,
+            "cumulative_seconds": 0.0083183
+          },
+          {
+            "file": "board_future.py",
+            "function": "roles",
+            "calls": 17,
+            "self_seconds": 4.5e-05,
+            "cumulative_seconds": 0.0210458
+          },
+          {
+            "file": "board_future.py",
+            "function": "reconstruct_information",
+            "calls": 5,
+            "self_seconds": 3.6400000000000004e-05,
+            "cumulative_seconds": 0.008263000000000001
+          }
+        ],
+        "ledger_retained_entries": {},
+        "case": "seven-owner-three",
+        "tracked": false,
+        "diagnostic": true,
+        "body_seconds": 0.20635190000757575,
+        "phase_seconds": {
+          "common_setup_seconds": 0.10769660002551973,
+          "root_guarantee_and_registration_seconds": 9.089999366551638e-05,
+          "finite_common_kernels_seconds": 0.06451799999922514,
+          "Forecast_Table_seconds": 0.03389489999972284
+        },
+        "process_peak_working_set_bytes_until_timed_end": 36204544,
+        "process_peak_before_bytes": 36073472,
+        "states": {
+          "values": 6,
+          "actions": 18,
+          "expansions": {
+            "actions": 18,
+            "values": 6
+          },
+          "acquired": 3,
+          "mornings": 2,
+          "publications": 3,
+          "policies": 3,
+          "saved_sources": 48,
+          "resolution_cache": 22,
+          "readout_entries": 29
+        },
+        "proof_counts": {},
+        "instrumented_calls": {
+          "__eq__": 72,
+          "__hash__": 245,
+          "roles": 17,
+          "condition_recipe": 2
+        },
+        "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+        "cold_reads": 29
+      },
+      "closed": {
+        "case": "seven-owner-three",
+        "mode": "closed",
+        "diagnostic": true,
+        "body_seconds": 0.07904829998733476,
+        "phase_seconds": {
+          "common_setup_seconds": 0.0457713000359945,
+          "closed_open_seconds": 0.010633900004904717,
+          "finite_common_kernels_seconds": 0.012294100015424192,
+          "Forecast_Table_seconds": 0.00985560001572594
+        },
+        "process_peak_before_bytes": 37560320,
+        "process_peak_working_set_bytes_until_timed_end": 37560320,
+        "states": {
+          "values": 6,
+          "actions": 18,
+          "expansions": {
+            "actions": 18,
+            "values": 6
+          },
+          "acquired": 3,
+          "mornings": 2,
+          "publications": 3,
+          "policies": 3,
+          "saved_sources": 0,
+          "resolution_cache": 22,
+          "readout_entries": 29
+        },
+        "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+        "instrumented_calls": {
+          "__eq__": 40,
+          "__hash__": 212
+        },
+        "cold_reads": 29,
+        "independent_group_generators": 17,
+        "ledger_required": false,
+        "initial7_value_search": false
+      },
+      "complete_named_results_equal": true
+    }
+  ],
+  "scope": "initial immutable uniform H0 group snapshot; typed owner/action/report/choice generation; Forecast at <=4 alive",
+  "ledger_required": false,
+  "full_initial7_search": false
+}

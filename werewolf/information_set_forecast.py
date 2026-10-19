@@ -46,8 +46,10 @@ class InformationSetForecast:
     def __init__(self, rules, strategy, *, max_work=DEFAULT_MAX_WORK, trace=None, memoize_flows=True,
                  retire_uninformative_scans=True, exact_renaming=True, track_acquisition_provenance=False):
         self.rules=rules;self.strategy=strategy;self.max_work=max_work;self.trace=trace
-        from .acquisition_provenance import AcquisitionLedger,UniformAcquisitionCache
-        self.acquisition_provenance=AcquisitionLedger(self) if track_acquisition_provenance else None
+        if track_acquisition_provenance:
+            from .acquisition_provenance import AcquisitionLedger,UniformAcquisitionCache
+            self.acquisition_provenance=AcquisitionLedger(self)
+        else:self.acquisition_provenance=None
         self.board_sources={}
         self.board_action_options={}
         self.board_action_kernels={}
@@ -144,8 +146,11 @@ class InformationSetForecast:
 
     def acquire(self,b,state):
         key=(b,state)
-        from .acquisition_provenance import UniformAcquisitionCache
-        if type(self.acquired)is UniformAcquisitionCache:
+        tracked_cache=False
+        if self.acquisition_provenance is not None:
+            from .acquisition_provenance import UniformAcquisitionCache
+            tracked_cache=type(self.acquired)is UniformAcquisitionCache
+        if tracked_cache:
             try:
                 result,ticket=self.acquired._lookup(key)
             except KeyError:

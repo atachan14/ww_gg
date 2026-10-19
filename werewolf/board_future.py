@@ -523,12 +523,19 @@ def same_role_board(left,right):
 
 
 @contextmanager
-def evidence_reconstruction():
-    """Already inside 3a: kernel transitions must not start nested Board replay."""
+def kernel_calculation():
+    """Run common numeric kernels when the caller owns the evidence path.
+
+    Used by saved reconstruction and closed calculation-local generation.
+    No nested origin lookup, publication recording or live Board replay.
+    """
     token=_rebuilding.set(True)
     try:yield
     finally:_rebuilding.reset(token)
 
+
+# Existing 3a callers share the same context; no second execution mode.
+evidence_reconstruction=kernel_calculation
 
 def reconstruction_reuse_enabled():return _reuse_kernels.get()
 

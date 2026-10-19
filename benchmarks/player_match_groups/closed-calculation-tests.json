@@ -1,0 +1,30 @@
+{
+  "status": "passed",
+  "tests": 66,
+  "seconds": 110.03044489998138,
+  "failures": 0,
+  "errors": 0,
+  "modules": [
+    "test_acquisition_provenance",
+    "test_inherited_group_consumption",
+    "test_action_flow",
+    "test_board_future",
+    "test_morning_flow",
+    "test_information_set_model_a",
+    "test_wolf_information_set_characterization",
+    "test_cut_out_inherited_groups",
+    "test_cut_out_six_inherited",
+    "test_shared_transition_provenance",
+    "test_owner_information_provenance",
+    "test_measure_shared_transition",
+    "test_provenance_boundary_costs",
+    "test_closed_calculation"
+  ],
+  "full_initial7_search": false,
+  "final_node_bound_api_targeted_run": {
+    "status": "passed",
+    "tests": 4,
+    "seconds": 1.339,
+    "includes_future_attack_counterexample": true
+  }
+}

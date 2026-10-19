@@ -793,15 +793,6 @@ def owner_information_audit():
         full_initial7_search=False,MAX_evaluated=False,default_provenance=False)
 
 
-def shared_transition_worker():
-    start=time.perf_counter()
-    with calculation_budget(4000000,max_seconds=30),independent_joint_values():
-        row=shared_transition_audit()
-        row['owner_information']=owner_information_audit()
-    row.update(seconds=time.perf_counter()-start,peak_working_set_bytes=peak_bytes())
-    Path('benchmarks/player_match_groups/shared-transition-groups-results.json').write_text(json.dumps(row,indent=2)+'\n')
-    print(json.dumps(row),flush=True)
-
 
 if __name__=='__main__':
     if len(sys.argv)>1 and sys.argv[1]=='recursive':recursive_worker(sys.argv[2])
@@ -809,9 +800,8 @@ if __name__=='__main__':
     elif len(sys.argv)>1 and sys.argv[1]=='structural-death':death_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='seven-coverage':seven_coverage_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':
-        if '--measure' in sys.argv:
-            from .measure_shared_transition import run,compare_boundary
-            if '--reference' in sys.argv:compare_boundary(sys.argv[sys.argv.index('--reference')+1])
-            else:run()
-        else:shared_transition_worker()
+        from .closed_calculation_fixture import audit as closed_audit,run as closed_measure
+        if '--reference' in sys.argv:raise SystemExit('Ledger reference comparison is historical; use measure_shared_transition.compare_boundary directly')
+        if '--measure' in sys.argv:closed_measure()
+        else:closed_audit()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')
