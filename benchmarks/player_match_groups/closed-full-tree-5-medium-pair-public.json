@@ -1,0 +1,170 @@
+{
+  "completed_at": "2026-10-19T04:16:33.807439+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. No scope guard is removed.",
+  "supervisor_seconds": 5.300974200014025,
+  "samples": 256,
+  "peak_private_committed_bytes": 31105024,
+  "observed_peak_working_set_bytes": 42246144,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "players": 5,
+    "kind": "medium-pair",
+    "selected_view": "public",
+    "status": "verified",
+    "entry": {
+      "alive": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "phase": "day",
+      "day": 1
+    },
+    "views": [
+      {
+        "view": "public",
+        "conditioning_mass": "1",
+        "village_win": "7/15",
+        "forecast_counts_before_development_tree": {
+          "expanded": {
+            "values": 70,
+            "actions": 364,
+            "expansions": {
+              "actions": 221,
+              "values": 70
+            },
+            "acquired": 11,
+            "mornings": 18,
+            "publications": 42,
+            "policies": 8,
+            "saved_sources": 0,
+            "resolution_cache": 221
+          },
+          "grouped": {
+            "values": 53,
+            "actions": 160,
+            "expansions": {
+              "actions": 160,
+              "values": 53
+            },
+            "acquired": 10,
+            "mornings": 12,
+            "publications": 30,
+            "policies": 7,
+            "saved_sources": 0,
+            "resolution_cache": 169,
+            "target_orbits": {
+              "target_members": 166,
+              "target_representatives": 164,
+              "solver_wolf_cells": 4,
+              "solver_wolf_hypotheses": 7
+            },
+            "report_vectors": {
+              "kernels": 0,
+              "public_event_laws": 0,
+              "fallback_public_vectors": 62,
+              "compiled_candidates": 0,
+              "newly_built_vectors": 0,
+              "emitted_vectors": 0,
+              "named_vectors_covered": 0
+            }
+          }
+        },
+        "counts": {
+          "cold_joint_sources": 831,
+          "nonterminal": 102,
+          "action_edges": 319,
+          "report_edges": 96,
+          "terminal": 290
+        },
+        "phases": {
+          "(5, 'day')": 1,
+          "(4, 'night')": 5,
+          "(3, 'day')": 96,
+          "(2, 'day')": 288,
+          "(4, 'day')": 2
+        },
+        "mass_checks": 346,
+        "expanded_cold_Forecast_Table_equal": true
+      }
+    ],
+    "expanded": {
+      "values": 70,
+      "actions": 364,
+      "expansions": {
+        "actions": 221,
+        "values": 70
+      },
+      "acquired": 11,
+      "mornings": 18,
+      "publications": 42,
+      "policies": 8,
+      "saved_sources": 0,
+      "resolution_cache": 538
+    },
+    "grouped": {
+      "values": 53,
+      "actions": 160,
+      "expansions": {
+        "actions": 160,
+        "values": 53
+      },
+      "acquired": 11,
+      "mornings": 18,
+      "publications": 42,
+      "policies": 8,
+      "saved_sources": 0,
+      "resolution_cache": 486,
+      "target_orbits": {
+        "target_members": 166,
+        "target_representatives": 164,
+        "solver_wolf_cells": 4,
+        "solver_wolf_hypotheses": 7
+      },
+      "report_vectors": {
+        "kernels": 0,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 90,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    },
+    "budget": {
+      "work": 49222,
+      "max_work": 250000,
+      "elapsed_seconds": 4.719
+    },
+    "seconds": 4.721697899978608,
+    "peak_working_set_bytes": 42233856
+  },
+  "progress": [
+    {
+      "progress_stage": "setup"
+    },
+    {
+      "progress_stage": "Forecast_Table_public"
+    },
+    {
+      "progress_stage": "all_transitions_public"
+    }
+  ],
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "1b1d1af3f479b57117bff9966fcf4b9e3412e3e717769585b7ba8931ee20c06c",
+    "werewolf\\grouped_forecast.py": "3caac47120541786e4414e8fa76de403a475572f1f2e643cb8c1b021e0f78a09",
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "benchmarks\\player_match_groups\\closed_full_tree_fixture.py": "270479f70a36ef6df236ae00b5e6a1031d250c67e49dd18894b1820a21cf792d"
+  }
+}

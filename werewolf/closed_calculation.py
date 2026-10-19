@@ -70,6 +70,20 @@ def _entry_origin(data,game,strategy):
     return data.updated(history=[],seer_inputs=[r for r in game.get('seer_inputs',()) if r['day']==1],reports=[]),tuple(step['target'] for step in history)
 
 
+def _forecast_scope(source,engine):
+    if source.public.winner is not None or len(source.public.alive)<=4:return
+    if len(source.public.alive)>5:raise Pending('closed_forecast_five_alive_limit')
+    if engine.strategy.include_self_bite:raise Pending('closed_forecast_self_bite_pending')
+    reporters=sum(1<<(p-1) for p in source.public.alive if source.public.claims[p-1]=='seer')
+    # Claims/roles cannot grow in this closed H0 flow; conditioning and deaths
+    # preserve the selected zero/one-fake joint kernel at every later morning.
+    tick(len(source.public_state.hypotheses)+len(source.past))
+    declared=sum(1<<(p-1) for p in {r.player for r in source.past if r.acquired_day==1})
+    if reporters & ~declared:raise Pending('closed_forecast_initial_report_pending')
+    if any((reporters & ~h.roles[2]).bit_count()>1 for h in source.public_state.hypotheses):
+        raise Pending('multiple_fake_report_correlation_unselected')
+
+
 @dataclass(frozen=True)
 class ActionBranch:
     probability:F
@@ -257,8 +271,8 @@ class _Node:
 
     def forecast(self):
         e=self.__calculation._ClosedCalculation__engine;s=self.__source
-        if s.public.winner is None and len(s.public.alive)>4:raise Pending('closed_forecast_four_alive_limit')
         with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups):
+            _forecast_scope(s,e)
             value=e.solve(*s,physical=s.physical);targets=legal_targets(s.physical,e.rules,e.strategy)
             orbits=e.target_orbits(targets)
             values={g[0]:e.act(*s[:3],g[0],s.private,s.observer,physical=s.physical) for g in orbits}

@@ -1,0 +1,55 @@
+{
+  "completed_at": "2026-10-19T04:11:58.299069+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. No scope guard is removed.",
+  "supervisor_seconds": 14.740749399992637,
+  "samples": 696,
+  "peak_private_committed_bytes": 40050688,
+  "observed_peak_working_set_bytes": 51007488,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "wwgg_budget_stop kind=work work=250002 max_work=250000 elapsed_seconds=14.031\r\n",
+  "worker": {
+    "players": 5,
+    "kind": "dual",
+    "status": "budget_stopped",
+    "reason": "work",
+    "seconds": 14.03775640000822,
+    "peak_working_set_bytes": 51003392
+  },
+  "progress": [
+    {
+      "progress_stage": "setup"
+    },
+    {
+      "progress_stage": "Forecast_Table_public"
+    },
+    {
+      "progress_stage": "all_transitions_public"
+    },
+    {
+      "progress_stage": "Forecast_Table_seer"
+    },
+    {
+      "progress_stage": "all_transitions_seer"
+    },
+    {
+      "progress_stage": "Forecast_Table_wolf"
+    },
+    {
+      "progress_stage": "all_transitions_wolf"
+    }
+  ],
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "2d375031a7fe718eaf178ca2f944f1150d5d9a90790fb921f00cdda78e399588",
+    "werewolf\\grouped_forecast.py": "3caac47120541786e4414e8fa76de403a475572f1f2e643cb8c1b021e0f78a09",
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "benchmarks\\player_match_groups\\closed_full_tree_fixture.py": "580dad7d3443f62e294be8b52d0419eb4d62715775638c34eb5e823271edf62a"
+  }
+}

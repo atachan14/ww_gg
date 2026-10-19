@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "tests": 10,
+  "seconds": 43.391,
+  "completed_at": "2026-10-19T04:17:31.504291+00:00",
+  "command": "python -X utf8 -m unittest tests.test_closed_full_tree tests.test_closed_calculation",
+  "log_sha256": "5b10da8cc48a0b859fa0be684c8c91eda494f641cbd185a3aa607083cf3d4861"
+}

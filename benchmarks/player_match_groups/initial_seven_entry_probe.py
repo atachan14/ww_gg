@@ -51,13 +51,13 @@ class Counters(ctypes.Structure):
     _fields_=[('cb',wintypes.DWORD),('PageFaultCount',wintypes.DWORD)]+[(name,ctypes.c_size_t) for name in ('PeakWorkingSetSize','WorkingSetSize','QuotaPeakPagedPoolUsage','QuotaPagedPoolUsage','QuotaPeakNonPagedPoolUsage','QuotaNonPagedPoolUsage','PagefileUsage','PeakPagefileUsage')]
 
 
-def run():
+def watch(module,args=()):
     kernel=ctypes.WinDLL('kernel32',use_last_error=True);psapi=ctypes.WinDLL('psapi',use_last_error=True)
     kernel.OpenProcess.argtypes=[wintypes.DWORD,wintypes.BOOL,wintypes.DWORD];kernel.OpenProcess.restype=wintypes.HANDLE
     kernel.CloseHandle.argtypes=[wintypes.HANDLE]
     psapi.GetProcessMemoryInfo.argtypes=[wintypes.HANDLE,ctypes.POINTER(Counters),wintypes.DWORD]
     start=time.perf_counter();output_file=tempfile.TemporaryFile();error_file=tempfile.TemporaryFile()
-    p=subprocess.Popen([sys.executable,'-X','utf8','-m','benchmarks.player_match_groups.initial_seven_entry_probe','worker'],stdout=output_file,stderr=error_file,creationflags=subprocess.CREATE_NO_WINDOW)
+    p=subprocess.Popen([sys.executable,'-X','utf8','-m',module,*args],stdout=output_file,stderr=error_file,creationflags=subprocess.CREATE_NO_WINDOW)
     handle=kernel.OpenProcess(0x410,False,p.pid);samples=0;peak_private=0;peak_ws=0;stop=None
     try:
         if not handle:raise ctypes.WinError(ctypes.get_last_error())
@@ -78,11 +78,15 @@ def run():
         if handle:kernel.CloseHandle(handle)
         output_file.close();error_file.close()
     result=dict(completed_at=datetime.now(timezone.utc).isoformat(),limits=LIMITS,limits_note='20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. No scope guard is removed.',supervisor_seconds=time.perf_counter()-start,samples=samples,peak_private_committed_bytes=peak_private,observed_peak_working_set_bytes=peak_ws,termination=stop,returncode=p.returncode,stderr=err)
-    if stop is None:
-        assert p.returncode==0,err
+    if stop is None and p.returncode==0:
         result['worker']=json.loads(out.splitlines()[-1])
     else:result['partial_stdout']=out
     result['progress']=[json.loads(line) for line in out.splitlines() if 'progress_stage' in line]
+    return result
+
+
+def run():
+    result=watch('benchmarks.player_match_groups.initial_seven_entry_probe',('worker',))
     result['source_sha256']={str(f):hashlib.sha256(f.read_bytes()).hexdigest() for f in map(Path,('werewolf/closed_calculation.py','werewolf/grouped_forecast.py','werewolf/morning_publications.py','benchmarks/player_match_groups/initial_seven_entry_probe.py'))}
     OUTPUT.write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     return result
