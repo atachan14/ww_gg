@@ -1104,3 +1104,191 @@ complete enumeration: distinct results stay distinct. `public-moment-validation.
 retains the46-test log, source hashes, all five exact matched local comparisons,
 bounded-cache checks and2278 reuse count. Final production hashes match BOTH
 local and seven measurements. Existing artifacts/previews remain untouched.
+
+## 2026-10-19 whole-cost structure and configured-MAX orbit DESIGN
+
+This checkpoint adds DEVELOPMENT analysis, prototypes and tests only. Production
+remains527136d. No changed/unchanged whole-seven Forecast was attempted, no limit
+or cache capacity was raised, and no default/factory/UI/server/push/deploy changed.
+
+### What the existing seven measurement establishes, and what it does not
+
+The saved527136d initial-seven request stopped, so its counts describe a partial
+progression, not the total computation needed. It has8666 uncached actions:
+7day3,6night56,5day3421,4night5186. Corresponding Q+P input-row totals are
+36,392,17204,15594. Thus4night has more calls, while5day carries slightly more
+input rows. Mean rows/call are12,7,~5.03,~3.01 respectively. It is no longer
+supported to describe all cost as an explosion of very large secret histories;
+many calls operate on small conditioned laws. These counts are not exclusive
+CPU-time shares. No current seven CPU profile is available or inferred from an
+older ExtensionForecast colour/key profile (that key path is disabled here).
+
+Terminal moment applications6062 / Q vector builds3784, with2278 reuses and3704
+compiled public kernels, mean the bounded memo removes repeated work but does
+not reduce the many upstream named decision contexts. The128-entry/516-row
+retention is below the4096-row capacity. Peak working set97,148,928 bytes is far
+below the384MiB stop; the binding limit is work, not sampled memory/time. Simply
+adding another local cache or raising its capacity is not justified as the
+whole-request solution by these observations.
+
+The structural evaluation is a configured-policy DAG, not one final vote:
+initial day public scoring and selection -> observed physical continuations ->
+night team-information partition -> each team's legal-bite scoring BEFORE fresh
+scans -> common acquisition/casualty/public Q update -> whole medium instructions
+scored on Q then merged -> joint seer reports -> next public day MAX. Final-three
+execution is already contracted into Q moments/P application. Full Forecast also
+requests every named forced-action column and by-dawn value. Memoization shares
+identical contexts, but a target or roster relabelling can leave an isomorphic
+problem under a DIFFERENT complete named Board/history/source key.
+
+### Complete small inputs distinguish state size from branching and overhead
+
+`max-structure-small-results.json` completes24 fresh workers:4 five-player
+configurations x3 views x production baseline / development orbit candidate.
+Every request finishes its WHOLE scalar/named action/dawn Forecast and both
+Table outputs under250000work/30s,384MiB sampled stop/35s watchdog. All12 matched
+pairs are exactly equal, not sums reconstructed from incomplete requests.
+Public baseline totals:
+
+| five-player case | work | action calls (5day/4night) | moment calls/builds |
+| --- | --- | --- | --- |
+| single | 919 | 5/33 | 33/19 |
+| dual | 1283 | 5/24 | 24/18 |
+| three | 5073 | 5/36 | 36/20 |
+| medium-pair | 1323 | 5/24 | 144/54 |
+
+Independent common ordinary named-report reconstruction at a FORCED final-three
+prefix separates hidden hypotheses / role worlds / positive joint report vectors:
+single6/2/5, dual6/2/9, three27/3/109, medium-pair6/2/5. All chance masses1. These
+are configured MAX medium choices; the earlier uniform-medium3-family/11-vector
+example is not substituted for medium MAX. Current moment code avoids normalised
+posteriors but still integrates complete correlated report plans. The three-seer
+case has fewer moment queries than medium-pair yet much more work, illustrating
+why call count, hidden state size and report fanout must not be conflated.
+
+Full cProfile self-time per module is retained for each completed small request,
+not only a top-N cumulative list. Across12 BASELINE profiles, total exclusive
+self-time3.157128s includes builtins~.944174, exact Fraction routines~.580013,
+Hypothesis/normalization module~.320311, Board/rule module~.290829, common
+publication module~.203209. These are disjoint INSTRUMENTED small-request timings,
+including wrapper costs, not a seven CPU decomposition or stable latency estimate.
+Nested cumulative times are not added. Many downstream contexts multiply common
+exact arithmetic, hashing/validation and branch construction, so reducing semantic
+decision repetitions is a stronger candidate than only tuning a hash/vector cache.
+
+### Chosen larger candidate: full-context configured-policy equivariance
+
+Use the EXISTING constructed partitions, not marginally similar player classes.
+For a frame F, a permissible permutation g must preserve its complete public Q,
+actual P, named public past (including full simultaneous report meanings), public
+and physical Boards, rosters, selected observer and known actor information.
+Rules and configured symbolic policies must be label-equivariant. Common legal
+actions and transitions must satisfy A(gF)=gA(F) and K(gF,ge)=K(F,e).
+
+Induction on the finite game horizon then proves public action scores transform
+under g. Exact argmax/argmin sets transform with them, and uniform weights over
+ALL tied named actions commute with permutation. The SAME public-selected policy
+evaluated on transformed P therefore gives the same scalar. No max/expectation
+exchange, optimal CO/report rule, new interacting-max equilibrium or per-world
+choice is introduced: this is equivariance of the EXISTING configured algorithm.
+
+For a day max face T, sum over action orbits O using |O|/|T|, not equal weights
+over orbit representatives. A finite private-payoff counterexample gives1/3
+versus the erroneous3/8 when orbit sizes1 and2 are ignored. Public claimants can
+be equivalent while a seer-private view has named columns0 and1; its public
+policy value is1/2, not its private optimum1. Its owner/record targets must refine
+the group BEFORE reusing an action representative.
+
+For wolf-information orbit C, compute one representative's continuation using
+Q conditioned on that COMPLETE known initial roster/own attacks, then multiply
+by the SUM of actual P cell masses in C. Do not pool information sets before
+minimisation. The independent two-information/two-action counterexample has
+E[min]=0 but min(E)=1/2. Actor scope splits group blocks by roster membership
+and fixes owned attack targets. Q remains public; no other actor's new secret
+is supplied to the wolf before choosing a bite.
+
+Existing common target tests already reuse SOME latent targets. Structural-only
+analysis of the actual initial input followed by forced execute3 (no scalar,
+Forecast or MAX scoring calls allowed) has6 named wolf-team cells, one constructed
+team orbit, four legal bites per team but already3 existing common score
+representatives per team. The incremental cold policy-scoring structure is18->3,
+not the misleading raw24->3 as a claimed new gain. This is one six-night input,
+not a global sixfold speedup or completion prediction. Likewise initial public
+day scoring already exploits latent symmetry:7 raw labels need5 existing score
+representatives, and constructed groups suggest4. Larger benefit also comes from
+weighted evaluation of a tied latent face and complete named Table/dawn columns,
+whose scalar expansions currently repeat several isomorphic named problems.
+
+The development candidate reuses common act/scoring, actor_scope,
+wolf_information_orbits, group fix/report refinement and existing chance flows.
+It leaves MAX joint-report orbit aggregation OFF and leaves Q-moment cache/
+physical/named observation generators unchanged. There is no new key alias,
+state fingerprint, case-specific evaluator or production proof ledger. Different
+observed targets still generate their actual named histories with common nodes;
+only a proved equal scalar is evaluated through an orbit representative.
+
+### Complete local effect; unequal private gains are expected
+
+Final development prototype versus production baseline, exact complete requests:
+
+| case | public work | seer work | wolf work |
+| --- | --- | --- | --- |
+| single | 919 ->530 | 1062 ->592 | 799 ->569 |
+| dual | 1283 ->692 | 1331 ->833 | 976 ->557 |
+| three | 5073 ->3556 | 5540 ->4962 | 5025 ->4316 |
+| medium-pair | 1323 ->1169 | 1665 ->1371 | 1071 ->1071 |
+
+Public single action expansions38->21, moments33->18; public dual29->15 and24->12;
+public three41->21 and36->18. This removes evaluations/contexts, unlike the previous
+moment cache alone. The wolf medium-pair input has no usable residual symmetry;
+no gain is claimed there. Private evidence often makes smaller valid groups.
+Per-worker time/memory and full self-profiles are preserved in raw results;
+single instrumented samples are not an extrapolation to seven or a statistical
+performance guarantee. Work improvements range from0 to~46%, with every final
+Forecast/Table equal to baseline and independent ordinary comparisons in tests.
+
+### Why it remains DEVELOPMENT ONLY: complete entry-point contract required
+
+Blindly removing MAX guards on the existing uniform grouping is unsafe. Two
+concrete missing stabiliser refinements were found by independent full-frame
+transposition checks, even after small numeric comparisons initially matched:
+
+1. Medium instruction scoring uses report_flow -> scalar directly, bypassing
+   GroupedPolicy.morning_value's actual-P branch refinement. In an actual-input
+   execute4/bite5 five-alive prefix,49 complete common report children are
+   generated with no root forecast. The stale inherited group fails full Q/P/
+   observer/public-context invariance on46; common _report_groups makes all49
+   invariant. This includes changed incoming targets and outgoing report meanings.
+2. horizon_for_action applies a named execution directly, outside Grouped.act's
+   target-fixing scope. A full-frame audit fails in a subsequent wolf policy
+   unless that newly observed history target also refines the group.
+
+The final development prototype adds those refinements at scalar/public-candidate
+and wolf-policy/history entry points using existing split operations. Its tests
+place FULL hidden-state transposition checks only in DEVELOPMENT wrappers, never
+in production loops. Same-batch report ordering is canonicalised for this test
+of semantic simultaneous reports while ALL acquired/published days and fields
+are retained; action chronology is unchanged. All hypothesis roles, acquisitions,
+guards/attacks, Q/P weights and observer fields are checked, not role marginals.
+Twelve complete initial-five public/private requests and a nonterminal two-wolf
+reported five-alive frame in public/seer/wolf views match fresh ordinary engines,
+complete Forecast/Table and cold source reconstruction. The independent counter-
+examples above remain fixed. Related24 tests pass in13.191s.
+
+These demonstrate a promising macro reduction but do not establish a complete
+constructor/generator contract for all saved-history replay, future typed-owner
+interventions, observed/cancel/recalculated Board entries or all policy consumers.
+The two discovered bypasses are evidence against treating existing uniform
+partitions as a blanket MAX certificate. Therefore no normal opt-in/factory code
+is connected in this checkpoint. Next boundary: make and audit one common
+stabiliser-refinement contract at physical-action, public-report, personal-owner
+and wolf-information entries (including Horizon/replay), then compare those
+small independent full stories before considering a bounded changed seven run.
+No dynamic full-law authentication/tickets or expensive permutation scans should
+be introduced in production as a substitute for this construction invariant.
+
+`max-structure-analysis.json` consolidates saved partial-seven counters, complete
+small totals/self-profiles, independent terminal fanout and scalar-forbidden
+six-night structure. `max-structure-validation.json` retains the24-test log,
+source hashes,12 exact complete pair checks and explicit production-unchanged /
+zero-new-seven-Forecast assertions. No full repository test run is claimed.

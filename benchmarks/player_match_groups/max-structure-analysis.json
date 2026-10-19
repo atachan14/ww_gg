@@ -1,0 +1,550 @@
+{
+  "scope": "Analysis only. Complete small totals and archived partial seven; no new seven request or production wiring.",
+  "saved_seven_partial": {
+    "kind": "seven",
+    "mode": "on",
+    "completed": false,
+    "input_sha256": "a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2",
+    "status": "budget_stopped",
+    "reason": "work",
+    "stop": {
+      "kind": "work",
+      "work": 250006,
+      "max_work": 250000,
+      "elapsed_seconds": 11.172
+    },
+    "seconds": 11.180931699986104,
+    "moments": {
+      "calls": 6062,
+      "private_rows": 16952,
+      "builds": 3784,
+      "public_build_rows": 15778,
+      "completed_builds": 3784,
+      "built_fibers": 15778
+    },
+    "uncached_actions_by_phase": {
+      "7-day": 3,
+      "6-night": 56,
+      "5-day": 3421,
+      "4-night": 5186
+    },
+    "action_input_hypotheses_by_phase": {
+      "7-day": 36,
+      "6-night": 392,
+      "5-day": 17204,
+      "4-night": 15594
+    },
+    "states": {
+      "values": 2454,
+      "actions": 8662,
+      "expansions": {
+        "actions": 8666,
+        "values": 2458
+      },
+      "acquired": 941,
+      "mornings": 15,
+      "publications": 21,
+      "policies": 1754,
+      "saved_sources": 0,
+      "resolution_cache": 8666,
+      "target_orbits": {
+        "target_members": 0,
+        "target_representatives": 0
+      },
+      "report_vectors": {
+        "kernels": 3704,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 304,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    },
+    "cache": {
+      "entries": 128,
+      "rows": 516,
+      "max_entries": 128,
+      "max_rows": 4096
+    }
+  },
+  "complete_small_pairs": [
+    {
+      "kind": "single",
+      "view": "public",
+      "value": "2/3",
+      "work": [
+        919,
+        530
+      ],
+      "actions": [
+        38,
+        21
+      ],
+      "values": [
+        6,
+        4
+      ],
+      "moment_calls": [
+        33,
+        18
+      ],
+      "seconds": [
+        0.2402011000085622,
+        0.1774786000023596
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "single",
+      "view": "seer",
+      "value": "2/3",
+      "work": [
+        1062,
+        592
+      ],
+      "actions": [
+        53,
+        27
+      ],
+      "values": [
+        9,
+        7
+      ],
+      "moment_calls": [
+        45,
+        21
+      ],
+      "seconds": [
+        0.29408210003748536,
+        0.28862669999944046
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "single",
+      "view": "wolf",
+      "value": "2/3",
+      "work": [
+        799,
+        569
+      ],
+      "actions": [
+        35,
+        22
+      ],
+      "values": [
+        8,
+        7
+      ],
+      "moment_calls": [
+        27,
+        15
+      ],
+      "seconds": [
+        0.2697628000169061,
+        0.1820346000022255
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "dual",
+      "view": "public",
+      "value": "1",
+      "work": [
+        1283,
+        692
+      ],
+      "actions": [
+        29,
+        15
+      ],
+      "values": [
+        6,
+        4
+      ],
+      "moment_calls": [
+        24,
+        12
+      ],
+      "seconds": [
+        0.31626029999461025,
+        0.14091369998641312
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "dual",
+      "view": "seer",
+      "value": "1",
+      "work": [
+        1331,
+        833
+      ],
+      "actions": [
+        39,
+        27
+      ],
+      "values": [
+        9,
+        8
+      ],
+      "moment_calls": [
+        30,
+        19
+      ],
+      "seconds": [
+        0.23278779996326193,
+        0.17227869998896495
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "dual",
+      "view": "wolf",
+      "value": "1",
+      "work": [
+        976,
+        557
+      ],
+      "actions": [
+        18,
+        12
+      ],
+      "values": [
+        5,
+        4
+      ],
+      "moment_calls": [
+        12,
+        7
+      ],
+      "seconds": [
+        0.15109879994997755,
+        0.12994990003062412
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "three",
+      "view": "public",
+      "value": "2/3",
+      "work": [
+        5073,
+        3556
+      ],
+      "actions": [
+        41,
+        21
+      ],
+      "values": [
+        6,
+        4
+      ],
+      "moment_calls": [
+        36,
+        18
+      ],
+      "seconds": [
+        0.6395223999861628,
+        0.2887791999964975
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "three",
+      "view": "seer",
+      "value": "2/3",
+      "work": [
+        5540,
+        4962
+      ],
+      "actions": [
+        62,
+        44
+      ],
+      "values": [
+        11,
+        9
+      ],
+      "moment_calls": [
+        52,
+        36
+      ],
+      "seconds": [
+        0.5849292000057176,
+        0.46005910000531003
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "three",
+      "view": "wolf",
+      "value": "2/3",
+      "work": [
+        5025,
+        4316
+      ],
+      "actions": [
+        46,
+        27
+      ],
+      "values": [
+        10,
+        8
+      ],
+      "moment_calls": [
+        36,
+        19
+      ],
+      "seconds": [
+        0.4223252000520006,
+        0.3274532000068575
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "medium-pair",
+      "view": "public",
+      "value": "1",
+      "work": [
+        1323,
+        1169
+      ],
+      "actions": [
+        29,
+        25
+      ],
+      "values": [
+        6,
+        5
+      ],
+      "moment_calls": [
+        144,
+        132
+      ],
+      "seconds": [
+        0.28104989998973906,
+        0.21092520002275705
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "medium-pair",
+      "view": "seer",
+      "value": "1",
+      "work": [
+        1665,
+        1371
+      ],
+      "actions": [
+        48,
+        36
+      ],
+      "values": [
+        11,
+        9
+      ],
+      "moment_calls": [
+        232,
+        176
+      ],
+      "seconds": [
+        0.3500019999919459,
+        0.28980810003122315
+      ],
+      "exact_forecast_table_equal": true
+    },
+    {
+      "kind": "medium-pair",
+      "view": "wolf",
+      "value": "1",
+      "work": [
+        1071,
+        1071
+      ],
+      "actions": [
+        25,
+        25
+      ],
+      "values": [
+        7,
+        7
+      ],
+      "moment_calls": [
+        104,
+        104
+      ],
+      "seconds": [
+        0.19039930001599714,
+        0.19943209999473765
+      ],
+      "exact_forecast_table_equal": true
+    }
+  ],
+  "baseline_small_self_profile_total": 3.1571275000000005,
+  "baseline_small_self_profile_modules": {
+    "max_structure_probe.py": 0.012655699999999997,
+    "dataclasses.py": 0.0598801,
+    "contextlib.py": 0.007926200000000001,
+    "__init__.py": 1.48e-05,
+    "morning_publications.py": 0.2032089,
+    "closed_calculation.py": 0.0014104000000000005,
+    "seer_acquisition.py": 0.32031050000000005,
+    "exact.py": 0.2908291,
+    "information_set_forecast.py": 0.0660003,
+    "seer_future_uniform.py": 0.1534861,
+    "belief_projection.py": 0.059506800000000006,
+    "fractions.py": 0.5800134000000001,
+    "calculation_budget.py": 0.03826020000000001,
+    "grouped_forecast.py": 0.07618710000000001,
+    "action_flow.py": 0.011843600000000001,
+    "information_weights.py": 0.0552279,
+    "<string>": 0.0342254,
+    "evaluation_branch.py": 0.028080100000000004,
+    "board_future.py": 0.042035100000000006,
+    "night_acquisition.py": 0.0030104000000000003,
+    "evaluation_projection.py": 0.0038312,
+    "actor_information.py": 0.022035800000000008,
+    "board_roles.py": 0.011573499999999997,
+    "medium_value_key.py": 0.00017660000000000004,
+    "model_a_public.py": 0.0042871,
+    "guard_model.py": 0.0019464,
+    "phase_updates.py": 0.0092416,
+    "night_knowledge.py": 0.027730500000000005,
+    "guard_history_prior.py": 0.0001824,
+    "policy_choice.py": 0.012336,
+    "group_partition.py": 0.0147136,
+    "by_dawn.py": 0.00012080000000000001,
+    "joint_value_sharing.py": 0.0058006,
+    "<frozen importlib._bootstrap_external>": 0.0029804999999999996,
+    "<frozen importlib._bootstrap>": 0.027467500000000002,
+    "<frozen abc>": 0.0198087,
+    "~": 0.9441741000000002,
+    "seer_fake_uniform.py": 0.004608500000000001
+  },
+  "structural_six_night": {
+    "note": "Only original input construction and named execute3 physical transition. No scalar/Forecast/MAX scoring calls.",
+    "root_groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5,
+        6,
+        7
+      ]
+    ],
+    "existing_root_score_representatives": 5,
+    "constructed_root_action_orbits": 4,
+    "night_alive": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7
+    ],
+    "night_groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5,
+        6,
+        7
+      ]
+    ],
+    "full_joint_invariant": true,
+    "named_team_cells": 6,
+    "constructed_team_orbits": 1,
+    "team_orbit_mass": "1",
+    "raw_legal_bites_per_team": 4,
+    "existing_common_score_representatives_by_team": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "existing_cold_score_queries": 18,
+    "constructed_cold_score_queries": 3,
+    "representative_bite_orbits": [
+      [
+        2
+      ],
+      [
+        4
+      ],
+      [
+        6,
+        7
+      ]
+    ]
+  },
+  "terminal_fanout": [
+    {
+      "kind": "single",
+      "alive": 3,
+      "joint_hypotheses": 6,
+      "role_worlds": 2,
+      "complete_joint_report_vectors": 5,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    },
+    {
+      "kind": "dual",
+      "alive": 3,
+      "joint_hypotheses": 6,
+      "role_worlds": 2,
+      "complete_joint_report_vectors": 9,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    },
+    {
+      "kind": "three",
+      "alive": 3,
+      "joint_hypotheses": 27,
+      "role_worlds": 3,
+      "complete_joint_report_vectors": 109,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    },
+    {
+      "kind": "medium-pair",
+      "alive": 3,
+      "joint_hypotheses": 6,
+      "role_worlds": 2,
+      "complete_joint_report_vectors": 5,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    }
+  ],
+  "limitations": [
+    "Action/row counters are not CPU shares.",
+    "Small self-profiles are instrumented, not a seven profile.",
+    "Initial/report/horizon/owner/actor stabilisers must all be preserved.",
+    "Candidate remains development-only; broad saved-history/prospective observation entry coverage is not established."
+  ],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "64b05cc09af334416dfb3afe29112db196d0ff2404417c1648ebd7b4a9e81c47",
+    "werewolf\\information_set_forecast.py": "7a2d91308873fe67f8e98b7c898fcf8b618343e96e3532fdd40db76fc5ae622d",
+    "benchmarks\\player_match_groups\\max_structure_design.py": "b8bd98226e731c91a047cc917261268fb1614640992bd7ad3e5f707a49f4a74a",
+    "benchmarks\\player_match_groups\\max_structure_probe.py": "199fdf312b7f3fd0e60aaa14f9d137bc62e860c7c11733f79b0c712fba0e837e"
+  }
+}
