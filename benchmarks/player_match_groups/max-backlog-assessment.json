@@ -1,0 +1,400 @@
+{
+  "recorded_at": "2026-10-19T10:29:09.920585+00:00",
+  "scope": "Saved evidence arithmetic only; ZERO new solver, partial seven, root seven or game-construction calls. Production unchanged at490df94.",
+  "source_sha256": {
+    "group-entry-seven-results.json": "51f06486368eecde79cd68f8ff6b9c3f8ec487a049f7b71cb630f0daab602220",
+    "max-structure-small-results.json": "ab59635a45c156868c625d9d53b869a8878c36a49ba3cfa3179972ddffd1e73a",
+    "max-structure-analysis.json": "cd9d1dff3f0f1b911eafdc0e2d0a09ae99260a40fdb9de912273c1e2ee8f0b10",
+    "public-moment-seven-results.json": "60888eee90b8ec614dbb0dfeae98e1b6028ee8aff807e9ffd0bdcbe30907daed",
+    "seven-initial-first-edges.json": "12652678f042fe20916cf7962fae52a25216fcfc2d1b25abed58e60a5df6b602",
+    "terminal-max-moment-results.json": "4e8f5e43c8d9f363b0bda9efb964938bd4e75f169e7b6a331c130f548954cb50",
+    "bounded-seven-profile-after.json": "ca90d7d797b4eae488c7cfa7e7e52fa45d204de941367bccbcb8f50e5beeaa88",
+    "report-integral-expanded-branch-public-1.json": "3b4b8b3382752e45186ac932c6a5aa3889b2582a1a9e0fb99263cab6dfdb3715",
+    "report-integral-expanded-branch-public-2.json": "28829c9d60f15446e84e26988e90ed6d6e825471139f73549152c1664eaf45fa",
+    "report-integral-expanded-branch-public-3.json": "f4bbd3209e52573e2afa33d0b555fa618ff8faeb912549285c367867acb9d4e6",
+    "report-integral-expanded-branch-public-4.json": "b3757a55e30c45b0591f6870746c3eac3702322c07a6c8e1c5661f9adf929d74",
+    "report-integral-expanded-branch-public-5.json": "3c5f90fa4102af0273e33bc67667fa643b76e7a8079ceb907d4a44236d484528",
+    "report-integral-expanded-branch-public-6.json": "2b8022c865b961405070ff4374cb88fe1b440719b048426076e35f7882a89529",
+    "report-integral-expanded-branch-public-7.json": "e84fcb50f1ba8a4cc43d0718478e3aa7cacd197145a8de9d04c1d277543ebd74",
+    "report-integral-expanded-branch-seer-1.json": "0880c5693ad70d7811368da193f0274c669cfaab3dcd39b306f2eebf005394b3",
+    "report-integral-expanded-branch-seer-2.json": "44feb7c4d65f5c6cd5c0e090756996c9e8393308cbe553351b0da8090b8449a4",
+    "report-integral-expanded-branch-seer-3.json": "53b524acf24a7585b8433fd7ac77c796f7243cf151b12b15601c672379098d30",
+    "report-integral-expanded-branch-seer-4.json": "a76c3b516ccbc2401851af24f7c060548601bb17ecdcaad97732a1a7039fbf01",
+    "report-integral-expanded-branch-seer-5.json": "af8015fc1cdc4cfd4ce1da4c4ea7577b844ac60cb83e1b8fcee962acce207fdc",
+    "report-integral-expanded-branch-seer-6.json": "aa7e3a6892139009d3a1da0388bb0825781553b0fe157bff5602f5010913bf2f",
+    "report-integral-expanded-branch-seer-7.json": "def8facf13667255c53702657f3a6dc55dfeaa3487d6682a8986be69bcf3c23f",
+    "report-integral-expanded-branch-wolf-1.json": "7dc58d57f3b84d1144bb0f4ddf2a683fc99eeee126156c21b92c70c6d17ace3c",
+    "report-integral-expanded-branch-wolf-2.json": "17c24d00f44e9f40406fc27484343b000598f0e3d59cdd627ae26d19d32f58dd",
+    "report-integral-expanded-branch-wolf-3.json": "4eb5f95ccd272874b8531b1dd56588a63717e8b4984b21b1e5b143c8bcbcee9a",
+    "report-integral-expanded-branch-wolf-4.json": "d6bfb7c4ce55789ee8e4c0970da9d2f429c1081eaf896488f675f52f97bc4995",
+    "report-integral-expanded-branch-wolf-5.json": "18063e71a3d8fab650d9db6eb30dc8ad61223c841b3581f6f06829a784ebf712",
+    "report-integral-expanded-branch-wolf-6.json": "cba7b306a2477ac1af82c8fda9aa049f120589b3de497a3efbc1b8e1845d6472",
+    "report-integral-expanded-branch-wolf-7.json": "f14f38cbb4f69e6f17568062eeed2de59f083e72f4e387984aaa0a74aebc696a"
+  },
+  "initial21": {
+    "policy": "uniform only",
+    "meaning": "first physical transition + complete joint cold reconstruction, NOT continuation Forecast",
+    "views": {
+      "public": {
+        "targets": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "work": 616
+      },
+      "seer": {
+        "targets": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "work": 616
+      },
+      "wolf": {
+        "targets": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "work": 616
+      }
+    },
+    "sum_work": 1848
+  },
+  "historical_uniform_expanded_branches": {
+    "views": {
+      "public": {
+        "work": 746494,
+        "per_target_work": [
+          12926,
+          12922,
+          46856,
+          46856,
+          208978,
+          208978,
+          208978
+        ],
+        "note": "Historical complete independent uniform branch jobs, not MAX and not an estimate of shared-root work."
+      },
+      "seer": {
+        "work": 734191,
+        "per_target_work": [
+          5458,
+          8297,
+          46814,
+          46814,
+          208936,
+          208936,
+          208936
+        ],
+        "note": "Historical complete independent uniform branch jobs, not MAX and not an estimate of shared-root work."
+      },
+      "wolf": {
+        "work": 414353,
+        "per_target_work": [
+          5446,
+          8269,
+          46786,
+          46786,
+          151396,
+          77835,
+          77835
+        ],
+        "note": "Historical complete independent uniform branch jobs, not MAX and not an estimate of shared-root work."
+      }
+    },
+    "sum_work": 1895038,
+    "not_max_or_single_request_total": true
+  },
+  "complete_small_MAX": {
+    "baseline": {
+      "complete_requests": 12,
+      "work": 26067,
+      "actions": 463,
+      "values": 94,
+      "phases": {
+        "5-day": 88,
+        "4-night": 375
+      },
+      "moments": {
+        "moment_calls": 775,
+        "moment_builds": 336,
+        "moment_fibers": 1521
+      },
+      "work_by_view": {
+        "public": 8598,
+        "seer": 9598,
+        "wolf": 7871
+      }
+    },
+    "orbits": {
+      "complete_requests": 12,
+      "work": 20218,
+      "actions": 302,
+      "values": 76,
+      "phases": {
+        "5-day": 70,
+        "4-night": 232
+      },
+      "moments": {
+        "moment_calls": 577,
+        "moment_builds": 262,
+        "moment_fibers": 1206
+      },
+      "work_by_view": {
+        "public": 5947,
+        "seer": 7758,
+        "wolf": 6513
+      }
+    }
+  },
+  "small_MAX_saved_work": 5849,
+  "current_seven": {
+    "input_sha256": "a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2",
+    "stop": {
+      "status": "budget_stopped",
+      "kind": "work",
+      "work": 250001,
+      "max_work": 250000,
+      "elapsed_seconds": 12.281,
+      "note": "Raw worker reported Pending true_scan_generation_budget_exceeded as unsupported; actual diagnostic is a work stop caught by acquisition. Raw worker/stdout metadata preserved. No seven rerun."
+    },
+    "states": {
+      "values": 1535,
+      "actions": 6185,
+      "expansions": {
+        "actions": 6189,
+        "values": 1539
+      },
+      "acquired": 746,
+      "mornings": 12,
+      "publications": 16,
+      "policies": 1489,
+      "saved_sources": 0,
+      "resolution_cache": 6188,
+      "target_orbits": {
+        "target_members": 4495,
+        "target_representatives": 4291,
+        "solver_wolf_cells": 1767,
+        "solver_wolf_hypotheses": 1882
+      },
+      "report_vectors": {
+        "kernels": 3144,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 423,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    },
+    "target_evaluations_avoided": 204,
+    "wolf_cells_avoided": 115,
+    "initial_target_completion": "UNKNOWN: no target/stage completion recording; progress=[]; aggregate caches cannot recover root prefixes. Only public view was requested.",
+    "remaining_work": "UNKNOWN; no extrapolation from unequal phases/inputs.",
+    "complete_root_result": false
+  },
+  "historical_MAX_prefix": {
+    "policy": "MAX",
+    "phase_counts": {
+      "7-day": 3,
+      "6-night": 56,
+      "5-day": 3421,
+      "4-night": 5186
+    },
+    "deep_action_fraction": 0.9931917839833834,
+    "warning": "Pre490 counters; no root target identities/completion or equal-progress comparison."
+  },
+  "historical_uniform_prefix": {
+    "initial_edges": [
+      {
+        "target": 1,
+        "work": 12860,
+        "completed": true
+      },
+      {
+        "target": 3,
+        "work": 46758,
+        "completed": true
+      },
+      {
+        "target": 4,
+        "work": 46758,
+        "completed": true
+      },
+      {
+        "target": 5,
+        "work": 143599,
+        "completed": false
+      }
+    ],
+    "warning": "UNIFORM pre490; do not transfer progress or work to MAX."
+  },
+  "structural_six_night": {
+    "note": "Only original input construction and named execute3 physical transition. No scalar/Forecast/MAX scoring calls.",
+    "root_groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5,
+        6,
+        7
+      ]
+    ],
+    "existing_root_score_representatives": 5,
+    "constructed_root_action_orbits": 4,
+    "night_alive": [
+      1,
+      2,
+      4,
+      5,
+      6,
+      7
+    ],
+    "night_groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5,
+        6,
+        7
+      ]
+    ],
+    "full_joint_invariant": true,
+    "named_team_cells": 6,
+    "constructed_team_orbits": 1,
+    "team_orbit_mass": "1",
+    "raw_legal_bites_per_team": 4,
+    "existing_common_score_representatives_by_team": [
+      3,
+      3,
+      3,
+      3,
+      3,
+      3
+    ],
+    "existing_cold_score_queries": 18,
+    "constructed_cold_score_queries": 3,
+    "representative_bite_orbits": [
+      [
+        2
+      ],
+      [
+        4
+      ],
+      [
+        6,
+        7
+      ]
+    ]
+  },
+  "terminal_fanout": [
+    {
+      "kind": "single",
+      "alive": 3,
+      "joint_hypotheses": 6,
+      "role_worlds": 2,
+      "complete_joint_report_vectors": 5,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    },
+    {
+      "kind": "dual",
+      "alive": 3,
+      "joint_hypotheses": 6,
+      "role_worlds": 2,
+      "complete_joint_report_vectors": 9,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    },
+    {
+      "kind": "three",
+      "alive": 3,
+      "joint_hypotheses": 27,
+      "role_worlds": 3,
+      "complete_joint_report_vectors": 109,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    },
+    {
+      "kind": "medium-pair",
+      "alive": 3,
+      "joint_hypotheses": 6,
+      "role_worlds": 2,
+      "complete_joint_report_vectors": 5,
+      "medium_observation_families": 1,
+      "chance_mass": "1"
+    }
+  ],
+  "already_integrated_terminal_moment_effect": [
+    {
+      "kind": "single",
+      "ordinary_work": 54,
+      "moment_work": 29,
+      "ordinary_publication_rows": 5,
+      "moment_publication_rows": 0,
+      "value_equal": true
+    },
+    {
+      "kind": "dual",
+      "ordinary_work": 252,
+      "moment_work": 99,
+      "ordinary_publication_rows": 9,
+      "moment_publication_rows": 0,
+      "value_equal": true
+    },
+    {
+      "kind": "three",
+      "ordinary_work": 1557,
+      "moment_work": 719,
+      "ordinary_publication_rows": 109,
+      "moment_publication_rows": 0,
+      "value_equal": true
+    },
+    {
+      "kind": "medium-pair",
+      "ordinary_work": 145,
+      "moment_work": 112,
+      "ordinary_publication_rows": 17,
+      "moment_publication_rows": 0,
+      "value_equal": true
+    }
+  ],
+  "limits": [
+    "No exact current MAX initial-target completion log",
+    "No exact root remaining work",
+    "Report kernel/row counts are not CPU/work shares",
+    "Small development orbit candidate is not a post490 performance rerun",
+    "Uniform independent work sums include repeated cold setup and cannot be substituted for shared-root cost",
+    "No new seven run, sharding, default/limit/publication change"
+  ]
+}

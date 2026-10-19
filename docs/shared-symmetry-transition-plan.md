@@ -1384,3 +1384,131 @@ unsupported label is preserved alongside the actual work-stop diagnostic in
 seven numerical result nor a new unsupported-feature finding. Progress differs
 from earlier capped runs, so no equal-progress speed/memory gain is asserted.
 No upper limit, default, publication setting, server or deployment was changed.
+
+
+## 2026-10-19: post490 MAX backlog, saved-evidence assessment only
+
+No solver was run for this assessment: no seven root, separately budgeted seven
+subproblem, or new small request. `max-backlog-assessment.json` records arithmetic
+and hashes of existing logs. Production remains at490df94; limits/defaults and
+publication remain unchanged. Three different meanings of initial21 must be
+kept separate:
+
+| saved evidence | actually complete | exact recorded work | interpretation |
+| --- | --- | --- | --- |
+| seven-initial-first-edges, public/seer/wolf x7 | all21 first physical transitions and full-joint/cold checks | 616 each view; total1848 | explicit UNIFORM strategy, not continuation wins |
+| report-integral expanded branch jobs, public/seer/wolf x7 | all21 independent UNIFORM branch value+dawn jobs | 746494 /734191 /414353; total1895038 | historical cold-job sums, repeated setup; not shared-root cost or MAX estimate |
+| current group-entry-seven MAX | one public-root request incomplete |250001work,12.281s | no action-level completion checkpoints; seer/wolf roots not requested |
+
+The current MAX log has progress=[] and no root target IDs/completion stages.
+Its caches only expose aggregate counts; they cannot establish which initial
+representative finished. Thus zero current initial targets are CERTIFIED by this
+log, which is not a claim that zero actually finished. Initial21 Forecast values
+are not available, and neither exact remaining work nor a percent-complete can
+be reconstructed. The exception occurred during true acquisition after its
+budget check; it does not identify the top-level target. The historical root
+value3487/7200 is a comparison expectation, not an output of this run.
+
+For context only, a PREVIOUS UNIFORM instrumented root had target1=12860work,
+3=46758,4=46758 complete (sum106376), then target5 partial143599. Target2 had
+already been handled by equivalent-target scoring. Do not transfer that boundary
+or those costs to current MAX. In particular, the1895038 cold-job sum above is
+not a way to complete the capped MAX request through sharding.
+
+### Exact complete MAX small totals and the surviving large cost
+
+Twelve complete five-player MAX requests (four configurations x three views),
+from the saved development candidate comparison, agree on all named action and
+Horizon values, Forecast and Table:
+
+| measure | baseline | constructed orbit candidate |
+| --- | --- | --- |
+| total work |26067|20218|
+| public/seer/wolf work |8598 /9598 /7871|5947 /7758 /6513|
+| uncached action expansions |463|302|
+| value expansions |94|76|
+| five-day/four-night actions |88 /375|70 /232|
+| terminal moment calls/builds/fibers |775 /336 /1521|577 /262 /1206|
+
+These are exact sums of complete independent small jobs, with5849work saved
+(22.44%); they are not current post490 timing runs or seven branch estimates.
+Symmetry helps unequally: wolf medium-pair stays1071work in both modes because
+its complete personal information leaves no usable residual symmetry.
+
+Current seven prefix:6189 action expansions,1539 value expansions,6185/1535
+completed cache entries,746 acquisition entries,12 morning entries,16 publication
+entries,1489 policy entries. The differences between expansions and completed
+cache entries include in-flight recursive frames; they are not completed root
+branches. Target evaluation members4495 ->representatives4291 saves204 (4.54%);
+wolf hypotheses1882 ->information cells1767 saves115 (6.11%). These counts have
+different denominators and cannot be multiplied into a total speedup. Initial
+public groups [1,2],[3],[4],[5,6,7] give four conservative root orbits, but
+reports, targets, deaths and private owner knowledge progressively split them.
+
+A saved pre490 MAX prefix (not the same progress point) records7-day3,
+6-night56,5-day3421,4-night5186 uncached action expansions. The last two phases
+account for8607/8666=99.32% of its expansions. Three seven-day calls identify
+neither their targets nor successful completion. This locates the historical
+expansion pressure after the first night; it is not a CPU share or a current
+phase count. A structural execute3 audit, with scalar/Forecast forbidden, shows
+six named wolf teams ->one information orbit and18 existing score queries ->3
+constructed queries. That local opportunity does not survive every downstream
+report/owner stabilizer, as the current4.54%/6.11% prefix ratios demonstrate.
+
+### Reports: already removed terminal work versus necessary information
+
+The current seven prefix has3144 compiled report kernels,423 fallback public
+vectors, zero compiled public-event laws/vector-orbit representatives. Kernels
+mostly serve terminal moments without materializing all event posteriors;
+3144 is not the number of nonterminal child Boards or a report-work percentage.
+The current log has no exclusive report work/timing, so its contribution cannot
+be expressed as an exact fraction of250001work.
+
+Existing independent terminal enumeration has5 /9 /109 complete joint vectors
+for single/dual/three-seer examples (6 /6 /27 joint hypotheses), despite just
+2 /2 /3 role worlds. The integrated terminal moment formula has ALREADY reduced
+ordinary-versus-moment work54->29,252->99,1557->719 and145->112 (medium-pair),
+with zero posterior publication rows on the moment path. Claiming these gains
+again as the next improvement would double count existing code.
+
+At five alive, different true reports can change Q, private information and
+future MAX actions; medium reports also change truth likelihood. MAX does not
+commute with averaging these observations: generally E[max_a V(a|R)] differs
+from max_a E[V(a|R)]. Equal role marginals or equal final numeric examples do not
+justify merging. Equal complete states already use exact-context caches; names,
+colors and days cannot simply be removed from their keys. Full history remains
+necessary for later policy legality and initial fake-law validation.
+
+### Next step: one narrow candidate, with a proof gate
+
+Investigate elimination of a single PUBLICLY EXPOSED fake seer's later
+role-independent report channel in scalar continuation only. Existing
+`plausible_fake_options` retains the uniform noise law once public Q has no true
+seer support for that actor. If q(R|h)=q(R) for every supported full hypothesis,
+private push has the same factor, and all future legal/configured policies and
+observer state factor through the retained information, summing this channel
+can avoid generating repeated five-day continuations, acquisitions and moment
+kernels. This attacks branch families, whereas more root target grouping has
+only a small observed residual gain.
+
+Conditions: fixed CO/H0, fully specified initial declaration retained, exactly
+one exposed fake, actual configured noise law proven independent on full Q/P,
+all observer/own records preserved (exclude affected observers initially), and
+no future rule/policy depends on the omitted report detail. Retain public past,
+chronology/seen-day information and the named/replay/Table source. Keep medium
+observations and any remaining true-seer channels separate. Prove full-history
+sufficiency and compare expanded small cases, including private/cold equality,
+before connecting a common projection/channel operation.
+
+Expected effect is removal of whole repeated continuations ONLY where this
+condition holds; existing logs do not measure their frequency in current MAX,
+so no numeric gain or seven-completion promise is defensible. No generic
+retirement flag flip: current continuation_context clears past, which can erase
+the initial fake declaration and observer evidence. No multi-fake law,
+true-report averaging, new scoring evaluator or lossy value-key alias.
+
+Before another authorized bounded root measurement, add lightweight development
+root action start/finish/work snapshots and exclusive report-channel counters.
+First validate that instrumentation on existing small complete requests. It
+must share the original single calculation budget; no resume/sharding, raised
+limit, or repeated seven request is performed as part of this assessment.
