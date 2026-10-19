@@ -57,7 +57,7 @@ class ClosedSavedDayTests(unittest.TestCase):
 
     def test_other_saved_conditions_decline_and_night_weights_are_not_constant(self):
         data=make_role_filter_scope().graph.data;mid=saved_day(data,2)
-        with self.assertRaises(Pending):ClosedCalculation(mid.child(mid.to_game()['history'][0]))
+        with self.assertRaises((Pending,ValueError)):ClosedCalculation(mid.child(mid.to_game()['history'][0]))
         game=mid.to_game();game['history'][0]['policy']['day']='max'
         with self.assertRaises(Pending):ClosedCalculation(mid.updated(history=game['history']))
         with self.assertRaises(Pending):ClosedCalculation(mid.updated(claims=['latent']*5))

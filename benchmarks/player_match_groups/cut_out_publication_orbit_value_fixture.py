@@ -803,7 +803,10 @@ if __name__=='__main__':
         from .closed_calculation_fixture import audit as closed_audit,run as closed_measure
         if '--reference' in sys.argv:raise SystemExit('Ledger reference comparison is historical; use measure_shared_transition.compare_boundary directly')
         if '--measure' in sys.argv:
-            if '--saved-day' in sys.argv:
+            if '--saved-history' in sys.argv:
+                from .closed_saved_history_fixture import measure as saved_history_measure
+                saved_history_measure()
+            elif '--saved-day' in sys.argv:
                 from .closed_saved_day_fixture import run as saved_day_measure
                 saved_day_measure()
             else:closed_measure()

@@ -56,14 +56,10 @@ def observe_root_public(branch,public,compatible,*,past=None):
     The caller supplies an existing public observation predicate, never an
     optimized-action likelihood for public roles. Physical evidence uses P.
     """
-    kept=tuple(h for h in branch.public_law.hypotheses if compatible(h))
-    totals={}
-    for h in kept:totals[h.roles]=totals.get(h.roles,F())+h.mass
-    if any(not totals.get(w[:-1]) for w in public.worlds):
-        return FuturePending('root_secret_public_history_zero_support')
+    from .belief_projection import restore_public_history_weights
+    try:public_law=restore_public_history_weights(branch.public_law,public,compatible)
+    except ValueError:return FuturePending('root_secret_public_history_zero_support')
     weights={w[:-1]:w[-1] for w in public.worlds}
-    public_law=replace(branch.public_law,hypotheses=normalize(tuple(
-        replace(h,mass=weights[h.roles]*h.mass/totals[h.roles]) for h in kept if h.roles in weights)))
     predicate=lambda h:h.roles in weights and compatible(h)
     if not any(predicate(h) for h in branch.physical_law.hypotheses):
         return FuturePending('root_secret_physical_zero_support')
@@ -589,12 +585,9 @@ def replay_root_secrets(game,board,rules,strategy,*,max_work=DEFAULT_MAX_WORK,ma
                     active=branch;mass=F(1)
                     if branch.public.phase=='night':
                         legal=lambda h:policy.include_self_bite or not h.roles[0]&(1<<(action-1))
-                        hs=tuple(replace(h,mass=h.mass*dict(kernels[h.roles[0],h.attacks]).get(action,F()))
-                            for h in branch.physical_law.hypotheses if legal(h) and
-                            dict(kernels[h.roles[0],h.attacks]).get(action,F())>0)
-                        if not hs:continue
-                        mass=sum((h.mass for h in hs),F())
-                        own=replace(branch.physical_law,hypotheses=normalize(hs))
+                        from .actor_information import condition_wolf_choice
+                        try:mass,own=condition_wolf_choice(branch.physical_law,kernels,action,compatible=legal)
+                        except ValueError:continue
                         active=replace(branch,physical_law=own,
                                        physical=physical_board(branch.public,own,branch.physical))
                     expected=branch.public.alive if target is None else tuple(p for p in branch.public.alive if p!=target)

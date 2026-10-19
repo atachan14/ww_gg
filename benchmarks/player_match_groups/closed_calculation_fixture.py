@@ -106,7 +106,9 @@ def audit():
         rows.append(dict(case=case,ordinary=reference,closed=closed,complete_named_results_equal=True))
     from .closed_saved_day_fixture import audit as saved_day_audit
     saved=saved_day_audit()
-    result=dict(status='verified',saved_day=saved,cases=rows,scope='initial immutable uniform H0 group snapshot; typed owner/action/report/choice generation; Forecast at <=4 alive',ledger_required=False,full_initial7_search=False)
+    from .closed_saved_history_fixture import audit as saved_history_audit
+    histories=saved_history_audit()
+    result=dict(status='verified',saved_history=histories,saved_day=saved,cases=rows,scope='initial immutable uniform H0 group snapshot; typed owner/action/report/choice generation; Forecast at <=4 alive',ledger_required=False,full_initial7_search=False)
     Path('benchmarks/player_match_groups/closed-calculation-results.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(dict(status=result['status'],cases=[dict(case=r['case'],states=r['closed']['states'],cold_reads=r['closed']['cold_reads'],groups=r['closed']['independent_group_generators'],calls=r['closed']['instrumented_calls']) for r in rows])),flush=True)
     return result

@@ -96,3 +96,12 @@ def condition_personal(state,observation):
     if type(observation)is WolfInformation:
         entries=tuple(replace(h,attacks=merge_night_records(h.attacks,observation.attacks)) for h in entries)
     return mass,replace(state,hypotheses=normalize(entries))
+
+
+def condition_wolf_choice(state,policies,target,*,compatible=lambda h:True):
+    """Observed chosen target: retain actual w_I*q_I(t), then normalize P."""
+    entries=tuple(replace(h,mass=h.mass*dict(policies[h.roles[0],h.attacks]).get(target,F()))
+                  for h in state.hypotheses if compatible(h) and dict(policies[h.roles[0],h.attacks]).get(target,F())>0)
+    mass=sum((h.mass for h in entries),F())
+    if not mass:raise ValueError('Observed wolf choice outside support')
+    return mass,replace(state,hypotheses=normalize(entries))

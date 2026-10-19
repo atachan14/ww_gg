@@ -96,3 +96,38 @@ def action_flow(board, state, target, policy):
                             else policy.day_value(projected))
         value += outcome.probability * continuation
     return value
+
+
+def observe_action(source,target,engine):
+    """One saved H0 action observation, distinct from a target intervention.
+
+    Public Model-A role weights come from the common projected Board. Its
+    within-world history mixture follows the observed actual choice. P keeps
+    the actual choice and physical continuation likelihoods separately.
+    """
+    from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
+    from .actor_information import wolf_information_keys,condition_wolf_choice
+    from .belief_projection import restore_public_history_weights
+    from .exact import legal_targets
+    from .information_set_forecast import Pending
+    b=source.public
+    if b.initial_hunter_count or (engine.strategy.day,engine.strategy.night)!=('random','random'):
+        raise Pending('saved_action_uniform_H0_only')
+    if source.observer is not None:raise ValueError('Observe public history before choosing an owner view')
+    if b.winner is not None or type(target)is not int or target not in legal_targets(source.physical,engine.rules,engine.strategy):raise ValueError('Illegal observed action target')
+    own=source.private
+    if b.phase=='night':
+        policies={(i.initial_roster,i.attacks):engine.wolf_policy(b,source.public_state,source.past,i.initial_roster,i.attacks)
+                  for i in wolf_information_keys(own)}
+        try:mass,own=condition_wolf_choice(own,policies,target)
+        except ValueError as error:raise Pending('saved_action_choice_zero_support') from error
+    else:mass=F(1,len(legal_targets(source.physical,engine.rules,engine.strategy)))
+    physical=physical_board(b,own,source.physical)
+    acquired,outcomes=resolve_action(b,ActionInputs(source.public_state,source.past,own,None,physical),target,engine.action_policy,terminal_payoffs=False)
+    selected=[o for o in outcomes if o.board.winner is None]
+    if len(selected)!=1:raise Pending('saved_action_continuation_zero_support')
+    outcome=selected[0];child=engine.action_policy.project(b,acquired,outcome,target)
+    # Restore Model-A Q per world without replacing P's observed event mass.
+    try:public=restore_public_history_weights(child.private,child.public)
+    except ValueError as error:raise Pending('saved_action_public_history_zero_support') from error
+    return mass*outcome.probability,ContinuationInputs(child.public,public,child.past,child.private,None,child.physical)

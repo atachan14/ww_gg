@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "tests": 58,
+  "runner_seconds": 59.915,
+  "modules": [
+    "tests.test_closed_saved_history",
+    "tests.test_closed_calculation",
+    "tests.test_closed_saved_day",
+    "tests.test_root_secret_flow",
+    "tests.test_root_secret_replay",
+    "tests.test_shared_transition_provenance",
+    "tests.test_owner_information_provenance",
+    "tests.test_root_guard_max",
+    "tests.test_public_prior_ownership"
+  ],
+  "selected_audit": "inherited-groups verified",
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "b96b98e032214c520484bb6cb1dfffee15b2e95ee0da65c8a9713871bb8ff08d",
+    "werewolf\\action_flow.py": "a615008cfdbf57523c126c1a33c30bcffe890bf85846c71770c89ce8775aa585",
+    "werewolf\\actor_information.py": "1904846ca79066bb5a2cf22e488632edff2519ff60aeafd8b39951092e518289",
+    "werewolf\\belief_projection.py": "6c8831ba6ba543e913dce87728055d6bc56e842a7b169e1782489e2428d43fe8",
+    "werewolf\\root_secret_flow.py": "65088bacd9813a8bf2a8cc1b6cf8659e9b4701b8ca92c6f77a0077a3530a7abb",
+    "tests\\test_closed_saved_history.py": "00910058c97fe4362ced504ac308862769f923bcddae835b176bd666a394800d"
+  },
+  "diff_check": "passed",
+  "full_initial7_search": false
+}

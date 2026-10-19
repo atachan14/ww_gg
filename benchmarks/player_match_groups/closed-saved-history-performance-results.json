@@ -1,0 +1,457 @@
+{
+  "status": "verified",
+  "repeats": 5,
+  "summary": [
+    {
+      "players": 5,
+      "modes": {
+        "ordinary": {
+          "seconds_median": 0.017637400014791638,
+          "seconds_range": [
+            0.01637760002631694,
+            0.02595919999293983
+          ],
+          "states": {
+            "values": 1,
+            "actions": 3,
+            "saved_sources": 1,
+            "resolution_cache": 3
+          }
+        },
+        "saved": {
+          "seconds_median": 0.008112700015772134,
+          "seconds_range": [
+            0.00719470001058653,
+            0.01299810002092272
+          ],
+          "states": {
+            "values": 1,
+            "actions": 3,
+            "expansions": {
+              "actions": 3,
+              "values": 1
+            },
+            "acquired": 2,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 3,
+            "saved_sources": 0,
+            "resolution_cache": 5
+          }
+        }
+      }
+    },
+    {
+      "players": 7,
+      "modes": {
+        "ordinary": {
+          "seconds_median": 0.08194750000257045,
+          "seconds_range": [
+            0.07700900000054389,
+            0.08975600003032014
+          ],
+          "states": {
+            "values": 1,
+            "actions": 3,
+            "saved_sources": 1,
+            "resolution_cache": 3
+          }
+        },
+        "saved": {
+          "seconds_median": 0.030496600025799125,
+          "seconds_range": [
+            0.02792540000518784,
+            0.03434790001483634
+          ],
+          "states": {
+            "values": 1,
+            "actions": 3,
+            "expansions": {
+              "actions": 3,
+              "values": 1
+            },
+            "acquired": 4,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 14,
+            "saved_sources": 0,
+            "resolution_cache": 7
+          }
+        }
+      }
+    }
+  ],
+  "runs": [
+    {
+      "players": 5,
+      "mode": "ordinary",
+      "seconds": 0.02038980001816526,
+      "peak_bytes": 33792000,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 0
+    },
+    {
+      "players": 5,
+      "mode": "saved",
+      "seconds": 0.01299810002092272,
+      "peak_bytes": 33619968,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 2,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 3,
+        "saved_sources": 0,
+        "resolution_cache": 5
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "ordinary",
+      "seconds": 0.08975600003032014,
+      "peak_bytes": 34160640,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "saved",
+      "seconds": 0.03374320000875741,
+      "peak_bytes": 33968128,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 4,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 14,
+        "saved_sources": 0,
+        "resolution_cache": 7
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 0
+    },
+    {
+      "players": 5,
+      "mode": "saved",
+      "seconds": 0.00719470001058653,
+      "peak_bytes": 33677312,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 2,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 3,
+        "saved_sources": 0,
+        "resolution_cache": 5
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 1
+    },
+    {
+      "players": 5,
+      "mode": "ordinary",
+      "seconds": 0.02595919999293983,
+      "peak_bytes": 33718272,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "saved",
+      "seconds": 0.03434790001483634,
+      "peak_bytes": 33841152,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 4,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 14,
+        "saved_sources": 0,
+        "resolution_cache": 7
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "ordinary",
+      "seconds": 0.07700900000054389,
+      "peak_bytes": 34205696,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 1
+    },
+    {
+      "players": 5,
+      "mode": "ordinary",
+      "seconds": 0.017157300026156008,
+      "peak_bytes": 33808384,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 2
+    },
+    {
+      "players": 5,
+      "mode": "saved",
+      "seconds": 0.008607399999164045,
+      "peak_bytes": 33574912,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 2,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 3,
+        "saved_sources": 0,
+        "resolution_cache": 5
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "ordinary",
+      "seconds": 0.08422560000326484,
+      "peak_bytes": 34107392,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "saved",
+      "seconds": 0.03034459997434169,
+      "peak_bytes": 33734656,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 4,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 14,
+        "saved_sources": 0,
+        "resolution_cache": 7
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 2
+    },
+    {
+      "players": 5,
+      "mode": "saved",
+      "seconds": 0.007798000006005168,
+      "peak_bytes": 33853440,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 2,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 3,
+        "saved_sources": 0,
+        "resolution_cache": 5
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 3
+    },
+    {
+      "players": 5,
+      "mode": "ordinary",
+      "seconds": 0.017637400014791638,
+      "peak_bytes": 33673216,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "saved",
+      "seconds": 0.02792540000518784,
+      "peak_bytes": 33935360,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 4,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 14,
+        "saved_sources": 0,
+        "resolution_cache": 7
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "ordinary",
+      "seconds": 0.08194750000257045,
+      "peak_bytes": 34213888,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 3
+    },
+    {
+      "players": 5,
+      "mode": "ordinary",
+      "seconds": 0.01637760002631694,
+      "peak_bytes": 33701888,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 4
+    },
+    {
+      "players": 5,
+      "mode": "saved",
+      "seconds": 0.008112700015772134,
+      "peak_bytes": 33579008,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 2,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 3,
+        "saved_sources": 0,
+        "resolution_cache": 5
+      },
+      "digest": "aa6ebc55d68af7ceaa75222d83513fcb2b382678bb29e7a465265689b27dcaac",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "ordinary",
+      "seconds": 0.08116699999663979,
+      "peak_bytes": 34201600,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "saved_sources": 1,
+        "resolution_cache": 3
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "saved",
+      "seconds": 0.030496600025799125,
+      "peak_bytes": 33939456,
+      "states": {
+        "values": 1,
+        "actions": 3,
+        "expansions": {
+          "actions": 3,
+          "values": 1
+        },
+        "acquired": 4,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 14,
+        "saved_sources": 0,
+        "resolution_cache": 7
+      },
+      "digest": "df3b41e4386ccd759e16d1e6b72c6eb2b56ce9dd6826642fa38dc0069e2bffdc",
+      "repeat": 4
+    }
+  ],
+  "boundary": "engine/root reconstruction plus public Forecast/Table; common fixture preparation and imports excluded",
+  "state_pruning": false,
+  "full_initial7_search": false,
+  "source_sha256": {
+    "werewolf\\action_flow.py": "a615008cfdbf57523c126c1a33c30bcffe890bf85846c71770c89ce8775aa585",
+    "werewolf\\closed_calculation.py": "b96b98e032214c520484bb6cb1dfffee15b2e95ee0da65c8a9713871bb8ff08d",
+    "werewolf\\actor_information.py": "1904846ca79066bb5a2cf22e488632edff2519ff60aeafd8b39951092e518289",
+    "werewolf\\belief_projection.py": "6c8831ba6ba543e913dce87728055d6bc56e842a7b169e1782489e2428d43fe8",
+    "werewolf\\root_secret_flow.py": "65088bacd9813a8bf2a8cc1b6cf8659e9b4701b8ca92c6f77a0077a3530a7abb",
+    "benchmarks\\player_match_groups\\closed_saved_history_fixture.py": "47666674a97b9917aad70307bc119e60d42eedd5f5238aaf07a31e4a40389d08"
+  }
+}

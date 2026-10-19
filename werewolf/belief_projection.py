@@ -56,3 +56,14 @@ def project_private(state,board,*,marginalize_private=False):
     entries=tuple(Hypothesis(h.roles,tuple(a for a in h.acquisitions if not marginalize_private or a.player in tracked),h.mass*new[h.roles]/old[h.roles],h.guards,h.attacks) for h in state.hypotheses if h.roles in new)
     return TrueScanState(normalize(entries),state.rosters,state.initial_rule,tracked,state.observed_prefix)
 
+
+
+def restore_public_history_weights(state,public,compatible=lambda h:True):
+    """Model-A public role mass with the retained within-world history law."""
+    from dataclasses import replace
+    from .seer_acquisition import normalize
+    kept=tuple(h for h in state.hypotheses if compatible(h));totals={}
+    for h in kept:totals[h.roles]=totals.get(h.roles,0)+h.mass
+    weights={w[:-1]:w[-1] for w in public.worlds}
+    if any(not totals.get(roles) for roles in weights):raise ValueError('Positive public world lacks secret-history support')
+    return replace(state,hypotheses=normalize(tuple(replace(h,mass=weights[h.roles]*h.mass/totals[h.roles]) for h in kept if h.roles in weights)))

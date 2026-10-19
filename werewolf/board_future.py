@@ -702,3 +702,13 @@ def reconstruct_information(engine,source,child,information,mass):
     result=request.roles()
     remember(engine,request,result)
     return replace(result,board_data=request)
+
+
+@dataclass(frozen=True)
+class ObservedActionEvidence:
+    engine:object
+    target:int
+
+    def __call__(self,source):
+        from .action_flow import observe_action
+        return observe_action(source,self.target,self.engine)[1]

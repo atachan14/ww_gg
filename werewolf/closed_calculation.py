@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from fractions import Fraction as F
 from .board_flow import BoardData
 from .board_future import (SavedOrigin,GeneratedBoard,ActionEvidence,PublicationEvidence,
-    OwnerInformationEvidence,outcome_key,publication_key,kernel_calculation)
+    OwnerInformationEvidence,ObservedActionEvidence,outcome_key,publication_key,kernel_calculation)
 from .information_set_forecast import InformationSetForecast,Pending
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
 from .actor_information import PersonalInformation,WolfInformation,wolf_information_groups
@@ -40,19 +40,22 @@ def _owner_positions(info,n):
 
 
 def _entry_origin(data,game,strategy):
-    """Decode one saved daytime observation; no hidden policy substitution."""
+    """Decode saved unchanged-public action observations; no hidden policy substitution."""
     history=game.get('history',())
-    if not history:return data,None
-    if len(history)!=1:raise Pending('closed_saved_night_or_multiple_steps_pending')
-    step=history[0];target=step.get('target')
-    if type(target)is not int or set(step)&{'observation','deaths'}:
-        raise Pending('closed_saved_nonstandard_observation_pending')
+    if not history:return data,()
+    if len(history)>max(0,2*game['players']-2):raise ValueError('Too much history')
+    for step in history:
+        if (not isinstance(step,dict) or not {'target','policy','claims','claim_policy','seer_options'}<=step.keys()
+            or set(step)-{'target','policy','claims','claim_policy','seer_options','reports','strategy_ui','result_disclosure_model','observation','deaths'}):
+            raise ValueError('Invalid saved history')
+        if type(step.get('target'))is not int or set(step)&{'observation','deaths'}:
+            raise Pending('closed_saved_nonstandard_observation_pending')
     cp=ClaimPolicy(**game.get('claim_policy',{}))
-    if (Strategy(**step.get('policy',{}))!=strategy
+    if (any(Strategy(**step.get('policy',{}))!=strategy
         or tuple(step.get('claims',()))!=tuple(game.get('claims',()))
         or ClaimPolicy(**step.get('claim_policy',{}))!=cp
         or step.get('result_disclosure_model')!=game.get('result_disclosure_model')
-        or step.get('seer_options',game.get('seer_options'))!=game.get('seer_options')
+        or step.get('seer_options')!=game.get('seer_options') or step.get('reports') for step in history)
         or game.get('result_disclosure_model')!='full-observed-v1'
         or {r.get('reporter') for r in game.get('seer_inputs',())}!=set(p for p,c in enumerate(game.get('claims',()),1) if c=='seer')
         or any(r.get('target') is None or r.get('color') is None for r in game.get('seer_inputs',()))
@@ -65,11 +68,10 @@ def _entry_origin(data,game,strategy):
         raise Pending('closed_saved_late_public_event_pending')
     from types import SimpleNamespace
     from .result_disclosure import snapshot
-    before,_=snapshot(game,SimpleNamespace(day=1,phase='day'),tuple(game['claims']))
-    after,_=snapshot(game,SimpleNamespace(day=1,phase='night'),tuple(game['claims']))
-    if before!=tuple(game['claims']) or after!=before:
-        raise Pending('closed_saved_late_public_event_pending')
-    return data.updated(history=[]),target
+    for slot in range(len(history)+1):
+        claims,_=snapshot(game,SimpleNamespace(day=1+slot//2,phase='night' if slot%2 else 'day'),tuple(game['claims']))
+        if claims!=tuple(game['claims']):raise Pending('closed_saved_late_public_event_pending')
+    return data.updated(history=[]),tuple(step['target'] for step in history)
 
 
 @dataclass(frozen=True)
@@ -133,16 +135,11 @@ class ClosedCalculation:
             for p,claim in enumerate(source.public.claims,1):classes.setdefault((claim,p if p in fixed else None),[]).append(p)
             groups=tuple(tuple(v) for v in classes.values())
             root=self.__node(source,groups,())
-            if saved_target is not None:
-                # Day policy is uniform across the same legal targets in every
-                # world, so its constant cancels in conditioning. Keep its event
-                # mass distinct from the normalized continuation distribution.
-                choices=legal_targets(source.physical,engine.rules,strategy)
-                rows=root.action(saved_target)
-                selected=next((r for r in rows if r.node.read().public.winner is None),None)
-                if selected is None:raise Pending('closed_saved_continuation_zero_support')
-                root=selected.node
-                object.__setattr__(self,'_ClosedCalculation__entry_probability',selected.probability/len(choices))
+            probability=F(1)
+            for target in saved_target:
+                mass,root=root.observe(target)
+                probability*=mass
+            object.__setattr__(self,'_ClosedCalculation__entry_probability',probability)
             object.__setattr__(self,'_ClosedCalculation__root',root)
 
     def __setattr__(self,name,value):raise AttributeError('Open a new calculation for changed inputs')
@@ -213,6 +210,23 @@ class _Node:
         groups=_fix(self.__groups,(target,))
         return tuple(ActionBranch(o.probability,self.__calculation._ClosedCalculation__node(c,groups,(*self.__path,('action',target,outcome_key(o))),self.__view)) for o,c in children)
 
+    def observe(self,target):
+        if self.__view is not None:raise ValueError('Observe saved public history before choosing a personal view')
+        from .action_flow import observe_action
+        from .exact import available_medium_opportunities
+        s=self.__source
+        with self.__calculation._ClosedCalculation__kernel():
+            mass,child=observe_action(s,target,self.__calculation._ClosedCalculation__engine)
+            # This input unit has unchanged initial report rows. New public
+            # report observations require their own validated migration unit.
+            b=child.public
+            if b.day>1 and any(b.claims[p-1]=='seer' for p in b.alive):
+                raise Pending('closed_saved_new_seer_report_pending')
+            supplied={(r.day,r.reporter,r.target) for r in b.reports}
+            if any(o[0]==b.day and o not in b.report_resolved and o not in supplied for o in available_medium_opportunities(b)):
+                raise Pending('closed_saved_new_medium_report_pending')
+        return mass,self.__calculation._ClosedCalculation__node(child,_fix(self.__groups,(target,)),(*self.__path,('observe',target)),None)
+
     def reports(self):
         s=self.__source
         with self.__calculation._ClosedCalculation__kernel():rows=self.__calculation._ClosedCalculation__engine.report_children(s)
@@ -255,6 +269,7 @@ class _Node:
         origin=SavedOrigin(self.__calculation._ClosedCalculation__origin_data,e.rules,e.strategy,project_public=False);request=GeneratedBoard(origin)
         for operation in self.__path:
             if operation[0]=='owner':step=OwnerInformationEvidence(operation[1],operation[2])
+            elif operation[0]=='observe':step=ObservedActionEvidence(e,operation[1])
             elif operation[0]=='action':step=ActionEvidence(e,operation[1],operation[2],False)
             else:step=PublicationEvidence(e,operation[1])
             request=request.child(step,None)
