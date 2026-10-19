@@ -1,8 +1,8 @@
-"""Uniform H0 target-orbit consumer of constructed closed-node partitions."""
+"""Configured-policy H0 consumer of constructed closed-node partitions."""
 from contextlib import contextmanager
 from fractions import Fraction as F
 from .information_set_forecast import InformationSetForecast,InformationSetActionPolicy,exchangeable_value
-from .group_partition import _fix,_report_groups
+from .group_partition import _fix,_report_groups,_frame_groups
 from .calculation_budget import tick
 
 
@@ -54,8 +54,9 @@ class GroupedForecast(InformationSetForecast):
         return q,p
 
     def solve(self,b,s,past,private,observer,*,physical=None):
-        s,private=self.scalar_laws(b,s,private,observer)
-        return super().solve(b,s,past,private,observer,physical=physical)
+        with self.frame_scope(b,past,observer):
+            s,private=self.scalar_laws(b,s,private,observer)
+            return super().solve(b,s,past,private,observer,physical=physical)
 
     # Constructed partitions replace discovery by full-law label permutations.
     # Named flow/action keys retain all inputs; only the proved constant
@@ -172,8 +173,28 @@ class GroupedForecast(InformationSetForecast):
         try:yield
         finally:self.groups=before
 
+    @property
+    def max_grouped(self):
+        return (self.strategy.day=='max' and self.aggregate_wolf and self.aggregate_reports and not self.strategy.include_self_bite
+                and not self.retire_uninformative_scans and self.acquisition_provenance is None and self.trace is None)
+
+    @contextmanager
+    def frame_scope(self,b,past,observer=None,*,target=None):
+        tick(0)
+        groups=() if self.strategy.day=='max' and b.initial_hunter_count else _frame_groups(self.groups,b,past,observer,target=target)
+        with self.group_scope(groups):yield
+
+    def equivalent_targets(self,b,s,x,y,past=()):
+        if self.max_grouped and any(x in group and y in group for group in self.groups):return True
+        return super().equivalent_targets(b,s,x,y,past)
+
+    def wolf_policy(self,b,s,past,mask,history=()):
+        from .actor_information import WolfInformation
+        with self.frame_scope(b,past),self.actor_scope(WolfInformation(mask,history)):
+            return super().wolf_policy(b,s,past,mask,history)
+
     def target_orbits(self,targets):
-        if self.strategy.day!='random':return super().target_orbits(targets)
+        if self.strategy.day!='random' and not self.max_grouped:return super().target_orbits(targets)
         available=set(targets)
         result=tuple(tuple(p for p in group if p in available) for group in self.groups)
         result=tuple(g for g in result if g)
@@ -185,7 +206,7 @@ class GroupedForecast(InformationSetForecast):
 
     def wolf_cells(self,state):
         from .actor_information import wolf_information_orbits
-        if self.strategy.day!='random':return super().wolf_cells(state)
+        if self.strategy.day!='random' and not self.max_grouped:return super().wolf_cells(state)
         rows=(wolf_information_orbits(state,self.groups) if self.aggregate_wolf and any(len(g)>1 for g in self.groups)
               else super().wolf_cells(state))
         self.orbit_stats['solver_wolf_cells']=self.orbit_stats.get('solver_wolf_cells',0)+len(rows)
@@ -207,6 +228,6 @@ class GroupedForecast(InformationSetForecast):
         return tuple((g[0],sum((probabilities[p] for p in g),F())) for g in self.target_orbits(tuple(probabilities)))
 
     def act(self,b,s,past,target,private,observer,*,physical=None):
-        s,private=self.scalar_laws(b,s,private,observer)
-        with self.group_scope(_fix(self.groups,(target,))):
+        with self.frame_scope(b,past,observer,target=target):
+            s,private=self.scalar_laws(b,s,private,observer)
             return super().act(b,s,past,target,private,observer,physical=physical)

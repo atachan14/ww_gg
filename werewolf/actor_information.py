@@ -124,3 +124,11 @@ def wolf_information_orbits(state,partition):
         if mask==row[1]:row[2].append(h)
     return tuple((WolfInformation(mask,attacks),mass,replace(state,hypotheses=normalize(tuple(entries))))
                  for (_,attacks),(mass,mask,entries) in buckets.items())
+
+
+def information_positions(info,n):
+    """Named owner evidence that a constructed partition must fix."""
+    if type(info)is WolfInformation:
+        return tuple(p for p in range(1,n+1) if info.initial_roster&(1<<(p-1)))+tuple(a.target for a in info.attacks)
+    from .seer_intervention import SeerObserver
+    return (info.actor,*(a.target for a in info.acquisitions),*((info.target,) if type(info)is SeerObserver else ()))

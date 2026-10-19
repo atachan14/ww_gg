@@ -1292,3 +1292,95 @@ small totals/self-profiles, independent terminal fanout and scalar-forbidden
 six-night structure. `max-structure-validation.json` retains the24-test log,
 source hashes,12 exact complete pair checks and explicit production-unchanged /
 zero-new-seven-Forecast assertions. No full repository test run is claimed.
+
+
+## 2026-10-19: common entry refinement and bounded MAX opt-in
+
+This checkpoint closes the two b5c438f entry gaps through common metadata
+refinement, not full-law authentication in production. `_frame_groups` is used
+by every generated Closed node and Grouped `solve`, `act`, and `wolf_policy`.
+The scalar entry therefore covers report candidate scoring; wolf policy covers
+Horizon's direct named execution. The named action target is fixed before
+continuation evaluation. Initialization, report children, owner children, and
+cold reconstruction all use the same constructor refinement.
+
+### Construction invariant and equivalence
+
+Groups are subgroups of the immutable calculation's initial partition. Each
+entry only splits a parent class; it never merges classes. Fix public history
+targets, dead positions, incoming report targets, the named intervention target,
+and the observer's actor/known acquisition targets/future target. A wolf owner's
+known initial roster and own attack targets are fixed by the common information
+position operation before the existing Q-conditioned policy scorer.
+
+Split remaining actors by their complete sorted outgoing public meanings:
+seer acquired day AND published day, medium report day, opportunity/resolved
+status, named target, and color. Equal simultaneous literal meanings retain a
+class; a one-sided record, different day/color/target, or incoming observation
+splits it. This is deliberately conservative: mutually exchanged target graphs
+are not newly admitted. Parent scopes restore their own partition on return;
+this does not merge evidence inside a child frame.
+
+Under fixed CO, H0, common configured policies and generated Q/P updates, every
+remaining transposition preserves public context, each owner's information,
+legal actions and physical branches. Thus action continuation values are
+constant on each target orbit, and equivalent wolf information cells can share
+the common scorer while their masses are summed. MAX chooses among values of
+the configured continuation policy; it does not invent optimal CO/report rules.
+Public Q weighting, within-world secret history, and physical P remain distinct.
+Paired scalar projection preserves the selected observer's known records; its
+retained positions are invariant under these fixed groups. Full named Board,
+Q/P, past, observer and target keys remain unchanged. No lossy marginal key,
+issued proof ticket, production permutation scan, or case evaluator is added.
+
+### Entry and support matrix
+
+| entry/event | refinement and evidence |
+| --- | --- |
+| initial public/seer/wolf | same constructor; reversed query order and fresh caches |
+| physical live day/night action | named target, history and deaths fixed; multiple forced nights |
+| morning reports and candidate scalar | common report metadata; all 49 actual-input report frames invariant |
+| private/future seer | owner and known/future targets fixed; latent seer and owner death/cancellation |
+| wolf policy and Horizon | public frame plus roster/own attacks, before Q-conditioned scoring |
+| uniform observed/saved action | existing common observation weighting; reopen/edit/cancel and cold |
+| initial input edit | new calculation and caches; one-sided report splits formerly equal CO actors |
+| MAX saved observed-action replay | existing `saved_action_uniform_H0_only` Pending retained |
+| incomplete saved report batch | existing Pending retained until complete |
+| guardian/GJ, self-bite or unsupported history/policy/CO | no promotion of these entries |
+| unknown observer / diagnostic provenance / trace / scan retirement | grouping disabled or existing rejection retained |
+
+The justified MAX connection requires explicit grouped mode plus BOTH
+aggregate_wolf=True and aggregate_reports=True, all configured selectors MAX,
+fixed CO/H0/all disclosure, and no self-bite, trace/provenance or scan retirement.
+Defaults and factories are unchanged. The prior reports-only MAX route keeps its
+named-target behavior. MAX joint report-vector orbit reduction remains disabled.
+Named live interventions and their ActionEvidence cold recipes are distinct
+from unsupported MAX observed saved-action replay. No guardian/GJ claim is made.
+
+### Development evidence and limits
+
+`tests/test_group_entry_contract.py` performs full Q/P/observer/public-context
+transposition audits only in development wrappers. Independent expanded engines
+disable target/actor equivalence, exchangeability, renaming and law projection,
+while reusing common probability/legal/policy/physical operations. Complete
+Forecast, public/physical Table, warm repeat, source immutability and fresh cold
+reconstruction agree. Same simultaneous reports versus one-sided changes,
+multiple nights, latent seer, named wolf choices, owner death/future cancellation,
+saved uniform replay and initial edits are covered. Seven-origin multiple-night
+tests force named prefixes; they do not compute a seven-root Forecast.
+
+Related combined suite: 62 tests passed in20.585s. After adding the one-sided
+initial-report edit assertion, the focused nine tests passed again in5.117s.
+These overlap; counts are not added. No full repository suite is claimed.
+`group-entry-validation.json` embeds logs and source hashes.
+
+One changed production public initial-seven request used the SAME 250000work,
+30second calculation limit and384MiB sampled/35second supervisor bounds. It
+stopped at250001work in12.281s, before a complete result; observed working-set
+peak85,528,576bytes and private committed74,555,392bytes. Acquisition wrapped the
+budget stop as Pending `true_scan_generation_budget_exceeded`; the raw worker's
+unsupported label is preserved alongside the actual work-stop diagnostic in
+`group-entry-seven-results.json`. It was not rerun. This is neither a complete
+seven numerical result nor a new unsupported-feature finding. Progress differs
+from earlier capped runs, so no equal-progress speed/memory gain is asserted.
+No upper limit, default, publication setting, server or deployment was changed.

@@ -1,0 +1,70 @@
+{
+  "completed_at": "2026-10-19T10:00:23.092551+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 13.460139699978754,
+  "samples": 638,
+  "peak_private_committed_bytes": 74555392,
+  "observed_peak_working_set_bytes": 85528576,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "wwgg_budget_stop kind=work work=250001 max_work=250000 elapsed_seconds=12.281\r\n",
+  "worker": {
+    "completed": false,
+    "input_sha256": "a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2",
+    "status": "unsupported",
+    "reason": "true_scan_generation_budget_exceeded",
+    "seconds": 12.284871599986218,
+    "states": {
+      "values": 1535,
+      "actions": 6185,
+      "expansions": {
+        "actions": 6189,
+        "values": 1539
+      },
+      "acquired": 746,
+      "mornings": 12,
+      "publications": 16,
+      "policies": 1489,
+      "saved_sources": 0,
+      "resolution_cache": 6188,
+      "target_orbits": {
+        "target_members": 4495,
+        "target_representatives": 4291,
+        "solver_wolf_cells": 1767,
+        "solver_wolf_hypotheses": 1882
+      },
+      "report_vectors": {
+        "kernels": 3144,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 423,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    }
+  },
+  "progress": [],
+  "scope": "One changed production public initial-seven request; explicit full aggregation opt-in. Historical vector comparison is not a fresh full named-reference proof.",
+  "source_sha256": {
+    "werewolf\\group_partition.py": "b68fa97f34bcab9d074667856c7200c04c0039805509ae578c7f61b93704fd64",
+    "werewolf\\grouped_forecast.py": "e9eae79c92d5f794e5d4334e377142da2befac7742bc4a80fcde8586c388baff",
+    "werewolf\\actor_information.py": "6fe3c635963855e4e24a65938c95cba9b61ddc457ec7af9dcaa0e9e7316bd1ce",
+    "werewolf\\closed_calculation.py": "d788600aee0c0f786654b61c5da172fc863e66ad11f0c031e83d9238d38b93ff"
+  },
+  "diagnostic_interpretation": {
+    "status": "budget_stopped",
+    "kind": "work",
+    "work": 250001,
+    "max_work": 250000,
+    "elapsed_seconds": 12.281,
+    "note": "Raw worker reported Pending true_scan_generation_budget_exceeded as unsupported; actual diagnostic is a work stop caught by acquisition. Raw worker/stdout metadata preserved. No seven rerun."
+  }
+}

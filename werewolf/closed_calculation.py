@@ -1,4 +1,4 @@
-"""Closed, snapshot-owned use of the existing uniform H0 common kernels.
+"""Closed, snapshot-owned use of the shared fixed-CO H0 common kernels.
 
 Public calls take saved BoardData or semantic actions/owner observations only.
 No public call accepts a law, group, child frame, engine or cache. Input edits
@@ -22,13 +22,10 @@ from .action_flow import resolve_action
 from .forecast_result import Forecast
 from .calculation_budget import calculation_budget,tick,DEFAULT_MAX_WORK,DEFAULT_MAX_SECONDS
 from .model_a_public import horizon_for_action
-from .group_partition import _fix,_report_groups
+from .group_partition import _fix,_report_groups,_frame_groups
 
 
-def _owner_positions(info,n):
-    if type(info)is WolfInformation:
-        return tuple(p for p in range(1,n+1) if info.initial_roster&(1<<(p-1)))+tuple(a.target for a in info.attacks)
-    return (info.actor,*(a.target for a in info.acquisitions),*((info.target,) if type(info)is SeerObserver else ()))
+from .actor_information import information_positions as _owner_positions
 
 
 def _entry_origin(data,game,strategy):
@@ -192,7 +189,7 @@ class ClosedCalculation:
         node=object.__new__(_Node)
         object.__setattr__(node,'_Node__calculation',self)
         object.__setattr__(node,'_Node__source',source)
-        object.__setattr__(node,'_Node__groups',groups)
+        object.__setattr__(node,'_Node__groups',_frame_groups(groups,source.public,source.past,source.observer))
         object.__setattr__(node,'_Node__path',path)
         object.__setattr__(node,'_Node__view',view)
         return node
