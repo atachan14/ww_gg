@@ -23,6 +23,8 @@ class GroupedForecast(InformationSetForecast):
         if (self.strategy.day,self.strategy.night,self.strategy.fake_reports) not in (('random',)*3,('max',)*3):raise ValueError('Uniform or MAX representative mode only')
         self.aggregate_wolf=aggregate_wolf;self.aggregate_reports=aggregate_reports
         self.report_kernels={};self.value_laws={};self.scalar_projections={}
+        from .morning_publications import PublicMomentCache
+        self.terminal_moments=PublicMomentCache()
         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
         self.action_policy=GroupedPolicy(self)
 
@@ -140,7 +142,7 @@ class GroupedForecast(InformationSetForecast):
         incomplete=lambda:Pending('information_set_report_likelihood_incomplete')
         def score(outcomes):
             return sum((o.probability*self.publication_kernel(o.board,law,past).terminal_execution_value(
-                law,o.board.alive,incomplete=incomplete)
+                law,o.board.alive,incomplete=incomplete,cache=self.terminal_moments)
                 for o in outcomes for law in (self.project(s,o.board),)),F())
         actions=report_actions(b)
         outcomes=self.report_outcomes(b,s,past,actions,evaluate=score) if actions else ()
@@ -148,7 +150,7 @@ class GroupedForecast(InformationSetForecast):
         # Validate all Q families, including zero-P observations, before push.
         for q,child,law,history in rows:self.publication_kernel(child,law,history)
         return sum((mass*self.publication_kernel(child,law,history).terminal_execution_value(
-            private,child.alive,incomplete=incomplete)
+            private,child.alive,incomplete=incomplete,cache=self.terminal_moments)
             for mass,child,law,history,private in self.push(s,own,rows)),F())
 
     def generate_publications(self,b,s,past):

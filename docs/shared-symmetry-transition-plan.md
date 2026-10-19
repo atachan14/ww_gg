@@ -944,3 +944,163 @@ label symmetries and general interacting maxima remain outside this change.
 local equality/work checks and the2358-repeat lower-bound calculation. Final
 production hashes equal the changed-seven measurement hashes. Original
 artifacts/previews are untouched; no full repository test run is claimed.
+
+## 2026-10-19 Q-owned terminal moment reuse, bounded within one calculation
+
+### Public key, private application and unchanged mathematics
+
+The79564c7 development formula is now implemented in the common publication
+kernel. For complete simultaneous seer report event e, Q first fixes the exact
+public maximum execution face B_e with unchanged uniform ties. With likelihood
+fiber x=(roles,acquisitions), retain the PUBLIC numerator
+M_Q(x)=sum_e J_e^Q(x) r(x,B_e). Every request returns
+sum_x [P(x)/Q(x)] M_Q(x) using the existing observer_projection_ratios operation.
+The numerator is unnormalised, not a private value, posterior or independently
+optimised per-world payoff. Scores and B_e are constructed before any P enters.
+Private guard/attack distinctions have the same terminal execution payoff and
+report likelihood at this existing three-alive/one-live-wolf/H0 boundary; their
+original records and physical branch mass remain outside this scalar vector.
+
+`terminal_execution_moments` uses the same indexed joint truth/fake kernel as
+named event generation, preserving reporter correlations and plausibility.
+`terminal_execution_value` validates the current private support/normalization
+on EVERY request, including a cache hit, before applying its ratios. Supported
+fibers with zero M remain valid; an unknown private fiber still refuses instead
+of being mapped to zero or uniformly filled. Private support does not have to
+be re-enumerated per public event: each common generated report kernel is
+row-stochastic on every original public fiber, so summing after P/Q transfer is
+exactly this dot product. Independent Cartesian/event checks remain in tests.
+P application is charged by vector length even on a hit and polls the same
+cancellation/time/work budgets. No probability tolerance or numerical cap changes.
+
+The cache key is `(compiled_kernel_object, exact_named_target_tuple)` within the
+owning calculation. This is an object reference with identity equality, not a
+lossy numeric ID/hash or an issued certificate. The kernel owns the complete
+immutable Q joint source, rosters/acquisition metadata, public past, alive/claim
+labels and already configured fake-policy chance table; its factory is cached
+under full Board/Q/past and a calculation-owned fixed Strategy. Thus changed
+public Q weights, history, source/report correlations, labelled actions or fake
+policy cannot reuse another kernel's numerator. Exact MAX/uniform-tie behavior
+is fixed by this operation. Medium instruction selection and outcome merging
+still happen FIRST in the existing shared flow; each resulting Q law gets its
+own compiled seer kernel. Viewer P/role/scan evidence never generates this key
+or vector. Dead-observer protection and Q/P scalar projection remain as79564c7.
+
+Different calculations never share this cache, including cold reconstruction,
+changed-input snapshots and equal-looking sources. Public Board, private Table,
+named report/history/cache inputs and cold recipes remain full ordinary flows.
+The existing MAX opt-in/terminal/disclosure/guardian/trace/provenance admission
+boundaries and all application defaults remain unchanged.
+
+### Memory and interrupted construction
+
+A calculation owns one `PublicMomentCache`, an LRU capped at128 complete vectors
+AND4096 retained fiber rows in total. Each stored vector is an immutable tuple
+of immutable fiber/Fraction pairs. A result larger than the row capacity is
+computed without retention; eviction or no-cache operation never changes value
+or rejects a previously admitted query. A separate entry cap also bounds keys
+for zero-length vectors. A vector is installed only after the whole exact
+build and normalization check succeeds; exceptions/time/work stops leave no
+partial vector. Other completed cached entries remain valid. No repeated
+owner/frame authentication, proof tickets or global cache were introduced.
+
+The bounds cover this ADDITIONAL retained cache, not all solver memory or a
+hard byte reservation. Building an uncached vector requires memory proportional
+to its input support. Existing report/source/action caches and20ms sampled
+384MiB private/working-set stop,250000work/30s calculation cap and35s watchdog
+remain unchanged in measurement. Capacity constants are cache policy, not new
+gameplay/work/admission limits, settings or user-facing options.
+
+### Independent regressions and direct negative examples
+
+Final related suite passes46 methods in11.549s (not an all-repository run).
+New tests compare cache off/on, independent complete joint-event numerators and
+ordinary InformationSetForecast values on public/seer/wolf P views; reverse and
+rotated view order reuse the SAME Q vector. Reversed initial full personal-view
+Forecast/Table order also matches independent ordinary engines and cold source
+reconstruction. Three complete small forecasts/Tables and all observed report
+children agree with cache disabled; existing MAX fixtures cover medium ties,
+merge-before-seer conditioning, future owner scans and retained dead evidence.
+
+A noncollision test has two Q priors with identical public scalar2/3 but swapped
+wolf weights: the same known-wolf private P evaluates to1 under one and0 under
+the other. Other tests change a valid observed public history/posterior and
+named target tuple, and use a cold equal-looking source in another calculation.
+No result is incorrectly reused. A supported private fiber with zero public
+policy payoff returns0; an unsupported private fiber still raises on a warm hit.
+
+Tiny capacity controls verify entry/row eviction, oversized uncached exact
+results and rebuild equality. A deliberately interrupted cold build installs
+nothing. Warm-hit cancellation, expired time and an ALREADY exhausted work
+budget remain checked. The prior work test assumed a hit would necessarily
+repeat at least two enumeration ticks; it now tests genuine exhaustion rather
+than a minimum implementation cost. Named event construction can still be
+forbidden during the scalar query while observed history/Table generation later
+uses the same ordinary complete branches.
+
+### Same-input local comparison, including negative timing evidence
+
+`public-moment-local-results.json` contains10 fresh bounded workers: four
+complete initial-five public Forecast/Table queries, and the actual original
+seven input's execute4/bite1 five-alive premorning scalar. Cache-off is the SAME
+new public-numerator formula with no retained cache, so this isolates reuse,
+not a claim of a controlled whole-request comparison against79564c7's old
+arithmetic. All values agree; initial-five named actions/dawn rows and both
+Table hashes agree. Action/value expansions are unchanged. Development wrappers
+count numerator builds and applications; no production instrumentation was added.
+
+| case | work off -> on | numerator builds off -> on | seconds off -> on |
+| --- | --- | --- | --- |
+| single | 1021 ->919 | 33 ->19 | .107735 ->.094068 |
+| dual | 1445 ->1283 | 24 ->18 | .099255 ->.059636 |
+| three | 6653 ->5073 | 36 ->20 | .208371 ->.267520 |
+| medium-pair | 1761 ->1323 | 144 ->54 | .150118 ->.134080 |
+| actual execute4/bite1 | 5779 ->4469 | 300 ->130 | .308400 ->.306580 |
+
+These are single samples while related regression work ran concurrently. The
+three-seer timing is WORSE with cache; actual-prefix timing is nearly unchanged.
+Therefore a stable wall-time improvement is NOT established. Work and repeated
+build counts decrease in every matched pair. Peak working-set off/on bytes are
+34,410,496/34,373,632;34,443,264/34,410,496;35,057,664/35,102,720;
+34,291,712/34,488,320;35,811,328/35,983,360 respectively. The small memory
+increases and noise are reported rather than presented as a memory saving.
+
+### One final changed seven request, still incomplete
+
+After local validation, exactly ONE final-code actual original initial-seven
+MAX Forecast was attempted. Input hash remains
+a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2.
+`public-moment-seven-results.json` records a work stop at250006/250000 after
+11.180932s, peak working set97,148,928 bytes and private committed87,363,584 bytes.
+There is no complete scalar/Forecast/Table, no larger-limit retry and no
+cache-capacity tuning via repeated seven runs. Historical3487/7200 remains a
+historical anchor only. This run differs in work progression/accounted vector
+application from the earlier stopped run, so their elapsed times are not an
+equal-work or complete-request speed comparison.
+
+Observed applications6062, numerator builds3784 (all completed), cached reuse
+2278. Built public fiber rows15778; P input rows16952. Retention is128 vectors /
+516 rows, below both capacities. There are3704 compiled kernels, so at least80
+build calls revisit a previously built key (a lower bound; some compiled kernels
+might never be queried). Exact queried-key/eviction/oversize counts were not
+recorded, so this bound alone does not identify all cache misses or justify
+capacity tuning. We did not enlarge the cache or assume distinct public
+kernels/histories are semantically interchangeable.
+
+Remaining observed uncached action expansions:7day3,6night56,5day3421,4night5186
+(total8666); their input Q+P row totals36,392,17204,15594. Value expansions2458
+(2454 completed values),941 acquisition entries,1754 wolf policies,15 mornings,
+21 ordinary publication entries. Named terminal event laws remain0; the scalar
+path still does not replace observed branch materialization. These counts are
+not CPU-time shares, total work shares or a proof of global dominance. Upstream
+nonterminal MAX and numerous distinct Q/report contexts remain. Any next
+cross-context reduction must first prove equality of future information sets,
+legal targets, configured policy and joint observations; it may not drop live
+secret history/public past or share keys by marginals to force completion.
+
+The final configured-fake-policy noncollision test also compares the same Q
+under noncontradictory/uniform versus uniform fake kernels against independent
+complete enumeration: distinct results stay distinct. `public-moment-validation.json`
+retains the46-test log, source hashes, all five exact matched local comparisons,
+bounded-cache checks and2278 reuse count. Final production hashes match BOTH
+local and seven measurements. Existing artifacts/previews remain untouched.

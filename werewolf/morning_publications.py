@@ -4,7 +4,7 @@ Generation receives the public joint prior, never viewer-conditioned evidence.
 """
 from dataclasses import dataclass
 from itertools import product,combinations,combinations_with_replacement
-from collections import Counter
+from collections import Counter,OrderedDict
 from math import factorial,prod
 from fractions import Fraction as F
 from .seer_acquisition import Hypothesis,SeerReport,normalize
@@ -142,6 +142,24 @@ def _plan_multisets(players,options):
         yield tuple(zip(players,plans)),multiplicity
 
 
+class PublicMomentCache:
+    """Calculation-owned LRU, bounded by entry count and retained fiber rows."""
+    def __init__(self,max_entries=128,max_rows=4096):
+        self.max_entries=max_entries;self.max_rows=max_rows;self.entries=OrderedDict();self.rows=0
+
+    def get(self,key):
+        if key not in self.entries:return None
+        self.entries.move_to_end(key)
+        return self.entries[key]
+
+    def put(self,key,value):
+        if len(value)>self.max_rows or self.max_entries<1:return
+        if key in self.entries:self.rows-=len(self.entries.pop(key))
+        while self.entries and (len(self.entries)>=self.max_entries or self.rows+len(value)>self.max_rows):
+            _,old=self.entries.popitem(last=False);self.rows-=len(old)
+        self.entries[key]=value;self.rows+=len(value)
+
+
 class CompiledPublications:
     """Public-source-owned exact event cache and orderly reporter allocations."""
     def __init__(self,state,board,past,reporters,indexed,fake_chances,options,seed):
@@ -154,38 +172,46 @@ class CompiledPublications:
             self.public_rows[reports]=(child,history)
         self.stats={'candidates':0,'built_vectors':0,'emitted_vectors':0,'named_vectors_covered':0}
 
-    def terminal_execution_value(self,private,targets,*,incomplete):
-        """Joint report moments for final one-wolf execution, without posteriors.
-
-        Choose each complete event's public face before weighting its private
-        payoff. The original correlated truth/fake index supplies all masses.
-        Named event/history caches remain untouched.
-        """
+    def terminal_execution_value(self,private,targets,*,incomplete,cache=None):
+        """Apply P to a Q-owned final-execution payoff numerator, never rerank."""
         from .information_weights import observer_projection_ratios
-        from .policy_choice import optimal_targets
+        tick(0)
         ratios=observer_projection_ratios(self.state,private,incomplete=incomplete)
-        value=F();public_mass=F();private_mass=F()
+        targets=tuple(targets);key=(self,targets)
+        moments=cache.get(key) if cache is not None else None
+        if moments is None:
+            moments=self.terminal_execution_moments(targets,incomplete=incomplete)
+            if cache is not None:cache.put(key,moments)
+        tick(len(moments))  # P application remains charged even on a cache hit.
+        return sum((ratios.get(fiber,F())*mass for fiber,mass in moments),F())
+
+    def terminal_execution_moments(self,targets,*,incomplete):
+        """M_Q(x)=sum_e J_e^Q(x) r(x,argmax_Q(e)); complete joint events.
+
+        Kept separate from P weighting and named event/history construction.
+        Return only a completed immutable fiber vector; interrupted builds are
+        never installed in the calculation-owned bounded cache.
+        """
+        from .policy_choice import optimal_targets
+        moments={};public_mass=F()
         for selection in product(*(self.options[p] for p in self.reporters)):
-            tick();plans=tuple(zip(self.reporters,selection))
-            public={t:F() for t in targets};own={t:F() for t in targets}
+            tick();plans=tuple(zip(self.reporters,selection));public={t:F() for t in targets};rows={}
             for fakes,chances in self.fake_chances.items():
-                fake=tuple(pair for pair in plans if pair[0] in fakes)
-                chance=chances.get(fake,F())
+                fake=tuple(pair for pair in plans if pair[0] in fakes);chance=chances.get(fake,F())
                 if not chance:continue
                 truth=tuple(pair for pair in plans if pair[0] not in fakes)
                 for h in self.indexed[fakes].get(truth,()):
-                    tick();mass=h.mass*chance
-                    public_mass+=mass
-                    private_mass+=mass*ratios.get((h.roles,h.acquisitions),F())
+                    tick();mass=h.mass*chance;public_mass+=mass
+                    fiber=(h.roles,h.acquisitions);rows[fiber]=rows.get(fiber,F())+mass
                     for t in targets:
-                        if h.roles[0]&(1<<(t-1)):
-                            public[t]+=mass
-                            own[t]+=mass*ratios.get((h.roles,h.acquisitions),F())
+                        if h.roles[0]&(1<<(t-1)):public[t]+=mass
             if any(public.values()):
                 chosen=optimal_targets(tuple(public.items()),maximize=True)
-                value+=sum((own[t] for t in chosen),F())/len(chosen)
-        if public_mass!=1 or private_mass!=1:raise incomplete()
-        return value
+                for fiber,mass in rows.items():
+                    payoff=F(sum(bool(fiber[0][0]&(1<<(t-1))) for t in chosen),len(chosen))
+                    moments[fiber]=moments.get(fiber,F())+mass*payoff
+        if public_mass!=1:raise incomplete()
+        return tuple(moments.items())
 
     def event(self,plans):
         if plans in self.events:return self.events[plans]

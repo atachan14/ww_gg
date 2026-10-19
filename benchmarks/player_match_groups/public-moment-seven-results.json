@@ -1,0 +1,98 @@
+{
+  "scope": "seven",
+  "measurements": [
+    {
+      "completed_at": "2026-10-19T08:54:15.834735+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 12.09843459998956,
+      "samples": 581,
+      "peak_private_committed_bytes": 87363584,
+      "observed_peak_working_set_bytes": 97148928,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "wwgg_budget_stop kind=work work=250006 max_work=250000 elapsed_seconds=11.172\r\n",
+      "worker": {
+        "kind": "seven",
+        "mode": "on",
+        "completed": false,
+        "input_sha256": "a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2",
+        "status": "budget_stopped",
+        "reason": "work",
+        "stop": {
+          "kind": "work",
+          "work": 250006,
+          "max_work": 250000,
+          "elapsed_seconds": 11.172
+        },
+        "seconds": 11.180931699986104,
+        "moments": {
+          "calls": 6062,
+          "private_rows": 16952,
+          "builds": 3784,
+          "public_build_rows": 15778,
+          "completed_builds": 3784,
+          "built_fibers": 15778
+        },
+        "uncached_actions_by_phase": {
+          "7-day": 3,
+          "6-night": 56,
+          "5-day": 3421,
+          "4-night": 5186
+        },
+        "action_input_hypotheses_by_phase": {
+          "7-day": 36,
+          "6-night": 392,
+          "5-day": 17204,
+          "4-night": 15594
+        },
+        "states": {
+          "values": 2454,
+          "actions": 8662,
+          "expansions": {
+            "actions": 8666,
+            "values": 2458
+          },
+          "acquired": 941,
+          "mornings": 15,
+          "publications": 21,
+          "policies": 1754,
+          "saved_sources": 0,
+          "resolution_cache": 8666,
+          "target_orbits": {
+            "target_members": 0,
+            "target_representatives": 0
+          },
+          "report_vectors": {
+            "kernels": 3704,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 304,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "cache": {
+          "entries": 128,
+          "rows": 516,
+          "max_entries": 128,
+          "max_rows": 4096
+        }
+      },
+      "progress": []
+    }
+  ],
+  "note": "Same work/time/memory/watchdog limits. Development wrappers count Q vector builds and P applications; no production instrumentation.",
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "64b05cc09af334416dfb3afe29112db196d0ff2404417c1648ebd7b4a9e81c47",
+    "werewolf\\morning_publications.py": "cd3073a80f76e0e70a7730cf7ab30d667d83fba211e7ac42c6b9be856b23764e",
+    "werewolf\\information_weights.py": "f7b70136135a742ac81080b49f185b90e859493cd5c5915d1c295bb140c78ef9"
+  }
+}

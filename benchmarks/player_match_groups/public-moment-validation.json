@@ -1,0 +1,112 @@
+{
+  "at": "2026-10-19T09:00:18.265465+00:00",
+  "related_tests": {
+    "count": 46,
+    "seconds": 11.549,
+    "log": "test_capacity_eviction_and_oversized_uncached_values_are_exact (tests.test_public_moment_cache.PublicMomentCacheTests.test_capacity_eviction_and_oversized_uncached_values_are_exact) ... ok\ntest_complete_forecast_tables_reports_cold_and_cache_disabled (tests.test_public_moment_cache.PublicMomentCacheTests.test_complete_forecast_tables_reports_cold_and_cache_disabled) ... ok\ntest_configured_fake_policy_is_owned_by_each_public_kernel (tests.test_public_moment_cache.PublicMomentCacheTests.test_configured_fake_policy_is_owned_by_each_public_kernel) ... ok\ntest_different_public_sources_histories_named_targets_and_calculations_do_not_collide (tests.test_public_moment_cache.PublicMomentCacheTests.test_different_public_sources_histories_named_targets_and_calculations_do_not_collide) ... ok\ntest_initial_full_private_forecasts_match_in_reversed_view_order (tests.test_public_moment_cache.PublicMomentCacheTests.test_initial_full_private_forecasts_match_in_reversed_view_order) ... ok\ntest_partial_build_is_not_cached_and_warm_hits_poll_resource_stops (tests.test_public_moment_cache.PublicMomentCacheTests.test_partial_build_is_not_cached_and_warm_hits_poll_resource_stops) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nwwgg_budget_stop kind=time work=0 max_work=100 elapsed_seconds=100.0\nok\ntest_private_order_uncached_and_independent_joint_enumeration (tests.test_public_moment_cache.PublicMomentCacheTests.test_private_order_uncached_and_independent_joint_enumeration) ... ok\ntest_same_public_scalar_different_Q_weights_do_not_share_private_values (tests.test_public_moment_cache.PublicMomentCacheTests.test_same_public_scalar_different_Q_weights_do_not_share_private_values) ... ok\ntest_zero_payoff_is_supported_and_unknown_private_input_still_refuses_on_hit (tests.test_public_moment_cache.PublicMomentCacheTests.test_zero_payoff_is_supported_and_unknown_private_input_still_refuses_on_hit) ... ok\ntest_diagnostic_and_uniform_boundaries_keep_original_state (tests.test_dead_history_scalar.DeadHistoryScalarTests.test_diagnostic_and_uniform_boundaries_keep_original_state) ... ok\ntest_public_private_tables_named_actions_cold_and_cache_remain_full (tests.test_dead_history_scalar.DeadHistoryScalarTests.test_public_private_tables_named_actions_cold_and_cache_remain_full) ... ok\ntest_quotient_cannot_create_support_for_an_unknown_dead_secret (tests.test_dead_history_scalar.DeadHistoryScalarTests.test_quotient_cannot_create_support_for_an_unknown_dead_secret) ... ok\ntest_warm_scalar_projection_polls_cancellation (tests.test_dead_history_scalar.DeadHistoryScalarTests.test_warm_scalar_projection_polls_cancellation) ... ok\ntest_blind_dead_owner_deletion_breaks_future_personal_observation (tests.test_dead_history_design.DeadHistoryDesignTests.test_blind_dead_owner_deletion_breaks_future_personal_observation) ... ok\ntest_next_public_payoff_moments_keep_private_measures_separate (tests.test_dead_history_design.DeadHistoryDesignTests.test_next_public_payoff_moments_keep_private_measures_separate) ... ok\ntest_public_live_seer_wolf_and_dead_observer_are_distinct (tests.test_dead_history_design.DeadHistoryDesignTests.test_public_live_seer_wolf_and_dead_observer_are_distinct) ... ok\ntest_public_only_recursive_experiment_matches_ordinary_named_values (tests.test_dead_history_design.DeadHistoryDesignTests.test_public_only_recursive_experiment_matches_ordinary_named_values) ... ok\ntest_surviving_own_history_is_not_an_exchangeable_dead_record (tests.test_dead_history_design.DeadHistoryDesignTests.test_surviving_own_history_is_not_an_exchangeable_dead_record) ... ok\ntest_cached_kernel_still_obeys_cancellation_and_work_limit (tests.test_terminal_max_report.TerminalMaxReportTests.test_cached_kernel_still_obeys_cancellation_and_work_limit) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nok\ntest_complete_forecast_tables_history_and_cache_match_ordinary (tests.test_terminal_max_report.TerminalMaxReportTests.test_complete_forecast_tables_history_and_cache_match_ordinary) ... ok\ntest_future_owner_observation_matches_expanded_path (tests.test_terminal_max_report.TerminalMaxReportTests.test_future_owner_observation_matches_expanded_path) ... ok\ntest_initial_max_day_night_and_reports_match_ordinary (tests.test_terminal_max_report.TerminalMaxReportTests.test_initial_max_day_night_and_reports_match_ordinary) ... ok\ntest_max_does_not_use_uniform_constant_or_target_orbits (tests.test_terminal_max_report.TerminalMaxReportTests.test_max_does_not_use_uniform_constant_or_target_orbits) ... ok\ntest_medium_conditioning_precedes_surviving_fake_seer_kernel (tests.test_terminal_max_report.TerminalMaxReportTests.test_medium_conditioning_precedes_surviving_fake_seer_kernel) ... ok\ntest_opt_in_and_nonterminal_diagnostic_boundaries (tests.test_terminal_max_report.TerminalMaxReportTests.test_opt_in_and_nonterminal_diagnostic_boundaries) ... ok\ntest_tied_medium_instructions_merge_before_private_evaluation (tests.test_terminal_max_report.TerminalMaxReportTests.test_tied_medium_instructions_merge_before_private_evaluation) ... ok\ntest_zero_private_support_and_zero_mass_public_undefined_family_refuse (tests.test_terminal_max_report.TerminalMaxReportTests.test_zero_private_support_and_zero_mass_public_undefined_family_refuse) ... ok\ntest_cached_indices_still_poll_cancellation_time_and_exhausted_work (tests.test_terminal_report_integral.TerminalReportIntegralTests.test_cached_indices_still_poll_cancellation_time_and_exhausted_work) ... wwgg_budget_stop kind=time work=0 max_work=100 elapsed_seconds=100.016\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.016\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.016\nok\ntest_observed_joint_reports_and_tables_remain_after_warming_scalar_indices (tests.test_terminal_report_integral.TerminalReportIntegralTests.test_observed_joint_reports_and_tables_remain_after_warming_scalar_indices) ... ok\ntest_opt_in_and_unsupported_modes_use_ordinary_path (tests.test_terminal_report_integral.TerminalReportIntegralTests.test_opt_in_and_unsupported_modes_use_ordinary_path) ... ok\ntest_private_zero_support_and_public_undefined_families_still_refuse (tests.test_terminal_report_integral.TerminalReportIntegralTests.test_private_zero_support_and_public_undefined_families_still_refuse) ... ok\ntest_twelve_joint_cases_match_independent_reference_without_event_construction (tests.test_terminal_report_integral.TerminalReportIntegralTests.test_twelve_joint_cases_match_independent_reference_without_event_construction) ... ok\ntest_valid_future_scan_is_applied_before_integral_and_invalid_one_stays_pending (tests.test_terminal_report_integral.TerminalReportIntegralTests.test_valid_future_scan_is_applied_before_integral_and_invalid_one_stays_pending) ... ok\ntest_all_ties_keep_original_instruction_mass_and_merge_public_vectors (tests.test_report_max_choice.ReportMaxChoiceTests.test_all_ties_keep_original_instruction_mass_and_merge_public_vectors) ... ok\ntest_incomplete_report_evaluation_is_not_selected_or_cached (tests.test_report_max_choice.ReportMaxChoiceTests.test_incomplete_report_evaluation_is_not_selected_or_cached) ... ok\ntest_legacy_wolf_owner_keeps_public_report_ranking_and_all_rows (tests.test_report_max_choice.ReportMaxChoiceTests.test_legacy_wolf_owner_keeps_public_report_ranking_and_all_rows) ... ok\ntest_unique_min_uses_whole_instruction_expectation_before_selection (tests.test_report_max_choice.ReportMaxChoiceTests.test_unique_min_uses_whole_instruction_expectation_before_selection) ... ok\ntest_future_scans_cannot_be_given_to_wolf_before_bite (tests.test_default_max_design.DefaultMaxDesignTests.test_future_scans_cannot_be_given_to_wolf_before_bite) ... ok\ntest_max_and_report_average_do_not_commute (tests.test_default_max_design.DefaultMaxDesignTests.test_max_and_report_average_do_not_commute) ... ok\ntest_named_joint_report_faces_match_normalized_reference (tests.test_default_max_design.DefaultMaxDesignTests.test_named_joint_report_faces_match_normalized_reference) ... ok\ntest_public_face_must_not_be_reselected_using_private_p (tests.test_default_max_design.DefaultMaxDesignTests.test_public_face_must_not_be_reselected_using_private_p) ... ok\ntest_tied_medium_instructions_must_merge_before_day_choice (tests.test_default_max_design.DefaultMaxDesignTests.test_tied_medium_instructions_must_merge_before_day_choice) ... ok\ntest_documentation_has_no_external_runtime_or_raw_html_code (tests.test_help_program.ProgramHelpTests.test_documentation_has_no_external_runtime_or_raw_html_code) ... ok\ntest_fixture_matches_exact_formula_and_existing_public_solver (tests.test_help_program.ProgramHelpTests.test_fixture_matches_exact_formula_and_existing_public_solver) ... ok\ntest_pages_links_anchors_and_game_are_stable (tests.test_help_program.ProgramHelpTests.test_pages_links_anchors_and_game_are_stable) ... ok\ntest_reference_symbols_and_tests_exist (tests.test_help_program.ProgramHelpTests.test_reference_symbols_and_tests_exist) ... ok\n\n----------------------------------------------------------------------\nRan 46 tests in 11.549s\n\nOK\n"
+  },
+  "local_comparisons": [
+    {
+      "kind": "single",
+      "exact_results_equal": true,
+      "work_off_on": [
+        1021,
+        919
+      ],
+      "builds_off_on": [
+        33,
+        19
+      ],
+      "seconds_off_on": [
+        0.10773549997247756,
+        0.09406830003717914
+      ]
+    },
+    {
+      "kind": "dual",
+      "exact_results_equal": true,
+      "work_off_on": [
+        1445,
+        1283
+      ],
+      "builds_off_on": [
+        24,
+        18
+      ],
+      "seconds_off_on": [
+        0.0992549000075087,
+        0.05963580001844093
+      ]
+    },
+    {
+      "kind": "three",
+      "exact_results_equal": true,
+      "work_off_on": [
+        6653,
+        5073
+      ],
+      "builds_off_on": [
+        36,
+        20
+      ],
+      "seconds_off_on": [
+        0.20837080001365393,
+        0.2675198000506498
+      ]
+    },
+    {
+      "kind": "medium-pair",
+      "exact_results_equal": true,
+      "work_off_on": [
+        1761,
+        1323
+      ],
+      "builds_off_on": [
+        144,
+        54
+      ],
+      "seconds_off_on": [
+        0.15011809999123216,
+        0.13407999998889863
+      ]
+    },
+    {
+      "kind": "actual-prefix",
+      "exact_results_equal": true,
+      "work_off_on": [
+        5779,
+        4469
+      ],
+      "builds_off_on": [
+        300,
+        130
+      ],
+      "seconds_off_on": [
+        0.3084004999836907,
+        0.30658029997721314
+      ]
+    }
+  ],
+  "seven_completed": false,
+  "seven_stop": {
+    "kind": "work",
+    "work": 250006,
+    "max_work": 250000,
+    "elapsed_seconds": 11.172
+  },
+  "seven_q_reuses": 2278,
+  "retained_cache": {
+    "entries": 128,
+    "rows": 516,
+    "max_entries": 128,
+    "max_rows": 4096
+  },
+  "source_sha256": {
+    "werewolf/morning_publications.py": "cd3073a80f76e0e70a7730cf7ab30d667d83fba211e7ac42c6b9be856b23764e",
+    "werewolf/grouped_forecast.py": "64b05cc09af334416dfb3afe29112db196d0ff2404417c1648ebd7b4a9e81c47",
+    "tests/test_public_moment_cache.py": "ad005b7a930591fcd824783f9d95039efa5d067fdbff09b0190c9b675bfae26e",
+    "tests/test_terminal_max_report.py": "def0252d7e2fa4cfc4f621b18abbcf829018b3c3fc7f831b254bac775efe6f98",
+    "benchmarks/player_match_groups/public_moment_probe.py": "ca2eb73ba295b182a02ccbb02fee4c27099c8c9907bfd510ebe4ccf37dbb80ae"
+  },
+  "limitations": "Single timings with concurrent tests; stable wall-time benefit not established. One whole seven attempt only, work-stopped. No all-repository run or complete independent seven reference."
+}

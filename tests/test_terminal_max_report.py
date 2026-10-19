@@ -183,8 +183,10 @@ class TerminalMaxReportTests(unittest.TestCase):
         stopped=Event();stopped.set()
         with cancellation_scope(stopped),self.assertRaises(CalculationCancelled):
             e.action_policy.morning_value(n.read())
-        with calculation_budget(1,max_seconds=30),self.assertRaises(CalculationBudgetExceeded):
-            e.action_policy.morning_value(n.read())
+        from werewolf.calculation_budget import tick
+        with calculation_budget(1,max_seconds=30):
+            with self.assertRaises(CalculationBudgetExceeded):tick(2)
+            with self.assertRaises(CalculationBudgetExceeded):e.action_policy.morning_value(n.read())
 
     def test_max_does_not_use_uniform_constant_or_target_orbits(self):
         c,n=make('single',3);e=c._ClosedCalculation__engine
