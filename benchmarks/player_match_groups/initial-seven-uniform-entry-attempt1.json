@@ -1,0 +1,25 @@
+{
+  "completed_at": "2026-10-19T04:04:52.046754+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. No scope guard is removed.",
+  "supervisor_seconds": 35.00564089999534,
+  "samples": 1716,
+  "peak_private_committed_bytes": 16437248,
+  "observed_peak_working_set_bytes": 26267648,
+  "termination": "watchdog_time_limit",
+  "returncode": 1,
+  "stderr": "",
+  "partial_stdout": "",
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "b3eb8a949d9afd1b3a264b1fdebecaf8063d14adfe7641cf440e89f48f0aaf64",
+    "werewolf\\grouped_forecast.py": "3caac47120541786e4414e8fa76de403a475572f1f2e643cb8c1b021e0f78a09",
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "benchmarks\\player_match_groups\\initial_seven_entry_probe.py": "cc851d0339d3e9aee6991d281a45e66e6137568c3b4cc9b273d3c855f9f47548"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status": "passed",
+  "tests": 11,
+  "seconds": 8.495,
+  "completed_at": "2026-10-19T04:06:48.547807+00:00",
+  "command": "python -X utf8 -m unittest tests.test_report_vectors tests.test_wolf_cell_orbits.WolfCellOrbitTests.test_original_seven_structured_scan_view_keeps_joint_conditional_future tests.test_wolf_cell_orbits.WolfCellOrbitTests.test_dead_teammates_keep_different_information_and_policy_denominators",
+  "log_sha256": "f940da8d60ebc1a6b6fbff735b8c9542267d5b4151ac2370a96294777da7b92a"
+}

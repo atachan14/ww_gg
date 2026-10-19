@@ -1,0 +1,492 @@
+{
+  "completed_at": "2026-10-19T04:05:24.734165+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. No scope guard is removed.",
+  "supervisor_seconds": 0.45404490001965314,
+  "samples": 21,
+  "peak_private_committed_bytes": 16527360,
+  "observed_peak_working_set_bytes": 26796032,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "stage": "root_forecast",
+    "value": null,
+    "forecast_completed": false,
+    "game": {
+      "claim_policy": {
+        "medium": "filled",
+        "villager": "filled",
+        "wolf": "none"
+      },
+      "claims": [
+        "seer",
+        "seer",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "history": [],
+      "hunters": 0,
+      "mediums": 1,
+      "model": "group",
+      "players": 7,
+      "policy": {
+        "day": "random",
+        "fake_reports": "random",
+        "include_self_bite": false,
+        "night": "random"
+      },
+      "public_log": {
+        "acquisition_provenance": [
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 1,
+            "source": "b1:e3",
+            "target": 4
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 2,
+            "source": "b1:e4",
+            "target": 4
+          }
+        ],
+        "base_claims": [
+          [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ]
+        ],
+        "base_medium": [],
+        "base_seer": [],
+        "batches": [
+          {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "board_graph": {
+          "archives": [
+            {
+              "ancestor_path": [
+                "a9fa0d2110a9b962:board:1"
+              ],
+              "generation": 1,
+              "nodes": {
+                "a9fa0d2110a9b962:board:1": {
+                  "active": true,
+                  "branch": 1,
+                  "children": [],
+                  "day": 1,
+                  "edge": null,
+                  "generation": 0,
+                  "id": "a9fa0d2110a9b962:board:1",
+                  "input_revision": 0,
+                  "legacy_claims": [
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent"
+                  ],
+                  "legacy_medium": [],
+                  "legacy_seer": [],
+                  "local_batches": [],
+                  "parent": null,
+                  "phase": "day",
+                  "revision": 0,
+                  "slot": 0
+                }
+              },
+              "owner": "a9fa0d2110a9b962:board:1",
+              "retired_roots": [],
+              "settings": {
+                "claim_policy": {
+                  "medium": "filled",
+                  "villager": "filled",
+                  "wolf": "none"
+                },
+                "hunters": 0,
+                "mediums": 1,
+                "model": "group",
+                "players": 7,
+                "policy": {
+                  "day": "max",
+                  "fake_reports": "max",
+                  "include_self_bite": false,
+                  "night": "max"
+                },
+                "rules": {
+                  "allow_repeat_guard": true,
+                  "allow_self_bite": false,
+                  "initial_seer": "random_white"
+                },
+                "seers": 1,
+                "wolves": 2
+              }
+            }
+          ],
+          "current": "a9fa0d2110a9b962:board:1",
+          "game_id": "a9fa0d2110a9b962",
+          "generation": 1,
+          "invalidated": [
+            "a9fa0d2110a9b962:board:1"
+          ],
+          "next_board": 2,
+          "next_branch": 2,
+          "nodes": {
+            "a9fa0d2110a9b962:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "content_generation": 1,
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "a9fa0d2110a9b962:board:1",
+              "input_revision": 1,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [
+                {
+                  "board_id": "a9fa0d2110a9b962:board:1",
+                  "day": 1,
+                  "events": [
+                    {
+                      "action": "assert",
+                      "id": "b1:e0",
+                      "kind": "co",
+                      "player": 1,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e1",
+                      "kind": "co",
+                      "player": 2,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e2",
+                      "kind": "co",
+                      "player": 3,
+                      "role": "medium"
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e3",
+                      "kind": "seer",
+                      "player": 1,
+                      "target": 4
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e4",
+                      "kind": "seer",
+                      "player": 2,
+                      "target": 4
+                    }
+                  ],
+                  "id": 1,
+                  "mode": "simultaneous",
+                  "phase": "day",
+                  "slot": 0
+                }
+              ],
+              "parent": null,
+              "phase": "day",
+              "retired_children": [],
+              "revision": 1,
+              "slot": 0
+            }
+          },
+          "root": "a9fa0d2110a9b962:board:1"
+        },
+        "board_id": "a9fa0d2110a9b962:board:1",
+        "branch_id": 1,
+        "has_local_legacy": false,
+        "legacy": false,
+        "local_batches": [
+          {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "local_legacy": {
+          "claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "medium": [],
+          "seer": []
+        },
+        "next_id": 2,
+        "report_publications": {
+          "seer:1:1": {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          },
+          "seer:1:2": {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          }
+        },
+        "retired_input_reports": [],
+        "version": 2
+      },
+      "reports": [],
+      "result_disclosure_model": "full-observed-v1",
+      "revision": 1,
+      "rules": {
+        "allow_repeat_guard": true,
+        "allow_self_bite": false,
+        "initial_seer": "random_white"
+      },
+      "seer_inputs": [
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 1,
+          "target": 4
+        },
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 2,
+          "target": 4
+        }
+      ],
+      "seer_mode": "information-fixed-v1",
+      "seer_options": {
+        "initial_rule": "random_white",
+        "likelihood": "compatibility"
+      },
+      "seers": 1,
+      "selection": null,
+      "wolves": 2
+    },
+    "game_sha256": "cd7337d45a43d1da4363cd1f7095e811fa15034c2210d80bf026648511bfa584",
+    "initial_joint_hypotheses": 6,
+    "groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5,
+        6,
+        7
+      ]
+    ],
+    "initial_independent_source_equal": true,
+    "initial_alive": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "initial_phase": "day",
+    "initial_day": 1,
+    "status": "unsupported",
+    "reason": "closed_forecast_four_alive_limit",
+    "budget": {
+      "work": 24,
+      "max_work": 250000,
+      "elapsed_seconds": 0.015
+    },
+    "seconds": 0.027802600001450628,
+    "peak_working_set_bytes": 26791936,
+    "states": {
+      "values": 0,
+      "actions": 0,
+      "expansions": {
+        "actions": 0,
+        "values": 0
+      },
+      "acquired": 0,
+      "mornings": 0,
+      "publications": 0,
+      "policies": 0,
+      "saved_sources": 0,
+      "resolution_cache": 0,
+      "target_orbits": {
+        "target_members": 0,
+        "target_representatives": 0
+      },
+      "report_vectors": {
+        "kernels": 0,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 0,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    }
+  },
+  "progress": [
+    {
+      "progress_stage": "imports"
+    },
+    {
+      "progress_stage": "input"
+    },
+    {
+      "progress_stage": "independent_initial_preparation"
+    },
+    {
+      "progress_stage": "closed_constructor"
+    },
+    {
+      "progress_stage": "root_forecast"
+    }
+  ],
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "b3eb8a949d9afd1b3a264b1fdebecaf8063d14adfe7641cf440e89f48f0aaf64",
+    "werewolf\\grouped_forecast.py": "3caac47120541786e4414e8fa76de403a475572f1f2e643cb8c1b021e0f78a09",
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "benchmarks\\player_match_groups\\initial_seven_entry_probe.py": "523145be132144536234537c83a86d3529221a8b18969189d6d5646feb70aa04"
+  }
+}
