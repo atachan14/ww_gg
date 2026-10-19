@@ -1,0 +1,540 @@
+{
+  "scope": "Development only; four complete five-player public MAX inputs and a terminal-only exposed-fake experiment. No seven run, no nonterminal suppression. Exclusive work categories are disjoint nested budget deltas, not CPU timings. Root action events include scoring/cache/output calls; event work is inclusive and must not be added to exclusive categories.",
+  "initial_requests": [
+    {
+      "kind": "single",
+      "value": "2/3",
+      "complete": true,
+      "forecast_work": 512,
+      "setup_work": 18,
+      "exclusive_work": {
+        "acquisition": 106,
+        "report": 286,
+        "evaluation": 104
+      },
+      "outside_wrappers_work": 16,
+      "calls": {
+        "solve": 4,
+        "act": 30,
+        "wolf_policy": 11,
+        "acquire": 42,
+        "terminal_report_value": 18,
+        "publication_kernel": 36
+      },
+      "root_action_events": [
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 25,
+          "value": "1/3",
+          "work": 47,
+          "finished_work": 72
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 72,
+          "value": "2/3",
+          "work": 123,
+          "finished_work": 195
+        },
+        {
+          "target": 3,
+          "observer": "None",
+          "completed": true,
+          "started_work": 195,
+          "value": "1/3",
+          "work": 127,
+          "finished_work": 322
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 322,
+          "value": "2/3",
+          "work": 1,
+          "finished_work": 323
+        },
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 323,
+          "value": "1/3",
+          "work": 1,
+          "finished_work": 324
+        },
+        {
+          "target": 3,
+          "observer": "None",
+          "completed": true,
+          "started_work": 324,
+          "value": "1/3",
+          "work": 1,
+          "finished_work": 325
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 325,
+          "value": "2/3",
+          "work": 1,
+          "finished_work": 326
+        }
+      ],
+      "stats": {
+        "values": 4,
+        "actions": 21,
+        "expansions": {
+          "actions": 21,
+          "values": 4
+        },
+        "acquired": 15,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 24,
+        "target_orbits": {
+          "target_members": 11,
+          "target_representatives": 7,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 8
+        },
+        "report_vectors": {
+          "kernels": 10,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      }
+    },
+    {
+      "kind": "dual",
+      "value": "1",
+      "complete": true,
+      "forecast_work": 676,
+      "setup_work": 10,
+      "exclusive_work": {
+        "acquisition": 62,
+        "report": 541,
+        "evaluation": 61
+      },
+      "outside_wrappers_work": 12,
+      "calls": {
+        "solve": 4,
+        "act": 23,
+        "wolf_policy": 8,
+        "acquire": 34,
+        "terminal_report_value": 12,
+        "publication_kernel": 24
+      },
+      "root_action_events": [
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 16,
+          "value": "1",
+          "work": 54,
+          "finished_work": 70
+        },
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 70,
+          "value": "1",
+          "work": 1,
+          "finished_work": 71
+        },
+        {
+          "target": 3,
+          "observer": "None",
+          "completed": true,
+          "started_work": 71,
+          "value": "1/2",
+          "work": 181,
+          "finished_work": 252
+        },
+        {
+          "target": 4,
+          "observer": "None",
+          "completed": true,
+          "started_work": 252,
+          "value": "1/2",
+          "work": 290,
+          "finished_work": 542
+        }
+      ],
+      "stats": {
+        "values": 4,
+        "actions": 15,
+        "expansions": {
+          "actions": 15,
+          "values": 4
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 20,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 8,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 5
+        },
+        "report_vectors": {
+          "kernels": 9,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      }
+    },
+    {
+      "kind": "three",
+      "value": "2/3",
+      "complete": true,
+      "forecast_work": 3538,
+      "setup_work": 12,
+      "exclusive_work": {
+        "acquisition": 284,
+        "report": 3130,
+        "evaluation": 106
+      },
+      "outside_wrappers_work": 18,
+      "calls": {
+        "solve": 4,
+        "act": 32,
+        "wolf_policy": 11,
+        "acquire": 56,
+        "terminal_report_value": 18,
+        "publication_kernel": 36
+      },
+      "root_action_events": [
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 21,
+          "value": "2/3",
+          "work": 292,
+          "finished_work": 313
+        },
+        {
+          "target": 4,
+          "observer": "None",
+          "completed": true,
+          "started_work": 313,
+          "value": "1/2",
+          "work": 1137,
+          "finished_work": 1450
+        },
+        {
+          "target": 5,
+          "observer": "None",
+          "completed": true,
+          "started_work": 1450,
+          "value": "1/2",
+          "work": 1137,
+          "finished_work": 2587
+        },
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 2587,
+          "value": "2/3",
+          "work": 1,
+          "finished_work": 2588
+        },
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 2588,
+          "value": "2/3",
+          "work": 1,
+          "finished_work": 2589
+        },
+        {
+          "target": 4,
+          "observer": "None",
+          "completed": true,
+          "started_work": 2589,
+          "value": "1/2",
+          "work": 1,
+          "finished_work": 2590
+        },
+        {
+          "target": 5,
+          "observer": "None",
+          "completed": true,
+          "started_work": 2590,
+          "value": "1/2",
+          "work": 1,
+          "finished_work": 2591
+        }
+      ],
+      "stats": {
+        "values": 4,
+        "actions": 21,
+        "expansions": {
+          "actions": 21,
+          "values": 4
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 31,
+        "target_orbits": {
+          "target_members": 14,
+          "target_representatives": 8,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 8
+        },
+        "report_vectors": {
+          "kernels": 10,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      }
+    },
+    {
+      "kind": "medium-pair",
+      "value": "1",
+      "complete": true,
+      "forecast_work": 1153,
+      "setup_work": 10,
+      "exclusive_work": {
+        "acquisition": 87,
+        "report": 956,
+        "evaluation": 97
+      },
+      "outside_wrappers_work": 13,
+      "calls": {
+        "solve": 5,
+        "act": 37,
+        "wolf_policy": 11,
+        "acquire": 50,
+        "terminal_report_value": 21,
+        "report_outcomes": 21,
+        "publication_kernel": 162
+      },
+      "root_action_events": [
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 15,
+          "value": "1/2",
+          "work": 90,
+          "finished_work": 105
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 105,
+          "value": "1",
+          "work": 143,
+          "finished_work": 248
+        },
+        {
+          "target": 1,
+          "observer": "None",
+          "completed": true,
+          "started_work": 248,
+          "value": "1/2",
+          "work": 1,
+          "finished_work": 249
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 249,
+          "value": "1",
+          "work": 1,
+          "finished_work": 250
+        },
+        {
+          "target": 4,
+          "observer": "None",
+          "completed": true,
+          "started_work": 250,
+          "value": "1/2",
+          "work": 305,
+          "finished_work": 555
+        },
+        {
+          "target": 5,
+          "observer": "None",
+          "completed": true,
+          "started_work": 555,
+          "value": "1/2",
+          "work": 305,
+          "finished_work": 860
+        }
+      ],
+      "stats": {
+        "values": 5,
+        "actions": 25,
+        "expansions": {
+          "actions": 25,
+          "values": 5
+        },
+        "acquired": 13,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 29,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 11,
+          "solver_wolf_cells": 4,
+          "solver_wolf_hypotheses": 7
+        },
+        "report_vectors": {
+          "kernels": 48,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      }
+    }
+  ],
+  "terminal_exposed_experiment": [
+    {
+      "mode": "expanded",
+      "value": "1",
+      "work": 38,
+      "exclusive_work": {
+        "report": 20,
+        "evaluation": 18
+      },
+      "root_action_events": [
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 32,
+          "value": "1",
+          "work": 2,
+          "finished_work": 34
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 35,
+          "value": "1",
+          "work": 2,
+          "finished_work": 37
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 38,
+          "value": "1",
+          "work": 2,
+          "finished_work": 40
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 41,
+          "value": "1",
+          "work": 2,
+          "finished_work": 43
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 44,
+          "value": "1",
+          "work": 2,
+          "finished_work": 46
+        },
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 47,
+          "value": "1",
+          "work": 2,
+          "finished_work": 49
+        }
+      ],
+      "source_preserved": true,
+      "cold_equal": true
+    },
+    {
+      "mode": "moments",
+      "value": "1",
+      "work": 21,
+      "exclusive_work": {
+        "report": 21
+      },
+      "root_action_events": [],
+      "source_preserved": true,
+      "cold_equal": true
+    },
+    {
+      "mode": "terminal-skip",
+      "value": "1",
+      "work": 3,
+      "exclusive_work": {
+        "evaluation": 3
+      },
+      "root_action_events": [
+        {
+          "target": 2,
+          "observer": "None",
+          "completed": true,
+          "started_work": 12,
+          "value": "1",
+          "work": 2,
+          "finished_work": 14
+        }
+      ],
+      "source_preserved": true,
+      "cold_equal": true
+    }
+  ],
+  "production_candidate": "NOT ADOPTED: terminal-only sufficient condition does not establish nonterminal history/policy sufficiency.",
+  "at": 1792406093.6339827,
+  "source_sha256": {
+    "werewolf/grouped_forecast.py": "e9eae79c92d5f794e5d4334e377142da2befac7742bc4a80fcde8586c388baff",
+    "werewolf/morning_publications.py": "cd3073a80f76e0e70a7730cf7ab30d667d83fba211e7ac42c6b9be856b23764e",
+    "werewolf/seer_fake_uniform.py": "382f959a2e2f82a50436ddabdffd2a7d756f93ae6be52f956df543215c704ae0",
+    "werewolf/information_set_forecast.py": "7a2d91308873fe67f8e98b7c898fcf8b618343e96e3532fdd40db76fc5ae622d",
+    "benchmarks/player_match_groups/exposed_fake_channel.py": "c20c559a93a1e0bef9f96284aaf16c91026a81c482b922e5bee8cf08cfbdad9f"
+  }
+}

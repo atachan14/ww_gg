@@ -1512,3 +1512,111 @@ root action start/finish/work snapshots and exclusive report-channel counters.
 First validate that instrumentation on existing small complete requests. It
 must share the original single calculation budget; no resume/sharding, raised
 limit, or repeated seven request is performed as part of this assessment.
+
+
+## 2026-10-19: exposed-fake channel development experiment; not adopted
+
+Implemented DEVELOPMENT instrumentation in `exposed_fake_channel.py`, without
+changing production. Each of four complete five-player public MAX requests
+keeps a shared250000work/30second budget. Every root action records target,
+start/finish work, completion and result, including repeated cache/scoring/output
+calls. Nested method inclusive work minus all measured child work gives disjoint
+exclusive categories. Report category includes common publication generation,
+medium report scoring, compiled kernels and terminal moments; evaluation called
+inside a report scorer is charged to evaluation, acquisitions to acquisition.
+It is not a fake-only percentage or CPU time. Unwrapped outer work is explicit.
+
+| current complete5 input | setup | Forecast work | report | acquisition | evaluation | outside wrappers |
+| --- | --- | --- | --- | --- | --- | --- |
+| single |18|512|286|106|104|16|
+| dual |10|676|541|62|61|12|
+| three |12|3538|3130|284|106|18|
+| medium-pair |10|1153|956|87|97|13|
+| total |50|5879|4913|539|368|59|
+
+All root action events finish, including cache hits. Nontrivial root calls and
+their inclusive work are single1:47,2:123,3:127; dual1:54,3:181,4:290;
+three1:292,4:1137,5:1137; medium-pair1:90,2:143,4:305,5:305. Extra1work events
+are recorded, not treated as fresh expansions. Each event's inclusive work is
+part of the exclusive totals above, so these two summaries must not be added.
+Complete Forecast work is not the sum of the named initial scoring calls:
+additional public/private continuation and Horizon work remains in the request.
+This fixes instrumentation on small requests only; no new seven/partial-seven
+request, shard, resume or altered ceiling was run.
+
+### Formula and proof boundary
+
+Let X include the full public history, Q, branch P, physical state and observer.
+For the proposed report R, public exposure can establish
+K(R=r|h,X)=k(r|X) on every positive-Q full hidden history h. This gives
+Q_r(h)=Q(h) and P_r(h)=P(h) when the same channel applies to P and all support
+checks succeed. It does NOT imply V(X,r) is independent of r.
+
+The scalar is S(X)=sum_r k(r|X)V(X,r). Replacing the whole channel by one
+continuation requires a sufficient retained state T: legal actions, configured
+policy (including MAX tie distributions), physical payoffs and all future
+information-conditioned transition kernels must factor through T, preserving
+selected-owner records. For a shared target action vector it requires the
+same values for every action, not merely equal maxima. Induction can then prove
+V(X,r)=v(T(X)) for every supported r; only then does S(X)=v(T(X)).
+
+Counterexamples in development tests distinguish what this claim does and does
+not cover:
+
+* An independent fair white/black public signal can select a history-configured
+  wait/finish policy with payoffs0/1. Its expectation1/2 differs from retaining
+  the white row0. This is a mathematical counterexample, not a new supported
+  game policy.
+* Public-history-dependent action scores(1,0) and(0,1) give E[max]=1 while
+  max(E[scores])=1/2. Independence of the hidden prior does not remove history
+  from the Bellman decision problem.
+* The ACTUAL approved fake_uniform_options uses own previously reported targets.
+  After initial fake2:black3, future options include target4; after publishing
+  fake2:white4, target4 is excluded while unvisited targets remain. Both kernels
+  are normalized and role-independent, but their future report distributions
+  differ. Deleting or replacing that public record changes a real transition.
+  This is a transition counterexample, not a demonstrated numerical difference
+  for a correctly proved stronger quotient under the current fixed policies.
+* An actual still-possibly-true seer report changes full Q and terminal MAX
+  values across children. Its observations cannot be treated as known-fake noise.
+* Missing the original declaration disables existing retirement validation;
+  selected-owner input and nonterminal input are excluded from the experiment.
+
+Thus the proposed simple nonterminal suppression fails its sufficient-history
+contract. A more powerful quotient might sum successive noise channels while
+retaining history sufficient statistics, but this experiment does not establish
+that theorem, count its eligible cases, or justify connecting it to production.
+Do not flip the old retirement flag: its continuation_context drops past and its
+role projection is not a proof of preserving every observer/private-history field.
+
+### Safe terminal boundary and measured benefit
+
+A small, COMMON-GENERATED source starts with5 players, dual seer claims,
+initial1:white3 and2:black3 under random-white initial rules. Execute1 and
+bite3 through common named generators;3 survivors remain and2 is publicly
+exposed as fake. All next executions terminate, no medium report is due, and
+no selected observer is present. Enumerating all fake reports leaves COMPLETE
+Q/P posteriors unchanged (past changes), so each current action score and MAX
+policy are invariant; no later legal/history policy remains after execution.
+
+Independent fully named report enumeration, existing moments and a
+DEVELOPMENT-ONLY terminal skip all give value1, with work38 /21 /3. Full current
+Forecast/Table, named report rows, source immutability and fresh cold source
+also agree. This gain is18work relative to the existing terminal path, in an
+already certain-win terminal example. It supplies no nontrivial five-alive
+continuation saving and no bound on the seven backlog.
+
+Decision: do NOT adopt the nonterminal candidate or connect the tiny terminal
+experiment to production. The proven boundary is narrower than the proposed
+branch-family reduction; a special terminal case for this limited gain would
+not solve the identified five-day/four-night cost. Production remains the
+existing common evaluator/moment formula, with no added assurance scans,
+ledgers, new evaluator, limit/default/publication change. Any future candidate
+must retain/report the actual seen-target and owner/history dependencies and
+prove the common full-history quotient before an opt-in connection.
+
+Seven development tests pass in0.084s. `exposed-fake-channel-results.json`
+retains every root event and report attribution;
+`exposed-fake-channel-validation.json` embeds the test log, exact sum checks,
+hashes and production-unchanged verification. No broad production regression
+rerun is claimed because production was not edited.

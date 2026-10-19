@@ -1,0 +1,26 @@
+{
+  "at": "2026-10-19T10:37:14.792472+00:00",
+  "summary": {
+    "forecast_work": 5879,
+    "setup_work": 50,
+    "outside_wrappers_work": 59,
+    "exclusive_work": {
+      "report": 4913,
+      "acquisition": 539,
+      "evaluation": 368
+    }
+  },
+  "tests": {
+    "count": 7,
+    "seconds": 0.084,
+    "log": "test_actual_fake_future_target_law_uses_report_history (tests.test_exposed_fake_channel.ExposedFakeChannelTests.test_actual_fake_future_target_law_uses_report_history) ... ok\ntest_disjoint_cost_accounting_and_root_completion_events (tests.test_exposed_fake_channel.ExposedFakeChannelTests.test_disjoint_cost_accounting_and_root_completion_events) ... ok\ntest_independent_noise_cannot_be_averaged_before_max_without_action_invariance (tests.test_exposed_fake_channel.ExposedFakeChannelTests.test_independent_noise_cannot_be_averaged_before_max_without_action_invariance) ... ok\ntest_observer_initial_declaration_and_nonterminal_boundaries (tests.test_exposed_fake_channel.ExposedFakeChannelTests.test_observer_initial_declaration_and_nonterminal_boundaries) ... ok\ntest_role_independence_alone_does_not_preserve_history_policy_value (tests.test_exposed_fake_channel.ExposedFakeChannelTests.test_role_independence_alone_does_not_preserve_history_policy_value) ... ok\ntest_terminal_only_full_enumeration_equal_source_cold_and_named_outputs (tests.test_exposed_fake_channel.ExposedFakeChannelTests.test_terminal_only_full_enumeration_equal_source_cold_and_named_outputs) ... ok\ntest_true_report_changes_posterior_and_future_max_value (tests.test_exposed_fake_channel.ExposedFakeChannelTests.test_true_report_changes_posterior_and_future_max_value) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.084s\n\nOK\n"
+  },
+  "production_matches490df94_measurement": true,
+  "candidate": "Nonterminal suppression NOT ADOPTED; terminal-only development experiment is not connected to production.",
+  "boundary": "Actual configured fake history changes its future target law; abstract history-policy and max counterexamples refute independence-alone proof. These do NOT claim a numerical counterexample to every possible full-history quotient under current fixed policies.",
+  "source_sha256": {
+    "benchmarks\\player_match_groups\\exposed_fake_channel.py": "c20c559a93a1e0bef9f96284aaf16c91026a81c482b922e5bee8cf08cfbdad9f",
+    "benchmarks\\player_match_groups\\exposed-fake-channel-results.json": "0aaa1b8bc62d514113f817c342254b70f3b5ac2a1baee365fb709d70300a33b8",
+    "tests\\test_exposed_fake_channel.py": "b12666a40758289c68bd6bbb5a0bf161691bdcde5352e4df6b70dc6415cb843a"
+  }
+}
