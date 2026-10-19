@@ -1,0 +1,423 @@
+{
+  "status": "verified",
+  "repeats": 5,
+  "scope": "one saved uniform daytime execution with unchanged complete initial public conditions; four-alive public Forecast",
+  "summary": {
+    "ordinary": {
+      "seconds_median": 0.04576100001577288,
+      "seconds_min": 0.040171400003600866,
+      "seconds_max": 0.05883340002037585,
+      "peak_bytes_median": 33959936,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "saved_sources": 22,
+        "resolution_cache": 33
+      }
+    },
+    "generated": {
+      "seconds_median": 0.02808110002661124,
+      "seconds_min": 0.02629700000397861,
+      "seconds_max": 0.0317345000221394,
+      "peak_bytes_median": 33927168,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      }
+    },
+    "saved": {
+      "seconds_median": 0.0316154999891296,
+      "seconds_min": 0.02925449999747798,
+      "seconds_max": 0.0446290000109002,
+      "peak_bytes_median": 33808384,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      }
+    }
+  },
+  "runs": [
+    {
+      "mode": "ordinary",
+      "seconds": 0.04576100001577288,
+      "peak_bytes": 34013184,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "saved_sources": 22,
+        "resolution_cache": 33
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": null,
+        "observed_prefix": 0
+      },
+      "repeat": 0
+    },
+    {
+      "mode": "generated",
+      "seconds": 0.029310799960512668,
+      "peak_bytes": 33984512,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 0
+    },
+    {
+      "mode": "saved",
+      "seconds": 0.0316154999891296,
+      "peak_bytes": 33751040,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 0
+    },
+    {
+      "mode": "generated",
+      "seconds": 0.0317345000221394,
+      "peak_bytes": 33927168,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 1
+    },
+    {
+      "mode": "saved",
+      "seconds": 0.0446290000109002,
+      "peak_bytes": 33656832,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 1
+    },
+    {
+      "mode": "ordinary",
+      "seconds": 0.05883340002037585,
+      "peak_bytes": 33894400,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "saved_sources": 22,
+        "resolution_cache": 33
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": null,
+        "observed_prefix": 0
+      },
+      "repeat": 1
+    },
+    {
+      "mode": "saved",
+      "seconds": 0.031185699976049364,
+      "peak_bytes": 33849344,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 2
+    },
+    {
+      "mode": "ordinary",
+      "seconds": 0.04606790002435446,
+      "peak_bytes": 33959936,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "saved_sources": 22,
+        "resolution_cache": 33
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": null,
+        "observed_prefix": 0
+      },
+      "repeat": 2
+    },
+    {
+      "mode": "generated",
+      "seconds": 0.02808110002661124,
+      "peak_bytes": 33734656,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 2
+    },
+    {
+      "mode": "ordinary",
+      "seconds": 0.040617199963890016,
+      "peak_bytes": 34258944,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "saved_sources": 22,
+        "resolution_cache": 33
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": null,
+        "observed_prefix": 0
+      },
+      "repeat": 3
+    },
+    {
+      "mode": "generated",
+      "seconds": 0.02629700000397861,
+      "peak_bytes": 33923072,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 3
+    },
+    {
+      "mode": "saved",
+      "seconds": 0.035827199986670166,
+      "peak_bytes": 33951744,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 3
+    },
+    {
+      "mode": "generated",
+      "seconds": 0.02639950002776459,
+      "peak_bytes": 33931264,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 4
+    },
+    {
+      "mode": "saved",
+      "seconds": 0.02925449999747798,
+      "peak_bytes": 33808384,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "expansions": {
+          "actions": 32,
+          "values": 10
+        },
+        "acquired": 2,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 0,
+        "resolution_cache": 34
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": [
+          1
+        ],
+        "observed_prefix": 1
+      },
+      "repeat": 4
+    },
+    {
+      "mode": "ordinary",
+      "seconds": 0.040171400003600866,
+      "peak_bytes": 33873920,
+      "states": {
+        "values": 10,
+        "actions": 63,
+        "saved_sources": 22,
+        "resolution_cache": 33
+      },
+      "digest": "b5624c42a7247c944e6b60f79a040309753f69102cc36c26d351964d0b4a0ca9",
+      "law_config": {
+        "tracked": null,
+        "observed_prefix": 0
+      },
+      "repeat": 4
+    }
+  ],
+  "raw_configuration_difference": "ordinary saved root uses tracked=None/observed_prefix=0; canonical generated replay retains initial tracked/prefix, never overwrites them",
+  "full_initial7_search": false,
+  "ledger_used": false,
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "130deafec404bad2b351e4f088ad19105aca840fb11adf016328aa5ab8665386",
+    "benchmarks\\player_match_groups\\closed_saved_day_fixture.py": "a257ac46f58d0a4323ebe5406bd771bd08a4df912c91b1b12ef327d2071c9644"
+  }
+}

@@ -802,6 +802,10 @@ if __name__=='__main__':
     elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':
         from .closed_calculation_fixture import audit as closed_audit,run as closed_measure
         if '--reference' in sys.argv:raise SystemExit('Ledger reference comparison is historical; use measure_shared_transition.compare_boundary directly')
-        if '--measure' in sys.argv:closed_measure()
+        if '--measure' in sys.argv:
+            if '--saved-day' in sys.argv:
+                from .closed_saved_day_fixture import run as saved_day_measure
+                saved_day_measure()
+            else:closed_measure()
         else:closed_audit()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

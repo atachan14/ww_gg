@@ -1,0 +1,13 @@
+{
+  "status": "passed",
+  "tests": 15,
+  "runner_seconds": 3.649,
+  "modules": [
+    "tests.test_closed_calculation",
+    "tests.test_closed_saved_day",
+    "tests.test_shared_transition_provenance",
+    "tests.test_owner_information_provenance"
+  ],
+  "selected_audit": "inherited-groups verified; existing two cases plus saved-day canonical/cold comparison",
+  "diff_check": "passed"
+}

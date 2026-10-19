@@ -1,5 +1,108 @@
 {
   "status": "verified",
+  "saved_day": {
+    "status": "verified",
+    "unit": "one saved uniform daytime execution; unchanged complete initial public conditions",
+    "rows": [
+      {
+        "players": 5,
+        "entry_probability": "2/15",
+        "groups": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            3
+          ]
+        ],
+        "canonical_full_state_equal": true,
+        "independent_cold_equal": true,
+        "ordinary_complete_hypotheses_equal": true,
+        "canonical_config": {
+          "tracked": [
+            1
+          ],
+          "observed_prefix": 1
+        },
+        "ordinary_config": {
+          "tracked": null,
+          "observed_prefix": 0
+        },
+        "Forecast_Table_equal": true,
+        "states": {
+          "values": 10,
+          "actions": 63,
+          "expansions": {
+            "actions": 32,
+            "values": 10
+          },
+          "acquired": 2,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 2,
+          "saved_sources": 0,
+          "resolution_cache": 34
+        }
+      },
+      {
+        "players": 7,
+        "entry_probability": "1/7",
+        "groups": [
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            5,
+            6,
+            7
+          ]
+        ],
+        "canonical_full_state_equal": true,
+        "independent_cold_equal": true,
+        "ordinary_complete_hypotheses_equal": true,
+        "canonical_config": {
+          "tracked": [
+            1,
+            2
+          ],
+          "observed_prefix": 1
+        },
+        "ordinary_config": {
+          "tracked": null,
+          "observed_prefix": 0
+        },
+        "night_next_unit_counterexample": {
+          "target": 4,
+          "choice_probabilities": [
+            "1/4",
+            "1/5"
+          ],
+          "observation_mass": "9/40",
+          "two_wolves_prior": "1/2",
+          "two_wolves_after_observed_choice": "5/9"
+        }
+      }
+    ],
+    "nighttime_saved_entry": false,
+    "ledger_used": false,
+    "full_initial7_search": false
+  },
   "cases": [
     {
       "case": "five-owner-night",
@@ -10,72 +113,72 @@
             "file": "board_future.py",
             "function": "kernel_snapshot",
             "calls": 58,
-            "self_seconds": 0.0003642,
-            "cumulative_seconds": 0.0011162000000000001
+            "self_seconds": 0.0003623,
+            "cumulative_seconds": 0.0011746
           },
           {
             "file": "board_future.py",
             "function": "remember",
             "calls": 66,
-            "self_seconds": 0.0003244,
-            "cumulative_seconds": 0.0027636
+            "self_seconds": 0.00033570000000000003,
+            "cumulative_seconds": 0.0028745000000000003
           },
           {
             "file": "board_future.py",
             "function": "register_origin",
             "calls": 58,
-            "self_seconds": 0.0001944,
-            "cumulative_seconds": 0.0042972
+            "self_seconds": 0.0002,
+            "cumulative_seconds": 0.0039332
           },
           {
             "file": "board_future.py",
             "function": "condition_recipe",
             "calls": 3,
-            "self_seconds": 0.00016600000000000002,
-            "cumulative_seconds": 0.0026820000000000004
+            "self_seconds": 0.00015460000000000002,
+            "cumulative_seconds": 0.0024028
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_child",
             "calls": 24,
-            "self_seconds": 0.0001395,
-            "cumulative_seconds": 0.019395000000000003
+            "self_seconds": 0.0001377,
+            "cumulative_seconds": 0.0193906
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_publication",
             "calls": 8,
-            "self_seconds": 8.75e-05,
-            "cumulative_seconds": 0.0053263
+            "self_seconds": 0.00011200000000000001,
+            "cumulative_seconds": 0.005619900000000001
           },
           {
             "file": "board_future.py",
             "function": "roles",
             "calls": 26,
-            "self_seconds": 5.33e-05,
-            "cumulative_seconds": 0.023704700000000002
+            "self_seconds": 5.7900000000000005e-05,
+            "cumulative_seconds": 0.0238709
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_information",
             "calls": 4,
-            "self_seconds": 2.3500000000000002e-05,
-            "cumulative_seconds": 0.0023184
+            "self_seconds": 2.33e-05,
+            "cumulative_seconds": 0.0022982000000000002
           }
         ],
         "ledger_retained_entries": {},
         "case": "five-owner-night",
         "tracked": false,
         "diagnostic": true,
-        "body_seconds": 0.10126989998389035,
+        "body_seconds": 0.09987769997678697,
         "phase_seconds": {
-          "common_setup_seconds": 0.022732700046617538,
-          "root_guarantee_and_registration_seconds": 6.430002395063639e-05,
-          "finite_common_kernels_seconds": 0.006404200044926256,
-          "Forecast_Table_seconds": 0.07190059998538345
+          "common_setup_seconds": 0.022890400025062263,
+          "root_guarantee_and_registration_seconds": 6.629998097196221e-05,
+          "finite_common_kernels_seconds": 0.006456899980548769,
+          "Forecast_Table_seconds": 0.07030019996454939
         },
-        "process_peak_working_set_bytes_until_timed_end": 34693120,
-        "process_peak_before_bytes": 33591296,
+        "process_peak_working_set_bytes_until_timed_end": 34746368,
+        "process_peak_before_bytes": 33738752,
         "states": {
           "values": 8,
           "actions": 31,
@@ -105,15 +208,15 @@
         "case": "five-owner-night",
         "mode": "closed",
         "diagnostic": true,
-        "body_seconds": 0.03255629999330267,
+        "body_seconds": 0.027551499952096492,
         "phase_seconds": {
-          "common_setup_seconds": 0.0029808999970555305,
-          "closed_open_seconds": 0.0022090999991633,
-          "finite_common_kernels_seconds": 0.0012410999624989927,
-          "Forecast_Table_seconds": 0.01726059999782592
+          "common_setup_seconds": 0.00367279996862635,
+          "closed_open_seconds": 0.001403900037985295,
+          "finite_common_kernels_seconds": 0.001409199961926788,
+          "Forecast_Table_seconds": 0.01588860002811998
         },
-        "process_peak_before_bytes": 35987456,
-        "process_peak_working_set_bytes_until_timed_end": 36073472,
+        "process_peak_before_bytes": 36122624,
+        "process_peak_working_set_bytes_until_timed_end": 36188160,
         "states": {
           "values": 8,
           "actions": 31,
@@ -151,72 +254,72 @@
             "file": "board_future.py",
             "function": "kernel_snapshot",
             "calls": 62,
-            "self_seconds": 0.000371,
-            "cumulative_seconds": 0.0011645000000000002
+            "self_seconds": 0.0003681,
+            "cumulative_seconds": 0.0011238
           },
           {
             "file": "board_future.py",
             "function": "remember",
             "calls": 70,
-            "self_seconds": 0.00033190000000000004,
-            "cumulative_seconds": 0.0028994000000000003
+            "self_seconds": 0.0002993,
+            "cumulative_seconds": 0.0028914
           },
           {
             "file": "board_future.py",
             "function": "condition_recipe",
             "calls": 2,
-            "self_seconds": 0.0002969,
-            "cumulative_seconds": 0.0044476
+            "self_seconds": 0.00019360000000000002,
+            "cumulative_seconds": 0.0037875
           },
           {
             "file": "board_future.py",
             "function": "register_origin",
             "calls": 51,
-            "self_seconds": 0.0002946,
-            "cumulative_seconds": 0.0058363
+            "self_seconds": 0.0001908,
+            "cumulative_seconds": 0.005083000000000001
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_publication",
             "calls": 8,
-            "self_seconds": 9.27e-05,
-            "cumulative_seconds": 0.0063374
+            "self_seconds": 8.850000000000001e-05,
+            "cumulative_seconds": 0.0062542000000000006
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_child",
             "calls": 8,
-            "self_seconds": 4.85e-05,
-            "cumulative_seconds": 0.0083183
+            "self_seconds": 5.4300000000000005e-05,
+            "cumulative_seconds": 0.009499200000000001
           },
           {
             "file": "board_future.py",
             "function": "roles",
             "calls": 17,
-            "self_seconds": 4.5e-05,
-            "cumulative_seconds": 0.0210458
+            "self_seconds": 3.44e-05,
+            "cumulative_seconds": 0.0181637
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_information",
             "calls": 5,
-            "self_seconds": 3.6400000000000004e-05,
-            "cumulative_seconds": 0.008263000000000001
+            "self_seconds": 2.57e-05,
+            "cumulative_seconds": 0.0042729000000000005
           }
         ],
         "ledger_retained_entries": {},
         "case": "seven-owner-three",
         "tracked": false,
         "diagnostic": true,
-        "body_seconds": 0.20635190000757575,
+        "body_seconds": 0.20046560000628233,
         "phase_seconds": {
-          "common_setup_seconds": 0.10769660002551973,
-          "root_guarantee_and_registration_seconds": 9.089999366551638e-05,
-          "finite_common_kernels_seconds": 0.06451799999922514,
-          "Forecast_Table_seconds": 0.03389489999972284
+          "common_setup_seconds": 0.10841879999497905,
+          "root_guarantee_and_registration_seconds": 0.00010629999451339245,
+          "finite_common_kernels_seconds": 0.058011299988720566,
+          "Forecast_Table_seconds": 0.03379259997745976
         },
-        "process_peak_working_set_bytes_until_timed_end": 36204544,
-        "process_peak_before_bytes": 36073472,
+        "process_peak_working_set_bytes_until_timed_end": 36384768,
+        "process_peak_before_bytes": 36188160,
         "states": {
           "values": 6,
           "actions": 18,
@@ -246,15 +349,15 @@
         "case": "seven-owner-three",
         "mode": "closed",
         "diagnostic": true,
-        "body_seconds": 0.07904829998733476,
+        "body_seconds": 0.07181330001913011,
         "phase_seconds": {
-          "common_setup_seconds": 0.0457713000359945,
-          "closed_open_seconds": 0.010633900004904717,
-          "finite_common_kernels_seconds": 0.012294100015424192,
-          "Forecast_Table_seconds": 0.00985560001572594
+          "common_setup_seconds": 0.0398875999962911,
+          "closed_open_seconds": 0.009152400016319007,
+          "finite_common_kernels_seconds": 0.013741199974901974,
+          "Forecast_Table_seconds": 0.00860960001591593
         },
-        "process_peak_before_bytes": 37560320,
-        "process_peak_working_set_bytes_until_timed_end": 37560320,
+        "process_peak_before_bytes": 37793792,
+        "process_peak_working_set_bytes_until_timed_end": 37801984,
         "states": {
           "values": 6,
           "actions": 18,

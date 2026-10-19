@@ -17,7 +17,7 @@ from .information_set_forecast import InformationSetForecast,Pending
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
 from .actor_information import PersonalInformation,WolfInformation,wolf_information_groups
 from .seer_intervention import SeerObserver
-from .exact import Strategy,legal_targets
+from .exact import Strategy,ClaimPolicy,legal_targets
 from .action_flow import resolve_action
 from .forecast_result import Forecast
 from .calculation_budget import calculation_budget,tick,DEFAULT_MAX_WORK,DEFAULT_MAX_SECONDS
@@ -37,6 +37,39 @@ def _owner_positions(info,n):
     if type(info)is WolfInformation:
         return tuple(p for p in range(1,n+1) if info.initial_roster&(1<<(p-1)))+tuple(a.target for a in info.attacks)
     return (info.actor,*(a.target for a in info.acquisitions),*((info.target,) if type(info)is SeerObserver else ()))
+
+
+def _entry_origin(data,game,strategy):
+    """Decode one saved daytime observation; no hidden policy substitution."""
+    history=game.get('history',())
+    if not history:return data,None
+    if len(history)!=1:raise Pending('closed_saved_night_or_multiple_steps_pending')
+    step=history[0];target=step.get('target')
+    if type(target)is not int or set(step)&{'observation','deaths'}:
+        raise Pending('closed_saved_nonstandard_observation_pending')
+    cp=ClaimPolicy(**game.get('claim_policy',{}))
+    if (Strategy(**step.get('policy',{}))!=strategy
+        or tuple(step.get('claims',()))!=tuple(game.get('claims',()))
+        or ClaimPolicy(**step.get('claim_policy',{}))!=cp
+        or step.get('result_disclosure_model')!=game.get('result_disclosure_model')
+        or step.get('seer_options',game.get('seer_options'))!=game.get('seer_options')
+        or game.get('result_disclosure_model')!='full-observed-v1'
+        or {r.get('reporter') for r in game.get('seer_inputs',())}!=set(p for p,c in enumerate(game.get('claims',()),1) if c=='seer')
+        or any(r.get('target') is None or r.get('color') is None for r in game.get('seer_inputs',()))
+        or 'filled' not in cp.conditions('seer')
+        or tuple(game.get('claims',())).count('seer')<game.get('seers',0)
+        or game.get('reports') or any(r.get('day')!=1 for r in game.get('seer_inputs',()))):
+        raise Pending('closed_saved_public_or_policy_change_pending')
+    log=game.get('public_log',{})
+    if any(b.get('slot',0)>0 for b in log.get('batches',())):
+        raise Pending('closed_saved_late_public_event_pending')
+    from types import SimpleNamespace
+    from .result_disclosure import snapshot
+    before,_=snapshot(game,SimpleNamespace(day=1,phase='day'),tuple(game['claims']))
+    after,_=snapshot(game,SimpleNamespace(day=1,phase='night'),tuple(game['claims']))
+    if before!=tuple(game['claims']) or after!=before:
+        raise Pending('closed_saved_late_public_event_pending')
+    return data.updated(history=[]),target
 
 
 @dataclass(frozen=True)
@@ -65,18 +98,21 @@ class WolfChoice:
 
 
 class ClosedCalculation:
-    __slots__=('__data','__strategy','__engine','__root','__max_work','__max_seconds')
+    __slots__=('__data','__strategy','__engine','__root','__max_work','__max_seconds','__origin_data','__entry_probability')
 
     def __init__(self,data,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
         if type(data)is not BoardData:raise TypeError('Saved immutable BoardData required')
         game=data.to_game();strategy=Strategy(**game['policy'])
-        if (game.get('history') or game.get('hunters',0) or game.get('model')!='group'
+        if (game.get('hunters',0) or game.get('model')!='group'
             or game.get('seer_mode')!='information-fixed-v1'
             or game.get('seer_options',{}).get('likelihood')!='compatibility'
             or game.get('seer_options',{}).get('initial_rule')!='random_white'
             or (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3
             or strategy.disclosure_for('seer')!='all' or strategy.disclosure_for('medium')!='all'):
             raise Pending('closed_initial_uniform_H0_snapshot_only')
+        origin_data,saved_target=_entry_origin(data,game,strategy)
+        object.__setattr__(self,'_ClosedCalculation__origin_data',origin_data)
+        object.__setattr__(self,'_ClosedCalculation__entry_probability',F(1))
         object.__setattr__(self,'_ClosedCalculation__data',data)
         object.__setattr__(self,'_ClosedCalculation__strategy',strategy)
         object.__setattr__(self,'_ClosedCalculation__max_work',max_work)
@@ -85,24 +121,37 @@ class ClosedCalculation:
         engine.retain_joint_guard_history=True
         object.__setattr__(self,'_ClosedCalculation__engine',engine)
         with calculation_budget(max_work,max_seconds=max_seconds):
-            tick(0);source=SavedOrigin(data,engine.rules,strategy,project_public=False)()
-        if source.public.day!=1 or source.public.phase!='day' or source.public.history:
-            raise Pending('closed_initial_snapshot_required')
-        # The initial saved group model is generated symmetrically within claim
-        # classes; every named published endpoint is fixed. No arbitrary law or
-        # caller-supplied partition can enter this constructor.
-        fixed={p for r in source.past for p in (r.player,r.target)}
-        fixed.update(p for r in source.public.reports for p in (r.reporter,r.target))
-        classes={}
-        for p,claim in enumerate(source.public.claims,1):classes.setdefault((claim,p if p in fixed else None),[]).append(p)
-        groups=tuple(tuple(v) for v in classes.values())
-        object.__setattr__(self,'_ClosedCalculation__root',self.__node(source,groups,()))
+            tick(0);source=SavedOrigin(origin_data,engine.rules,strategy,project_public=False)()
+            if source.public.day!=1 or source.public.phase!='day' or source.public.history:
+                raise Pending('closed_initial_snapshot_required')
+            # The initial saved group model is generated symmetrically within claim
+            # classes; every named published endpoint is fixed. No arbitrary law or
+            # caller-supplied partition can enter this constructor.
+            fixed={p for r in source.past for p in (r.player,r.target)}
+            fixed.update(p for r in source.public.reports for p in (r.reporter,r.target))
+            classes={}
+            for p,claim in enumerate(source.public.claims,1):classes.setdefault((claim,p if p in fixed else None),[]).append(p)
+            groups=tuple(tuple(v) for v in classes.values())
+            root=self.__node(source,groups,())
+            if saved_target is not None:
+                # Day policy is uniform across the same legal targets in every
+                # world, so its constant cancels in conditioning. Keep its event
+                # mass distinct from the normalized continuation distribution.
+                choices=legal_targets(source.physical,engine.rules,strategy)
+                rows=root.action(saved_target)
+                selected=next((r for r in rows if r.node.read().public.winner is None),None)
+                if selected is None:raise Pending('closed_saved_continuation_zero_support')
+                root=selected.node
+                object.__setattr__(self,'_ClosedCalculation__entry_probability',selected.probability/len(choices))
+            object.__setattr__(self,'_ClosedCalculation__root',root)
 
     def __setattr__(self,name,value):raise AttributeError('Open a new calculation for changed inputs')
     @property
     def data(self):return self.__data
     @property
     def root(self):return self.__root
+    @property
+    def entry_probability(self):return self.__entry_probability
 
     def stats(self):
         e=self.__engine
@@ -203,7 +252,7 @@ class _Node:
         # the live calculation through exported evidence or its engine fields.
         e=InformationSetForecast(self.__calculation.data.game_data.rules,self.__calculation._ClosedCalculation__strategy,exact_renaming=False,retire_uninformative_scans=False)
         e.retain_joint_guard_history=True
-        origin=SavedOrigin(self.__calculation.data,e.rules,e.strategy,project_public=False);request=GeneratedBoard(origin)
+        origin=SavedOrigin(self.__calculation._ClosedCalculation__origin_data,e.rules,e.strategy,project_public=False);request=GeneratedBoard(origin)
         for operation in self.__path:
             if operation[0]=='owner':step=OwnerInformationEvidence(operation[1],operation[2])
             elif operation[0]=='action':step=ActionEvidence(e,operation[1],operation[2],False)
