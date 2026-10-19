@@ -1,0 +1,188 @@
+{
+  "completed_at": "2026-10-19T05:59:59.895168+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 15.381378400023095,
+  "samples": 515,
+  "peak_private_committed_bytes": 60051456,
+  "observed_peak_working_set_bytes": 71004160,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "forecast_completed": true,
+    "value": "2/15",
+    "forecast": "Forecast(village_win=Fraction(2, 15), action_values=((1, Fraction(2, 15)), (2, Fraction(2, 15)), (3, Fraction(2, 15)), (5, Fraction(2, 15)), (6, Fraction(2, 15)), (7, Fraction(2, 15))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (6, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (7, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+    "budget": {
+      "work": 138347,
+      "max_work": 250000,
+      "elapsed_seconds": 13.391
+    },
+    "mode": "optimized",
+    "seconds": 13.391418399987742,
+    "budget_stop": null,
+    "counts": {
+      "solve_calls": 14288,
+      "act_calls": 2341,
+      "act_target_members": 10148,
+      "act_inherited_blocks": 9556,
+      "terminal_uniform_day_calls": 13645
+    },
+    "phases": {
+      "(1, 'night', 6)": 1,
+      "(2, 'day', 5)": 172,
+      "(2, 'night', 4)": 470,
+      "(3, 'day', 3)": 13645
+    },
+    "report_partitions": {
+      "(1, ())": 1424,
+      "(0, ())": 542,
+      "(2, ())": 762,
+      "(2, (2,))": 4
+    },
+    "partition_examples": {
+      "(2, ())": {
+        "alive": [
+          1,
+          2,
+          5,
+          6,
+          7
+        ],
+        "groups": [
+          [
+            2
+          ],
+          [
+            1
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            6,
+            7
+          ],
+          [
+            5
+          ]
+        ],
+        "past": [
+          "SeerReport(acquired_day=1, published_day=1, player=1, target=4, color='white')",
+          "SeerReport(acquired_day=1, published_day=1, player=2, target=4, color='white')"
+        ],
+        "public_reports": [],
+        "partition": [],
+        "hypotheses": null
+      },
+      "(2, (2,))": {
+        "alive": [
+          1,
+          2,
+          5,
+          6,
+          7
+        ],
+        "groups": [
+          [
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4
+          ],
+          [
+            5,
+            6,
+            7
+          ]
+        ],
+        "past": [
+          "SeerReport(acquired_day=1, published_day=1, player=1, target=4, color='white')",
+          "SeerReport(acquired_day=1, published_day=1, player=2, target=4, color='white')"
+        ],
+        "public_reports": [],
+        "partition": [
+          [
+            1,
+            2
+          ]
+        ],
+        "hypotheses": null
+      }
+    },
+    "stages": [
+      {
+        "kind": "solve",
+        "completed": true,
+        "value": "2/15"
+      },
+      {
+        "kind": "act",
+        "target": 1,
+        "completed": true,
+        "value": "2/15"
+      },
+      {
+        "kind": "act",
+        "target": 3,
+        "completed": true,
+        "value": "2/15"
+      },
+      {
+        "kind": "act",
+        "target": 5,
+        "completed": true,
+        "value": "2/15"
+      }
+    ],
+    "peak_working_set_bytes": 70995968,
+    "states": {
+      "values": 14277,
+      "actions": 2226,
+      "expansions": {
+        "actions": 2226,
+        "values": 14277
+      },
+      "acquired": 271,
+      "mornings": 1276,
+      "publications": 1276,
+      "policies": 523,
+      "saved_sources": 0,
+      "resolution_cache": 2227,
+      "target_orbits": {
+        "target_members": 2565,
+        "target_representatives": 2341,
+        "solver_wolf_cells": 566,
+        "solver_wolf_hypotheses": 923
+      },
+      "report_vectors": {
+        "kernels": 2,
+        "public_event_laws": 98,
+        "fallback_public_vectors": 12316,
+        "compiled_candidates": 77,
+        "newly_built_vectors": 34,
+        "emitted_vectors": 77,
+        "named_vectors_covered": 113
+      }
+    }
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_day_profile.py": "eb7d925557f0603ee0c86123a52972bb22b92e0840c38f88c8231da5a40f1586"
+  }
+}

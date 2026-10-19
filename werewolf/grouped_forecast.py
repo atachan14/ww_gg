@@ -29,6 +29,12 @@ class GroupedForecast(InformationSetForecast):
     def full_renamed_key(self,*args,**kwargs):return None
     def scalar_descriptor(self,*args,**kwargs):return None
 
+    def exchangeable(self,b):
+        # Uniform execution of three survivors with one wolf always ends.
+        # The common count recurrence is independent of all report/scan history.
+        if b.phase=='day' and len(b.alive)==3 and not b.initial_hunter_count and set(b.wolf_count_distribution)=={1}:return True
+        return super().exchangeable(b)
+
     def value_law(self,state):
         # Exact derived value of the same owned immutable input; no state orbit.
         key=(self.rules.allow_repeat_guard,self.strategy.night,state)

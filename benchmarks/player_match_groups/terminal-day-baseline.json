@@ -1,0 +1,111 @@
+{
+  "completed_at": "2026-10-19T05:57:05.201197+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 19.161643699975684,
+  "samples": 927,
+  "peak_private_committed_bytes": 192462848,
+  "observed_peak_working_set_bytes": 202784768,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "wwgg_budget_stop kind=work work=250004 max_work=250000 elapsed_seconds=17.75\r\n",
+  "worker": {
+    "forecast_completed": false,
+    "status": "budget_stopped",
+    "reason": "work",
+    "mode": "baseline",
+    "seconds": 17.747481300029904,
+    "budget_stop": {
+      "kind": "work",
+      "work": 250004,
+      "max_work": 250000,
+      "elapsed_seconds": 17.75
+    },
+    "counts": {
+      "solve_calls": 12291,
+      "act_calls": 36739,
+      "act_target_members": 113017,
+      "act_inherited_blocks": 111937,
+      "terminal_uniform_day_calls": 11711,
+      "three_day_act_calls": 34653
+    },
+    "phases": {
+      "(1, 'night', 6)": 1,
+      "(2, 'day', 5)": 158,
+      "(2, 'night', 4)": 421,
+      "(3, 'day', 3)": 11711
+    },
+    "report_partitions": {
+      "(1, ())": 1243,
+      "(0, ())": 487,
+      "(2, ())": 652,
+      "(2, (2,))": 4
+    },
+    "stages": [
+      {
+        "kind": "solve",
+        "completed": true,
+        "value": "2/15"
+      },
+      {
+        "kind": "act",
+        "target": 1,
+        "completed": true,
+        "value": "2/15"
+      },
+      {
+        "kind": "act",
+        "target": 3,
+        "completed": true,
+        "value": "2/15"
+      },
+      {
+        "kind": "act",
+        "target": 5,
+        "completed": false
+      }
+    ],
+    "peak_working_set_bytes": 202784768,
+    "states": {
+      "values": 12277,
+      "actions": 36621,
+      "expansions": {
+        "actions": 36624,
+        "values": 12280
+      },
+      "acquired": 242,
+      "mornings": 1115,
+      "publications": 1115,
+      "policies": 462,
+      "saved_sources": 0,
+      "resolution_cache": 36625,
+      "target_orbits": {
+        "target_members": 37217,
+        "target_representatives": 36745,
+        "solver_wolf_cells": 505,
+        "solver_wolf_hypotheses": 858
+      },
+      "report_vectors": {
+        "kernels": 2,
+        "public_event_laws": 98,
+        "fallback_public_vectors": 10621,
+        "compiled_candidates": 77,
+        "newly_built_vectors": 34,
+        "emitted_vectors": 77,
+        "named_vectors_covered": 113
+      }
+    }
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_day_profile.py": "c5b95e4c3c9cba4a7dda1ebfff1d329301912c3d5cdcf04d5c50b3c80ee91ab2"
+  }
+}

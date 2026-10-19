@@ -1,0 +1,52 @@
+{
+  "completed_at": "2026-10-19T06:04:55.674983+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 5.335716500005219,
+  "samples": 256,
+  "peak_private_committed_bytes": 43327488,
+  "observed_peak_working_set_bytes": 54321152,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "mode": "reference",
+    "view": "seer-roster-34",
+    "part": "scalar",
+    "status": "completed",
+    "conditioning_mass": "1/2",
+    "actual_P_partition_mass": "1/3",
+    "private_rows": [
+      [
+        "((34, 4, 1, 0), (Acquisition(day=1, player=1, target=4, color='white'),), (), ())",
+        "1"
+      ]
+    ],
+    "observer": "PersonalInformation(actor=1, role='seer', acquisitions=(Acquisition(day=1, player=1, target=4, color='white'),))",
+    "value": "2/15",
+    "counts": {
+      "terminal_sources": 6780,
+      "physical_edges": 20340
+    },
+    "budget": {
+      "work": 90445,
+      "max_work": 250000,
+      "elapsed_seconds": 4.64
+    },
+    "cold_complete_source_equal": true,
+    "source_sha256": "df991ac29d1cf3721254741cc96442be3ad44d48928be54da2f1430b82517eaa",
+    "seconds": 4.649451000033878
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_day_reference.py": "1542e16a981d74766f0104a0fa16abeaff76446c3a5d9d69ee77038c14aac81a"
+  }
+}

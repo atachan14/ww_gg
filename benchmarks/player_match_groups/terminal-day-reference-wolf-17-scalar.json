@@ -1,0 +1,51 @@
+{
+  "completed_at": "2026-10-19T06:02:37.219004+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 4.832864500000142,
+  "samples": 231,
+  "peak_private_committed_bytes": 41091072,
+  "observed_peak_working_set_bytes": 52199424,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "mode": "reference",
+    "view": "wolf-17",
+    "part": "scalar",
+    "status": "completed",
+    "conditioning_mass": "1/6",
+    "private_rows": [
+      [
+        "((17, 4, 2, 0), (Acquisition(day=1, player=2, target=4, color='white'),), (), ())",
+        "1"
+      ]
+    ],
+    "observer": "None",
+    "value": "2/15",
+    "counts": {
+      "terminal_sources": 6189,
+      "physical_edges": 18567
+    },
+    "budget": {
+      "work": 80143,
+      "max_work": 250000,
+      "elapsed_seconds": 4.156
+    },
+    "cold_complete_source_equal": true,
+    "source_sha256": "56dede8c830736f5f9fc2465bb92d0c90550e27d10f455875199e2a15fec1378",
+    "seconds": 4.1563116000033915
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_day_reference.py": "d8c9fd46b50fd5b8444c3680f893da5d94ad253158f1910979e90931e3de3daa"
+  }
+}
