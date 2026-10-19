@@ -52,10 +52,10 @@ class ClosedFullTreeTests(unittest.TestCase):
         from werewolf.acquisition_provenance import AcquisitionLedger,UniformAcquisitionCache
         with patch.object(AcquisitionLedger,'__init__',side_effect=AssertionError('ledger')),patch.object(UniformAcquisitionCache,'__init__',side_effect=AssertionError('proof cache')):
             self.assertEqual(str(c.root.forecast().village_win),'7/15')
-        seven=ClosedCalculation(case(7,'single').data,max_work=250000,max_seconds=30)
-        with self.assertRaises(Pending) as caught:seven.root.forecast()
-        self.assertEqual(caught.exception.reason,'closed_forecast_six_alive_limit')
-        self.assertEqual(seven.stats()['values'],0)
+        eight=ClosedCalculation(case(8,'single').data,max_work=250000,max_seconds=30)
+        with self.assertRaises(Pending) as caught:eight.root.forecast()
+        self.assertEqual(caught.exception.reason,'closed_forecast_seven_alive_limit')
+        self.assertEqual(eight.stats()['values'],0)
 
     def test_missing_initial_declaration_is_not_synthesized_as_future_policy(self):
         data=case(5,'dual').data;g=data.to_game();g['seer_inputs']=g['seer_inputs'][:1]

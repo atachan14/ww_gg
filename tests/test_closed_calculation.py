@@ -67,7 +67,7 @@ class ClosedCalculationTests(unittest.TestCase):
         with self.assertRaises(TypeError):ClosedCalculation({})
         with self.assertRaises(Pending):ClosedCalculation(c.data.updated(policy={'day':'random','night':'max','fake_reports':'random'}))
         with self.assertRaises(Pending):
-            ClosedCalculation(type(c.data).from_game(c.data.to_game()|dict(players=7,claims=['seer']+['latent']*6))).root.forecast()
+            ClosedCalculation(type(c.data).from_game(c.data.to_game()|dict(players=8,claims=['seer']+['latent']*7))).root.forecast()
         with self.assertRaises(ValueError):root.action(0)
         with self.assertRaises(ValueError):root.personal(PersonalInformation(1,'villager'))
         with self.assertRaises(ValueError):root.personal(lambda h,s:True)

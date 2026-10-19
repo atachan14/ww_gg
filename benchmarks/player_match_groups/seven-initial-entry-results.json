@@ -1,0 +1,2048 @@
+{
+  "status": "initial_seven_formally_admitted_original_numerical_query_work_stopped",
+  "scope": {
+    "max_alive": 7,
+    "seven_initial_day_only": true,
+    "uniform_H0_only": true,
+    "initial_reports_complete": true,
+    "max_fakes_per_public_world": 1,
+    "self_bite": false,
+    "MAX_extension": false,
+    "hunter_extension": false
+  },
+  "six_completed_measurements": {
+    "public": {
+      "completed_at": "2026-10-19T06:00:21.562559+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 12.290971400041599,
+      "samples": 500,
+      "peak_private_committed_bytes": 61849600,
+      "observed_peak_working_set_bytes": 72552448,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "mode": "fast",
+        "view": "public",
+        "part": "all",
+        "status": "completed",
+        "value": "2/15",
+        "forecast": "Forecast(village_win=Fraction(2, 15), action_values=((1, Fraction(2, 15)), (2, Fraction(2, 15)), (3, Fraction(2, 15)), (5, Fraction(2, 15)), (6, Fraction(2, 15)), (7, Fraction(2, 15))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (6, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (7, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+        "table_sha256": "5fa8b92f31b5908c25bc51f00a67c164312d5c7d64dbd17c609e22ba38401f4c",
+        "budget": {
+          "work": 138347,
+          "max_work": 250000,
+          "elapsed_seconds": 11.219
+        },
+        "counts": {
+          "terminal_sources": 0,
+          "physical_edges": 0
+        },
+        "seconds": 11.230600800015964,
+        "budget_stop": null
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_day_reference.py": "ea1f791723d118fae86692f662a6915276f34f795575a35a47b191796a5a8641"
+      }
+    },
+    "seer": {
+      "completed_at": "2026-10-19T06:00:33.113733+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 11.54912169999443,
+      "samples": 437,
+      "peak_private_committed_bytes": 56389632,
+      "observed_peak_working_set_bytes": 67522560,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "mode": "fast",
+        "view": "seer",
+        "part": "all",
+        "status": "completed",
+        "value": "2/15",
+        "forecast": "Forecast(village_win=Fraction(2, 15), action_values=((1, Fraction(2, 15)), (3, Fraction(2, 15)), (5, Fraction(2, 15)), (6, Fraction(2, 15)), (7, Fraction(2, 15))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (6, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (7, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+        "table_sha256": "1176e85a96040057cd86be29f2fe7033afd2314018a53d7980616d72421ebe96",
+        "budget": {
+          "work": 120894,
+          "max_work": 250000,
+          "elapsed_seconds": 9.562
+        },
+        "counts": {
+          "terminal_sources": 0,
+          "physical_edges": 0
+        },
+        "seconds": 9.561603800044395,
+        "budget_stop": null
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_day_reference.py": "ea1f791723d118fae86692f662a6915276f34f795575a35a47b191796a5a8641"
+      }
+    },
+    "wolf": {
+      "completed_at": "2026-10-19T06:00:58.385924+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 5.701827600016259,
+      "samples": 203,
+      "peak_private_committed_bytes": 37302272,
+      "observed_peak_working_set_bytes": 47947776,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "mode": "fast",
+        "view": "wolf",
+        "part": "all",
+        "status": "completed",
+        "value": "2/15",
+        "forecast": "Forecast(village_win=Fraction(2, 15), action_values=((1, Fraction(2, 15)), (3, Fraction(2, 15)), (6, Fraction(2, 15)), (7, Fraction(2, 15))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (6, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (7, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+        "table_sha256": "047496d14d30b47589da8f79e09f4e70108a0f36ab3ab4e86961b08f349b06d2",
+        "budget": {
+          "work": 54059,
+          "max_work": 250000,
+          "elapsed_seconds": 4.765
+        },
+        "counts": {
+          "terminal_sources": 0,
+          "physical_edges": 0
+        },
+        "seconds": 4.751460300001781,
+        "budget_stop": null
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_day_reference.py": "ea1f791723d118fae86692f662a6915276f34f795575a35a47b191796a5a8641"
+      }
+    }
+  },
+  "six_complete_Forecast_Table_verification": {
+    "public": {
+      "complete_Forecast_Table_equal": true,
+      "source_private_joint_equals_actual_roster_mixture": true,
+      "observer_retained": true,
+      "scalar": "2/15",
+      "roster_masses": {
+        "17": "1/6",
+        "18": "1/6",
+        "33": "1/6",
+        "34": "1/6",
+        "65": "1/6",
+        "66": "1/6"
+      },
+      "actions": [
+        [
+          1,
+          "2/15"
+        ],
+        [
+          2,
+          "2/15"
+        ],
+        [
+          3,
+          "2/15"
+        ],
+        [
+          5,
+          "2/15"
+        ],
+        [
+          6,
+          "2/15"
+        ],
+        [
+          7,
+          "2/15"
+        ]
+      ],
+      "table_sha256": "5fa8b92f31b5908c25bc51f00a67c164312d5c7d64dbd17c609e22ba38401f4c"
+    },
+    "seer": {
+      "complete_Forecast_Table_equal": true,
+      "source_private_joint_equals_actual_roster_mixture": true,
+      "observer_retained": true,
+      "scalar": "2/15",
+      "roster_masses": {
+        "18": "1/3",
+        "34": "1/3",
+        "66": "1/3"
+      },
+      "actions": [
+        [
+          1,
+          "2/15"
+        ],
+        [
+          3,
+          "2/15"
+        ],
+        [
+          5,
+          "2/15"
+        ],
+        [
+          6,
+          "2/15"
+        ],
+        [
+          7,
+          "2/15"
+        ]
+      ],
+      "table_sha256": "1176e85a96040057cd86be29f2fe7033afd2314018a53d7980616d72421ebe96"
+    },
+    "wolf": {
+      "complete_Forecast_Table_equal": true,
+      "full_unsharded_cold_enumeration": true,
+      "value": "2/15",
+      "table_sha256": "047496d14d30b47589da8f79e09f4e70108a0f36ab3ab4e86961b08f349b06d2"
+    }
+  },
+  "first_edge_jobs": [
+    {
+      "completed_at": "2026-10-19T06:10:38.174257+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.8179967000032775,
+      "samples": 38,
+      "peak_private_committed_bytes": 24244224,
+      "observed_peak_working_set_bytes": 35065856,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "public",
+        "target": 1,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/2"
+              ],
+              [
+                2,
+                "1/2"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 6,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.063
+        },
+        "seconds": 0.07015519996639341
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:38.870522+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6932416000054218,
+      "samples": 33,
+      "peak_private_committed_bytes": 23269376,
+      "observed_peak_working_set_bytes": 34263040,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "public",
+        "target": 2,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/2"
+              ],
+              [
+                2,
+                "1/2"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 6,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.0720632000011392
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:39.589166+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7171051999903284,
+      "samples": 34,
+      "peak_private_committed_bytes": 23146496,
+      "observed_peak_working_set_bytes": 34164736,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "public",
+        "target": 3,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                2,
+                "1"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 6,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.062
+        },
+        "seconds": 0.07033889996819198
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:40.268444+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6731136999442242,
+      "samples": 32,
+      "peak_private_committed_bytes": 23130112,
+      "observed_peak_working_set_bytes": 34172928,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "public",
+        "target": 4,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                2,
+                "1"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 6,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.063
+        },
+        "seconds": 0.07201639999402687
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:40.968410+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6984226999920793,
+      "samples": 33,
+      "peak_private_committed_bytes": 23285760,
+      "observed_peak_working_set_bytes": 34295808,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "public",
+        "target": 5,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 6,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.08225239999592304
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:41.780881+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.8108685999759473,
+      "samples": 38,
+      "peak_private_committed_bytes": 23183360,
+      "observed_peak_working_set_bytes": 34242560,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "public",
+        "target": 6,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 6,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.09023030003299937
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:42.617319+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.8343052999698557,
+      "samples": 39,
+      "peak_private_committed_bytes": 23306240,
+      "observed_peak_working_set_bytes": 34316288,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "public",
+        "target": 7,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 6,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.125
+        },
+        "seconds": 0.1223446000367403
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:43.315249+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.696137799997814,
+      "samples": 33,
+      "peak_private_committed_bytes": 23289856,
+      "observed_peak_working_set_bytes": 34299904,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "seer",
+        "target": 1,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/2"
+              ],
+              [
+                2,
+                "1/2"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 3,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.08290979999583215
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:44.075221+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7581925999838859,
+      "samples": 35,
+      "peak_private_committed_bytes": 23105536,
+      "observed_peak_working_set_bytes": 34140160,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "seer",
+        "target": 2,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/2"
+              ],
+              [
+                2,
+                "1/2"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 3,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.094
+        },
+        "seconds": 0.09263849997660145
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:44.787852+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7104581999592483,
+      "samples": 34,
+      "peak_private_committed_bytes": 23187456,
+      "observed_peak_working_set_bytes": 34226176,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "seer",
+        "target": 3,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                2,
+                "1"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 3,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.06826659996295348
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:46.108624+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 1.3170448000309989,
+      "samples": 55,
+      "peak_private_committed_bytes": 23314432,
+      "observed_peak_working_set_bytes": 34328576,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "seer",
+        "target": 4,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                2,
+                "1"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 3,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.125
+        },
+        "seconds": 0.12132999999448657
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:47.096781+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.9856968999956734,
+      "samples": 40,
+      "peak_private_committed_bytes": 23375872,
+      "observed_peak_working_set_bytes": 34361344,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "seer",
+        "target": 5,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 3,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.172
+        },
+        "seconds": 0.17579849995672703
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:48.043357+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.9446966000250541,
+      "samples": 43,
+      "peak_private_committed_bytes": 23146496,
+      "observed_peak_working_set_bytes": 34185216,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "seer",
+        "target": 6,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 3,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.079
+        },
+        "seconds": 0.08678520005196333
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:48.845258+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7998077000374906,
+      "samples": 37,
+      "peak_private_committed_bytes": 23248896,
+      "observed_peak_working_set_bytes": 34304000,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "seer",
+        "target": 7,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 3,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.094
+        },
+        "seconds": 0.09316709998529404
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:49.592820+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7447134000249207,
+      "samples": 35,
+      "peak_private_committed_bytes": 23306240,
+      "observed_peak_working_set_bytes": 34336768,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "wolf",
+        "target": 1,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              2,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/2"
+              ],
+              [
+                2,
+                "1/2"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 1,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.062
+        },
+        "seconds": 0.07189970003673807
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:50.436113+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.8395978000480682,
+      "samples": 40,
+      "peak_private_committed_bytes": 23420928,
+      "observed_peak_working_set_bytes": 34377728,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "wolf",
+        "target": 2,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/2"
+              ],
+              [
+                2,
+                "1/2"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 1,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.07720310002332553
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:51.157431+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7194125999812968,
+      "samples": 34,
+      "peak_private_committed_bytes": 23040000,
+      "observed_peak_working_set_bytes": 34119680,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "wolf",
+        "target": 3,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              4,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                2,
+                "1"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 1,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.0775419999845326
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:51.910734+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7502999000134878,
+      "samples": 34,
+      "peak_private_committed_bytes": 23117824,
+      "observed_peak_working_set_bytes": 34197504,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "wolf",
+        "target": 4,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              5,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                2,
+                "1"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 1,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.11
+        },
+        "seconds": 0.10384170000907034
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:52.637242+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7235202000010759,
+      "samples": 34,
+      "peak_private_committed_bytes": 23113728,
+      "observed_peak_working_set_bytes": 34123776,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "wolf",
+        "target": 5,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              6,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 1,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.07869370002299547
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:53.291273+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6511834000120871,
+      "samples": 31,
+      "peak_private_committed_bytes": 23351296,
+      "observed_peak_working_set_bytes": 34410496,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "wolf",
+        "target": 6,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              7
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 1,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.063
+        },
+        "seconds": 0.07520150003256276
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T06:10:54.024808+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7277491000131704,
+      "samples": 34,
+      "peak_private_committed_bytes": 23400448,
+      "observed_peak_working_set_bytes": 34418688,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "status": "verified",
+        "view": "wolf",
+        "target": 7,
+        "initial_scope_admitted": true,
+        "initial_preparation_equal": true,
+        "children": [
+          {
+            "probability": "1",
+            "alive": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "phase": "night",
+            "wolf_counts": [
+              [
+                1,
+                "1/3"
+              ],
+              [
+                2,
+                "2/3"
+              ]
+            ],
+            "public_hypotheses": 6,
+            "private_hypotheses": 1,
+            "full_joint_equal_and_cold": true
+          }
+        ],
+        "budget": {
+          "work": 88,
+          "max_work": 250000,
+          "elapsed_seconds": 0.079
+        },
+        "seconds": 0.07562640000833198
+      },
+      "progress": [],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+        "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+        "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+      }
+    }
+  ],
+  "original_seven_actual_run": {
+    "completed_at": "2026-10-19T06:12:02.674286+00:00",
+    "limits": {
+      "max_work": 250000,
+      "max_seconds": 30,
+      "watchdog_seconds": 35,
+      "sampled_stop_bytes": 402653184,
+      "poll_seconds": 0.02
+    },
+    "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+    "supervisor_seconds": 15.771977700002026,
+    "samples": 741,
+    "peak_private_committed_bytes": 84054016,
+    "observed_peak_working_set_bytes": 94527488,
+    "termination": null,
+    "returncode": 0,
+    "stderr": "wwgg_budget_stop kind=work work=250004 max_work=250000 elapsed_seconds=14.516\r\n",
+    "worker": {
+      "view": "public",
+      "forecast_completed": false,
+      "value": null,
+      "initial_preparation_equal": true,
+      "game": {
+        "claim_policy": {
+          "medium": "filled",
+          "villager": "filled",
+          "wolf": "none"
+        },
+        "claims": [
+          "seer",
+          "seer",
+          "medium",
+          "latent",
+          "latent",
+          "latent",
+          "latent"
+        ],
+        "history": [],
+        "hunters": 0,
+        "mediums": 1,
+        "model": "group",
+        "players": 7,
+        "policy": {
+          "day": "random",
+          "fake_reports": "random",
+          "include_self_bite": false,
+          "night": "random"
+        },
+        "public_log": {
+          "acquisition_provenance": [
+            {
+              "action": "assert",
+              "color": "white",
+              "day": 1,
+              "player": 1,
+              "source": "b1:e3",
+              "target": 4
+            },
+            {
+              "action": "assert",
+              "color": "white",
+              "day": 1,
+              "player": 2,
+              "source": "b1:e4",
+              "target": 4
+            }
+          ],
+          "base_claims": [
+            [
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ]
+          ],
+          "base_medium": [],
+          "base_seer": [],
+          "batches": [
+            {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "day": 1,
+              "events": [
+                {
+                  "action": "assert",
+                  "id": "b1:e0",
+                  "kind": "co",
+                  "player": 1,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e1",
+                  "kind": "co",
+                  "player": 2,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e2",
+                  "kind": "co",
+                  "player": 3,
+                  "role": "medium"
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e3",
+                  "kind": "seer",
+                  "player": 1,
+                  "target": 4
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e4",
+                  "kind": "seer",
+                  "player": 2,
+                  "target": 4
+                }
+              ],
+              "id": 1,
+              "mode": "simultaneous",
+              "phase": "day",
+              "slot": 0
+            }
+          ],
+          "board_graph": {
+            "archives": [
+              {
+                "ancestor_path": [
+                  "a9fa0d2110a9b962:board:1"
+                ],
+                "generation": 1,
+                "nodes": {
+                  "a9fa0d2110a9b962:board:1": {
+                    "active": true,
+                    "branch": 1,
+                    "children": [],
+                    "day": 1,
+                    "edge": null,
+                    "generation": 0,
+                    "id": "a9fa0d2110a9b962:board:1",
+                    "input_revision": 0,
+                    "legacy_claims": [
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent"
+                    ],
+                    "legacy_medium": [],
+                    "legacy_seer": [],
+                    "local_batches": [],
+                    "parent": null,
+                    "phase": "day",
+                    "revision": 0,
+                    "slot": 0
+                  }
+                },
+                "owner": "a9fa0d2110a9b962:board:1",
+                "retired_roots": [],
+                "settings": {
+                  "claim_policy": {
+                    "medium": "filled",
+                    "villager": "filled",
+                    "wolf": "none"
+                  },
+                  "hunters": 0,
+                  "mediums": 1,
+                  "model": "group",
+                  "players": 7,
+                  "policy": {
+                    "day": "max",
+                    "fake_reports": "max",
+                    "include_self_bite": false,
+                    "night": "max"
+                  },
+                  "rules": {
+                    "allow_repeat_guard": true,
+                    "allow_self_bite": false,
+                    "initial_seer": "random_white"
+                  },
+                  "seers": 1,
+                  "wolves": 2
+                }
+              }
+            ],
+            "current": "a9fa0d2110a9b962:board:1",
+            "game_id": "a9fa0d2110a9b962",
+            "generation": 1,
+            "invalidated": [
+              "a9fa0d2110a9b962:board:1"
+            ],
+            "next_board": 2,
+            "next_branch": 2,
+            "nodes": {
+              "a9fa0d2110a9b962:board:1": {
+                "active": true,
+                "branch": 1,
+                "children": [],
+                "content_generation": 1,
+                "day": 1,
+                "edge": null,
+                "generation": 0,
+                "id": "a9fa0d2110a9b962:board:1",
+                "input_revision": 1,
+                "legacy_claims": [
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent"
+                ],
+                "legacy_medium": [],
+                "legacy_seer": [],
+                "local_batches": [
+                  {
+                    "board_id": "a9fa0d2110a9b962:board:1",
+                    "day": 1,
+                    "events": [
+                      {
+                        "action": "assert",
+                        "id": "b1:e0",
+                        "kind": "co",
+                        "player": 1,
+                        "role": "seer"
+                      },
+                      {
+                        "action": "assert",
+                        "id": "b1:e1",
+                        "kind": "co",
+                        "player": 2,
+                        "role": "seer"
+                      },
+                      {
+                        "action": "assert",
+                        "id": "b1:e2",
+                        "kind": "co",
+                        "player": 3,
+                        "role": "medium"
+                      },
+                      {
+                        "action": "assert",
+                        "color": "white",
+                        "day": 1,
+                        "id": "b1:e3",
+                        "kind": "seer",
+                        "player": 1,
+                        "target": 4
+                      },
+                      {
+                        "action": "assert",
+                        "color": "white",
+                        "day": 1,
+                        "id": "b1:e4",
+                        "kind": "seer",
+                        "player": 2,
+                        "target": 4
+                      }
+                    ],
+                    "id": 1,
+                    "mode": "simultaneous",
+                    "phase": "day",
+                    "slot": 0
+                  }
+                ],
+                "parent": null,
+                "phase": "day",
+                "retired_children": [],
+                "revision": 1,
+                "slot": 0
+              }
+            },
+            "root": "a9fa0d2110a9b962:board:1"
+          },
+          "board_id": "a9fa0d2110a9b962:board:1",
+          "branch_id": 1,
+          "has_local_legacy": false,
+          "legacy": false,
+          "local_batches": [
+            {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "day": 1,
+              "events": [
+                {
+                  "action": "assert",
+                  "id": "b1:e0",
+                  "kind": "co",
+                  "player": 1,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e1",
+                  "kind": "co",
+                  "player": 2,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e2",
+                  "kind": "co",
+                  "player": 3,
+                  "role": "medium"
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e3",
+                  "kind": "seer",
+                  "player": 1,
+                  "target": 4
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e4",
+                  "kind": "seer",
+                  "player": 2,
+                  "target": 4
+                }
+              ],
+              "id": 1,
+              "mode": "simultaneous",
+              "phase": "day",
+              "slot": 0
+            }
+          ],
+          "local_legacy": {
+            "claims": [
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "medium": [],
+            "seer": []
+          },
+          "next_id": 2,
+          "report_publications": {
+            "seer:1:1": {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "published_day": 1,
+              "published_phase": "day",
+              "slot": 0
+            },
+            "seer:1:2": {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "published_day": 1,
+              "published_phase": "day",
+              "slot": 0
+            }
+          },
+          "retired_input_reports": [],
+          "version": 2
+        },
+        "reports": [],
+        "result_disclosure_model": "full-observed-v1",
+        "revision": 1,
+        "rules": {
+          "allow_repeat_guard": true,
+          "allow_self_bite": false,
+          "initial_seer": "random_white"
+        },
+        "seer_inputs": [
+          {
+            "color": "white",
+            "day": 1,
+            "reporter": 1,
+            "target": 4
+          },
+          {
+            "color": "white",
+            "day": 1,
+            "reporter": 2,
+            "target": 4
+          }
+        ],
+        "seer_mode": "information-fixed-v1",
+        "seer_options": {
+          "initial_rule": "random_white",
+          "likelihood": "compatibility"
+        },
+        "seers": 1,
+        "selection": null,
+        "wolves": 2
+      },
+      "initial_hypotheses": 6,
+      "initial_groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "status": "budget_stopped",
+      "reason": "work",
+      "seconds": 14.511168900004122,
+      "budget_stop": {
+        "kind": "work",
+        "work": 250004,
+        "max_work": 250000,
+        "elapsed_seconds": 14.516
+      },
+      "stages": [
+        {
+          "kind": "solve",
+          "completed": false
+        }
+      ],
+      "states": {
+        "values": 20244,
+        "actions": 3382,
+        "expansions": {
+          "actions": 3386,
+          "values": 20248
+        },
+        "acquired": 594,
+        "mornings": 2006,
+        "publications": 2010,
+        "policies": 727,
+        "saved_sources": 0,
+        "resolution_cache": 3386,
+        "target_orbits": {
+          "target_members": 3635,
+          "target_representatives": 3387,
+          "solver_wolf_cells": 728,
+          "solver_wolf_hypotheses": 1054
+        },
+        "report_vectors": {
+          "kernels": 0,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 20805,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      }
+    },
+    "progress": [],
+    "source_sha256": {
+      "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+      "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+      "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\seven_initial_forecast.py": "d14603b974bce09e55f6dccda1f71915817bbc8a6b5ded8767f5e4aaaff0607a"
+    }
+  },
+  "regressions": {
+    "ww-terminal-boundary-extended.log": {
+      "text": "test_max_policy_still_rejected_by_grouped_constructor (tests.test_terminal_day_cut.TerminalDayCutTests.test_max_policy_still_rejected_by_grouped_constructor) ... ok\ntest_narrow_condition_and_common_fallback (tests.test_terminal_day_cut.TerminalDayCutTests.test_narrow_condition_and_common_fallback) ... ok\ntest_uniform_terminal_scalar_public_and_owners_keeps_named_actions (tests.test_terminal_day_cut.TerminalDayCutTests.test_uniform_terminal_scalar_public_and_owners_keeps_named_actions) ... ok\ntest_reporting_observer_and_max_night_keep_the_ordinary_path (tests.test_uniform_terminal_cut.UniformTerminalCutTests.test_reporting_observer_and_max_night_keep_the_ordinary_path) ... ok\ntest_terminal_day_full_observation_history_matches_unreduced_execution (tests.test_uniform_terminal_cut.UniformTerminalCutTests.test_terminal_day_full_observation_history_matches_unreduced_execution) ... ok\ntest_uniform_night_complete_common_flow_matches_with_full_public_and_owned_histories (tests.test_uniform_terminal_cut.UniformTerminalCutTests.test_uniform_night_complete_common_flow_matches_with_full_public_and_owned_histories) ... ok\ntest_complete_scan_expansion_and_terminal_measure_have_identical_physical_law (tests.test_terminal_followup.TerminalPhysicalMeasureTests.test_complete_scan_expansion_and_terminal_measure_have_identical_physical_law) ... ok\ntest_any_continuation_hunter_or_custom_physics_declines_without_pruning (tests.test_compact_terminal.CompactTerminalTests.test_any_continuation_hunter_or_custom_physics_declines_without_pruning) ... ok\ntest_complete_finite_case_and_actual_saved_day3_without_initial_search (tests.test_compact_terminal.CompactTerminalTests.test_complete_finite_case_and_actual_saved_day3_without_initial_search) ... ok\ntest_configured_self_bite_permission_and_exact_forced_weights_match_full (tests.test_compact_terminal.CompactTerminalTests.test_configured_self_bite_permission_and_exact_forced_weights_match_full) ... ok\ntest_counterfactual_terminal_payoff_does_not_invent_public_history_support (tests.test_compact_terminal.CompactTerminalTests.test_counterfactual_terminal_payoff_does_not_invent_public_history_support) ... ok\ntest_existing_parity_can_end_a_larger_P_branch_without_changing_public_Q (tests.test_compact_terminal.CompactTerminalTests.test_existing_parity_can_end_a_larger_P_branch_without_changing_public_Q) ... ok\ntest_full_history_contract_never_uses_compact_outcomes (tests.test_compact_terminal.CompactTerminalTests.test_full_history_contract_never_uses_compact_outcomes) ... ok\ntest_illegal_self_bite_terminal_input_and_strategy_still_rejected (tests.test_compact_terminal.CompactTerminalTests.test_illegal_self_bite_terminal_input_and_strategy_still_rejected) ... ok\ntest_observed_roster_filter_preserves_mass_and_custom_night_resolver_declines (tests.test_compact_terminal.CompactTerminalTests.test_observed_roster_filter_preserves_mass_and_custom_night_resolver_declines) ... ok\ntest_physical_weights_are_not_replaced_by_public_Q (tests.test_compact_terminal.CompactTerminalTests.test_physical_weights_are_not_replaced_by_public_Q) ... ok\ntest_scalar_day_and_night_construct_no_child_Board_but_full_details_are_exact (tests.test_compact_terminal.CompactTerminalTests.test_scalar_day_and_night_construct_no_child_Board_but_full_details_are_exact) ... ok\ntest_terminal_hook_change_invalidates_resolution_reuse (tests.test_compact_terminal.CompactTerminalTests.test_terminal_hook_change_invalidates_resolution_reuse) ... ok\ntest_unsupported_public_corpse_and_observer_acquisition_still_fail (tests.test_compact_terminal.CompactTerminalTests.test_unsupported_public_corpse_and_observer_acquisition_still_fail) ... ok\ntest_default_max_is_preserved_when_exact_value_matches_uniform_and_each_phase_can_be_edited (tests.test_guard_no_repeat.NoRepeatGuardRouteTests.test_default_max_is_preserved_when_exact_value_matches_uniform_and_each_phase_can_be_edited) ... wwgg_budget_result endpoint=main status=200 work=8777 max_work=4000000 elapsed_seconds=0.907 process_peak_mb=None stop=complete\nwwgg_budget_result endpoint=main status=200 work=4631 max_work=4000000 elapsed_seconds=0.313 process_peak_mb=None stop=complete\nok\ntest_invalid_rule_and_unsupported_max_do_not_replace_game (tests.test_guard_no_repeat.NoRepeatGuardRouteTests.test_invalid_rule_and_unsupported_max_do_not_replace_game) ... ok\ntest_minimal_rule_control_default_and_false_save (tests.test_guard_no_repeat.NoRepeatGuardRouteTests.test_minimal_rule_control_default_and_false_save) ... wwgg_budget_result endpoint=main status=200 work=4631 max_work=4000000 elapsed_seconds=0.422 process_peak_mb=None stop=complete\nok\ntest_rule_works_with_existing_dawn_flow_when_preview_flags_are_off (tests.test_guard_no_repeat.NoRepeatGuardRouteTests.test_rule_works_with_existing_dawn_flow_when_preview_flags_are_off) ... wwgg_budget_result endpoint=main status=200 work=4631 max_work=4000000 elapsed_seconds=0.5 process_peak_mb=None stop=complete\nok\ntest_saved_reentry_two_gj_private_back_and_corpse_edit (tests.test_guard_no_repeat.NoRepeatGuardRouteTests.test_saved_reentry_two_gj_private_back_and_corpse_edit) ... wwgg_budget_result endpoint=main status=200 work=995 max_work=4000000 elapsed_seconds=0.281 process_peak_mb=None stop=complete\nwwgg_budget_result endpoint=private_view status=200 work=1604 max_work=4000000 elapsed_seconds=0.156 process_peak_mb=None stop=complete\nok\ntest_dead_guardian_uses_existing_no_ability_flow_and_terminal_skips_choices (tests.test_guard_no_repeat.NoRepeatGuardTests.test_dead_guardian_uses_existing_no_ability_flow_and_terminal_skips_choices) ... ok\ntest_five_player_hand_value_and_old_rule_are_distinct (tests.test_guard_no_repeat.NoRepeatGuardTests.test_five_player_hand_value_and_old_rule_are_distinct) ... ok\ntest_fixed_night_rejects_repeat_and_keeps_default (tests.test_guard_no_repeat.NoRepeatGuardTests.test_fixed_night_rejects_repeat_and_keeps_default) ... ok\ntest_legal_targets_initial_previous_dead_and_empty (tests.test_guard_no_repeat.NoRepeatGuardTests.test_legal_targets_initial_previous_dead_and_empty) ... ok\ntest_owner_table_conditions_same_law_and_unknown_previous_stays_pending (tests.test_guard_no_repeat.NoRepeatGuardTests.test_owner_table_conditions_same_law_and_unknown_previous_stays_pending) ... ok\ntest_public_corpse_condition_uses_each_hypothesis_previous_guard (tests.test_guard_no_repeat.NoRepeatGuardTests.test_public_corpse_condition_uses_each_hypothesis_previous_guard) ... ok\ntest_rules_cache_and_cold_recalculation_keep_default_numbers (tests.test_guard_no_repeat.NoRepeatGuardTests.test_rules_cache_and_cold_recalculation_keep_default_numbers) ... ok\ntest_two_gj_joint_replay_retains_guard_history_and_excludes_repeat (tests.test_guard_no_repeat.NoRepeatGuardTests.test_two_gj_joint_replay_retains_guard_history_and_excludes_repeat) ... ok\ntest_deducible_six_alive_flow_preserves_both_owner_ledgers (tests.test_guard_max_history.GuardMaxHistoryTests.test_deducible_six_alive_flow_preserves_both_owner_ledgers) ... ok\ntest_first_five_player_result_matches_hand_calculation (tests.test_guard_max_history.GuardMaxHistoryTests.test_first_five_player_result_matches_hand_calculation) ... ok\ntest_guardian_can_be_deduced_by_wolves_without_public_identity (tests.test_guard_max_history.GuardMaxHistoryTests.test_guardian_can_be_deduced_by_wolves_without_public_identity) ... ok\ntest_historical_proof_is_required_not_inferred_from_later_symmetry (tests.test_guard_max_history.GuardMaxHistoryTests.test_historical_proof_is_required_not_inferred_from_later_symmetry) ... ok\ntest_late_five_alive_cut_from_nine_players_preserves_full_roster (tests.test_guard_max_history.GuardMaxHistoryTests.test_late_five_alive_cut_from_nine_players_preserves_full_roster) ... ok\ntest_owned_histories_split_max_policy_and_cache_without_public_leak (tests.test_guard_max_history.GuardMaxHistoryTests.test_owned_histories_split_max_policy_and_cache_without_public_leak) ... ok\ntest_private_guardian_deduction_keeps_scan_law_and_public_secrecy (tests.test_guard_max_history.GuardMaxHistoryTests.test_private_guardian_deduction_keeps_scan_law_and_public_secrecy) ... ok\ntest_public_history_mixture_preserves_role_prior_and_all_alternatives (tests.test_guard_max_history.GuardMaxHistoryTests.test_public_history_mixture_preserves_role_prior_and_all_alternatives) ... ok\ntest_six_player_asymmetric_deduction_uses_shared_max_engine (tests.test_guard_max_history.GuardMaxHistoryTests.test_six_player_asymmetric_deduction_uses_shared_max_engine) ... ok\ntest_two_initial_wolves_keep_dead_teammate_in_owned_information_set (tests.test_guard_max_history.GuardMaxHistoryTests.test_two_initial_wolves_keep_dead_teammate_in_owned_information_set) ... ok\ntest_viewer_history_conditions_source_and_guard_actor_stays_private (tests.test_guard_max_history.GuardMaxHistoryTests.test_viewer_history_conditions_source_and_guard_actor_stays_private) ... ok\ntest_legal_four_player_board_global_support_and_past_policy (tests.test_hidden_guard_max_support.HiddenGuardMaxSupportTests.test_legal_four_player_board_global_support_and_past_policy) ... ok\ntest_public_support_keeps_role_weights_despite_unequal_likelihoods (tests.test_hidden_guard_max_support.HiddenGuardMaxSupportTests.test_public_support_keeps_role_weights_despite_unequal_likelihoods) ... ok\ntest_unknown_guard_max_gj_has_public_world_without_policy_history (tests.test_hidden_guard_max_support.HiddenGuardMaxSupportTests.test_unknown_guard_max_gj_has_public_world_without_policy_history) ... ok\ntest_changed_input_opens_new_snapshot_and_private_cache (tests.test_closed_calculation.ClosedCalculationTests.test_changed_input_opens_new_snapshot_and_private_cache) ... ok\ntest_exported_recipe_cannot_modify_live_engine_or_cache (tests.test_closed_calculation.ClosedCalculationTests.test_exported_recipe_cannot_modify_live_engine_or_cache) ... ok\ntest_input_and_owner_validation_support_errors_and_bounds_remain (tests.test_closed_calculation.ClosedCalculationTests.test_input_and_owner_validation_support_errors_and_bounds_remain) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=None\nok\ntest_same_two_named_tasks_and_independent_cold_without_ledger (tests.test_closed_calculation.ClosedCalculationTests.test_same_two_named_tasks_and_independent_cold_without_ledger) ... ok\ntest_edit_cancel_recalculate_and_export_keep_snapshots_isolated (tests.test_closed_saved_history.ClosedSavedHistoryTests.test_edit_cancel_recalculate_and_export_keep_snapshots_isolated) ... ok\ntest_multiple_nights_named_public_owner_and_independent_cold (tests.test_closed_saved_history.ClosedSavedHistoryTests.test_multiple_nights_named_public_owner_and_independent_cold) ... ok\ntest_observed_wolf_selection_is_weighted_before_physical_outcomes (tests.test_closed_saved_history.ClosedSavedHistoryTests.test_observed_wolf_selection_is_weighted_before_physical_outcomes) ... ok\ntest_unsupported_reports_observations_and_zero_support_remain_explicit (tests.test_closed_saved_history.ClosedSavedHistoryTests.test_unsupported_reports_observations_and_zero_support_remain_explicit) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nok\ntest_edit_cancel_and_recalculate_are_new_snapshots (tests.test_closed_saved_day.ClosedSavedDayTests.test_edit_cancel_and_recalculate_are_new_snapshots) ... ok\ntest_other_saved_conditions_decline_and_night_weights_are_not_constant (tests.test_closed_saved_day.ClosedSavedDayTests.test_other_saved_conditions_decline_and_night_weights_are_not_constant) ... ok\ntest_saved_day_matches_initial_generation_full_state_and_cold (tests.test_closed_saved_day.ClosedSavedDayTests.test_saved_day_matches_initial_generation_full_state_and_cold) ... ok\ntest_concurrent_requests_use_one_slot_and_release_after_error (tests.test_extended_budget.ExtendedBudgetTests.test_concurrent_requests_use_one_slot_and_release_after_error) ... wwgg_budget_result endpoint=main status=200 work=0 max_work=4000000 elapsed_seconds=0.016 process_peak_mb=None stop=complete\nwwgg_budget_result endpoint=main status=200 work=0 max_work=4000000 elapsed_seconds=0.047 process_peak_mb=None stop=complete\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nwwgg_budget_result endpoint=main status=503 work=0 max_work=4000000 elapsed_seconds=0.0 process_peak_mb=None stop=work\nwwgg_budget_result endpoint=main status=200 work=0 max_work=4000000 elapsed_seconds=0.031 process_peak_mb=None stop=complete\nok\ntest_defaults_and_forecast_still_exact (tests.test_extended_budget.ExtendedBudgetTests.test_defaults_and_forecast_still_exact) ... wwgg_budget_result endpoint=main status=200 work=6 max_work=4000000 elapsed_seconds=0.141 process_peak_mb=None stop=complete\nok\ntest_failed_post_retains_previous_saved_game (tests.test_extended_budget.ExtendedBudgetTests.test_failed_post_retains_previous_saved_game) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nok\ntest_independent_thread_budgets_do_not_share_counts (tests.test_extended_budget.ExtendedBudgetTests.test_independent_thread_budgets_do_not_share_counts) ... ok\ntest_nested_time_uses_earliest_deadline (tests.test_extended_budget.ExtendedBudgetTests.test_nested_time_uses_earliest_deadline) ... wwgg_budget_stop kind=time work=1 max_work=100 elapsed_seconds=1.1\nok\ntest_nested_work_cannot_reset_parent_and_kind_is_recorded (tests.test_extended_budget.ExtendedBudgetTests.test_nested_work_cannot_reset_parent_and_kind_is_recorded) ... wwgg_budget_stop kind=work work=4 max_work=3 elapsed_seconds=None\nok\ntest_time_stop_display (tests.test_extended_budget.ExtendedBudgetTests.test_time_stop_display) ... wwgg_budget_stop kind=time work=0 max_work=4000000 elapsed_seconds=2\nwwgg_budget_result endpoint=main status=503 work=0 max_work=4000000 elapsed_seconds=4 process_peak_mb=None stop=time\nok\ntest_work_stop_display_and_no_secret_log (tests.test_extended_budget.ExtendedBudgetTests.test_work_stop_display_and_no_secret_log) ... ok\ntest_acquisition_cache_keeps_complete_source_and_never_keeps_failure (tests.test_candidate_policy_coherence.CandidatePolicyCoherenceTests.test_acquisition_cache_keeps_complete_source_and_never_keeps_failure) ... ok\ntest_candidate_bite_and_public_kernel_are_same_policy_not_public_fact (tests.test_candidate_policy_coherence.CandidatePolicyCoherenceTests.test_candidate_bite_and_public_kernel_are_same_policy_not_public_fact) ... ok\ntest_exact_renaming_maps_candidate_policy_and_all_information_keys_together (tests.test_candidate_policy_coherence.CandidatePolicyCoherenceTests.test_exact_renaming_maps_candidate_policy_and_all_information_keys_together) ... ok\ntest_profile_search_does_not_reject_legal_candidates_as_off_path (tests.test_candidate_policy_coherence.CandidatePolicyCoherenceTests.test_profile_search_does_not_reject_legal_candidates_as_off_path) ... ok\ntest_same_owned_information_ignores_hidden_hunter_and_no_history_is_published (tests.test_candidate_policy_coherence.CandidatePolicyCoherenceTests.test_same_owned_information_ignores_hidden_hunter_and_no_history_is_published) ... ok\ntest_acquisition_consumes_parent_groups_without_parent_walk_or_full_checks (tests.test_inherited_group_consumption.InheritedGroupConsumptionTests.test_acquisition_consumes_parent_groups_without_parent_walk_or_full_checks) ... ok\ntest_existing_publication_entry_skips_checks_and_preserves_all_named_details (tests.test_inherited_group_consumption.InheritedGroupConsumptionTests.test_existing_publication_entry_skips_checks_and_preserves_all_named_details) ... ok\ntest_fake_producer_proof_cannot_skip_normal_checks (tests.test_inherited_group_consumption.InheritedGroupConsumptionTests.test_fake_producer_proof_cannot_skip_normal_checks) ... ok\ntest_fast_scope_remains_identity_bound_and_revision_guarded (tests.test_inherited_group_consumption.InheritedGroupConsumptionTests.test_fast_scope_remains_identity_bound_and_revision_guarded) ... ok\ntest_owner_revision_copy_and_changed_private_identity_are_rejected (tests.test_inherited_group_consumption.InheritedGroupConsumptionTests.test_owner_revision_copy_and_changed_private_identity_are_rejected) ... ok\ntest_unsupported_observer_keeps_ordinary_scope (tests.test_inherited_group_consumption.InheritedGroupConsumptionTests.test_unsupported_observer_keeps_ordinary_scope) ... ok\n\n----------------------------------------------------------------------\nRan 76 tests in 22.167s\n\nOK\n",
+      "sha256": "b031170aaf9067494fc01ecbc6b95336eb904a7799901dc26903d1bb1dfc4e57"
+    },
+    "ww-seven-initial-tests.log": {
+      "text": "test_complete_initial_seven_admitted_without_solving (tests.test_seven_initial_scope.SevenInitialScopeTests.test_complete_initial_seven_admitted_without_solving) ... ok\ntest_missing_initial_and_two_fakes_stay_public_support_refusals (tests.test_seven_initial_scope.SevenInitialScopeTests.test_missing_initial_and_two_fakes_stay_public_support_refusals) ... ok\ntest_seven_night_and_eight_root_do_not_gain_entry (tests.test_seven_initial_scope.SevenInitialScopeTests.test_seven_night_and_eight_root_do_not_gain_entry) ... ok\ntest_seven_self_bite_max_and_guard_are_not_admitted (tests.test_seven_initial_scope.SevenInitialScopeTests.test_seven_self_bite_max_and_guard_are_not_admitted) ... ok\ntest_max_policy_still_rejected_by_grouped_constructor (tests.test_terminal_day_cut.TerminalDayCutTests.test_max_policy_still_rejected_by_grouped_constructor) ... ok\ntest_narrow_condition_and_common_fallback (tests.test_terminal_day_cut.TerminalDayCutTests.test_narrow_condition_and_common_fallback) ... ok\ntest_uniform_terminal_scalar_public_and_owners_keeps_named_actions (tests.test_terminal_day_cut.TerminalDayCutTests.test_uniform_terminal_scalar_public_and_owners_keeps_named_actions) ... ok\ntest_changed_input_opens_new_snapshot_and_private_cache (tests.test_closed_calculation.ClosedCalculationTests.test_changed_input_opens_new_snapshot_and_private_cache) ... ok\ntest_exported_recipe_cannot_modify_live_engine_or_cache (tests.test_closed_calculation.ClosedCalculationTests.test_exported_recipe_cannot_modify_live_engine_or_cache) ... ok\ntest_input_and_owner_validation_support_errors_and_bounds_remain (tests.test_closed_calculation.ClosedCalculationTests.test_input_and_owner_validation_support_errors_and_bounds_remain) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=None\nok\ntest_same_two_named_tasks_and_independent_cold_without_ledger (tests.test_closed_calculation.ClosedCalculationTests.test_same_two_named_tasks_and_independent_cold_without_ledger) ... ok\ntest_budget_separate_scope_limit_and_no_ledger (tests.test_closed_full_tree.ClosedFullTreeTests.test_budget_separate_scope_limit_and_no_ledger) ... wwgg_budget_stop kind=work work=4 max_work=1 elapsed_seconds=None\nok\n\n----------------------------------------------------------------------\nRan 12 tests in 2.304s\n\nOK\n",
+      "sha256": "a23187408262328bbb27e80f5c86fb2f5d915ff21cf43916f32565611aefcc5c"
+    }
+  },
+  "source_sha256": {
+    "werewolf/closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+    "werewolf/grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+    "werewolf/information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "tests/test_seven_initial_scope.py": "5429ea65ed3456215aebc91dbad0fd42efb00a1b21c8d82e4f1e3627fdee01ea",
+    "tests/test_closed_calculation.py": "9baa6826e4e77a3524196883753903f2527fd3f596df49b15851be764c9f7eb6",
+    "tests/test_closed_full_tree.py": "edef3c987334cbfa1de4e555f9ff94cb14363fe9754e2b384b94d11794f75556",
+    "benchmarks/player_match_groups/seven_initial_forecast.py": "d14603b974bce09e55f6dccda1f71915817bbc8a6b5ded8767f5e4aaaff0607a",
+    "benchmarks/player_match_groups/seven_initial_transition.py": "68e23bd83b7d24fd26423631f5126757cbac140c6d8082a73404a40b7896e0ef"
+  },
+  "notes": [
+    "Alive-count induction connects every new initial-day action to already defined <=6 kernels. First-edge cold equality is not a claim of complete seven numerical enumeration.",
+    "Original seven root solve has not completed; neither a scalar nor a complete Forecast/Table is reported.",
+    "Limits unchanged. No push/deploy/UI/server change."
+  ]
+}
