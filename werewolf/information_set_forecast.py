@@ -276,7 +276,10 @@ class InformationSetForecast:
         def generate():
             ledger=self.acquisition_provenance
             if ledger is not None:ledger._begin_morning(b,s,past)
-            rows=self.generate_morning(b,s,past)
+            try:rows=self.generate_morning(b,s,past)
+            except BaseException:
+                if ledger is not None:ledger._abort_morning(b,s,past)
+                raise
             if ledger is not None:ledger._record_morning(b,s,past,rows)
             return rows
         branches=self.cached_flow(self.mornings,(b,s,past),generate,'morning')

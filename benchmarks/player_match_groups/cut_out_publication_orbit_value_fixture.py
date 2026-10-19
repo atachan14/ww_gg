@@ -810,7 +810,8 @@ if __name__=='__main__':
     elif len(sys.argv)>1 and sys.argv[1]=='seven-coverage':seven_coverage_worker()
     elif len(sys.argv)>1 and sys.argv[1]=='inherited-groups':
         if '--measure' in sys.argv:
-            from .measure_shared_transition import run
-            run()
+            from .measure_shared_transition import run,compare_boundary
+            if '--reference' in sys.argv:compare_boundary(sys.argv[sys.argv.index('--reference')+1])
+            else:run()
         else:shared_transition_worker()
     else:worker(sys.argv[1] if len(sys.argv)>1 else 'five')

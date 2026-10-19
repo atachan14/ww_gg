@@ -1,0 +1,2812 @@
+{
+  "python": "3.12.10 (tags/v3.12.10:0cc8128, Apr  8 2025, 12:21:36) [MSC v.1943 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "recorded_at_utc": "2026-10-18T23:59:36.313508+00:00",
+  "status": "verified",
+  "repeats": 5,
+  "seconds": 15.36405959998956,
+  "summaries": [
+    {
+      "case": "five-owner-night",
+      "named_complete_results_equal": true,
+      "ordinary": {
+        "repeats": 5,
+        "body_seconds_median": 0.04787190002389252,
+        "body_seconds_min": 0.04482940002344549,
+        "body_seconds_max": 0.0493199999909848,
+        "process_wall_seconds_median": 0.5511768999858759,
+        "peak_working_set_bytes_median": 34279424,
+        "peak_working_set_bytes_max": 34410496,
+        "phase_seconds_median": {
+          "common_setup_seconds": 0.019394499948248267,
+          "root_guarantee_and_registration_seconds": 2.6899971999228e-05,
+          "finite_common_kernels_seconds": 0.002625000022817403,
+          "Forecast_Table_seconds": 0.025849000026937574
+        },
+        "root_and_compute_seconds_median": 0.028588299988768995,
+        "instrumented_calls": {
+          "__eq__": 180,
+          "__hash__": 348,
+          "roles": 26,
+          "condition_recipe": 3
+        },
+        "states": {
+          "values": 8,
+          "actions": 31,
+          "expansions": {
+            "actions": 31,
+            "values": 8
+          },
+          "acquired": 3,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 2,
+          "saved_sources": 36,
+          "resolution_cache": 32,
+          "readout_entries": 10
+        },
+        "proof_counts": {}
+      },
+      "inherited": {
+        "repeats": 5,
+        "body_seconds_median": 0.048787000006996095,
+        "body_seconds_min": 0.04662590002408251,
+        "body_seconds_max": 0.05435079999733716,
+        "process_wall_seconds_median": 0.5810370999970473,
+        "peak_working_set_bytes_median": 34381824,
+        "peak_working_set_bytes_max": 34467840,
+        "phase_seconds_median": {
+          "common_setup_seconds": 0.017746200028341264,
+          "root_guarantee_and_registration_seconds": 0.0010305999894626439,
+          "finite_common_kernels_seconds": 0.0018328999867662787,
+          "Forecast_Table_seconds": 0.027429799956735224
+        },
+        "root_and_compute_seconds_median": 0.030248599941842258,
+        "instrumented_calls": {
+          "__eq__": 135,
+          "__hash__": 310,
+          "roles": 9,
+          "condition_recipe": 3
+        },
+        "states": {
+          "values": 8,
+          "actions": 31,
+          "expansions": {
+            "actions": 31,
+            "values": 8
+          },
+          "acquired": 3,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 2,
+          "saved_sources": 36,
+          "resolution_cache": 32,
+          "readout_entries": 10
+        },
+        "proof_counts": {
+          "root_canonical_hypothesis_visits": 3,
+          "audited_roots": 1,
+          "information_semantic_hypothesis_visits": 5,
+          "group_consumptions": 63,
+          "information_group_receipts": 6,
+          "information_parent_replays_avoided": 6,
+          "death_group_receipts": 12,
+          "death_parent_replays_avoided": 12,
+          "wolf_partition_hypothesis_visits": 4,
+          "wolf_policy_public_hypothesis_visits": 4,
+          "uniform_choice_receipts": 12,
+          "frame_identity_reuses": 29,
+          "uniform_wolf_solve_uses": 1,
+          "generation_records": 3,
+          "observed_acquisition_records": 14,
+          "paired_receipts": 14,
+          "inherited_groups": 10,
+          "report_group_receipts": 3,
+          "report_parent_replays_avoided": 3,
+          "report_ordinary_fallbacks": 5,
+          "trusted_cache_equivalence_links": 1
+        }
+      },
+      "inherited_over_ordinary_time": 1.0191155977232333,
+      "inherited_over_ordinary_peak": 1.0029872147209942,
+      "paired_body_ratios": [
+        0.9559365341818188,
+        1.0701074468126395,
+        1.0882813506645372,
+        0.9790962966976349,
+        1.1020032442674765
+      ]
+    },
+    {
+      "case": "seven-owner-three",
+      "named_complete_results_equal": true,
+      "ordinary": {
+        "repeats": 5,
+        "body_seconds_median": 0.07923929998651147,
+        "body_seconds_min": 0.0785289999912493,
+        "body_seconds_max": 0.08124199998565018,
+        "process_wall_seconds_median": 0.5733107000123709,
+        "peak_working_set_bytes_median": 34615296,
+        "peak_working_set_bytes_max": 34717696,
+        "phase_seconds_median": {
+          "common_setup_seconds": 0.04626769997412339,
+          "root_guarantee_and_registration_seconds": 4.050001734867692e-05,
+          "finite_common_kernels_seconds": 0.021389000001363456,
+          "Forecast_Table_seconds": 0.011445100011769682
+        },
+        "root_and_compute_seconds_median": 0.033164899970870465,
+        "instrumented_calls": {
+          "__eq__": 72,
+          "__hash__": 245,
+          "roles": 17,
+          "condition_recipe": 2
+        },
+        "states": {
+          "values": 6,
+          "actions": 18,
+          "expansions": {
+            "actions": 18,
+            "values": 6
+          },
+          "acquired": 3,
+          "mornings": 2,
+          "publications": 3,
+          "policies": 3,
+          "saved_sources": 48,
+          "resolution_cache": 22,
+          "readout_entries": 29
+        },
+        "proof_counts": {}
+      },
+      "inherited": {
+        "repeats": 5,
+        "body_seconds_median": 0.08046110003488138,
+        "body_seconds_min": 0.07593940000515431,
+        "body_seconds_max": 0.08509499998763204,
+        "process_wall_seconds_median": 0.5922737999935634,
+        "peak_working_set_bytes_median": 34680832,
+        "peak_working_set_bytes_max": 34729984,
+        "phase_seconds_median": {
+          "common_setup_seconds": 0.0468199000461027,
+          "root_guarantee_and_registration_seconds": 0.0019130000146105886,
+          "finite_common_kernels_seconds": 0.017904900014400482,
+          "Forecast_Table_seconds": 0.01327649998711422
+        },
+        "root_and_compute_seconds_median": 0.03302829997846857,
+        "instrumented_calls": {
+          "__eq__": 50,
+          "__hash__": 239,
+          "condition_recipe": 2
+        },
+        "states": {
+          "values": 6,
+          "actions": 18,
+          "expansions": {
+            "actions": 18,
+            "values": 6
+          },
+          "acquired": 3,
+          "mornings": 2,
+          "publications": 3,
+          "policies": 3,
+          "saved_sources": 48,
+          "resolution_cache": 22,
+          "readout_entries": 29
+        },
+        "proof_counts": {
+          "root_canonical_hypothesis_visits": 6,
+          "audited_roots": 1,
+          "information_semantic_hypothesis_visits": 9,
+          "group_consumptions": 34,
+          "information_group_receipts": 5,
+          "information_parent_replays_avoided": 5,
+          "death_group_receipts": 4,
+          "death_parent_replays_avoided": 4,
+          "wolf_partition_hypothesis_visits": 3,
+          "wolf_policy_public_hypothesis_visits": 18,
+          "uniform_choice_receipts": 15,
+          "generation_records": 3,
+          "observed_acquisition_records": 2,
+          "paired_receipts": 2,
+          "inherited_groups": 2,
+          "report_group_receipts": 8,
+          "report_parent_replays_avoided": 8,
+          "trusted_cache_equivalence_links": 1,
+          "frame_identity_reuses": 18
+        }
+      },
+      "inherited_over_ordinary_time": 1.015419117137303,
+      "inherited_over_ordinary_peak": 1.001893267068986,
+      "paired_body_ratios": [
+        1.020540583921628,
+        1.0474262081517247,
+        1.0246036501655107,
+        1.0020406541820817,
+        0.9552738602572546
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "five-owner-night",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.048775099974591285,
+      "phase_seconds": {
+        "common_setup_seconds": 0.02003999997396022,
+        "root_guarantee_and_registration_seconds": 2.7799978852272034e-05,
+        "finite_common_kernels_seconds": 0.002479200018569827,
+        "Forecast_Table_seconds": 0.026183700014371425
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34279424,
+      "process_peak_before_bytes": 33144832,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 0,
+      "process_wall_seconds": 0.5511768999858759
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 14,
+        "_roots": 1,
+        "_transitions": 21,
+        "_requests": 32,
+        "_frames": 32,
+        "_deaths": 32,
+        "_public_deaths": 4,
+        "_publications": 4,
+        "_morning_components": 0,
+        "_mornings": 4,
+        "_weighted_reports": 3,
+        "_report_batches": 3,
+        "_canonical_laws": 54,
+        "_canonical_boards": 32,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 6,
+        "_information_outputs": 0,
+        "_policy_generations": 2,
+        "stats": 21
+      },
+      "case": "five-owner-night",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.04662590002408251,
+      "phase_seconds": {
+        "common_setup_seconds": 0.0177038999972865,
+        "root_guarantee_and_registration_seconds": 0.0010305999894626439,
+        "finite_common_kernels_seconds": 0.0018288000137545168,
+        "Forecast_Table_seconds": 0.026019199984148145
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34381824,
+      "process_peak_before_bytes": 33177600,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 3,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 5,
+        "group_consumptions": 63,
+        "information_group_receipts": 6,
+        "information_parent_replays_avoided": 6,
+        "death_group_receipts": 12,
+        "death_parent_replays_avoided": 12,
+        "wolf_partition_hypothesis_visits": 4,
+        "wolf_policy_public_hypothesis_visits": 4,
+        "uniform_choice_receipts": 12,
+        "frame_identity_reuses": 29,
+        "uniform_wolf_solve_uses": 1,
+        "generation_records": 3,
+        "observed_acquisition_records": 14,
+        "paired_receipts": 14,
+        "inherited_groups": 10,
+        "report_group_receipts": 3,
+        "report_parent_replays_avoided": 3,
+        "report_ordinary_fallbacks": 5,
+        "trusted_cache_equivalence_links": 1
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 0,
+      "process_wall_seconds": 0.599213800043799
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 14,
+        "_roots": 1,
+        "_transitions": 21,
+        "_requests": 32,
+        "_frames": 32,
+        "_deaths": 32,
+        "_public_deaths": 4,
+        "_publications": 4,
+        "_morning_components": 0,
+        "_mornings": 4,
+        "_weighted_reports": 3,
+        "_report_batches": 3,
+        "_canonical_laws": 54,
+        "_canonical_boards": 32,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 6,
+        "_information_outputs": 0,
+        "_policy_generations": 2,
+        "stats": 21
+      },
+      "case": "five-owner-night",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.04939830000512302,
+      "phase_seconds": {
+        "common_setup_seconds": 0.01910819998010993,
+        "root_guarantee_and_registration_seconds": 0.0009858999983407557,
+        "finite_common_kernels_seconds": 0.0018328999867662787,
+        "Forecast_Table_seconds": 0.027429799956735224
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34418688,
+      "process_peak_before_bytes": 33132544,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 3,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 5,
+        "group_consumptions": 63,
+        "information_group_receipts": 6,
+        "information_parent_replays_avoided": 6,
+        "death_group_receipts": 12,
+        "death_parent_replays_avoided": 12,
+        "wolf_partition_hypothesis_visits": 4,
+        "wolf_policy_public_hypothesis_visits": 4,
+        "uniform_choice_receipts": 12,
+        "frame_identity_reuses": 29,
+        "uniform_wolf_solve_uses": 1,
+        "generation_records": 3,
+        "observed_acquisition_records": 14,
+        "paired_receipts": 14,
+        "inherited_groups": 10,
+        "report_group_receipts": 3,
+        "report_parent_replays_avoided": 3,
+        "report_ordinary_fallbacks": 5,
+        "trusted_cache_equivalence_links": 1
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 1,
+      "process_wall_seconds": 0.7084060999914072
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "five-owner-night",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.04616200004238635,
+      "phase_seconds": {
+        "common_setup_seconds": 0.01761330000590533,
+        "root_guarantee_and_registration_seconds": 2.6899971999228e-05,
+        "finite_common_kernels_seconds": 0.002625000022817403,
+        "Forecast_Table_seconds": 0.025849000026937574
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34312192,
+      "process_peak_before_bytes": 33157120,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 1,
+      "process_wall_seconds": 0.5265369999688119
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "five-owner-night",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.04482940002344549,
+      "phase_seconds": {
+        "common_setup_seconds": 0.01619819999905303,
+        "root_guarantee_and_registration_seconds": 3.1999952625483274e-05,
+        "finite_common_kernels_seconds": 0.00311879999935627,
+        "Forecast_Table_seconds": 0.02543750003678724
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34152448,
+      "process_peak_before_bytes": 33140736,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 2,
+      "process_wall_seconds": 0.5670049000182189
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 14,
+        "_roots": 1,
+        "_transitions": 21,
+        "_requests": 32,
+        "_frames": 32,
+        "_deaths": 32,
+        "_public_deaths": 4,
+        "_publications": 4,
+        "_morning_components": 0,
+        "_mornings": 4,
+        "_weighted_reports": 3,
+        "_report_batches": 3,
+        "_canonical_laws": 54,
+        "_canonical_boards": 32,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 6,
+        "_information_outputs": 0,
+        "_policy_generations": 2,
+        "stats": 21
+      },
+      "case": "five-owner-night",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.048787000006996095,
+      "phase_seconds": {
+        "common_setup_seconds": 0.017746200028341264,
+        "root_guarantee_and_registration_seconds": 0.0011029000161215663,
+        "finite_common_kernels_seconds": 0.0021299999789334834,
+        "Forecast_Table_seconds": 0.027764200000092387
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34377728,
+      "process_peak_before_bytes": 33255424,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 3,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 5,
+        "group_consumptions": 63,
+        "information_group_receipts": 6,
+        "information_parent_replays_avoided": 6,
+        "death_group_receipts": 12,
+        "death_parent_replays_avoided": 12,
+        "wolf_partition_hypothesis_visits": 4,
+        "wolf_policy_public_hypothesis_visits": 4,
+        "uniform_choice_receipts": 12,
+        "frame_identity_reuses": 29,
+        "uniform_wolf_solve_uses": 1,
+        "generation_records": 3,
+        "observed_acquisition_records": 14,
+        "paired_receipts": 14,
+        "inherited_groups": 10,
+        "report_group_receipts": 3,
+        "report_parent_replays_avoided": 3,
+        "report_ordinary_fallbacks": 5,
+        "trusted_cache_equivalence_links": 1
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 2,
+      "process_wall_seconds": 0.5467209999915212
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 14,
+        "_roots": 1,
+        "_transitions": 21,
+        "_requests": 32,
+        "_frames": 32,
+        "_deaths": 32,
+        "_public_deaths": 4,
+        "_publications": 4,
+        "_morning_components": 0,
+        "_mornings": 4,
+        "_weighted_reports": 3,
+        "_report_batches": 3,
+        "_canonical_laws": 54,
+        "_canonical_boards": 32,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 6,
+        "_information_outputs": 0,
+        "_policy_generations": 2,
+        "stats": 21
+      },
+      "case": "five-owner-night",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.046871200029272586,
+      "phase_seconds": {
+        "common_setup_seconds": 0.016657200001645833,
+        "root_guarantee_and_registration_seconds": 0.0012988000526092947,
+        "finite_common_kernels_seconds": 0.002074900025036186,
+        "Forecast_Table_seconds": 0.026798299979418516
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34467840,
+      "process_peak_before_bytes": 33124352,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 3,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 5,
+        "group_consumptions": 63,
+        "information_group_receipts": 6,
+        "information_parent_replays_avoided": 6,
+        "death_group_receipts": 12,
+        "death_parent_replays_avoided": 12,
+        "wolf_partition_hypothesis_visits": 4,
+        "wolf_policy_public_hypothesis_visits": 4,
+        "uniform_choice_receipts": 12,
+        "frame_identity_reuses": 29,
+        "uniform_wolf_solve_uses": 1,
+        "generation_records": 3,
+        "observed_acquisition_records": 14,
+        "paired_receipts": 14,
+        "inherited_groups": 10,
+        "report_group_receipts": 3,
+        "report_parent_replays_avoided": 3,
+        "report_ordinary_fallbacks": 5,
+        "trusted_cache_equivalence_links": 1
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 3,
+      "process_wall_seconds": 0.551058400014881
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "five-owner-night",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.04787190002389252,
+      "phase_seconds": {
+        "common_setup_seconds": 0.019655700016301125,
+        "root_guarantee_and_registration_seconds": 2.5900022592395544e-05,
+        "finite_common_kernels_seconds": 0.00269950000802055,
+        "Forecast_Table_seconds": 0.025443899969104677
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34181120,
+      "process_peak_before_bytes": 32989184,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 3,
+      "process_wall_seconds": 0.539483200001996
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "five-owner-night",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.0493199999909848,
+      "phase_seconds": {
+        "common_setup_seconds": 0.019394499948248267,
+        "root_guarantee_and_registration_seconds": 2.570002106949687e-05,
+        "finite_common_kernels_seconds": 0.002353500050958246,
+        "Forecast_Table_seconds": 0.027505500009283423
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34410496,
+      "process_peak_before_bytes": 33251328,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 4,
+      "process_wall_seconds": 0.6045373000088148
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 14,
+        "_roots": 1,
+        "_transitions": 21,
+        "_requests": 32,
+        "_frames": 32,
+        "_deaths": 32,
+        "_public_deaths": 4,
+        "_publications": 4,
+        "_morning_components": 0,
+        "_mornings": 4,
+        "_weighted_reports": 3,
+        "_report_batches": 3,
+        "_canonical_laws": 54,
+        "_canonical_boards": 32,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 6,
+        "_information_outputs": 0,
+        "_policy_generations": 2,
+        "stats": 21
+      },
+      "case": "five-owner-night",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.05435079999733716,
+      "phase_seconds": {
+        "common_setup_seconds": 0.018070300051476806,
+        "root_guarantee_and_registration_seconds": 0.0010237999958917499,
+        "finite_common_kernels_seconds": 0.001736900012474507,
+        "Forecast_Table_seconds": 0.0334764999570325
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34373632,
+      "process_peak_before_bytes": 33255424,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 3,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 5,
+        "group_consumptions": 63,
+        "information_group_receipts": 6,
+        "information_parent_replays_avoided": 6,
+        "death_group_receipts": 12,
+        "death_parent_replays_avoided": 12,
+        "wolf_partition_hypothesis_visits": 4,
+        "wolf_policy_public_hypothesis_visits": 4,
+        "uniform_choice_receipts": 12,
+        "frame_identity_reuses": 29,
+        "uniform_wolf_solve_uses": 1,
+        "generation_records": 3,
+        "observed_acquisition_records": 14,
+        "paired_receipts": 14,
+        "inherited_groups": 10,
+        "report_group_receipts": 3,
+        "report_parent_replays_avoided": 3,
+        "report_ordinary_fallbacks": 5,
+        "trusted_cache_equivalence_links": 1
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 0,
+      "repeat": 4,
+      "process_wall_seconds": 0.5810370999970473
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "seven-owner-three",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.07909220003057271,
+      "phase_seconds": {
+        "common_setup_seconds": 0.04713330004597083,
+        "root_guarantee_and_registration_seconds": 3.860000288113952e-05,
+        "finite_common_kernels_seconds": 0.02073649998055771,
+        "Forecast_Table_seconds": 0.011125999968498945
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34680832,
+      "process_peak_before_bytes": 33173504,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 0,
+      "process_wall_seconds": 0.5775375999510288
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 2,
+        "_roots": 1,
+        "_transitions": 17,
+        "_requests": 20,
+        "_frames": 20,
+        "_deaths": 4,
+        "_public_deaths": 0,
+        "_publications": 3,
+        "_morning_components": 0,
+        "_mornings": 2,
+        "_weighted_reports": 8,
+        "_report_batches": 2,
+        "_canonical_laws": 31,
+        "_canonical_boards": 28,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 15,
+        "_information_outputs": 0,
+        "_policy_generations": 3,
+        "stats": 19
+      },
+      "case": "seven-owner-three",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.08071680000284687,
+      "phase_seconds": {
+        "common_setup_seconds": 0.047731600003317,
+        "root_guarantee_and_registration_seconds": 0.0018400000408291817,
+        "finite_common_kernels_seconds": 0.017904900014400482,
+        "Forecast_Table_seconds": 0.013189900026191026
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34680832,
+      "process_peak_before_bytes": 33288192,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 6,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 9,
+        "group_consumptions": 34,
+        "information_group_receipts": 5,
+        "information_parent_replays_avoided": 5,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "wolf_partition_hypothesis_visits": 3,
+        "wolf_policy_public_hypothesis_visits": 18,
+        "uniform_choice_receipts": 15,
+        "generation_records": 3,
+        "observed_acquisition_records": 2,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 8,
+        "report_parent_replays_avoided": 8,
+        "trusted_cache_equivalence_links": 1,
+        "frame_identity_reuses": 18
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 0,
+      "process_wall_seconds": 0.6045046999934129
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 2,
+        "_roots": 1,
+        "_transitions": 17,
+        "_requests": 20,
+        "_frames": 20,
+        "_deaths": 4,
+        "_public_deaths": 0,
+        "_publications": 3,
+        "_morning_components": 0,
+        "_mornings": 2,
+        "_weighted_reports": 8,
+        "_report_batches": 2,
+        "_canonical_laws": 31,
+        "_canonical_boards": 28,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 15,
+        "_information_outputs": 0,
+        "_policy_generations": 3,
+        "stats": 19
+      },
+      "case": "seven-owner-three",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.08509499998763204,
+      "phase_seconds": {
+        "common_setup_seconds": 0.05153649998828769,
+        "root_guarantee_and_registration_seconds": 0.0019509000121615827,
+        "finite_common_kernels_seconds": 0.018277700000908226,
+        "Forecast_Table_seconds": 0.01327649998711422
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34729984,
+      "process_peak_before_bytes": 33198080,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 6,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 9,
+        "group_consumptions": 34,
+        "information_group_receipts": 5,
+        "information_parent_replays_avoided": 5,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "wolf_partition_hypothesis_visits": 3,
+        "wolf_policy_public_hypothesis_visits": 18,
+        "uniform_choice_receipts": 15,
+        "generation_records": 3,
+        "observed_acquisition_records": 2,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 8,
+        "report_parent_replays_avoided": 8,
+        "trusted_cache_equivalence_links": 1,
+        "frame_identity_reuses": 18
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 1,
+      "process_wall_seconds": 0.5940729000139982
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "seven-owner-three",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.08124199998565018,
+      "phase_seconds": {
+        "common_setup_seconds": 0.04802640003617853,
+        "root_guarantee_and_registration_seconds": 4.0000013541430235e-05,
+        "finite_common_kernels_seconds": 0.021679799945559353,
+        "Forecast_Table_seconds": 0.011445100011769682
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34717696,
+      "process_peak_before_bytes": 33251328,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 1,
+      "process_wall_seconds": 0.6125553000019863
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "seven-owner-three",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.0785289999912493,
+      "phase_seconds": {
+        "common_setup_seconds": 0.04462569998577237,
+        "root_guarantee_and_registration_seconds": 0.0001631999621167779,
+        "finite_common_kernels_seconds": 0.021389000001363456,
+        "Forecast_Table_seconds": 0.012296099972445518
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34615296,
+      "process_peak_before_bytes": 33202176,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 2,
+      "process_wall_seconds": 0.5710268999682739
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 2,
+        "_roots": 1,
+        "_transitions": 17,
+        "_requests": 20,
+        "_frames": 20,
+        "_deaths": 4,
+        "_public_deaths": 0,
+        "_publications": 3,
+        "_morning_components": 0,
+        "_mornings": 2,
+        "_weighted_reports": 8,
+        "_report_batches": 2,
+        "_canonical_laws": 31,
+        "_canonical_boards": 28,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 15,
+        "_information_outputs": 0,
+        "_policy_generations": 3,
+        "stats": 19
+      },
+      "case": "seven-owner-three",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.08046110003488138,
+      "phase_seconds": {
+        "common_setup_seconds": 0.0468199000461027,
+        "root_guarantee_and_registration_seconds": 0.0018078999710269272,
+        "finite_common_kernels_seconds": 0.01795140001922846,
+        "Forecast_Table_seconds": 0.01383229997009039
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34582528,
+      "process_peak_before_bytes": 33206272,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 6,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 9,
+        "group_consumptions": 34,
+        "information_group_receipts": 5,
+        "information_parent_replays_avoided": 5,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "wolf_partition_hypothesis_visits": 3,
+        "wolf_policy_public_hypothesis_visits": 18,
+        "uniform_choice_receipts": 15,
+        "generation_records": 3,
+        "observed_acquisition_records": 2,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 8,
+        "report_parent_replays_avoided": 8,
+        "trusted_cache_equivalence_links": 1,
+        "frame_identity_reuses": 18
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 2,
+      "process_wall_seconds": 0.5922737999935634
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 2,
+        "_roots": 1,
+        "_transitions": 17,
+        "_requests": 20,
+        "_frames": 20,
+        "_deaths": 4,
+        "_public_deaths": 0,
+        "_publications": 3,
+        "_morning_components": 0,
+        "_mornings": 2,
+        "_weighted_reports": 8,
+        "_report_batches": 2,
+        "_canonical_laws": 31,
+        "_canonical_boards": 28,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 15,
+        "_information_outputs": 0,
+        "_policy_generations": 3,
+        "stats": 19
+      },
+      "case": "seven-owner-three",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.07940099999541417,
+      "phase_seconds": {
+        "common_setup_seconds": 0.046320200024638325,
+        "root_guarantee_and_registration_seconds": 0.0019130000146105886,
+        "finite_common_kernels_seconds": 0.017816799983847886,
+        "Forecast_Table_seconds": 0.013298499980010092
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34488320,
+      "process_peak_before_bytes": 33107968,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 6,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 9,
+        "group_consumptions": 34,
+        "information_group_receipts": 5,
+        "information_parent_replays_avoided": 5,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "wolf_partition_hypothesis_visits": 3,
+        "wolf_policy_public_hypothesis_visits": 18,
+        "uniform_choice_receipts": 15,
+        "generation_records": 3,
+        "observed_acquisition_records": 2,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 8,
+        "report_parent_replays_avoided": 8,
+        "trusted_cache_equivalence_links": 1,
+        "frame_identity_reuses": 18
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 3,
+      "process_wall_seconds": 0.5789514000061899
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "seven-owner-three",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.07923929998651147,
+      "phase_seconds": {
+        "common_setup_seconds": 0.04626769997412339,
+        "root_guarantee_and_registration_seconds": 4.1899969801306725e-05,
+        "finite_common_kernels_seconds": 0.021611200005281717,
+        "Forecast_Table_seconds": 0.01126030000159517
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34541568,
+      "process_peak_before_bytes": 33193984,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 3,
+      "process_wall_seconds": 0.5597828999743797
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {},
+      "case": "seven-owner-three",
+      "tracked": false,
+      "diagnostic": false,
+      "body_seconds": 0.07949490001192316,
+      "phase_seconds": {
+        "common_setup_seconds": 0.045798700011800975,
+        "root_guarantee_and_registration_seconds": 4.050001734867692e-05,
+        "finite_common_kernels_seconds": 0.021032099961303174,
+        "Forecast_Table_seconds": 0.01254930003779009
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34545664,
+      "process_peak_before_bytes": 33251328,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {},
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 4,
+      "process_wall_seconds": 0.5733107000123709
+    },
+    {
+      "profile": [],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 2,
+        "_roots": 1,
+        "_transitions": 17,
+        "_requests": 20,
+        "_frames": 20,
+        "_deaths": 4,
+        "_public_deaths": 0,
+        "_publications": 3,
+        "_morning_components": 0,
+        "_mornings": 2,
+        "_weighted_reports": 8,
+        "_report_batches": 2,
+        "_canonical_laws": 31,
+        "_canonical_boards": 28,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 15,
+        "_information_outputs": 0,
+        "_policy_generations": 3,
+        "stats": 19
+      },
+      "case": "seven-owner-three",
+      "tracked": true,
+      "diagnostic": false,
+      "body_seconds": 0.07593940000515431,
+      "phase_seconds": {
+        "common_setup_seconds": 0.044817699992563576,
+        "root_guarantee_and_registration_seconds": 0.002035900019109249,
+        "finite_common_kernels_seconds": 0.017285200010519475,
+        "Forecast_Table_seconds": 0.011748300050385296
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34721792,
+      "process_peak_before_bytes": 33234944,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 6,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 9,
+        "group_consumptions": 34,
+        "information_group_receipts": 5,
+        "information_parent_replays_avoided": 5,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "wolf_partition_hypothesis_visits": 3,
+        "wolf_policy_public_hypothesis_visits": 18,
+        "uniform_choice_receipts": 15,
+        "generation_records": 3,
+        "observed_acquisition_records": 2,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 8,
+        "report_parent_replays_avoided": 8,
+        "trusted_cache_equivalence_links": 1,
+        "frame_identity_reuses": 18
+      },
+      "instrumented_calls": {},
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 0,
+      "repeat": 4,
+      "process_wall_seconds": 0.5636592999799177
+    }
+  ],
+  "diagnostics": [
+    {
+      "profile": [
+        {
+          "file": "board_future.py",
+          "function": "kernel_snapshot",
+          "calls": 58,
+          "self_seconds": 0.00045870000000000004,
+          "cumulative_seconds": 0.0014085
+        },
+        {
+          "file": "board_future.py",
+          "function": "remember",
+          "calls": 66,
+          "self_seconds": 0.00040730000000000003,
+          "cumulative_seconds": 0.0033223000000000003
+        },
+        {
+          "file": "board_future.py",
+          "function": "condition_recipe",
+          "calls": 3,
+          "self_seconds": 0.00032900000000000003,
+          "cumulative_seconds": 0.0040023
+        },
+        {
+          "file": "board_future.py",
+          "function": "register_origin",
+          "calls": 58,
+          "self_seconds": 0.00021050000000000002,
+          "cumulative_seconds": 0.005634500000000001
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_publication",
+          "calls": 8,
+          "self_seconds": 0.0001584,
+          "cumulative_seconds": 0.0099971
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_child",
+          "calls": 24,
+          "self_seconds": 0.00015690000000000002,
+          "cumulative_seconds": 0.023876300000000003
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<module>",
+          "calls": 1,
+          "self_seconds": 8.14e-05,
+          "cumulative_seconds": 0.0031856000000000002
+        },
+        {
+          "file": "board_future.py",
+          "function": "roles",
+          "calls": 26,
+          "self_seconds": 7.65e-05,
+          "cumulative_seconds": 0.032904
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_information",
+          "calls": 4,
+          "self_seconds": 2.5e-05,
+          "cumulative_seconds": 0.0028545000000000003
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AcquisitionLedger",
+          "calls": 1,
+          "self_seconds": 1.3300000000000001e-05,
+          "cumulative_seconds": 1.3300000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionCache",
+          "calls": 1,
+          "self_seconds": 4.1000000000000006e-06,
+          "cumulative_seconds": 4.1000000000000006e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionReceipt",
+          "calls": 1,
+          "self_seconds": 2.1000000000000002e-06,
+          "cumulative_seconds": 2.1000000000000002e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "TransitionReceipt",
+          "calls": 1,
+          "self_seconds": 1.6000000000000001e-06,
+          "cumulative_seconds": 1.6000000000000001e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "ActorChoiceReceipt",
+          "calls": 1,
+          "self_seconds": 1.6000000000000001e-06,
+          "cumulative_seconds": 1.6000000000000001e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AuditedGroupReceipt",
+          "calls": 1,
+          "self_seconds": 8.000000000000001e-07,
+          "cumulative_seconds": 8.000000000000001e-07
+        }
+      ],
+      "ledger_retained_entries": {},
+      "case": "five-owner-night",
+      "tracked": false,
+      "diagnostic": true,
+      "body_seconds": 0.12536419997923076,
+      "phase_seconds": {
+        "common_setup_seconds": 0.027646999980788678,
+        "root_guarantee_and_registration_seconds": 6.729998858645558e-05,
+        "finite_common_kernels_seconds": 0.007702200033236295,
+        "Forecast_Table_seconds": 0.08975189999910071
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34865152,
+      "process_peak_before_bytes": 33542144,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {},
+      "instrumented_calls": {
+        "__eq__": 180,
+        "__hash__": 348,
+        "roles": 26,
+        "condition_recipe": 3
+      },
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 10
+    },
+    {
+      "profile": [
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_same_references",
+          "calls": 305,
+          "self_seconds": 0.0004104,
+          "cumulative_seconds": 0.0012661
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_observer_supported",
+          "calls": 82,
+          "self_seconds": 0.0004043,
+          "cumulative_seconds": 0.0006853
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_groups_record",
+          "calls": 101,
+          "self_seconds": 0.0003769,
+          "cumulative_seconds": 0.0014692000000000001
+        },
+        {
+          "file": "board_future.py",
+          "function": "kernel_snapshot",
+          "calls": 58,
+          "self_seconds": 0.00037140000000000003,
+          "cumulative_seconds": 0.0011209
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_supported",
+          "calls": 245,
+          "self_seconds": 0.0003478,
+          "cumulative_seconds": 0.00039590000000000003
+        },
+        {
+          "file": "board_future.py",
+          "function": "remember",
+          "calls": 68,
+          "self_seconds": 0.00034720000000000004,
+          "cumulative_seconds": 0.0029071
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 1871,
+          "self_seconds": 0.0003419,
+          "cumulative_seconds": 0.0003419
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_deaths",
+          "calls": 36,
+          "self_seconds": 0.00028490000000000004,
+          "cumulative_seconds": 0.0013735000000000002
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "receipt_for_frame",
+          "calls": 32,
+          "self_seconds": 0.0002526,
+          "cumulative_seconds": 0.0009197000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_fix",
+          "calls": 31,
+          "self_seconds": 0.00024880000000000003,
+          "cumulative_seconds": 0.0004934000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_owner_current",
+          "calls": 94,
+          "self_seconds": 0.0002144,
+          "cumulative_seconds": 0.00035410000000000004
+        },
+        {
+          "file": "board_future.py",
+          "function": "condition_recipe",
+          "calls": 3,
+          "self_seconds": 0.00018800000000000002,
+          "cumulative_seconds": 0.0031884
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_canonical_death",
+          "calls": 45,
+          "self_seconds": 0.0001874,
+          "cumulative_seconds": 0.00034540000000000005
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_child",
+          "calls": 12,
+          "self_seconds": 0.0001788,
+          "cumulative_seconds": 0.013641200000000001
+        },
+        {
+          "file": "board_future.py",
+          "function": "register_origin",
+          "calls": 46,
+          "self_seconds": 0.00016820000000000002,
+          "cumulative_seconds": 0.0044478
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_reports_supported",
+          "calls": 42,
+          "self_seconds": 0.0001672,
+          "cumulative_seconds": 0.0006774000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_bind",
+          "calls": 14,
+          "self_seconds": 0.00015670000000000001,
+          "cumulative_seconds": 0.0010146
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 252,
+          "self_seconds": 0.000145,
+          "cumulative_seconds": 0.0002497
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_validated_frame",
+          "calls": 67,
+          "self_seconds": 0.0001243,
+          "cumulative_seconds": 0.0013525000000000002
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_mint_transition",
+          "calls": 21,
+          "self_seconds": 0.000123,
+          "cumulative_seconds": 0.0002858
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_publication",
+          "calls": 8,
+          "self_seconds": 0.00011640000000000001,
+          "cumulative_seconds": 0.004745
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_choice",
+          "calls": 12,
+          "self_seconds": 9.410000000000001e-05,
+          "cumulative_seconds": 0.0004239
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_remember_frame",
+          "calls": 32,
+          "self_seconds": 8.410000000000001e-05,
+          "cumulative_seconds": 9.570000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_generation",
+          "calls": 67,
+          "self_seconds": 8.36e-05,
+          "cumulative_seconds": 0.0003598
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "death_boundary",
+          "calls": 12,
+          "self_seconds": 8.25e-05,
+          "cumulative_seconds": 0.0008695
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "report_boundary",
+          "calls": 13,
+          "self_seconds": 7.99e-05,
+          "cumulative_seconds": 0.0008804
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "information_boundary",
+          "calls": 6,
+          "self_seconds": 7.86e-05,
+          "cumulative_seconds": 0.0005067
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_frame",
+          "calls": 258,
+          "self_seconds": 7.670000000000001e-05,
+          "cumulative_seconds": 7.670000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_observed",
+          "calls": 14,
+          "self_seconds": 6.280000000000001e-05,
+          "cumulative_seconds": 0.0002998
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<module>",
+          "calls": 1,
+          "self_seconds": 6.24e-05,
+          "cumulative_seconds": 0.0028708
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 162,
+          "self_seconds": 5.42e-05,
+          "cumulative_seconds": 5.42e-05
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_information",
+          "calls": 6,
+          "self_seconds": 4.6500000000000005e-05,
+          "cumulative_seconds": 0.0009842
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 205,
+          "self_seconds": 4.16e-05,
+          "cumulative_seconds": 4.16e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 246,
+          "self_seconds": 3.9200000000000004e-05,
+          "cumulative_seconds": 3.9200000000000004e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_lookup",
+          "calls": 28,
+          "self_seconds": 3.7800000000000004e-05,
+          "cumulative_seconds": 0.0004528
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_register_audited_root",
+          "calls": 1,
+          "self_seconds": 3.09e-05,
+          "cumulative_seconds": 0.0001663
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_cache_equivalence",
+          "calls": 25,
+          "self_seconds": 3.03e-05,
+          "cumulative_seconds": 0.00020150000000000002
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_attach_generated_request",
+          "calls": 21,
+          "self_seconds": 2.9900000000000002e-05,
+          "cumulative_seconds": 6.71e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_push",
+          "calls": 7,
+          "self_seconds": 2.7700000000000002e-05,
+          "cumulative_seconds": 0.00018590000000000002
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_observed_generation",
+          "calls": 14,
+          "self_seconds": 2.71e-05,
+          "cumulative_seconds": 8.290000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_observer_positions",
+          "calls": 12,
+          "self_seconds": 2.54e-05,
+          "cumulative_seconds": 3.3900000000000004e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 37,
+          "self_seconds": 2.3500000000000002e-05,
+          "cumulative_seconds": 0.0001427
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_raw_request",
+          "calls": 32,
+          "self_seconds": 2.3500000000000002e-05,
+          "cumulative_seconds": 5.7e-05
+        },
+        {
+          "file": "board_future.py",
+          "function": "roles",
+          "calls": 9,
+          "self_seconds": 2.01e-05,
+          "cumulative_seconds": 0.0029969000000000003
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_morning",
+          "calls": 4,
+          "self_seconds": 1.65e-05,
+          "cumulative_seconds": 0.00010860000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AcquisitionLedger",
+          "calls": 1,
+          "self_seconds": 1.27e-05,
+          "cumulative_seconds": 1.27e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_uniform",
+          "calls": 3,
+          "self_seconds": 1.25e-05,
+          "cumulative_seconds": 2.1700000000000002e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_information_output",
+          "calls": 6,
+          "self_seconds": 1.0700000000000001e-05,
+          "cumulative_seconds": 1.34e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "__init__",
+          "calls": 1,
+          "self_seconds": 1e-05,
+          "cumulative_seconds": 1.6800000000000002e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "groups_for",
+          "calls": 10,
+          "self_seconds": 7.2000000000000005e-06,
+          "cumulative_seconds": 0.00022510000000000002
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_begin_morning",
+          "calls": 4,
+          "self_seconds": 6.4000000000000006e-06,
+          "cumulative_seconds": 6.670000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_publications",
+          "calls": 4,
+          "self_seconds": 6.200000000000001e-06,
+          "cumulative_seconds": 7.33e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "finish_report",
+          "calls": 5,
+          "self_seconds": 5.7000000000000005e-06,
+          "cumulative_seconds": 0.00029340000000000003
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "expired",
+          "calls": 4,
+          "self_seconds": 5.2e-06,
+          "cumulative_seconds": 8.1e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 24,
+          "self_seconds": 4.9000000000000005e-06,
+          "cumulative_seconds": 4.9000000000000005e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_attach_request",
+          "calls": 1,
+          "self_seconds": 4.800000000000001e-06,
+          "cumulative_seconds": 2.37e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionCache",
+          "calls": 1,
+          "self_seconds": 3.9e-06,
+          "cumulative_seconds": 3.9e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_store_generated",
+          "calls": 3,
+          "self_seconds": 3.9e-06,
+          "cumulative_seconds": 3.68e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_policy",
+          "calls": 2,
+          "self_seconds": 3.6000000000000003e-06,
+          "cumulative_seconds": 4.6e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 8,
+          "self_seconds": 2.0000000000000003e-06,
+          "cumulative_seconds": 2.0000000000000003e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionReceipt",
+          "calls": 1,
+          "self_seconds": 1.7e-06,
+          "cumulative_seconds": 1.7e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "TransitionReceipt",
+          "calls": 1,
+          "self_seconds": 1.6000000000000001e-06,
+          "cumulative_seconds": 1.6000000000000001e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "ActorChoiceReceipt",
+          "calls": 1,
+          "self_seconds": 1.5e-06,
+          "cumulative_seconds": 1.5e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 6,
+          "self_seconds": 1.4000000000000001e-06,
+          "cumulative_seconds": 1.4000000000000001e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "request_for",
+          "calls": 1,
+          "self_seconds": 1.1e-06,
+          "cumulative_seconds": 1.5300000000000003e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 4,
+          "self_seconds": 9.000000000000001e-07,
+          "cumulative_seconds": 9.000000000000001e-07
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AuditedGroupReceipt",
+          "calls": 1,
+          "self_seconds": 8.000000000000001e-07,
+          "cumulative_seconds": 8.000000000000001e-07
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "__init__",
+          "calls": 1,
+          "self_seconds": 8.000000000000001e-07,
+          "cumulative_seconds": 8.000000000000001e-07
+        }
+      ],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 14,
+        "_roots": 1,
+        "_transitions": 21,
+        "_requests": 32,
+        "_frames": 32,
+        "_deaths": 32,
+        "_public_deaths": 4,
+        "_publications": 4,
+        "_morning_components": 0,
+        "_mornings": 4,
+        "_weighted_reports": 3,
+        "_report_batches": 3,
+        "_canonical_laws": 54,
+        "_canonical_boards": 32,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 6,
+        "_information_outputs": 0,
+        "_policy_generations": 2,
+        "stats": 21
+      },
+      "case": "five-owner-night",
+      "tracked": true,
+      "diagnostic": true,
+      "body_seconds": 0.1066813999786973,
+      "phase_seconds": {
+        "common_setup_seconds": 0.026988200028426945,
+        "root_guarantee_and_registration_seconds": 0.0030527000199072063,
+        "finite_common_kernels_seconds": 0.004505700024310499,
+        "Forecast_Table_seconds": 0.07196540001314133
+      },
+      "process_peak_working_set_bytes_until_timed_end": 34971648,
+      "process_peak_before_bytes": 33386496,
+      "states": {
+        "values": 8,
+        "actions": 31,
+        "expansions": {
+          "actions": 31,
+          "values": 8
+        },
+        "acquired": 3,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 2,
+        "saved_sources": 36,
+        "resolution_cache": 32,
+        "readout_entries": 10
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 3,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 5,
+        "group_consumptions": 63,
+        "information_group_receipts": 6,
+        "information_parent_replays_avoided": 6,
+        "death_group_receipts": 12,
+        "death_parent_replays_avoided": 12,
+        "wolf_partition_hypothesis_visits": 4,
+        "wolf_policy_public_hypothesis_visits": 4,
+        "uniform_choice_receipts": 12,
+        "frame_identity_reuses": 29,
+        "uniform_wolf_solve_uses": 1,
+        "generation_records": 3,
+        "observed_acquisition_records": 14,
+        "paired_receipts": 14,
+        "inherited_groups": 10,
+        "report_group_receipts": 3,
+        "report_parent_replays_avoided": 3,
+        "report_ordinary_fallbacks": 5,
+        "trusted_cache_equivalence_links": 1
+      },
+      "instrumented_calls": {
+        "__eq__": 135,
+        "__hash__": 310,
+        "roles": 9,
+        "condition_recipe": 3
+      },
+      "semantic_digest": "93b6b8da3df926f854c140f07b35cc40b0740914bfe64baa051042ab6a069167",
+      "cold_reads": 10
+    },
+    {
+      "profile": [
+        {
+          "file": "board_future.py",
+          "function": "kernel_snapshot",
+          "calls": 62,
+          "self_seconds": 0.0004708,
+          "cumulative_seconds": 0.0013127
+        },
+        {
+          "file": "board_future.py",
+          "function": "remember",
+          "calls": 70,
+          "self_seconds": 0.0003288,
+          "cumulative_seconds": 0.0031485000000000003
+        },
+        {
+          "file": "board_future.py",
+          "function": "condition_recipe",
+          "calls": 2,
+          "self_seconds": 0.00020720000000000002,
+          "cumulative_seconds": 0.0039268
+        },
+        {
+          "file": "board_future.py",
+          "function": "register_origin",
+          "calls": 51,
+          "self_seconds": 0.0001786,
+          "cumulative_seconds": 0.0051754
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_publication",
+          "calls": 8,
+          "self_seconds": 9.350000000000001e-05,
+          "cumulative_seconds": 0.0062002
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_child",
+          "calls": 8,
+          "self_seconds": 5.4000000000000005e-05,
+          "cumulative_seconds": 0.0089495
+        },
+        {
+          "file": "board_future.py",
+          "function": "roles",
+          "calls": 17,
+          "self_seconds": 3.4200000000000005e-05,
+          "cumulative_seconds": 0.017318
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_information",
+          "calls": 5,
+          "self_seconds": 2.7700000000000002e-05,
+          "cumulative_seconds": 0.0040803
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<module>",
+          "calls": 1,
+          "self_seconds": 2.57e-05,
+          "cumulative_seconds": 0.0032786
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AcquisitionLedger",
+          "calls": 1,
+          "self_seconds": 1.8500000000000002e-05,
+          "cumulative_seconds": 1.8500000000000002e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionCache",
+          "calls": 1,
+          "self_seconds": 2.6e-06,
+          "cumulative_seconds": 2.6e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionReceipt",
+          "calls": 1,
+          "self_seconds": 2.2e-06,
+          "cumulative_seconds": 2.2e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "TransitionReceipt",
+          "calls": 1,
+          "self_seconds": 1.9e-06,
+          "cumulative_seconds": 1.9e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "ActorChoiceReceipt",
+          "calls": 1,
+          "self_seconds": 1.3e-06,
+          "cumulative_seconds": 1.3e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AuditedGroupReceipt",
+          "calls": 1,
+          "self_seconds": 8.000000000000001e-07,
+          "cumulative_seconds": 8.000000000000001e-07
+        }
+      ],
+      "ledger_retained_entries": {},
+      "case": "seven-owner-three",
+      "tracked": false,
+      "diagnostic": true,
+      "body_seconds": 0.21373070002300665,
+      "phase_seconds": {
+        "common_setup_seconds": 0.12217950000194833,
+        "root_guarantee_and_registration_seconds": 0.00023599999258294702,
+        "finite_common_kernels_seconds": 0.0591489999787882,
+        "Forecast_Table_seconds": 0.03183779999380931
+      },
+      "process_peak_working_set_bytes_until_timed_end": 35201024,
+      "process_peak_before_bytes": 33345536,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {},
+      "instrumented_calls": {
+        "__eq__": 72,
+        "__hash__": 245,
+        "roles": 17,
+        "condition_recipe": 2
+      },
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 29
+    },
+    {
+      "profile": [
+        {
+          "file": "acquisition_provenance.py",
+          "function": "receipt_for_frame",
+          "calls": 18,
+          "self_seconds": 0.0003956,
+          "cumulative_seconds": 0.0008167000000000001
+        },
+        {
+          "file": "board_future.py",
+          "function": "kernel_snapshot",
+          "calls": 62,
+          "self_seconds": 0.0003639,
+          "cumulative_seconds": 0.0011137
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_same_references",
+          "calls": 242,
+          "self_seconds": 0.0003154,
+          "cumulative_seconds": 0.0008404
+        },
+        {
+          "file": "board_future.py",
+          "function": "remember",
+          "calls": 70,
+          "self_seconds": 0.0003018,
+          "cumulative_seconds": 0.0027748
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_supported",
+          "calls": 107,
+          "self_seconds": 0.00022590000000000002,
+          "cumulative_seconds": 0.00025130000000000004
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 1222,
+          "self_seconds": 0.00021950000000000002,
+          "cumulative_seconds": 0.00021950000000000002
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_groups_record",
+          "calls": 53,
+          "self_seconds": 0.00021810000000000002,
+          "cumulative_seconds": 0.0008692000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_deaths",
+          "calls": 40,
+          "self_seconds": 0.0002121,
+          "cumulative_seconds": 0.0010169
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_observer_supported",
+          "calls": 41,
+          "self_seconds": 0.00021160000000000002,
+          "cumulative_seconds": 0.00035210000000000005
+        },
+        {
+          "file": "board_future.py",
+          "function": "condition_recipe",
+          "calls": 2,
+          "self_seconds": 0.00020150000000000002,
+          "cumulative_seconds": 0.0039452
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_fix",
+          "calls": 19,
+          "self_seconds": 0.0001853,
+          "cumulative_seconds": 0.00036030000000000003
+        },
+        {
+          "file": "board_future.py",
+          "function": "register_origin",
+          "calls": 47,
+          "self_seconds": 0.00016930000000000002,
+          "cumulative_seconds": 0.0051444
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "report_boundary",
+          "calls": 8,
+          "self_seconds": 0.0001249,
+          "cumulative_seconds": 0.0008713000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_canonical_death",
+          "calls": 26,
+          "self_seconds": 0.0001231,
+          "cumulative_seconds": 0.0002699
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_owner_current",
+          "calls": 53,
+          "self_seconds": 0.00012040000000000001,
+          "cumulative_seconds": 0.00020240000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_mint_transition",
+          "calls": 17,
+          "self_seconds": 0.00011410000000000001,
+          "cumulative_seconds": 0.0002474
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_choice",
+          "calls": 15,
+          "self_seconds": 0.0001065,
+          "cumulative_seconds": 0.0005105
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_publication",
+          "calls": 8,
+          "self_seconds": 9.970000000000001e-05,
+          "cumulative_seconds": 0.0017313
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_reports_supported",
+          "calls": 19,
+          "self_seconds": 9.010000000000001e-05,
+          "cumulative_seconds": 0.0003464
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "information_boundary",
+          "calls": 5,
+          "self_seconds": 7.02e-05,
+          "cumulative_seconds": 0.0004646
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_validated_frame",
+          "calls": 34,
+          "self_seconds": 6.780000000000001e-05,
+          "cumulative_seconds": 0.0007227000000000001
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_child",
+          "calls": 4,
+          "self_seconds": 6.71e-05,
+          "cumulative_seconds": 0.0060057
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 114,
+          "self_seconds": 6.71e-05,
+          "cumulative_seconds": 0.0001205
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_remember_frame",
+          "calls": 20,
+          "self_seconds": 6.41e-05,
+          "cumulative_seconds": 6.98e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_register_audited_root",
+          "calls": 1,
+          "self_seconds": 4.8200000000000006e-05,
+          "cumulative_seconds": 0.00025130000000000004
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_push",
+          "calls": 2,
+          "self_seconds": 4.72e-05,
+          "cumulative_seconds": 0.0002663
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_frame",
+          "calls": 153,
+          "self_seconds": 4.52e-05,
+          "cumulative_seconds": 4.52e-05
+        },
+        {
+          "file": "board_future.py",
+          "function": "reconstruct_information",
+          "calls": 5,
+          "self_seconds": 4.0900000000000005e-05,
+          "cumulative_seconds": 0.0008331
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "death_boundary",
+          "calls": 4,
+          "self_seconds": 3.35e-05,
+          "cumulative_seconds": 0.0003457
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 202,
+          "self_seconds": 3.2500000000000004e-05,
+          "cumulative_seconds": 3.2500000000000004e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 151,
+          "self_seconds": 3.1700000000000005e-05,
+          "cumulative_seconds": 3.1700000000000005e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_bind",
+          "calls": 2,
+          "self_seconds": 3.1e-05,
+          "cumulative_seconds": 0.0001901
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 80,
+          "self_seconds": 2.8800000000000002e-05,
+          "cumulative_seconds": 2.8800000000000002e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<module>",
+          "calls": 1,
+          "self_seconds": 2.61e-05,
+          "cumulative_seconds": 0.0033061
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "expired",
+          "calls": 22,
+          "self_seconds": 2.54e-05,
+          "cumulative_seconds": 4.0100000000000006e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_attach_generated_request",
+          "calls": 17,
+          "self_seconds": 2.46e-05,
+          "cumulative_seconds": 5.42e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 19,
+          "self_seconds": 2e-05,
+          "cumulative_seconds": 0.00010970000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AcquisitionLedger",
+          "calls": 1,
+          "self_seconds": 1.95e-05,
+          "cumulative_seconds": 1.95e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 22,
+          "self_seconds": 1.54e-05,
+          "cumulative_seconds": 9.17e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_raw_request",
+          "calls": 19,
+          "self_seconds": 1.46e-05,
+          "cumulative_seconds": 3.44e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_morning",
+          "calls": 2,
+          "self_seconds": 1.3000000000000001e-05,
+          "cumulative_seconds": 0.00017230000000000001
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_uniform",
+          "calls": 3,
+          "self_seconds": 1.23e-05,
+          "cumulative_seconds": 2.23e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 20,
+          "self_seconds": 1.23e-05,
+          "cumulative_seconds": 6.220000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_component",
+          "calls": 2,
+          "self_seconds": 1.1900000000000001e-05,
+          "cumulative_seconds": 0.0001287
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_observed",
+          "calls": 2,
+          "self_seconds": 1.16e-05,
+          "cumulative_seconds": 4.75e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_generation",
+          "calls": 7,
+          "self_seconds": 9.800000000000001e-06,
+          "cumulative_seconds": 3.7300000000000005e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_information_output",
+          "calls": 5,
+          "self_seconds": 9.800000000000001e-06,
+          "cumulative_seconds": 1.3300000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "__init__",
+          "calls": 1,
+          "self_seconds": 9.5e-06,
+          "cumulative_seconds": 1.5e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_observer_positions",
+          "calls": 4,
+          "self_seconds": 9.4e-06,
+          "cumulative_seconds": 1.2400000000000002e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_publications",
+          "calls": 3,
+          "self_seconds": 9.3e-06,
+          "cumulative_seconds": 8.460000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_lookup",
+          "calls": 4,
+          "self_seconds": 7.4e-06,
+          "cumulative_seconds": 9.22e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_cache_equivalence",
+          "calls": 1,
+          "self_seconds": 5.9e-06,
+          "cumulative_seconds": 1.1400000000000001e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_attach_request",
+          "calls": 1,
+          "self_seconds": 5.7000000000000005e-06,
+          "cumulative_seconds": 2.9800000000000003e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_begin_morning",
+          "calls": 2,
+          "self_seconds": 5.1e-06,
+          "cumulative_seconds": 4.35e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_observed_generation",
+          "calls": 2,
+          "self_seconds": 4.7e-06,
+          "cumulative_seconds": 1.2400000000000002e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_record_policy",
+          "calls": 3,
+          "self_seconds": 4.7e-06,
+          "cumulative_seconds": 6e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 11,
+          "self_seconds": 4.5e-06,
+          "cumulative_seconds": 4.5e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "_store_generated",
+          "calls": 3,
+          "self_seconds": 4.1000000000000006e-06,
+          "cumulative_seconds": 6.8e-05
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionCache",
+          "calls": 1,
+          "self_seconds": 2.4000000000000003e-06,
+          "cumulative_seconds": 2.4000000000000003e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "TransitionReceipt",
+          "calls": 1,
+          "self_seconds": 2.4000000000000003e-06,
+          "cumulative_seconds": 2.4000000000000003e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "UniformAcquisitionReceipt",
+          "calls": 1,
+          "self_seconds": 2.3e-06,
+          "cumulative_seconds": 2.3e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 8,
+          "self_seconds": 1.8000000000000001e-06,
+          "cumulative_seconds": 1.8000000000000001e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 8,
+          "self_seconds": 1.7e-06,
+          "cumulative_seconds": 1.7e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "ActorChoiceReceipt",
+          "calls": 1,
+          "self_seconds": 1.5e-06,
+          "cumulative_seconds": 1.5e-06
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "AuditedGroupReceipt",
+          "calls": 1,
+          "self_seconds": 9.000000000000001e-07,
+          "cumulative_seconds": 9.000000000000001e-07
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "<genexpr>",
+          "calls": 3,
+          "self_seconds": 8.000000000000001e-07,
+          "cumulative_seconds": 8.000000000000001e-07
+        },
+        {
+          "file": "acquisition_provenance.py",
+          "function": "__init__",
+          "calls": 1,
+          "self_seconds": 7.000000000000001e-07,
+          "cumulative_seconds": 7.000000000000001e-07
+        }
+      ],
+      "ledger_retained_entries": {
+        "_generations": 4,
+        "_issued": 2,
+        "_roots": 1,
+        "_transitions": 17,
+        "_requests": 20,
+        "_frames": 20,
+        "_deaths": 4,
+        "_public_deaths": 0,
+        "_publications": 3,
+        "_morning_components": 0,
+        "_mornings": 2,
+        "_weighted_reports": 8,
+        "_report_batches": 2,
+        "_canonical_laws": 31,
+        "_canonical_boards": 28,
+        "_cache_tickets": 3,
+        "_observed_generations": 0,
+        "_selections": 15,
+        "_information_outputs": 0,
+        "_policy_generations": 3,
+        "stats": 19
+      },
+      "case": "seven-owner-three",
+      "tracked": true,
+      "diagnostic": true,
+      "body_seconds": 0.21992519998457283,
+      "phase_seconds": {
+        "common_setup_seconds": 0.12705840001581237,
+        "root_guarantee_and_registration_seconds": 0.007984699972439557,
+        "finite_common_kernels_seconds": 0.050824099977035075,
+        "Forecast_Table_seconds": 0.033877599984407425
+      },
+      "process_peak_working_set_bytes_until_timed_end": 35135488,
+      "process_peak_before_bytes": 33333248,
+      "states": {
+        "values": 6,
+        "actions": 18,
+        "expansions": {
+          "actions": 18,
+          "values": 6
+        },
+        "acquired": 3,
+        "mornings": 2,
+        "publications": 3,
+        "policies": 3,
+        "saved_sources": 48,
+        "resolution_cache": 22,
+        "readout_entries": 29
+      },
+      "proof_counts": {
+        "root_canonical_hypothesis_visits": 6,
+        "audited_roots": 1,
+        "information_semantic_hypothesis_visits": 9,
+        "group_consumptions": 34,
+        "information_group_receipts": 5,
+        "information_parent_replays_avoided": 5,
+        "death_group_receipts": 4,
+        "death_parent_replays_avoided": 4,
+        "wolf_partition_hypothesis_visits": 3,
+        "wolf_policy_public_hypothesis_visits": 18,
+        "uniform_choice_receipts": 15,
+        "generation_records": 3,
+        "observed_acquisition_records": 2,
+        "paired_receipts": 2,
+        "inherited_groups": 2,
+        "report_group_receipts": 8,
+        "report_parent_replays_avoided": 8,
+        "trusted_cache_equivalence_links": 1,
+        "frame_identity_reuses": 18
+      },
+      "instrumented_calls": {
+        "__eq__": 50,
+        "__hash__": 239,
+        "condition_recipe": 2
+      },
+      "semantic_digest": "ce800dccc88e2f8ae40044238b32f0c80212ec9e5dfa72b4370558a2a557a402",
+      "cold_reads": 29
+    }
+  ],
+  "method": "alternating paired fresh processes; uninstrumented timed work; separate counted/cold runs; setup/root audit/finite kernels/Forecast/Table included; digest and cold excluded from timed body and peak snapshot",
+  "baseline": "same named task via ordinary common kernels; no artificial symmetry rechecks added to baseline; downstream group merges are not implemented by this path",
+  "memory": "Windows process peak working set through timed end, including common imports and source setup; not Python heap or post-validation peak",
+  "full_initial7_search": false,
+  "MAX_evaluated": false
+}

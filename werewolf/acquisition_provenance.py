@@ -87,7 +87,6 @@ class AcquisitionLedger:
         self._selections=WeakKeyDictionary()
         self._information_outputs={}
         self._policy_generations={}
-        self._observation_masses=WeakKeyDictionary()
         self.stats=Counter()
 
     def _supported(self):
@@ -137,19 +136,17 @@ class AcquisitionLedger:
         if not (self._generation(board,before.public_state,after.public_state)
                 and (self._generation(board,before.private,after.private) or self._observed_generation(board,before.private,after.private,before.observer))):
             self.stats['unknown_generation_declines']+=1;return None
-        groups=self.groups_for(before.provenance,board,before)
-        if groups is not None:groups=self._fix(groups,self._observer_positions(before.observer))
-        inherited=self._groups_record(before.provenance) if groups is not None else None
+        inherited=self._validated_frame(board,before)
+        groups=None if inherited is None else self._fix(inherited[1],self._observer_positions(before.observer))
         owner=None if inherited is None else inherited[2]
-        observation=self._observed_generations.get((id(board),id(before.private),id(after.private),id(before.observer)))
+        observation=self._observed_generations.pop((id(board),id(before.private),id(after.private),id(before.observer)),None)
         receipt=UniformAcquisitionReceipt(before.provenance,groups=groups,observation_mass=1 if observation is None else observation[4])
-        self._observation_masses[receipt]=receipt.observation_mass
-        self._issued[receipt]=(_frame(board,before),_frame(board,after),receipt.parent,receipt.operation,groups,owner)
+        self._issued[receipt]=(_frame(board,before),_frame(board,after),receipt.parent,receipt.operation,groups,owner,receipt.observation_mass)
         self.stats['paired_receipts']+=1
         if groups is not None:self.stats['inherited_groups']+=1
         if groups is not None:
             self._remember_frame(receipt,board,after)
-            request=self.request_for(before.provenance)
+            request=self._raw_request(before.provenance)
             if request is not None:self._requests[receipt]=ref(request)
         return receipt
 
@@ -158,8 +155,8 @@ class AcquisitionLedger:
         self.stats['validation_requests']+=1
         if not self._supported() or type(receipt)is not UniformAcquisitionReceipt:return False
         row=self._issued.get(receipt)
-        if row is None or receipt.observation_mass is not self._observation_masses.get(receipt):return False
-        parent,child,prior,operation,groups,owner=row
+        if row is None or receipt.observation_mass is not row[6]:return False
+        parent,child,prior,operation,groups,owner,observation_mass=row
         if groups is not None and (owner is None or not self._owner_current(owner)):return False
         return (after.provenance is receipt and before.provenance is prior and receipt.parent is prior and receipt.operation is operation
             and receipt.groups is groups
@@ -205,8 +202,8 @@ class AcquisitionLedger:
             return frame,groups,owner
         if type(receipt)is UniformAcquisitionReceipt:
             row=self._issued.get(receipt)
-            if row is None or receipt.observation_mass is not self._observation_masses.get(receipt):return None
-            parent,child,prior,operation,groups,owner=row
+            if row is None or receipt.observation_mass is not row[6]:return None
+            parent,child,prior,operation,groups,owner,observation_mass=row
             # Owner was sealed at issue time. No parent walk, full-state
             # equality or replay is needed at consumption.
             if (owner is None or groups is None or receipt.groups is not groups
@@ -229,15 +226,17 @@ class AcquisitionLedger:
         return ((active is None or active is data) and graph.data is data and graph.engine is engine and graph.root is root and graph.origin is origin
             and engine.baseline is baseline and baseline.rules is rules and baseline.strategy is strategy)
 
-    def groups_for(self,receipt,board,payload):
-        """Consume only an exact, owned frame; never compare complete laws."""
-        row=self._groups_record(receipt)
-        if row is None:return None
-        frame,groups,owner=row
-        if payload.provenance is not receipt or not _same_references(frame,_frame(board,payload)):
-            return None
+    def _validated_frame(self,board,payload):
+        row=self._groups_record(payload.provenance)
+        if row is None or not _same_references(row[0],_frame(board,payload)):return None
         self.stats['group_consumptions']+=1
-        return groups
+        return row
+
+    def groups_for(self,receipt,board,payload):
+        """External consumption always checks current ownership and exact frame."""
+        if payload.provenance is not receipt:return None
+        row=self._validated_frame(board,payload)
+        return None if row is None else row[1]
 
     def public_groups_for(self,receipt,board,state,past):
         row=self._groups_record(receipt)
@@ -247,7 +246,12 @@ class AcquisitionLedger:
         return groups
 
     def _remember_frame(self,receipt,board,payload):
-        self._frames[tuple(map(id,_frame(board,payload)))]=ref(receipt)
+        key=tuple(map(id,_frame(board,payload)))
+        ledger=ref(self)
+        def expired(token):
+            owner=ledger()
+            if owner is not None and owner._frames.get(key) is token:owner._frames.pop(key,None)
+        self._frames[key]=ref(receipt,expired)
 
     def receipt_for_frame(self,board,payload):
         token=self._frames.get(tuple(map(id,_frame(board,payload))))
@@ -263,10 +267,21 @@ class AcquisitionLedger:
         self._requests[receipt]=ref(request)
         return True
 
-    def request_for(self,receipt):
-        if self._groups_record(receipt) is None:return None
+    def _raw_request(self,receipt):
         entry=self._requests.get(receipt)
         return None if entry is None else entry()
+
+    def request_for(self,receipt):
+        if self._groups_record(receipt) is None:return None
+        return self._raw_request(receipt)
+
+    def _attach_generated_request(self,receipt,request):
+        # Internal mint->attach seam, with no callback/consumer between them.
+        # Every later external use still validates fields/config/owner/frame.
+        row=self._transitions.get(receipt)
+        if row is None or request.origin is not row[1][3].origin:return False
+        self._requests[receipt]=ref(request)
+        return True
 
     def owner_for(self,receipt):
         row=self._groups_record(receipt)
@@ -282,11 +297,13 @@ class AcquisitionLedger:
         b,q,past,p,observer,physical=frame
         return request,ContinuationInputs(b,q,past,p,observer,physical)
 
-    def _mint_transition(self,before,after,groups,operation,q,p,qkernel,pkernel):
-        inherited=self._groups_record(before.provenance)
-        if inherited is None:return None
+    def _mint_transition(self,before,after,groups,operation,q,p,qkernel,pkernel,*,_owner=None):
+        if _owner is None:
+            inherited=self._groups_record(before.provenance)
+            if inherited is None:return None
+            _owner=inherited[2]
         receipt=TransitionReceipt(before.provenance,groups,operation,q,p,qkernel,pkernel)
-        self._transitions[receipt]=(_frame(after.public,after),inherited[2],tuple(vars(receipt).values()))
+        self._transitions[receipt]=(_frame(after.public,after),_owner,tuple(vars(receipt).values()))
         self._canonical_laws[id(after.public_state)]=after.public_state
         self._canonical_laws[id(after.private)]=after.private
         self._canonical_boards[id(after.public)]=after.public
@@ -312,36 +329,57 @@ class AcquisitionLedger:
             and getattr(e.action_policy._project_roles,'__func__',None)is InformationSetActionPolicy._project_roles)
 
     def _record_deaths(self,board,payload,target,public,outcomes):
+        if payload.provenance is None:return
         if not self._canonical_death() or board.initial_hunter_count or not self._observer_supported(payload.observer):return
         qbywinner={o.board.winner:o for o in public}
-        self._public_deaths[id(board),id(payload.public_state),id(payload.private),target]=(board,payload,target,public,outcomes)
+        key=id(board),id(payload.public_state),id(payload.private),target
+        physical={o.board.winner for o in outcomes}
+        public_only=tuple(o for o in public if o.board.winner not in physical)
+        if public_only:self._public_deaths[key]=(_frame(board,payload),public_only)
+        else:self._public_deaths.pop(key,None)
         for outcome in outcomes:
             q=qbywinner.get(outcome.board.winner)
             if q is not None and outcome.context is q.board:
-                self._deaths[id(outcome)]=(_frame(board,payload),target,outcome,q.probability,outcome.probability)
+                key=id(outcome);ledger=ref(self)
+                def expired(token,key=key):
+                    owner=ledger()
+                    if owner is not None:
+                        row=owner._deaths.get(key)
+                        if row is not None and row[2] is token:owner._deaths.pop(key,None)
+                self._deaths[key]=(_frame(board,payload),target,ref(outcome,expired),q.probability,outcome.probability)
 
     def can_project(self,board,payload,outcome,target):
         row=self._deaths.get(id(outcome))
         return (self._canonical_death() and self.groups_for(payload.provenance,board,payload) is not None
-            and row is not None and row[1]==target and row[2] is outcome
+            and row is not None and row[1]==target and row[2]() is outcome
             and _same_references(row[0],_frame(board,payload)))
 
-    def finish_death(self,board,payload,outcome,target,child):
-        if not self.can_project(board,payload,outcome,target):return None
-        row=self._deaths[id(outcome)];groups=self._fix(self.groups_for(payload.provenance,board,payload),(target,))
-        night=board.phase=='night'
+    def death_boundary(self,board,payload,outcome,target,child,*,require_request=False):
+        if not self._canonical_death():return None
+        inherited=self._validated_frame(board,payload)
+        row=self._deaths.get(id(outcome))
+        if (inherited is None or row is None or row[1]!=target or row[2]() is not outcome
+            or not _same_references(row[0],inherited[0])):return None
+        request=self._raw_request(payload.provenance)
+        if require_request and request is None:return None
+        groups=self._fix(inherited[1],(target,));night=board.phase=='night'
         receipt=self._mint_transition(payload,child,groups,'fixed_target_death',row[3],row[4],
             'corpse_compatibility_then_death' if night else 'execution_death',
-            'target_intervention_then_death' if night else 'execution_death')
+            'target_intervention_then_death' if night else 'execution_death',_owner=inherited[2])
         if receipt is not None:self.stats['death_group_receipts']+=1
-        return receipt
+        source=self._issued.get(payload.provenance) if type(payload.provenance)is UniformAcquisitionReceipt else None
+        frame=source[0] if source is not None else inherited[0]
+        return receipt,request,frame
+
+    def finish_death(self,board,payload,outcome,target,child):
+        result=self.death_boundary(board,payload,outcome,target,child)
+        return None if result is None else result[0]
 
     def public_only_deaths(self,board,payload,target):
         if not self._canonical_death():return ()
         row=self._public_deaths.get((id(board),id(payload.public_state),id(payload.private),target))
-        if row is None or not _same_references(_frame(board,row[1]),_frame(board,payload)):return ()
-        physical={o.board.winner for o in row[4]}
-        return tuple(o for o in row[3] if o.board.winner not in physical)
+        if row is None or not _same_references(row[0],_frame(board,payload)):return ()
+        return row[1]
 
     def _reports_supported(self):
         from .information_set_forecast import InformationSetForecast
@@ -358,6 +396,9 @@ class AcquisitionLedger:
     def _begin_morning(self,b,q,past):
         if self._reports_supported():self._morning_components[id(b),id(q),id(past)]=[]
 
+    def _abort_morning(self,b,q,past):
+        self._morning_components.pop((id(b),id(q),id(past)),None)
+
     def _record_component(self,b,q,past,outcome,state,rows):
         if not self._reports_supported():return
         record=self._publications.get(id(rows))
@@ -372,8 +413,8 @@ class AcquisitionLedger:
         if not self._reports_supported() or b.initial_hunter_count:return
         simple=self._publications.get(id(rows))
         valid=simple is not None and _same_references(simple,(b,q,past,rows))
+        components=self._morning_components.pop((id(b),id(q),id(past)),None)
         if not valid:
-            components=self._morning_components.get((id(b),id(q),id(past)))
             valid=(components is not None and len(components)==len(rows) and all(a[0]==v[0] and _same_references(a[1:],v[1:]) for a,v in zip(components,rows)))
         if valid:self._mornings[id(rows)]=(b,q,past,rows)
 
@@ -394,18 +435,27 @@ class AcquisitionLedger:
         return (row is not None and _same_references(row[0][:3],(source.public,source.public_state,source.past))
             and row[1] is source.private and _same_references(row[4],(child.public,child.public_state,child.past,child.private)))
 
-    def finish_report(self,source,child):
-        if not self.can_report(source,child):return None
-        row=self._weighted_reports[id(child.public),id(child.public_state),id(child.past),id(child.private)]
+    def report_boundary(self,source,child,*,require_request=False):
+        if not self._reports_supported() or not self._observer_supported(source.observer):return None
+        inherited=self._validated_frame(source.public,source)
+        row=self._weighted_reports.get((id(child.public),id(child.public_state),id(child.past),id(child.private)))
+        if (inherited is None or row is None or not _same_references(row[0][:3],inherited[0][:3])
+            or row[1] is not source.private or not _same_references(row[4],(child.public,child.public_state,child.past,child.private))):return None
+        request=self._raw_request(source.provenance)
+        if require_request and request is None:return None
         fixed=set()
         for r in set(child.public.reports)-set(source.public.reports):fixed.update((r.reporter,r.target))
         for r in set(child.past)-set(source.past):fixed.update((r.player,r.target))
         for day,actor,target in set(child.public.report_resolved)-set(source.public.report_resolved):fixed.update((actor,target))
-        groups=self._fix(self.groups_for(source.provenance,source.public,source),fixed)
+        groups=self._fix(inherited[1],fixed)
         receipt=self._mint_transition(source,child,groups,'uniform_morning_observation',row[2],row[3],
-            'configured_uniform_morning','observer_report_likelihood_transfer')
+            'configured_uniform_morning','observer_report_likelihood_transfer',_owner=inherited[2])
         if receipt is not None:self.stats['report_group_receipts']+=1
-        return receipt
+        return receipt,request
+
+    def finish_report(self,source,child):
+        result=self.report_boundary(source,child)
+        return None if result is None else result[0]
 
     def public_only_reports(self,source,rows):
         if not self._reports_supported():return ()
@@ -448,23 +498,30 @@ class AcquisitionLedger:
         self._information_outputs[id(child)]=(source,child,information,mass)
         self.stats['information_semantic_hypothesis_visits']+=len(source.private.hypotheses)
 
-    def finish_information(self,source,child,information,mass):
+    def information_boundary(self,source,child,information,mass,*,require_request=False):
         from .actor_information import WolfInformation,PersonalInformation
         from .seer_intervention import SeerObserver
-        record=self._information_outputs.get(id(child))
+        record=self._information_outputs.pop(id(child),None)
         if record is None or not _same_references(record,(source,child,information,mass)):return None
-        if self.groups_for(source.provenance,source.public,source) is None:return None
+        inherited=self._validated_frame(source.public,source)
+        if inherited is None:return None
+        request=self._raw_request(source.provenance)
+        if require_request and request is None:return None
         if source.public.initial_hunter_count or not self._observer_supported(source.observer) or type(information) not in (WolfInformation,PersonalInformation,SeerObserver):return None
         if type(information)is WolfInformation:
             positions=tuple(p for p in range(1,source.public.player_count+1) if information.initial_roster&(1<<(p-1)))+tuple(a.target for a in information.attacks)
         else:
             if not self._observer_supported(information):return None
             positions=self._observer_positions(information)
-        groups=self._fix(self.groups_for(source.provenance,source.public,source),positions)
+        groups=self._fix(inherited[1],positions)
         receipt=self._mint_transition(source,child,groups,'owner_information_condition',1,mass,
-            'unchanged_public_prior','normalized_owner_information_event')
+            'unchanged_public_prior','normalized_owner_information_event',_owner=inherited[2])
         if receipt is not None:self.stats['information_group_receipts']+=1
-        return receipt
+        return receipt,request
+
+    def finish_information(self,source,child,information,mass):
+        result=self.information_boundary(source,child,information,mass)
+        return None if result is None else result[0]
 
 
     def _record_policy(self,b,q,past,information,mass,policy):
@@ -474,15 +531,14 @@ class AcquisitionLedger:
     def _record_choice(self,source,information,information_mass,target,probability,policy):
         from .information_set_forecast import InformationSetForecast
         e=self._engine()
-        if (not self._supported() or e.strategy.night!='random'
-            or getattr(e.wolf_policy,'__func__',None)is not InformationSetForecast.wolf_policy
-            or self.groups_for(source.provenance,source.public,source) is None):return None
+        row=self._validated_frame(source.public,source)
+        if (row is None or e.strategy.night!='random'
+            or getattr(e.wolf_policy,'__func__',None)is not InformationSetForecast.wolf_policy):return None
         generated=self._policy_generations.get(id(policy))
         if (generated is None or not _same_references(generated[:3],(source.public,source.public_state,source.past))
             or generated[3]!=information or generated[5] is not policy or (target,probability) not in policy):
             self.stats['unknown_policy_declines']+=1;return None
         receipt=ActorChoiceReceipt(information,information_mass,target,probability,policy,generated[4])
-        row=self._groups_record(source.provenance)
         self._selections[receipt]=(_frame(source.public,source),row[2],tuple(vars(receipt).values()))
         self.stats['uniform_choice_receipts']+=1
         return receipt

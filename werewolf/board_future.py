@@ -241,18 +241,21 @@ def reconstruct_child(engine,board,payload,outcome,target,legacy):
     if _rebuilding.get():return legacy()
     ledger=getattr(engine,'acquisition_provenance',None)
     evidence=None
-    if _reuse_kernels.get() and ledger is not None and ledger.can_project(board,payload,outcome,target):
-        evidence=ledger.evidence_parent(board,payload)
+    state=None
+    if _reuse_kernels.get() and ledger is not None and id(outcome) in ledger._deaths:
+        state=legacy()  # Pure canonical projection precedes the single boundary check.
+        evidence=ledger.death_boundary(board,payload,outcome,target,state,require_request=True)
     if evidence is not None:
-        parent,parent_state=evidence
+        receipt,parent,frame=evidence
+        from .evaluation_branch import ContinuationInputs
+        b,q,past,p,observer,physical=frame
+        parent_state=ContinuationInputs(b,q,past,p,observer,physical)
         options=engine.board_action_options.get((source_key(board,payload,engine),target),(True,None))
         operation=ActionEvidence(kernel_snapshot(engine),target,outcome_key(outcome),*options)
-        state=legacy()
-        receipt=ledger.finish_death(board,payload,outcome,target,state)
         state=replace(state,provenance=receipt)
         operation._completed[:]=(parent_state,state,0)
         request=parent.child(operation,(outcome.board.day,outcome.board.phase,outcome.board.alive))
-        ledger._attach_request(receipt,request)
+        ledger._attach_generated_request(receipt,request)
         ledger.stats['death_parent_replays_avoided']+=1
         remember(engine,request,state)
         return replace(state,board_data=request)
@@ -283,18 +286,17 @@ def reconstruct_publication(engine,payload,child,public,past,private,physical,*,
     if _rebuilding.get():return ContinuationInputs(child,public,past,private,payload.observer,physical)
     ledger=getattr(engine,'acquisition_provenance',None)
     completed=ContinuationInputs(child,public,past,private,payload.observer,physical)
-    if _reuse_kernels.get() and replay_unique and ledger is not None and ledger.can_report(payload,completed):
-        source=ledger.request_for(payload.provenance)
-        if source is not None:
-            operation=PublicationEvidence(kernel_snapshot(engine),publication_key(child,past))
-            receipt=ledger.finish_report(payload,completed)
-            completed=replace(completed,provenance=receipt)
-            operation._completed[:]=(payload,completed,0)
-            request=source.child(operation,(child.day,child.phase,child.alive))
-            ledger._attach_request(receipt,request)
-            ledger.stats['report_parent_replays_avoided']+=1
-            remember(engine,request,completed)
-            return replace(completed,board_data=request)
+    boundary=None if not (_reuse_kernels.get() and replay_unique and ledger is not None) else ledger.report_boundary(payload,completed,require_request=True)
+    if boundary is not None:
+        receipt,source=boundary
+        operation=PublicationEvidence(kernel_snapshot(engine),publication_key(child,past))
+        completed=replace(completed,provenance=receipt)
+        operation._completed[:]=(payload,completed,0)
+        request=source.child(operation,(child.day,child.phase,child.alive))
+        ledger._attach_generated_request(receipt,request)
+        ledger.stats['report_parent_replays_avoided']+=1
+        remember(engine,request,completed)
+        return replace(completed,board_data=request)
     if ledger is not None:ledger.stats['report_ordinary_fallbacks']+=1
     source=payload.board_data
     if source is None:
@@ -674,13 +676,13 @@ def reconstruct_information(engine,source,child,information,mass):
     """Generated semantic filter, no reconstructed-law comparison to certify it."""
     if _rebuilding.get():return child
     ledger=getattr(engine,'acquisition_provenance',None)
-    receipt=None if ledger is None else ledger.finish_information(source,child,information,mass)
-    parent=None if receipt is None else ledger.request_for(source.provenance)
+    boundary=None if ledger is None else ledger.information_boundary(source,child,information,mass,require_request=True)
+    receipt,parent=(None,None) if boundary is None else boundary
     operation=OwnerInformationEvidence(information,child.observer)
     if parent is not None and _reuse_kernels.get():
         child=replace(child,provenance=receipt)
         request=parent.child(operation,(child.public.day,child.public.phase,child.public.alive))
-        ledger._attach_request(receipt,request)
+        ledger._attach_generated_request(receipt,request)
         ledger.stats['information_parent_replays_avoided']+=1
         remember(engine,request,child)
         return replace(child,board_data=request)

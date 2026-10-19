@@ -117,6 +117,13 @@ def worker(case,tracked,diagnostic=False):
             cold=independent_cold(graph,s.board_data)
             assert same_role_board(cold.public,s.public) and same_role_board(cold.physical,s.physical)
             assert (cold.public_state,cold.private,cold.past,cold.observer)==(s.public_state,s.private,s.past,s.observer)
+    group_shapes=[]
+    if diagnostic and e.acquisition_provenance is not None:
+        for source in readbacks:
+            groups=e.acquisition_provenance.groups_for(source.provenance,source.public,source)
+            live=() if groups is None else tuple(tuple(p for p in group if p in source.public.alive) for group in groups)
+            group_shapes.append(dict(day=source.public.day,phase=source.public.phase,alive=len(source.public.alive),
+                inherited=groups is not None,nontrivial_live_blocks=[len(g) for g in live if len(g)>1]))
     profiles=[]
     if profiler is not None:
         import pstats
@@ -124,13 +131,13 @@ def worker(case,tracked,diagnostic=False):
             if file.endswith(('acquisition_provenance.py','board_future.py')) and (file.endswith('acquisition_provenance.py') or name in ('condition_recipe','register_origin','remember','roles','kernel_snapshot','reconstruct_information','reconstruct_child','reconstruct_publication')):
                 profiles.append(dict(file=Path(file).name,function=name,calls=nc,self_seconds=tt,cumulative_seconds=ct))
     retained={} if e.acquisition_provenance is None else {k:len(v) for k,v in vars(e.acquisition_provenance).items() if isinstance(v,dict) or type(v).__name__=='WeakKeyDictionary'}
-    return dict(profile=sorted(profiles,key=lambda r:r['self_seconds'],reverse=True),ledger_retained_entries=retained,case=case,tracked=tracked,diagnostic=diagnostic,body_seconds=elapsed,phase_seconds=phases,
+    return dict(diagnostic_group_shapes=group_shapes,profile=sorted(profiles,key=lambda r:r['self_seconds'],reverse=True),ledger_retained_entries=retained,case=case,tracked=tracked,diagnostic=diagnostic,body_seconds=elapsed,phase_seconds=phases,
         process_peak_working_set_bytes_until_timed_end=peak,process_peak_before_bytes=before_peak,
         states=states,proof_counts=proof,instrumented_calls=dict(counts),semantic_digest=digest,
         cold_reads=len(readbacks) if diagnostic else 0)
 
 
-def run(repeats=5):
+def run(repeats=5,*,output_path='benchmarks/player_match_groups/shared-transition-performance-boundary-results.json'):
     start=time.perf_counter();rows=[];diagnostics=[]
     for case in ('five-owner-night','seven-owner-three'):
         for i in range(repeats):
@@ -168,7 +175,64 @@ def run(repeats=5):
         baseline='same named task via ordinary common kernels; no artificial symmetry rechecks added to baseline; downstream group merges are not implemented by this path',
         memory='Windows process peak working set through timed end, including common imports and source setup; not Python heap or post-validation peak',
         full_initial7_search=False,MAX_evaluated=False)
-    Path('benchmarks/player_match_groups/shared-transition-performance-results.json').write_text(json.dumps(output,indent=2)+'\n',encoding='utf-8')
+    Path(output_path).write_text(json.dumps(output,indent=2)+'\n',encoding='utf-8')
+    print(json.dumps(dict(status=output['status'],summaries=summaries,seconds=output['seconds'])),flush=True)
+    return output
+
+
+def compare_boundary(reference_cwd,repeats=5):
+    """Same-session old/current/ordinary runs; reference is a clean f930c44 tree."""
+    root=Path.cwd();reference=Path(reference_cwd).resolve()
+    if reference==root:raise ValueError('Separate reference checkout required')
+    reference_sources={}
+    for name in ('acquisition_provenance.py','board_future.py','information_set_forecast.py'):
+        blob=subprocess.run(['git','show','f930c44:werewolf/'+name],cwd=root,capture_output=True,check=True).stdout
+        actual=hashlib.sha256((reference/'werewolf'/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest()
+        if actual!=hashlib.sha256(blob.replace(b'\r\n',b'\n')).hexdigest():raise ValueError('Reference source differs from f930c44: '+name)
+        reference_sources[name]=actual
+    variants=(('ordinary',root,False),('before_inherited',reference,True),('optimized_inherited',root,True))
+    start=time.perf_counter();rows=[];diagnostics=[]
+    for case in ('five-owner-night','seven-owner-three'):
+        for i in range(repeats):
+            order=variants[i%3:]+variants[:i%3]
+            for variant,cwd,tracked in order:
+                if time.perf_counter()-start>180:raise TimeoutError('boundary comparison exceeded 180 seconds')
+                began=time.perf_counter()
+                child=subprocess.run([sys.executable,'-m',__name__,'worker',case,str(int(tracked))],cwd=cwd,capture_output=True,text=True,timeout=25,check=True)
+                row=json.loads(child.stdout);row.update(variant=variant,repeat=i,process_wall_seconds=time.perf_counter()-began);rows.append(row)
+        for variant,cwd,tracked in variants:
+            child=subprocess.run([sys.executable,'-m',__name__,'worker',case,str(int(tracked)),'diagnostic'],cwd=cwd,capture_output=True,text=True,timeout=25,check=True)
+            row=json.loads(child.stdout);row['variant']=variant;diagnostics.append(row)
+    summaries=[]
+    for case in ('five-owner-night','seven-owner-three'):
+        selected=[r for r in rows if r['case']==case]
+        assert len({r['semantic_digest'] for r in selected+[r for r in diagnostics if r['case']==case]})==1
+        assert all(r['states']==selected[0]['states'] for r in selected)
+        result=dict(case=case,named_results_equal=True,states_equal=True)
+        for variant,cwd,tracked in variants:
+            group=[r for r in selected if r['variant']==variant]
+            diagnostic=next(r for r in diagnostics if r['case']==case and r['variant']==variant)
+            result[variant]=dict(body_seconds_median=statistics.median(r['body_seconds'] for r in group),
+                body_seconds_min=min(r['body_seconds'] for r in group),body_seconds_max=max(r['body_seconds'] for r in group),
+                root_compute_seconds_median=statistics.median(sum(v for k,v in r['phase_seconds'].items() if k!='common_setup_seconds') for r in group),
+                peak_bytes_median=statistics.median(r['process_peak_working_set_bytes_until_timed_end'] for r in group),
+                peak_bytes_max=max(r['process_peak_working_set_bytes_until_timed_end'] for r in group),
+                process_wall_seconds_median=statistics.median(r['process_wall_seconds'] for r in group),
+                phase_seconds_median={k:statistics.median(r['phase_seconds'][k] for r in group) for k in group[0]['phase_seconds']},
+                instrumented_calls=diagnostic['instrumented_calls'],
+                validation_calls={name:sum(p['calls'] for p in diagnostic['profile'] if p['file']=='acquisition_provenance.py' and p['function']==name) for name in ('_groups_record','_owner_current','_same_references','_supported')},
+                ledger_self_seconds=sum(p['self_seconds'] for p in diagnostic['profile'] if p['file']=='acquisition_provenance.py'),
+                retained_entry_count=sum(n for k,n in diagnostic['ledger_retained_entries'].items() if k!='stats'),
+                retained_entries=diagnostic['ledger_retained_entries'],states=group[0]['states'])
+        result['optimized_over_ordinary']=result['optimized_inherited']['body_seconds_median']/result['ordinary']['body_seconds_median']
+        result['optimized_over_before']=result['optimized_inherited']['body_seconds_median']/result['before_inherited']['body_seconds_median']
+        summaries.append(result)
+    sources={name:hashlib.sha256((root/'werewolf'/name).read_bytes()).hexdigest() for name in ('acquisition_provenance.py','board_future.py','information_set_forecast.py')}
+    output=dict(status='verified',repeats=repeats,seconds=time.perf_counter()-start,reference_revision='f930c44',reference_cwd=str(reference),
+        optimized_source_hashes=sources,reference_source_hashes_lf=reference_sources,runtime_acceleration_adopted=False,python=sys.version,platform=platform.platform(),recorded_at_utc=datetime.now(timezone.utc).isoformat(),
+        method='three rotating-order variants in fresh processes; same cases/task/timing boundaries as f930c44; diagnostic/profile/cold separate; no concurrent test load',
+        summaries=summaries,runs=rows,diagnostics=diagnostics,full_initial7_search=False,scope_extended=False)
+    Path('benchmarks/player_match_groups/shared-transition-performance-boundary-ab-results.json').write_text(json.dumps(output,indent=2)+'\n',encoding='utf-8')
     print(json.dumps(dict(status=output['status'],summaries=summaries,seconds=output['seconds'])),flush=True)
     return output
 

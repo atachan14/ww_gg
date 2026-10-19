@@ -347,3 +347,59 @@ All 20 timed semantic digests and the separate diagnostic digests match by case 
 Next: keep the feature OFF and do not expand MAX/H1/GJ or observation cases. First consolidate repeated receipt/frame/owner validation within each transition boundary, carrying an already checked row to mint/evidence attachment without repeating the same checks. Preserve revision/configuration/copy guards at every external consumption boundary; do not replace them with full-law equality. Review strong retained output/canonical maps and the numerical-cache alias fallback cost. Re-run this exact paired benchmark before accepting another optimization; state/action reduction through inherited groups is a separate measured goal, not an assumed consequence of certificates. Normal UI, HELP, public edition and server processes remain unchanged.
 
 Final targeted validation: measurement harness, shared-transition and owner-information modules pass 9 tests in 3.684 seconds. This checkpoint changes only benchmark instrumentation/entry routing and documentation; core numeric/guarantee implementation is unchanged.
+
+
+## Boundary consolidation and runtime-acceleration rejection
+
+Decision: **not adopted as runtime acceleration**. Retain this path as a default-OFF correctness/structural experiment. The requested consolidation reduces repeated checks and retained metadata, but it still gives no demonstrated time, peak-memory or numeric-state advantage over the ordinary named evaluator. No cases were added, and no production dispatch/setting was changed.
+
+Implementation stays within the existing ledger/common-kernel boundary. `_validated_frame` checks current configuration/owner/revision and exact frame once. Death/report/information boundary methods carry that checked row directly into the internal mint, saved-parent lookup and newly generated request attachment. No caller-visible reusable validation capability is introduced. `groups_for`, `public_groups_for`, `request_for`, `owner_for`, `receipt_for_frame` and ordinary attachment still revalidate on external use. The pure death projection is completed before the single authorization check; changes/stale ownership at that boundary decline. Existing full-law/hash/replay-free proof consumption and ordinary unsupported fallback are retained.
+
+One-shot owner-output and observed-acquisition stamps are consumed instead of retaining intermediate carriers. Morning component scratch records are released on completion or exception, while the original Pending/error is preserved. Acquisition observation mass lives in the issued record instead of a second weak map. Death outcome stamps use identity-keyed weak references; id reuse cannot delete a newer entry. Public-death metadata retains only Q-positive/P-zero rows rather than all outcomes, and dead frame weakrefs clean their index entries. Numeric laws/Boards and their weights are unchanged; numerical cache sizes are not reduced.
+
+A permanent boundary test asserts exactly one owner validation for a completed death transition and a fresh validation on every subsequent external read. It also checks revision/copy rejection and one-shot/Pending cleanup. Existing acquisition, owner, shared-transition, Model-A, saved-Board, action/morning and measurement tests all pass: **61 tests, 120.710 seconds**, saved in `provenance-boundary-tests.json`.
+
+### Same-session A/B evidence
+
+Previous absolute timings were not reused to claim an optimization: machine/startup conditions had changed. A clean f930c44 reference tree was exported into Temp; all three reference core files were verified against Git blobs after Windows CRLF-to-LF normalization. Current core byte hashes are recorded. Five rotating-order fresh-process repetitions per variant/case compare ordinary, f930c44 inherited and consolidated inherited paths (30 timed workers). Six separate diagnostic/profile/cold workers compare the same cases. An earlier two-variant rerun is also saved separately. There was no concurrent regression load during either timed batch.
+
+Reproduce through the same entry: `python -m benchmarks.player_match_groups.cut_out_publication_orbit_value_fixture inherited-groups --measure --reference <clean-f930c44-tree>`. The reference source check fails if the core files differ. Timing/peak boundaries remain the f930c44 protocol: common setup, guarantee initialization, finite transitions and Forecast/Table included; import/start/exit separately reported; oracle/digest/cold/profiling excluded. Both cases finish; no initial-seven or five/six-alive seven-player value recursion occurs.
+
+| Task | Ordinary body median, ms | f930c44 inherited, ms | Consolidated inherited, ms | Ordinary → consolidated root+compute, ms |
+| --- | --- | --- | --- | --- |
+| Five-player own-seer night | 50.44 | 52.67 | 51.17 | 29.64 → 31.95 |
+| Seven-player finite owner chain to three alive | 80.89 | 89.31 | 81.13 | 34.29 → 35.94 |
+
+Against ordinary, consolidated body medians are +1.45% and +0.30%; ranges overlap, so this is a lack of demonstrated benefit rather than a precise slowdown estimate. Against old inherited, small median changes by -2.8%; seven changes by -9.2%, but its common setup median also changes 53.27 → 45.48 ms, so the entire difference cannot be attributed to the ledger. Separate owner/group call counts, not cross-run absolute time, establish the intended reduction. Process wall medians (ordinary/old/consolidated) are 0.592/0.569/0.571 seconds (small), 0.592/0.603/0.581 seconds (seven); launch/import noise is larger than the body differences and is not solver acceleration.
+
+| Diagnostic | Small old → consolidated | Seven old → consolidated |
+| --- | --- | --- |
+| Owner validation calls | 237 → 94 | 156 → 53 |
+| Group-record validation calls | 244 → 101 | 156 → 53 |
+| Reference-field checks | 461 → 305 | 385 → 242 |
+| Ledger entry count, excluding stats | 328 → 251 | 240 → 163 |
+
+Entry counts sum map entries, including duplicate references, and are not bytes or unique objects. Actual peak working-set medians (ordinary/old/consolidated) are 32.734/32.824/32.848 MiB and 32.969/33.008/33.094 MiB. Peak maxima are 32.832/37.602/32.988 MiB and 33.098/33.066/33.156 MiB; the old small maximum is an outlier, not evidence of memory savings. Thus reduced logical retention does not demonstrate reduced peak memory. The process/import floor and new weakref/callback bookkeeping remain. Diagnostic profile self time is not a correction factor for uninstrumented timings.
+
+Values/actions remain **8/31** and **6/18** for every variant/run. Saved numeric source keys remain 36 and 48; other numeric cache/expansion counts match. Ordinary → consolidated roles calls remain 26 → 9 and 17 → 0, equality calls 180 → 135 and 72 → 50, and condition_recipe calls remain 3 → 3 and 2 → 2. The expensive generic recipe-search count still does not decrease, and cached ordinary replay was already cheap. There is no state-count reduction to amortize receipt maintenance.
+
+Every timed and diagnostic complete semantic digest matches by case across all three variants. Separate diagnostics cold-read all 10/29 saved readout entries in each variant. The matching current source byte hashes and all raw runs/phases/profiles/retained maps are in `shared-transition-performance-boundary-ab-results.json`; the separate two-variant rerun is in `shared-transition-performance-boundary-results.json`. Extra untimed group-shape diagnostics are explicitly separate from measured/profiled work.
+
+### Limit and next direction
+
+This receipt currently proves pointwise invariance of one complete named frame. It fixes named actors/targets and wolf-owned information as observations arrive. Extra untimed diagnostics show that some earlier frames still have 2/3-position blocks, but the small valued own-intervention frame and the seven final named report children have no nontrivial live blocks. Rechecking or cheaply retaining their child stabilizers cannot alone reduce those scalar states.
+
+The next meaningful experiment would have to consume the *parent* group at a common generator split: classify legal target/information/report children into transport-related sibling orbits, evaluate a representative once, and aggregate Q event likelihood, P branch mass and uniform choice probability separately. A child may have a singleton self-stabilizer while being equivalent to a differently named sibling. Current point-fixing plus named numeric cache keys does not exploit that relation. An internal transport witness must be issued at generation from the checked parent group/typed kernel, not discovered later by scanning complete laws or matching role marginals. Existing publication pattern generation/value memoization is the intended consumer; do not add a separate evaluator or cast-specific shortcut.
+
+Acceptance must show fewer actual numeric values/actions than 8/31 or 6/18 (or another already completed bounded case), plus full named Q/P/history/physical/Forecast/Table/cold restoration equality and a fresh-process time/memory benefit including root/transport costs. Preserve zero-support rows and unknown-observer/cache fallback; do not infer MAX or H1/GJ covariance. Until such a consumer demonstrates a gain, this guarantee ledger is correctness infrastructure, not an adopted runtime optimization. No further support expansion or initial-seven retry was made. Normal UI, HELP, MAX, public edition, server processes, push/deploy remain unchanged.
+
+
+### User clarification: what is optional and what is the calculation
+
+The repeated ledger is auxiliary, not a required part of the werewolf algorithm. Currently it checks graph/engine/data/rules/strategy identity (_owner_current), receipt issuance/field identity (_groups_record), exact law/history/physical carrier references, and whether acquisition/report/policy cache values were stamped by a trusted generator. Some saved-recipe checks and semantic probability work are distinct and remain necessary. The consolidation above is transitional; it should not make this audit infrastructure the permanent hot path.
+
+GameData/BoardData are already frozen and GameRuntime already creates a fresh setup runtime. The next API/lifetime change should use that foundation to prevent replacement/cross-calculation inputs internally: one saved Board snapshot and fixed strategy/view per calculation, private calculation-local engine/caches, child frames only from common typed generators, and a new calculation for edits. Under that structure, most issued-receipt registries, repeated owner/frame checks and cache-proof tickets can disappear; independent invariance, named-result and cold comparisons can live in tests. No arbitrary law/group pair may simply be assumed symmetric. The actual same-group partition/transport and Q/P filtering, likelihoods, legal policies and physical transitions remain algorithm data/operations.
+
+This structural closure is proposed next work, not implemented by the current checkpoint. Current runtime optimization is not adopted. Do not drop guards from the existing open mutable API as a shortcut; first make wrong internal input combinations unconstructible at the API level. Full caller input/unsupported/zero-support handling remains at the boundary. The larger state-count reduction gate remains relevant after this ownership restructuring.
+
+Additional weak-index lifecycle regression verifies dead outcomes are released and an older receipt callback cannot delete its replacement frame index. The final extended targeted run passes 12 tests; combined coverage is 62 unique tests.
