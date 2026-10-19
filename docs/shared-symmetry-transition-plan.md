@@ -380,3 +380,130 @@ Original initial-seven full API request AFTER this key still stops at250001 work
 Validation:87 related tests pass in103.547s. They include generated distinct terminal histories sharing only a scalar, public/own/forced-action separation, calculation-locality, disabled memoization, common scope and physical refusals on hits, cancellation, deadline and exhausted-work refusal, existing guard/MAX/terminal boundaries, seven admission, complete small named terminal trees with independent cold reconstruction, multiple-true-seer joint publication laws, mixed live-wolf counts and multi-night six-player continuations. The current6-night full results additionally match the existing independent terminal physical-enumeration evidence; the ordinary evaluator source hash is unchanged. Evidence includes all raw stopped profiles and numerical jobs plus losslessly bundled37 current regression jobs, test output and hashes in terminal-scalar-key-analysis.json. Prior checkpoint JSONs written by the test harness are restored only after their current records are copied into that bundle. No new all-repository test run is claimed.
 
 Stop here rather than layering speculative caches. This does not prove that the remaining states are mathematically irreducible. The next substantive option is to prove a shared scalar integral that contracts a normalized terminal report family before constructing all conditional posterior rows, while preserving undefined fake-kernel/zero-support refusals and every ordinary history/Table path. A broader uniform-H0 count recurrence would require the same proof that information-dependent report generation is defined/normalized and cannot affect the selected physical policy, not merely equal current role marginals. Until that proof and independent reconstruction/enumeration exist, no report color, visited-target history, medium identity or owner roster is erased. A development-only bounded partition can verify separate branches, but is not a production budget reset or a completed seven-root result. No public push/deploy, server/UI/HELP or shared-setting change is made.
+
+
+## Report-integral mathematical design (development only)
+
+This checkpoint changes no production module, policy, API, limit or admission. It derives exact scalar contractions from the existing equations, exercises them against independent finite enumeration and current common kernels, and leaves implementation for a separate reviewed change. In particular, neither a new report strategy nor a completed production seven-player Forecast/Table is introduced.
+
+### Existing equation and the three different measures
+
+Start AFTER the common acquisition, owner-observation validation and physical/public continuation projection, at a pre-publication morning. Let h contain complete roles/acquisitions/guard/attack records, Q(h) be the current public joint law, and P(u) the separate normalized actual/viewer law. The projection pi(h)=(roles, acquisitions) is exactly the identity used by information_weights.observer_report_weights; the viewer's guard/attack metadata is preserved, not required to be identical to a public history. Write Qpi(z)=sum_{pi(h)=z} Q(h). This Q is the already established Model-A public continuation law, not a posterior obtained by replacing it with P or with a physical branch mass.
+
+Let m be a complete medium-report vector. The existing uniform fake-medium instruction law and truthful medium reports define L_m(roles), with sum_m L_m(roles)=1. Its public probability and conditional history law are
+
+\[
+ q_m=\sum_h Q(h)L_m(roles_h),\qquad
+ Q_m(h)=Q(h)L_m(roles_h)/q_m.
+\]
+
+These are the existing report_actions/random_report_outcomes and project_private operations: relative within-role acquisition histories survive the role projection. Only positive-q_m families are generated. No medium opportunities means one identity family.
+
+Given Q_m, let f(h) be the living fake-seer claimant set, tau(h) the deterministic COMPLETE newly publishable truthful vector, and beta an approved fake plan. For zero fake claimants the plan is empty with probability1. More than one fake seer remains undefined. For one fake p, B_p(beta) is the current fake_backlog_options product law: every unpublished slot uses the same own PUBLIC past, original nonself target domain, unvisited-first fallback and uniform colors. This is not an invented sequential updating rule for unpublished fake slots.
+
+For the configured noncontradictory/uniform policy, let T_p(Q_m) be the SET of distinct pending own report signatures in positive-Q_m hypotheses where p is true. If p has no possible true world, keep the full old noise law. Otherwise
+
+\[
+ A_p=B_p\cap T_p(Q_m),\qquad
+ Z_p(Q_m)=\sum_{\beta\in A_p}B_p(\beta),\qquad
+ F_p(\beta;Q_m)=B_p(\beta)1_{\beta\in A_p}/Z_p(Q_m).
+\]
+
+Here intersection means plan support, not multiplication of measures. Z=0 is the existing no_noncontradictory_fake_report refusal. Duplicate true signatures and their public probabilities do NOT multiply fake weights: plausibility is existence, not imitation of the true seer's posterior distribution. For the separately configured plain uniform policy, A is the whole base support and Z=1. A shortcut must retain the selected policy rather than silently switching between them.
+
+Let S_y(h;Q_m) sum F_{f(h)} over plans whose union with tau(h) is the complete named seer vector y. The joint observation kernel is K_{m,y}(h)=L_m(roles_h) S_y(h;Q_m). Since every selected factor law is defined and normalized, sum_{m,y} K_{m,y}(h)=1 for each positive-Q hypothesis. This is conditional independence of the approved fake-plan factors within a world, NOT independence of different reporters' public marginals. Multiple true reports remain correlated through the same h.
+
+For e=(m,y), the current generator constructs q_e=sum_h Q(h)K_e(h), Q_e(h)=Q(h)K_e(h)/q_e. The current transfer to P is exactly
+
+\[
+ \widetilde P_e(u)=P(u)\frac{q_e Q_e^\pi(\pi u)}{Q^\pi(\pi u)},\quad
+ p_e=\sum_u\widetilde P_e(u),\quad
+ P_e=\widetilde P_e/p_e.
+\]
+
+The ordinary scalar continuation is sum_e p_e V(B_e,Q_e,past+e,P_e,observer). A physical incoming branch probability remains outside this expression. Public q_e, actual p_e and a forced-target Model-A count prior must never be substituted for one another.
+
+### Exact contraction conditions
+
+Assume a COMPLETE unobserved report family, normalized P, P absolutely continuous with respect to Q on pi, defined normalized kernels in EVERY positive-Q_m family, and a continuation affine in P whose per-state payoff g(u) does not depend on e, Q_e, an e-dependent legal-action set or an e-dependent chosen policy. Then
+
+\[
+ \sum_e p_e\sum_u P_e(u)g(u)
+ =\sum_u P(u)g(u)\sum_e\frac{q_e Q_e^\pi(\pi u)}{Q^\pi(\pi u)}
+ =\sum_u P(u)g(u).
+\]
+
+This is just exchanging two finite sums and cancelling the CURRENT normalizers. It does not claim Q_e or P_e are equal across observations. It also does not permit taking max outside the observation integral. If the event is already selected/observed, its likelihood and conditional law remain required; an average over possible events cannot replace an observed Table.
+
+The safest immediate candidate (A) is the already proved uniform day, three survivors, one live wolf, no hunter boundary. Every execution ends; its uniform scalar is the existing count recurrence value c=1/3 in every supported world and every private condition. Reports do not change those physical facts. Contract the FULL unobserved morning report family to c, AFTER the common acquisition/observer/physical checks. Do not move this cut before acquiring a mandatory own result. Do not use it for a named observed report, a conditional Table, MAX, guardian continuations, future physical transitions or a partial report family. Fixed named last-execution payoffs are also affine before an unobserved family, but this is not a replacement for the existing observed named-action rows.
+
+Positive-Q families must be validated even if their p_e or their medium-level P mass is zero. If P has unsupported pi entries, the current incomplete-likelihood refusal remains necessary. Undefined initial future declarations, multiple fake-seer correlation and zero normalizers are not repaired with uniform mass. These are ordinary input/model-domain responsibilities, not runtime proof tickets.
+
+### Reuse of the existing common index, without posterior construction
+
+The current compile_publications already constructs a truth-plan index over complete source hypotheses and the selected fake-plan probabilities before event()/branches()/representatives() constructs ANY conditional event law. Candidate A can reuse this common probability representation at the terminal scalar boundary, regardless of whether reporter permutation grouping is available. It need not introduce a case-specific seer evaluator or a new report formula.
+
+The development compiled_mass_probe does the following: enumerate the existing positive-Q medium outcomes, use the existing role/history projection, compile every such seer kernel (including zero-P medium families), and transfer the medium-only masses with the existing push operation. Because every conditional seer row sums to1, the integrated scalar is c times the sum of actual medium masses. The probe never calls event, branches or representatives and builds zero conditional seer posteriors. Ordinary report/history/Table requests would still use their complete existing generation and reconstruction.
+
+Coverage scans and assertions in this PROBE are development checks, not instructions to add them to production. A later minimal production change would share the same common kernel/normalizer definition with ordinary generation and consume its scalar integral. Actual factor normalizers/support failures and cancellation/work/time polling remain necessary; full-history swaps, repeated owner/frame authentication, issued ledgers and proof certificates do not. Inputs and any useful probability index remain immutable/calculation-owned. The independent checker/oracle in this checkpoint must not be copied into production as another evaluator.
+
+### Small-board derivations and counterexamples
+
+All following sources come from common generated actions and independent cold reconstruction, unless explicitly marked as raw/out-of-scope negative inputs. Complete Q probabilities/posteriors and P probabilities/posteriors are compared, including Q-positive/P-zero rows.
+
+| Five-player initial source; first execution/night bite | Pre-report H | Medium families | Full h/fake emissions | Public vectors | Compact seer event laws built |
+|---|---:|---:|---:|---:|---:|
+| One true seer; execute3/bite5 | 6 | 1 | 6 | 5 | 0 |
+| True/fake dual seer; execute3/bite5 | 6 | 1 | 18 | 9 | 0 |
+| Two true seers plus one fake; execute4/bite5 | 27 | 1 | 135 | 109 | 0 |
+| One seer plus true/fake medium pair; execute4/bite5 | 6 | 3 | 12 | 11 | 0 |
+
+Each morning has three survivors/one wolf. Independent named last-execution enumeration and candidate A both give1/3 in public, complete-own-seer and wolf views (12 cases). In the three-claim case the current common index retains27 source hypotheses and15 fake plans across three fake families, not135 emitted hypothesis copies and109 conditional seer laws. The own-seer view has only15 positive-P vectors while public Q still has109; the wolf view has45. Pruning the Q model down to those P rows is not the validation theorem.
+
+* Observed Table / MAX counterexample: in the single-seer example, wolf2 and wolf4 each have prior probability1/2. A Day2 black report on2 occurs with probability1/6 and makes the named execution2 value1, versus the prior column1/2. Unobserved fixed-column averaging gives1/2 as it should. Choosing the best execution AFTER seeing a report gives5/6; choosing it before gives1/2. Thus moving max through the integral, or replacing a conditional Table by its average, changes the defined problem. No MAX policy is added or changed here.
+* Joint-marginal counterexample: in the two-true/one-fake example, each of 1:black2, 2:black3, 3:black1 has marginal probability8/45. Their product is512/91125, but the simultaneous three-report cycle has joint probability0: two truthful black reports cannot require different sole wolves. Independent reporter marginals would invent an impossible observation.
+* Existence is not probability weighting: in that same source, fake1's approved plan white5 has probability1/5. Conditional on1 being true, the matching true signature has probability1/3. Weighting a fake option by that hypothetical true probability would select a different strategy. The deduplicated normalizer is5/6, not a count or weighted sum of all repeated supporting histories.
+* Medium-before-seer counterexample: use the specified seven-player initial source, execute2 and force bite4. The five-survivor pre-report source has18 hypotheses, two medium outcomes,45 emitted h/fake pairs and18 public vectors. Before conditioning on the medium, fake1's base10 plans are filtered to8 (Z=4/5). A white medium report on executed2 eliminates true1 worlds, making1 a known fake; its existing noise law then has all10 plans (Z=1). The joint event medium:white2 plus seer1:white2 has probability1/20, which the pre-medium filtered plan set would incorrectly remove. An owner-seer condition can give this entire positive-Q medium family zero P; it still cannot be omitted from kernel validation. This five-survivor example is NOT admitted to the constant-terminal contraction.
+* Multiple-night witness: from the seven source, execute4, bite3, select both Day2 seers' white3 reports, execute5 and retain the continuing branch, then bite7. The final three-survivor source has8 hypotheses,32 h/fake emissions and16 vectors. All three tested views agree on the full joint laws and1/3 integral. Each fake still has one pending slot and Z=1/2; the prior results were retained, not reconstructed as fresh unvisited history.
+* Support negatives: positive-Q multiple-fake families still fail even if P selects only a supported one-fake world. An unsupported private pi, an incomplete event family and an incoherent raw supplied past retain their old refusals. A genuine Day1 source still cannot be treated as the defined future declaration law.
+* Raw report-law boundary: an own-acquisition/public-prefix-consistent raw object outside this route uses four players, recorded guards/attacks and three delayed unpublished slots. Its repeated rosters are NOT asserted to form a legal sequence of daytime eliminations; it is not a generated physical game. True1 initially reports white4, then scans2:black,3:white,4:white after exhausting unvisited targets (and symmetrically true2 in the other world). The current fake backlog uses the unchanged public past white4 for ALL pending slots, so it still excludes target4 while an actual true pending signature includes4. The noncontradictory normalizer is0 and the existing kernel refuses it; the separately selected plain uniform law is defined. This is an out-of-scope negative report-law input, NOT new guardian/delayed-report support. Silently falling back to uniform or changing how pending fake slots update history would be a strategy/specification change and is not implemented.
+
+For the current full-disclosure/fixed-claim scope, there is a constructive positivity witness: every previous result of a surviving true claimant is published, so its private visited set and its own public reported-target set agree. At a new morning there is just one pending slot. The true unvisited-first/fallback domain therefore equals the fake plan's domain, and the actual truthful color has positive fake base mass. Any possible true reporter supplies a signature in the intersection, hence Z>0; a known fake has the normalized original noise law. Medium conditioning removes worlds but does not invalidate the coherent histories of the remaining true witnesses. The simple witness uses the current coherent generated full-disclosure invariant. It does not assert that every causally valid delayed game fails; such a larger domain needs its own support argument. Normalized dataclasses alone, including the raw repeated-roster counterexample, do not establish future-kernel definedness.
+
+### Complexity and a broader conditional theorem
+
+Let H_m be supported histories after medium m, A the per-history record length, F_{m,f} the number of selected fake plans, E=sum_m sum_h F_{m,f(h)} raw h/plan emissions, and R the number of complete observation vectors. Ordinary future_publications performs the H*A scan, constructs E entries, aggregates/normalizes R posterior states and creates corresponding Boards/private conditionals. Its state/output cost is at least proportional to E+R (with record/normalization costs in addition).
+
+Candidate A using the CURRENT common compiler retains source truth indices and fake-plan maps with approximate cost sum_m[H_m*A + sum_f F_{m,f}], plus medium projection/P transfer; it does not pay H_m*F_{m,f} for seer events or construct R conditional seer states. The generic factor-normalizer study can compute Z by visiting distinct feasible truth signatures instead of a Cartesian fake product: for k pending slots, test membership and multiply slot weights, summing once per distinct signature. If no true world exists, each factor is already normalized. This gives a possible bound involving H*A + sum_f |T_f|*k rather than |B_f|=product of slot cardinalities. In the CURRENT scope k<=1, so this generic backlog improvement is secondary; avoiding h/plan cross-products and posterior rows is the main opportunity. Medium outcome enumeration/conditioning remains: a general theorem does not erase an observation that changes a later kernel's domain.
+
+The last measured seven prefix after the scalar key spends160327+43685+17426=221438 counted work (about88.58%) in publication construction, plausible support and backlog. This is NOT a claim that all that work disappears: the common source/normalizer/index cost still exists. This checkpoint measures only small development constructions and exact operation cardinalities, not an optimized production speedup.
+
+A broader scalar candidate (B) also follows algebraically under stronger CLOSED-FUTURE conditions: H0, no self-bite, uniform current and future physical policies, fixed complete declarations/full disclosure, approved defined normalized future ability/report laws, coherent generated Q/P support, and no prospective observer condition that can reject/reweight a future acquisition. Physical count transitions then ignore report identity. For the existing count recurrence v, terminal values are v(n,0)=1 and v(n,w)=0 at parity; otherwise
+
+\[
+ v_D(n,w)=\frac wn v_N(n-1,w-1)+\frac{n-w}{n}v_N(n-1,w),\qquad
+ v_N(n,w)=v_D(n-1,w).
+\]
+
+Finite backward induction integrates each normalized report family and yields sum_u P(u)v_phase(n,w_u). More precisely, the induction statement ranges over coherent generated frames, not role marginals alone. Physical H0 actions strictly reduce survivor count; a pending-report step consumes its pending observation without another physical action, giving a finite well-founded phase order. The terminal case is the existing winner rule. For a daytime world, averaging the uniform legal targets kills a wolf with exactly w/n probability, regardless of its identity. For an actual wolf-owned night cell, every legal nonself bite kills one nonwolf, so every target has the same next count (n-1,w); the approved policy probabilities sum to1. Incoming physical masses and posterior normalizers cancel by the same finite conditional-expectation identity. At a reporting boundary, applying the lemma to each indicator 1_{w_u=w} gives sum_e p_e P_e(w)=P(w), although each individual posterior count law may differ. The coherent/full-disclosure witness above establishes report definedness, while ordinary acquisition and physical generators preserve normalized support. This is the EXISTING exchangeable_value formula, not a new case evaluator. Initial asymmetry of wolf positions is harmless for uniform day scalar averages, but named actions still require the actual joint count/target information:
+
+\[
+ A_t^D=\sum_u P(u)[1_{t\in W_u}v_N(n-1,w_u-1)+1_{t\notin W_u}v_N(n-1,w_u)].
+\]
+
+For a LEGAL forced night target, the existing within-live-count intervention preserves P's count weights, so A_t^N=sum_w P(w)v_D(n-1,w). Legal targets are still produced by the common legal-action operation; illegal own-wolf targets are not inserted. Actual night target CONTRIBUTIONS remain sum_I P(I)policy_I(t) v_D(n-1,w_I), not equal weights over public columns.
+
+Small independent verification of B enumerates all first-day targets, actual roster-owned night choices, named physical outcomes, the independently enumerated complete report law and each final execution. It never calls solve or the count recurrence while producing the reference. Four five-player claim configurations times public/seer/wolf views (12 COMPLETE integrals) match the existing recurrence, every named forced-action value and the current complete Forecast:7/15 throughout. A separate five-night mixed-count source has P(w=1)=1/3, P(w=2)=2/3, scalar1/12 and a selected two-live-wolf owner's scalar0. Actual target contributions1/96 versus1/48 are retained; they are not1/5 of the forced-column value. Unknown count weights must not be replaced by a uniform count prior.
+
+B is not a blanket predicate for GroupedForecast. A prospective SeerObserver requesting slot2's already-visited initial target3 is accepted as future information at the current source but the mandatory next acquisition has zero support; the current full continuation refuses with seer_view_scan_outside_public_support. A count-only immediate return would incorrectly return a number. Current-result acquisition/observer checks must precede A, and broader B must conservatively exclude prospective interventions or preserve their full domain checks. Small-entry inputs missing initial declarations and other selected ability policies likewise need the ordinary existing path. No internal API acceptance, cache ticket or runtime full-history matching is proposed to bypass this requirement.
+
+For the specified initial-seven PUBLIC input with retrospective views, B predicts v_D(7,2)=8/35, columns1/2=3/10,3/4=2/15,5/6/7=11/45 under its stated future-closure hypotheses. These are design-derived references, NOT a completed production seven-player request or a synthesized Table. The native seven request remains at its recorded250001-work stop. No production integration, universal performance claim, new MAX/guardian/delayed-report rule or approximate value is made.
+
+### Next implementation boundary and evidence
+
+A is the conservative first integration candidate: a shared complete-report-kernel MASS/normalizer operation at the already physically resolved terminal morning, using the current compiler/probability helpers and retaining the full generation path for observed reports/history/Table. B is a separate larger admission/closure change; it must be gated by immutable validated input semantics, normalizer/support closure and retrospective observer rules, with ordinary fallback for uncovered inputs. Neither needs a history-permutation test or a guarantee ledger in production. Any new delayed-report or multiple-fake correlation rule would require an explicit specification and remains a proposal rather than an automatic repair.
+
+The development report_integral_design.py contains an explicit Cartesian reference with its OWN normalization/filter calculation, a separate distinct-signature factor checker, the current-common-index probe, independent full five-player terminal sums, and conditional count references. The oracle matches every full Q/P branch and fresh independent cold source, not just final scalar coincidences. Tests cover normalization, zero support, medium ordering, correlations, observed/MAX noncommutation, mixed-count actual policy masses, retrospective/prospective observation and multiple nights. All production hashes remain unchanged. Raw bounded results, test output, source hashes and the frozen last actual seven stop are retained in report-integral-design-results.json. Bounds remain250000 work/30s/384MiB sampled memory/35s watchdog; no push/deploy, server, UI/HELP or shared-setting change is included.
+
+
+Bounded validation outcome for this mathematical design: the study verifies12 terminal-morning public/owner joint cases and12 complete five-player named physical/report/terminal integrals in1.381727s,25355 counted development/common work, peak working set37,040,128 bytes. The separate25-test watched job (14 new mathematical-design methods plus11 existing boundary/history methods) passes in2.591859s,38523 counted work, peak working set41,463,808 bytes. Both use the original250000-work/30s/384MiB sampled/35s-watchdog ceilings and finish without supervisor termination. These are development verification costs, not production performance benchmarks. The full seven native API stop is unchanged; only a conditional theorem reference for its value/columns has been added. No all-repository rerun is claimed.

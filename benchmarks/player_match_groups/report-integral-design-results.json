@@ -1,0 +1,1154 @@
+{
+  "study": {
+    "completed_at": "2026-10-19T07:05:49.822669+00:00",
+    "limits": {
+      "max_work": 250000,
+      "max_seconds": 30,
+      "watchdog_seconds": 35,
+      "sampled_stop_bytes": 402653184,
+      "poll_seconds": 0.02
+    },
+    "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+    "supervisor_seconds": 1.959037900029216,
+    "samples": 95,
+    "peak_private_committed_bytes": 26611712,
+    "observed_peak_working_set_bytes": 37040128,
+    "termination": null,
+    "returncode": 0,
+    "stderr": "",
+    "worker": {
+      "status": "verified",
+      "cases": [
+        {
+          "kind": "single",
+          "view": "public",
+          "counts": {
+            "H": 6,
+            "medium_families": 1,
+            "raw_emissions": 6,
+            "public_vectors": 5,
+            "positive_P_vectors": 5
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "single",
+          "view": "seer",
+          "counts": {
+            "H": 6,
+            "medium_families": 1,
+            "raw_emissions": 6,
+            "public_vectors": 5,
+            "positive_P_vectors": 1
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "single",
+          "view": "wolf",
+          "counts": {
+            "H": 6,
+            "medium_families": 1,
+            "raw_emissions": 6,
+            "public_vectors": 5,
+            "positive_P_vectors": 3
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "dual",
+          "view": "public",
+          "counts": {
+            "H": 6,
+            "medium_families": 1,
+            "raw_emissions": 18,
+            "public_vectors": 9,
+            "positive_P_vectors": 9
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 6,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "dual",
+          "view": "seer",
+          "counts": {
+            "H": 6,
+            "medium_families": 1,
+            "raw_emissions": 18,
+            "public_vectors": 9,
+            "positive_P_vectors": 3
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 6,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "dual",
+          "view": "wolf",
+          "counts": {
+            "H": 6,
+            "medium_families": 1,
+            "raw_emissions": 18,
+            "public_vectors": 9,
+            "positive_P_vectors": 9
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 6,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "three",
+          "view": "public",
+          "counts": {
+            "H": 27,
+            "medium_families": 1,
+            "raw_emissions": 135,
+            "public_vectors": 109,
+            "positive_P_vectors": 109
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 27,
+                "fake_plans": 15,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "three",
+          "view": "seer",
+          "counts": {
+            "H": 27,
+            "medium_families": 1,
+            "raw_emissions": 135,
+            "public_vectors": 109,
+            "positive_P_vectors": 15
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 27,
+                "fake_plans": 15,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "three",
+          "view": "wolf",
+          "counts": {
+            "H": 27,
+            "medium_families": 1,
+            "raw_emissions": 135,
+            "public_vectors": 109,
+            "positive_P_vectors": 45
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 1,
+            "positive_P_medium_families": 1,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 27,
+                "fake_plans": 15,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "medium-pair",
+          "view": "public",
+          "counts": {
+            "H": 6,
+            "medium_families": 3,
+            "raw_emissions": 12,
+            "public_vectors": 11,
+            "positive_P_vectors": 11
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 3,
+            "positive_P_medium_families": 3,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              },
+              {
+                "hypotheses": 3,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              },
+              {
+                "hypotheses": 3,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "medium-pair",
+          "view": "seer",
+          "counts": {
+            "H": 6,
+            "medium_families": 3,
+            "raw_emissions": 12,
+            "public_vectors": 11,
+            "positive_P_vectors": 2
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 3,
+            "positive_P_medium_families": 2,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              },
+              {
+                "hypotheses": 3,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              },
+              {
+                "hypotheses": 3,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        },
+        {
+          "kind": "medium-pair",
+          "view": "wolf",
+          "counts": {
+            "H": 6,
+            "medium_families": 3,
+            "raw_emissions": 12,
+            "public_vectors": 11,
+            "positive_P_vectors": 6
+          },
+          "expanded": "1/3",
+          "contracted": "1/3",
+          "current_common_index_probe": {
+            "medium_families": 3,
+            "positive_P_medium_families": 2,
+            "built_conditional_seer_event_laws": 0,
+            "indices": [
+              {
+                "hypotheses": 6,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              },
+              {
+                "hypotheses": 3,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              },
+              {
+                "hypotheses": 3,
+                "fake_plans": 1,
+                "built_event_laws": 0
+              }
+            ]
+          },
+          "full_joint_oracle_equal": true
+        }
+      ],
+      "budget": {
+        "work": 25355,
+        "max_work": 250000,
+        "elapsed_seconds": 1.375
+      },
+      "seconds": 1.3817271000007167,
+      "production_changed": false,
+      "complete_five_player_integrals": [
+        {
+          "kind": "single",
+          "view": "public",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "5/9",
+            "3": "1/3",
+            "4": "5/9",
+            "5": "5/9"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 44,
+            "wolf_choices": 36,
+            "terminal_executions": 216,
+            "report_vectors": 96
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "single",
+          "view": "seer",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "5/9",
+            "3": "1/3",
+            "4": "5/9",
+            "5": "5/9"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 44,
+            "wolf_choices": 36,
+            "terminal_executions": 216,
+            "report_vectors": 96
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "single",
+          "view": "wolf",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "1",
+            "3": "1/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 17,
+            "wolf_choices": 12,
+            "terminal_executions": 72,
+            "report_vectors": 32
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "dual",
+          "view": "public",
+          "value": "7/15",
+          "columns": {
+            "1": "2/3",
+            "2": "2/3",
+            "3": "1/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 31,
+            "wolf_choices": 24,
+            "terminal_executions": 540,
+            "report_vectors": 180
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "dual",
+          "view": "seer",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "1",
+            "3": "1/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 17,
+            "wolf_choices": 12,
+            "terminal_executions": 270,
+            "report_vectors": 90
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "dual",
+          "view": "wolf",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "1",
+            "3": "1/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 17,
+            "wolf_choices": 12,
+            "terminal_executions": 270,
+            "report_vectors": 90
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "three",
+          "view": "public",
+          "value": "7/15",
+          "columns": {
+            "1": "5/9",
+            "2": "5/9",
+            "3": "5/9",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 44,
+            "wolf_choices": 36,
+            "terminal_executions": 1566,
+            "report_vectors": 906
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "three",
+          "view": "seer",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "2/3",
+            "3": "2/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 31,
+            "wolf_choices": 24,
+            "terminal_executions": 1044,
+            "report_vectors": 604
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "three",
+          "view": "wolf",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "1",
+            "3": "1/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 17,
+            "wolf_choices": 12,
+            "terminal_executions": 522,
+            "report_vectors": 302
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "medium-pair",
+          "view": "public",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "2/3",
+            "3": "2/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 31,
+            "wolf_choices": 24,
+            "terminal_executions": 288,
+            "report_vectors": 124
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "medium-pair",
+          "view": "seer",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "2/3",
+            "3": "2/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 31,
+            "wolf_choices": 24,
+            "terminal_executions": 288,
+            "report_vectors": 124
+          },
+          "current_full_Forecast_values_equal": true
+        },
+        {
+          "kind": "medium-pair",
+          "view": "wolf",
+          "value": "7/15",
+          "columns": {
+            "1": "1/3",
+            "2": "1",
+            "3": "1/3",
+            "4": "1/3",
+            "5": "1/3"
+          },
+          "named_physical_report_terminal_enumeration": {
+            "first_targets": 5,
+            "physical_edges": 17,
+            "wolf_choices": 12,
+            "terminal_executions": 144,
+            "report_vectors": 62
+          },
+          "current_full_Forecast_values_equal": true
+        }
+      ],
+      "initial_seven_conditional_theorem_prediction": {
+        "value": "8/35",
+        "columns": {
+          "1": "3/10",
+          "2": "3/10",
+          "3": "2/15",
+          "4": "2/15",
+          "5": "11/45",
+          "6": "11/45",
+          "7": "11/45"
+        },
+        "actual_complete_seven_API_obtained": false,
+        "note": "Mathematical prediction under stated full-law closure hypotheses; no production Forecast/Table returned or synthesized."
+      }
+    },
+    "progress": []
+  },
+  "tests": {
+    "completed_at": "2026-10-19T07:05:52.661810+00:00",
+    "limits": {
+      "max_work": 250000,
+      "max_seconds": 30,
+      "watchdog_seconds": 35,
+      "sampled_stop_bytes": 402653184,
+      "poll_seconds": 0.02
+    },
+    "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+    "supervisor_seconds": 2.8373846000176854,
+    "samples": 137,
+    "peak_private_committed_bytes": 30871552,
+    "observed_peak_working_set_bytes": 41463808,
+    "termination": null,
+    "returncode": 0,
+    "stderr": "wwgg_budget_stop kind=time work=0 max_work=100 elapsed_seconds=102.5\r\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=2.5\r\nwwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=2.5\r\n",
+    "worker": {
+      "status": "verified",
+      "tests": 25,
+      "test_output": "test_broader_uniform_count_candidate_matches_complete_named_five_player_integrals (tests.test_report_integral_design.ReportIntegralDesignTests.test_broader_uniform_count_candidate_matches_complete_named_five_player_integrals) ... ok\ntest_coherent_but_delayed_backlog_can_have_zero_noncontradictory_normalizer (tests.test_report_integral_design.ReportIntegralDesignTests.test_coherent_but_delayed_backlog_can_have_zero_noncontradictory_normalizer) ... ok\ntest_complete_joint_oracle_and_constant_contraction_twelve_public_owner_cases (tests.test_report_integral_design.ReportIntegralDesignTests.test_complete_joint_oracle_and_constant_contraction_twelve_public_owner_cases) ... ok\ntest_factored_normalizers_equal_current_selected_fake_law (tests.test_report_integral_design.ReportIntegralDesignTests.test_factored_normalizers_equal_current_selected_fake_law) ... ok\ntest_joint_reports_cannot_be_replaced_by_independent_marginals (tests.test_report_integral_design.ReportIntegralDesignTests.test_joint_reports_cannot_be_replaced_by_independent_marginals) ... ok\ntest_medium_conditions_public_fake_kernel_before_seer_normalization (tests.test_report_integral_design.ReportIntegralDesignTests.test_medium_conditions_public_fake_kernel_before_seer_normalization) ... ok\ntest_missing_private_support_and_incomplete_event_family_are_not_completed (tests.test_report_integral_design.ReportIntegralDesignTests.test_missing_private_support_and_incomplete_event_family_are_not_completed) ... ok\ntest_mixed_live_counts_keep_actual_P_weights_and_roster_choice_contributions (tests.test_report_integral_design.ReportIntegralDesignTests.test_mixed_live_counts_keep_actual_P_weights_and_roster_choice_contributions) ... ok\ntest_multiple_night_complete_prefix_retains_one_pending_slot_and_truth_witness (tests.test_report_integral_design.ReportIntegralDesignTests.test_multiple_night_complete_prefix_retains_one_pending_slot_and_truth_witness) ... ok\ntest_observed_table_and_max_do_not_commute_with_unobserved_average (tests.test_report_integral_design.ReportIntegralDesignTests.test_observed_table_and_max_do_not_commute_with_unobserved_average) ... ok\ntest_prospective_scan_intervention_prevents_unconditional_count_shortcut (tests.test_report_integral_design.ReportIntegralDesignTests.test_prospective_scan_intervention_prevents_unconditional_count_shortcut) ... ok\ntest_public_unsupported_family_cannot_be_pruned_by_private_zero_mass (tests.test_report_integral_design.ReportIntegralDesignTests.test_public_unsupported_family_cannot_be_pruned_by_private_zero_mass) ... ok\ntest_support_existence_does_not_reweight_by_hypothetical_truth_frequency (tests.test_report_integral_design.ReportIntegralDesignTests.test_support_existence_does_not_reweight_by_hypothetical_truth_frequency) ... ok\ntest_undefined_raw_support_is_refused_instead_of_returning_a_constant (tests.test_report_integral_design.ReportIntegralDesignTests.test_undefined_raw_support_is_refused_instead_of_returning_a_constant) ... ok\ntest_generated_terminal_histories_share_scalar_only_and_keep_common_checks (tests.test_terminal_day_cut.TerminalDayCutTests.test_generated_terminal_histories_share_scalar_only_and_keep_common_checks) ... ok\ntest_max_policy_still_rejected_by_grouped_constructor (tests.test_terminal_day_cut.TerminalDayCutTests.test_max_policy_still_rejected_by_grouped_constructor) ... ok\ntest_narrow_condition_and_common_fallback (tests.test_terminal_day_cut.TerminalDayCutTests.test_narrow_condition_and_common_fallback) ... ok\ntest_uniform_terminal_scalar_public_and_owners_keeps_named_actions (tests.test_terminal_day_cut.TerminalDayCutTests.test_uniform_terminal_scalar_public_and_owners_keeps_named_actions) ... ok\ntest_complete_initial_seven_admitted_without_solving (tests.test_seven_initial_scope.SevenInitialScopeTests.test_complete_initial_seven_admitted_without_solving) ... ok\ntest_missing_initial_and_two_fakes_stay_public_support_refusals (tests.test_seven_initial_scope.SevenInitialScopeTests.test_missing_initial_and_two_fakes_stay_public_support_refusals) ... ok\ntest_seven_night_and_eight_root_do_not_gain_entry (tests.test_seven_initial_scope.SevenInitialScopeTests.test_seven_night_and_eight_root_do_not_gain_entry) ... ok\ntest_seven_self_bite_max_and_guard_are_not_admitted (tests.test_seven_initial_scope.SevenInitialScopeTests.test_seven_self_bite_max_and_guard_are_not_admitted) ... ok\ntest_same_role_marginal_different_scan_history_cannot_share_input (tests.test_value_law_cache.ValueLawCacheTests.test_same_role_marginal_different_scan_history_cannot_share_input) ... ok\ntest_undefined_multiple_fake_joint_kernel_is_rejected_before_recursion (tests.test_closed_full_tree.ClosedFullTreeTests.test_undefined_multiple_fake_joint_kernel_is_rejected_before_recursion) ... ok\ntest_missing_initial_declaration_is_not_synthesized_as_future_policy (tests.test_closed_full_tree.ClosedFullTreeTests.test_missing_initial_declaration_is_not_synthesized_as_future_policy) ... ok\n\n----------------------------------------------------------------------\nRan 25 tests in 2.276s\n\nOK\n",
+      "budget": {
+        "work": 38523,
+        "max_work": 250000,
+        "elapsed_seconds": 2.594
+      },
+      "seconds": 2.5918585000326857
+    },
+    "progress": []
+  },
+  "production_unchanged": true,
+  "production_source_sha256": {
+    "werewolf/grouped_forecast.py": "d9fc6f5186476d037d783d447f958c6f0e51cd0d0aa0c83433ac9a423aa0e81e",
+    "werewolf/information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "werewolf/morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "werewolf/information_weights.py": "2d864654bc20142a90b7261e4bbd67e02898ed35fffdda870549405ca008a333",
+    "werewolf/closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae"
+  },
+  "development_source_sha256": {
+    "benchmarks/player_match_groups/report_integral_design.py": "f45332e91e504f1081595977f47e86bdee7afc45c280c74572325c16b23e4549",
+    "tests/test_report_integral_design.py": "db43e9fb229ea5b229b2c0231f27a12e6fc8ef4beca37d037b0d02dd50b7e8de"
+  },
+  "last_measured_production_seven_run": {
+    "completed_at": "2026-10-19T06:25:11.156552+00:00",
+    "limits": {
+      "max_work": 250000,
+      "max_seconds": 30,
+      "watchdog_seconds": 35,
+      "sampled_stop_bytes": 402653184,
+      "poll_seconds": 0.02
+    },
+    "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+    "supervisor_seconds": 15.128445900045335,
+    "samples": 723,
+    "peak_private_committed_bytes": 87797760,
+    "observed_peak_working_set_bytes": 98373632,
+    "termination": null,
+    "returncode": 0,
+    "stderr": "wwgg_budget_stop kind=work work=250001 max_work=250000 elapsed_seconds=14.032\r\n",
+    "worker": {
+      "view": "public",
+      "forecast_completed": false,
+      "value": null,
+      "initial_preparation_equal": true,
+      "game": {
+        "claim_policy": {
+          "medium": "filled",
+          "villager": "filled",
+          "wolf": "none"
+        },
+        "claims": [
+          "seer",
+          "seer",
+          "medium",
+          "latent",
+          "latent",
+          "latent",
+          "latent"
+        ],
+        "history": [],
+        "hunters": 0,
+        "mediums": 1,
+        "model": "group",
+        "players": 7,
+        "policy": {
+          "day": "random",
+          "fake_reports": "random",
+          "include_self_bite": false,
+          "night": "random"
+        },
+        "public_log": {
+          "acquisition_provenance": [
+            {
+              "action": "assert",
+              "color": "white",
+              "day": 1,
+              "player": 1,
+              "source": "b1:e3",
+              "target": 4
+            },
+            {
+              "action": "assert",
+              "color": "white",
+              "day": 1,
+              "player": 2,
+              "source": "b1:e4",
+              "target": 4
+            }
+          ],
+          "base_claims": [
+            [
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ]
+          ],
+          "base_medium": [],
+          "base_seer": [],
+          "batches": [
+            {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "day": 1,
+              "events": [
+                {
+                  "action": "assert",
+                  "id": "b1:e0",
+                  "kind": "co",
+                  "player": 1,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e1",
+                  "kind": "co",
+                  "player": 2,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e2",
+                  "kind": "co",
+                  "player": 3,
+                  "role": "medium"
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e3",
+                  "kind": "seer",
+                  "player": 1,
+                  "target": 4
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e4",
+                  "kind": "seer",
+                  "player": 2,
+                  "target": 4
+                }
+              ],
+              "id": 1,
+              "mode": "simultaneous",
+              "phase": "day",
+              "slot": 0
+            }
+          ],
+          "board_graph": {
+            "archives": [
+              {
+                "ancestor_path": [
+                  "a9fa0d2110a9b962:board:1"
+                ],
+                "generation": 1,
+                "nodes": {
+                  "a9fa0d2110a9b962:board:1": {
+                    "active": true,
+                    "branch": 1,
+                    "children": [],
+                    "day": 1,
+                    "edge": null,
+                    "generation": 0,
+                    "id": "a9fa0d2110a9b962:board:1",
+                    "input_revision": 0,
+                    "legacy_claims": [
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent",
+                      "latent"
+                    ],
+                    "legacy_medium": [],
+                    "legacy_seer": [],
+                    "local_batches": [],
+                    "parent": null,
+                    "phase": "day",
+                    "revision": 0,
+                    "slot": 0
+                  }
+                },
+                "owner": "a9fa0d2110a9b962:board:1",
+                "retired_roots": [],
+                "settings": {
+                  "claim_policy": {
+                    "medium": "filled",
+                    "villager": "filled",
+                    "wolf": "none"
+                  },
+                  "hunters": 0,
+                  "mediums": 1,
+                  "model": "group",
+                  "players": 7,
+                  "policy": {
+                    "day": "max",
+                    "fake_reports": "max",
+                    "include_self_bite": false,
+                    "night": "max"
+                  },
+                  "rules": {
+                    "allow_repeat_guard": true,
+                    "allow_self_bite": false,
+                    "initial_seer": "random_white"
+                  },
+                  "seers": 1,
+                  "wolves": 2
+                }
+              }
+            ],
+            "current": "a9fa0d2110a9b962:board:1",
+            "game_id": "a9fa0d2110a9b962",
+            "generation": 1,
+            "invalidated": [
+              "a9fa0d2110a9b962:board:1"
+            ],
+            "next_board": 2,
+            "next_branch": 2,
+            "nodes": {
+              "a9fa0d2110a9b962:board:1": {
+                "active": true,
+                "branch": 1,
+                "children": [],
+                "content_generation": 1,
+                "day": 1,
+                "edge": null,
+                "generation": 0,
+                "id": "a9fa0d2110a9b962:board:1",
+                "input_revision": 1,
+                "legacy_claims": [
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent",
+                  "latent"
+                ],
+                "legacy_medium": [],
+                "legacy_seer": [],
+                "local_batches": [
+                  {
+                    "board_id": "a9fa0d2110a9b962:board:1",
+                    "day": 1,
+                    "events": [
+                      {
+                        "action": "assert",
+                        "id": "b1:e0",
+                        "kind": "co",
+                        "player": 1,
+                        "role": "seer"
+                      },
+                      {
+                        "action": "assert",
+                        "id": "b1:e1",
+                        "kind": "co",
+                        "player": 2,
+                        "role": "seer"
+                      },
+                      {
+                        "action": "assert",
+                        "id": "b1:e2",
+                        "kind": "co",
+                        "player": 3,
+                        "role": "medium"
+                      },
+                      {
+                        "action": "assert",
+                        "color": "white",
+                        "day": 1,
+                        "id": "b1:e3",
+                        "kind": "seer",
+                        "player": 1,
+                        "target": 4
+                      },
+                      {
+                        "action": "assert",
+                        "color": "white",
+                        "day": 1,
+                        "id": "b1:e4",
+                        "kind": "seer",
+                        "player": 2,
+                        "target": 4
+                      }
+                    ],
+                    "id": 1,
+                    "mode": "simultaneous",
+                    "phase": "day",
+                    "slot": 0
+                  }
+                ],
+                "parent": null,
+                "phase": "day",
+                "retired_children": [],
+                "revision": 1,
+                "slot": 0
+              }
+            },
+            "root": "a9fa0d2110a9b962:board:1"
+          },
+          "board_id": "a9fa0d2110a9b962:board:1",
+          "branch_id": 1,
+          "has_local_legacy": false,
+          "legacy": false,
+          "local_batches": [
+            {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "day": 1,
+              "events": [
+                {
+                  "action": "assert",
+                  "id": "b1:e0",
+                  "kind": "co",
+                  "player": 1,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e1",
+                  "kind": "co",
+                  "player": 2,
+                  "role": "seer"
+                },
+                {
+                  "action": "assert",
+                  "id": "b1:e2",
+                  "kind": "co",
+                  "player": 3,
+                  "role": "medium"
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e3",
+                  "kind": "seer",
+                  "player": 1,
+                  "target": 4
+                },
+                {
+                  "action": "assert",
+                  "color": "white",
+                  "day": 1,
+                  "id": "b1:e4",
+                  "kind": "seer",
+                  "player": 2,
+                  "target": 4
+                }
+              ],
+              "id": 1,
+              "mode": "simultaneous",
+              "phase": "day",
+              "slot": 0
+            }
+          ],
+          "local_legacy": {
+            "claims": [
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent",
+              "latent"
+            ],
+            "medium": [],
+            "seer": []
+          },
+          "next_id": 2,
+          "report_publications": {
+            "seer:1:1": {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "published_day": 1,
+              "published_phase": "day",
+              "slot": 0
+            },
+            "seer:1:2": {
+              "board_id": "a9fa0d2110a9b962:board:1",
+              "published_day": 1,
+              "published_phase": "day",
+              "slot": 0
+            }
+          },
+          "retired_input_reports": [],
+          "version": 2
+        },
+        "reports": [],
+        "result_disclosure_model": "full-observed-v1",
+        "revision": 1,
+        "rules": {
+          "allow_repeat_guard": true,
+          "allow_self_bite": false,
+          "initial_seer": "random_white"
+        },
+        "seer_inputs": [
+          {
+            "color": "white",
+            "day": 1,
+            "reporter": 1,
+            "target": 4
+          },
+          {
+            "color": "white",
+            "day": 1,
+            "reporter": 2,
+            "target": 4
+          }
+        ],
+        "seer_mode": "information-fixed-v1",
+        "seer_options": {
+          "initial_rule": "random_white",
+          "likelihood": "compatibility"
+        },
+        "seers": 1,
+        "selection": null,
+        "wolves": 2
+      },
+      "initial_hypotheses": 6,
+      "initial_groups": [
+        [
+          1,
+          2
+        ],
+        [
+          3
+        ],
+        [
+          4
+        ],
+        [
+          5,
+          6,
+          7
+        ]
+      ],
+      "status": "budget_stopped",
+      "reason": "work",
+      "seconds": 14.041552699985914,
+      "budget_stop": {
+        "kind": "work",
+        "work": 250001,
+        "max_work": 250000,
+        "elapsed_seconds": 14.032
+      },
+      "stages": [
+        {
+          "kind": "solve",
+          "completed": false
+        }
+      ],
+      "states": {
+        "values": 1117,
+        "actions": 3739,
+        "expansions": {
+          "actions": 3743,
+          "values": 1121
+        },
+        "acquired": 677,
+        "mornings": 2258,
+        "publications": 2263,
+        "policies": 811,
+        "saved_sources": 0,
+        "resolution_cache": 3743,
+        "target_orbits": {
+          "target_members": 3992,
+          "target_representatives": 3744,
+          "solver_wolf_cells": 812,
+          "solver_wolf_hypotheses": 1138
+        },
+        "report_vectors": {
+          "kernels": 0,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 23863,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      }
+    },
+    "progress": [],
+    "source_sha256": {
+      "werewolf\\grouped_forecast.py": "d9fc6f5186476d037d783d447f958c6f0e51cd0d0aa0c83433ac9a423aa0e81e",
+      "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+      "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae"
+    }
+  },
+  "notes": [
+    "Design and development-only oracles; no production evaluator/limit/strategy changed.",
+    "Independent enumerator computes its own fake normalizers via full Cartesian enumeration; compact checker sums distinct truth signatures without expanding fake products. Both match existing common Q/P laws.",
+    "Study uses current compile_publications indices but never constructs conditional seer event laws. Coverage assertions are development-only.",
+    "The theorem-derived seven value is not a completed production API result.",
+    "One initial negative timing test tried to truncate a roster while keeping night records; the constructor correctly rejected it. Replaced with a genuine initial source; no production change."
+  ],
+  "verification_source_sha256": {
+    "benchmarks\\player_match_groups\\verify_report_integral_design.py": "679e410c0605425c6c6ebf58ddefb6e8822a2e6c8fd466e33c0b3c8f798ad673"
+  }
+}
