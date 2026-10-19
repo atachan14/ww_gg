@@ -1,0 +1,471 @@
+{
+  "completed_at": "2026-10-19T06:25:11.156552+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 15.128445900045335,
+  "samples": 723,
+  "peak_private_committed_bytes": 87797760,
+  "observed_peak_working_set_bytes": 98373632,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "wwgg_budget_stop kind=work work=250001 max_work=250000 elapsed_seconds=14.032\r\n",
+  "worker": {
+    "view": "public",
+    "forecast_completed": false,
+    "value": null,
+    "initial_preparation_equal": true,
+    "game": {
+      "claim_policy": {
+        "medium": "filled",
+        "villager": "filled",
+        "wolf": "none"
+      },
+      "claims": [
+        "seer",
+        "seer",
+        "medium",
+        "latent",
+        "latent",
+        "latent",
+        "latent"
+      ],
+      "history": [],
+      "hunters": 0,
+      "mediums": 1,
+      "model": "group",
+      "players": 7,
+      "policy": {
+        "day": "random",
+        "fake_reports": "random",
+        "include_self_bite": false,
+        "night": "random"
+      },
+      "public_log": {
+        "acquisition_provenance": [
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 1,
+            "source": "b1:e3",
+            "target": 4
+          },
+          {
+            "action": "assert",
+            "color": "white",
+            "day": 1,
+            "player": 2,
+            "source": "b1:e4",
+            "target": 4
+          }
+        ],
+        "base_claims": [
+          [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ]
+        ],
+        "base_medium": [],
+        "base_seer": [],
+        "batches": [
+          {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "board_graph": {
+          "archives": [
+            {
+              "ancestor_path": [
+                "a9fa0d2110a9b962:board:1"
+              ],
+              "generation": 1,
+              "nodes": {
+                "a9fa0d2110a9b962:board:1": {
+                  "active": true,
+                  "branch": 1,
+                  "children": [],
+                  "day": 1,
+                  "edge": null,
+                  "generation": 0,
+                  "id": "a9fa0d2110a9b962:board:1",
+                  "input_revision": 0,
+                  "legacy_claims": [
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent",
+                    "latent"
+                  ],
+                  "legacy_medium": [],
+                  "legacy_seer": [],
+                  "local_batches": [],
+                  "parent": null,
+                  "phase": "day",
+                  "revision": 0,
+                  "slot": 0
+                }
+              },
+              "owner": "a9fa0d2110a9b962:board:1",
+              "retired_roots": [],
+              "settings": {
+                "claim_policy": {
+                  "medium": "filled",
+                  "villager": "filled",
+                  "wolf": "none"
+                },
+                "hunters": 0,
+                "mediums": 1,
+                "model": "group",
+                "players": 7,
+                "policy": {
+                  "day": "max",
+                  "fake_reports": "max",
+                  "include_self_bite": false,
+                  "night": "max"
+                },
+                "rules": {
+                  "allow_repeat_guard": true,
+                  "allow_self_bite": false,
+                  "initial_seer": "random_white"
+                },
+                "seers": 1,
+                "wolves": 2
+              }
+            }
+          ],
+          "current": "a9fa0d2110a9b962:board:1",
+          "game_id": "a9fa0d2110a9b962",
+          "generation": 1,
+          "invalidated": [
+            "a9fa0d2110a9b962:board:1"
+          ],
+          "next_board": 2,
+          "next_branch": 2,
+          "nodes": {
+            "a9fa0d2110a9b962:board:1": {
+              "active": true,
+              "branch": 1,
+              "children": [],
+              "content_generation": 1,
+              "day": 1,
+              "edge": null,
+              "generation": 0,
+              "id": "a9fa0d2110a9b962:board:1",
+              "input_revision": 1,
+              "legacy_claims": [
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent",
+                "latent"
+              ],
+              "legacy_medium": [],
+              "legacy_seer": [],
+              "local_batches": [
+                {
+                  "board_id": "a9fa0d2110a9b962:board:1",
+                  "day": 1,
+                  "events": [
+                    {
+                      "action": "assert",
+                      "id": "b1:e0",
+                      "kind": "co",
+                      "player": 1,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e1",
+                      "kind": "co",
+                      "player": 2,
+                      "role": "seer"
+                    },
+                    {
+                      "action": "assert",
+                      "id": "b1:e2",
+                      "kind": "co",
+                      "player": 3,
+                      "role": "medium"
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e3",
+                      "kind": "seer",
+                      "player": 1,
+                      "target": 4
+                    },
+                    {
+                      "action": "assert",
+                      "color": "white",
+                      "day": 1,
+                      "id": "b1:e4",
+                      "kind": "seer",
+                      "player": 2,
+                      "target": 4
+                    }
+                  ],
+                  "id": 1,
+                  "mode": "simultaneous",
+                  "phase": "day",
+                  "slot": 0
+                }
+              ],
+              "parent": null,
+              "phase": "day",
+              "retired_children": [],
+              "revision": 1,
+              "slot": 0
+            }
+          },
+          "root": "a9fa0d2110a9b962:board:1"
+        },
+        "board_id": "a9fa0d2110a9b962:board:1",
+        "branch_id": 1,
+        "has_local_legacy": false,
+        "legacy": false,
+        "local_batches": [
+          {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "day": 1,
+            "events": [
+              {
+                "action": "assert",
+                "id": "b1:e0",
+                "kind": "co",
+                "player": 1,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e1",
+                "kind": "co",
+                "player": 2,
+                "role": "seer"
+              },
+              {
+                "action": "assert",
+                "id": "b1:e2",
+                "kind": "co",
+                "player": 3,
+                "role": "medium"
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e3",
+                "kind": "seer",
+                "player": 1,
+                "target": 4
+              },
+              {
+                "action": "assert",
+                "color": "white",
+                "day": 1,
+                "id": "b1:e4",
+                "kind": "seer",
+                "player": 2,
+                "target": 4
+              }
+            ],
+            "id": 1,
+            "mode": "simultaneous",
+            "phase": "day",
+            "slot": 0
+          }
+        ],
+        "local_legacy": {
+          "claims": [
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "medium": [],
+          "seer": []
+        },
+        "next_id": 2,
+        "report_publications": {
+          "seer:1:1": {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          },
+          "seer:1:2": {
+            "board_id": "a9fa0d2110a9b962:board:1",
+            "published_day": 1,
+            "published_phase": "day",
+            "slot": 0
+          }
+        },
+        "retired_input_reports": [],
+        "version": 2
+      },
+      "reports": [],
+      "result_disclosure_model": "full-observed-v1",
+      "revision": 1,
+      "rules": {
+        "allow_repeat_guard": true,
+        "allow_self_bite": false,
+        "initial_seer": "random_white"
+      },
+      "seer_inputs": [
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 1,
+          "target": 4
+        },
+        {
+          "color": "white",
+          "day": 1,
+          "reporter": 2,
+          "target": 4
+        }
+      ],
+      "seer_mode": "information-fixed-v1",
+      "seer_options": {
+        "initial_rule": "random_white",
+        "likelihood": "compatibility"
+      },
+      "seers": 1,
+      "selection": null,
+      "wolves": 2
+    },
+    "initial_hypotheses": 6,
+    "initial_groups": [
+      [
+        1,
+        2
+      ],
+      [
+        3
+      ],
+      [
+        4
+      ],
+      [
+        5,
+        6,
+        7
+      ]
+    ],
+    "status": "budget_stopped",
+    "reason": "work",
+    "seconds": 14.041552699985914,
+    "budget_stop": {
+      "kind": "work",
+      "work": 250001,
+      "max_work": 250000,
+      "elapsed_seconds": 14.032
+    },
+    "stages": [
+      {
+        "kind": "solve",
+        "completed": false
+      }
+    ],
+    "states": {
+      "values": 1117,
+      "actions": 3739,
+      "expansions": {
+        "actions": 3743,
+        "values": 1121
+      },
+      "acquired": 677,
+      "mornings": 2258,
+      "publications": 2263,
+      "policies": 811,
+      "saved_sources": 0,
+      "resolution_cache": 3743,
+      "target_orbits": {
+        "target_members": 3992,
+        "target_representatives": 3744,
+        "solver_wolf_cells": 812,
+        "solver_wolf_hypotheses": 1138
+      },
+      "report_vectors": {
+        "kernels": 0,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 23863,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    }
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "d9fc6f5186476d037d783d447f958c6f0e51cd0d0aa0c83433ac9a423aa0e81e",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae"
+  }
+}

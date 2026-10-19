@@ -1,0 +1,258 @@
+{
+  "completed_at": "2026-10-19T06:16:42.051013+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 19.167040800035466,
+  "samples": 887,
+  "peak_private_committed_bytes": 116031488,
+  "observed_peak_working_set_bytes": 126783488,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "wwgg_budget_stop kind=work work=250001 max_work=250000 elapsed_seconds=17.797\r\n",
+  "worker": {
+    "forecast_completed": false,
+    "value": null,
+    "status": "budget_stopped",
+    "reason": "work",
+    "budget_stop": {
+      "kind": "work",
+      "work": 250001,
+      "max_work": 250000,
+      "elapsed_seconds": 17.797
+    },
+    "seconds": 17.7993817999959,
+    "states": {
+      "values": 20244,
+      "actions": 3382,
+      "expansions": {
+        "actions": 3386,
+        "values": 20248
+      },
+      "acquired": 594,
+      "mornings": 2006,
+      "publications": 2010,
+      "policies": 727,
+      "saved_sources": 0,
+      "resolution_cache": 3386,
+      "target_orbits": {
+        "target_members": 3635,
+        "target_representatives": 3387,
+        "solver_wolf_cells": 728,
+        "solver_wolf_hypotheses": 1054
+      },
+      "report_vectors": {
+        "kernels": 0,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 20805,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    },
+    "profile": {
+      "initial_target_work": {
+        "1": 13989,
+        "3": 54050,
+        "4": 54050,
+        "5": 127886
+      },
+      "initial_target_solve_calls": {
+        "1": 1147,
+        "3": 4659,
+        "4": 4659,
+        "5": 9782
+      },
+      "initial_edges": [
+        {
+          "target": 1,
+          "work": 13989,
+          "completed": true
+        },
+        {
+          "target": 3,
+          "work": 54050,
+          "completed": true
+        },
+        {
+          "target": 4,
+          "work": 54050,
+          "completed": true
+        },
+        {
+          "target": 5,
+          "work": 127886,
+          "completed": false
+        }
+      ],
+      "calls": {
+        "solve": 20248,
+        "value_law": 23634,
+        "act": 3386,
+        "public_children": 3386,
+        "physical_children": 3386,
+        "flow_project": 2748,
+        "wolf_cells": 726,
+        "wolf_policy": 727,
+        "flow_acquire": 2022,
+        "acquire": 4044,
+        "morning": 2022,
+        "future_publications": 2011,
+        "plausible_fake_options": 2579,
+        "fake_backlog_options": 2579,
+        "push": 1784,
+        "value_key_normalize": 1127
+      },
+      "cache_hit_or_terminal_calls": {},
+      "exclusive_seconds": {
+        "solve": 4.108702701923903,
+        "value_law": 0.6994726006523706,
+        "act": 2.707101697800681,
+        "public_children": 0.453016999468673,
+        "physical_children": 0.30621150037040934,
+        "flow_project": 1.1787916999892332,
+        "wolf_cells": 0.06283990078372881,
+        "wolf_policy": 0.11600529996212572,
+        "flow_acquire": 0.07421120029175654,
+        "acquire": 0.29211750044487417,
+        "morning": 1.6416816004202701,
+        "future_publications": 3.120956600352656,
+        "plausible_fake_options": 0.09303249948425218,
+        "fake_backlog_options": 0.6895892997854389,
+        "push": 2.1476216985611245,
+        "value_key_normalize": 0.0381065997062251
+      },
+      "exclusive_fraction": {
+        "solve": 0.23174438708065914,
+        "value_law": 0.03945256225085241,
+        "act": 0.15268946653844553,
+        "public_children": 0.02555165328214865,
+        "physical_children": 0.017271338818737398,
+        "flow_project": 0.06648774073671894,
+        "wolf_cells": 0.0035443777142881686,
+        "wolf_policy": 0.006543081621661889,
+        "flow_acquire": 0.0041857565206847806,
+        "acquire": 0.016476390726550393,
+        "morning": 0.09259625820404208,
+        "future_publications": 0.17603224835795372,
+        "plausible_fake_options": 0.005247339886982913,
+        "fake_backlog_options": 0.03889511147675081,
+        "push": 0.1211329488456597,
+        "value_key_normalize": 0.002149337937863463
+      },
+      "exclusive_counted_work": {
+        "solve": 33612,
+        "value_law": 0,
+        "act": 15675,
+        "public_children": 0,
+        "physical_children": 0,
+        "flow_project": 0,
+        "wolf_cells": 0,
+        "wolf_policy": 0,
+        "flow_acquire": 0,
+        "acquire": 8975,
+        "morning": 15,
+        "future_publications": 141820,
+        "plausible_fake_options": 35513,
+        "fake_backlog_options": 14371,
+        "push": 0,
+        "value_key_normalize": 0
+      },
+      "rows": {
+        "solve_public_hypotheses": 47459,
+        "solve_private_hypotheses": 33612,
+        "wolf_cells": 728,
+        "future_publications": 20805,
+        "future_publications_hypotheses": 47924,
+        "public_Q_rows": 20860,
+        "positive_P_rows": 19285,
+        "value_law_rebuilt_or_cached_transform": 23618
+      },
+      "solve_depths": [
+        {
+          "depth": 1,
+          "day": 1,
+          "phase": "day",
+          "alive": 7,
+          "calls": 1,
+          "distinct_full_inputs": 1
+        },
+        {
+          "depth": 2,
+          "day": 1,
+          "phase": "night",
+          "alive": 6,
+          "calls": 4,
+          "distinct_full_inputs": 4
+        },
+        {
+          "depth": 3,
+          "day": 2,
+          "phase": "day",
+          "alive": 5,
+          "calls": 288,
+          "distinct_full_inputs": 288
+        },
+        {
+          "depth": 4,
+          "day": 2,
+          "phase": "night",
+          "alive": 4,
+          "calls": 722,
+          "distinct_full_inputs": 722
+        },
+        {
+          "depth": 5,
+          "day": 3,
+          "phase": "day",
+          "alive": 3,
+          "calls": 19233,
+          "distinct_full_inputs": 19233
+        }
+      ],
+      "distinct": {
+        "full_solve_inputs": 20248,
+        "public_complete_inputs": 20226,
+        "private_complete_inputs": 1128,
+        "public_role_projection_only": 489,
+        "same_full_inputs_repeated": 0,
+        "known_fake_color_omitted_diagnostic_only": 14722,
+        "value_law_requests": 23634,
+        "value_law_distinct_complete_inputs": 1130,
+        "value_law_same_input_repeats": 22504
+      },
+      "top_stages": [
+        {
+          "kind": "solve",
+          "target": null,
+          "completed": false
+        }
+      ]
+    },
+    "peak_working_set_bytes": 126779392,
+    "notes": [
+      "Initial target work is inclusive and describes this bounded prefix only.",
+      "Exclusive timing/counts include development instrumentation overhead; fractions describe this bounded prefix, not an unmeasured complete run.",
+      "Projection-only/color-omitted counts are diagnostics, not evidence that those branches may be merged. Complete histories, P/Q and policy may differ.",
+      "Cached calls are not repeated expansions; value_law is a pure helper and repeats are counted separately."
+    ]
+  },
+  "progress": [
+    {
+      "progress_stage": "bounded_instrumented_forecast"
+    }
+  ],
+  "source_sha256": {
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "werewolf\\grouped_forecast.py": "152ea2f73dbdc127f36f570ac685e7f0069f9806086ca63e1b47309f15055b13",
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "werewolf\\closed_calculation.py": "3cd3ddcfb209ac27bff9309147422607078b6ca5a7597fa9bbe08bbf6f78c7ae",
+    "benchmarks\\player_match_groups\\bounded_seven_profile.py": "c3e84f25f998c68727769818f09592edffb0cb362edb854bffe9b41650febf46"
+  }
+}

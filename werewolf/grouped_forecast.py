@@ -3,6 +3,7 @@ from contextlib import contextmanager
 from fractions import Fraction as F
 from .information_set_forecast import InformationSetForecast,InformationSetActionPolicy
 from .group_partition import _fix,_report_groups
+from .calculation_budget import tick
 
 
 class GroupedPolicy(InformationSetActionPolicy):
@@ -24,15 +25,25 @@ class GroupedForecast(InformationSetForecast):
         self.action_policy=GroupedPolicy(self)
 
     # Constructed partitions replace discovery by full-law label permutations.
-    # Ordinary named memo keys still retain all numerical inputs.
+    # Named flow/action keys retain all inputs; only the proved constant
+    # terminal scalar uses a shared value key.
     def renamed_value_key(self,*args,**kwargs):return None
-    def full_renamed_key(self,*args,**kwargs):return None
+    def full_renamed_key(self,b,s,past,private,observer,*,target=None,physical=None):
+        # Only the already-proved constant terminal scalar, never a joint law
+        # or a forced named action. Common solve checks run before this key.
+        if target is None and self.memoize_flows and self.terminal_uniform_day(b):
+            tick(0)  # Cache reuse still observes cancellation and time/work stops.
+            return ('uniform-terminal-day',self.rules,self.strategy)
+        return None
     def scalar_descriptor(self,*args,**kwargs):return None
+
+    def terminal_uniform_day(self,b):
+        return b.phase=='day' and len(b.alive)==3 and not b.initial_hunter_count and set(b.wolf_count_distribution)=={1}
 
     def exchangeable(self,b):
         # Uniform execution of three survivors with one wolf always ends.
         # The common count recurrence is independent of all report/scan history.
-        if b.phase=='day' and len(b.alive)==3 and not b.initial_hunter_count and set(b.wolf_count_distribution)=={1}:return True
+        if self.terminal_uniform_day(b):return True
         return super().exchangeable(b)
 
     def value_law(self,state):

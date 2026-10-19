@@ -1,0 +1,68 @@
+{
+  "completed_at": "2026-10-19T06:23:58.434541+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 3.00174799998058,
+  "samples": 146,
+  "peak_private_committed_bytes": 34398208,
+  "observed_peak_working_set_bytes": 45436928,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "status": "verified",
+    "mode": "after",
+    "target": 4,
+    "value": "2/15",
+    "complete_same_branch": true,
+    "forced_and_observed_six_joint_equal": true,
+    "six_child_scalar_cached_without_reexpansion": true,
+    "states": {
+      "values": 257,
+      "actions": 885,
+      "expansions": {
+        "actions": 885,
+        "values": 257
+      },
+      "acquired": 92,
+      "mornings": 477,
+      "publications": 477,
+      "policies": 171,
+      "saved_sources": 0,
+      "resolution_cache": 886,
+      "target_orbits": {
+        "target_members": 939,
+        "target_representatives": 884,
+        "solver_wolf_cells": 171,
+        "solver_wolf_hypotheses": 256
+      },
+      "report_vectors": {
+        "kernels": 0,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 4648,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    },
+    "budget": {
+      "work": 46783,
+      "max_work": 250000,
+      "elapsed_seconds": 2.485
+    },
+    "seconds": 2.476164299994707
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "d9fc6f5186476d037d783d447f958c6f0e51cd0d0aa0c83433ac9a423aa0e81e",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\terminal_scalar_key_fixture.py": "29541e7b5b9a117587cce7e279ecb1bd0c785587d12a5d7662cc5a3a344b3f00"
+  }
+}

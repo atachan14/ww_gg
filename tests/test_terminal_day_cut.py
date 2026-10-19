@@ -37,3 +37,37 @@ class TerminalDayCutTests(unittest.TestCase):
 
     def test_max_policy_still_rejected_by_grouped_constructor(self):
         with self.assertRaises(ValueError):GroupedForecast(Rules(),replace(Strategy(),day='max'))
+
+    def test_generated_terminal_histories_share_scalar_only_and_keep_common_checks(self):
+        from werewolf.information_set_forecast import Pending
+        from werewolf.calculation_budget import calculation_budget,cancellation_scope,CalculationCancelled,CalculationBudgetExceeded,tick
+        from threading import Event
+        from time import monotonic
+        c=ClosedCalculation(case(5,'single').data,grouped=True,aggregate_wolf=True,aggregate_reports=True)
+        node=next(r.node for r in c.root.action(2) if r.node.read().public.winner is None)
+        node=next(r.node for r in node.action(5) if r.node.read().public.winner is None)
+        children=tuple(r.node for r in node.reports());e=c._ClosedCalculation__engine
+        self.assertGreater(len({n.read().past for n in children}),1)
+        keys=[]
+        for n in children:
+            v=n.read();keys.append(e.full_renamed_key(*v,physical=v.physical))
+            self.assertEqual(e.solve(*v,physical=v.physical),F(1,3))
+            for target in v.public.alive:self.assertIsNone(e.full_renamed_key(*v,target=target,physical=v.physical))
+        self.assertEqual(len(set(keys)),1);self.assertEqual(len(e.values),1);self.assertEqual(e.expansions['values'],1)
+        source=children[0].read()
+        with patch('werewolf.guard_model.scope_reason',return_value='test_common_scope_refusal'):
+            with self.assertRaises(Pending):e.solve(*source,physical=source.physical)
+        with self.assertRaises(ValueError):e.solve(*source,physical=replace(source.physical,day=source.physical.day+1))
+        cancelled=Event();cancelled.set()
+        with cancellation_scope(cancelled):
+            with self.assertRaises(CalculationCancelled):e.solve(*source,physical=source.physical)
+        with calculation_budget(100,max_seconds=1):
+            with patch('werewolf.calculation_budget.monotonic',return_value=monotonic()+100):
+                with self.assertRaises(CalculationBudgetExceeded) as caught:e.solve(*source,physical=source.physical)
+                self.assertEqual(caught.exception.kind,'time')
+        with calculation_budget(1):
+            with self.assertRaises(CalculationBudgetExceeded):tick(2)
+            with self.assertRaises(CalculationBudgetExceeded):e.solve(*source,physical=source.physical)
+        e.memoize_flows=False;self.assertIsNone(e.full_renamed_key(*source,physical=source.physical))
+        other=ClosedCalculation(case(3,'single').data,grouped=True)
+        self.assertEqual(other._ClosedCalculation__engine.values,{})
