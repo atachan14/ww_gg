@@ -1,0 +1,88 @@
+{
+  "completed_at": "2026-10-19T08:36:36.823872+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 11.724779300042428,
+  "samples": 560,
+  "peak_private_committed_bytes": 82255872,
+  "observed_peak_working_set_bytes": 93220864,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "wwgg_budget_stop kind=work work=250001 max_work=250000 elapsed_seconds=10.906\r\n",
+  "worker": {
+    "completed": false,
+    "input_sha256": "a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2",
+    "status": "budget_stopped",
+    "reason": "work",
+    "stop": {
+      "kind": "work",
+      "work": 250001,
+      "max_work": 250000,
+      "elapsed_seconds": 10.906
+    },
+    "seconds": 10.90641150000738,
+    "uncached_actions_by_phase": {
+      "7-day": 3,
+      "6-night": 54,
+      "5-day": 3359,
+      "4-night": 5153
+    },
+    "action_input_hypotheses_by_phase": {
+      "7-day": 36,
+      "6-night": 378,
+      "5-day": 16923,
+      "4-night": 15520
+    },
+    "terminal_moments": {
+      "calls": 6029,
+      "public_rows": 26026,
+      "private_rows": 16892
+    },
+    "states": {
+      "values": 2415,
+      "actions": 8565,
+      "expansions": {
+        "actions": 8569,
+        "values": 2419
+      },
+      "acquired": 937,
+      "mornings": 15,
+      "publications": 21,
+      "policies": 1742,
+      "saved_sources": 0,
+      "resolution_cache": 8569,
+      "target_orbits": {
+        "target_members": 0,
+        "target_representatives": 0
+      },
+      "report_vectors": {
+        "kernels": 3671,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 304,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    },
+    "derived_projection_cache": {
+      "entries": 82,
+      "hypotheses_before": 276,
+      "hypotheses_after": 188
+    }
+  },
+  "progress": [],
+  "note": "One changed-code initial-seven MAX request. Lightweight development wrappers count uncached action input rows and moment calls; not a full CPU profile or an unchanged repeat.",
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "64ae6d4b0db8ea32bdb150f475f154f06ba395b950a245eec22274106d8ee068",
+    "werewolf\\evaluation_projection.py": "b43500d4c8211edbd219b2fd5184b8fb99c30f39cdc3b22798a7dba428c1ab5d",
+    "werewolf\\information_weights.py": "f7b70136135a742ac81080b49f185b90e859493cd5c5915d1c295bb140c78ef9",
+    "werewolf\\morning_publications.py": "1356afab7ed586434705ef4303ffdf8f30a8c277a62c7151f7c840661da1ef1b"
+  }
+}

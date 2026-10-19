@@ -80,3 +80,20 @@ def project_retired_seers(board,state,private):
         groups[roles]=groups.get(roles,F())+hypothesis.mass
     own=replace(joint,hypotheses=tuple(Hypothesis(roles,(),q) for roles,q in sorted(groups.items())))
     return projected,joint,own
+
+
+def project_inactive_acquisitions(state,players):
+    """Scalar-only sum over omitted owners; preserve all remaining joint data.
+
+    Caller keeps every future living owner and every selected observer owner.
+    No role placement, public report, guard/attack record or roster is removed.
+    """
+    if (state.tracked is not None and set(state.tracked)<=set(players)
+        or set(state.rosters[0] if state.rosters else ())<=set(players)):
+        return state
+    if not any(a.player not in players for h in state.hypotheses for a in h.acquisitions):return state
+    from .seer_acquisition import normalize
+    entries=tuple(Hypothesis(h.roles,tuple(a for a in h.acquisitions if a.player in players),h.mass,h.guards,h.attacks)
+                  for h in state.hypotheses)
+    tracked=tuple(p for p in (state.rosters[0] if state.tracked is None else state.tracked) if p in players)
+    return replace(state,hypotheses=normalize(entries),tracked=tracked)

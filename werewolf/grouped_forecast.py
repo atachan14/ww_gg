@@ -22,9 +22,38 @@ class GroupedForecast(InformationSetForecast):
         super().__init__(*args,**kwargs)
         if (self.strategy.day,self.strategy.night,self.strategy.fake_reports) not in (('random',)*3,('max',)*3):raise ValueError('Uniform or MAX representative mode only')
         self.aggregate_wolf=aggregate_wolf;self.aggregate_reports=aggregate_reports
-        self.report_kernels={};self.value_laws={}
+        self.report_kernels={};self.value_laws={};self.scalar_projections={}
         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
         self.action_policy=GroupedPolicy(self)
+
+    def scalar_laws(self,b,s,private,observer):
+        # Only ephemeral scalar inputs; named/observed/history frames stay full.
+        if (not self.aggregate_reports or self.strategy.day!='max' or b.initial_hunter_count
+            or not b.initial_seer_count or self.retire_uninformative_scans
+            or self.acquisition_provenance is not None or self.trace is not None):return s,private
+        from .actor_information import PersonalInformation
+        from .seer_intervention import SeerObserver
+        if observer is not None and type(observer) not in (PersonalInformation,SeerObserver):return s,private
+        tick(0)
+        keep=tuple(sorted(set(b.alive)|({observer.actor} if observer is not None else set())))
+        from .evaluation_projection import project_inactive_acquisitions
+        def projected(state):
+            key=(state,keep)
+            if key in self.scalar_projections:return self.scalar_projections[key]
+            result=project_inactive_acquisitions(state,keep)
+            if result is not state:self.scalar_projections[key]=result
+            return result
+        q,p=projected(s),projected(private)
+        if q is not s or p is not private:
+            # Discarding an unsupported private coordinate cannot create support.
+            from .information_weights import observer_projection_ratios
+            from .information_set_forecast import Pending
+            observer_projection_ratios(s,private,incomplete=lambda:Pending('information_set_report_likelihood_incomplete'))
+        return q,p
+
+    def solve(self,b,s,past,private,observer,*,physical=None):
+        s,private=self.scalar_laws(b,s,private,observer)
+        return super().solve(b,s,past,private,observer,physical=physical)
 
     # Constructed partitions replace discovery by full-law label permutations.
     # Named flow/action keys retain all inputs; only the proved constant
@@ -176,5 +205,6 @@ class GroupedForecast(InformationSetForecast):
         return tuple((g[0],sum((probabilities[p] for p in g),F())) for g in self.target_orbits(tuple(probabilities)))
 
     def act(self,b,s,past,target,private,observer,*,physical=None):
+        s,private=self.scalar_laws(b,s,private,observer)
         with self.group_scope(_fix(self.groups,(target,))):
             return super().act(b,s,past,target,private,observer,physical=physical)

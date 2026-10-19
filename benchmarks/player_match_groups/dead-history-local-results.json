@@ -1,0 +1,685 @@
+{
+  "scope": "Local complete scalar comparisons on toy four-day and actual forced execute4/bite1 five-day premorning. No full initial-seven calculation. cProfile overhead is present.",
+  "results": [
+    {
+      "completed_at": "2026-10-19T08:31:06.678685+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6728038000292145,
+      "samples": 32,
+      "peak_private_committed_bytes": 24600576,
+      "observed_peak_working_set_bytes": 35389440,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "case": "toy",
+        "mode": "base",
+        "completed": true,
+        "source_hypotheses": 12,
+        "alive": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "phase": "day",
+        "value": "1/3",
+        "seconds": 0.062368699989747256,
+        "work": 637,
+        "whole_seconds": 0.3206314999843016,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "values": 5,
+        "actions": 16,
+        "mornings": 0,
+        "report_kernels": 0,
+        "projection_visits": {},
+        "profile_self_top": [
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.hash>",
+            "calls": 22396,
+            "self": 0.007859,
+            "cumulative": 0.0143335
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 49,
+            "function": "__post_init__",
+            "calls": 264,
+            "self": 0.0029419000000000003,
+            "cumulative": 0.0065998
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 74,
+            "function": "normalize",
+            "calls": 27,
+            "self": 0.0019954,
+            "cumulative": 0.0112996
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py",
+            "line": 24,
+            "function": "__post_init__",
+            "calls": 27,
+            "self": 0.0018102,
+            "cumulative": 0.0036388
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.any>",
+            "calls": 1579,
+            "self": 0.0016755000000000001,
+            "cumulative": 0.0047751
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 710,
+            "function": "_add",
+            "calls": 1253,
+            "self": 0.0013903000000000001,
+            "cumulative": 0.0028868
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 613,
+            "function": "forward",
+            "calls": 1918,
+            "self": 0.0013269,
+            "cumulative": 0.0064971000000000004
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 317,
+            "function": "_from_coprime_ints",
+            "calls": 1921,
+            "self": 0.0013144,
+            "cumulative": 0.0016962000000000001
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 908,
+            "function": "__hash__",
+            "calls": 4002,
+            "self": 0.0012698000000000002,
+            "cumulative": 0.0012816000000000001
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py",
+            "line": 282,
+            "function": "__post_init__",
+            "calls": 68,
+            "self": 0.0010991,
+            "cumulative": 0.0038442000000000003
+          },
+          {
+            "file": "<string>",
+            "line": 2,
+            "function": "__hash__",
+            "calls": 3540,
+            "self": 0.0010774,
+            "cumulative": 0.0015749000000000002
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.isinstance>",
+            "calls": 4319,
+            "self": 0.0010615000000000002,
+            "cumulative": 0.0017931000000000002
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py",
+            "line": 77,
+            "function": "acquire_uniform",
+            "calls": 9,
+            "self": 0.0010251000000000001,
+            "cumulative": 0.0174617
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method _io.open_code>",
+            "calls": 1,
+            "self": 0.0010145,
+            "cumulative": 0.0010145
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 23,
+            "function": "<genexpr>",
+            "calls": 624,
+            "self": 0.0008929000000000001,
+            "cumulative": 0.0008929000000000001
+          }
+        ]
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T08:31:07.320541+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6420895000337623,
+      "samples": 31,
+      "peak_private_committed_bytes": 24346624,
+      "observed_peak_working_set_bytes": 35119104,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "case": "toy",
+        "mode": "candidate",
+        "completed": true,
+        "source_hypotheses": 12,
+        "alive": [
+          2,
+          3,
+          5,
+          6
+        ],
+        "phase": "day",
+        "value": "1/3",
+        "seconds": 0.07677260000491515,
+        "work": 661,
+        "whole_seconds": 0.30526409996673465,
+        "expansions": {
+          "actions": 21,
+          "values": 6
+        },
+        "values": 6,
+        "actions": 21,
+        "mornings": 0,
+        "report_kernels": 0,
+        "projection_visits": {
+          "requests": 43,
+          "projected_calls": 3,
+          "hypotheses_before": 27,
+          "hypotheses_after": 9
+        },
+        "profile_self_top": [
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.hash>",
+            "calls": 22872,
+            "self": 0.0092051,
+            "cumulative": 0.015277200000000001
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 186,
+            "function": "__new__",
+            "calls": 1148,
+            "self": 0.0038129,
+            "cumulative": 0.0041637
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 49,
+            "function": "__post_init__",
+            "calls": 304,
+            "self": 0.0032026000000000003,
+            "cumulative": 0.0074919
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py",
+            "line": 24,
+            "function": "__post_init__",
+            "calls": 38,
+            "self": 0.0027805,
+            "cumulative": 0.0062994
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 74,
+            "function": "normalize",
+            "calls": 38,
+            "self": 0.0027418,
+            "cumulative": 0.017935100000000002
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 613,
+            "function": "forward",
+            "calls": 2206,
+            "self": 0.0020781000000000003,
+            "cumulative": 0.009211500000000001
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 317,
+            "function": "_from_coprime_ints",
+            "calls": 2209,
+            "self": 0.0020019,
+            "cumulative": 0.0024475
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.any>",
+            "calls": 1814,
+            "self": 0.0019862,
+            "cumulative": 0.004953600000000001
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.isinstance>",
+            "calls": 4973,
+            "self": 0.0018232,
+            "cumulative": 0.0026698
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 710,
+            "function": "_add",
+            "calls": 1450,
+            "self": 0.0017063,
+            "cumulative": 0.0032241
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py",
+            "line": 282,
+            "function": "__post_init__",
+            "calls": 90,
+            "self": 0.0015093,
+            "cumulative": 0.005092
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 908,
+            "function": "__hash__",
+            "calls": 4409,
+            "self": 0.0013005,
+            "cumulative": 0.0013104
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py",
+            "line": 77,
+            "function": "acquire_uniform",
+            "calls": 12,
+            "self": 0.0011828000000000001,
+            "cumulative": 0.026011000000000003
+          },
+          {
+            "file": "<string>",
+            "line": 2,
+            "function": "__hash__",
+            "calls": 3699,
+            "self": 0.0010752000000000001,
+            "cumulative": 0.0017419
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.sum>",
+            "calls": 454,
+            "self": 0.0009944,
+            "cumulative": 0.06299600000000001
+          }
+        ]
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T08:31:09.250636+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 1.9299742000293918,
+      "samples": 94,
+      "peak_private_committed_bytes": 18587648,
+      "observed_peak_working_set_bytes": 28778496,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "case": "actual-prefix",
+        "mode": "base",
+        "completed": true,
+        "source_hypotheses": 15,
+        "alive": [
+          2,
+          3,
+          5,
+          6,
+          7
+        ],
+        "phase": "day",
+        "value": "1/3",
+        "seconds": 1.564325999992434,
+        "work": 17689,
+        "whole_seconds": 1.6004266000236385,
+        "expansions": {
+          "actions": 230,
+          "values": 50
+        },
+        "values": 50,
+        "actions": 230,
+        "mornings": 1,
+        "report_kernels": 130,
+        "projection_visits": {},
+        "profile_self_top": [
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.hash>",
+            "calls": 381471,
+            "self": 0.1319895,
+            "cumulative": 0.22452270000000002
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 710,
+            "function": "_add",
+            "calls": 67258,
+            "self": 0.0664892,
+            "cumulative": 0.13475620000000002
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 613,
+            "function": "forward",
+            "calls": 107878,
+            "self": 0.0641145,
+            "cumulative": 0.3042744
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 317,
+            "function": "_from_coprime_ints",
+            "calls": 107918,
+            "self": 0.060601800000000004,
+            "cumulative": 0.0819029
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\morning_publications.py",
+            "line": 157,
+            "function": "terminal_execution_value",
+            "calls": 300,
+            "self": 0.0581718,
+            "cumulative": 0.3758133
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 49,
+            "function": "__post_init__",
+            "calls": 5445,
+            "self": 0.0525139,
+            "cumulative": 0.1343204
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.any>",
+            "calls": 46011,
+            "self": 0.0463847,
+            "cumulative": 0.1153286
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 74,
+            "function": "normalize",
+            "calls": 807,
+            "self": 0.041700100000000004,
+            "cumulative": 0.19684510000000002
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.isinstance>",
+            "calls": 183256,
+            "self": 0.040101000000000005,
+            "cumulative": 0.0666732
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 186,
+            "function": "__new__",
+            "calls": 52266,
+            "self": 0.0379817,
+            "cumulative": 0.0496172
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py",
+            "line": 24,
+            "function": "__post_init__",
+            "calls": 807,
+            "self": 0.0371104,
+            "cumulative": 0.0827206
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method __new__ of type object at 0x00007FFDF55F98F0>",
+            "calls": 160185,
+            "self": 0.0326938,
+            "cumulative": 0.0326938
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method math.gcd>",
+            "calls": 191153,
+            "self": 0.0314689,
+            "cumulative": 0.0314689
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 912,
+            "function": "__eq__",
+            "calls": 36492,
+            "self": 0.0296315,
+            "cumulative": 0.0716121
+          },
+          {
+            "file": "<string>",
+            "line": 2,
+            "function": "__hash__",
+            "calls": 90405,
+            "self": 0.0271441,
+            "cumulative": 0.0412516
+          }
+        ]
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T08:31:11.853859+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 2.602723399992101,
+      "samples": 126,
+      "peak_private_committed_bytes": 20537344,
+      "observed_peak_working_set_bytes": 30367744,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "case": "actual-prefix",
+        "mode": "candidate",
+        "completed": true,
+        "source_hypotheses": 15,
+        "alive": [
+          2,
+          3,
+          5,
+          6,
+          7
+        ],
+        "phase": "day",
+        "value": "1/3",
+        "seconds": 2.2406995999626815,
+        "work": 22264,
+        "whole_seconds": 2.2753274000133388,
+        "expansions": {
+          "actions": 450,
+          "values": 100
+        },
+        "values": 100,
+        "actions": 450,
+        "mornings": 1,
+        "report_kernels": 260,
+        "projection_visits": {
+          "requests": 816,
+          "projected_calls": 46,
+          "hypotheses_before": 690,
+          "hypotheses_after": 138
+        },
+        "profile_self_top": [
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.hash>",
+            "calls": 431915,
+            "self": 0.16086550000000002,
+            "cumulative": 0.27307220000000004
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\morning_publications.py",
+            "line": 157,
+            "function": "terminal_execution_value",
+            "calls": 600,
+            "self": 0.0857841,
+            "cumulative": 0.5059835
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 710,
+            "function": "_add",
+            "calls": 87946,
+            "self": 0.083333,
+            "cumulative": 0.1734521
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 613,
+            "function": "forward",
+            "calls": 140847,
+            "self": 0.0829015,
+            "cumulative": 0.39318240000000004
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 317,
+            "function": "_from_coprime_ints",
+            "calls": 140927,
+            "self": 0.07964320000000001,
+            "cumulative": 0.1070855
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.any>",
+            "calls": 66363,
+            "self": 0.06701660000000001,
+            "cumulative": 0.1696978
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 49,
+            "function": "__post_init__",
+            "calls": 6432,
+            "self": 0.0638929,
+            "cumulative": 0.1698721
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 186,
+            "function": "__new__",
+            "calls": 81195,
+            "self": 0.060060800000000004,
+            "cumulative": 0.07878460000000001
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.isinstance>",
+            "calls": 249674,
+            "self": 0.058168700000000004,
+            "cumulative": 0.0971598
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py",
+            "line": 74,
+            "function": "normalize",
+            "calls": 1595,
+            "self": 0.05150950000000001,
+            "cumulative": 0.23240170000000002
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py",
+            "line": 24,
+            "function": "__post_init__",
+            "calls": 1595,
+            "self": 0.0504437,
+            "cumulative": 0.1194481
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method __new__ of type object at 0x00007FFDF55F98F0>",
+            "calls": 222123,
+            "self": 0.0456521,
+            "cumulative": 0.0456521
+          },
+          {
+            "file": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py",
+            "line": 912,
+            "function": "__eq__",
+            "calls": 51782,
+            "self": 0.044796300000000004,
+            "cumulative": 0.1081801
+          },
+          {
+            "file": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py",
+            "line": 282,
+            "function": "__post_init__",
+            "calls": 2122,
+            "self": 0.0421691,
+            "cumulative": 0.13762390000000002
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method math.gcd>",
+            "calls": 242473,
+            "self": 0.039728,
+            "cumulative": 0.039728
+          }
+        ]
+      },
+      "progress": []
+    }
+  ]
+}

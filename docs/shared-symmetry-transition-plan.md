@@ -777,3 +777,170 @@ and complete report children match. Its immutable origin has seven players,
 but no forecast of that origin is performed; only the final-three conditional
 frame is evaluated. Earlier unobserved reports use the existing backlog law,
 so this is not claimed as the realised initial DEFAULT MAX trajectory.
+
+## 2026-10-19 paired dead-acquisition scalar reduction and remaining MAX work
+
+### Attribution limits and the investigated duplication
+
+Saved ExtensionForecast/component measurements cannot be treated as the cost
+breakdown of847819d's GroupedForecast MAX consumer: its full-renaming/colour
+keys are disabled. The component experiment found no material final-tuple hash
+benefit; its~7.3s colour builder is absent on the current opt-in path. The saved
+847819d bounded seven result records a stop, not a CPU/expansion breakdown.
+Therefore no globally largest present bottleneck can be inferred from those
+old percentages. We did not repeat the unchanged whole request to guess one.
+
+Instead, small exact conditional frames test a specific repeated dimension:
+obtained results of a true seer who died before publishing them. The two-seer
+six-player origin, forced execute4/bite1 and observed surviving seer2 white1,
+has12 Q histories (three wolf placements times four dead-seer last draws).
+The next behavior-relevant Q contains3 histories. A known-wolf P reduces4->1;
+a dead-seer selected observer who knows black3 must keep its actual result.
+The actual original seven input's forced execute4/bite1 premorning has15 Q
+histories and reduces to3. This is a relevant named conditional branch, not a
+claim that initial day MAX chooses execution4 or a complete initial forecast.
+
+### Mathematical sufficient state and exactness conditions
+
+For a scalar query let A be current survivors plus the owner referenced by any
+selected PersonalInformation/SeerObserver. Write a hidden state as (x,z), where
+x retains the COMPLETE role tuple, acquisitions of owners in A, every guard and
+attack record, rosters, initial rule and observed-prefix metadata; z is only
+acquisitions owned by players outside A. Under fixed claims, no resurrection,
+H0 and the existing configured rules, future acquisition targets depend on
+living owners' own histories and the ORIGINAL target roster (corpses included).
+Future truthful publication and plausible-fake support inspect living reporters'
+own records; medium truth and physical casualties depend on retained roles.
+Wolf information retains its complete initial team and own attacks. No future
+transition, legal action or observation reads z. All public past reports remain
+in the separate unchanged past/Board, including reports by later-dead players.
+
+Define Qbar(x)=sum_z Q(x,z), Pbar(x)=sum_z P(x,z), separately. The common chance
+kernels commute with these sums because they depend only on x and the complete
+retained public context. In particular every fake-support witness survives as
+an x witness and no new living-owner witness is invented. For each named action,
+public Q continuation values agree by induction. Exact argmax/argmin and ALL
+ties therefore agree; evaluating that SAME selected policy on Pbar then gives
+the original P value. This does NOT exchange expectation and max, condition Q on
+viewer evidence, discard role correlation, or optimise independently per world.
+The public-medium candidate choice still scores whole instructions and merges
+selected outcomes before computing the seer kernel.
+
+A selected dead observer can still require an obtained scan during subsequent
+acquisition filtering. Its actor is conservatively included in A, even when it
+supplies only a role or a future target. Blind deletion raises false
+seer_view_scan_outside_public_support on the independent small counterexample.
+A living seer's unvisited set changes if its own records are dropped; another
+negative test fixes that distinction. The dead observer's actual Table has
+named column3=1 but public-strategy scalar1/3, so replacing public strategy by a
+private optimum would also fail. Unknown/dead target identities remain readable.
+
+The quotient is defined only for coherent Q/P input. A private acquisition not
+in original Q must remain outside support even if deleting z would hide the
+mismatch. The shared observer_projection_ratios check runs on the ORIGINAL
+full likelihood projection whenever scalar projection actually changes either
+law. No unsupported private record is repaired or uniformly filled. This is
+zero-support handling, not an owner/frame certificate or issued ledger.
+
+### Adopted opt-in implementation and cache boundary
+
+The common `project_inactive_acquisitions` operation sums complete immutable
+Hypotheses with the existing normalizer. GroupedForecast applies it to Q and P
+at solve/forced-action SCALAR boundaries only, for MAX aggregate_reports opt-in,
+H0, no scan retirement, no provenance/trace and supported typed observers.
+Other paths retain existing behavior. Each calculation owns a derived-state
+cache keyed by the FULL input state and retained owner tuple; identity results
+are not cached. The operation depends only on those arguments, so Board/rules/
+past need not be duplicated in that derived-state key. ALL actual scalar/action
+keys still contain their unchanged Board, public past, Q/P, observer, target and
+physical context. Thus different decision/observation meanings are not aliased.
+Cancellation/time is polled before reuse. No source Board/node, observed report
+branch, saved history, owner Table or cold export is replaced by the quotient.
+
+The failed public-only candidate is retained in DEVELOPMENT code/evidence:
+projecting just pure-Q scalar calls leaves original and quotient P calls in
+separate caches. In the actual prefix it doubled action/value expansions
+230/50 ->450/100, increased17689->22264work and1.56->2.24s. State count reduction
+alone was not grounds to adopt that candidate. Aligning BOTH laws restores
+230/50 expansions and reduces repeated per-branch hypothesis work.
+
+### Bounded local effect and independent validation
+
+Final production/control comparison (`dead-history-production-local-results.json`):
+
+| same conditional query | value | work, off -> on | profile-instrumented seconds |
+| --- | --- | --- | --- |
+| four-alive, two true seers / one dead | 1/3 | 637 ->169 | .072572 ->.033749 |
+| actual seven execute4/bite1, five-alive premorning | 1/3 | 17689 ->5221 | 1.710037 ->.840774 |
+
+Action/value expansions are unchanged (16/5 and230/50). The paired development profile records807 versus808 common normalizer calls
+while row volume falls: this is reducing the size of repeated work, not
+skipping defined choices. One timing sample per
+case with cProfile is descriptive, not a full-game or statistical speedup.
+The frozen public-only and paired development experiments remain in separate
+raw files. The final probe defaults to projection-off/production-on local
+controls, with source hashes and the original250000work/30s/384MiB/35s watcher.
+
+Independent ordinary InformationSetForecast comparisons cover public, live
+seer, dead seer and wolf, named forced actions, complete Forecast/Table, original
+joint source/cold export, warm cache and observed reports. Full role marginals
+remain equal but are not used as equality. Private hidden-support rejection,
+future observer preservation, unvisited counterexample, diagnostic/uniform
+fallback and cached cancellation are tested. All prior terminal-MAX, joint
+medium/true-fake ordering and future-observer tests remain passing. Final run:
+37 related methods pass in7.671s (not an all-repository run).
+
+### One changed seven run: complete status and observed remaining work
+
+After the locally demonstrated improvement, ONE changed-code actual original
+seven MAX calculation was measured, with lightweight DEVELOPMENT wrappers only.
+`dead-history-seven-results.json` retains input hash, production source hashes,
+raw stop, counters and sampled resource limits. It stops at250001/250000work,
+10.906412s, peak working set93,220,864 bytes / private committed82,255,872 bytes.
+It returns NO complete scalar/Forecast/Table. The historical3487/7200 is not this
+run's result. There is no larger-cap retry or second unchanged whole run.
+
+Observed uncached actions before stopping: initial7day3,6night54,5day3359,
+4night5153 (8569 total);4night and5day account for8512 calls. Their input Q+P
+hypothesis-row totals are15520 and16923 respectively, with other phases414.
+These are counts/row volumes, NOT exclusive CPU time or total work shares.
+Terminal moments are called6029 times with26026 public /16892 private input
+rows. There are3671 compiled kernels,937 acquisition entries,1742 wolf policies,
+2419 value expansions (2415 completed values) and8569 action expansions (8565
+completed cached actions). The derived projection cache has82 entries,
+276->188 input/output hypotheses across its distinct derived states. These are
+only the progressed prefix; it does not prove global dominance of dead records
+or compare equal progress with the old cap-stopped run.
+
+### Most concrete next repetition: Q-owned terminal payoff numerators
+
+Because every terminal call uses its kernel's same named alive targets,6029
+calls and at most3671 distinct kernels imply AT LEAST2358 repeat calls for the
+same Q-owned report kernel. Different P laws do not justify recomputing public
+report faces. This is a lower bound on repeated calls, not a measured saved CPU
+fraction, and a larger complete-tree/global bottleneck claim is not established.
+
+For each complete report e, first choose B_e on Q exactly as847819d. For the
+common likelihood fiber x=(roles,acquisitions), define
+M_Q(x)=sum_e J_e^Q(x) r(x,B_e), where r is the uniform-tie final-execution payoff.
+Then V_Q(P)=sum_x [P(x)/Q(x)] M_Q(x). M_Q is a Q-owned payoff numerator, not a
+private posterior, role marginal, or per-world optimum. Keep original Q support
+separately even where M_Q(x)=0. A future cache can belong to the immutable
+compiled kernel and exact named target tuple; it must not share across distinct
+Q/report kernels, histories, tie laws or labelled actions. Common private-support
+validation remains necessary before the dot product. Complete report/Board
+materialization is still separate. Public argmax precedes every fiber payoff.
+
+An INDEPENDENT complete joint-event enumerator checks this formula on nine
+small public/seer/wolf views, matches ordinary final MAX values, verifies that
+M_Q is unchanged across P views and0<=M_Q(x)<=Q(x). This next cache is DESIGN /
+DEVELOPMENT ONLY, not wired into production and not a reason for another whole
+seven run in this checkpoint. Its bounded local comparison, cache ownership,
+zero-payoff support, cancellation/interrupted construction and observed-history
+regressions are the next concrete implementation boundary. Broader history/
+label symmetries and general interacting maxima remain outside this change.
+
+`dead-history-validation.json` retains the final37-method log, source hashes,
+local equality/work checks and the2358-repeat lower-bound calculation. Final
+production hashes equal the changed-seven measurement hashes. Original
+artifacts/previews are untouched; no full repository test run is claimed.
