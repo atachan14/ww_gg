@@ -1,0 +1,244 @@
+{
+  "at": "2026-10-19T08:16:26.822008+00:00",
+  "measurements": [
+    {
+      "completed_at": "2026-10-19T08:16:13.716602+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.953984500025399,
+      "samples": 34,
+      "peak_private_committed_bytes": 23195648,
+      "observed_peak_working_set_bytes": 34000896,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "mode": "single",
+        "completed": true,
+        "runs": [
+          {
+            "name": "ordinary",
+            "value": "5/6",
+            "seconds": 0.013948200037702918,
+            "work": 54,
+            "posterior_events": 0,
+            "publication_rows": 5,
+            "values": 3,
+            "actions": 15
+          },
+          {
+            "name": "moments",
+            "value": "5/6",
+            "seconds": 0.0007473999867215753,
+            "work": 29,
+            "posterior_events": 0,
+            "publication_rows": 0,
+            "values": 0,
+            "actions": 0
+          }
+        ],
+        "budget": {
+          "work": 122,
+          "max_work": 250000,
+          "elapsed_seconds": 0.047
+        },
+        "seconds": 0.03607889998238534
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T08:16:14.331361+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6142771000158973,
+      "samples": 29,
+      "peak_private_committed_bytes": 23130112,
+      "observed_peak_working_set_bytes": 34041856,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "mode": "dual",
+        "completed": true,
+        "runs": [
+          {
+            "name": "ordinary",
+            "value": "1/2",
+            "seconds": 0.013768100005108863,
+            "work": 252,
+            "posterior_events": 0,
+            "publication_rows": 9,
+            "values": 9,
+            "actions": 27
+          },
+          {
+            "name": "moments",
+            "value": "1/2",
+            "seconds": 0.001256300020031631,
+            "work": 99,
+            "posterior_events": 0,
+            "publication_rows": 0,
+            "values": 0,
+            "actions": 0
+          }
+        ],
+        "budget": {
+          "work": 381,
+          "max_work": 250000,
+          "elapsed_seconds": 0.031
+        },
+        "seconds": 0.03393299999879673
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T08:16:15.047309+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.715708400006406,
+      "samples": 34,
+      "peak_private_committed_bytes": 24326144,
+      "observed_peak_working_set_bytes": 35340288,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "mode": "three",
+        "completed": true,
+        "runs": [
+          {
+            "name": "ordinary",
+            "value": "109/135",
+            "seconds": 0.10683970001991838,
+            "work": 1557,
+            "posterior_events": 0,
+            "publication_rows": 109,
+            "values": 109,
+            "actions": 243
+          },
+          {
+            "name": "moments",
+            "value": "109/135",
+            "seconds": 0.005638799979351461,
+            "work": 719,
+            "posterior_events": 0,
+            "publication_rows": 0,
+            "values": 0,
+            "actions": 0
+          }
+        ],
+        "budget": {
+          "work": 2351,
+          "max_work": 250000,
+          "elapsed_seconds": 0.141
+        },
+        "seconds": 0.13409730000421405
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T08:16:15.608112+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.5605672999517992,
+      "samples": 27,
+      "peak_private_committed_bytes": 23306240,
+      "observed_peak_working_set_bytes": 34222080,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "mode": "medium-pair",
+        "completed": true,
+        "runs": [
+          {
+            "name": "ordinary",
+            "value": "5/6",
+            "seconds": 0.011200500011909753,
+            "work": 145,
+            "posterior_events": 0,
+            "publication_rows": 17,
+            "values": 7,
+            "actions": 36
+          },
+          {
+            "name": "moments",
+            "value": "5/6",
+            "seconds": 0.003084799973294139,
+            "work": 112,
+            "posterior_events": 0,
+            "publication_rows": 0,
+            "values": 0,
+            "actions": 0
+          }
+        ],
+        "budget": {
+          "work": 287,
+          "max_work": 250000,
+          "elapsed_seconds": 0.031
+        },
+        "seconds": 0.030770599958486855
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T08:16:26.822008+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 11.214017100050114,
+      "samples": 543,
+      "peak_private_committed_bytes": 81063936,
+      "observed_peak_working_set_bytes": 91197440,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "wwgg_budget_stop kind=work work=250002 max_work=250000 elapsed_seconds=10.328\r\n",
+      "worker": {
+        "mode": "seven",
+        "completed": false,
+        "input_sha256": "a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2",
+        "status": "budget_stopped",
+        "reason": "work",
+        "seconds": 10.324506999982987
+      },
+      "progress": []
+    }
+  ],
+  "note": "One seven MAX attempt only; limits unchanged. Small runs compare the same conditional frame, not the full initial game.",
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "c594df0d92db364b4a2231e9f8061cb03451741f1d5587a5b0322810162dafa2",
+    "werewolf\\morning_publications.py": "1356afab7ed586434705ef4303ffdf8f30a8c277a62c7151f7c840661da1ef1b",
+    "werewolf\\information_set_forecast.py": "7a2d91308873fe67f8e98b7c898fcf8b618343e96e3532fdd40db76fc5ae622d",
+    "werewolf\\information_weights.py": "f7b70136135a742ac81080b49f185b90e859493cd5c5915d1c295bb140c78ef9",
+    "werewolf\\closed_calculation.py": "ac3568a2e503d670650b5a39ebba0833162d7f6df6109bf35ce2962c477486ec"
+  }
+}

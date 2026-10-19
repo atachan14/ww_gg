@@ -123,7 +123,8 @@ class ClosedCalculation:
             or game.get('seer_mode')!='information-fixed-v1'
             or game.get('seer_options',{}).get('likelihood')!='compatibility'
             or game.get('seer_options',{}).get('initial_rule')!='random_white'
-            or (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3
+            or ((strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3
+                and not (grouped and aggregate_reports and (strategy.day,strategy.night,strategy.fake_reports)==('max',)*3))
             or strategy.disclosure_for('seer')!='all' or strategy.disclosure_for('medium')!='all'):
             raise Pending('closed_initial_uniform_H0_snapshot_only')
         origin_data,saved_target=_entry_origin(data,game,strategy)

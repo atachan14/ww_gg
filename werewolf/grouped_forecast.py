@@ -20,7 +20,7 @@ class GroupedPolicy(InformationSetActionPolicy):
 class GroupedForecast(InformationSetForecast):
     def __init__(self,*args,aggregate_wolf=False,aggregate_reports=False,**kwargs):
         super().__init__(*args,**kwargs)
-        if (self.strategy.day,self.strategy.night,self.strategy.fake_reports)!=('random',)*3:raise ValueError('Uniform representative mode only')
+        if (self.strategy.day,self.strategy.night,self.strategy.fake_reports) not in (('random',)*3,('max',)*3):raise ValueError('Uniform or MAX representative mode only')
         self.aggregate_wolf=aggregate_wolf;self.aggregate_reports=aggregate_reports
         self.report_kernels={};self.value_laws={}
         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
@@ -40,6 +40,9 @@ class GroupedForecast(InformationSetForecast):
     def scalar_descriptor(self,*args,**kwargs):return None
 
     def terminal_uniform_day(self,b):
+        return self.strategy.day=='random' and self.terminal_execution_day(b)
+
+    def terminal_execution_day(self,b):
         return b.phase=='day' and len(b.alive)==3 and not b.initial_hunter_count and set(b.wolf_count_distribution)=={1}
 
     def exchangeable(self,b):
@@ -55,7 +58,7 @@ class GroupedForecast(InformationSetForecast):
         return self.value_laws[key]
 
     def report_partition(self,b,past):
-        if not self.aggregate_reports or not self.groups:return ()
+        if self.strategy.day!='random' or not self.aggregate_reports or not self.groups:return ()
         from types import SimpleNamespace
         reporters={p for p in b.alive if b.claims[p-1]=='seer'}
         refined=_report_groups(self.groups,SimpleNamespace(public=b,past=past))
@@ -86,6 +89,7 @@ class GroupedForecast(InformationSetForecast):
         # Compile every positive-Q medium family before transferring P, even
         # when a family has zero viewer mass. No seer event law is constructed.
         b,s,past,own,observer=payload
+        if self.strategy.day=='max':return self.terminal_max_report_value(payload)
         if (not self.aggregate_reports or self.retire_uninformative_scans or self.acquisition_provenance is not None
             or not self.terminal_uniform_day(b) or
             any(self.strategy.disclosure_for(role)!='all' for role in ('seer','medium'))):return None
@@ -96,6 +100,27 @@ class GroupedForecast(InformationSetForecast):
         for q,child,law,history in rows:self.publication_kernel(child,law,history)
         constant=exchangeable_value(3,1,'day',self.strategy)
         return sum((mass*constant for mass,*rest in self.push(s,own,rows)),F())
+
+    def terminal_max_report_value(self,payload):
+        b,s,past,own,observer=payload
+        if (not self.aggregate_reports or self.retire_uninformative_scans or self.acquisition_provenance is not None
+            or self.trace is not None or not self.terminal_execution_day(b)
+            or any(self.strategy.disclosure_for(role)!='all' for role in ('seer','medium'))):return None
+        from .exact import report_actions
+        from .information_set_forecast import Pending
+        incomplete=lambda:Pending('information_set_report_likelihood_incomplete')
+        def score(outcomes):
+            return sum((o.probability*self.publication_kernel(o.board,law,past).terminal_execution_value(
+                law,o.board.alive,incomplete=incomplete)
+                for o in outcomes for law in (self.project(s,o.board),)),F())
+        actions=report_actions(b)
+        outcomes=self.report_outcomes(b,s,past,actions,evaluate=score) if actions else ()
+        rows=tuple((o.probability,o.board,self.project(s,o.board),past) for o in outcomes) if outcomes else ((F(1),b,s,past),)
+        # Validate all Q families, including zero-P observations, before push.
+        for q,child,law,history in rows:self.publication_kernel(child,law,history)
+        return sum((mass*self.publication_kernel(child,law,history).terminal_execution_value(
+            private,child.alive,incomplete=incomplete)
+            for mass,child,law,history,private in self.push(s,own,rows)),F())
 
     def generate_publications(self,b,s,past):
         kernel=self.report_kernels.get((b,s,past)) if self.aggregate_reports else None
@@ -117,6 +142,7 @@ class GroupedForecast(InformationSetForecast):
         finally:self.groups=before
 
     def target_orbits(self,targets):
+        if self.strategy.day!='random':return super().target_orbits(targets)
         available=set(targets)
         result=tuple(tuple(p for p in group if p in available) for group in self.groups)
         result=tuple(g for g in result if g)
@@ -128,6 +154,7 @@ class GroupedForecast(InformationSetForecast):
 
     def wolf_cells(self,state):
         from .actor_information import wolf_information_orbits
+        if self.strategy.day!='random':return super().wolf_cells(state)
         rows=(wolf_information_orbits(state,self.groups) if self.aggregate_wolf and any(len(g)>1 for g in self.groups)
               else super().wolf_cells(state))
         self.orbit_stats['solver_wolf_cells']=self.orbit_stats.get('solver_wolf_cells',0)+len(rows)

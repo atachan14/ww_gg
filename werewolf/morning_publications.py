@@ -154,6 +154,39 @@ class CompiledPublications:
             self.public_rows[reports]=(child,history)
         self.stats={'candidates':0,'built_vectors':0,'emitted_vectors':0,'named_vectors_covered':0}
 
+    def terminal_execution_value(self,private,targets,*,incomplete):
+        """Joint report moments for final one-wolf execution, without posteriors.
+
+        Choose each complete event's public face before weighting its private
+        payoff. The original correlated truth/fake index supplies all masses.
+        Named event/history caches remain untouched.
+        """
+        from .information_weights import observer_projection_ratios
+        from .policy_choice import optimal_targets
+        ratios=observer_projection_ratios(self.state,private,incomplete=incomplete)
+        value=F();public_mass=F();private_mass=F()
+        for selection in product(*(self.options[p] for p in self.reporters)):
+            tick();plans=tuple(zip(self.reporters,selection))
+            public={t:F() for t in targets};own={t:F() for t in targets}
+            for fakes,chances in self.fake_chances.items():
+                fake=tuple(pair for pair in plans if pair[0] in fakes)
+                chance=chances.get(fake,F())
+                if not chance:continue
+                truth=tuple(pair for pair in plans if pair[0] not in fakes)
+                for h in self.indexed[fakes].get(truth,()):
+                    tick();mass=h.mass*chance
+                    public_mass+=mass
+                    private_mass+=mass*ratios.get((h.roles,h.acquisitions),F())
+                    for t in targets:
+                        if h.roles[0]&(1<<(t-1)):
+                            public[t]+=mass
+                            own[t]+=mass*ratios.get((h.roles,h.acquisitions),F())
+            if any(public.values()):
+                chosen=optimal_targets(tuple(public.items()),maximize=True)
+                value+=sum((own[t] for t in chosen),F())/len(chosen)
+        if public_mass!=1 or private_mass!=1:raise incomplete()
+        return value
+
     def event(self,plans):
         if plans in self.events:return self.events[plans]
         entries=[]

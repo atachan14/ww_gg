@@ -25,3 +25,14 @@ def observer_report_weights(source, private, branches, *, incomplete):
     if sum((q for q,*_ in result),F())!=1:
         raise incomplete()
     return result
+
+
+def observer_projection_ratios(source, private, *, incomplete):
+    """Unnormalised report-moment transfer on the common likelihood projection."""
+    public={};own={}
+    for h in source.hypotheses:
+        key=(h.roles,h.acquisitions);public[key]=public.get(key,F())+h.mass
+    for h in private.hypotheses:
+        key=(h.roles,h.acquisitions);own[key]=own.get(key,F())+h.mass
+    if sum(own.values(),F())!=1 or any(key not in public for key in own):raise incomplete()
+    return {key:mass/public[key] for key,mass in own.items()}

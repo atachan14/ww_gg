@@ -311,18 +311,24 @@ class InformationSetForecast:
     def generate_morning(self,b,s,past):
         actions=report_actions(b) if self.strategy.disclosure_for('medium')=='all' else ()
         if not actions:return self.publications(b,s,past)
+        outcomes=self.report_outcomes(b,s,past,actions)
+        return tuple(report_flow(outcomes,s,past,self,source_board=b))
+
+    def report_outcomes(self,b,s,past,actions,evaluate=None):
+        # One configured instruction choice, shared by scalar and full history.
         if self.strategy.fake_reports=='random':outcomes=random_report_outcomes(b)
         else:
             scored=[]
             for action in actions:
-                value=continuation_value(report_flow(action.outcomes,s,past,self,source_board=b,fake_colors=action.fake_colors),self.scalar)
+                value=(evaluate(action.outcomes) if evaluate is not None else
+                       continuation_value(report_flow(action.outcomes,s,past,self,source_board=b,fake_colors=action.fake_colors),self.scalar))
                 scored.append((action,value))
             tied=optimal_targets(scored,maximize=False)
             chosen=uniform_policy(tied)
             self.record_report_choices(b,s,past,tuple(scored),chosen)
             outcomes=merge_report_outcomes(BoardOutcome(o.probability*q,o.board)
                                            for action,q in chosen for o in action.outcomes)
-        return tuple(report_flow(outcomes,s,past,self,source_board=b))
+        return outcomes
 
     def push(self,source,private,branches):
         result=observer_report_weights(source,private,branches,

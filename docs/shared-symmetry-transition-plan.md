@@ -664,3 +664,116 @@ Table/history/cache equality and full performance acceptance remain outstanding.
 Validation: python -X utf8 -m unittest tests.test_default_max_design -v passes
 5 methods in0.441s. The generated conditional cases run inside250000 work/30s.
 These tests add no production limits, tickets, case evaluator or cache mutation.
+
+## 2026-10-19 terminal MAX moment integration (opt-in)
+
+The existing `grouped=True, aggregate_reports=True` closed consumer now admits
+all-three-MAX policies in the same fixed-claim H0 scope. The default constructor
+continues to refuse MAX. No policy field, runtime limit, API default, CO rule,
+server or ordinary UI flow changes. The uniform path remains intact. MAX uses
+ordinary named action/wolf cells and named publications rather than borrowing
+the uniform target/report orbit reductions or terminal constant cache key.
+
+### Production formula and preserved decision order
+
+`CompiledPublications.terminal_execution_value` traverses complete named report
+plans against the SAME indexed joint truth/fake kernel used by `event()`. For
+each event it accumulates raw public wolf-target moments D and private moments E,
+chooses the exact public argmax/ties via common `optimal_targets`, and adds the
+uniform-tie dot product with E. Division by public event mass cancels in argmax.
+It streams that scalar sum directly: there is no need to store seven face buckets,
+construct normalized event Hypotheses/TrueScanState/Board, or solve forced final
+executions. It enumerates complete candidate report plans, so this is not a
+factorisation into reporter marginals or a claim of avoiding all enumeration.
+
+`observer_projection_ratios` supplies the same roles/acquisitions likelihood
+projection as the existing Q-to-P report transfer. It verifies private support;
+the moment operation checks complete public/private mass. Initial private
+guard/attack distinctions remain in the owned source; this terminal payoff
+and report likelihood do not depend on their differing conditional records.
+No acquisition records are removed or histories merged in any stored frame.
+
+`InformationSetForecast.report_outcomes` extracts the unchanged common medium
+instruction choice from `generate_morning`. Whole candidates are scored on Q,
+all minimizing instruction IDs keep their uniform tie weights, and their
+outcomes are merged BEFORE the final Q-conditioned seer kernel. The moment
+consumer supplies only the equivalent final-execution scoring callback. It
+still scores singleton instructions; singleton comparison removal is not part
+of this change. Every selected positive-Q medium family compiles before P
+transfer, including families with zero viewer probability.
+
+Eligibility is unobserved scalar evaluation after acquisition and physical
+projection: day, three alive, exactly one live wolf in public support, no initial
+hunter, all disclosures, no scan retirement, no provenance instrumentation or
+trace. Other frames retain their existing report/solver path. Observed reports,
+Tables and history use complete ordinary named branches; warmed moment indices
+can serve that same generator without substituting scalar moments for state.
+Future personal observations are applied by the existing continuation context;
+no future draw or another owner's secret is introduced into action ranking.
+
+### Independent comparisons and measured effect
+
+Development tests compare against fresh ordinary `InformationSetForecast`
+engines, not the moment emitter. Four generated five-player configurations
+(single claim, true/fake pair, multiple true seers plus fake, competing mediums)
+cover public/true-seer/wolf views. Twelve conditional final-three views compare
+scalar, complete Forecast, public/physical Tables, all emitted report children,
+observed child Forecasts/Tables, unchanged source, warm cache repeat and cold
+exported source reconstruction. Twelve initial views also compare complete
+configured day/night/report MAX Forecasts and Tables against ordinary engines.
+
+An explicitly supplied finite medium frame independently reproduces the tied
+instruction example: both public candidates2/3, private actual value0 after
+mixing, not the erroneous1/2 average of separately selected private policies.
+That frame is a kernel-order counterexample, not a generated full-disclosure
+DEFAULT history. Further tests cover valid/invalid future owner scans, private
+zero support, public undefined multiple-fake support even with zero P mass,
+cancellation/work stops, nonterminal/diagnostic fallback and default opt-in gate.
+The independent algebraic/development oracle tests from bdb8e93 remain separate.
+
+`terminal-max-moment-results.json` contains four exact same-frame bounded scalar
+comparisons. Ordinary -> moments (one timing sample each):
+
+| conditional case | value | work | seconds |
+| --- | --- | --- | --- |
+| single | 5/6 | 54 -> 29 | .013948 -> .000747 |
+| dual | 1/2 | 252 -> 99 | .013768 -> .001256 |
+| three | 109/135 | 1557 -> 719 | .106840 -> .005639 |
+| medium-pair | 5/6 | 145 -> 112 | .011201 -> .003085 |
+
+All moment runs build zero seer posterior event rows and zero forced terminal
+action values. Ordinary report rows are5/9/109/17 respectively. These local
+micro-timings are not full-game speedups or repeated statistical measurements;
+other regression work ran concurrently. Separate watcher processes sample memory
+at20ms with unchanged384MiB stop/35s watchdog and250000work/30s calculation caps.
+
+Exactly ONE actual original seven MAX calculation was started after fixing a
+measurement-launch module-name error (that failed launch never started the
+calculation). The actual input hash is a84a76cd242752ee364f11d2d053a5b330453793a398f157e738f5ec373de0a2.
+It stops at250002work versus250000 cap after10.324507s; sampled peak working set
+91,197,440 bytes, private committed81,063,936 bytes. No seven scalar or complete
+Forecast/Table is returned or claimed. The matching historical3487/7200 anchor
+remains historical evidence, not this run's result. There is no raised-cap retry.
+
+The next performance boundary remains upstream configured MAX continuation and
+its full private/public state. This checkpoint establishes the local reduction;
+it does not establish which further reduction dominates the whole seven request.
+Dead-owner secret-history marginalisation, broader symmetry, guardians and general
+interacting-max extensions remain outside scope. HELP records this exact status.
+
+Final validation records: related Closed regression32 tests pass in304.575s;
+focused final MAX integration9 tests pass in5.197s; related uniform/report/MAX
+algebra/HELP25 tests pass in3.097s (overlapping methods across runs, not summed).
+`terminal-max-moment-validation.json` retains the focused logs, test source hash
+and lossless base64/SHA256 records of this run's regenerated regression jobs.
+Only those test-generated tracked checkpoint files are restored after saving;
+only this run's generated untracked closed-full-tree JSON files are removed.
+Existing unrelated .artifacts/ and docs/previews/ remain untouched.
+
+Final review adds a forced-prefix final-three frame with surviving seer1 true
+in some Q worlds and fake in others, and a medium instruction whose colour
+conditions that support before the seer kernel. Ordinary scalar/Forecast/Table
+and complete report children match. Its immutable origin has seven players,
+but no forecast of that origin is performed; only the final-three conditional
+frame is evaluated. Earlier unobserved reports use the existing backlog law,
+so this is not claimed as the realised initial DEFAULT MAX trajectory.
