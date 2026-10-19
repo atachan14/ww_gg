@@ -570,3 +570,97 @@ Whole expanded-control seven seer/wolf API attempts still stop at the work cap a
 Evidence is consolidated in report-integral-integration-results.json:32 raw bounded measurement/reference jobs (including the two stopped controls),21 named seven-column references, local effects, six complete native requests, exact comparison proofs, prior independent six-night evidence,37 lossless current regression job records,107-test output and source hashes. verify_report_integral_integration.py rechecks full Forecast/Table equality against complete reference columns and cold source inputs. Test-runner checkpoint files are restored only after their new records are copied into that bundle. The main development fixture is report_integral_integration_fixture.py; no production benchmark hooks or counters were added.
 
 No broad count-only continuation shortcut, MAX/guardian/new CO/report strategy, approximation, public push/deploy, setting/permission change, UI/HELP addition or server restart is part of this checkpoint. Performance/admission for other eligible seven-player configurations is still bounded by the same runtime limits rather than promised from this one case.
+
+## 2026-10-19 DEFAULT MAX: development decision-order boundary
+
+This checkpoint changes development math/tests only. Production remains at the
+uniform H0 admission boundary of09ad0ed. No complete current seven-player MAX
+run, larger limit, new policy, UI/server operation or deployment is claimed.
+
+### Exact terminal reduction and its assumptions
+
+At three living players, exactly one living wolf, day execution and H0, let
+J_e^Q(h) be the unnormalised mass of a COMPLETE joint public report event e.
+For every labelled legal target t define D_e(t)=sum_h J_e^Q(h) 1[t is wolf].
+The public decision face B_e is argmax_t D_e(t), with all exact ties retained.
+Division by the positive event mass does not change that face. Let E_e(t) be
+the same payoff moment under the actual private P event mass (including the
+common Q-to-P likelihood transfer on its supported projection). The contribution
+is sum_{t in B_e} E_e(t)/|B_e|. AFTER choosing B_e, events with identical labelled
+faces may be summed. There are at most seven nonempty faces for three targets.
+This is a scalar query reduction; it does not reconstruct a report posterior,
+observed Board, Table, named history, or owner knowledge.
+
+The development implementation receives already complete raw moments; it does
+not yet replace the production publication generator or avoid its enumeration.
+Tests reconstruct normalized posteriors independently and compare nine views
+(public, true seer and wolf on each of three small conditional frames). These
+frames use uniform earlier action prefixes. They establish the local final-day
+identity, NOT reachability under the initial DEFAULT MAX policy or full MAX
+Forecast/Table equivalence. Medium-claim competition is excluded from those
+three generated frames. Tests also preserve zero-private-mass public events.
+
+### Counterexamples that block broader averaging
+
+A two-event exact example has expected report-conditioned maximum1 versus
+maximum of averaged scores1/2. A private view assigning probability1 to target2
+still follows a public policy selecting target1, giving0 rather than private1.
+An abstract finite medium frame has two complete instructions tied at public2/3:
+each separately evaluated private continuation is1/2, but mixing their public
+observations FIRST gives private0. This is an algebraic counterexample, not a
+claimed generated DEFAULT game. It fixes the instruction-selection/mixing order:
+score whole candidates on Q, choose all minimising instruction IDs uniformly,
+merge their chance outcomes, THEN condition Q and apply downstream report laws
+and day MAX. In particular fake-seer plausibility must use that merged Q.
+
+Another abstract timing counter has two seers with one redundant and two
+informative next draws each. Choosing a bite before those draws gives5/6;
+choosing after seeing both draws illegally gives13/18. The test is a finite
+information-order counter, not an ordinary-engine integration verification.
+No future acquisition or another player's secret may enter the wolf information
+set used to choose the current bite.
+
+### DEFAULT settings and the historical3487/7200 anchor
+
+Inspection of actual-seven-max-results.json and corpse-rule-seven-results.json
+shows identical saved game input after replacing only the opaque game/Board ID.
+The reconstructed complete SavedOrigin ContinuationInputs are equal (six initial
+hypotheses; SHA256 of repr8562ba0c27a9eb5eb073634a4752cdab6cf8e2f01513757532f15029decf227b).
+The configured policy equals Strategy(): day/night/fake_reports max; true-seer
+positions unvisited/uniform; fake-seer reports noncontradictory/uniform. The
+fake_reports field selects fake MEDIUM instructions, not optimal fake-seer
+reports or optimal CO. The historical column values are19/48 for1,2;4/15 for3,4;
+3487/7200 for5,6,7, so public MAX selects the last three uniformly. The historical
+completed optimized run took49.755125s and768,892,928 bytes peak working set;
+it does not satisfy the present30s/384MiB bounds. The original full ordinary
+reference did not complete. This is a matching historical anchor, not a fresh
+bounded complete independent MAX proof.
+
+In this particular seven-player input, claimant3 is the true medium in every
+initial Q world. Its medium instruction set is therefore a singleton. Removing
+a mathematically vacuous comparison is a candidate small optimisation, but its
+truthful colour observations and subsequent fake-seer Q conditioning must stay.
+Before production integration, verify that bypassing candidate scoring preserves
+necessary zero-support/domain checks and optional diagnostic behavior.
+
+### Remaining state and next implementation boundary
+
+Retain labelled legal actions, complete joint role/report correlations, current
+Q and P support, live owners' scan histories, public past, wolf roster/own attack
+history, observer evidence, rules and acquisition/report timing. Dead owners'
+unreported scans may be candidates for scalar-only marginalisation when they
+cannot affect any future observation or action. That reduction is NOT proved or
+implemented here; a dead selected observer can still require its acquired record.
+Do not discard such records, change tracking, merge generic cache frames, or
+replace full history reconstruction based on this checkpoint.
+
+The next implementation boundary is a common publication moment operation for
+eligible final-three MAX scalar queries, with small ordinary-engine comparison
+including medium instruction ties and personal views BEFORE admitting it.
+Singleton-medium comparison removal is a separate candidate with its own domain
+validation checks. Full seven MAX, multiple interacting maxima, guardian scope,
+Table/history/cache equality and full performance acceptance remain outstanding.
+
+Validation: python -X utf8 -m unittest tests.test_default_max_design -v passes
+5 methods in0.441s. The generated conditional cases run inside250000 work/30s.
+These tests add no production limits, tickets, case evaluator or cache mutation.
