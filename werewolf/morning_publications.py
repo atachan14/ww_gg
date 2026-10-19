@@ -3,7 +3,9 @@
 Generation receives the public joint prior, never viewer-conditioned evidence.
 """
 from dataclasses import dataclass
-from itertools import product
+from itertools import product,combinations,combinations_with_replacement
+from collections import Counter
+from math import factorial,prod
 from fractions import Fraction as F
 from .seer_acquisition import Hypothesis,SeerReport,normalize
 from .seer_future_uniform import TrueScanState,FuturePending,true_reports
@@ -26,6 +28,7 @@ class GeneratedPublication:
     reports: tuple
     probability: F
     state: TrueScanState
+    multiplicity: int = 1
 
 
 def fake_backlog_options(state,reporters,past):
@@ -99,3 +102,122 @@ def future_publications(state,past,morning_alive,claims,*,fake_policy=('noncontr
         result.append(GeneratedPublication(reports,mass,TrueScanState(normalize(entries),state.rosters,state.initial_rule,state.tracked,state.observed_prefix)))
     return tuple(sorted(result,key=lambda b:repr(b.reports)))
 
+
+
+def _report_plans(reports,players):
+    grouped={p:[] for p in players}
+    for r in reports:grouped[r.player].append((r.acquired_day,r.published_day,r.target,r.color))
+    return tuple((p,tuple(sorted(grouped[p]))) for p in players)
+
+
+def compile_publications(state,past,morning_alive,claims,*,fake_policy=('noncontradictory','uniform'),seed=(),board=None):
+    """Index the original joint truth/fake kernel; no independent marginals."""
+    if tuple(fake_policy) not in (('uniform',),('noncontradictory','uniform')):raise ValueError('Unsupported fake seer policy')
+    day=len(state.rosters)
+    if day<2:return FuturePending('future_fake_law_does_not_specify_initial_declarations')
+    generator=plausible_fake_options if 'noncontradictory' in fake_policy else fake_backlog_options
+    reporters=tuple(sorted(p for p in morning_alive if claims[p-1]=='seer'))
+    indexed={};fake_chances={};options={p:set() for p in reporters}
+    for h in state.hypotheses:
+        tick(1+len(h.acquisitions))
+        fakes=tuple(p for p in reporters if not h.roles[2]&(1<<(p-1)))
+        if fakes not in fake_chances:
+            choices=generator(state,fakes,past)
+            if isinstance(choices,FuturePending):return choices
+            chances={}
+            for reports,q in choices:
+                key=_report_plans(reports,fakes);chances[key]=chances.get(key,F())+q
+                for p,plan in key:options[p].add(plan)
+            fake_chances[fakes]=chances
+        truth=_report_plans(true_reports(h,past,morning_alive,claims,day),tuple(p for p in reporters if p not in fakes))
+        indexed.setdefault(fakes,{}).setdefault(truth,[]).append(h)
+        for p,plan in truth:options[p].add(plan)
+    return CompiledPublications(state,board,past,reporters,indexed,fake_chances,options,seed)
+
+
+def _plan_multisets(players,options):
+    for plans in combinations_with_replacement(options,len(players)):
+        tick()
+        multiplicity=factorial(len(players))//prod(factorial(n) for n in Counter(plans).values())
+        yield tuple(zip(players,plans)),multiplicity
+
+
+class CompiledPublications:
+    """Public-source-owned exact event cache and orderly reporter allocations."""
+    def __init__(self,state,board,past,reporters,indexed,fake_chances,options,seed):
+        self.state=state;self.board=board;self.past=past;self.reporters=reporters;self.indexed=indexed;self.fake_chances=fake_chances
+        self.options={p:tuple(sorted(v)) for p,v in options.items()}
+        self.events={};self.public_rows={}
+        for q,child,law,history in seed:
+            reports=tuple(history[len(past):])
+            self.events[_report_plans(reports,reporters)]=GeneratedPublication(reports,q,law)
+            self.public_rows[reports]=(child,history)
+        self.stats={'candidates':0,'built_vectors':0,'emitted_vectors':0,'named_vectors_covered':0}
+
+    def event(self,plans):
+        if plans in self.events:return self.events[plans]
+        entries=[]
+        for fakes,chances in self.fake_chances.items():
+            fake=tuple(pair for pair in plans if pair[0] in fakes);q=chances.get(fake,F())
+            if not q:continue
+            truth=tuple(pair for pair in plans if pair[0] not in fakes)
+            entries.extend(Hypothesis(h.roles,h.acquisitions,h.mass*q,h.guards,h.attacks)
+                           for h in self.indexed[fakes].get(truth,()))
+        tick(1+len(entries))
+        if not entries:result=None
+        else:
+            mass=sum((h.mass for h in entries),F())
+            law=TrueScanState(normalize(entries),self.state.rosters,self.state.initial_rule,self.state.tracked,self.state.observed_prefix)
+            reports=tuple(sorted(SeerReport(day,pub,p,target,color) for p,plan in plans for day,pub,target,color in plan))
+            result=GeneratedPublication(reports,mass,law);self.stats['built_vectors']+=1
+        self.events[plans]=result
+        return result
+
+    def branches(self,partition):
+        generated=self.representatives(partition)
+        if isinstance(generated,FuturePending):return generated
+        result=[]
+        for r in generated:
+            if r.reports not in self.public_rows:
+                self.public_rows[r.reports]=(replace_worlds(self.board,r.state.public_roles),self.past+r.reports)
+            child,history=self.public_rows[r.reports]
+            result.append((r.probability,child,r.state,history))
+        return tuple(result)
+
+    def representatives(self,partition):
+        """Fix every target literally; permute only remaining reporter rows.
+
+        Enumerate multisets before constructing report vectors. The marginal
+        plan options only propose candidates: event() evaluates the correlated
+        source hypotheses and the unchanged public fake kernel exactly.
+        """
+        targets={plan:frozenset(r[2] for r in plan) for options in self.options.values() for plan in options}
+        universe=tuple(sorted(set().union(*targets.values()))) if targets else ()
+        limit=min(len(universe),sum(max((len(plan) for plan in self.options[p]),default=0) for p in self.reporters))
+        result=[]
+        for width in range(limit+1):
+            for selected in combinations(universe,width):
+                tick();selected=frozenset(selected);blocks=[]
+                for group in partition:
+                    blocks.extend((p,) for p in group if p in selected)
+                    rest=tuple(p for p in group if p not in selected)
+                    if rest:blocks.append(rest)
+                choices=[]
+                for block in blocks:
+                    options=tuple(plan for plan in self.options[block[0]] if targets[plan]<=selected)
+                    if not options:break
+                    choices.append(tuple(_plan_multisets(block,options)))
+                else:
+                    for selection in product(*choices):
+                        tick();assignments=tuple(pair for plans,m in selection for pair in plans)
+                        used=frozenset(t for p,plan in assignments for t in targets[plan])
+                        if used!=selected:continue
+                        plans=tuple(sorted(assignments))
+                        self.stats['candidates']+=1;event=self.event(plans)
+                        if event is None:continue
+                        multiplicity=prod(m for plans,m in selection)
+                        result.append(GeneratedPublication(event.reports,event.probability*multiplicity,event.state,multiplicity))
+        if sum((r.probability for r in result),F())!=1:return FuturePending('report_orbit_public_mass_incomplete')
+        self.stats['emitted_vectors']+=len(result)
+        self.stats['named_vectors_covered']+=sum(r.multiplicity for r in result)
+        return tuple(sorted(result,key=lambda b:repr(b.reports)))

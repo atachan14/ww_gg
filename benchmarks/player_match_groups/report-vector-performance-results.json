@@ -1,0 +1,1046 @@
+{
+  "status": "verified",
+  "repeats": 5,
+  "summary": [
+    {
+      "players": 6,
+      "modes": {
+        "expanded": {
+          "seconds_median": 0.03729339997516945,
+          "peak_bytes_median": 34258944,
+          "states": {
+            "values": 5,
+            "actions": 22,
+            "expansions": {
+              "actions": 22,
+              "values": 5
+            },
+            "acquired": 14,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 12,
+            "saved_sources": 0,
+            "resolution_cache": 24
+          }
+        },
+        "cells": {
+          "seconds_median": 0.02348640002310276,
+          "peak_bytes_median": 34091008,
+          "states": {
+            "values": 3,
+            "actions": 5,
+            "expansions": {
+              "actions": 5,
+              "values": 3
+            },
+            "acquired": 8,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 8,
+            "saved_sources": 0,
+            "resolution_cache": 14,
+            "target_orbits": {
+              "target_members": 12,
+              "target_representatives": 7,
+              "solver_wolf_cells": 2,
+              "solver_wolf_hypotheses": 5
+            }
+          }
+        },
+        "reports": {
+          "seconds_median": 0.023348799964878708,
+          "peak_bytes_median": 34058240,
+          "states": {
+            "values": 3,
+            "actions": 5,
+            "expansions": {
+              "actions": 5,
+              "values": 3
+            },
+            "acquired": 8,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 8,
+            "saved_sources": 0,
+            "resolution_cache": 14,
+            "target_orbits": {
+              "target_members": 12,
+              "target_representatives": 7,
+              "solver_wolf_cells": 2,
+              "solver_wolf_hypotheses": 5
+            },
+            "report_vectors": {
+              "kernels": 0,
+              "public_event_laws": 0,
+              "fallback_public_vectors": 0,
+              "compiled_candidates": 0,
+              "newly_built_vectors": 0,
+              "emitted_vectors": 0,
+              "named_vectors_covered": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "players": 7,
+      "modes": {
+        "expanded": {
+          "seconds_median": 0.8741960999905132,
+          "peak_bytes_median": 42266624,
+          "states": {
+            "values": 513,
+            "actions": 1549,
+            "expansions": {
+              "actions": 1549,
+              "values": 513
+            },
+            "acquired": 5,
+            "mornings": 4,
+            "publications": 4,
+            "policies": 6,
+            "saved_sources": 0,
+            "resolution_cache": 1552
+          }
+        },
+        "cells": {
+          "seconds_median": 0.47898609994444996,
+          "peak_bytes_median": 38731776,
+          "states": {
+            "values": 289,
+            "actions": 839,
+            "expansions": {
+              "actions": 839,
+              "values": 289
+            },
+            "acquired": 3,
+            "mornings": 3,
+            "publications": 3,
+            "policies": 4,
+            "saved_sources": 0,
+            "resolution_cache": 842,
+            "target_orbits": {
+              "target_members": 871,
+              "target_representatives": 839,
+              "solver_wolf_cells": 1,
+              "solver_wolf_hypotheses": 3
+            }
+          }
+        },
+        "reports": {
+          "seconds_median": 0.4364759000018239,
+          "peak_bytes_median": 38158336,
+          "states": {
+            "values": 246,
+            "actions": 714,
+            "expansions": {
+              "actions": 714,
+              "values": 246
+            },
+            "acquired": 3,
+            "mornings": 1,
+            "publications": 1,
+            "policies": 4,
+            "saved_sources": 0,
+            "resolution_cache": 717,
+            "target_orbits": {
+              "target_members": 742,
+              "target_representatives": 714,
+              "solver_wolf_cells": 1,
+              "solver_wolf_hypotheses": 3
+            },
+            "report_vectors": {
+              "kernels": 2,
+              "public_event_laws": 201,
+              "fallback_public_vectors": 16,
+              "compiled_candidates": 399,
+              "newly_built_vectors": 201,
+              "emitted_vectors": 367,
+              "named_vectors_covered": 416
+            }
+          }
+        }
+      }
+    }
+  ],
+  "runs": [
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.03853939997497946,
+      "peak_bytes": 34627584,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 0
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.02351869997801259,
+      "peak_bytes": 34017280,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 0
+    },
+    {
+      "players": 6,
+      "mode": "reports",
+      "seconds": 0.02277099998900667,
+      "peak_bytes": 34058240,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        },
+        "report_vectors": {
+          "kernels": 0,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8639332000166178,
+      "peak_bytes": 42229760,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.47408119996543974,
+      "peak_bytes": 38723584,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "reports",
+      "seconds": 0.4364759000018239,
+      "peak_bytes": 38035456,
+      "states": {
+        "values": 246,
+        "actions": 714,
+        "expansions": {
+          "actions": 714,
+          "values": 246
+        },
+        "acquired": 3,
+        "mornings": 1,
+        "publications": 1,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 717,
+        "target_orbits": {
+          "target_members": 742,
+          "target_representatives": 714,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        },
+        "report_vectors": {
+          "kernels": 2,
+          "public_event_laws": 201,
+          "fallback_public_vectors": 16,
+          "compiled_candidates": 399,
+          "newly_built_vectors": 201,
+          "emitted_vectors": 367,
+          "named_vectors_covered": 416
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 0
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.02348640002310276,
+      "peak_bytes": 34091008,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 1
+    },
+    {
+      "players": 6,
+      "mode": "reports",
+      "seconds": 0.02618889999575913,
+      "peak_bytes": 34111488,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        },
+        "report_vectors": {
+          "kernels": 0,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 1
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.04818330000853166,
+      "peak_bytes": 34308096,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.4952214999939315,
+      "peak_bytes": 38731776,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "reports",
+      "seconds": 0.44373659999109805,
+      "peak_bytes": 38158336,
+      "states": {
+        "values": 246,
+        "actions": 714,
+        "expansions": {
+          "actions": 714,
+          "values": 246
+        },
+        "acquired": 3,
+        "mornings": 1,
+        "publications": 1,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 717,
+        "target_orbits": {
+          "target_members": 742,
+          "target_representatives": 714,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        },
+        "report_vectors": {
+          "kernels": 2,
+          "public_event_laws": 201,
+          "fallback_public_vectors": 16,
+          "compiled_candidates": 399,
+          "newly_built_vectors": 201,
+          "emitted_vectors": 367,
+          "named_vectors_covered": 416
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8877852999721654,
+      "peak_bytes": 42274816,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 1
+    },
+    {
+      "players": 6,
+      "mode": "reports",
+      "seconds": 0.0236418999847956,
+      "peak_bytes": 33927168,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        },
+        "report_vectors": {
+          "kernels": 0,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 2
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.03729339997516945,
+      "peak_bytes": 34258944,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 2
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.023883999965619296,
+      "peak_bytes": 33964032,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "reports",
+      "seconds": 0.4435986000462435,
+      "peak_bytes": 38162432,
+      "states": {
+        "values": 246,
+        "actions": 714,
+        "expansions": {
+          "actions": 714,
+          "values": 246
+        },
+        "acquired": 3,
+        "mornings": 1,
+        "publications": 1,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 717,
+        "target_orbits": {
+          "target_members": 742,
+          "target_representatives": 714,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        },
+        "report_vectors": {
+          "kernels": 2,
+          "public_event_laws": 201,
+          "fallback_public_vectors": 16,
+          "compiled_candidates": 399,
+          "newly_built_vectors": 201,
+          "emitted_vectors": 367,
+          "named_vectors_covered": 416
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8741960999905132,
+      "peak_bytes": 42266624,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.48418780002975836,
+      "peak_bytes": 38748160,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 2
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.031514199974481016,
+      "peak_bytes": 34131968,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 3
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.02212030004011467,
+      "peak_bytes": 34217984,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 3
+    },
+    {
+      "players": 6,
+      "mode": "reports",
+      "seconds": 0.023348799964878708,
+      "peak_bytes": 33980416,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        },
+        "report_vectors": {
+          "kernels": 0,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8852617000229657,
+      "peak_bytes": 42250240,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.47898609994444996,
+      "peak_bytes": 38715392,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "reports",
+      "seconds": 0.43195999995805323,
+      "peak_bytes": 38158336,
+      "states": {
+        "values": 246,
+        "actions": 714,
+        "expansions": {
+          "actions": 714,
+          "values": 246
+        },
+        "acquired": 3,
+        "mornings": 1,
+        "publications": 1,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 717,
+        "target_orbits": {
+          "target_members": 742,
+          "target_representatives": 714,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        },
+        "report_vectors": {
+          "kernels": 2,
+          "public_event_laws": 201,
+          "fallback_public_vectors": 16,
+          "compiled_candidates": 399,
+          "newly_built_vectors": 201,
+          "emitted_vectors": 367,
+          "named_vectors_covered": 416
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 3
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.022020399977918714,
+      "peak_bytes": 34107392,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 4
+    },
+    {
+      "players": 6,
+      "mode": "reports",
+      "seconds": 0.022042600030545145,
+      "peak_bytes": 34152448,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        },
+        "report_vectors": {
+          "kernels": 0,
+          "public_event_laws": 0,
+          "fallback_public_vectors": 0,
+          "compiled_candidates": 0,
+          "newly_built_vectors": 0,
+          "emitted_vectors": 0,
+          "named_vectors_covered": 0
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 4
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.03276410000398755,
+      "peak_bytes": 34168832,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.47178949997760355,
+      "peak_bytes": 38768640,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "reports",
+      "seconds": 0.4174697999842465,
+      "peak_bytes": 38256640,
+      "states": {
+        "values": 246,
+        "actions": 714,
+        "expansions": {
+          "actions": 714,
+          "values": 246
+        },
+        "acquired": 3,
+        "mornings": 1,
+        "publications": 1,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 717,
+        "target_orbits": {
+          "target_members": 742,
+          "target_representatives": 714,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        },
+        "report_vectors": {
+          "kernels": 2,
+          "public_event_laws": 201,
+          "fallback_public_vectors": 16,
+          "compiled_candidates": 399,
+          "newly_built_vectors": 201,
+          "emitted_vectors": 367,
+          "named_vectors_covered": 416
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8685895000235178,
+      "peak_bytes": 42319872,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 4
+    }
+  ],
+  "boundary": "opening/prefix/Forecast/Table; fixture/import setup excluded; fresh process peak",
+  "full_initial7_search": false,
+  "source_sha256": {
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "werewolf\\grouped_forecast.py": "3caac47120541786e4414e8fa76de403a475572f1f2e643cb8c1b021e0f78a09",
+    "werewolf\\closed_calculation.py": "b3eb8a949d9afd1b3a264b1fdebecaf8063d14adfe7641cf440e89f48f0aaf64",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\report_vector_fixture.py": "745c455806fc6f5bfeee42ee09c6f84461abc62a043ee0e82fca1a772584350f"
+  }
+}

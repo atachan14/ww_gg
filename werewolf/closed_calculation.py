@@ -98,10 +98,10 @@ class WolfChoice:
 class ClosedCalculation:
     __slots__=('__data','__strategy','__engine','__root','__max_work','__max_seconds','__origin_data','__entry_probability')
 
-    def __init__(self,data,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,grouped=False,aggregate_wolf=False):
+    def __init__(self,data,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,grouped=False,aggregate_wolf=False,aggregate_reports=False):
         if type(data)is not BoardData:raise TypeError('Saved immutable BoardData required')
-        if type(grouped)is not bool or type(aggregate_wolf)is not bool:raise TypeError('Boolean representative mode required')
-        if aggregate_wolf and not grouped:raise ValueError('Wolf aggregation requires the grouped consumer')
+        if type(grouped)is not bool or type(aggregate_wolf)is not bool or type(aggregate_reports)is not bool:raise TypeError('Boolean representative mode required')
+        if (aggregate_wolf or aggregate_reports) and not grouped:raise ValueError('Aggregation requires the grouped consumer')
         game=data.to_game();strategy=Strategy(**game['policy'])
         if (game.get('hunters',0) or game.get('model')!='group'
             or game.get('seer_mode')!='information-fixed-v1'
@@ -118,7 +118,7 @@ class ClosedCalculation:
         object.__setattr__(self,'_ClosedCalculation__max_work',max_work)
         object.__setattr__(self,'_ClosedCalculation__max_seconds',max_seconds)
         from .grouped_forecast import GroupedForecast
-        options={'aggregate_wolf':aggregate_wolf} if grouped else {}
+        options={'aggregate_wolf':aggregate_wolf,'aggregate_reports':aggregate_reports} if grouped else {}
         engine=(GroupedForecast if grouped else InformationSetForecast)(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work,**options)
         engine.retain_joint_guard_history=True
         object.__setattr__(self,'_ClosedCalculation__engine',engine)
@@ -162,6 +162,7 @@ class ClosedCalculation:
             acquired=len(e.acquired),mornings=len(e.mornings),publications=len(e.publication_values),policies=len(e.policies),
             saved_sources=len(e.board_sources),resolution_cache=len(e.board_action_kernels))
         if hasattr(e,'orbit_stats'):result['target_orbits']=dict(e.orbit_stats)
+        if getattr(e,'aggregate_reports',False):result['report_vectors']=e.report_counts()
         return result
 
     @contextmanager

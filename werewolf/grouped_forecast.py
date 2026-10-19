@@ -15,10 +15,11 @@ class GroupedPolicy(InformationSetActionPolicy):
 
 
 class GroupedForecast(InformationSetForecast):
-    def __init__(self,*args,aggregate_wolf=False,**kwargs):
+    def __init__(self,*args,aggregate_wolf=False,aggregate_reports=False,**kwargs):
         super().__init__(*args,**kwargs)
         if (self.strategy.day,self.strategy.night,self.strategy.fake_reports)!=('random',)*3:raise ValueError('Uniform representative mode only')
-        self.aggregate_wolf=aggregate_wolf
+        self.aggregate_wolf=aggregate_wolf;self.aggregate_reports=aggregate_reports
+        self.report_kernels={}
         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
         self.action_policy=GroupedPolicy(self)
 
@@ -27,6 +28,43 @@ class GroupedForecast(InformationSetForecast):
     def renamed_value_key(self,*args,**kwargs):return None
     def full_renamed_key(self,*args,**kwargs):return None
     def scalar_descriptor(self,*args,**kwargs):return None
+
+    def report_partition(self,b,past):
+        if not self.aggregate_reports or not self.groups:return ()
+        from types import SimpleNamespace
+        reporters={p for p in b.alive if b.claims[p-1]=='seer'}
+        refined=_report_groups(self.groups,SimpleNamespace(public=b,past=past))
+        parts=tuple(sorted(tuple(sorted(p for p in group if p in reporters)) for group in refined if any(p in reporters for p in group)))
+        return parts if any(len(g)>1 for g in parts) else ()
+
+    def morning(self,b,s,past):
+        # Compact coefficients describe different families in different private
+        # stabilizers. Cache intrinsic public events, not quotient row sets.
+        if self.report_partition(b,past):return self.generate_morning(b,s,past)
+        return super().morning(b,s,past)
+
+    def publications(self,b,s,past):
+        partition=self.report_partition(b,past)
+        if not partition:return super().publications(b,s,past)
+        from .morning_publications import compile_publications
+        key=(b,s,past)
+        if key not in self.report_kernels:
+            self.report_kernels[key]=self.checked(compile_publications(s,past,b.alive,b.claims,
+                fake_policy=self.strategy.fake_seer_policy,seed=self.publication_values.get(key,()),board=b))
+        return self.checked(self.report_kernels[key].branches(partition))
+
+    def generate_publications(self,b,s,past):
+        kernel=self.report_kernels.get((b,s,past)) if self.aggregate_reports else None
+        if kernel is not None:return self.checked(kernel.branches(tuple((p,) for p in kernel.reporters)))
+        return super().generate_publications(b,s,past)
+
+    def report_counts(self):
+        return dict(kernels=len(self.report_kernels),public_event_laws=sum(sum(v is not None for v in k.events.values()) for k in self.report_kernels.values()),
+            fallback_public_vectors=sum(len(rows) for key,rows in self.publication_values.items() if key not in self.report_kernels),
+            compiled_candidates=sum(k.stats['candidates'] for k in self.report_kernels.values()),
+            newly_built_vectors=sum(k.stats['built_vectors'] for k in self.report_kernels.values()),
+            emitted_vectors=sum(k.stats['emitted_vectors'] for k in self.report_kernels.values()),
+            named_vectors_covered=sum(k.stats['named_vectors_covered'] for k in self.report_kernels.values()))
 
     @contextmanager
     def group_scope(self,groups):

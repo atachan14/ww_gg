@@ -24,8 +24,8 @@ def case(n):
     return SimpleNamespace(data=data,engine=graph.engine)
 
 
-def prepare(graph,grouped,*,asymmetric=False,personal=False,aggregate_wolf=False):
-    n=graph.data.game_data.players;c=ClosedCalculation(graph.data,grouped=grouped,aggregate_wolf=aggregate_wolf,max_seconds=30);node=c.root;trace=[]
+def prepare(graph,grouped,*,asymmetric=False,personal=False,aggregate_wolf=False,aggregate_reports=False):
+    n=graph.data.game_data.players;c=ClosedCalculation(graph.data,grouped=grouped,aggregate_wolf=aggregate_wolf,aggregate_reports=aggregate_reports,max_seconds=30);node=c.root;trace=[]
     for target in (4,n):
         mass,node=node.observe(target);trace.append((mass,node.read(),node.groups))
     reports=report_vector(6,asymmetric) if n==6 else tuple(SeerReport(2,2,p,6,'white') for p in (1,2,3))

@@ -1,0 +1,362 @@
+{
+  "status": "verified",
+  "cases": [
+    {
+      "players": 6,
+      "asymmetric": false,
+      "personal": false,
+      "counts": [
+        {
+          "values": 5,
+          "actions": 22,
+          "expansions": {
+            "actions": 22,
+            "values": 5
+          },
+          "acquired": 14,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 12,
+          "saved_sources": 0,
+          "resolution_cache": 24
+        },
+        {
+          "values": 3,
+          "actions": 5,
+          "expansions": {
+            "actions": 5,
+            "values": 3
+          },
+          "acquired": 8,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 8,
+          "saved_sources": 0,
+          "resolution_cache": 14,
+          "target_orbits": {
+            "target_members": 12,
+            "target_representatives": 7,
+            "solver_wolf_cells": 2,
+            "solver_wolf_hypotheses": 5
+          }
+        },
+        {
+          "values": 3,
+          "actions": 5,
+          "expansions": {
+            "actions": 5,
+            "values": 3
+          },
+          "acquired": 8,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 8,
+          "saved_sources": 0,
+          "resolution_cache": 14,
+          "target_orbits": {
+            "target_members": 12,
+            "target_representatives": 7,
+            "solver_wolf_cells": 2,
+            "solver_wolf_hypotheses": 5
+          },
+          "report_vectors": {
+            "kernels": 0,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        }
+      ],
+      "expanded_cold_Forecast_Table_equal": true
+    },
+    {
+      "players": 7,
+      "asymmetric": false,
+      "personal": false,
+      "counts": [
+        {
+          "values": 513,
+          "actions": 1549,
+          "expansions": {
+            "actions": 1549,
+            "values": 513
+          },
+          "acquired": 5,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 6,
+          "saved_sources": 0,
+          "resolution_cache": 1552
+        },
+        {
+          "values": 289,
+          "actions": 839,
+          "expansions": {
+            "actions": 839,
+            "values": 289
+          },
+          "acquired": 3,
+          "mornings": 3,
+          "publications": 3,
+          "policies": 4,
+          "saved_sources": 0,
+          "resolution_cache": 842,
+          "target_orbits": {
+            "target_members": 871,
+            "target_representatives": 839,
+            "solver_wolf_cells": 1,
+            "solver_wolf_hypotheses": 3
+          }
+        },
+        {
+          "values": 246,
+          "actions": 714,
+          "expansions": {
+            "actions": 714,
+            "values": 246
+          },
+          "acquired": 3,
+          "mornings": 1,
+          "publications": 1,
+          "policies": 4,
+          "saved_sources": 0,
+          "resolution_cache": 717,
+          "target_orbits": {
+            "target_members": 742,
+            "target_representatives": 714,
+            "solver_wolf_cells": 1,
+            "solver_wolf_hypotheses": 3
+          },
+          "report_vectors": {
+            "kernels": 2,
+            "public_event_laws": 201,
+            "fallback_public_vectors": 16,
+            "compiled_candidates": 399,
+            "newly_built_vectors": 201,
+            "emitted_vectors": 367,
+            "named_vectors_covered": 416
+          }
+        }
+      ],
+      "expanded_cold_Forecast_Table_equal": true
+    },
+    {
+      "players": 6,
+      "asymmetric": true,
+      "personal": false,
+      "counts": [
+        {
+          "values": 5,
+          "actions": 16,
+          "expansions": {
+            "actions": 16,
+            "values": 5
+          },
+          "acquired": 9,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 9,
+          "saved_sources": 0,
+          "resolution_cache": 18
+        },
+        {
+          "values": 5,
+          "actions": 16,
+          "expansions": {
+            "actions": 16,
+            "values": 5
+          },
+          "acquired": 9,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 9,
+          "saved_sources": 0,
+          "resolution_cache": 18,
+          "target_orbits": {
+            "target_members": 20,
+            "target_representatives": 20,
+            "solver_wolf_cells": 6,
+            "solver_wolf_hypotheses": 6
+          }
+        },
+        {
+          "values": 5,
+          "actions": 16,
+          "expansions": {
+            "actions": 16,
+            "values": 5
+          },
+          "acquired": 9,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 9,
+          "saved_sources": 0,
+          "resolution_cache": 18,
+          "target_orbits": {
+            "target_members": 20,
+            "target_representatives": 20,
+            "solver_wolf_cells": 6,
+            "solver_wolf_hypotheses": 6
+          },
+          "report_vectors": {
+            "kernels": 0,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        }
+      ],
+      "expanded_cold_Forecast_Table_equal": true
+    },
+    {
+      "players": 6,
+      "asymmetric": false,
+      "personal": true,
+      "counts": [
+        {
+          "values": 5,
+          "actions": 16,
+          "expansions": {
+            "actions": 16,
+            "values": 5
+          },
+          "acquired": 11,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 9,
+          "saved_sources": 0,
+          "resolution_cache": 18
+        },
+        {
+          "values": 4,
+          "actions": 9,
+          "expansions": {
+            "actions": 9,
+            "values": 4
+          },
+          "acquired": 9,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 8,
+          "saved_sources": 0,
+          "resolution_cache": 15,
+          "target_orbits": {
+            "target_members": 14,
+            "target_representatives": 12,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 5
+          }
+        },
+        {
+          "values": 4,
+          "actions": 9,
+          "expansions": {
+            "actions": 9,
+            "values": 4
+          },
+          "acquired": 9,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 8,
+          "saved_sources": 0,
+          "resolution_cache": 15,
+          "target_orbits": {
+            "target_members": 14,
+            "target_representatives": 12,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 5
+          },
+          "report_vectors": {
+            "kernels": 0,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        }
+      ],
+      "expanded_cold_Forecast_Table_equal": true
+    },
+    {
+      "players": 7,
+      "asymmetric": false,
+      "personal": true,
+      "counts": [
+        {
+          "values": 305,
+          "actions": 922,
+          "expansions": {
+            "actions": 922,
+            "values": 305
+          },
+          "acquired": 5,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 5,
+          "saved_sources": 0,
+          "resolution_cache": 925
+        },
+        {
+          "values": 257,
+          "actions": 765,
+          "expansions": {
+            "actions": 765,
+            "values": 257
+          },
+          "acquired": 4,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 4,
+          "saved_sources": 0,
+          "resolution_cache": 768,
+          "target_orbits": {
+            "target_members": 775,
+            "target_representatives": 765,
+            "solver_wolf_cells": 1,
+            "solver_wolf_hypotheses": 2
+          }
+        },
+        {
+          "values": 242,
+          "actions": 720,
+          "expansions": {
+            "actions": 720,
+            "values": 242
+          },
+          "acquired": 4,
+          "mornings": 4,
+          "publications": 4,
+          "policies": 4,
+          "saved_sources": 0,
+          "resolution_cache": 723,
+          "target_orbits": {
+            "target_members": 730,
+            "target_representatives": 720,
+            "solver_wolf_cells": 1,
+            "solver_wolf_hypotheses": 2
+          },
+          "report_vectors": {
+            "kernels": 2,
+            "public_event_laws": 216,
+            "fallback_public_vectors": 32,
+            "compiled_candidates": 217,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 201,
+            "named_vectors_covered": 216
+          }
+        }
+      ],
+      "expanded_cold_Forecast_Table_equal": true
+    }
+  ],
+  "scope": "existing uniform H0 finite continuations; no target-name quotient",
+  "full_initial7_search": false
+}

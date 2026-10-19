@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "command": "python -X utf8 -m unittest discover -s tests",
+  "tests": 1119,
+  "seconds": 876.376,
+  "completed_at": "2026-10-19T04:01:38.791149+00:00",
+  "log_sha256": "1fa686565cd2485e99abbcfc68982adaa5c97ca5677952f1ec9ab9f571ad623d",
+  "related_prior_run": {
+    "tests": 104,
+    "seconds": 82.07
+  },
+  "source_sha256": {
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "werewolf\\grouped_forecast.py": "3caac47120541786e4414e8fa76de403a475572f1f2e643cb8c1b021e0f78a09",
+    "werewolf\\closed_calculation.py": "b3eb8a949d9afd1b3a264b1fdebecaf8063d14adfe7641cf440e89f48f0aaf64",
+    "tests\\test_report_vectors.py": "860c9e749ea25edd748ade1e99ec83d02c0f0961990540d9b25372e597773801",
+    "benchmarks\\player_match_groups\\report_vector_fixture.py": "745c455806fc6f5bfeee42ee09c6f84461abc62a043ee0e82fca1a772584350f"
+  }
+}
