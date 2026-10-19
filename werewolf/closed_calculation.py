@@ -12,7 +12,7 @@ from contextlib import contextmanager
 from fractions import Fraction as F
 from .board_flow import BoardData
 from .board_future import (SavedOrigin,GeneratedBoard,ActionEvidence,PublicationEvidence,
-    OwnerInformationEvidence,ObservedActionEvidence,outcome_key,publication_key,kernel_calculation)
+    OwnerInformationEvidence,ObservedActionEvidence,ObservedPublicationEvidence,outcome_key,publication_key,kernel_calculation)
 from .information_set_forecast import InformationSetForecast,Pending
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
 from .actor_information import PersonalInformation,WolfInformation,wolf_information_groups
@@ -31,6 +31,27 @@ def _fix(groups,positions):
         rest=tuple(p for p in group if p not in fixed)
         if rest:out.append(rest)
     return tuple(out)
+
+
+def _report_groups(groups,source):
+    """Refine inherited classes by complete public outgoing report meaning.
+
+    Named report targets are fixed conservatively. Equal reporters from the
+    same parent class remain one block; incoming information can never be
+    hidden by equal outgoing declarations.
+    """
+    records=[(r.player,('seer',r.acquired_day,r.published_day,'day',r.target,r.color)) for r in source.past]
+    records.extend((r.reporter,('medium',r.day,r.day,'day',r.target,r.color)) for r in source.public.reports)
+    records.extend((actor,('resolved',day,day,'day',target,None)) for day,actor,target in source.public.report_resolved)
+    fixed={record[4] for _,record in records}
+    result=[]
+    for group in _fix(groups,fixed):
+        split={}
+        for player in group:
+            key=tuple(sorted((r for actor,r in records if actor==player),key=repr))
+            split.setdefault(key,[]).append(player)
+        result.extend(tuple(v) for v in split.values())
+    return tuple(result)
 
 
 def _owner_positions(info,n):
@@ -57,12 +78,16 @@ def _entry_origin(data,game,strategy):
         or step.get('result_disclosure_model')!=game.get('result_disclosure_model')
         or step.get('seer_options')!=game.get('seer_options') or step.get('reports') for step in history)
         or game.get('result_disclosure_model')!='full-observed-v1'
-        or {r.get('reporter') for r in game.get('seer_inputs',())}!=set(p for p,c in enumerate(game.get('claims',()),1) if c=='seer')
+        or {r.get('reporter') for r in game.get('seer_inputs',()) if r.get('day')==1}!=set(p for p,c in enumerate(game.get('claims',()),1) if c=='seer')
         or any(r.get('target') is None or r.get('color') is None for r in game.get('seer_inputs',()))
         or 'filled' not in cp.conditions('seer')
         or tuple(game.get('claims',())).count('seer')<game.get('seers',0)
-        or game.get('reports') or any(r.get('day')!=1 for r in game.get('seer_inputs',()))):
+        or any(type(r.get('day'))is not int or not 1<=r['day']<=1+len(history)//2 for r in game.get('seer_inputs',()))):
         raise Pending('closed_saved_public_or_policy_change_pending')
+    if any(type(r.get('day'))is not int or not 2<=r['day']<=1+len(history)//2 for r in game.get('reports',())):
+        raise Pending('closed_saved_medium_timing_pending')
+    if (any(r['day']>1 for r in game.get('seer_inputs',())) or game.get('reports')) and game.get('public_log'):
+        raise Pending('closed_saved_report_public_log_pending')
     log=game.get('public_log',{})
     if any(b.get('slot',0)>0 for b in log.get('batches',())):
         raise Pending('closed_saved_late_public_event_pending')
@@ -71,7 +96,7 @@ def _entry_origin(data,game,strategy):
     for slot in range(len(history)+1):
         claims,_=snapshot(game,SimpleNamespace(day=1+slot//2,phase='night' if slot%2 else 'day'),tuple(game['claims']))
         if claims!=tuple(game['claims']):raise Pending('closed_saved_late_public_event_pending')
-    return data.updated(history=[]),tuple(step['target'] for step in history)
+    return data.updated(history=[],seer_inputs=[r for r in game.get('seer_inputs',()) if r['day']==1],reports=[]),tuple(step['target'] for step in history)
 
 
 @dataclass(frozen=True)
@@ -127,18 +152,24 @@ class ClosedCalculation:
             if source.public.day!=1 or source.public.phase!='day' or source.public.history:
                 raise Pending('closed_initial_snapshot_required')
             # The initial saved group model is generated symmetrically within claim
-            # classes; every named published endpoint is fixed. No arbitrary law or
+            # classes; public report meanings refine them and fix targets. No arbitrary law or
             # caller-supplied partition can enter this constructor.
-            fixed={p for r in source.past for p in (r.player,r.target)}
-            fixed.update(p for r in source.public.reports for p in (r.reporter,r.target))
             classes={}
-            for p,claim in enumerate(source.public.claims,1):classes.setdefault((claim,p if p in fixed else None),[]).append(p)
-            groups=tuple(tuple(v) for v in classes.values())
+            for p,claim in enumerate(source.public.claims,1):classes.setdefault(claim,[]).append(p)
+            groups=_report_groups(tuple(tuple(v) for v in classes.values()),source)
             root=self.__node(source,groups,())
             probability=F(1)
             for target in saved_target:
                 mass,root=root.observe(target)
                 probability*=mass
+                if root.read().public.phase=='day':
+                    from .seer_acquisition import SeerReport
+                    day=root.read().public.day
+                    reports=tuple(SeerReport(day,day,r['reporter'],r['target'],r['color']) for r in game.get('seer_inputs',()) if r['day']==day)
+                    from .exact import MediumReport
+                    medium=tuple(MediumReport(**r) for r in game.get('reports',()) if r['day']==day)
+                    mass,root=root.observe_reports(reports,medium)
+                    probability*=mass
             object.__setattr__(self,'_ClosedCalculation__entry_probability',probability)
             object.__setattr__(self,'_ClosedCalculation__root',root)
 
@@ -213,19 +244,16 @@ class _Node:
     def observe(self,target):
         if self.__view is not None:raise ValueError('Observe saved public history before choosing a personal view')
         from .action_flow import observe_action
-        from .exact import available_medium_opportunities
         s=self.__source
-        with self.__calculation._ClosedCalculation__kernel():
-            mass,child=observe_action(s,target,self.__calculation._ClosedCalculation__engine)
-            # This input unit has unchanged initial report rows. New public
-            # report observations require their own validated migration unit.
-            b=child.public
-            if b.day>1 and any(b.claims[p-1]=='seer' for p in b.alive):
-                raise Pending('closed_saved_new_seer_report_pending')
-            supplied={(r.day,r.reporter,r.target) for r in b.reports}
-            if any(o[0]==b.day and o not in b.report_resolved and o not in supplied for o in available_medium_opportunities(b)):
-                raise Pending('closed_saved_new_medium_report_pending')
+        with self.__calculation._ClosedCalculation__kernel():mass,child=observe_action(s,target,self.__calculation._ClosedCalculation__engine)
         return mass,self.__calculation._ClosedCalculation__node(child,_fix(self.__groups,(target,)),(*self.__path,('observe',target)),None)
+
+    def observe_reports(self,seer_reports,medium_reports=()):
+        if self.__view is not None:raise ValueError('Observe public reports before choosing a personal view')
+        from .report_publication import observe_public_reports
+        with self.__calculation._ClosedCalculation__kernel():
+            mass,child=observe_public_reports(self.__source,seer_reports,medium_reports,self.__calculation.data.game_data.rules)
+        return mass,self.__calculation._ClosedCalculation__node(child,_report_groups(self.__groups,child),(*self.__path,('observed_reports',seer_reports,medium_reports)),None)
 
     def reports(self):
         s=self.__source
@@ -233,10 +261,7 @@ class _Node:
         result=[]
         for q,p,c in rows:
             if c is s:result.append(ReportBranch(q,p,self));continue
-            positions={p for r in set(c.public.reports)-set(s.public.reports) for p in (r.reporter,r.target)}
-            positions.update(p for r in set(c.past)-set(s.past) for p in (r.player,r.target))
-            positions.update(p for day,actor,target in set(c.public.report_resolved)-set(s.public.report_resolved) for p in (actor,target))
-            result.append(ReportBranch(q,p,self.__calculation._ClosedCalculation__node(c,_fix(self.__groups,positions),(*self.__path,('report',publication_key(c.public,c.past))),self.__view)))
+            result.append(ReportBranch(q,p,self.__calculation._ClosedCalculation__node(c,_report_groups(self.__groups,c),(*self.__path,('report',publication_key(c.public,c.past))),self.__view)))
         return tuple(result)
 
     def wolf_choices(self):
@@ -270,6 +295,7 @@ class _Node:
         for operation in self.__path:
             if operation[0]=='owner':step=OwnerInformationEvidence(operation[1],operation[2])
             elif operation[0]=='observe':step=ObservedActionEvidence(e,operation[1])
+            elif operation[0]=='observed_reports':step=ObservedPublicationEvidence(e,operation[1],operation[2])
             elif operation[0]=='action':step=ActionEvidence(e,operation[1],operation[2],False)
             else:step=PublicationEvidence(e,operation[1])
             request=request.child(step,None)

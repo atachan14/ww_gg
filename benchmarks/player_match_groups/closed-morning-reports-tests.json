@@ -1,0 +1,35 @@
+{
+  "status": "passed",
+  "tests": 66,
+  "runner_seconds": 65.602,
+  "modules": [
+    "tests.test_closed_morning_reports",
+    "tests.test_closed_saved_history",
+    "tests.test_closed_calculation",
+    "tests.test_closed_saved_day",
+    "tests.test_root_secret_flow",
+    "tests.test_root_secret_replay",
+    "tests.test_shared_transition_provenance",
+    "tests.test_owner_information_provenance",
+    "tests.test_root_guard_max",
+    "tests.test_public_prior_ownership",
+    "tests.test_cut_out_initial_publications",
+    "tests.test_cut_out_separate_publications"
+  ],
+  "final_morning_tests": {
+    "tests": 4,
+    "runner_seconds": 1.097
+  },
+  "selected_audit": "inherited-groups verified after final action-mass decomposition checks",
+  "diff_check": "passed",
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "7d3567ed899d915b9218bca32386fcc4aca3e5cc2aa94b3efa80359b7c7aa5c4",
+    "werewolf\\report_publication.py": "5a7a0d3792f6775de8c54522222c67447c1cb6714f0c3d89ebaa79b2f38917db",
+    "werewolf\\seer_acquisition.py": "0fd4f6aa069b01b69f21569b4f76ae22c503eefbcbf40f93a47b8174d9ecad62",
+    "werewolf\\board_future.py": "c63a7bf00afadca80a07fb11bc79cf7cac27d70b4105546c93bf98e1be2e21de",
+    "benchmarks\\player_match_groups\\closed_morning_reports_fixture.py": "7f463672e2da439adddc36b0bedcf0abdd607e1bd3db43ae61865cc1850a25f1",
+    "tests\\test_closed_morning_reports.py": "3f86155b68ff70e0b60f935455c1d8f032ce04ee150cc1260c7d68d20ba04fed"
+  },
+  "ledger_used": false,
+  "full_initial7_search": false
+}

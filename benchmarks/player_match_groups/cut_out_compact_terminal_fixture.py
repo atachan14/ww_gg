@@ -23,12 +23,12 @@ def independent_cold(graph,request):
     from dataclasses import replace
     from werewolf.information_set_forecast import InformationSetForecast,Pending
     from werewolf.board_future import (SavedOrigin,GeneratedBoard,ActionEvidence,PublicationEvidence,PublicReportEvidence,
-        MediumInstructionEvidence,ContextEvidence,ConditionEvidence,PublicViewEvidence,OwnerInformationEvidence,ObservedActionEvidence,reconstruction_kernel_reuse)
+        MediumInstructionEvidence,ContextEvidence,ConditionEvidence,PublicViewEvidence,OwnerInformationEvidence,ObservedActionEvidence,ObservedPublicationEvidence,reconstruction_kernel_reuse)
     fresh=InformationSetForecast(graph.engine.baseline.rules,graph.engine.baseline.strategy,exact_renaming=False,retire_uninformative_scans=False)
     fresh.retain_joint_guard_history=True
     origin=SavedOrigin(graph.data,fresh.rules,fresh.strategy,project_public=False);ops=[]
     for op in request.history:
-        if type(op) in (ObservedActionEvidence,ActionEvidence,PublicationEvidence,PublicReportEvidence,MediumInstructionEvidence,ContextEvidence):ops.append(replace(op,engine=fresh))
+        if type(op) in (ObservedPublicationEvidence,ObservedActionEvidence,ActionEvidence,PublicationEvidence,PublicReportEvidence,MediumInstructionEvidence,ContextEvidence):ops.append(replace(op,engine=fresh))
         elif type(op) in (ConditionEvidence,PublicViewEvidence):ops.append(replace(op))
         elif type(op)is OwnerInformationEvidence:
             def owner_filter(source,info=op.information,observer=op.observer):

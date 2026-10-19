@@ -147,7 +147,7 @@ def initial_random_white(entries, alive):
     return normalize(result)
 
 
-def condition_publications(entries, reports):
+def publication_support(entries, reports):
     """Hand input is a truth-support filter; fake reporting policy is separate.
 
     Eligibility (CO, life, timing, permitted target) is the caller's concern.
@@ -160,4 +160,8 @@ def condition_publications(entries, reports):
         known={(a.day,a.player):(a.target,a.color) for a in h.acquisitions}
         if all(not h.roles[2] & (1<<(r.player-1)) or known.get((r.acquired_day,r.player))==(r.target,r.color) for r in reports):
             compatible.append(h)
-    return normalize(compatible)
+    return tuple(compatible)
+
+
+def condition_publications(entries,reports):
+    return normalize(publication_support(entries,reports))

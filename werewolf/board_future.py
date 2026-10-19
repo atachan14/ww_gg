@@ -712,3 +712,14 @@ class ObservedActionEvidence:
     def __call__(self,source):
         from .action_flow import observe_action
         return observe_action(source,self.target,self.engine)[1]
+
+
+@dataclass(frozen=True)
+class ObservedPublicationEvidence:
+    engine:object
+    seer_reports:tuple
+    medium_reports:tuple
+
+    def __call__(self,source):
+        from .report_publication import observe_public_reports
+        return observe_public_reports(source,self.seer_reports,self.medium_reports,self.engine.rules)[1]
