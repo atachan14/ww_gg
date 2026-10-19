@@ -1,0 +1,840 @@
+{
+  "at": "2026-10-19T14:04:04.507745+00:00",
+  "scope": "Development initial-five full-horizon root-secret vector with existing public/actor-Q scalar policy engine; public only vs all supported root seer/wolf owner views. All by-dawn outputs stay existing exact horizon calls and are included. Separate fresh workers, unchanged250000work/30s/384MiB sampled supervisor. No seven run.",
+  "measurements": [
+    {
+      "completed_at": "2026-10-19T14:03:59.431904+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7407911000191234,
+      "samples": 35,
+      "peak_private_committed_bytes": 23883776,
+      "observed_peak_working_set_bytes": 34459648,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "dual",
+        "mode": "scalar",
+        "multi": false,
+        "completed": true,
+        "view_count": 1,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "daef83ef341f2433d84ffcdbb844ef7ea7eed06b383c4a88d57592c6c4d58d0d"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.03608940000412986,
+            "work": 676
+          }
+        ],
+        "forecast_seconds": 0.03610219998518005,
+        "forecast_work": 676,
+        "setup_work": 16,
+        "budget": {
+          "work": 692,
+          "max_work": 250000,
+          "elapsed_seconds": 0.063
+        },
+        "seconds": 0.059276700019836426,
+        "scalar_engine": {
+          "values": 4,
+          "actions": 15,
+          "expansions": {
+            "actions": 15,
+            "values": 4
+          },
+          "acquired": 8,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 6,
+          "saved_sources": 0,
+          "resolution_cache": 20,
+          "target_orbits": {
+            "target_members": 12,
+            "target_representatives": 8,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 5
+          },
+          "report_vectors": {
+            "kernels": 9,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        }
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T14:04:00.075014+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6429873000015505,
+      "samples": 31,
+      "peak_private_committed_bytes": 23261184,
+      "observed_peak_working_set_bytes": 34504704,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "dual",
+        "mode": "vector",
+        "multi": false,
+        "completed": true,
+        "view_count": 1,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "daef83ef341f2433d84ffcdbb844ef7ea7eed06b383c4a88d57592c6c4d58d0d"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.0561221000389196,
+            "work": 1520
+          }
+        ],
+        "forecast_seconds": 0.05613349995110184,
+        "forecast_work": 1520,
+        "setup_work": 16,
+        "budget": {
+          "work": 1536,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.07787280000047758,
+        "scalar_engine": {
+          "values": 3,
+          "actions": 23,
+          "expansions": {
+            "actions": 23,
+            "values": 3
+          },
+          "acquired": 13,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 9,
+          "saved_sources": 0,
+          "resolution_cache": 56,
+          "target_orbits": {
+            "target_members": 7,
+            "target_representatives": 5,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 5
+          },
+          "report_vectors": {
+            "kernels": 22,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "vector": {
+          "width": 2,
+          "value_vectors": 6,
+          "action_vectors": 23,
+          "distribution_vectors": 2,
+          "stored_coefficients": 62,
+          "nonzero_coefficients": 40,
+          "future_scalar_fallbacks": 0,
+          "solve_calls": 6,
+          "action_calls": 25,
+          "terminal_branches": 2,
+          "report_branches": 0,
+          "physical_branches": 25,
+          "terminal_moment_applications": 18
+        }
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T14:04:00.722903+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6475095999776386,
+      "samples": 31,
+      "peak_private_committed_bytes": 23121920,
+      "observed_peak_working_set_bytes": 34344960,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "dual",
+        "mode": "scalar",
+        "multi": true,
+        "completed": true,
+        "view_count": 5,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "daef83ef341f2433d84ffcdbb844ef7ea7eed06b383c4a88d57592c6c4d58d0d"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6d7117b16d326a39569343e1d54d81d8a4e70d4b421e9338423edd11942da19e"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6d7117b16d326a39569343e1d54d81d8a4e70d4b421e9338423edd11942da19e"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6f090f75c23144da2576cf549a48cbd605864cd4b30895f7574defa16e3e2a6f"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6f090f75c23144da2576cf549a48cbd605864cd4b30895f7574defa16e3e2a6f"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.02313550002872944,
+            "work": 676
+          },
+          {
+            "seconds": 0.015299699967727065,
+            "work": 161
+          },
+          {
+            "seconds": 0.004887700022663921,
+            "work": 26
+          },
+          {
+            "seconds": 0.009908100008033216,
+            "work": 99
+          },
+          {
+            "seconds": 0.0033543999888934195,
+            "work": 26
+          }
+        ],
+        "forecast_seconds": 0.05662819999270141,
+        "forecast_work": 988,
+        "setup_work": 16,
+        "budget": {
+          "work": 1004,
+          "max_work": 250000,
+          "elapsed_seconds": 0.078
+        },
+        "seconds": 0.07511829998111352,
+        "scalar_engine": {
+          "values": 19,
+          "actions": 44,
+          "expansions": {
+            "actions": 44,
+            "values": 19
+          },
+          "acquired": 10,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 8,
+          "saved_sources": 0,
+          "resolution_cache": 56,
+          "target_orbits": {
+            "target_members": 61,
+            "target_representatives": 46,
+            "solver_wolf_cells": 14,
+            "solver_wolf_hypotheses": 16
+          },
+          "report_vectors": {
+            "kernels": 15,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        }
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T14:04:01.613450+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.8905997999827377,
+      "samples": 40,
+      "peak_private_committed_bytes": 24367104,
+      "observed_peak_working_set_bytes": 34746368,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "dual",
+        "mode": "vector",
+        "multi": true,
+        "completed": true,
+        "view_count": 5,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "daef83ef341f2433d84ffcdbb844ef7ea7eed06b383c4a88d57592c6c4d58d0d"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6d7117b16d326a39569343e1d54d81d8a4e70d4b421e9338423edd11942da19e"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6d7117b16d326a39569343e1d54d81d8a4e70d4b421e9338423edd11942da19e"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6f090f75c23144da2576cf549a48cbd605864cd4b30895f7574defa16e3e2a6f"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "6f090f75c23144da2576cf549a48cbd605864cd4b30895f7574defa16e3e2a6f"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.06785300001502037,
+            "work": 1520
+          },
+          {
+            "seconds": 0.005414200015366077,
+            "work": 17
+          },
+          {
+            "seconds": 0.002952300012111664,
+            "work": 17
+          },
+          {
+            "seconds": 0.005207600013818592,
+            "work": 17
+          },
+          {
+            "seconds": 0.002484199998434633,
+            "work": 17
+          }
+        ],
+        "forecast_seconds": 0.08395450003445148,
+        "forecast_work": 1588,
+        "setup_work": 16,
+        "budget": {
+          "work": 1604,
+          "max_work": 250000,
+          "elapsed_seconds": 0.109
+        },
+        "seconds": 0.10540549998404458,
+        "scalar_engine": {
+          "values": 3,
+          "actions": 23,
+          "expansions": {
+            "actions": 23,
+            "values": 3
+          },
+          "acquired": 13,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 9,
+          "saved_sources": 0,
+          "resolution_cache": 94,
+          "target_orbits": {
+            "target_members": 7,
+            "target_representatives": 5,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 5
+          },
+          "report_vectors": {
+            "kernels": 22,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "vector": {
+          "width": 2,
+          "value_vectors": 6,
+          "action_vectors": 23,
+          "distribution_vectors": 2,
+          "stored_coefficients": 62,
+          "nonzero_coefficients": 40,
+          "future_scalar_fallbacks": 0,
+          "solve_calls": 10,
+          "action_calls": 45,
+          "terminal_branches": 2,
+          "report_branches": 0,
+          "physical_branches": 25,
+          "terminal_moment_applications": 18
+        }
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T14:04:02.278970+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.6634188999887556,
+      "samples": 32,
+      "peak_private_committed_bytes": 24182784,
+      "observed_peak_working_set_bytes": 34439168,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "three",
+        "mode": "scalar",
+        "multi": false,
+        "completed": true,
+        "view_count": 1,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(2, 3)), (2, Fraction(2, 3)), (3, Fraction(2, 3)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "a217b757cc24d9a0511504f4ad9e319e1f13c995c0e3efbc5c25d916c26f7bd5"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.07372980000218377,
+            "work": 3538
+          }
+        ],
+        "forecast_seconds": 0.07374190003611147,
+        "forecast_work": 3538,
+        "setup_work": 18,
+        "budget": {
+          "work": 3556,
+          "max_work": 250000,
+          "elapsed_seconds": 0.094
+        },
+        "seconds": 0.09094680001726374,
+        "scalar_engine": {
+          "values": 4,
+          "actions": 21,
+          "expansions": {
+            "actions": 21,
+            "values": 4
+          },
+          "acquired": 14,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 9,
+          "saved_sources": 0,
+          "resolution_cache": 31,
+          "target_orbits": {
+            "target_members": 14,
+            "target_representatives": 8,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 8
+          },
+          "report_vectors": {
+            "kernels": 10,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        }
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T14:04:02.990321+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7109059999929741,
+      "samples": 34,
+      "peak_private_committed_bytes": 24244224,
+      "observed_peak_working_set_bytes": 34926592,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "three",
+        "mode": "vector",
+        "multi": false,
+        "completed": true,
+        "view_count": 1,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(2, 3)), (2, Fraction(2, 3)), (3, Fraction(2, 3)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "a217b757cc24d9a0511504f4ad9e319e1f13c995c0e3efbc5c25d916c26f7bd5"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.14384859998244792,
+            "work": 6151
+          }
+        ],
+        "forecast_seconds": 0.14385890000266954,
+        "forecast_work": 6151,
+        "setup_work": 18,
+        "budget": {
+          "work": 6169,
+          "max_work": 250000,
+          "elapsed_seconds": 0.156
+        },
+        "seconds": 0.16231789998710155,
+        "scalar_engine": {
+          "values": 3,
+          "actions": 33,
+          "expansions": {
+            "actions": 33,
+            "values": 3
+          },
+          "acquired": 26,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 13,
+          "saved_sources": 0,
+          "resolution_cache": 82,
+          "target_orbits": {
+            "target_members": 6,
+            "target_representatives": 4,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 8
+          },
+          "report_vectors": {
+            "kernels": 26,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "vector": {
+          "width": 3,
+          "value_vectors": 6,
+          "action_vectors": 29,
+          "distribution_vectors": 3,
+          "stored_coefficients": 114,
+          "nonzero_coefficients": 57,
+          "future_scalar_fallbacks": 0,
+          "solve_calls": 6,
+          "action_calls": 32,
+          "terminal_branches": 3,
+          "report_branches": 0,
+          "physical_branches": 32,
+          "terminal_moment_applications": 24
+        }
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T14:04:03.736017+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7452997000073083,
+      "samples": 36,
+      "peak_private_committed_bytes": 24301568,
+      "observed_peak_working_set_bytes": 35168256,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "three",
+        "mode": "scalar",
+        "multi": true,
+        "completed": true,
+        "view_count": 7,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(2, 3)), (2, Fraction(2, 3)), (3, Fraction(2, 3)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "a217b757cc24d9a0511504f4ad9e319e1f13c995c0e3efbc5c25d916c26f7bd5"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(3, 4)), (2, Fraction(1, 2)), (3, Fraction(3, 4)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "54390f1bec6652d319921dcde0fc1fba5431e1b4e9ea6bbacee0f7b5387f5402"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(3, 4)), (2, Fraction(3, 4)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "2eaaed3adc0af9f69b6daa421fb33bee60b88ef236bcd69f0cb7be79850fbd12"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 2)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "9b198f8f5071e3dd6ac959ba71dfd5724ec580c4ba2b434d47a3756b8897a08f"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 2)), (2, Fraction(3, 4)), (3, Fraction(3, 4)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "61629d9799682fe3cedc02ccb1c640598e8fec1c16a3bf75215d5f643d2acc8e"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 2)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "1eca0499c5a0b741dfdc3eda5e0430f6465bfe0029ff9fbe05806d72c19287e4"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 2)), (2, Fraction(1, 2)), (3, Fraction(1, 1)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "1d818d1668e53a85d43ef2805e21575ff5a57366fa43dc6b9475b75255830d73"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.07635600003413856,
+            "work": 3538
+          },
+          {
+            "seconds": 0.03751900000497699,
+            "work": 1334
+          },
+          {
+            "seconds": 0.03498110000509769,
+            "work": 773
+          },
+          {
+            "seconds": 0.004682699975091964,
+            "work": 39
+          },
+          {
+            "seconds": 0.024874299997463822,
+            "work": 396
+          },
+          {
+            "seconds": 0.004524000047240406,
+            "work": 36
+          },
+          {
+            "seconds": 0.0036989999935030937,
+            "work": 36
+          }
+        ],
+        "forecast_seconds": 0.18669019994558766,
+        "forecast_work": 6152,
+        "setup_work": 18,
+        "budget": {
+          "work": 6170,
+          "max_work": 250000,
+          "elapsed_seconds": 0.203
+        },
+        "seconds": 0.20388530002674088,
+        "scalar_engine": {
+          "values": 31,
+          "actions": 81,
+          "expansions": {
+            "actions": 81,
+            "values": 31
+          },
+          "acquired": 26,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 16,
+          "saved_sources": 0,
+          "resolution_cache": 117,
+          "target_orbits": {
+            "target_members": 104,
+            "target_representatives": 80,
+            "solver_wolf_cells": 24,
+            "solver_wolf_hypotheses": 38
+          },
+          "report_vectors": {
+            "kernels": 26,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        }
+      },
+      "progress": []
+    },
+    {
+      "completed_at": "2026-10-19T14:04:04.507243+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 0.7708861000137404,
+      "samples": 37,
+      "peak_private_committed_bytes": 24285184,
+      "observed_peak_working_set_bytes": 35332096,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "kind": "three",
+        "mode": "vector",
+        "multi": true,
+        "completed": true,
+        "view_count": 7,
+        "results": [
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(2, 3)), (2, Fraction(2, 3)), (3, Fraction(2, 3)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "a217b757cc24d9a0511504f4ad9e319e1f13c995c0e3efbc5c25d916c26f7bd5"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(3, 4)), (2, Fraction(1, 2)), (3, Fraction(3, 4)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "54390f1bec6652d319921dcde0fc1fba5431e1b4e9ea6bbacee0f7b5387f5402"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(3, 4)), (2, Fraction(3, 4)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "2eaaed3adc0af9f69b6daa421fb33bee60b88ef236bcd69f0cb7be79850fbd12"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 2)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "9b198f8f5071e3dd6ac959ba71dfd5724ec580c4ba2b434d47a3756b8897a08f"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 2)), (2, Fraction(3, 4)), (3, Fraction(3, 4)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "61629d9799682fe3cedc02ccb1c640598e8fec1c16a3bf75215d5f643d2acc8e"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 2)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "1eca0499c5a0b741dfdc3eda5e0430f6465bfe0029ff9fbe05806d72c19287e4"
+          },
+          {
+            "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 2)), (2, Fraction(1, 2)), (3, Fraction(1, 1)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+            "table_sha256": "1d818d1668e53a85d43ef2805e21575ff5a57366fa43dc6b9475b75255830d73"
+          }
+        ],
+        "view_costs": [
+          {
+            "seconds": 0.14648910000687465,
+            "work": 6151
+          },
+          {
+            "seconds": 0.010542900010477751,
+            "work": 32
+          },
+          {
+            "seconds": 0.009038299962412566,
+            "work": 32
+          },
+          {
+            "seconds": 0.004257099993992597,
+            "work": 23
+          },
+          {
+            "seconds": 0.009203399997204542,
+            "work": 32
+          },
+          {
+            "seconds": 0.002676400006748736,
+            "work": 23
+          },
+          {
+            "seconds": 0.0024674999876879156,
+            "work": 23
+          }
+        ],
+        "forecast_seconds": 0.1847319999942556,
+        "forecast_work": 6316,
+        "setup_work": 18,
+        "budget": {
+          "work": 6334,
+          "max_work": 250000,
+          "elapsed_seconds": 0.204
+        },
+        "seconds": 0.2050926000229083,
+        "scalar_engine": {
+          "values": 3,
+          "actions": 33,
+          "expansions": {
+            "actions": 33,
+            "values": 3
+          },
+          "acquired": 26,
+          "mornings": 0,
+          "publications": 0,
+          "policies": 13,
+          "saved_sources": 0,
+          "resolution_cache": 160,
+          "target_orbits": {
+            "target_members": 6,
+            "target_representatives": 4,
+            "solver_wolf_cells": 3,
+            "solver_wolf_hypotheses": 8
+          },
+          "report_vectors": {
+            "kernels": 26,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 0,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "vector": {
+          "width": 3,
+          "value_vectors": 6,
+          "action_vectors": 29,
+          "distribution_vectors": 3,
+          "stored_coefficients": 114,
+          "nonzero_coefficients": 57,
+          "future_scalar_fallbacks": 0,
+          "solve_calls": 12,
+          "action_calls": 62,
+          "terminal_branches": 3,
+          "report_branches": 0,
+          "physical_branches": 32,
+          "terminal_moment_applications": 24
+        }
+      },
+      "progress": []
+    }
+  ],
+  "source_sha256": {
+    "benchmarks/player_match_groups/payoff_vector_experiment.py": "6b4075fee2a3c1e43653f92db94c34f984d4b9fa699dc62083787050921a0b51",
+    "benchmarks/player_match_groups/payoff_vector_probe.py": "b4186e3f3b00aa4b586af6e781d2e5190485c1e1ffe59cf930add9cd5b410628",
+    "werewolf/information_set_forecast.py": "7a2d91308873fe67f8e98b7c898fcf8b618343e96e3532fdd40db76fc5ae622d",
+    "werewolf/grouped_forecast.py": "e9eae79c92d5f794e5d4334e377142da2befac7742bc4a80fcde8586c388baff"
+  }
+}

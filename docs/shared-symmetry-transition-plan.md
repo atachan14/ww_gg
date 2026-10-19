@@ -4,8 +4,9 @@
 
 This block supersedes historical plans below. Current production uses immutable
 ClosedCalculation inputs and common generators, not issued receipt ledgers.
-Additional optimization is paused at this checkpoint. History-key, exposed-fake
-and sparse-positive-report experiments all remain development-only.
+Additional optimization is paused at this checkpoint. History-key, exposed-fake,
+sparse-positive-report and root-secret payoff-vector experiments all remain
+development-only.
 
 | area | current status |
 | --- | --- |
@@ -16,6 +17,7 @@ and sparse-positive-report experiments all remain development-only.
 | MAX saved observed-action replay in Closed | Pending; live named intervention/cold recipes are separate |
 | guardian/GJ in new Closed path | outside H0, unsupported; existing ordinary guardian/MAX/saved/GJ paths remain separate and are regression-tested |
 | fake-channel deletion / sufficient-history keys | not connected; experiments retain full named source/history, with limited evidence only |
+| nonterminal root-secret payoff vectors | development only; no total small-input improvement, future intervention scalar fallback; no seven trial |
 
 A smaller history key does not delete report observations: the six-origin
 four-alive example still generates32 rows despite16 public scalar keys, and
@@ -1926,3 +1928,135 @@ manufacture savings. No seven retry, publication, upper-limit or default change.
 Evidence: sparse-report-moment-results.json (raw measurement hashes retained;
 final reference-helper policy parameter note included),
 sparse-report-moment-validation.json, development fixture and5-test log.
+
+
+## 2026-10-19: nonterminal full-horizon root-secret payoff vector; HOLD
+
+User requirement: exact evaluation THROUGH TERMINATION; no approximation,
+sampling, lookahead cutoff or changed policy. Permission is for a small
+DEVELOPMENT prototype to decide whether to continue, not a product replacement.
+Implemented payoff_vector_experiment.py and isolated payoff_vector_probe.py.
+No production code, limit, default, public route or deployment changed.
+
+### Scope and exact meaning
+
+One immutable initial-five fixed-CO H0 input, no medium/hunter, supported all-MAX
+strategy. Root basis i is the COMPLETE initial (roles,acquisitions,guards,attacks)
+hypothesis, not a role marginal. The initial mixed law P0 is the public complete
+Q. Common generation retains every initial record; descendant records identify
+its root ancestor. At each generated frame a vector records conditional joint
+terminal village payoff mass attributed to each ancestor i. Branch probabilities
+are the SAME common physical/acquisition/report/actor policy probabilities;
+normalizing a child P is canceled by its parent branch mass when summing.
+
+The final root coordinate is
+
+    u_i = E_Q[1(village wins at eventual termination) * 1(root=i)]
+    v_i = u_i / Q(root=i)
+    value(P) = sum_i P(root=i) v_i
+
+The same vector is built for each forced current action. Public day choices use
+existing Q day_scores/MAX/ties. Night choices use existing wolf_choices, which
+conditions PUBLIC Q on the acting wolf's own roster/actions and weights the
+actual P information groups. No viewer P selects a public or another owner's
+action. All generation, legal resolution, Q/P update, report likelihood transfer
+and initial owner filtering reuse the COMMON production operations. No fixed
+number of plies ends evaluation: five-day and four-night lead to the exact
+terminal-three formula, or common actual termination earlier.
+
+The first prototype expanded all terminal report children; its measurements are
+preserved in payoff-vector-expanded-terminal-results.json. It was unnecessarily
+unfair to the production terminal moment optimization. The final prototype
+reuses the EXISTING public-Q terminal moment/cache and scatters each full
+P/Q-weighted secret fiber to its initial ancestor coordinate. Q-positive/P-zero
+observations remain in Q policy construction. No new terminal evaluator or
+report deletion is introduced. Full report/cold APIs keep their complete sources.
+
+Reused views are current initial owner information (seer role/known results or
+wolf roster), with P absolutely continuous on this exact root support. A future
+SeerObserver acquisition intervention is NOT aliased to the same linear
+operator: filtering/renormalization can depend on the chosen P and surviving
+path. It explicitly retains the original exact scalar evaluation, including
+original Pending behavior and owner-death cancellation semantics. This preserves
+meaning, but gives no vector performance claim for future interventions.
+Other Board histories/calculations, guardian/GJ, medium strategic reports and
+changed policies are outside this small prototype, not newly supported. Horizon
+outputs use the unchanged exact by-dawn evaluator; their cost is INCLUDED in
+both scalar and vector measurements.
+
+### Fair comparisons: current scalar reuse is already present
+
+The baseline is current production with grouped/aggregate_wolf/aggregate_reports
+explicitly enabled. Each request uses ONE calculation and shares its existing
+Q-policy/moment caches between requested views. The vector request uses that same
+Q strategy engine PLUS one actual-P vector continuation pass. It does not pretend
+that public-Q ranking or terminal Q/P separation was missing from production.
+Both modes share input preparation and owner selection before timing Forecasts.
+
+Two independent five-player inputs: dual CO (root width2), and three seer CO
+with two actual seers (root width3). Public-only requests have1 view. Multiple
+requests contain public plus EVERY supported root seer-owner record and wolf
+roster:5 views for dual and7 for three. These are natural supported views, not
+repeated identical requests chosen to amortize preparation artificially.
+
+Eight final FRESH workers complete within the EXISTING250000work/30s,
+384MiB sampled/35s watchdog limits. No seven request is run. Single instrumented
+samples are not timing distributions; reported peak memory includes imports,
+setup and all requested views, not vector payload alone.
+
+| input/views | scalar work ->vector | scalar seconds ->vector | peak working-set MiB scalar ->vector | peak private-commit MiB scalar ->vector |
+| --- | --- | --- | --- | --- |
+| dual/public1 |676->1520|0.0361->0.0561|32.86->32.91|22.78->22.18|
+| dual/public+owners5 |988->1588|0.0566->0.0840|32.75->33.14|22.05->23.24|
+| three/public1 |3538->6151|0.0737->0.1439|32.84->33.31|23.06->23.12|
+| three/public+owners7 |6152->6316|0.1867->0.1847|33.54->33.70|23.18->23.16|
+
+The ~1% timing difference on the last row is noise-scale, with2.67% MORE work;
+no total speedup is asserted. Public-only work increases2.25x (dual) and1.74x
+(three). Multiple-view total work increases1.61x and1.027x respectively.
+
+Incremental extra-view work DOES fall: dual312->68, three2614->165. But the
+operator's initial cost is not recovered in either complete request. Cached
+value/action vector counts stay6/23 for dual and6/29 for three across all views;
+physical branches25/32 are traversed once. Width2/3, dense retained coefficients
+INCLUDING distribution vectors are62/114 (nonzero40/57). Initial expanded-
+terminal version retained938/2274 coefficients and was much slower; those are
+not the final comparison. The final small basis says nothing about nine-player
+coefficient widths or memory bounds, and process-memory differences this small
+are not evidence of a memory improvement.
+
+### Why this does not remove the single-public seven wall
+
+The current public/acting-owner Q ranking computation still consumes the common
+scalar evaluator; it already reuses Q policies and terminal moments. The prototype
+adds another vector pass and retains extra acquisition/physical distributions.
+Scalar target symmetry may also permute SECRET vector coordinates rather than
+make two vectors equal, so literal action vectors cannot simply copy one scalar
+representative. Replacing the Q ranking evaluator itself with local full-secret
+transition operators would be a separate larger design with changing future
+secret bases; it was NOT implemented or established here.
+
+Consequently this experiment supports only cheap incremental P application after
+an expensive operator is built. It does NOT show a route through single-view
+seven MAX's existing limit. No nine-player runtime estimate follows, and no
+seven benchmark is justified by these small results.
+
+### Independent correctness and decision
+
+All final scalar/vector worker pairs match complete Forecast (all forced named
+actions and by-dawn outputs) and Table hashes. Five development tests pass
+in13.767s: independent fully named common-flow Forecast/Table for public and
+multiple owners, reversed repeated views without growing the vector tree,
+every root-secret point P and a nonuniform P mixture, source/named-report history
+immutability and cold reconstruction. Each conditional root payoff stays in[0,1].
+A valid future scan and an already-visited unsupported scan retain their EXACT
+original scalar result or Pending reason via separate fallback. Cancellation,
+work limits and immutable calculation boundaries are still enforced.
+
+Decision: HOLD; development-only, no large product replacement. Total work does
+not improve even for natural multiple views; memory is not improved. Stop this
+small trial here, with no additional seven run. Retain the current implementation
+and previous unsupported boundaries. Evidence: payoff-vector-results.json,
+payoff-vector-expanded-terminal-results.json, payoff-vector-validation.json,
+prototype/probe and5-test log. No complete repository rerun is claimed because
+production was not changed.

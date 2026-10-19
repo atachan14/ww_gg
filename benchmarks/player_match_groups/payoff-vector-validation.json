@@ -1,0 +1,99 @@
+{
+  "at": "2026-10-19T14:08:59.041612+00:00",
+  "decision": "HOLD, development-only; no total measured work benefit in public-only or natural multiple-owner requests. No seven measurement or product replacement.",
+  "comparisons": [
+    {
+      "kind": "dual",
+      "views": 1,
+      "scalar_work": 676,
+      "vector_work": 1520,
+      "scalar_seconds": 0.03610219998518005,
+      "vector_seconds": 0.05613349995110184,
+      "scalar_peak_ws_bytes": 34459648,
+      "vector_peak_ws_bytes": 34504704,
+      "scalar_private_bytes": 23883776,
+      "vector_private_bytes": 23261184,
+      "scalar_extra_view_work": 0,
+      "vector_extra_view_work": 0,
+      "vector_width": 2,
+      "stored_coefficients": 62
+    },
+    {
+      "kind": "dual",
+      "views": 5,
+      "scalar_work": 988,
+      "vector_work": 1588,
+      "scalar_seconds": 0.05662819999270141,
+      "vector_seconds": 0.08395450003445148,
+      "scalar_peak_ws_bytes": 34344960,
+      "vector_peak_ws_bytes": 34746368,
+      "scalar_private_bytes": 23121920,
+      "vector_private_bytes": 24367104,
+      "scalar_extra_view_work": 312,
+      "vector_extra_view_work": 68,
+      "vector_width": 2,
+      "stored_coefficients": 62
+    },
+    {
+      "kind": "three",
+      "views": 1,
+      "scalar_work": 3538,
+      "vector_work": 6151,
+      "scalar_seconds": 0.07374190003611147,
+      "vector_seconds": 0.14385890000266954,
+      "scalar_peak_ws_bytes": 34439168,
+      "vector_peak_ws_bytes": 34926592,
+      "scalar_private_bytes": 24182784,
+      "vector_private_bytes": 24244224,
+      "scalar_extra_view_work": 0,
+      "vector_extra_view_work": 0,
+      "vector_width": 3,
+      "stored_coefficients": 114
+    },
+    {
+      "kind": "three",
+      "views": 7,
+      "scalar_work": 6152,
+      "vector_work": 6316,
+      "scalar_seconds": 0.18669019994558766,
+      "vector_seconds": 0.1847319999942556,
+      "scalar_peak_ws_bytes": 35168256,
+      "vector_peak_ws_bytes": 35332096,
+      "scalar_private_bytes": 24301568,
+      "vector_private_bytes": 24285184,
+      "scalar_extra_view_work": 2614,
+      "vector_extra_view_work": 165,
+      "vector_width": 3,
+      "stored_coefficients": 114
+    }
+  ],
+  "tests": {
+    "count": 5,
+    "seconds": 13.767,
+    "log": "test_each_root_secret_and_nonuniform_P_match_independent_exact_scalar (tests.test_payoff_vector_experiment.PayoffVectorTests.test_each_root_secret_and_nonuniform_P_match_independent_exact_scalar) ... ok\ntest_full_nonterminal_public_multiple_owner_Forecast_Table_and_cold (tests.test_payoff_vector_experiment.PayoffVectorTests.test_full_nonterminal_public_multiple_owner_Forecast_Table_and_cold) ... ok\ntest_future_scan_keeps_exact_scalar_result_or_Pending_in_separate_path (tests.test_payoff_vector_experiment.PayoffVectorTests.test_future_scan_keeps_exact_scalar_result_or_Pending_in_separate_path) ... ok\ntest_named_report_history_unchanged_after_vector_build (tests.test_payoff_vector_experiment.PayoffVectorTests.test_named_report_history_unchanged_after_vector_build) ... ok\ntest_scope_and_warm_cancellation_work_limits_remain_separate (tests.test_payoff_vector_experiment.PayoffVectorTests.test_scope_and_warm_cancellation_work_limits_remain_separate) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.062\nok\n\n----------------------------------------------------------------------\nRan 5 tests in 13.767s\n\nOK\n"
+  },
+  "equality": [
+    "8 final bounded workers complete; paired complete Forecast/Table equality",
+    "Fully named independent full-horizon public/seer/wolf forecasts and tables",
+    "Each root-secret point P and nonuniform P coefficient equality",
+    "Immutable source, named report history and fresh cold source equality",
+    "Future SeerObserver retains exact old scalar result or Pending on separate fallback, never mixed with coefficient operator",
+    "Warm cancellation/work limits and immutable calculation boundaries"
+  ],
+  "scope": "Initial-five fixedCO H0, no medium/hunter, current supported root personal information only; vector includes nonterminal5day/4night and exact existing terminal moment. Public/actor Q strategy ranking stays existing scalar engine. By-dawn stays exact existing horizon and its costs included. Future scan interventions use explicit exact scalar fallback.",
+  "production_unchanged_since": "490df94",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "sources_sha256": {
+    "benchmarks\\player_match_groups\\payoff_vector_experiment.py": "6b4075fee2a3c1e43653f92db94c34f984d4b9fa699dc62083787050921a0b51",
+    "benchmarks\\player_match_groups\\payoff_vector_probe.py": "b4186e3f3b00aa4b586af6e781d2e5190485c1e1ffe59cf930add9cd5b410628",
+    "benchmarks\\player_match_groups\\payoff-vector-results.json": "a7f445afb327c235e52035468b4378c3d444dde2f01223a1ae392dea10739c19",
+    "benchmarks\\player_match_groups\\payoff-vector-expanded-terminal-results.json": "1b87709e9946fc8a6ddef1da6e23e586da7e0965ec0e039a72c44d9cf2f3171f",
+    "tests\\test_payoff_vector_experiment.py": "b5c11f9f9ab7b57eea3c566460c6ceb002a8a5761fd402a70af97e68fd1d3d7f"
+  }
+}
