@@ -1,0 +1,204 @@
+{
+  "status": "verified",
+  "cases": [
+    {
+      "players": 6,
+      "asymmetric": false,
+      "personal": false,
+      "ordinary": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "representative": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11
+        }
+      },
+      "full_joint_trace_cold_Forecast_Table_equal": true,
+      "independent_labelled_transition_comparisons": 4
+    },
+    {
+      "players": 7,
+      "asymmetric": false,
+      "personal": false,
+      "ordinary": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "representative": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267
+        }
+      },
+      "full_joint_trace_cold_Forecast_Table_equal": true,
+      "independent_labelled_transition_comparisons": 2
+    },
+    {
+      "players": 6,
+      "asymmetric": true,
+      "personal": false,
+      "ordinary": {
+        "values": 5,
+        "actions": 16,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 18
+      },
+      "representative": {
+        "values": 5,
+        "actions": 16,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 18,
+        "target_orbits": {
+          "target_members": 20,
+          "target_representatives": 20
+        }
+      },
+      "full_joint_trace_cold_Forecast_Table_equal": true,
+      "independent_labelled_transition_comparisons": 0
+    },
+    {
+      "players": 6,
+      "asymmetric": false,
+      "personal": true,
+      "ordinary": {
+        "values": 5,
+        "actions": 16,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "acquired": 11,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 18
+      },
+      "representative": {
+        "values": 4,
+        "actions": 13,
+        "expansions": {
+          "actions": 13,
+          "values": 4
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 15,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 16
+        }
+      },
+      "full_joint_trace_cold_Forecast_Table_equal": true,
+      "independent_labelled_transition_comparisons": 2
+    },
+    {
+      "players": 7,
+      "asymmetric": false,
+      "personal": true,
+      "ordinary": {
+        "values": 305,
+        "actions": 922,
+        "expansions": {
+          "actions": 922,
+          "values": 305
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 5,
+        "saved_sources": 0,
+        "resolution_cache": 925
+      },
+      "representative": {
+        "values": 305,
+        "actions": 912,
+        "expansions": {
+          "actions": 912,
+          "values": 305
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 5,
+        "saved_sources": 0,
+        "resolution_cache": 915,
+        "target_orbits": {
+          "target_members": 922,
+          "target_representatives": 912
+        }
+      },
+      "full_joint_trace_cold_Forecast_Table_equal": true,
+      "independent_labelled_transition_comparisons": 1
+    }
+  ],
+  "scope": "same validated uniform H0 complete simultaneous morning reports; finite <=4-alive scalar continuations",
+  "wolf_cells_and_report_vectors_still_enumerated": true,
+  "ledger_used": false,
+  "full_initial7_search": false
+}

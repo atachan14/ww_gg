@@ -8,6 +8,7 @@ from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from dataclasses import replace
 from fractions import Fraction as F
 from functools import lru_cache
+from contextlib import nullcontext
 from math import comb
 from .exact import (action_outcomes, legal_targets, replace_worlds, report_actions,
                     random_report_outcomes, merge_report_outcomes, BoardOutcome, winner_for, has_future_medium)
@@ -71,6 +72,15 @@ class InformationSetForecast:
         self.joint_descriptors={}
         self.joint_keys={}
         self.action_policy=InformationSetActionPolicy(self)
+
+    def group_scope(self,groups):return nullcontext()
+    def actor_scope(self,info):return nullcontext()
+    def target_orbits(self,targets):return tuple((p,) for p in targets)
+    def weighted_actor_targets(self,policy):return policy
+
+    def scalar_descriptor(self,b,s):
+        from .medium_value_key import public_descriptor
+        return public_descriptor(b,s,self.rules,self.strategy)
 
     def value_law(self,state):
         # Uniform guards/repeat permission and the supported wolf policies do
@@ -368,7 +378,7 @@ class InformationSetForecast:
             from .medium_value_key import public_descriptor,private_action_key
             source=(b,s)
             if source not in self.reduced_descriptors:
-                self.reduced_descriptors[source]=public_descriptor(b,s,self.rules,self.strategy)
+                self.reduced_descriptors[source]=self.scalar_descriptor(b,s)
             if action_key is None:action_key=private_action_key(self.reduced_descriptors[source],private,target)
             if action_key is not None and action_key in self.action_values:
                 tick();return self.action_values[action_key]
@@ -502,7 +512,7 @@ class InformationSetForecast:
             from .medium_value_key import public_descriptor,private_value_key
             source=(b,s)
             if source not in self.reduced_descriptors:
-                self.reduced_descriptors[source]=public_descriptor(b,s,self.rules,self.strategy)
+                self.reduced_descriptors[source]=self.scalar_descriptor(b,s)
             reduced=self.renamed_value_key(b,s,past,private) if self.memoize_flows else None
             if reduced is None:reduced=private_value_key(self.reduced_descriptors[source],private)
             if reduced is not None:key=reduced
@@ -526,7 +536,7 @@ class InformationSetForecast:
             if self.strategy.day=='random':targets=b.alive
             else:
                 targets=optimal_targets(self.day_scores(b,s,past),maximize=True)
-            value=sum((self.act(b,s,past,p,private,observer,physical=physical) for p in targets),F())/len(targets)
+            value=sum((len(g)*self.act(b,s,past,g[0],private,observer,physical=physical) for g in self.target_orbits(targets)),F())/len(targets)
         else:
             value=F()
             ledger=self.acquisition_provenance
@@ -540,8 +550,10 @@ class InformationSetForecast:
             else:
                 for info,mass,group in wolf_information_groups(private):
                     group_board=physical_board(b,group,physical)
-                    value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
-                                    for p,q in self.wolf_policy(b,s,past,info.initial_roster,info.attacks)),F())
+                    with self.actor_scope(info):
+                        policy=self.wolf_policy(b,s,past,info.initial_roster,info.attacks)
+                        value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
+                                        for p,q in self.weighted_actor_targets(policy)),F())
         self.values[key]=value
         return value
 

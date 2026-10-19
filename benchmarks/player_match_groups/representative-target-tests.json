@@ -1,0 +1,40 @@
+{
+  "status": "passed",
+  "tests": 70,
+  "runner_seconds": 115.87,
+  "modules": [
+    "tests.test_representative_targets",
+    "tests.test_closed_morning_reports",
+    "tests.test_closed_saved_history",
+    "tests.test_closed_calculation",
+    "tests.test_closed_saved_day",
+    "tests.test_root_secret_flow",
+    "tests.test_root_secret_replay",
+    "tests.test_shared_transition_provenance",
+    "tests.test_owner_information_provenance",
+    "tests.test_root_guard_max",
+    "tests.test_public_prior_ownership",
+    "tests.test_cut_out_initial_publications",
+    "tests.test_cut_out_separate_publications"
+  ],
+  "selected_audits": [
+    "inherited-groups --representatives verified",
+    "inherited-groups verified"
+  ],
+  "diff_check": "passed",
+  "performance_source_hashes_match": true,
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "fa0602a031f35966c058ebd0d4a982bee0dd735f468f51cf504073a9546ba686",
+    "werewolf\\group_partition.py": "97aaed3c291161abd0e6a2147f990553b1c53b3cb7bc22f46d8ec4ba2fcb5450",
+    "werewolf\\grouped_forecast.py": "cf6a1262a5670d045ca2686011d8a653303ef3c89c66bd289c4e4e45f53e035b",
+    "werewolf\\information_set_forecast.py": "07245de62c72bd7870a7c5a84e32d44748d870fb6d6f87e002d18c739b99ca10",
+    "benchmarks\\player_match_groups\\representative_target_fixture.py": "c756e776d372a4fa72786181eddc8515a1b61abb391fc2534e0c8b5f4fb4d2ac",
+    "tests\\test_representative_targets.py": "a0896f1fe087f3e72f0eb3ef9ade6f71ca269e35824e69f7e0d9de3e1cf5e5ba"
+  },
+  "ledger_used": false,
+  "full_initial7_search": false,
+  "final_format_tests": {
+    "tests": 4,
+    "runner_seconds": 5.213
+  }
+}

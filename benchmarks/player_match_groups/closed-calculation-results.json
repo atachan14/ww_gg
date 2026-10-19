@@ -683,72 +683,72 @@
             "file": "board_future.py",
             "function": "kernel_snapshot",
             "calls": 58,
-            "self_seconds": 0.00037660000000000005,
-            "cumulative_seconds": 0.0011924000000000001
+            "self_seconds": 0.0003847,
+            "cumulative_seconds": 0.0012878000000000002
           },
           {
             "file": "board_future.py",
             "function": "remember",
             "calls": 66,
-            "self_seconds": 0.0003281,
-            "cumulative_seconds": 0.0028948000000000003
+            "self_seconds": 0.0003713,
+            "cumulative_seconds": 0.007967700000000001
           },
           {
             "file": "board_future.py",
             "function": "register_origin",
             "calls": 58,
-            "self_seconds": 0.0002067,
-            "cumulative_seconds": 0.0039475000000000005
+            "self_seconds": 0.00021600000000000002,
+            "cumulative_seconds": 0.0047806
           },
           {
             "file": "board_future.py",
             "function": "condition_recipe",
             "calls": 3,
-            "self_seconds": 0.00017240000000000002,
-            "cumulative_seconds": 0.0023882
+            "self_seconds": 0.000199,
+            "cumulative_seconds": 0.0027044
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_child",
             "calls": 24,
-            "self_seconds": 0.00015360000000000002,
-            "cumulative_seconds": 0.019756000000000003
+            "self_seconds": 0.0001488,
+            "cumulative_seconds": 0.029474300000000002
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_publication",
             "calls": 8,
-            "self_seconds": 9.11e-05,
-            "cumulative_seconds": 0.005569500000000001
+            "self_seconds": 0.00011850000000000001,
+            "cumulative_seconds": 0.0087726
           },
           {
             "file": "board_future.py",
             "function": "roles",
             "calls": 26,
-            "self_seconds": 5.6000000000000006e-05,
-            "cumulative_seconds": 0.024154000000000002
+            "self_seconds": 6.69e-05,
+            "cumulative_seconds": 0.041151
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_information",
             "calls": 4,
-            "self_seconds": 2.5300000000000002e-05,
-            "cumulative_seconds": 0.0023754
+            "self_seconds": 4.46e-05,
+            "cumulative_seconds": 0.011694300000000001
           }
         ],
         "ledger_retained_entries": {},
         "case": "five-owner-night",
         "tracked": false,
         "diagnostic": true,
-        "body_seconds": 0.10019190004095435,
+        "body_seconds": 0.16938279999885708,
         "phase_seconds": {
-          "common_setup_seconds": 0.021849999960977584,
-          "root_guarantee_and_registration_seconds": 6.420002318918705e-05,
-          "finite_common_kernels_seconds": 0.006822100025601685,
-          "Forecast_Table_seconds": 0.07128839998040348
+          "common_setup_seconds": 0.04047569999238476,
+          "root_guarantee_and_registration_seconds": 7.160002132877707e-05,
+          "finite_common_kernels_seconds": 0.016896600020118058,
+          "Forecast_Table_seconds": 0.11175769998226315
         },
-        "process_peak_working_set_bytes_until_timed_end": 34988032,
-        "process_peak_before_bytes": 33910784,
+        "process_peak_working_set_bytes_until_timed_end": 34856960,
+        "process_peak_before_bytes": 33771520,
         "states": {
           "values": 8,
           "actions": 31,
@@ -778,15 +778,15 @@
         "case": "five-owner-night",
         "mode": "closed",
         "diagnostic": true,
-        "body_seconds": 0.027386900037527084,
+        "body_seconds": 0.08800449996488169,
         "phase_seconds": {
-          "common_setup_seconds": 0.003268800035584718,
-          "closed_open_seconds": 0.0014028000296093524,
-          "finite_common_kernels_seconds": 0.0011519999825395644,
-          "Forecast_Table_seconds": 0.016643200011458248
+          "common_setup_seconds": 0.005273899994790554,
+          "closed_open_seconds": 0.02481410000473261,
+          "finite_common_kernels_seconds": 0.0025394000113010406,
+          "Forecast_Table_seconds": 0.048015200009103864
         },
-        "process_peak_before_bytes": 36401152,
-        "process_peak_working_set_bytes_until_timed_end": 36524032,
+        "process_peak_before_bytes": 36343808,
+        "process_peak_working_set_bytes_until_timed_end": 36642816,
         "states": {
           "values": 8,
           "actions": 31,
@@ -824,72 +824,72 @@
             "file": "board_future.py",
             "function": "kernel_snapshot",
             "calls": 62,
-            "self_seconds": 0.0003598,
-            "cumulative_seconds": 0.001079
+            "self_seconds": 0.00038990000000000004,
+            "cumulative_seconds": 0.0011811
           },
           {
             "file": "board_future.py",
             "function": "remember",
             "calls": 70,
-            "self_seconds": 0.0002944,
-            "cumulative_seconds": 0.0027525
+            "self_seconds": 0.00033850000000000004,
+            "cumulative_seconds": 0.0032047
           },
           {
             "file": "board_future.py",
             "function": "register_origin",
             "calls": 51,
-            "self_seconds": 0.00023620000000000002,
-            "cumulative_seconds": 0.0056961
+            "self_seconds": 0.0002279,
+            "cumulative_seconds": 0.025450100000000003
           },
           {
             "file": "board_future.py",
             "function": "condition_recipe",
             "calls": 2,
-            "self_seconds": 0.00019270000000000002,
-            "cumulative_seconds": 0.0043927
+            "self_seconds": 0.00022480000000000002,
+            "cumulative_seconds": 0.023827800000000003
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_publication",
             "calls": 8,
-            "self_seconds": 0.0001179,
-            "cumulative_seconds": 0.008072300000000001
+            "self_seconds": 0.00011250000000000001,
+            "cumulative_seconds": 0.010432100000000001
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_child",
             "calls": 8,
-            "self_seconds": 4.77e-05,
-            "cumulative_seconds": 0.0074806000000000004
+            "self_seconds": 4.99e-05,
+            "cumulative_seconds": 0.0079849
           },
           {
             "file": "board_future.py",
             "function": "roles",
             "calls": 17,
-            "self_seconds": 4.25e-05,
-            "cumulative_seconds": 0.0184401
+            "self_seconds": 4.3100000000000004e-05,
+            "cumulative_seconds": 0.021565
           },
           {
             "file": "board_future.py",
             "function": "reconstruct_information",
             "calls": 5,
-            "self_seconds": 2.54e-05,
-            "cumulative_seconds": 0.0048609000000000005
+            "self_seconds": 2.82e-05,
+            "cumulative_seconds": 0.0051872
           }
         ],
         "ledger_retained_entries": {},
         "case": "seven-owner-three",
         "tracked": false,
         "diagnostic": true,
-        "body_seconds": 0.19244030001573265,
+        "body_seconds": 0.3125847000046633,
         "phase_seconds": {
-          "common_setup_seconds": 0.10365730000194162,
-          "root_guarantee_and_registration_seconds": 8.789997082203627e-05,
-          "finite_common_kernels_seconds": 0.05611000000499189,
-          "Forecast_Table_seconds": 0.032434699998702854
+          "common_setup_seconds": 0.15280810004333034,
+          "root_guarantee_and_registration_seconds": 0.00030770001467317343,
+          "finite_common_kernels_seconds": 0.09950289997505024,
+          "Forecast_Table_seconds": 0.059786600002553314
         },
-        "process_peak_working_set_bytes_until_timed_end": 36610048,
-        "process_peak_before_bytes": 36524032,
+        "process_peak_working_set_bytes_until_timed_end": 36802560,
+        "process_peak_before_bytes": 36642816,
         "states": {
           "values": 6,
           "actions": 18,
@@ -919,15 +919,15 @@
         "case": "seven-owner-three",
         "mode": "closed",
         "diagnostic": true,
-        "body_seconds": 0.06689469999400899,
+        "body_seconds": 0.15852439997252077,
         "phase_seconds": {
-          "common_setup_seconds": 0.035254199989140034,
-          "closed_open_seconds": 0.0098718999652192,
-          "finite_common_kernels_seconds": 0.011360800010152161,
-          "Forecast_Table_seconds": 0.009976500004995614
+          "common_setup_seconds": 0.08635359996696934,
+          "closed_open_seconds": 0.017397699994035065,
+          "finite_common_kernels_seconds": 0.020103199989534914,
+          "Forecast_Table_seconds": 0.034215299994684756
         },
-        "process_peak_before_bytes": 37941248,
-        "process_peak_working_set_bytes_until_timed_end": 37941248,
+        "process_peak_before_bytes": 38060032,
+        "process_peak_working_set_bytes_until_timed_end": 38068224,
         "states": {
           "values": 6,
           "actions": 18,

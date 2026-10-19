@@ -22,36 +22,7 @@ from .action_flow import resolve_action
 from .forecast_result import Forecast
 from .calculation_budget import calculation_budget,tick,DEFAULT_MAX_WORK,DEFAULT_MAX_SECONDS
 from .model_a_public import horizon_for_action
-
-
-def _fix(groups,positions):
-    fixed=set(positions);out=[]
-    for group in groups:
-        out.extend((p,) for p in group if p in fixed)
-        rest=tuple(p for p in group if p not in fixed)
-        if rest:out.append(rest)
-    return tuple(out)
-
-
-def _report_groups(groups,source):
-    """Refine inherited classes by complete public outgoing report meaning.
-
-    Named report targets are fixed conservatively. Equal reporters from the
-    same parent class remain one block; incoming information can never be
-    hidden by equal outgoing declarations.
-    """
-    records=[(r.player,('seer',r.acquired_day,r.published_day,'day',r.target,r.color)) for r in source.past]
-    records.extend((r.reporter,('medium',r.day,r.day,'day',r.target,r.color)) for r in source.public.reports)
-    records.extend((actor,('resolved',day,day,'day',target,None)) for day,actor,target in source.public.report_resolved)
-    fixed={record[4] for _,record in records}
-    result=[]
-    for group in _fix(groups,fixed):
-        split={}
-        for player in group:
-            key=tuple(sorted((r for actor,r in records if actor==player),key=repr))
-            split.setdefault(key,[]).append(player)
-        result.extend(tuple(v) for v in split.values())
-    return tuple(result)
+from .group_partition import _fix,_report_groups
 
 
 def _owner_positions(info,n):
@@ -127,8 +98,9 @@ class WolfChoice:
 class ClosedCalculation:
     __slots__=('__data','__strategy','__engine','__root','__max_work','__max_seconds','__origin_data','__entry_probability')
 
-    def __init__(self,data,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+    def __init__(self,data,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,grouped=False):
         if type(data)is not BoardData:raise TypeError('Saved immutable BoardData required')
+        if type(grouped)is not bool:raise TypeError('Boolean representative mode required')
         game=data.to_game();strategy=Strategy(**game['policy'])
         if (game.get('hunters',0) or game.get('model')!='group'
             or game.get('seer_mode')!='information-fixed-v1'
@@ -144,7 +116,8 @@ class ClosedCalculation:
         object.__setattr__(self,'_ClosedCalculation__strategy',strategy)
         object.__setattr__(self,'_ClosedCalculation__max_work',max_work)
         object.__setattr__(self,'_ClosedCalculation__max_seconds',max_seconds)
-        engine=InformationSetForecast(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work)
+        from .grouped_forecast import GroupedForecast
+        engine=(GroupedForecast if grouped else InformationSetForecast)(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work)
         engine.retain_joint_guard_history=True
         object.__setattr__(self,'_ClosedCalculation__engine',engine)
         with calculation_budget(max_work,max_seconds=max_seconds):
@@ -183,9 +156,11 @@ class ClosedCalculation:
 
     def stats(self):
         e=self.__engine
-        return dict(values=len(e.values),actions=len(e.action_values),expansions=dict(e.expansions),
+        result=dict(values=len(e.values),actions=len(e.action_values),expansions=dict(e.expansions),
             acquired=len(e.acquired),mornings=len(e.mornings),publications=len(e.publication_values),policies=len(e.policies),
             saved_sources=len(e.board_sources),resolution_cache=len(e.board_action_kernels))
+        if hasattr(e,'orbit_stats'):result['target_orbits']=dict(e.orbit_stats)
+        return result
 
     @contextmanager
     def __kernel(self):
@@ -280,10 +255,14 @@ class _Node:
     def forecast(self):
         e=self.__calculation._ClosedCalculation__engine;s=self.__source
         if s.public.winner is None and len(s.public.alive)>4:raise Pending('closed_forecast_four_alive_limit')
-        with self.__calculation._ClosedCalculation__kernel():
+        with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups):
             value=e.solve(*s,physical=s.physical);targets=legal_targets(s.physical,e.rules,e.strategy)
-            actions=tuple((p,e.act(*s[:3],p,s.private,s.observer,physical=s.physical)) for p in targets)
-            dawn=tuple((p,horizon_for_action(e,s.public,s.public_state,s.past,p,s.private,observer=s.observer)) for p in targets)
+            orbits=e.target_orbits(targets)
+            values={g[0]:e.act(*s[:3],g[0],s.private,s.observer,physical=s.physical) for g in orbits}
+            horizons={g[0]:horizon_for_action(e,s.public,s.public_state,s.past,g[0],s.private,observer=s.observer) for g in orbits}
+            representatives={p:g[0] for g in orbits for p in g}
+            actions=tuple((p,values[representatives[p]]) for p in targets)
+            dawn=tuple((p,horizons[representatives[p]]) for p in targets)
         return Forecast(value,actions,dawn)
 
     def export_request(self):
