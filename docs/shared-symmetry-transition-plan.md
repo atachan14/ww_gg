@@ -1620,3 +1620,139 @@ retains every root event and report attribution;
 `exposed-fake-channel-validation.json` embeds the test log, exact sum checks,
 hashes and production-unchanged verification. No broad production regression
 rerun is claimed because production was not edited.
+
+
+## 2026-10-19: report-history sufficient statistics, calculation-key experiment
+
+The earlier nonterminal report DELETION remains rejected. This experiment keeps
+all generated report rows, complete public history, immutable named sources,
+exports, replay and rendering. Only DEVELOPMENT scalar result cache keys use a
+summary. No production method or configuration was changed; all production
+hashes still match the490df94 measured source.
+
+### Actual current consumers: history inventory
+
+| common operation | fields actually needed; what cannot be inferred from a target set |
+| --- | --- |
+| seer_fake_uniform.fake_uniform_options | original roster, actor, set of that actor's previously PUBLIC reported targets; past colors/order/days do not enter this function |
+| morning_publications.fake_backlog_options | actor/acquired-day publication set, rosters and current day, initial_rule; a target set does not say which acquisitions remain unpublished |
+| plausible_fake_options | full public-Q truth support and possible unpublished (acquired day,target,color) acquisition signatures, in addition to the above; publicly exposed fake retains the uniform fallback |
+| seer_future_uniform.true_reports | complete real acquisitions with target/color/day plus published actor/day set; initial and delayed publications cannot be synthesized from role marginals |
+| seer_future_uniform.scan/acquire | each TRUE owner's PRIVATE visited acquisition targets and acquisition roster; public fake target sets cannot replace these |
+| report_publication / initial conditioning / saved observations | acquired/published timing, target,color, legal current batch, initial fake declaration, full observed evidence; not covered by a continuation cache key |
+| information_set_forecast day/night/medium MAX | full public Q and Q-conditioned owner information for scoring; branch P, observer, physical outcome for integration; report colors may already be encoded in Q/P |
+| information_weights push / ratios | complete (roles,acquisitions) joint fibers and private guard/attack records; equal role marginals are insufficient |
+| group_partition._public_groups | outgoing acquired/published day,target,color and medium opportunity/resolved fields, incoming target; partition must not be silently broadened by a smaller key |
+| public / wolf action history and legal targets | named executions/deaths, full wolf roster and own attacks; guardian histories excluded from this candidate |
+| CompiledPublications / named branches | source-owned past and full new report vectors, truth/fake kernel, complete Q fibers; sharing the object would return another source's history |
+
+Thus the seen-target set is sufficient for ONE fake-target selection operation,
+not for the calculation state. Seen-acquired-day set is needed for backlog,
+other reporters' true records and full Q/P must remain, and publication timing
+still belongs to validation/export even if one continuation operation ignores it.
+
+### Narrow proposed key and transition argument
+
+Development eligibility: on full positive-Q support, the live seer-CO false set
+is the SAME singleton {f} in every hypothesis. Every other living seer CO is
+therefore true in every hypothesis. This is stronger than matching truth/role
+marginals and avoids inventing multi-fake correlation. Fixed CO and common
+generated H0 frames, all configured selectors MAX, existing explicit full
+aggregation opt-in, no trace/provenance/retirement/self-bite are retained.
+
+For eligible valid frames define T_f(past) as:
+
+* actor f and ALL of f's original acquired-day1 declaration records;
+* union of f's publicly reported target labels;
+* set of f's published acquired days;
+* ALL other actors' complete report records.
+
+The experimental scalar key is (method,Board,complete Q,T_f,complete P,
+observer,physical,optional named target,refined constructed groups). Rules and
+configured strategy are fixed within the calculation owner. Only f's later
+colors, ordering, target/day pairing and publication-day decoration are absent
+from this key. They remain in every actual source. The physical/action history,
+initial declaration, true secret results and full Q/P fibers are never projected.
+
+At the current fake law, a next report is sampled from unvisited public targets
+(or all legal targets if exhausted) and uniform colors. Given T_f, the same
+pending acquired-day set and roster produce the same chance kernel. Appending
+new reports updates target/day sets by union. True reports are generated from
+retained Q/acquisition records and other actors' retained publication histories.
+A known fake cannot become true by subsequent positive-Q conditioning. This
+suggests a closed continuation summary for these exact rules, while the full
+Board/history and Q/P carry all other legal-action and information dependencies.
+It is not a license to drop colors that changed Q in an earlier observation.
+
+Refined groups are included conservatively because the implementation reads
+complete public meaning metadata; observed cache aliases in this experiment
+are only fake-color pairs with identical groups. Cached values are scalars,
+never a source-owned CompiledPublications or generated named branch object.
+No full-law proof scan/ticket is proposed for production.
+
+### Independent small evidence and actual effect
+
+Common generated SIX-player input: dual claims,1:white3,2:black3, initial
+random-white rule. Force execute3 then bite4; four players survive. Reports are
+still fully generated.32 rows form16 two-row fake-color pairs with equal full
+Q/P and equal summary. Across public, true-seer owner and wolf owner views,
+96 complete independent named Forecast/Table/cold reconstructions match within
+48 two-row buckets; each named full history remains distinct.
+
+Same shared250000work/30s per small request, no seven root/subproblem or sharding:
+
+| complete small request | original work | development summary-key work |
+| --- | --- | --- |
+| five single MAX Forecast |512|512|
+| five dual MAX Forecast |676|676|
+| five three MAX Forecast |3538|3538|
+| five medium-pair MAX Forecast |1153|1153|
+| independent six-origin four-alive morning scalar |463|275|
+
+The six-frame experiment has16 scalar aliases/hits,140 full eligible keys ->124
+summary keys. Work decomposition is report84->84, acquisition3->3,
+evaluation376->188. This is a40.6% LOCAL total reduction in a certain-win known-
+wolf example, not a seven speedup. The report rows and their generation are
+unchanged. Full public/owner named reference equality does not prove all future
+entry or observer conditions globally.
+
+Five-input report-heavy total remains5879work in BOTH modes. Three inputs have
+no eligible scalar key calls; dual has7 eligible calls but7 distinct full keys
+and zero aliases. Those five-player paths reach the terminal report moment
+formula before a second nonterminal color-history family accumulates. The
+4913/5879=83.57% report-attributed work is mainly inside generation/kernel/moment
+operations; shrinking an outer scalar history key does not remove their internal
+plan products. The already implemented moments still enumerate complete
+truth/fake signatures as needed to select the public-Q optimal terminal action.
+The present result provides no large-saving estimate for seven MAX.
+
+### Boundaries, counterexamples and decision
+
+Thirteen development tests (new6 + previous7) pass in0.493s. They check generated
+color-pair equality, full named/cold outputs, exact named history preservation,
+ambiguous fake and diagnostic exclusions, and differing Q/P secret fibers with
+the SAME role marginals remaining distinct. Changing a true report color or the
+fake's initial declaration remains distinct. An isolated common-backlog kernel
+counterexample has the same seen targets but different published acquired-day
+sets, producing a pending report versus none; it is explicitly a generator unit
+input, not a claimed reachable whole-game trajectory.
+
+NOT established: arbitrary observed/saved/edited/reordered/delayed report entry,
+prospective/dead-owner combinations, guardian/GJ, dynamic CO, multiple fake
+correlation, custom/history-sensitive future policies, or generalized initial
+fake law. Their validation and complete history cannot reuse this smaller key.
+Future rules that read old fake colors, report pairings or publication timing
+would invalidate the summary and require a versioned new argument/proof.
+
+Decision: retain this as DEVELOPMENT ONLY. A restricted scalar-key equivalence
+has positive small evidence, but no broad entry contract and no gain in the
+report-heavy five-player requests. It does not justify a production cache alias
+or a promise to resolve seven's limit. The design limit is concrete: full Q/P
+truth/secret correlations and pending-day/seen-target dependencies must remain;
+key compression can share duplicate results after some report histories, while
+it cannot by itself remove the costly complete observation kernel. Original
+nonterminal deletion remains rejected; no publication/limit/default change.
+
+Evidence: `report-history-summary-results.json`,
+`report-history-summary-validation.json`, development fixture and tests. The
+validation embeds logs, exact totals and measured-production hash checks.

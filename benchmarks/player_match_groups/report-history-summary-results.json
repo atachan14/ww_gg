@@ -1,0 +1,199 @@
+{
+  "scope": "DEVELOPMENT only, scalar result keys. All reports and full source/history remain generated. Four independent five-player MAX requests in two modes and an independent six-player report frame. No seven request/sharding, no production connection.",
+  "five": [
+    {
+      "kind": "single",
+      "mode": "baseline",
+      "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 3)), (2, Fraction(2, 3)), (3, Fraction(1, 3)), (4, Fraction(2, 3)), (5, Fraction(2, 3))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 512,
+      "exclusive_work": {
+        "acquisition": 106,
+        "report": 286,
+        "evaluation": 104
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "kind": "single",
+      "mode": "summary-key",
+      "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(1, 3)), (2, Fraction(2, 3)), (3, Fraction(1, 3)), (4, Fraction(2, 3)), (5, Fraction(2, 3))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 512,
+      "exclusive_work": {
+        "acquisition": 106,
+        "report": 286,
+        "evaluation": 104
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "kind": "dual",
+      "mode": "baseline",
+      "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 676,
+      "exclusive_work": {
+        "acquisition": 62,
+        "report": 541,
+        "evaluation": 61
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "kind": "dual",
+      "mode": "summary-key",
+      "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 1)), (2, Fraction(1, 1)), (3, Fraction(1, 2)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 676,
+      "exclusive_work": {
+        "acquisition": 62,
+        "report": 541,
+        "evaluation": 61
+      },
+      "keys": {
+        "eligible_calls": 7,
+        "builds": 7,
+        "summary_keys": 7,
+        "full_keys": 7,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "kind": "three",
+      "mode": "baseline",
+      "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(2, 3)), (2, Fraction(2, 3)), (3, Fraction(2, 3)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 3538,
+      "exclusive_work": {
+        "acquisition": 284,
+        "report": 3130,
+        "evaluation": 106
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "kind": "three",
+      "mode": "summary-key",
+      "forecast": "Forecast(village_win=Fraction(2, 3), action_values=((1, Fraction(2, 3)), (2, Fraction(2, 3)), (3, Fraction(2, 3)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 3), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 3538,
+      "exclusive_work": {
+        "acquisition": 284,
+        "report": 3130,
+        "evaluation": 106
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "kind": "medium-pair",
+      "mode": "baseline",
+      "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 2)), (2, Fraction(1, 1)), (3, Fraction(1, 1)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 1153,
+      "exclusive_work": {
+        "acquisition": 87,
+        "report": 956,
+        "evaluation": 97
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "kind": "medium-pair",
+      "mode": "summary-key",
+      "forecast": "Forecast(village_win=Fraction(1, 1), action_values=((1, Fraction(1, 2)), (2, Fraction(1, 1)), (3, Fraction(1, 1)), (4, Fraction(1, 2)), (5, Fraction(1, 2))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (2, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(1, 2), wolf_win=Fraction(0, 1))), (4, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (5, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+      "work": 1153,
+      "exclusive_work": {
+        "acquisition": 87,
+        "report": 956,
+        "evaluation": 97
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    }
+  ],
+  "six": [
+    {
+      "mode": "baseline",
+      "value": "1",
+      "work": 463,
+      "exclusive_work": {
+        "report": 84,
+        "acquisition": 3,
+        "evaluation": 376
+      },
+      "keys": {
+        "summary_keys": 0,
+        "full_keys": 0,
+        "distinct_full_aliases": 0
+      },
+      "complete": true
+    },
+    {
+      "mode": "summary-key",
+      "value": "1",
+      "work": 275,
+      "exclusive_work": {
+        "report": 84,
+        "acquisition": 3,
+        "evaluation": 188
+      },
+      "keys": {
+        "eligible_calls": 140,
+        "builds": 124,
+        "hits": 16,
+        "summary_keys": 124,
+        "full_keys": 140,
+        "distinct_full_aliases": 16
+      },
+      "complete": true
+    }
+  ],
+  "six_independent_audit": {
+    "report_rows": 32,
+    "views": 3,
+    "summary_buckets": 48,
+    "bucket_sizes": {
+      "2": 48
+    },
+    "independent_Forecast_Table_cold_checks": 96,
+    "complete": true,
+    "value": "1",
+    "note": "Complete six-origin four-alive report children; full Q/P, observer, physical and group keys retained. Known wolf makes this a certain-win example."
+  },
+  "source_sha256": {
+    "benchmarks/player_match_groups/report_history_summary.py": "78244cfcf5e7de28b20ed24062a3e0244ecb47cf6fd6bd8ae361b24e301b050c",
+    "werewolf/seer_fake_uniform.py": "382f959a2e2f82a50436ddabdffd2a7d756f93ae6be52f956df543215c704ae0",
+    "werewolf/morning_publications.py": "cd3073a80f76e0e70a7730cf7ab30d667d83fba211e7ac42c6b9be856b23764e",
+    "werewolf/grouped_forecast.py": "e9eae79c92d5f794e5d4334e377142da2befac7742bc4a80fcde8586c388baff",
+    "werewolf/information_set_forecast.py": "7a2d91308873fe67f8e98b7c898fcf8b618343e96e3532fdd40db76fc5ae622d"
+  }
+}
