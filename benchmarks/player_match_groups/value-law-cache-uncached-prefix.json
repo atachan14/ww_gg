@@ -1,0 +1,130 @@
+{
+  "completed_at": "2026-10-19T05:24:23.950448+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 11.41918019996956,
+  "samples": 506,
+  "peak_private_committed_bytes": 94789632,
+  "observed_peak_working_set_bytes": 105644032,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "wwgg_budget_stop kind=work work=100001 max_work=100000 elapsed_seconds=9.062\r\n",
+  "worker": {
+    "mode": "uncached",
+    "forecast_completed": false,
+    "value": null,
+    "comparison_work_limit": 100000,
+    "comparison_seconds": 20,
+    "status": "budget_stopped",
+    "reason": "work",
+    "calculation_seconds": 9.057820199988782,
+    "budget_stop": {
+      "kind": "work",
+      "work": 100001,
+      "max_work": 100000,
+      "elapsed_seconds": 9.062
+    },
+    "states": {
+      "values": 4572,
+      "actions": 13681,
+      "expansions": {
+        "actions": 13684,
+        "values": 4575
+      },
+      "acquired": 91,
+      "mornings": 469,
+      "publications": 469,
+      "policies": 169,
+      "saved_sources": 0,
+      "resolution_cache": 13685,
+      "target_orbits": {
+        "target_members": 13816,
+        "target_representatives": 13685,
+        "solver_wolf_cells": 169,
+        "solver_wolf_hypotheses": 254
+      },
+      "report_vectors": {
+        "kernels": 0,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 4567,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    },
+    "derived_cache_inputs": 0,
+    "completed_entry_digests": {
+      "values": "400ddc962e499f822211fc4a2ffa5f55c932042658db4f6e6c51765b8f3f8c39",
+      "action_values": "f4f190611451a59aa35060c6a2f7b1644e7158d2e84309d10a388a0c66671749"
+    },
+    "digest_seconds": 1.0740260999882594,
+    "peak_working_set_bytes": 105644032
+  },
+  "progress": [
+    {
+      "progress_stage": "bounded_full_forecast_uncached"
+    },
+    {
+      "progress_stage": "stream_completed_entry_digest",
+      "completed_numeric_prefix": {
+        "mode": "uncached",
+        "forecast_completed": false,
+        "value": null,
+        "comparison_work_limit": 100000,
+        "comparison_seconds": 20,
+        "status": "budget_stopped",
+        "reason": "work",
+        "calculation_seconds": 9.057820199988782,
+        "budget_stop": {
+          "kind": "work",
+          "work": 100001,
+          "max_work": 100000,
+          "elapsed_seconds": 9.062
+        },
+        "states": {
+          "values": 4572,
+          "actions": 13681,
+          "expansions": {
+            "actions": 13684,
+            "values": 4575
+          },
+          "acquired": 91,
+          "mornings": 469,
+          "publications": 469,
+          "policies": 169,
+          "saved_sources": 0,
+          "resolution_cache": 13685,
+          "target_orbits": {
+            "target_members": 13816,
+            "target_representatives": 13685,
+            "solver_wolf_cells": 169,
+            "solver_wolf_hypotheses": 254
+          },
+          "report_vectors": {
+            "kernels": 0,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 4567,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "derived_cache_inputs": 0
+      }
+    }
+  ],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "45bcb40603751ec5edb4ee2597c5e39ac656f4d534d116e753160865f42a273e",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "werewolf\\closed_calculation.py": "a5c24757f64ef06c49d92760d2b501a9b458971afd12a647a3ce04f930412106",
+    "benchmarks\\player_match_groups\\bounded_value_law_fixture.py": "c7c2b8b7c01067fcd1513d0aaf2b5dd288c3d89e820d68eb2116eec5c9fb576a"
+  }
+}

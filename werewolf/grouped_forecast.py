@@ -19,7 +19,7 @@ class GroupedForecast(InformationSetForecast):
         super().__init__(*args,**kwargs)
         if (self.strategy.day,self.strategy.night,self.strategy.fake_reports)!=('random',)*3:raise ValueError('Uniform representative mode only')
         self.aggregate_wolf=aggregate_wolf;self.aggregate_reports=aggregate_reports
-        self.report_kernels={}
+        self.report_kernels={};self.value_laws={}
         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
         self.action_policy=GroupedPolicy(self)
 
@@ -28,6 +28,12 @@ class GroupedForecast(InformationSetForecast):
     def renamed_value_key(self,*args,**kwargs):return None
     def full_renamed_key(self,*args,**kwargs):return None
     def scalar_descriptor(self,*args,**kwargs):return None
+
+    def value_law(self,state):
+        # Exact derived value of the same owned immutable input; no state orbit.
+        key=(self.rules.allow_repeat_guard,self.strategy.night,state)
+        if key not in self.value_laws:self.value_laws[key]=super().value_law(state)
+        return self.value_laws[key]
 
     def report_partition(self,b,past):
         if not self.aggregate_reports or not self.groups:return ()

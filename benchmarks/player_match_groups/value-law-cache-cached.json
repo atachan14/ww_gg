@@ -1,0 +1,33 @@
+{
+  "completed_at": "2026-10-19T05:21:27.088101+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 35.06611159996828,
+  "samples": 1081,
+  "peak_private_committed_bytes": 191729664,
+  "observed_peak_working_set_bytes": 202670080,
+  "termination": "watchdog_time_limit",
+  "returncode": 1,
+  "stderr": "wwgg_budget_stop kind=work work=250004 max_work=250000 elapsed_seconds=29.031\r\n",
+  "partial_stdout": "{\"progress_stage\": \"bounded_full_forecast_cached\"}\r\n{\"progress_stage\": \"stream_completed_entry_digest\"}\r\n",
+  "progress": [
+    {
+      "progress_stage": "bounded_full_forecast_cached"
+    },
+    {
+      "progress_stage": "stream_completed_entry_digest"
+    }
+  ],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "45bcb40603751ec5edb4ee2597c5e39ac656f4d534d116e753160865f42a273e",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "werewolf\\closed_calculation.py": "a5c24757f64ef06c49d92760d2b501a9b458971afd12a647a3ce04f930412106",
+    "benchmarks\\player_match_groups\\bounded_value_law_fixture.py": "0f3dc2aab8a9cba05a3ec954561c47bd99f0c21296c7fcb8a4828ec8edd6c880"
+  }
+}

@@ -1,0 +1,569 @@
+{
+  "status": "verified",
+  "cases": [
+    {
+      "completed_at": "2026-10-19T05:28:29.264650+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 6.510056799976155,
+      "samples": 307,
+      "peak_private_committed_bytes": 65699840,
+      "observed_peak_working_set_bytes": 76304384,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "players": 6,
+        "kind": "dual",
+        "selected_view": "public",
+        "part": "forecast",
+        "status": "verified",
+        "entry": {
+          "alive": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "phase": "day",
+          "day": 1,
+          "wolf_counts": [
+            1
+          ],
+          "initial_wolf_masks": [
+            1,
+            2
+          ]
+        },
+        "views": [],
+        "forecasts": [
+          {
+            "view": "public",
+            "village_win": "3/8",
+            "actions": [
+              [
+                1,
+                "5/8"
+              ],
+              [
+                2,
+                "5/8"
+              ],
+              [
+                3,
+                "1/4"
+              ],
+              [
+                4,
+                "1/4"
+              ],
+              [
+                5,
+                "1/4"
+              ],
+              [
+                6,
+                "1/4"
+              ]
+            ],
+            "forecast_counts": {
+              "expanded": {
+                "values": 1335,
+                "actions": 3906,
+                "expansions": {
+                  "actions": 3466,
+                  "values": 1335
+                },
+                "acquired": 630,
+                "mornings": 24,
+                "publications": 24,
+                "policies": 914,
+                "saved_sources": 0,
+                "resolution_cache": 3470
+              },
+              "grouped": {
+                "values": 288,
+                "actions": 670,
+                "expansions": {
+                  "actions": 670,
+                  "values": 288
+                },
+                "acquired": 143,
+                "mornings": 7,
+                "publications": 7,
+                "policies": 209,
+                "saved_sources": 0,
+                "resolution_cache": 683,
+                "target_orbits": {
+                  "target_members": 752,
+                  "target_representatives": 673,
+                  "solver_wolf_cells": 207,
+                  "solver_wolf_hypotheses": 311
+                },
+                "report_vectors": {
+                  "kernels": 0,
+                  "public_event_laws": 0,
+                  "fallback_public_vectors": 80,
+                  "compiled_candidates": 0,
+                  "newly_built_vectors": 0,
+                  "emitted_vectors": 0,
+                  "named_vectors_covered": 0
+                }
+              }
+            },
+            "expanded_cold_Forecast_Table_equal": true
+          }
+        ],
+        "expanded": {
+          "values": 1335,
+          "actions": 3906,
+          "expansions": {
+            "actions": 3466,
+            "values": 1335
+          },
+          "acquired": 630,
+          "mornings": 24,
+          "publications": 24,
+          "policies": 914,
+          "saved_sources": 0,
+          "resolution_cache": 3470
+        },
+        "grouped": {
+          "values": 288,
+          "actions": 670,
+          "expansions": {
+            "actions": 670,
+            "values": 288
+          },
+          "acquired": 143,
+          "mornings": 7,
+          "publications": 7,
+          "policies": 209,
+          "saved_sources": 0,
+          "resolution_cache": 683,
+          "target_orbits": {
+            "target_members": 752,
+            "target_representatives": 673,
+            "solver_wolf_cells": 207,
+            "solver_wolf_hypotheses": 311
+          },
+          "report_vectors": {
+            "kernels": 0,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 80,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "budget": {
+          "work": 49544,
+          "max_work": 250000,
+          "elapsed_seconds": 5.5
+        },
+        "budget_stop": null,
+        "seconds": 5.508067999966443,
+        "peak_working_set_bytes": 76304384
+      },
+      "progress": [
+        {
+          "progress_stage": "setup"
+        },
+        {
+          "progress_stage": "Forecast_Table_public"
+        }
+      ],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "a5c24757f64ef06c49d92760d2b501a9b458971afd12a647a3ce04f930412106",
+        "werewolf\\grouped_forecast.py": "45bcb40603751ec5edb4ee2597c5e39ac656f4d534d116e753160865f42a273e",
+        "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+        "benchmarks\\player_match_groups\\closed_full_tree_fixture.py": "4810b6fd99ae4d9fc02393a8702b6c72980dd411a97e4d62d0d8a292233e6952"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T05:28:33.832973+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 4.5618424999993294,
+      "samples": 221,
+      "peak_private_committed_bytes": 55046144,
+      "observed_peak_working_set_bytes": 65634304,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "players": 6,
+        "kind": "dual",
+        "selected_view": "seer",
+        "part": "forecast",
+        "status": "verified",
+        "entry": {
+          "alive": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "phase": "day",
+          "day": 1,
+          "wolf_counts": [
+            1
+          ],
+          "initial_wolf_masks": [
+            1,
+            2
+          ]
+        },
+        "views": [],
+        "forecasts": [
+          {
+            "view": "seer",
+            "village_win": "3/8",
+            "actions": [
+              [
+                1,
+                "1/4"
+              ],
+              [
+                2,
+                "1"
+              ],
+              [
+                3,
+                "1/4"
+              ],
+              [
+                4,
+                "1/4"
+              ],
+              [
+                5,
+                "1/4"
+              ],
+              [
+                6,
+                "1/4"
+              ]
+            ],
+            "forecast_counts": {
+              "expanded": {
+                "values": 1030,
+                "actions": 2586,
+                "expansions": {
+                  "actions": 2586,
+                  "values": 1030
+                },
+                "acquired": 561,
+                "mornings": 20,
+                "publications": 20,
+                "policies": 773,
+                "saved_sources": 0,
+                "resolution_cache": 2586
+              },
+              "grouped": {
+                "values": 288,
+                "actions": 671,
+                "expansions": {
+                  "actions": 671,
+                  "values": 288
+                },
+                "acquired": 141,
+                "mornings": 7,
+                "publications": 7,
+                "policies": 207,
+                "saved_sources": 0,
+                "resolution_cache": 676,
+                "target_orbits": {
+                  "target_members": 752,
+                  "target_representatives": 675,
+                  "solver_wolf_cells": 207,
+                  "solver_wolf_hypotheses": 309
+                },
+                "report_vectors": {
+                  "kernels": 0,
+                  "public_event_laws": 0,
+                  "fallback_public_vectors": 80,
+                  "compiled_candidates": 0,
+                  "newly_built_vectors": 0,
+                  "emitted_vectors": 0,
+                  "named_vectors_covered": 0
+                }
+              }
+            },
+            "expanded_cold_Forecast_Table_equal": true
+          }
+        ],
+        "expanded": {
+          "values": 1030,
+          "actions": 2586,
+          "expansions": {
+            "actions": 2586,
+            "values": 1030
+          },
+          "acquired": 561,
+          "mornings": 20,
+          "publications": 20,
+          "policies": 773,
+          "saved_sources": 0,
+          "resolution_cache": 2586
+        },
+        "grouped": {
+          "values": 288,
+          "actions": 671,
+          "expansions": {
+            "actions": 671,
+            "values": 288
+          },
+          "acquired": 141,
+          "mornings": 7,
+          "publications": 7,
+          "policies": 207,
+          "saved_sources": 0,
+          "resolution_cache": 676,
+          "target_orbits": {
+            "target_members": 752,
+            "target_representatives": 675,
+            "solver_wolf_cells": 207,
+            "solver_wolf_hypotheses": 309
+          },
+          "report_vectors": {
+            "kernels": 0,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 80,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "budget": {
+          "work": 42946,
+          "max_work": 250000,
+          "elapsed_seconds": 3.687
+        },
+        "budget_stop": null,
+        "seconds": 3.6963057999964803,
+        "peak_working_set_bytes": 65630208
+      },
+      "progress": [
+        {
+          "progress_stage": "setup"
+        },
+        {
+          "progress_stage": "Forecast_Table_seer"
+        }
+      ],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "a5c24757f64ef06c49d92760d2b501a9b458971afd12a647a3ce04f930412106",
+        "werewolf\\grouped_forecast.py": "45bcb40603751ec5edb4ee2597c5e39ac656f4d534d116e753160865f42a273e",
+        "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+        "benchmarks\\player_match_groups\\closed_full_tree_fixture.py": "4810b6fd99ae4d9fc02393a8702b6c72980dd411a97e4d62d0d8a292233e6952"
+      }
+    },
+    {
+      "completed_at": "2026-10-19T05:28:38.045341+00:00",
+      "limits": {
+        "max_work": 250000,
+        "max_seconds": 30,
+        "watchdog_seconds": 35,
+        "sampled_stop_bytes": 402653184,
+        "poll_seconds": 0.02
+      },
+      "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+      "supervisor_seconds": 4.209744099993259,
+      "samples": 193,
+      "peak_private_committed_bytes": 47665152,
+      "observed_peak_working_set_bytes": 58236928,
+      "termination": null,
+      "returncode": 0,
+      "stderr": "",
+      "worker": {
+        "players": 6,
+        "kind": "dual",
+        "selected_view": "wolf",
+        "part": "forecast",
+        "status": "verified",
+        "entry": {
+          "alive": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "phase": "day",
+          "day": 1,
+          "wolf_counts": [
+            1
+          ],
+          "initial_wolf_masks": [
+            1,
+            2
+          ]
+        },
+        "views": [],
+        "forecasts": [
+          {
+            "view": "wolf",
+            "village_win": "3/8",
+            "actions": [
+              [
+                1,
+                "1/4"
+              ],
+              [
+                2,
+                "1"
+              ],
+              [
+                3,
+                "1/4"
+              ],
+              [
+                4,
+                "1/4"
+              ],
+              [
+                5,
+                "1/4"
+              ],
+              [
+                6,
+                "1/4"
+              ]
+            ],
+            "forecast_counts": {
+              "expanded": {
+                "values": 670,
+                "actions": 1956,
+                "expansions": {
+                  "actions": 1736,
+                  "values": 670
+                },
+                "acquired": 508,
+                "mornings": 18,
+                "publications": 18,
+                "policies": 457,
+                "saved_sources": 0,
+                "resolution_cache": 1738
+              },
+              "grouped": {
+                "values": 288,
+                "actions": 671,
+                "expansions": {
+                  "actions": 671,
+                  "values": 288
+                },
+                "acquired": 141,
+                "mornings": 7,
+                "publications": 7,
+                "policies": 207,
+                "saved_sources": 0,
+                "resolution_cache": 676,
+                "target_orbits": {
+                  "target_members": 752,
+                  "target_representatives": 675,
+                  "solver_wolf_cells": 207,
+                  "solver_wolf_hypotheses": 309
+                },
+                "report_vectors": {
+                  "kernels": 0,
+                  "public_event_laws": 0,
+                  "fallback_public_vectors": 80,
+                  "compiled_candidates": 0,
+                  "newly_built_vectors": 0,
+                  "emitted_vectors": 0,
+                  "named_vectors_covered": 0
+                }
+              }
+            },
+            "expanded_cold_Forecast_Table_equal": true
+          }
+        ],
+        "expanded": {
+          "values": 670,
+          "actions": 1956,
+          "expansions": {
+            "actions": 1736,
+            "values": 670
+          },
+          "acquired": 508,
+          "mornings": 18,
+          "publications": 18,
+          "policies": 457,
+          "saved_sources": 0,
+          "resolution_cache": 1738
+        },
+        "grouped": {
+          "values": 288,
+          "actions": 671,
+          "expansions": {
+            "actions": 671,
+            "values": 288
+          },
+          "acquired": 141,
+          "mornings": 7,
+          "publications": 7,
+          "policies": 207,
+          "saved_sources": 0,
+          "resolution_cache": 676,
+          "target_orbits": {
+            "target_members": 752,
+            "target_representatives": 675,
+            "solver_wolf_cells": 207,
+            "solver_wolf_hypotheses": 309
+          },
+          "report_vectors": {
+            "kernels": 0,
+            "public_event_laws": 0,
+            "fallback_public_vectors": 80,
+            "compiled_candidates": 0,
+            "newly_built_vectors": 0,
+            "emitted_vectors": 0,
+            "named_vectors_covered": 0
+          }
+        },
+        "budget": {
+          "work": 34678,
+          "max_work": 250000,
+          "elapsed_seconds": 3.219
+        },
+        "budget_stop": null,
+        "seconds": 3.212387999985367,
+        "peak_working_set_bytes": 58232832
+      },
+      "progress": [
+        {
+          "progress_stage": "setup"
+        },
+        {
+          "progress_stage": "Forecast_Table_wolf"
+        }
+      ],
+      "source_sha256": {
+        "werewolf\\closed_calculation.py": "a5c24757f64ef06c49d92760d2b501a9b458971afd12a647a3ce04f930412106",
+        "werewolf\\grouped_forecast.py": "45bcb40603751ec5edb4ee2597c5e39ac656f4d534d116e753160865f42a273e",
+        "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+        "benchmarks\\player_match_groups\\closed_full_tree_fixture.py": "4810b6fd99ae4d9fc02393a8702b6c72980dd411a97e4d62d0d8a292233e6952"
+      }
+    }
+  ]
+}
