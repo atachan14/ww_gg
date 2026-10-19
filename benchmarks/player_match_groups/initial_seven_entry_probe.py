@@ -77,7 +77,7 @@ def watch(module,args=()):
         if p.poll() is None:p.kill();p.wait(timeout=5)
         if handle:kernel.CloseHandle(handle)
         output_file.close();error_file.close()
-    result=dict(completed_at=datetime.now(timezone.utc).isoformat(),limits=LIMITS,limits_note='20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. No scope guard is removed.',supervisor_seconds=time.perf_counter()-start,samples=samples,peak_private_committed_bytes=peak_private,observed_peak_working_set_bytes=peak_ws,termination=stop,returncode=p.returncode,stderr=err)
+    result=dict(completed_at=datetime.now(timezone.utc).isoformat(),limits=LIMITS,limits_note='20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.',supervisor_seconds=time.perf_counter()-start,samples=samples,peak_private_committed_bytes=peak_private,observed_peak_working_set_bytes=peak_ws,termination=stop,returncode=p.returncode,stderr=err)
     if stop is None and p.returncode==0:
         result['worker']=json.loads(out.splitlines()[-1])
     else:result['partial_stdout']=out

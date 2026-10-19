@@ -72,7 +72,7 @@ def _entry_origin(data,game,strategy):
 
 def _forecast_scope(source,engine):
     if source.public.winner is not None or len(source.public.alive)<=4:return
-    if len(source.public.alive)>5:raise Pending('closed_forecast_five_alive_limit')
+    if len(source.public.alive)>6:raise Pending('closed_forecast_six_alive_limit')
     if engine.strategy.include_self_bite:raise Pending('closed_forecast_self_bite_pending')
     reporters=sum(1<<(p-1) for p in source.public.alive if source.public.claims[p-1]=='seer')
     # Claims/roles cannot grow in this closed H0 flow; conditioning and deaths

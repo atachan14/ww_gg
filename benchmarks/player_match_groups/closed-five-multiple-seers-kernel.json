@@ -1,0 +1,29 @@
+{
+  "status": "verified",
+  "prefix": [
+    4,
+    5
+  ],
+  "public_hypotheses": 27,
+  "owner_private_hypotheses": 3,
+  "public": {
+    "expanded": 109,
+    "representatives": 100,
+    "named_coverage": 109
+  },
+  "owner": {
+    "expanded": 109,
+    "representatives": 109,
+    "named_coverage": 109
+  },
+  "branch_mass_checks": [
+    {
+      "named_positive_P": 109,
+      "compact_positive_P": 100
+    },
+    {
+      "named_positive_P": 15,
+      "compact_positive_P": 15
+    }
+  ]
+}

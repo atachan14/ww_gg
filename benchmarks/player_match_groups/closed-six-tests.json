@@ -1,0 +1,83 @@
+{
+  "status": "all_current_cases_verified_across_focused_runs",
+  "current_full_tree_methods": 12,
+  "passed_current_full_tree_methods": [
+    "test_budget_separate_scope_limit_and_no_ledger",
+    "test_extended_entry_keeps_no_self_bite_scope",
+    "test_five_correlated_true_fake_complete_owner_trees",
+    "test_five_multiple_true_seers_compiler_in_full_continuation",
+    "test_five_night_and_joint_medium_public_trees",
+    "test_five_night_mixed_live_counts_actual_weights_not_forced_target_weights",
+    "test_five_small_public_and_complete_owner_trees",
+    "test_missing_initial_declaration_is_not_synthesized_as_future_policy",
+    "test_six_all_day_branches_public_and_complete_owners",
+    "test_six_joint_medium_all_branches_and_owned_medium",
+    "test_six_night_multiple_nights_complete_public_and_seer",
+    "test_undefined_multiple_fake_joint_kernel_is_rejected_before_recursion"
+  ],
+  "related_regression_tests": 114,
+  "related_seconds": 93.346,
+  "runs": [
+    {
+      "log": "ww-five-six-full-tree-tests.log",
+      "tests": 9,
+      "seconds": 266.85,
+      "status": "superseded_failure",
+      "sha256": "31ea2334c55c0a38e19effdb49df8078b906e1a1b97aff99b7a16c5127ea968b",
+      "note": "dense terminal-origin audit exceeded work; superseded by complete cold Forecast and exact joint publication audit"
+    },
+    {
+      "log": "ww-five-six-final-related-tests.log",
+      "tests": 114,
+      "seconds": 93.346,
+      "status": "passed",
+      "sha256": "33e6cd31171210045b77b288ea0101290bf2869ec8b0f56110652dfb8a554f6c",
+      "note": null
+    },
+    {
+      "log": "ww-five-six-night-tests.log",
+      "tests": 2,
+      "seconds": 31.857,
+      "status": "superseded_failure",
+      "sha256": "50a98176d1888ce899e646317d11fd3b6322edce4568e1a1bbe858d063ff54ff",
+      "note": "mixed-count test compared role-row ordering; corrected to sorted rows"
+    },
+    {
+      "log": "ww-five-mixed-night-tests-final.log",
+      "tests": 1,
+      "seconds": 22.435,
+      "status": "passed",
+      "sha256": "afa228f7b2a1555c93a469dc5bdf18c183a7269d934de482900d00eb4513c474",
+      "note": null
+    },
+    {
+      "log": "ww-five-dense-kernel-tests-final.log",
+      "tests": 1,
+      "seconds": 5.585,
+      "status": "passed",
+      "sha256": "04a383b289eff1f5dc31faa5488ced5a6d5897cce0cb0c915beb0c662d3b0ac4",
+      "note": null
+    },
+    {
+      "log": "ww-five-six-scope-tests-final.log",
+      "tests": 2,
+      "seconds": 0.066,
+      "status": "passed",
+      "sha256": "4da601fadd8ae0e2dcd2567182d87f63c929e1ec1bff16fdf636a4d4174adea1",
+      "note": null
+    },
+    {
+      "log": "ww-five-six-boundaries-final.log",
+      "tests": 4,
+      "seconds": 0.074,
+      "status": "passed",
+      "sha256": "917524c4ffa761102b377ae190aea2c0b87fffbc4852fcc06c88b5fd099ba087",
+      "note": "Final boundary checks explicitly retain250000 work/30s."
+    }
+  ],
+  "source_sha256": {
+    "werewolf\\closed_calculation.py": "a5c24757f64ef06c49d92760d2b501a9b458971afd12a647a3ce04f930412106",
+    "benchmarks\\player_match_groups\\closed_full_tree_fixture.py": "4810b6fd99ae4d9fc02393a8702b6c72980dd411a97e4d62d0d8a292233e6952",
+    "tests\\test_closed_full_tree.py": "216d23248e5687d0a18d5a9cc2008d0e76f8f60919eb1ae3619fe31c2d52993c"
+  }
+}
