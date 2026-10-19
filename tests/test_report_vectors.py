@@ -15,8 +15,14 @@ class ReportVectorTests(unittest.TestCase):
 
     def test_expanded_cold_public_own_seer_forecast_tables(self):
         result=audit();counts=result['cases'][1]['counts']
-        self.assertEqual((counts[1]['values'],counts[2]['values']),(289,246))
-        self.assertEqual(counts[2]['report_vectors']['public_event_laws'],201)
+        self.assertTrue(all(row['expanded_cold_Forecast_Table_equal'] for row in result['cases']))
+        # Unobserved terminal reports now use the scalar integral. The named
+        # vector/cold tests below still require complete observable histories;
+        # old expansion totals are not a semantic contract.
+        self.assertLessEqual(counts[2]['values'],counts[1]['values'])
+        self.assertGreater(counts[2]['report_vectors']['kernels'],0)
+        self.assertEqual(counts[2]['report_vectors']['public_event_laws'],0)
+        self.assertEqual(counts[2]['report_vectors']['newly_built_vectors'],0)
 
     def test_complete_vector_orbits_joint_laws_and_literal_targets(self):
         graph,c,node=self.raw();result=kernel_audit(node)

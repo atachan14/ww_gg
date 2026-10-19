@@ -1,10 +1,71 @@
 # Shared symmetry transition implementation plan
 
+## Current status — integration review, 2026-10-19
+
+This block supersedes historical plans below. Current production uses immutable
+ClosedCalculation inputs and common generators, not issued receipt ledgers.
+Local additional optimization is paused afterf807616; the history-key and
+exposed-fake experiments remain development-only.
+
+| area | current status |
+| --- | --- |
+| explicit Closed grouped opt-in | fixed CO/H0/full disclosure, uniform continuation; configured all-MAX supports terminal joint report moments, paired inactive-owner scalar projection and bounded Q-moment cache |
+| explicit grouped+aggregate_reports+aggregate_wolf MAX | constructed target/wolf information sharing with common per-entry history/report/owner refinement |
+| public defaults/factories | unchanged; Closed aggregation flags default false, Flask exact-future preview default false; no promotion to ordinary routes |
+| seven public MAX | incomplete at existing250000work cap; no additional root enumeration in this review |
+| MAX saved observed-action replay in Closed | Pending; live named intervention/cold recipes are separate |
+| guardian/GJ in new Closed path | outside H0, unsupported; existing ordinary guardian/MAX/saved/GJ paths remain separate and are regression-tested |
+| fake-channel deletion / sufficient-history keys | not connected; experiments retain full named source/history, with limited evidence only |
+
+A smaller history key does not delete report observations: the six-origin
+four-alive example still generates32 rows despite16 public scalar keys, and
+report work remains84. On four report-heavy five-player MAX inputs scalar-key
+sharing saves0 of5879work. Future fake target law still needs seen targets AND
+published acquired days; actual true reports require complete Q/P secret fibers.
+
+One possible next investigation, not an implementation commitment: use the
+compiler's existing sparse joint truth/fake index to enumerate only supported
+complete report plans, instead of testing the full Cartesian product of each
+reporter's marginal plan options in terminal_execution_moments. Merge ALL
+contributions to the SAME complete public event before public-Q argmax/ties,
+then use the existing moment/P transfer. This retains every meaningful report,
+including colors/days/owner correlations, and targets internal report work where
+outer history-key sharing had no effect. The three-seer example has27 joint
+hypotheses and109 supported full vectors; current code also visits marginal
+combinations with no supported joint entries. Savings depend on that sparsity
+and are unmeasured. Independent small full-vector/Q-policy/P/cold equality and
+resource-limit behavior would be required before considering any opt-in change.
+
+Final verification:173 integrated tests ran in330.246s;172 passed and one
+old report-vector test failed only on obsolete expansion totals289/246 and201
+posterior event laws. Independent Forecast/Table/cold comparisons had passed.
+The test now keeps those semantic comparisons and asserts that the unobserved
+scalar path compiles kernels without constructing event/posterior vectors;
+named report/history tests remain. Related30 tests then passed in7.847s,
+including2 new default-factory/Web boundaries (also independently2/2 in0.078s).
+Unique covered IDs total175; the173-test suite was NOT rerun as one fresh job,
+and counts overlap. No whole-repository-suite pass is claimed. Raw initial
+failure and rerun logs are embedded in final-opt-in-integration-validation.json.
+
+Default app/factory/budget Git blobs matchd27be629, before Closed API creation.
+Dynamic default routes run with the Grouped constructor forbidden, and Closed
+MAX admission still requires explicit flags. Production werewolf sources remain
+unchanged since490df94.94 generated regression artifacts are preserved under
+.artifacts/final-opt-in-integration-f807616 with hash manifest; old committed
+checkpoint artifacts were restored rather than overwritten. HELP/current status
+and historical plan labels are reconciled. No additional material issue was
+found in the reviewed production diff and covered inputs; unsupported inputs
+and seven completion remain open, not approved by this review.
+
+The dated sections below are chronological evidence, not simultaneous claims
+of current support. The early baseline/receipt plan is HISTORICAL and
+superseded; later sections document the closed generator-based transition.
+
 Current entry: the closed snapshot-owned API below. The earlier ledger sections record historical experiments; the ledger is no longer the selected inherited-groups entry.
 
-Baseline: 4b290ad. New paths stay default OFF; no normal UI, HELP, MAX or public-edition changes, and no long initial-seven run.
+Historical baseline: 4b290ad. The following receipt-era constraints and plans record that checkpoint only; consult the current-status block above and dated later evidence for current opt-in support.
 
-## Required implementation unit
+## Historical required implementation unit (superseded)
 
 1. Bind an audited parent group receipt to the exact before/after frame already recorded by AcquisitionLedger. A kernel-lineage receipt alone never establishes parent symmetry. Missing ownership, changed configuration or unknown cache identity must retain ordinary evaluation.
 2. Preserve the complete group through a full unobserved uniform acquisition mixture. Keep Q/P generation separate. Observed results/interventions are different typed filters and must fix their actor/target endpoints; unsupported filters decline.
