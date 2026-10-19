@@ -1,0 +1,115 @@
+{
+  "completed_at": "2026-10-19T07:28:49.087757+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 1.5214227000251412,
+  "samples": 74,
+  "peak_private_committed_bytes": 30908416,
+  "observed_peak_working_set_bytes": 41668608,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "mode": "integrated",
+    "query": "six",
+    "view": "wolf",
+    "target": 4,
+    "completed": true,
+    "conditioning_mass": "1/6",
+    "source_sha256": "f032f9dfdf80a99a6ed51106d6064cd7ad9cb8be7677645f8582c9e50b512ae9",
+    "value": "2/15",
+    "forecast": "Forecast(village_win=Fraction(2, 15), action_values=((1, Fraction(2, 15)), (3, Fraction(2, 15)), (6, Fraction(2, 15)), (7, Fraction(2, 15))), by_dawn_values=((1, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (3, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (6, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))), (7, HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1)))), pending_metrics=())",
+    "actions": [
+      [
+        1,
+        "2/15"
+      ],
+      [
+        3,
+        "2/15"
+      ],
+      [
+        6,
+        "2/15"
+      ],
+      [
+        7,
+        "2/15"
+      ]
+    ],
+    "dawn": [
+      [
+        1,
+        "0",
+        "0"
+      ],
+      [
+        3,
+        "0",
+        "0"
+      ],
+      [
+        6,
+        "0",
+        "0"
+      ],
+      [
+        7,
+        "0",
+        "0"
+      ]
+    ],
+    "table_sha256": "047496d14d30b47589da8f79e09f4e70108a0f36ab3ab4e86961b08f349b06d2",
+    "status": "completed",
+    "budget": {
+      "work": 27903,
+      "max_work": 250000,
+      "elapsed_seconds": 0.969
+    },
+    "seconds": 0.9636566000408493,
+    "budget_stop": null,
+    "states": {
+      "values": 256,
+      "actions": 884,
+      "expansions": {
+        "actions": 884,
+        "values": 256
+      },
+      "acquired": 92,
+      "mornings": 3,
+      "publications": 3,
+      "policies": 171,
+      "saved_sources": 0,
+      "resolution_cache": 885,
+      "target_orbits": {
+        "target_members": 943,
+        "target_representatives": 887,
+        "solver_wolf_cells": 171,
+        "solver_wolf_hypotheses": 251
+      },
+      "report_vectors": {
+        "kernels": 474,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 123,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    }
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "fb0f5cc0f97cc38c7f7fecf31df1aca42f61ddac410b853887c2d1371ee36a4e",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "werewolf\\information_weights.py": "2d864654bc20142a90b7261e4bbd67e02898ed35fffdda870549405ca008a333",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\report_integral_integration_fixture.py": "7787a361719ff48a07003f1dabc03c13c908ee61507fb061add326d7323b82a3"
+  }
+}

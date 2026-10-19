@@ -1,0 +1,74 @@
+{
+  "completed_at": "2026-10-19T07:32:13.539951+00:00",
+  "limits": {
+    "max_work": 250000,
+    "max_seconds": 30,
+    "watchdog_seconds": 35,
+    "sampled_stop_bytes": 402653184,
+    "poll_seconds": 0.02
+  },
+  "limits_note": "20ms sampled early-stop at384MiB private committed or working set; not an OS hard memory reservation. The same per-calculation limits apply.",
+  "supervisor_seconds": 0.9770015000249259,
+  "samples": 47,
+  "peak_private_committed_bytes": 26398720,
+  "observed_peak_working_set_bytes": 36917248,
+  "termination": null,
+  "returncode": 0,
+  "stderr": "",
+  "worker": {
+    "mode": "expanded",
+    "query": "branch",
+    "view": "seer",
+    "target": 1,
+    "completed": true,
+    "conditioning_mass": "1/2",
+    "source_sha256": "811353e3394fabc73916e262f0f92c6b4cea4602310d009bbc904ab02556589c",
+    "value": "2/15",
+    "dawn": "HorizonValues(village_win=Fraction(0, 1), wolf_win=Fraction(0, 1))",
+    "status": "completed",
+    "budget": {
+      "work": 5458,
+      "max_work": 250000,
+      "elapsed_seconds": 0.422
+    },
+    "seconds": 0.42513679998228326,
+    "budget_stop": null,
+    "states": {
+      "values": 86,
+      "actions": 282,
+      "expansions": {
+        "actions": 282,
+        "values": 86
+      },
+      "acquired": 36,
+      "mornings": 151,
+      "publications": 153,
+      "policies": 59,
+      "saved_sources": 0,
+      "resolution_cache": 291,
+      "target_orbits": {
+        "target_members": 312,
+        "target_representatives": 281,
+        "solver_wolf_cells": 57,
+        "solver_wolf_hypotheses": 59
+      },
+      "report_vectors": {
+        "kernels": 0,
+        "public_event_laws": 0,
+        "fallback_public_vectors": 659,
+        "compiled_candidates": 0,
+        "newly_built_vectors": 0,
+        "emitted_vectors": 0,
+        "named_vectors_covered": 0
+      }
+    }
+  },
+  "progress": [],
+  "source_sha256": {
+    "werewolf\\grouped_forecast.py": "fb0f5cc0f97cc38c7f7fecf31df1aca42f61ddac410b853887c2d1371ee36a4e",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "werewolf\\morning_publications.py": "a5ab6fa00576bdf4d0f32bf27e0ff63781a12a5a016753cfed157bc578d5ac3b",
+    "werewolf\\information_weights.py": "2d864654bc20142a90b7261e4bbd67e02898ed35fffdda870549405ca008a333",
+    "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\benchmarks\\player_match_groups\\report_integral_integration_fixture.py": "7787a361719ff48a07003f1dabc03c13c908ee61507fb061add326d7323b82a3"
+  }
+}

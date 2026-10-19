@@ -1,14 +1,16 @@
 """Uniform H0 target-orbit consumer of constructed closed-node partitions."""
 from contextlib import contextmanager
 from fractions import Fraction as F
-from .information_set_forecast import InformationSetForecast,InformationSetActionPolicy
+from .information_set_forecast import InformationSetForecast,InformationSetActionPolicy,exchangeable_value
 from .group_partition import _fix,_report_groups
 from .calculation_budget import tick
 
 
 class GroupedPolicy(InformationSetActionPolicy):
     def morning_value(self,payload):
-        e=self.engine;value=F()
+        e=self.engine;value=e.terminal_report_value(payload)
+        if value is not None:return value
+        value=F()
         for q,mass,child in e.report_children(payload):
             with e.group_scope(_report_groups(e.groups,child)):
                 value+=mass*e.solve(*child,physical=child.physical)
@@ -69,12 +71,31 @@ class GroupedForecast(InformationSetForecast):
     def publications(self,b,s,past):
         partition=self.report_partition(b,past)
         if not partition:return super().publications(b,s,past)
+        return self.checked(self.publication_kernel(b,s,past).branches(partition))
+
+    def publication_kernel(self,b,s,past):
         from .morning_publications import compile_publications
         key=(b,s,past)
         if key not in self.report_kernels:
             self.report_kernels[key]=self.checked(compile_publications(s,past,b.alive,b.claims,
                 fake_policy=self.strategy.fake_seer_policy,seed=self.publication_values.get(key,()),board=b))
-        return self.checked(self.report_kernels[key].branches(partition))
+        return self.report_kernels[key]
+
+    def terminal_report_value(self,payload):
+        # Only an unobserved scalar AFTER acquisition/physical projection.
+        # Compile every positive-Q medium family before transferring P, even
+        # when a family has zero viewer mass. No seer event law is constructed.
+        b,s,past,own,observer=payload
+        if (not self.aggregate_reports or self.retire_uninformative_scans or self.acquisition_provenance is not None
+            or not self.terminal_uniform_day(b) or
+            any(self.strategy.disclosure_for(role)!='all' for role in ('seer','medium'))):return None
+        from .exact import report_actions,random_report_outcomes
+        tick(0)
+        outcomes=random_report_outcomes(b) if report_actions(b) else ()
+        rows=tuple((o.probability,o.board,self.project(s,o.board),past) for o in outcomes) if outcomes else ((F(1),b,s,past),)
+        for q,child,law,history in rows:self.publication_kernel(child,law,history)
+        constant=exchangeable_value(3,1,'day',self.strategy)
+        return sum((mass*constant for mass,*rest in self.push(s,own,rows)),F())
 
     def generate_publications(self,b,s,past):
         kernel=self.report_kernels.get((b,s,past)) if self.aggregate_reports else None

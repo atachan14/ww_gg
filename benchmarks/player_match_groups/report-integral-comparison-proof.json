@@ -1,0 +1,29 @@
+{
+  "public": {
+    "native_single_request_complete": true,
+    "all_seven_expanded_report_named_values_and_dawn_equal": true,
+    "full_Forecast_Table_equal": true,
+    "cold_initial_source_equal": true,
+    "value": "8/35",
+    "table_sha256": "49691c41cafae666facafc7e1d08cb1512244645729b6804aab872d1a516e236",
+    "six_full_Forecast_Table_matches_prior_independent_cold": true
+  },
+  "seer": {
+    "native_single_request_complete": true,
+    "all_seven_expanded_report_named_values_and_dawn_equal": true,
+    "full_Forecast_Table_equal": true,
+    "cold_initial_source_equal": true,
+    "value": "8/35",
+    "table_sha256": "f277e0f696ce6a3e8698ada5050b8988d8b5dd44be80260d2b65fb46ec22af7d",
+    "six_full_Forecast_Table_matches_prior_independent_cold": true
+  },
+  "wolf": {
+    "native_single_request_complete": true,
+    "all_seven_expanded_report_named_values_and_dawn_equal": true,
+    "full_Forecast_Table_equal": true,
+    "cold_initial_source_equal": true,
+    "value": "8/35",
+    "table_sha256": "2e74685fa5a4ad4e1ed369d3e293f926b080e3de06410252fbb22ed3c1ab7578",
+    "six_full_Forecast_Table_matches_prior_independent_cold": true
+  }
+}

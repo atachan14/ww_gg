@@ -507,3 +507,66 @@ The development report_integral_design.py contains an explicit Cartesian referen
 
 
 Bounded validation outcome for this mathematical design: the study verifies12 terminal-morning public/owner joint cases and12 complete five-player named physical/report/terminal integrals in1.381727s,25355 counted development/common work, peak working set37,040,128 bytes. The separate25-test watched job (14 new mathematical-design methods plus11 existing boundary/history methods) passes in2.591859s,38523 counted work, peak working set41,463,808 bytes. Both use the original250000-work/30s/384MiB sampled/35s-watchdog ceilings and finish without supervisor termination. These are development verification costs, not production performance benchmarks. The full seven native API stop is unchanged; only a conditional theorem reference for its value/columns has been added. No all-repository rerun is claimed.
+
+
+## Opt-in integration of the unobserved terminal report integral
+
+Candidate A above is now implemented ONLY in GroupedForecast's existing aggregate_reports opt-in scalar continuation. Candidate B (a broad count-only root/continuation shortcut) is NOT implemented. The measured seven-player value below is now an actual complete ClosedCalculation Node.forecast() result, rather than only the previous theorem prediction. This does not enable a new UI/HTTP path, change settings or claim every eligible seven-player input completes.
+
+GroupedPolicy.morning_value first asks for a terminal_report_value. It is available only for the already established day/three-survivor/one-live-wolf/no-hunter predicate, full seer+medium disclosure, unretired complete histories, aggregate_reports enabled and no legacy acquisition-provenance tracing. Other cases retain the ordinary report_children/solve path. The grouped constructor still requires uniform day/night/fake policies. MAX, guardians, seven-night, eight-player, self-bite admission and the ordinary evaluator are not extended or replaced.
+
+The helper is entered AFTER the existing acquisition, prospective owner scan validation and physical/public outcome projection. It uses existing report_actions/random_report_outcomes, existing public history projection, the SAME compile_publications constructor and existing push for medium-only Q/P transfer. It compiles EVERY positive-Q medium family before P transfer, including zero-P families. Existing undefined-correlation/initial-law/zero-normalizer errors therefore remain; private unsupported report likelihood still uses the existing refusal. The common per-kernel fake normalizers and deterministic truth index establish unit seer row sums without event construction. The result is the actual medium-mass integral of the existing exchangeable_value(3,1,day) constant. A zero-work tick keeps cancellation/deadline/exhausted-budget checks on cached calls.
+
+Existing grouped publication-kernel construction is factored into publication_kernel and reused by both the old report branches and the new scalar operation. Kernels/cache keys remain public-only and calculation-owned, with no viewer secret entering a policy. There are no added proof ledgers, tickets, full-history swaps, issued owner/frame authentication or development coverage scans in production. The ordinary information_set_forecast, morning_publications and information_weights modules are byte-identical. Full conditional reports/history/Table still go through the ordinary generation and reconstruction; requesting them after scalar compilation builds their event laws on demand. No policy or report correlation is changed.
+
+New focused checks compare12 complete public/seer/wolf report laws against the independent Cartesian oracle while forbidding any event constructor, report_children call or posterior solve in the scalar path. Warming the scalar index then requesting all109 observed report rows and their named Forecast/Table values preserves the exact Q/P distributions and conditional action payoffs. Other checks cover disabled opt-in, disclosure/history-retirement/provenance fallback, public undefined worlds with zero P, unsupported private likelihood, cancellation, deadline and exhausted work, and valid/invalid prospective own scans. Invalid future scans still fail during the common acquisition before the integral can run. No new validation ledger is used to obtain these guarantees.
+
+### Observed local effects (fresh bounded jobs)
+
+The expanded control disables ONLY terminal_report_value; existing exact player/wolf groups and the prior constant terminal scalar key stay enabled. Input source digests match. These are individual observed comparisons, not general timing ratios.
+
+| Complete query | Expanded | Integrated |
+|---|---:|---:|
+| Dense three-claim terminal morning, scalar | 1/3 | 1/3 |
+| Conditional seer report vectors built | 109 | 0 |
+| Counted work including setup | 805 | 534 |
+| Body seconds | 0.059134 | 0.023831 |
+| Peak working set bytes | 34,197,504 | 34,033,664 |
+| Original initial7 forced execute4 continuation | 2/15 | 2/15 |
+| Counted work including complete dawn query | 46,856 | 27,975 |
+| Body seconds | 2.502290 | 0.958820 |
+| Peak working set bytes | 48,017,408 | 42,127,360 |
+| Fallback report vectors in that complete branch | 4,648 | 123 |
+| Ordinary morning-result caches | 477 | 3 |
+| Action expansions / acquired sources | 885 / 97 | 885 / 97 |
+
+The latter reduction retains the same physical/action work and nonterminal report path. The474 last-morning sources become common probability indices with zero newly built conditional seer event laws, not missing/approximated histories. This is different from claiming no reports occur anywhere: nonterminal reports are still generated, and any observed request remains full. Tiny terminal timings include setup and process noise; the larger matched complete branch is the useful local comparison.
+
+### Actual complete opt-in API requests
+
+All jobs use the unchanged30s/250000-work/384MiB sampled-memory limits and35s external watchdog, in fresh processes, without concurrent tests. Each row is ONE complete native ClosedCalculation opt-in request returning the scalar, all legal named final-action columns, both dawn masses and Table digest. No development partition resets its budget.
+
+| Input / selected view | Village value | Counted work | Body seconds | Peak working set bytes |
+|---|---:|---:|---:|---:|
+| Specified initial7 / public | 8/35 | 185,180 | 5.869605 | 79,388,672 |
+| Initial7 / complete-own P1 seer | 8/35 | 185,758 | 6.215626 | 80,498,688 |
+| Initial7 / selected own wolf | 8/35 | 196,007 | 5.824133 | 80,109,568 |
+| Original six-night after observed execute4 / public | 2/15 | 66,409 | 2.736281 | 53,870,592 |
+| Six-night / complete-own P1 seer | 2/15 | 61,078 | 2.852573 | 51,974,144 |
+| Six-night / selected own wolf | 2/15 | 27,903 | 0.963657 | 41,668,608 |
+
+Thus all six specified requests complete; the largest measured work is196007, body6.215626s, working set80,498,688 bytes (about76.8MiB). Sampled memory is not an OS hard reservation. Seven-public now finishes with1475 scalar values,5043 action entries and548 fallback report vectors. The prior whole native seven request stopped at250001 work/14.041553s/98,373,632 bytes with1117 values,3739 actions and23863 fallback vectors. Those are DIFFERENT progressed prefixes (old incomplete versus new complete), so no equal-work speed/memory ratio is inferred. Limits are not increased.
+
+Seven-public named values are players1,2:3/10; players3,4:2/15; players5,6,7:11/45; all dawn victory masses0. In the selected true P1 seer view, columns1/3/4 are2/15,2 is7/15 and5/6/7 are11/45. The selected wolf roster{2,5} has players2,5 columns7/15 and all other columns2/15. These are initial DAY targets, so voting for any survivor remains legal; later own-known-wolf NIGHT targets stay excluded by the common legal-action operation.
+
+### Independent comparison scope and remaining boundaries
+
+Before measuring,22 existing/design boundary tests and6 new integration methods passed. Final validation passes107 related tests in102.768s: independent report Cartesian/factor normalizers, cold source reconstruction, complete five-player named physical/report/terminal sums, complete small ordinary/expanded/cold Forecasts, multiple true-seer correlation, mixed live-wolf counts, multiple nights, saved source/cache ownership, prospective observation, resource stops and unchanged guard/MAX boundaries. There is no fresh all-repository run.
+
+For each of the three initial7 views, EVERY named first target1..7 was also computed to completion with the old expanded-report scalar path, in21 separate fresh bounded reference jobs. Each retains the full existing report correlations/order and other already proved exact groups. Largest reference work208978, all within the original bounds. All root input Q/P/observer/physical snapshots match the integrated request and independently reconstructed cold initial source. Because the actual initial day policy is uniform, the exact1/7 sum of these complete old column values reconstructs the reference scalar; independently completed old dawn values and unchanged source rows reconstruct the reference Forecast/Table for testing. All three COMPLETE native integrated Forecasts and both public/physical Table row sets match exactly. This is a bounded development comparison, not a claim that the unoptimized whole request finished or an exhaustive cold seven-player terminal tree enumeration.
+
+Whole expanded-control seven seer/wolf API attempts still stop at the work cap and are preserved separately; their partial caches are not filled. Current integrated requests all finish without a remaining numerical blocker for these specified inputs/views. The six-night full Forecast/Table strings and role/value/dawn rows additionally match the saved independent ordinary/cold physical-enumeration evidence from the earlier checkpoint. The initial-seven prior comparison input changes only its three selected policy fields to random; archived MAX metadata is preserved as data and is not used as the continuation policy.
+
+Evidence is consolidated in report-integral-integration-results.json:32 raw bounded measurement/reference jobs (including the two stopped controls),21 named seven-column references, local effects, six complete native requests, exact comparison proofs, prior independent six-night evidence,37 lossless current regression job records,107-test output and source hashes. verify_report_integral_integration.py rechecks full Forecast/Table equality against complete reference columns and cold source inputs. Test-runner checkpoint files are restored only after their new records are copied into that bundle. The main development fixture is report_integral_integration_fixture.py; no production benchmark hooks or counters were added.
+
+No broad count-only continuation shortcut, MAX/guardian/new CO/report strategy, approximation, public push/deploy, setting/permission change, UI/HELP addition or server restart is part of this checkpoint. Performance/admission for other eligible seven-player configurations is still bounded by the same runtime limits rather than promised from this one case.
