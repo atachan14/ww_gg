@@ -4,8 +4,8 @@
 
 This block supersedes historical plans below. Current production uses immutable
 ClosedCalculation inputs and common generators, not issued receipt ledgers.
-Local additional optimization is paused afterf807616; the history-key and
-exposed-fake experiments remain development-only.
+Additional optimization is paused at this checkpoint. History-key, exposed-fake
+and sparse-positive-report experiments all remain development-only.
 
 | area | current status |
 | --- | --- |
@@ -23,18 +23,12 @@ report work remains84. On four report-heavy five-player MAX inputs scalar-key
 sharing saves0 of5879work. Future fake target law still needs seen targets AND
 published acquired days; actual true reports require complete Q/P secret fibers.
 
-One possible next investigation, not an implementation commitment: use the
-compiler's existing sparse joint truth/fake index to enumerate only supported
-complete report plans, instead of testing the full Cartesian product of each
-reporter's marginal plan options in terminal_execution_moments. Merge ALL
-contributions to the SAME complete public event before public-Q argmax/ties,
-then use the existing moment/P transfer. This retains every meaningful report,
-including colors/days/owner correlations, and targets internal report work where
-outer history-key sharing had no effect. The three-seer example has27 joint
-hypotheses and109 supported full vectors; current code also visits marginal
-combinations with no supported joint entries. Savings depend on that sparsity
-and are unmeasured. Independent small full-vector/Q-policy/P/cold equality and
-resource-limit behavior would be required before considering any opt-in change.
+The sparse supported-joint-report candidate has now been measured in development
+and is NOT adopted:12 complete five-player public/private inputs have1643 dense
+candidates but only96 zero-Q combinations. Sparse traversal performs2036
+positive component joins before merging1547 public events, so total charged work
+increases20014->20407 (+1.96%). Full semantic comparisons pass; no production
+connection or additional seven run is justified. See the latest dated section.
 
 Final verification:173 integrated tests ran in330.246s;172 passed and one
 old report-vector test failed only on obsolete expansion totals289/246 and201
@@ -1817,3 +1811,118 @@ nonterminal deletion remains rejected; no publication/limit/default change.
 Evidence: `report-history-summary-results.json`,
 `report-history-summary-validation.json`, development fixture and tests. The
 validation embeds logs, exact totals and measured-production hash checks.
+
+
+## 2026-10-19: sparse positive-Q joint report prototype; not adopted
+
+`benchmarks/player_match_groups/sparse_report_moments.py` is DEVELOPMENT ONLY.
+Production and public defaults remain unchanged. No seven root or subproblem was
+run. The candidate only changes development terminal moment construction, never
+named event generation, full report/history carriers or Q/P filtering.
+
+### Formula and algorithm
+
+The compiler already owns complete full-Q hypothesis groups I[f,t] for each fake
+identity set f and true-report plan t, plus the configured fake plan chance C_f(u).
+For each positive supported (f,t,u), join disjoint reporter plans to a literal
+complete public event e. Accumulate
+
+    J_Q(e,x) = sum_(f,t,u compatible with e) sum_(h in I[f,t],fiber(h)=x) Q(h) C_f(u)
+    A_Q(e) = argmax_a sum_x J_Q(e,x) reward(x,a)
+    M_Q(x) = sum_e J_Q(e,x) mean_(a in A_Q(e)) reward(x,a)
+    V_P = sum_x (P(x)/Q(x)) M_Q(x)
+
+All contributions to the SAME observable e are added BEFORE A_Q(e), including
+contributions from different latent fake identities. Full target/color/acquired/
+published-day plans remain in e; complete (roles,acquisitions) fibers retain
+correlations. Existing common ratio/support checks apply P afterward. Q-positive
+P-zero events still determine public decisions and are never removed by a viewer.
+Nonnegative mass means only events with zero JOINT Q mass can disappear; no
+positive event, hypothesis correlation or uniform MAX tie mass is altered.
+
+The prototype traverses the compiler's indexed truth plans x positive fake
+chances, accumulates event/fiber dictionaries, and uses the EXISTING common
+optimal_targets/tie rule. It does not choose an action separately per hypothesis
+or invent a case evaluator. It charges every component join and hypothesis term,
+polls cancellation, and checks complete Q mass. Unlike the current streaming
+Cartesian loop, it also retains all positive event rows while building moments;
+no memory-saving claim is made.
+
+### Measured waste and cost
+
+Four independent FIVE-player configurations x public/seer/wolf views, both
+existing dense and sparse development modes:24 completed requests. Every request
+keeps the same250000work/30s limit. Instrumented Forecast timing ends before
+separate dense/sparse row diagnostics; diagnostics remain charged inside the
+SAME original request budget and are reported separately. No ceiling reset or
+unbudgeted continuation is used to finish a request.
+
+Across the12 baseline requests' actual terminal moment builds:
+
+| item | exact count |
+| --- | --- |
+| marginal Cartesian candidates |1643|
+| positive complete public events |1547|
+| discarded zero-Q candidates |96 (5.84%)|
+| positive hidden truth/fake component plans |2036|
+| positive hypothesis mass contributions |3017|
+
+Only three-seer inputs have zero-Q Cartesian candidates:32 each in public/seer/
+wolf requests. Single, dual and medium-pair inputs have ZERO such waste in the
+measured moment builds. The current configured noncontradictory fake policy
+already restricts marginal candidates; supported full vectors cannot be compared
+to an imagined unrestricted independent color product.
+
+Sparse iteration removes96 zero candidates but encounters489 extra positive
+components that converge to the same event (2036-1547). These are not dispensable
+zero branches: they are different supported hidden explanations. Net additional
+charged work is489-96=393. Existing full support/correlation arithmetic remains.
+
+| full initial MAX request | public dense->sparse | seer dense->sparse | wolf dense->sparse |
+| --- | --- | --- | --- |
+| single |512->512|574->574|551->551|
+| dual |676->703|817->844|541->568|
+| three |3538->3612|4944->5072|4298->4408|
+| medium-pair |1153->1153|1355->1355|1055->1055|
+
+Total across12 requests:20014->20407work (+1.96%).
+
+Single-sample instrumented Forecast times sum0.5214s dense /0.5159s sparse.
+This tiny timing difference is not a repeatable speedup claim; work worsens and
+intermediate event storage increases. No large measured benefit is established,
+including on the report-heavy three-seer family. These totals are current
+already-grouped production, not the earlier pre-group26067work baseline.
+
+### Independent semantic comparisons and counterexample
+
+Sparse event/fiber maps match the independent Cartesian diagnostic exactly on
+every measured build. Separate existing expanded future_publications generation
+matches full positive joint maps on four terminal fixtures.12 complete initial
+public/personal Forecast/Table results match the fully named common-flow
+reference with equivalence/renaming/value-law shortcuts disabled; immutable
+sources, complete named reports and fresh cold reconstruction remain equal.
+
+A normalized isolated common-kernel input with two possible fake identities and
+the existing uniform fake policy creates the SAME white/white public event from
+two worlds. Its public-Q optimal targets are(1,2), with equal tie weights. After
+joint aggregation this event contributes half its mass as village payoff;
+choosing the wolf separately inside each hidden component contributes all its
+mass and is wrong. The same kernel has positive-Q events with zero mass in a
+selected one-world P; sparse construction retains them and P uses the Q policy.
+This kernel unit input is not claimed to be a reachable three-player full game.
+
+Zero-payoff target subsets keep the existing empty moment-vector representation.
+Moment construction does not call posterior-event generation. Five development
+tests pass in3.692s, including cancellation and work-stop boundaries. The unit
+fixture explicitly passes uniform fake policy to BOTH compiler and independent
+reference; ordinary measured five-player requests retain their configured
+noncontradictory-uniform policy.
+
+Decision: NOT ADOPTED; no opt-in connection. The exact positive-Q meaning is
+preserved, but eliminating zero candidate combinations is a small opportunity
+in these actual inputs, while reorganizing positive latent contributions adds
+work. Do not drop/independently optimize overlapping positive components to
+manufacture savings. No seven retry, publication, upper-limit or default change.
+Evidence: sparse-report-moment-results.json (raw measurement hashes retained;
+final reference-helper policy parameter note included),
+sparse-report-moment-validation.json, development fixture and5-test log.

@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-19T11:03:20.728565+00:00",
+  "decision": "DEVELOPMENT ONLY, NOT ADOPTED. No measured large effect; charged work increases1.96%.",
+  "counts": {
+    "positive_hypothesis_terms": 3017,
+    "positive_component_plans": 2036,
+    "positive_joint_events": 1547,
+    "cartesian_candidates": 1643,
+    "zero_Q_candidates": 96
+  },
+  "work": {
+    "dense": 20014,
+    "sparse": 20407
+  },
+  "tests": {
+    "count": 5,
+    "seconds": 3.692,
+    "log": "test_complete_positive_joint_laws_match_cartesian_and_expanded_generator (tests.test_sparse_report_moments.SparseReportMomentTests.test_complete_positive_joint_laws_match_cartesian_and_expanded_generator) ... ok\ntest_full_five_public_personal_Forecast_Table_named_history_and_cold (tests.test_sparse_report_moments.SparseReportMomentTests.test_full_five_public_personal_Forecast_Table_named_history_and_cold) ... ok\ntest_positive_Q_zero_P_events_stay_and_private_does_not_rerank (tests.test_sparse_report_moments.SparseReportMomentTests.test_positive_Q_zero_P_events_stay_and_private_does_not_rerank) ... ok\ntest_same_public_event_is_combined_before_MAX_and_tie_distribution (tests.test_sparse_report_moments.SparseReportMomentTests.test_same_public_event_is_combined_before_MAX_and_tie_distribution) ... ok\ntest_zero_payoff_no_event_construction_and_resource_boundaries (tests.test_sparse_report_moments.SparseReportMomentTests.test_zero_payoff_no_event_construction_and_resource_boundaries) ... wwgg_budget_stop kind=work work=2 max_work=1 elapsed_seconds=0.0\nok\n\n----------------------------------------------------------------------\nRan 5 tests in 3.692s\n\nOK\n"
+  },
+  "semantic_evidence": [
+    "12 complete five-player MAX Forecast/Table pairs public/seer/wolf equal",
+    "All sparse positive Q joint rows match Cartesian diagnostic",
+    "Four terminal fixtures also match independent expanded future_publications joint laws",
+    "Full initial public/private Forecast/Table and source/named history/cold equal fully named reference",
+    "Same visible event combines both fake identities before MAX; uniform tie preserved",
+    "Positive Q/zero P events retained; P never chooses public action",
+    "Zero payoff returns same empty moment vector; cancellation/work stops retained"
+  ],
+  "production_unchanged_since": "490df94",
+  "no_seven_calls": true,
+  "limits_defaults_publication_unchanged": true,
+  "sources_sha256": {
+    "benchmarks\\player_match_groups\\sparse_report_moments.py": "fb065f65640eafc5406d8e2ac3f97ab144234766714781c79aa2a417a84d7e20",
+    "benchmarks\\player_match_groups\\sparse-report-moment-results.json": "fb96347be60265151173a50992f245bb03444709e48ffd1d44e5de5d170fcfe9",
+    "tests\\test_sparse_report_moments.py": "8e8549eb69e7ddcd9fc2b489bc9e64b9310ddfa456df0c79cf88064ea0db7634"
+  }
+}
