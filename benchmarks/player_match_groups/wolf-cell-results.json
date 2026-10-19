@@ -1,0 +1,678 @@
+{
+  "status": "verified",
+  "cases": [
+    {
+      "players": 6,
+      "asymmetric": false,
+      "personal": false,
+      "expanded": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "target_only": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "target_and_cells": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "root_cells": {
+        "expanded_cells": 3,
+        "representative_cells": 1,
+        "transported_joint_and_public_policy_comparisons": 3,
+        "representative_hypotheses": [
+          1
+        ],
+        "mass_sum": "1"
+      },
+      "full_joint_trace_expanded_cold_public_owner_Forecast_Table_equal": true
+    },
+    {
+      "players": 7,
+      "asymmetric": false,
+      "personal": false,
+      "expanded": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "target_only": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "target_and_cells": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "root_cells": {
+        "expanded_cells": 3,
+        "representative_cells": 1,
+        "transported_joint_and_public_policy_comparisons": 3,
+        "representative_hypotheses": [
+          1
+        ],
+        "mass_sum": "1"
+      },
+      "full_joint_trace_expanded_cold_public_owner_Forecast_Table_equal": true
+    },
+    {
+      "players": 6,
+      "asymmetric": true,
+      "personal": false,
+      "expanded": {
+        "values": 5,
+        "actions": 16,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 18
+      },
+      "target_only": {
+        "values": 5,
+        "actions": 16,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 18,
+        "target_orbits": {
+          "target_members": 20,
+          "target_representatives": 20,
+          "solver_wolf_cells": 6,
+          "solver_wolf_hypotheses": 6
+        }
+      },
+      "target_and_cells": {
+        "values": 5,
+        "actions": 16,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 18,
+        "target_orbits": {
+          "target_members": 20,
+          "target_representatives": 20,
+          "solver_wolf_cells": 6,
+          "solver_wolf_hypotheses": 6
+        }
+      },
+      "root_cells": {
+        "expanded_cells": 2,
+        "representative_cells": 2,
+        "transported_joint_and_public_policy_comparisons": 2,
+        "representative_hypotheses": [
+          1,
+          1
+        ],
+        "mass_sum": "1"
+      },
+      "full_joint_trace_expanded_cold_public_owner_Forecast_Table_equal": true
+    },
+    {
+      "players": 6,
+      "asymmetric": false,
+      "personal": true,
+      "expanded": {
+        "values": 5,
+        "actions": 16,
+        "expansions": {
+          "actions": 16,
+          "values": 5
+        },
+        "acquired": 11,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 9,
+        "saved_sources": 0,
+        "resolution_cache": 18
+      },
+      "target_only": {
+        "values": 4,
+        "actions": 13,
+        "expansions": {
+          "actions": 13,
+          "values": 4
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 15,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 16,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "target_and_cells": {
+        "values": 4,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 4
+        },
+        "acquired": 9,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 15,
+        "target_orbits": {
+          "target_members": 14,
+          "target_representatives": 12,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "root_cells": {
+        "expanded_cells": 2,
+        "representative_cells": 1,
+        "transported_joint_and_public_policy_comparisons": 2,
+        "representative_hypotheses": [
+          1
+        ],
+        "mass_sum": "1"
+      },
+      "full_joint_trace_expanded_cold_public_owner_Forecast_Table_equal": true
+    },
+    {
+      "players": 7,
+      "asymmetric": false,
+      "personal": true,
+      "expanded": {
+        "values": 305,
+        "actions": 922,
+        "expansions": {
+          "actions": 922,
+          "values": 305
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 5,
+        "saved_sources": 0,
+        "resolution_cache": 925
+      },
+      "target_only": {
+        "values": 305,
+        "actions": 912,
+        "expansions": {
+          "actions": 912,
+          "values": 305
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 5,
+        "saved_sources": 0,
+        "resolution_cache": 915,
+        "target_orbits": {
+          "target_members": 922,
+          "target_representatives": 912,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 2
+        }
+      },
+      "target_and_cells": {
+        "values": 257,
+        "actions": 765,
+        "expansions": {
+          "actions": 765,
+          "values": 257
+        },
+        "acquired": 4,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 768,
+        "target_orbits": {
+          "target_members": 775,
+          "target_representatives": 765,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 2
+        }
+      },
+      "root_cells": {
+        "expanded_cells": 2,
+        "representative_cells": 1,
+        "transported_joint_and_public_policy_comparisons": 2,
+        "representative_hypotheses": [
+          1
+        ],
+        "mass_sum": "1"
+      },
+      "full_joint_trace_expanded_cold_public_owner_Forecast_Table_equal": true
+    }
+  ],
+  "report_orbit_census": [
+    {
+      "players": 7,
+      "aggregate_wolf": false,
+      "calls": [
+        {
+          "parent_groups": [
+            [
+              2
+            ],
+            [
+              3
+            ],
+            [
+              1
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 16,
+          "possible_vector_orbits": 16
+        },
+        {
+          "parent_groups": [
+            [
+              2,
+              3
+            ],
+            [
+              1
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 96,
+          "possible_vector_orbits": 52
+        },
+        {
+          "parent_groups": [
+            [
+              1
+            ],
+            [
+              3
+            ],
+            [
+              2
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 16,
+          "possible_vector_orbits": 16
+        },
+        {
+          "parent_groups": [
+            [
+              1,
+              3
+            ],
+            [
+              2
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 96,
+          "possible_vector_orbits": 52
+        },
+        {
+          "parent_groups": [
+            [
+              1
+            ],
+            [
+              2
+            ],
+            [
+              3
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 16,
+          "possible_vector_orbits": 16
+        },
+        {
+          "parent_groups": [
+            [
+              1,
+              2
+            ],
+            [
+              3
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 96,
+          "possible_vector_orbits": 52
+        },
+        {
+          "parent_groups": [
+            [
+              1
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 16,
+          "possible_vector_orbits": 10
+        },
+        {
+          "parent_groups": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 200,
+          "possible_vector_orbits": 40
+        }
+      ],
+      "actual_vectors": 552,
+      "possible_vector_orbits": 254,
+      "development_only": true
+    },
+    {
+      "players": 7,
+      "aggregate_wolf": true,
+      "calls": [
+        {
+          "parent_groups": [
+            [
+              2
+            ],
+            [
+              3
+            ],
+            [
+              1
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 16,
+          "possible_vector_orbits": 16
+        },
+        {
+          "parent_groups": [
+            [
+              2,
+              3
+            ],
+            [
+              1
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 96,
+          "possible_vector_orbits": 52
+        },
+        {
+          "parent_groups": [
+            [
+              1
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 16,
+          "possible_vector_orbits": 10
+        },
+        {
+          "parent_groups": [
+            [
+              1,
+              2,
+              3
+            ],
+            [
+              5
+            ],
+            [
+              4
+            ],
+            [
+              7
+            ],
+            [
+              6
+            ]
+          ],
+          "actual_vectors": 200,
+          "possible_vector_orbits": 40
+        }
+      ],
+      "actual_vectors": 328,
+      "possible_vector_orbits": 118,
+      "development_only": true
+    }
+  ],
+  "report_vector_generation_unchanged": true,
+  "ledger_used": false,
+  "full_initial7_search": false
+}

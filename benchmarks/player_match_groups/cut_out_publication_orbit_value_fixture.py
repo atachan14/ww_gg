@@ -803,7 +803,10 @@ if __name__=='__main__':
         from .closed_calculation_fixture import audit as closed_audit,run as closed_measure
         if '--reference' in sys.argv:raise SystemExit('Ledger reference comparison is historical; use measure_shared_transition.compare_boundary directly')
         if '--measure' in sys.argv:
-            if '--representatives' in sys.argv:
+            if '--wolf-cells' in sys.argv:
+                from .wolf_cell_fixture import measure as wolf_cell_measure
+                print(json.dumps(wolf_cell_measure()['summary']))
+            elif '--representatives' in sys.argv:
                 from .representative_target_fixture import measure as representative_measure
                 print(json.dumps(representative_measure()['summary']))
             elif '--saved-history' in sys.argv:
@@ -813,6 +816,9 @@ if __name__=='__main__':
                 from .closed_saved_day_fixture import run as saved_day_measure
                 saved_day_measure()
             else:closed_measure()
+        elif '--wolf-cells' in sys.argv:
+            from .wolf_cell_fixture import audit as wolf_cell_audit
+            print(json.dumps(wolf_cell_audit()))
         elif '--representatives' in sys.argv:
             from .representative_target_fixture import audit as representative_audit
             print(json.dumps(representative_audit()))

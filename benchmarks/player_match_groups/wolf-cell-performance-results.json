@@ -1,0 +1,964 @@
+{
+  "status": "verified",
+  "repeats": 5,
+  "summary": [
+    {
+      "players": 6,
+      "modes": {
+        "expanded": {
+          "seconds_median": 0.03345050005009398,
+          "seconds_range": [
+            0.0331863000174053,
+            0.03638790000695735
+          ],
+          "peak_bytes_median": 34119680,
+          "states": {
+            "values": 5,
+            "actions": 22,
+            "expansions": {
+              "actions": 22,
+              "values": 5
+            },
+            "acquired": 14,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 12,
+            "saved_sources": 0,
+            "resolution_cache": 24
+          }
+        },
+        "targets": {
+          "seconds_median": 0.02480790001573041,
+          "seconds_range": [
+            0.023842499998863786,
+            0.027796100010164082
+          ],
+          "peak_bytes_median": 34017280,
+          "states": {
+            "values": 3,
+            "actions": 9,
+            "expansions": {
+              "actions": 9,
+              "values": 3
+            },
+            "acquired": 8,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 8,
+            "saved_sources": 0,
+            "resolution_cache": 14,
+            "target_orbits": {
+              "target_members": 18,
+              "target_representatives": 11,
+              "solver_wolf_cells": 5,
+              "solver_wolf_hypotheses": 5
+            }
+          }
+        },
+        "cells": {
+          "seconds_median": 0.022834100003819913,
+          "seconds_range": [
+            0.022053299995604903,
+            0.023065200017299503
+          ],
+          "peak_bytes_median": 33972224,
+          "states": {
+            "values": 3,
+            "actions": 5,
+            "expansions": {
+              "actions": 5,
+              "values": 3
+            },
+            "acquired": 8,
+            "mornings": 0,
+            "publications": 0,
+            "policies": 8,
+            "saved_sources": 0,
+            "resolution_cache": 14,
+            "target_orbits": {
+              "target_members": 12,
+              "target_representatives": 7,
+              "solver_wolf_cells": 2,
+              "solver_wolf_hypotheses": 5
+            }
+          }
+        }
+      }
+    },
+    {
+      "players": 7,
+      "modes": {
+        "expanded": {
+          "seconds_median": 0.8900026999763213,
+          "seconds_range": [
+            0.8623334000003524,
+            0.9022947999765165
+          ],
+          "peak_bytes_median": 42205184,
+          "states": {
+            "values": 513,
+            "actions": 1549,
+            "expansions": {
+              "actions": 1549,
+              "values": 513
+            },
+            "acquired": 5,
+            "mornings": 4,
+            "publications": 4,
+            "policies": 6,
+            "saved_sources": 0,
+            "resolution_cache": 1552
+          }
+        },
+        "targets": {
+          "seconds_median": 0.7316433999803849,
+          "seconds_range": [
+            0.7072154000052251,
+            0.8026498000253923
+          ],
+          "peak_bytes_median": 40570880,
+          "states": {
+            "values": 433,
+            "actions": 1267,
+            "expansions": {
+              "actions": 1267,
+              "values": 433
+            },
+            "acquired": 5,
+            "mornings": 3,
+            "publications": 3,
+            "policies": 6,
+            "saved_sources": 0,
+            "resolution_cache": 1270,
+            "target_orbits": {
+              "target_members": 1309,
+              "target_representatives": 1267,
+              "solver_wolf_cells": 3,
+              "solver_wolf_hypotheses": 3
+            }
+          }
+        },
+        "cells": {
+          "seconds_median": 0.49969560001045465,
+          "seconds_range": [
+            0.4812038000090979,
+            0.555944100022316
+          ],
+          "peak_bytes_median": 38825984,
+          "states": {
+            "values": 289,
+            "actions": 839,
+            "expansions": {
+              "actions": 839,
+              "values": 289
+            },
+            "acquired": 3,
+            "mornings": 3,
+            "publications": 3,
+            "policies": 4,
+            "saved_sources": 0,
+            "resolution_cache": 842,
+            "target_orbits": {
+              "target_members": 871,
+              "target_representatives": 839,
+              "solver_wolf_cells": 1,
+              "solver_wolf_hypotheses": 3
+            }
+          }
+        }
+      }
+    }
+  ],
+  "runs": [
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.03638790000695735,
+      "peak_bytes": 34308096,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 0
+    },
+    {
+      "players": 6,
+      "mode": "targets",
+      "seconds": 0.027796100010164082,
+      "peak_bytes": 34025472,
+      "states": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 0
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.02280769997742027,
+      "peak_bytes": 33972224,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.9022947999765165,
+      "peak_bytes": 42070016,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "targets",
+      "seconds": 0.7072154000052251,
+      "peak_bytes": 40566784,
+      "states": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 0
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.49969560001045465,
+      "peak_bytes": 38887424,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 0
+    },
+    {
+      "players": 6,
+      "mode": "targets",
+      "seconds": 0.024695599975530058,
+      "peak_bytes": 34140160,
+      "states": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 1
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.022834100003819913,
+      "peak_bytes": 34025472,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 1
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.0331863000174053,
+      "peak_bytes": 34017280,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "targets",
+      "seconds": 0.7694701999425888,
+      "peak_bytes": 40517632,
+      "states": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.4896106999949552,
+      "peak_bytes": 38907904,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 1
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.9013280000071973,
+      "peak_bytes": 42205184,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 1
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.02294089994393289,
+      "peak_bytes": 33894400,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 2
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.03345050005009398,
+      "peak_bytes": 34119680,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 2
+    },
+    {
+      "players": 6,
+      "mode": "targets",
+      "seconds": 0.025184699974488467,
+      "peak_bytes": 33996800,
+      "states": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.4812038000090979,
+      "peak_bytes": 38719488,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8623334000003524,
+      "peak_bytes": 42250240,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 2
+    },
+    {
+      "players": 7,
+      "mode": "targets",
+      "seconds": 0.7143656999687664,
+      "peak_bytes": 40570880,
+      "states": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 2
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.033358999993652105,
+      "peak_bytes": 34156544,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 3
+    },
+    {
+      "players": 6,
+      "mode": "targets",
+      "seconds": 0.02480790001573041,
+      "peak_bytes": 33873920,
+      "states": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 3
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.022053299995604903,
+      "peak_bytes": 33906688,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8800677999970503,
+      "peak_bytes": 42090496,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "targets",
+      "seconds": 0.7316433999803849,
+      "peak_bytes": 40681472,
+      "states": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 3
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.555944100022316,
+      "peak_bytes": 38658048,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 3
+    },
+    {
+      "players": 6,
+      "mode": "targets",
+      "seconds": 0.023842499998863786,
+      "peak_bytes": 34017280,
+      "states": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 4
+    },
+    {
+      "players": 6,
+      "mode": "cells",
+      "seconds": 0.023065200017299503,
+      "peak_bytes": 34070528,
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 4
+    },
+    {
+      "players": 6,
+      "mode": "expanded",
+      "seconds": 0.0335701999720186,
+      "peak_bytes": 33910784,
+      "states": {
+        "values": 5,
+        "actions": 22,
+        "expansions": {
+          "actions": 22,
+          "values": 5
+        },
+        "acquired": 14,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 12,
+        "saved_sources": 0,
+        "resolution_cache": 24
+      },
+      "digest": "f456991dd136602c4efeddc3ce090f20e775ab2e75e6c2863ae33ee3785fcbaa",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "targets",
+      "seconds": 0.8026498000253923,
+      "peak_bytes": 40628224,
+      "states": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "cells",
+      "seconds": 0.5122872000210918,
+      "peak_bytes": 38825984,
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 4
+    },
+    {
+      "players": 7,
+      "mode": "expanded",
+      "seconds": 0.8900026999763213,
+      "peak_bytes": 42205184,
+      "states": {
+        "values": 513,
+        "actions": 1549,
+        "expansions": {
+          "actions": 1549,
+          "values": 513
+        },
+        "acquired": 5,
+        "mornings": 4,
+        "publications": 4,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1552
+      },
+      "digest": "f4f4670a06370150fa7dcf03a5a42749d45c45ddfffc4c6e3141f7a532f6025d",
+      "repeat": 4
+    }
+  ],
+  "boundary": "same immutable opening/finite target/hand-report conditioning/public Forecast/Table; fixture/import setup excluded",
+  "full_initial7_search": false,
+  "source_sha256": {
+    "werewolf\\actor_information.py": "1a333eaabbd6de2dacd86ad6104a3bcf70e57c84b49ec66607cbab56b7598c1e",
+    "werewolf\\closed_calculation.py": "cea29e44f99185831aa6e03ee4b8b3e6a3895da2dd663c4af36d13cae9a8a090",
+    "werewolf\\grouped_forecast.py": "5e5a95e360b0d164e9afb00e086bce3b72929d03723cc9a40f5d10428fa2ffa3",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "benchmarks\\player_match_groups\\wolf_cell_fixture.py": "0b9d587236374e128410f53ae4cc263369c216f9239d07a99ecdd206cd4a101d",
+    "benchmarks\\player_match_groups\\representative_target_fixture.py": "096352fe4204090a2f00a70ae851ec24b705d7865a96f892aeb905be255910ea"
+  }
+}

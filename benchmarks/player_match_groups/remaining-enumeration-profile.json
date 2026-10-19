@@ -1,0 +1,710 @@
+{
+  "status": "profiled",
+  "cases": [
+    {
+      "players": 6,
+      "aggregate_wolf": false,
+      "diagnostic_seconds": 0.13516289996914566,
+      "parts": {
+        "solver_wolf_information_cells": {
+          "calls": 2,
+          "rows": 5,
+          "hypotheses": 5,
+          "seconds": 0.0033517000265419483,
+          "max_incremental_peak_bytes": 8140,
+          "retained_bytes_sum": 7456
+        },
+        "horizon_wolf_information_cells": {
+          "calls": 2,
+          "rows": 5,
+          "hypotheses": 5,
+          "seconds": 0.0026919000083580613,
+          "max_incremental_peak_bytes": 3961,
+          "retained_bytes_sum": 2501
+        }
+      },
+      "cached_report_vectors": {
+        "mornings": {
+          "vectors": 0,
+          "hypotheses": 0
+        },
+        "publication_values": {
+          "vectors": 0,
+          "hypotheses": 0
+        }
+      },
+      "value_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 4,
+          "states": 1
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 3,
+          "states": 2
+        }
+      ],
+      "action_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 4,
+          "states": 2
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 3,
+          "states": 7
+        }
+      ],
+      "states": {
+        "values": 3,
+        "actions": 9,
+        "expansions": {
+          "actions": 9,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 18,
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "traced_current_bytes": 256470,
+      "traced_peak_since_last_reset_bytes": 273937,
+      "top_exclusive": [
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:49:__post_init__",
+          "primitive_calls": 121,
+          "calls": 121,
+          "exclusive_seconds": 0.011210600000000001,
+          "inclusive_seconds": 0.0166991
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:282:__post_init__",
+          "primitive_calls": 46,
+          "calls": 46,
+          "exclusive_seconds": 0.011056100000000001,
+          "inclusive_seconds": 0.0208598
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py:24:__post_init__",
+          "primitive_calls": 40,
+          "calls": 40,
+          "exclusive_seconds": 0.0101726,
+          "inclusive_seconds": 0.0151263
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:74:normalize",
+          "primitive_calls": 40,
+          "calls": 40,
+          "exclusive_seconds": 0.008140900000000001,
+          "inclusive_seconds": 0.0200194
+        },
+        {
+          "function": "~:0:<built-in method builtins.hash>",
+          "primitive_calls": 3404,
+          "calls": 5985,
+          "exclusive_seconds": 0.0061076,
+          "inclusive_seconds": 0.0082337
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py:77:acquire_uniform",
+          "primitive_calls": 7,
+          "calls": 7,
+          "exclusive_seconds": 0.0046099,
+          "inclusive_seconds": 0.0379757
+        },
+        {
+          "function": "~:0:<built-in method builtins.len>",
+          "primitive_calls": 2792,
+          "calls": 2792,
+          "exclusive_seconds": 0.0045786,
+          "inclusive_seconds": 0.0045786
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\board_future.py:627:resolution_key",
+          "primitive_calls": 33,
+          "calls": 33,
+          "exclusive_seconds": 0.0028198000000000003,
+          "inclusive_seconds": 0.007970900000000001
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:390:wolf_count_distribution",
+          "primitive_calls": 235,
+          "calls": 235,
+          "exclusive_seconds": 0.0027316000000000003,
+          "inclusive_seconds": 0.0045106
+        },
+        {
+          "function": "~:0:<method 'append' of 'list' objects>",
+          "primitive_calls": 1007,
+          "calls": 1007,
+          "exclusive_seconds": 0.0025754000000000003,
+          "inclusive_seconds": 0.0025754000000000003
+        },
+        {
+          "function": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py:710:_add",
+          "primitive_calls": 727,
+          "calls": 727,
+          "exclusive_seconds": 0.002467,
+          "inclusive_seconds": 0.004692900000000001
+        },
+        {
+          "function": "~:0:<built-in method builtins.getattr>",
+          "primitive_calls": 2616,
+          "calls": 2616,
+          "exclusive_seconds": 0.0023403,
+          "inclusive_seconds": 0.0023403
+        }
+      ],
+      "warning": "cProfile/tracemalloc are diagnostic only; per-function peaks reset and are incremental, not independent-process peak memory"
+    },
+    {
+      "players": 6,
+      "aggregate_wolf": true,
+      "diagnostic_seconds": 0.12366420001490042,
+      "parts": {
+        "solver_wolf_information_cells": {
+          "calls": 2,
+          "rows": 2,
+          "hypotheses": 2,
+          "seconds": 0.001485799963120371,
+          "max_incremental_peak_bytes": 7404,
+          "retained_bytes_sum": 5416
+        },
+        "horizon_wolf_information_cells": {
+          "calls": 2,
+          "rows": 5,
+          "hypotheses": 5,
+          "seconds": 0.002671100024599582,
+          "max_incremental_peak_bytes": 4636,
+          "retained_bytes_sum": 3192
+        }
+      },
+      "cached_report_vectors": {
+        "mornings": {
+          "vectors": 0,
+          "hypotheses": 0
+        },
+        "publication_values": {
+          "vectors": 0,
+          "hypotheses": 0
+        }
+      },
+      "value_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 4,
+          "states": 1
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 3,
+          "states": 2
+        }
+      ],
+      "action_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "day",
+          "alive": 4,
+          "states": 2
+        },
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 3,
+          "states": 3
+        }
+      ],
+      "states": {
+        "values": 3,
+        "actions": 5,
+        "expansions": {
+          "actions": 5,
+          "values": 3
+        },
+        "acquired": 8,
+        "mornings": 0,
+        "publications": 0,
+        "policies": 8,
+        "saved_sources": 0,
+        "resolution_cache": 14,
+        "target_orbits": {
+          "target_members": 12,
+          "target_representatives": 7,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 5
+        }
+      },
+      "traced_current_bytes": 164419,
+      "traced_peak_since_last_reset_bytes": 181523,
+      "top_exclusive": [
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:49:__post_init__",
+          "primitive_calls": 114,
+          "calls": 114,
+          "exclusive_seconds": 0.0106435,
+          "inclusive_seconds": 0.016087900000000002
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:282:__post_init__",
+          "primitive_calls": 43,
+          "calls": 43,
+          "exclusive_seconds": 0.010612,
+          "inclusive_seconds": 0.018306000000000003
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py:24:__post_init__",
+          "primitive_calls": 33,
+          "calls": 33,
+          "exclusive_seconds": 0.0094487,
+          "inclusive_seconds": 0.0136542
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:74:normalize",
+          "primitive_calls": 33,
+          "calls": 33,
+          "exclusive_seconds": 0.0074888,
+          "inclusive_seconds": 0.018139100000000002
+        },
+        {
+          "function": "~:0:<built-in method builtins.hash>",
+          "primitive_calls": 3127,
+          "calls": 5214,
+          "exclusive_seconds": 0.0053282,
+          "inclusive_seconds": 0.006985300000000001
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py:77:acquire_uniform",
+          "primitive_calls": 7,
+          "calls": 7,
+          "exclusive_seconds": 0.0042839,
+          "inclusive_seconds": 0.0377283
+        },
+        {
+          "function": "~:0:<built-in method builtins.len>",
+          "primitive_calls": 2556,
+          "calls": 2556,
+          "exclusive_seconds": 0.004055400000000001,
+          "inclusive_seconds": 0.004055400000000001
+        },
+        {
+          "function": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py:742:_mul",
+          "primitive_calls": 115,
+          "calls": 115,
+          "exclusive_seconds": 0.0025509,
+          "inclusive_seconds": 0.0028926000000000004
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:390:wolf_count_distribution",
+          "primitive_calls": 216,
+          "calls": 216,
+          "exclusive_seconds": 0.0025044,
+          "inclusive_seconds": 0.0041081
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\board_future.py:627:resolution_key",
+          "primitive_calls": 29,
+          "calls": 29,
+          "exclusive_seconds": 0.0024022,
+          "inclusive_seconds": 0.007021500000000001
+        },
+        {
+          "function": "C:\\Users\\user\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\fractions.py:710:_add",
+          "primitive_calls": 653,
+          "calls": 653,
+          "exclusive_seconds": 0.0022708000000000003,
+          "inclusive_seconds": 0.0040996
+        },
+        {
+          "function": "~:0:<method 'append' of 'list' objects>",
+          "primitive_calls": 862,
+          "calls": 862,
+          "exclusive_seconds": 0.0020879,
+          "inclusive_seconds": 0.0020879
+        }
+      ],
+      "warning": "cProfile/tracemalloc are diagnostic only; per-function peaks reset and are incremental, not independent-process peak memory"
+    },
+    {
+      "players": 7,
+      "aggregate_wolf": false,
+      "diagnostic_seconds": 8.402402799983975,
+      "parts": {
+        "solver_wolf_information_cells": {
+          "calls": 1,
+          "rows": 3,
+          "hypotheses": 3,
+          "seconds": 0.0016696000238880515,
+          "max_incremental_peak_bytes": 7700,
+          "retained_bytes_sum": 5148
+        },
+        "public_report_vectors": {
+          "calls": 3,
+          "rows": 232,
+          "hypotheses": 544,
+          "seconds": 0.42637220001779497,
+          "max_incremental_peak_bytes": 256395,
+          "retained_bytes_sum": 188121
+        },
+        "actual_report_likelihood_transfer": {
+          "calls": 8,
+          "rows": 552,
+          "hypotheses": 896,
+          "seconds": 0.7194582000374794,
+          "max_incremental_peak_bytes": 123900,
+          "retained_bytes_sum": 323480
+        }
+      },
+      "cached_report_vectors": {
+        "mornings": {
+          "vectors": 232,
+          "hypotheses": 544
+        },
+        "publication_values": {
+          "vectors": 232,
+          "hypotheses": 544
+        }
+      },
+      "value_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 4,
+          "states": 1
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 3,
+          "states": 432
+        }
+      ],
+      "action_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 4,
+          "states": 8
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 3,
+          "states": 1259
+        }
+      ],
+      "states": {
+        "values": 433,
+        "actions": 1267,
+        "expansions": {
+          "actions": 1267,
+          "values": 433
+        },
+        "acquired": 5,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 6,
+        "saved_sources": 0,
+        "resolution_cache": 1270,
+        "target_orbits": {
+          "target_members": 1309,
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "traced_current_bytes": 6293684,
+      "traced_peak_since_last_reset_bytes": 6453632,
+      "top_exclusive": [
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:282:__post_init__",
+          "primitive_calls": 3775,
+          "calls": 3775,
+          "exclusive_seconds": 0.9749294000000001,
+          "inclusive_seconds": 1.6451107
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:49:__post_init__",
+          "primitive_calls": 6796,
+          "calls": 6796,
+          "exclusive_seconds": 0.6594873,
+          "inclusive_seconds": 0.9715987
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py:24:__post_init__",
+          "primitive_calls": 2635,
+          "calls": 2635,
+          "exclusive_seconds": 0.6130895000000001,
+          "inclusive_seconds": 0.8903198000000001
+        },
+        {
+          "function": "~:0:<built-in method builtins.hash>",
+          "primitive_calls": 243875,
+          "calls": 519821,
+          "exclusive_seconds": 0.5339911,
+          "inclusive_seconds": 0.7357368000000001
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:74:normalize",
+          "primitive_calls": 2635,
+          "calls": 2635,
+          "exclusive_seconds": 0.36889170000000004,
+          "inclusive_seconds": 1.1051615000000001
+        },
+        {
+          "function": "~:0:<built-in method builtins.len>",
+          "primitive_calls": 179392,
+          "calls": 179392,
+          "exclusive_seconds": 0.2771465,
+          "inclusive_seconds": 0.2771465
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:538:action_outcomes",
+          "primitive_calls": 2534,
+          "calls": 2534,
+          "exclusive_seconds": 0.24675940000000002,
+          "inclusive_seconds": 2.2543155
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\board_future.py:627:resolution_key",
+          "primitive_calls": 2536,
+          "calls": 2536,
+          "exclusive_seconds": 0.22776220000000003,
+          "inclusive_seconds": 0.6415301
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:390:wolf_count_distribution",
+          "primitive_calls": 17388,
+          "calls": 17388,
+          "exclusive_seconds": 0.22495630000000003,
+          "inclusive_seconds": 0.35507750000000005
+        },
+        {
+          "function": "~:0:<method 'append' of 'list' objects>",
+          "primitive_calls": 75681,
+          "calls": 75681,
+          "exclusive_seconds": 0.190973,
+          "inclusive_seconds": 0.190973
+        },
+        {
+          "function": "<string>:2:__hash__",
+          "primitive_calls": 320100,
+          "calls": 320100,
+          "exclusive_seconds": 0.1630271,
+          "inclusive_seconds": 0.407636
+        },
+        {
+          "function": "~:0:<built-in method builtins.getattr>",
+          "primitive_calls": 193889,
+          "calls": 193889,
+          "exclusive_seconds": 0.1606224,
+          "inclusive_seconds": 0.1606224
+        }
+      ],
+      "warning": "cProfile/tracemalloc are diagnostic only; per-function peaks reset and are incremental, not independent-process peak memory"
+    },
+    {
+      "players": 7,
+      "aggregate_wolf": true,
+      "diagnostic_seconds": 6.212360200006515,
+      "parts": {
+        "solver_wolf_information_cells": {
+          "calls": 1,
+          "rows": 1,
+          "hypotheses": 1,
+          "seconds": 0.0007404999923892319,
+          "max_incremental_peak_bytes": 7514,
+          "retained_bytes_sum": 4890
+        },
+        "public_report_vectors": {
+          "calls": 3,
+          "rows": 232,
+          "hypotheses": 544,
+          "seconds": 0.4307835000217892,
+          "max_incremental_peak_bytes": 253835,
+          "retained_bytes_sum": 178671
+        },
+        "actual_report_likelihood_transfer": {
+          "calls": 4,
+          "rows": 328,
+          "hypotheses": 576,
+          "seconds": 0.4541903000208549,
+          "max_incremental_peak_bytes": 123004,
+          "retained_bytes_sum": 201152
+        }
+      },
+      "cached_report_vectors": {
+        "mornings": {
+          "vectors": 232,
+          "hypotheses": 544
+        },
+        "publication_values": {
+          "vectors": 232,
+          "hypotheses": 544
+        }
+      },
+      "value_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 4,
+          "states": 1
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 3,
+          "states": 288
+        }
+      ],
+      "action_states_by_phase": [
+        {
+          "day": 2,
+          "phase": "night",
+          "alive": 4,
+          "states": 4
+        },
+        {
+          "day": 3,
+          "phase": "day",
+          "alive": 3,
+          "states": 835
+        }
+      ],
+      "states": {
+        "values": 289,
+        "actions": 839,
+        "expansions": {
+          "actions": 839,
+          "values": 289
+        },
+        "acquired": 3,
+        "mornings": 3,
+        "publications": 3,
+        "policies": 4,
+        "saved_sources": 0,
+        "resolution_cache": 842,
+        "target_orbits": {
+          "target_members": 871,
+          "target_representatives": 839,
+          "solver_wolf_cells": 1,
+          "solver_wolf_hypotheses": 3
+        }
+      },
+      "traced_current_bytes": 4504271,
+      "traced_peak_since_last_reset_bytes": 4592918,
+      "top_exclusive": [
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:282:__post_init__",
+          "primitive_calls": 2617,
+          "calls": 2617,
+          "exclusive_seconds": 0.7795463,
+          "inclusive_seconds": 1.2679776
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:49:__post_init__",
+          "primitive_calls": 4794,
+          "calls": 4794,
+          "exclusive_seconds": 0.5100801,
+          "inclusive_seconds": 0.7506681000000001
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_future_uniform.py:24:__post_init__",
+          "primitive_calls": 1743,
+          "calls": 1743,
+          "exclusive_seconds": 0.4434345,
+          "inclusive_seconds": 0.6442497
+        },
+        {
+          "function": "~:0:<built-in method builtins.hash>",
+          "primitive_calls": 161887,
+          "calls": 332276,
+          "exclusive_seconds": 0.3708227,
+          "inclusive_seconds": 0.5033730000000001
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\seer_acquisition.py:74:normalize",
+          "primitive_calls": 1743,
+          "calls": 1743,
+          "exclusive_seconds": 0.2826981,
+          "inclusive_seconds": 0.8622042000000001
+        },
+        {
+          "function": "~:0:<built-in method builtins.len>",
+          "primitive_calls": 123037,
+          "calls": 123037,
+          "exclusive_seconds": 0.2043696,
+          "inclusive_seconds": 0.2043696
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:538:action_outcomes",
+          "primitive_calls": 1678,
+          "calls": 1678,
+          "exclusive_seconds": 0.1705307,
+          "inclusive_seconds": 1.6476327000000002
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\exact.py:390:wolf_count_distribution",
+          "primitive_calls": 11690,
+          "calls": 11690,
+          "exclusive_seconds": 0.17008420000000002,
+          "inclusive_seconds": 0.26594310000000004
+        },
+        {
+          "function": "C:\\Users\\user\\Documents\\Codex\\2026-10-14\\task\\ww_gg-recovery-git\\werewolf\\board_future.py:627:resolution_key",
+          "primitive_calls": 1680,
+          "calls": 1680,
+          "exclusive_seconds": 0.15876110000000002,
+          "inclusive_seconds": 0.4688687
+        },
+        {
+          "function": "~:0:<method 'append' of 'list' objects>",
+          "primitive_calls": 50019,
+          "calls": 50019,
+          "exclusive_seconds": 0.1304489,
+          "inclusive_seconds": 0.1304489
+        },
+        {
+          "function": "~:0:<built-in method builtins.getattr>",
+          "primitive_calls": 126963,
+          "calls": 126963,
+          "exclusive_seconds": 0.1100277,
+          "inclusive_seconds": 0.1100277
+        },
+        {
+          "function": "<string>:2:__hash__",
+          "primitive_calls": 203588,
+          "calls": 203588,
+          "exclusive_seconds": 0.10808720000000001,
+          "inclusive_seconds": 0.2731466
+        }
+      ],
+      "warning": "cProfile/tracemalloc are diagnostic only; per-function peaks reset and are incremental, not independent-process peak memory"
+    }
+  ],
+  "full_initial7_search": false,
+  "memory_note": "Per-call incremental traced peaks; retained allocation sums may include shared objects and are not whole-cache ownership attribution",
+  "source_sha256": {
+    "werewolf\\actor_information.py": "1a333eaabbd6de2dacd86ad6104a3bcf70e57c84b49ec66607cbab56b7598c1e",
+    "werewolf\\closed_calculation.py": "cea29e44f99185831aa6e03ee4b8b3e6a3895da2dd663c4af36d13cae9a8a090",
+    "werewolf\\grouped_forecast.py": "5e5a95e360b0d164e9afb00e086bce3b72929d03723cc9a40f5d10428fa2ffa3",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "benchmarks\\player_match_groups\\remaining_enumeration_profile.py": "3aed14b31feae79a06b37e218e86b71c8cf55ca4a2c4fc79fafb618054c965b5"
+  }
+}

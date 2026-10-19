@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "full_related_run": {
+    "tests": 75,
+    "runner_seconds": 81.101,
+    "modules": [
+      "tests.test_wolf_cell_orbits",
+      "tests.test_representative_targets",
+      "tests.test_closed_morning_reports",
+      "tests.test_closed_saved_history",
+      "tests.test_closed_calculation",
+      "tests.test_closed_saved_day",
+      "tests.test_root_secret_flow",
+      "tests.test_root_secret_replay",
+      "tests.test_shared_transition_provenance",
+      "tests.test_owner_information_provenance",
+      "tests.test_root_guard_max",
+      "tests.test_public_prior_ownership",
+      "tests.test_cut_out_initial_publications",
+      "tests.test_cut_out_separate_publications"
+    ]
+  },
+  "final_wolf_cell_suite": {
+    "tests": 7,
+    "runner_seconds": 10.702,
+    "added_since_full_run": [
+      "wolf-owned joint view versus expanded and cold",
+      "original seven-player structured own-scan continuation"
+    ]
+  },
+  "distinct_tests_covered": 77,
+  "production_unchanged_since_full_run": true,
+  "selected_audit": "inherited-groups --wolf-cells verified",
+  "diff_check": "passed",
+  "measured_source_hashes_match": true,
+  "profiled_source_hashes_match": true,
+  "source_sha256": {
+    "werewolf\\actor_information.py": "1a333eaabbd6de2dacd86ad6104a3bcf70e57c84b49ec66607cbab56b7598c1e",
+    "werewolf\\closed_calculation.py": "cea29e44f99185831aa6e03ee4b8b3e6a3895da2dd663c4af36d13cae9a8a090",
+    "werewolf\\grouped_forecast.py": "5e5a95e360b0d164e9afb00e086bce3b72929d03723cc9a40f5d10428fa2ffa3",
+    "werewolf\\information_set_forecast.py": "e85ba183550754be1ff43d5f749e458e781481eecd2ed0c03d1d68c8c17f397a",
+    "benchmarks\\player_match_groups\\wolf_cell_fixture.py": "0b9d587236374e128410f53ae4cc263369c216f9239d07a99ecdd206cd4a101d",
+    "benchmarks\\player_match_groups\\remaining_enumeration_profile.py": "3aed14b31feae79a06b37e218e86b71c8cf55ca4a2c4fc79fafb618054c965b5",
+    "tests\\test_wolf_cell_orbits.py": "7f3a06f5e34f5904b2ae1c9fcaf6f82972b6421191cde962dc6854bdea037813"
+  },
+  "full_initial7_search": false
+}

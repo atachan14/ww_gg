@@ -105,3 +105,22 @@ def condition_wolf_choice(state,policies,target,*,compatible=lambda h:True):
     mass=sum((h.mass for h in entries),F())
     if not mass:raise ValueError('Observed wolf choice outside support')
     return mass,replace(state,hypotheses=normalize(entries))
+
+
+def wolf_information_orbits(state,partition):
+    """Aggregate invariant wolf cells before building their conditional laws.
+
+    Partitions are supplied only by the closed common generators. Recorded
+    attack targets are fixed by them. Keep a complete representative joint
+    law and sum actual mass over every image, never combine role marginals.
+    """
+    masks=tuple(sum(1<<(p-1) for p in group) for group in partition)
+    buckets={}
+    for h in state.hypotheses:
+        mask=h.roles[0];key=(tuple((mask&part).bit_count() for part in masks),h.attacks)
+        if key not in buckets:buckets[key]=[F(),mask,[]]
+        row=buckets[key];row[0]+=h.mass
+        if mask<row[1]:row[1]=mask;row[2]=[]
+        if mask==row[1]:row[2].append(h)
+    return tuple((WolfInformation(mask,attacks),mass,replace(state,hypotheses=normalize(tuple(entries))))
+                 for (_,attacks),(mass,mask,entries) in buckets.items())

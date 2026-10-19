@@ -34,7 +34,9 @@
         "resolution_cache": 14,
         "target_orbits": {
           "target_members": 18,
-          "target_representatives": 11
+          "target_representatives": 11,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
         }
       },
       "full_joint_trace_cold_Forecast_Table_equal": true,
@@ -73,7 +75,9 @@
         "resolution_cache": 1270,
         "target_orbits": {
           "target_members": 1309,
-          "target_representatives": 1267
+          "target_representatives": 1267,
+          "solver_wolf_cells": 3,
+          "solver_wolf_hypotheses": 3
         }
       },
       "full_joint_trace_cold_Forecast_Table_equal": true,
@@ -112,7 +116,9 @@
         "resolution_cache": 18,
         "target_orbits": {
           "target_members": 20,
-          "target_representatives": 20
+          "target_representatives": 20,
+          "solver_wolf_cells": 6,
+          "solver_wolf_hypotheses": 6
         }
       },
       "full_joint_trace_cold_Forecast_Table_equal": true,
@@ -151,7 +157,9 @@
         "resolution_cache": 15,
         "target_orbits": {
           "target_members": 18,
-          "target_representatives": 16
+          "target_representatives": 16,
+          "solver_wolf_cells": 5,
+          "solver_wolf_hypotheses": 5
         }
       },
       "full_joint_trace_cold_Forecast_Table_equal": true,
@@ -190,7 +198,9 @@
         "resolution_cache": 915,
         "target_orbits": {
           "target_members": 922,
-          "target_representatives": 912
+          "target_representatives": 912,
+          "solver_wolf_cells": 2,
+          "solver_wolf_hypotheses": 2
         }
       },
       "full_joint_trace_cold_Forecast_Table_equal": true,

@@ -15,9 +15,10 @@ class GroupedPolicy(InformationSetActionPolicy):
 
 
 class GroupedForecast(InformationSetForecast):
-    def __init__(self,*args,**kwargs):
+    def __init__(self,*args,aggregate_wolf=False,**kwargs):
         super().__init__(*args,**kwargs)
         if (self.strategy.day,self.strategy.night,self.strategy.fake_reports)!=('random',)*3:raise ValueError('Uniform representative mode only')
+        self.aggregate_wolf=aggregate_wolf
         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
         self.action_policy=GroupedPolicy(self)
 
@@ -42,6 +43,14 @@ class GroupedForecast(InformationSetForecast):
         self.orbit_stats['target_members']+=len(targets)
         self.orbit_stats['target_representatives']+=len(result)
         return result
+
+    def wolf_cells(self,state):
+        from .actor_information import wolf_information_orbits
+        rows=(wolf_information_orbits(state,self.groups) if self.aggregate_wolf and any(len(g)>1 for g in self.groups)
+              else super().wolf_cells(state))
+        self.orbit_stats['solver_wolf_cells']=self.orbit_stats.get('solver_wolf_cells',0)+len(rows)
+        self.orbit_stats['solver_wolf_hypotheses']=self.orbit_stats.get('solver_wolf_hypotheses',0)+len(state.hypotheses)
+        return rows
 
     @contextmanager
     def actor_scope(self,info):

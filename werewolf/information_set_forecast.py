@@ -73,6 +73,7 @@ class InformationSetForecast:
         self.joint_keys={}
         self.action_policy=InformationSetActionPolicy(self)
 
+    def wolf_cells(self,state):return wolf_information_groups(state)
     def group_scope(self,groups):return nullcontext()
     def actor_scope(self,info):return nullcontext()
     def target_orbits(self,targets):return tuple((p,) for p in targets)
@@ -548,7 +549,7 @@ class InformationSetForecast:
                 value=sum((mass*self.act(*child[:3],target,child.private,child.observer,physical=child.physical)
                     for mass,child,target,proof in self.wolf_choices(frame)),F())
             else:
-                for info,mass,group in wolf_information_groups(private):
+                for info,mass,group in self.wolf_cells(private):
                     group_board=physical_board(b,group,physical)
                     with self.actor_scope(info):
                         policy=self.wolf_policy(b,s,past,info.initial_roster,info.attacks)
