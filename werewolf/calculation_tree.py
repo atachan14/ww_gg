@@ -152,12 +152,12 @@ class CalculationTree:
         from .seer_future_uniform import candidates
         record=self.nodes[key];node=record['node'];s=node.read();e=self.engine
         def names(players):
-            values=list(sorted(players));return str(values[0])+('（or'+'or'.join(map(str,values[1:]))+'）' if len(values)>1 else '')
+            values=list(sorted(players));return '['+','.join(map(str,values))+']から' if len(values)>1 else str(values[0])+'を'
         scans=[]
         for player in s.public.alive:
             if s.public.role_probability(player,'seer')==1:
                 targets={t for h in s.private.hypotheses for t in candidates(h,player,s.public.alive)}
-                scans.append(f'{player}が{names(targets)}を占い')
+                scans.append(f'{player}が{names(targets)}占い')
         result=[]
         for action in actions:
             normalizer=action.policy_mass or action.fallback_mass;branches=[]
@@ -198,7 +198,7 @@ class CalculationTree:
                     outcome_label=color+'・'+('占い先が死亡' if new[0].target==plan.target else '別の対象が死亡')
                 elif not new and outcome.source.public.winner is None:outcome_label='占い公開なし'
                 branches.append(dict(node=representative,probability=str(weight*outcome.probability),variants=variants,observation=observation,outcome_label=outcome_label,joint_actions=traces))
-            result.append(dict(targets=list(action.targets),label='・'.join(scans)+'｜狼が'+names(action.targets)+'を襲撃',grouped=True,
+            result.append(dict(targets=list(action.targets),label='・'.join(scans)+'｜狼が'+names(action.targets)+'襲撃',grouped=True,
                 multiplicity=sum(len(p.members) for p in action.plans),members=[dict(target=m.target,information='狼本人情報',policy_mass=str(m.policy_mass)) for p in action.plans for m in p.members],
                 q_score=None,selected=bool(action.policy_mass),policy_probability=str(action.policy_mass),branches=branches))
         record['actions']=result

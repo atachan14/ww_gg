@@ -1,6 +1,9 @@
 "use strict";
 (()=>{
  const el=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
+ const targetLabel=(targets,action)=>(targets.length>1?'['+targets.join(',')+']から':targets[0]+'を')+action;
+ // Also format labels already cached by a running local server.
+ const groupLabel=label=>label.replace(/(\d+)[（(]or(\d+(?:or\d+)*)[）)]を/g,(_,first,rest)=>'['+[first,...rest.split('or')].join(',')+']から');
  function mass(a,b){const pair=x=>x.split('/').map(BigInt),[an,ad=1n]=pair(a),[bn,bd=1n]=pair(b);let n=an*bn,d=ad*bd,x=n,y=d;while(y){const r=x%y;x=y;y=r;}n/=x;d/=x;return d===1n?String(n):`${n}/${d}`;}
  function mount(root){
   if(root.dataset.treeBound)return;root.dataset.treeBound='1';root.querySelector('.tree-conditions').textContent='項目：村勝率 ／ 矢印：枝の確率（行動群の結果は条件付き）';
@@ -27,7 +30,7 @@
    const tree=build(rootId);if(!tree)return;
    function place(board,top){board.cy=top+board.height/2;board.span=[top,top+board.height];entries.push(board);let cursor=top;
     for(const group of board.groups){
-     if(group.kind==='execution'||group.kind==='joint'){const joint=group.kind==='joint',text=joint?group.action.label:group.action.targets[0]+(group.action.targets.length>1?'（or'+group.action.targets.slice(1).join('or')+'）':'')+'を処刑',title=joint?'行動群の選択確率 '+group.action.policy_probability+'\n'+group.children.map(({branch})=>branch.observation+'：条件付き '+branch.probability+' ／ 到達 '+mass(group.action.policy_probability,branch.probability)).join('\n'):group.action.members.map(m=>m.target+'を処刑').join(' / ');const item={kind:'action',column:group.column,cy:cursor+group.height/2,text,title,span:[cursor,cursor+group.height]};entries.push(item);links.push([board,item,joint?group.action.policy_probability:null]);let childTop=cursor;for(const {branch,child} of group.children){place(child,childTop);links.push([item,child,joint?branch.probability:mass(group.action.policy_probability,branch.probability)]);childTop+=child.height+GAP;}}
+     if(group.kind==='execution'||group.kind==='joint'){const joint=group.kind==='joint',text=joint?groupLabel(group.action.label):targetLabel(group.action.targets,'処刑'),title=joint?'行動群の選択確率 '+group.action.policy_probability+'\n'+group.children.map(({branch})=>branch.observation+'：条件付き '+branch.probability+' ／ 到達 '+mass(group.action.policy_probability,branch.probability)).join('\n'):group.action.members.map(m=>m.target+'を処刑').join(' / ');const item={kind:'action',column:group.column,cy:cursor+group.height/2,text,title,span:[cursor,cursor+group.height]};entries.push(item);links.push([board,item,joint?group.action.policy_probability:null]);let childTop=cursor;for(const {branch,child} of group.children){place(child,childTop);links.push([item,child,joint?branch.probability:mass(group.action.policy_probability,branch.probability)]);childTop+=child.height+GAP;}}
      else{place(group.child,cursor+(group.height-group.child.height)/2);const start=cursor+(group.height-group.traces.length*ROW)/2;group.traces.forEach((trace,index)=>{const title='代替組合せ（各組合せの襲撃者は1人）\n'+trace.members.map(m=>m.label+' · '+mass(group.action.policy_probability,m.probability)).join('\n')+(group.branch.trace_pending?'\n'+group.branch.trace_pending:'');const item={kind:'action',column:group.column,cy:start+(index+.5)*ROW,text:textFor(group.action,trace),title,trace};entries.push(item);links.push([board,item,null],[item,group.child,mass(group.action.policy_probability,trace.probability)]);});}
      cursor+=group.height+GAP;
     }

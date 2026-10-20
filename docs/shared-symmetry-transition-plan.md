@@ -2634,3 +2634,13 @@ items. Background dragging pans horizontally and vertically, releases capture,
 and does not navigate. Mobile right-edge B17 Current gives Day2day,3 survivors,
 village100%; browser Back restores saved inputs. Viewport reset; no console
 errors. All older server processes/sessions remain untouched. No push/deploy.
+### 2026-10-20 Bracketed target-group display notation
+
+Label-only follow-up: execution groups now read `[3,4,5]から処刑`; shared
+ability labels read `1が[4,5]から占い｜狼が[4,5]から襲撃`. Single targets keep
+`1を処刑` / `狼が1を襲撃`. The frontend also formats already cached old group
+labels, so the existing18806 server and saved session need no restart. No kernel,
+probability, representative, outcome or Current-transport change. Nine focused
+joint-kernel/Current tests pass, including exact label assertions. Browser reload
+at http://127.0.0.1:18806/main confirms these labels, root2/3/night1/2, conditional
+1/2 outcomes and selected mass0, no clipped action items and no console errors.
