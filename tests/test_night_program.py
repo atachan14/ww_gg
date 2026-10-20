@@ -36,16 +36,18 @@ class NightProgramTests(unittest.TestCase):
    response=client.get('/game-tree',query_string={'node':key,'expand':'1'});self.assertEqual(response.status_code,200,response.data)
    stages=response.json['night_stages'];self.assertIsNotNone(stages)
    self.assertEqual(len(stages['branches']),1);target=stages['branches'][0]
-   self.assertEqual((target['actor'],target['value'],target['targets']),(2,3,[3,4,5]));self.assertEqual(target['label'],'\u5360\u3044\u5e2b\u304c[(3),4,5]\u304b\u3089\u5360\u3044')
+   self.assertEqual((target['actor'],target['value'],target['targets']),(2,3,[3,4,5]));self.assertEqual(target['label'],'[(2),3,4,5]\u304c[(3),4,5]\u304b\u3089\u5360\u3044')
    results=target['children']['branches'];self.assertEqual({r['label']:F(r['probability']) for r in results},{'\u767d':F(5,9),'\u9ed2':F(4,9)})
    for r in results:
     self.assertEqual(r['kind'],'seer_result');attacks=r['children']['branches'];groups=[a['targets'] for a in attacks]
-    self.assertIn([4,5],groups);self.assertIn([2],groups)
+    self.assertIn([2],groups)
+    if r['label']=='\u767d':self.assertIn([5],groups)
+    else:self.assertIn([4,5],groups)
     if r['label']=='\u767d':self.assertIn([3],groups)
     self.assertEqual(sum(F(a['probability']) for a in attacks),1)
     for a in attacks:self.assertTrue(a['children']['leaves'])
    # Exercise the real signed endpoint from a staged named leaf.
-   selected=next(a for a in results[0]['children']['branches'] if a['targets']==[4,5])['children']['leaves'][0]['node']
+   selected=next(a for a in results[0]['children']['branches'] if a['targets']==[5])['children']['leaves'][0]['node']
    result=client.post('/game-tree/current',data={'snapshot':root['snapshot'],'node':selected});self.assertEqual(result.status_code,200,result.data)
    self.assertEqual(client.get(result.json['url']).status_code,200)
  def test_two_seers_have_target_result_pairs_and_same_named_scalar_value(self):
@@ -120,4 +122,4 @@ class NightProgramTests(unittest.TestCase):
        expand(NightStage(program,leaves,(*stage.prefix,named)),reach*branch.probability/F(len(branch.images)))
     expand(program.root,F(1))
     self.assertEqual(actual,{id(leaf):leaf.mass for leaf in program.leaves})
-    self.assertTrue(any(len(s.outcomes())<len(s.leaves) for b in program.root.branches() for r in b.state.branches() for a in r.state.branches() for s in (a.state,)))
+    self.assertTrue(any(len(a.images)>1 for b in program.root.branches() for r in b.state.branches() for a in r.state.branches()))

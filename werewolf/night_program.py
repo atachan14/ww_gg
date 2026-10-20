@@ -70,7 +70,7 @@ class NightStage:
         for leaf in self.leaves:
             if index<len(leaf.steps):buckets.setdefault(leaf.steps[index],[]).append(leaf)
         groups=[]
-        ordered=sorted(buckets.items(),key=lambda pair:(pair[0].kind,pair[0].actor or 0,{'white':0,'black':1}.get(pair[0].value,pair[0].value)))
+        ordered=sorted(buckets.items(),key=lambda pair:(pair[0].kind,pair[0].actor or 0,pair[0].actors,{'white':0,'black':1}.get(pair[0].value,pair[0].value)))
         for step,leaves in ordered:
             found=False
             for group in groups:
@@ -87,7 +87,7 @@ class NightStage:
             # A target group lists images fixing the canonical actor. Actor
             # transports are retained separately, never interpreted as a set
             # cross product between possible actors and possible targets.
-            targets=tuple(sorted({s.value for s,rows,m in images if s.actor==step.actor})) if step.kind.endswith('_target') else ()
+            targets=tuple(sorted({s.value for s,rows,m in images if s.actor==step.actor and s.actors==step.actors})) if step.kind.endswith('_target') else ()
             branches.append(StageBranch(mass/self.mass if self.mass else counter/self.counter,
                 mass/self.mass if self.mass else F(),counter/self.counter,mass,step,targets,
                 NightStage(self.program,leaves,(*self.prefix,step)),tuple(images)))
@@ -129,7 +129,7 @@ class NightProgram:
     def moved_steps(self,steps,mapping):
         return tuple(replace(s,actor=None if s.actor is None else mapping[s.actor-1],
             value=mapping[s.value-1] if s.kind.endswith('_target') else s.value,
-            visible_to=tuple(mapping[p-1] for p in s.visible_to)) for s in steps)
+            visible_to=tuple(mapping[p-1] for p in s.visible_to),actors=tuple(sorted(mapping[p-1] for p in s.actors))) for s in steps)
     def leaf_signature(self,leaf,mapping):
         key=(id(leaf.source),mapping)
         if key not in self.signatures:self.signatures[key]=signature(leaf.source,mapping)
@@ -188,6 +188,7 @@ def compile_night(engine,source,groups):
                         for h in after.private.hypotheses:
                             steps=recorded_steps(h,b.day+1)
                             if not steps or steps[-1].kind!='wolf_target':steps=(*steps,AbilityStep('wolf_target',None,target,()))
+                            steps=tuple(replace(step,actors=wolves) if step.kind=='wolf_target' else step for step in steps)
                             scans=tuple(sorted((a.player,a.target) for a in h.acquisitions if a.day==b.day+1))
                             events.setdefault((steps,scans),[]).append(h)
                         for (steps,scans),hypotheses in events.items():

@@ -295,18 +295,9 @@ class CalculationTree:
             branches=[]
             for branch in stage.branches():
                 step=branch.step
-                owner=str(step.actor) if step.actor is not None and node.read().public.role_probability(step.actor,'seer')==1 else '\u5360\u3044\u5e2b'
-                if step.kind=='seer_target':
-                    targets=branch.targets or (step.value,)
-                    positions='['+','.join('('+str(p)+')' if p==step.value else str(p) for p in targets)+']\u304b\u3089' if len(targets)>1 else str(step.value)+'\u3092'
-                    label=owner+'\u304c'+positions+'\u5360\u3044'
-                elif step.kind=='seer_result':label={'white':'\u767d','black':'\u9ed2'}[step.value]
-                elif step.kind=='wolf_target':
-                    targets=branch.targets or (step.value,)
-                    positions='['+','.join('('+str(p)+')' if p==step.value else str(p) for p in targets)+']\u304b\u3089' if len(targets)>1 else str(step.value)+'\u3092'
-                    label='\u72fc\u304c'+positions+'\u8972\u6483'
-                else:label=step.kind
-                branches.append(dict(kind=step.kind,actor=step.actor,value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=True,public_observation=False,visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
+                from .ability_labels import stage_label
+                label,actor_groups,joint_choices=stage_label(branch)
+                branches.append(dict(kind=step.kind,actor=step.actor,actor_groups=actor_groups,joint_choices=joint_choices,actors=list(step.actors),value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=True,public_observation=False,visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
             result=dict(branches=branches);built[cache]=result
             return result
         result=build(program.root);row['night_stages']=result;return result

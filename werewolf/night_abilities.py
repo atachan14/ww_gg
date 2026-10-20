@@ -17,6 +17,7 @@ class AbilityStep:
     actor:int | None
     value:object
     visible_to:tuple=()
+    actors:tuple=()
 
 @dataclass(frozen=True)
 class AbilityPath:

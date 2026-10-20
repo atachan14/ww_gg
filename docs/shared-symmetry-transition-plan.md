@@ -2814,3 +2814,49 @@ Browser Back restores the saved root. Viewport reset; no console errors.
 Current-build full-page screenshot attempts on18810 and18812 timed out; actual
 new-build pixel inspection remains unverified, distinct from successful DOM/AX
 and native-input verification. No screenshot artifact is claimed.
+
+### 2026-10-21 Correlated canonical actor allocations
+
+Night target stages now include the living wolf actor roster as a transported
+coordinate. This is part of the exact shared orbit, not a label inferred from
+equal probabilities. Canonical roster selection precedes the residual target
+orbit: targets must fix both the canonical seer actor and the entire canonical
+wolf allocation. A representative wolf4 therefore excludes self-bite4; the
+alternate named image wolf5/bite4 is transported with wolf4/bite5, not independently
+cross-producted with it. Policies, Q/P, generation order and chance masses remain
+unchanged. Existing full-state, full-history joint-measure comparisons still
+authorize every shared branch; each Current image retains its named recipe.
+
+Labels derive actor position orbits from the same proven joint transports.
+Seer example: [(2),3,4,5] acting, residual targets [(3),4,5]. White-result wolf
+example: [(4),5] acting, target5. Multiple occupied wolf orbits are joined by
+the Japanese conjunction, e.g. [(1),2] and [(5),6,7] acting on [(6),7]. The
+seven-player split case is tested at the exact joint-action/state-orbit level,
+not claimed as a new end-to-end seven-player MAX solver capability.
+
+If two wolves occupy one actor orbit, both canonical members are parenthesized
+and an explicit '(2 people)' count is appended, e.g. [(1),(2),3] (2 people).
+This denotes alternative two-wolf allocations, not three simultaneous wolves.
+The API also exposes actor_groups with count/representatives and joint_choices
+with the actual actor allocation, target and shared transport; no independent
+actor/target Cartesian-product meaning is assigned to bracketed groups. Known
+single actors remain numeric. Attack groups use the user's requested direct
+object wording; seer target groups retain selection-from wording.
+
+Actual TOP UI on http://127.0.0.1:18813/main was exercised with3citizen/1seer/
+1wolf, all hidden, execution1 and the living-seer composition. DOM/AX confirms
+the exact seer actor-group label and white-side [(4),5] acting on5; black-side
+actor3 stays singleton and residual targets4/5 remain grouped. White/black
+probabilities5/9 and4/9 and root/night values7/15 and1/3 are unchanged. Desktop
+and mobile DOM checks show no clipped items or document overflow. Right-edge
+B17 Current now gives actual victim5, Day2 day,3 survivors and village1/3; Back
+restores the saved root. Viewport reset; no console errors. Full-page screenshot
+capture again timed out; DOM/AX checks are not claimed as pixel inspection.
+Old servers, sessions and untracked artifacts remain. No push/deploy.
+
+Validation:162 relevant tests passed in135.702s. This includes real all-hidden
+API and Current, exact named mass expansion, random/MAX equivalence, multiple
+seers with separate actors, single known actors, split seven-player wolf orbits,
+two wolves in one orbit and self-target exclusions. Evidence:
+tests/test_actor_labels.py and .artifacts/actor-labels-verified.log. JavaScript
+syntax and diff checks pass. No new role-law/solver-scope capability is claimed.

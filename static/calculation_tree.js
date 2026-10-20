@@ -28,7 +28,7 @@
       return (stage.branches||[]).map(branch=>{const reach=mass(parentReach,branch.probability),position=branch.kind==='wolf_target'?2*seerCount:index;
        const image=(branch.images||[]).find(image=>image.children&&image.nodes.some(id=>displayPath.includes(id)));
        const descendants=walk(image?image.children:branch.children,index+1,reach);
-       return {probability:branch.probability,item:make('action',column+position,{text:branch.label,title:'\u540c\u6642\u884c\u52d5 / \u5230\u9054 '+reach+' / Q\u3068\u4ed6\u8005\u306e\u60c5\u5831\u96c6\u5408\u306f\u5909\u66f4\u3057\u307e\u305b\u3093'},descendants)};
+       return {probability:branch.probability,item:make('action',column+position,{text:branch.label,title:'\u540c\u6642\u884c\u52d5 / \u5230\u9054 '+reach+' / \u62ec\u5f27\u306f\u4ee3\u8868\u914d\u7f6e\u3002\u80fd\u529b\u8005\u3068\u5bfe\u8c61\u306f\u540c\u3058\u540d\u524d\u7f6e\u63db\u306b\u5f93\u3044\u307e\u3059\u3002'},descendants)};
       });
      };
      return walk(d.night_stages,0,reach);
