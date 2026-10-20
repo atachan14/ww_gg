@@ -16,36 +16,37 @@
   function render(anchorId){
    const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-item="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
    const entries=[],links=[],ROW=44,GAP=14;let maxPhase=3;
-   const base=phase=>Math.floor(phase/2)*7+(phase%2?3:0);
+   const base=phase=>Math.floor(phase/2)*8+(phase%2?3:0);
    function make(kind,column,data,children=[]){return {kind,column,...data,children,height:Math.max(ROW,children.reduce((h,c)=>h+c.item.height,0)+Math.max(0,children.length-1)*GAP)};}
-   function choices(d,path){
+   function choices(d,path,reach){
     if(d.winner)return [];
     const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0),column=base(phase)+2;
     if(d.phase==='night'&&d.ability_choices){
      return d.ability_choices.map(scan=>{
-      const attacks=scan.attacks.map(attack=>{
-       const outcomes=attack.branches.map(branch=>({probability:branch.probability,item:build(branch.node,path,branch.observation)})).filter(x=>x.item);
-       return {probability:attack.policy_probability,item:make('action',column+1,{text:attack.label,title:'方策 '+attack.policy_probability+' ／ 元の行動群内の条件付き確率 '+attack.conditional_probability},outcomes)};
+      const scanReach=mass(reach,scan.probability);
+      const attacks=(rows,resultReach)=>rows.map(attack=>{const attackReach=mass(resultReach,attack.probability||attack.policy_probability);
+       const outcomes=attack.branches.map(branch=>{const exact=(branch.variants||[]).find(v=>displayPath.includes(v.node));return {probability:branch.probability,item:build(exact?exact.node:branch.node,path,branch.observation,mass(attackReach,branch.probability))};}).filter(x=>x.item);
+       return {probability:attack.probability||attack.policy_probability,item:make('action',column+2,{text:attack.label,title:'\u540c\u6642\u884c\u52d5 / \u5230\u9054 '+attackReach+' / \u6761\u4ef6\u4ed8\u304d '+attack.conditional_probability},outcomes)};
       });
-      return {probability:scan.probability,item:make('action',column,{text:scan.label,title:'同時行動を表示順に分けています。狼の方策は占い・結果を観測する前に決定。'},attacks)};
+      const children=scan.results?scan.results.map(result=>({probability:result.probability,item:make('action',column+1,{text:result.label,title:'\u5360\u3044\u5e2b\u306e\u975e\u516c\u958b\u7d50\u679c\u3002\u72fc\u306e\u65b9\u7b56\u306f\u7d50\u679c\u3092\u89b3\u6e2c\u3059\u308b\u524d\u306b\u6c7a\u5b9a\u3002 / \u5230\u9054 '+mass(scanReach,result.probability)},attacks(result.attacks,mass(scanReach,result.probability)))})):attacks(scan.attacks,scanReach);
+      return {probability:scan.probability,item:make('action',column,{text:scan.label,title:'\u540c\u6642\u884c\u52d5\u3092\u8868\u793a\u9806\u306b\u5206\u3051\u3066\u3044\u307e\u3059\u3002'},children)};
      });
     }
-    return (d.actions||[]).map(action=>({probability:action.policy_probability,item:make('action',d.phase==='night'?column+1:column,{text:d.phase==='day'?targetLabel(action.targets,'処刑'):groupLabel(action.label),title:(d.ability_pending?d.ability_pending+'\n':'')+action.members.map(m=>m.target+' · '+m.policy_mass).join(' / ')},action.branches.map(branch=>{const exact=branch.variants.find(v=>displayPath.includes(v.node));return {probability:branch.probability,item:build(exact?exact.node:branch.node,path,branch.outcome_label)};}).filter(x=>x.item))}));
+    return (d.actions||[]).map(action=>({probability:action.policy_probability,item:make('action',d.phase==='night'?column+2:column,{text:d.phase==='day'?targetLabel(action.targets,'処刑'):groupLabel(action.label),title:(d.ability_pending?d.ability_pending+'\n':'')+action.members.map(m=>m.target+' · '+m.policy_mass).join(' / ')},action.branches.map(branch=>{const exact=branch.variants.find(v=>displayPath.includes(v.node));return {probability:branch.probability,item:build(exact?exact.node:branch.node,path,branch.outcome_label,mass(reach,mass(action.policy_probability,branch.probability)))};}).filter(x=>x.item))}));
    }
-   function build(id,path=new Set(),arrival){
+   function build(id,path=new Set(),arrival,reach='1'){
     const d=nodes.get(id);if(!d)return null;
     const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0);maxPhase=Math.max(maxPhase,phase);
     const next=new Set([...path,id]),compositions=d.compositions||[{node:id,label:'内訳未取得',probability:'1'}];
-    const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id},choices(c,next))};});
+    const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id},choices(c,next,mass(reach,composition.probability)))};});
     return make('board',base(phase),{d,id,arrival},children);
    }
    const tree=build(rootId);if(!tree)return;
    function place(item,top){item.cy=top+item.height/2;item.span=[top,top+item.height];entries.push(item);let cursor=top;for(const child of item.children){place(child.item,cursor);links.push([item,child.item,child.probability]);cursor+=child.item.height+GAP;}}
    place(tree,12);const columns=base(maxPhase+1),canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(headers,canvas);
    for(let phase=0;phase<=maxPhase;phase++){
-    const start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'夜':'昼'}`,'内訳',...(night?['占い','襲撃']:['選択'])];
-    labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;if(night&&index>1){h.style.top='26px';h.classList.add('ability-subheading');}headers.append(h);headings.push(h);});
-    if(night){const h=el('h3','選択','compact-tree-phase phase-heading action-heading');h.dataset.phaseGroup=phase;headers.append(h);selectionHeads.push({element:h,start:start+2,end:start+3});}
+    const start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'\u591c':'\u663c'}`,'\u5185\u8a33',...(night?['\u5360\u3044\u4f4d\u7f6e','\u5360\u3044\u7d50\u679c','\u8972\u6483\u4f4d\u7f6e']:['\u51e6\u5211\u4f4d\u7f6e'])];
+    labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;headers.append(h);headings.push(h);});
    }
    for(const item of entries){
     let row;if(item.kind==='action'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;row.onclick=()=>inspector.replaceChildren(el('span',item.title));}

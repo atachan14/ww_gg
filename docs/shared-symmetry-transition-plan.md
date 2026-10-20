@@ -2682,3 +2682,51 @@ items or document overflow. Two-axis pan releases without navigation; mobile
 right-edge Current reconstructs the selected scan/bite Board and browser Back
 restores the saved game. Final local server: http://127.0.0.1:18808/main; all older
 servers and sessions preserved. No push or deployment.
+
+### 2026-10-20 Private result factorization and attack stabilizers
+
+The retained simultaneous measure now displays scan position -> private result
+-> attack position -> morning Board. There is no intermediate solver decision,
+new public evidence, or wolf-policy recomputation. Results come from the actual
+current-night acquisition, even when the seer dies that night. Missing seers get
+an explicit no-scan result; incomplete histories retain the earlier exact joint
+fallback. The supported Tree has at most one seer; unsupported multi-record
+results conservatively retain the unsplit exact display.
+
+Attack grouping requires a single transposition fixing every canonical scan
+actor and target, preserving the complete source public Board, Q, P, histories,
+observer and physical Board, and transporting the whole child measure including
+both policy mass and counterfactual weights. Unsupported shapes fail closed. No
+equal-payoff or equal-marginal rule is used. Every named child route and transport
+is retained as a Current variant; only equivalent display subtrees are shared.
+
+Screenshot fixture: all-hidden, execution 1, living composition 1 seer/2 citizens/
+1 wolf, canonical seer 2 scanning 3. Swap 4/5 preserves the full source and fixes
+that scan. Attack masses are 1/3 at 2, 5/27 at 3 and 13/27 on the 4/5 orbit.
+Private white has probability 5/9 with conditional attack masses 1/3 each on
+2, 3 and 4/5. Private black has probability 4/9 with masses 1/3 at 2 and 2/3
+on 4/5; self-bite at black target 3 is impossible. Actor 2 and scan target 3
+remain distinct even if their displayed numeric policy fields are made equal.
+
+Result/attack edge probabilities disintegrate the same named joint measure.
+Backend reach fields are unconditional relative to the expanded night source;
+the renderer multiplies every preceding phase/composition/action edge to show
+root-relative reach in tooltips (white 1/3, black 4/15 in this fixture). Zero-policy
+branches retain actual reach zero and a separate counterfactual conditional law.
+Headers directly name execution position, scan position, scan result and attack
+position; the generic selection heading is removed.
+
+149 relevant tests pass in 33.722s; evidence: tests/test_ability_factorization.py
+and .artifacts/ability-factorization-final.log. Includes random/MAX, full named
+measure/value agreement with the existing action enumeration, no-seer behavior,
+private information invariance, same-night legality and named Current variants.
+JavaScript syntax and diff checks pass. Normal UI http://127.0.0.1:18809/main
+reproduces these labels, colors and masses. DOM desktop/mobile checks find zero
+clipped items or document overflow; responsive resize retains alignment. An empty
+background drag moves scroll from (200,0) to (300,100), releases panning and keeps
+the URL unchanged. Grouped representative B31 Current yields Day2 day, 3 alive,
+village 1/3; Back restores the all-hidden saved game. No console errors. Browser
+screenshot capture returned blank images despite successful DOM/native controls,
+so final pixel-image inspection is limited; no screenshot artifact is claimed.
+All earlier servers/sessions remain. No push/deploy. Named event enumeration and
+full-state comparison remain; no new scalar computational speedup is claimed.

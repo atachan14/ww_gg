@@ -268,11 +268,12 @@ class CalculationTree:
                         route=self.nodes[selected['node']]['route']
                         if full.read()!=base.read():route=(*route,{'full_trace':True})
                         child_id=self.register(child,(*route,{'physical':'joint','value':(source.public.day,wolves,acquired)}));conditioned[cache]=child_id
-                    branches.append(dict(node=conditioned[cache],probability=str((outcome['mass'] if attack['mass'] else outcome['counter'])/total),observation=outcome['label']))
+                    branches.append(dict(node=conditioned[cache],probability=str((outcome['mass'] if attack['mass'] else outcome['counter'])/total),mass=str(outcome['mass']),counter=str(outcome['counter']),observation=outcome['label']))
                 family_total=sum(other['counter'] for other in scan['attacks'].values() if set(other['families'])&set(attack['families']))
-                attacks.append(dict(label=f'狼が{victim}を襲撃',target=victim,policy_probability=str(attack['mass']/scan['mass'] if scan['mass'] else F()),conditional_probability=str(attack['counter']/family_total),branches=branches))
+                attacks.append(dict(label=f'狼が{victim}を襲撃',target=victim,targets=[victim],mass=str(attack['mass']),counter=str(attack['counter']),policy_probability=str(attack['mass']/scan['mass'] if scan['mass'] else F()),conditional_probability=str(attack['counter']/family_total),branches=branches))
             result.append(dict(label='・'.join(parts) if parts else '占いなし',scans=[list(p) for p in acquisitions],probability=str(scan['mass']),attacks=attacks,simultaneous=True))
-        record['ability_choices']=result
+        from .ability_factorization import factor
+        record['ability_choices']=factor(self,node,result)
 
     def expand(self,key):
         record=self.nodes[key]
@@ -405,7 +406,8 @@ class CalculationTree:
                 for choice in self.nodes[parent].get('ability_choices') or []:
                     for attack in choice['attacks']:
                         for branch in attack['branches']:
-                            child=branch['node'];items[child]=self.summary(child,True);pending.append(child)
+                            for child in [branch['node'],*[v['node'] for v in branch.get('variants',[])]]:
+                                items[child]=self.summary(child,True);pending.append(child)
                 for choice in self.nodes[parent]['actions'] or []:
                     for branch in choice['branches']:
                         child=branch['node'];items[child]=self.summary(child,True);pending.append(child)
