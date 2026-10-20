@@ -1,0 +1,100 @@
+{
+  "assumptions": {
+    "players": 5,
+    "seers": 1,
+    "mediums": 0,
+    "hunters": 0,
+    "wolves": 1,
+    "CO": {
+      "1": "seer"
+    },
+    "initial_report": "1->2 white",
+    "day": "max",
+    "night": "max",
+    "fake_reports": "max(default)",
+    "seer_position": [
+      "unvisited",
+      "uniform"
+    ],
+    "initial": "random_white",
+    "self_bite": false,
+    "representative_execution": 3,
+    "user_actual_saved_settings": "not read; screenshot matching reproduction only"
+  },
+  "values": {
+    "root": "2/3",
+    "night": "1/2",
+    "wolf4_forced_victims": {
+      "1": "1/2",
+      "2": "5/6",
+      "5": "1"
+    }
+  },
+  "representative_night": {
+    "alive": [
+      1,
+      2,
+      4,
+      5
+    ],
+    "wolf_distribution": {
+      "4": "1/2",
+      "5": "1/2"
+    },
+    "raw_joint_choices": 18,
+    "display_groups": 9,
+    "members_each": 2,
+    "selected_groups": 3,
+    "selected_group_masses": [
+      "1/3",
+      "1/3",
+      "1/3"
+    ],
+    "counterfactual_groups": 6,
+    "counterfactual_configured_mass": "0",
+    "solver_owner_orbits": 1,
+    "owner_representative": 4,
+    "owner_orbit_mass": "1",
+    "Q_acquired_hypotheses": 6,
+    "representative_P_acquired_hypotheses": 3
+  },
+  "parent_execution_orbit": {
+    "executions": [
+      3,
+      4,
+      5
+    ],
+    "union_wolf_actors": [
+      3,
+      4,
+      5
+    ],
+    "legal_named_joint_tuples": 54,
+    "configured_positive_tuples": 18,
+    "constraints": "wolf differs from executed; bite victim alive and differs from wolf; scan target in3/4/5 including executed; seer1 initial white2 fixed"
+  },
+  "cold_solver_stats": {
+    "values": 4,
+    "actions": 21,
+    "acquired": 15,
+    "policies": 9,
+    "resolution_cache": 24,
+    "target_members": 11,
+    "target_representatives": 7,
+    "report_kernels": 10,
+    "emitted_report_vectors": 0
+  },
+  "dead_target": "new night scan; existing candidates use original roster and own-unvisited preference, not alive-only targets",
+  "tree_relation": "UI expansion of common generated action/report frames plus action trace grouping; not a literal recursive-call tree. In this one-CO case acquisitions are retained, not latent-record reconstruction. Zero-selected counterfactuals also displayed.",
+  "safe_compression": {
+    "full_state": "S3 parent orbit transported across execution alternatives; stabilizer S2 after representative execution, further fixed by own wolf information. Preserve joint(E,W,C) constraints.",
+    "scalar_only": "integrate unobservable dead-seer scan coordinates or terminal known-wolf value; existing projection/terminal report moments already do this. Distinct scan records and public reports remain distinct full histories.",
+    "not_safe": "merge scanE/scanW/scanC solely equal payoff or independent actor/target set cross product"
+  },
+  "regressions": {
+    "tests": 2,
+    "result": "pass",
+    "seconds": 0.233
+  },
+  "solver_changes": "none"
+}

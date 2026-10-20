@@ -2425,3 +2425,89 @@ cookie namespace for a different local port. Use the new URL for the complete
 joint-action trace API. No saved game mutation, push/deploy, auth/permission or
 solver-rule change;8771/8772/thdmn8773 untouched. Evidence:
 benchmarks/player_match_groups/action-columns-validation.json.
+
+
+### 2026-10-20 One-CO solver/trace investigation (no solver change)
+
+Screenshot-matching isolated reproduction:5 players,3cit/1seer/1wolf,1CO seer1,
+initial report1->2 white, day/night/fake-report MAX defaults, self-bite false,
+random-white initial, own-unvisited/uniform scans; representative execution3.
+User's actual saved settings were not read. Root value2/3; continuing night1/2.
+Alive1,2,4,5, wolves4/5 each1/2. The wolf4 label is a representative. There are
+18 legal joint named tuples and9 UI groups of2; three bite1 scan groups each
+configured mass1/3, six counterfactual rows mass0. Their forced village values
+for wolf4 victims1,2,5 are respectively1/2,5/6,1, so MAX correctly selects1.
+
+The displayed nine rows are not nine literal solve-recursion branches. Normal
+solve already merges the two wolf-information cells into one full-joint orbit
+representative4 with mass1, while own-information stabilizers separate legal
+victim classes1,2,other-candidate. Acquisition generates6 public hypotheses or3
+representative-owner hypotheses here. The cold root forecast builds4 cached
+values/21 action entries,10 terminal report kernels and0 emitted report vectors;
+terminal moment/projection paths avoid the UI's full report/history materialization.
+UI candidates deliberately include unselected legal counterfactuals; it expands
+common node.action/reports outputs and then canonicalizes action-conditioned P
+traces. For this true1CO case records are retained (tracked seer1); no optional
+all-latent FullTraceOrigin reconstruction is used.
+
+Target3 is a NEW night scan after3 died, not an initial/historical record: existing
+seer_future_uniform.scan_target_players uses the ORIGINAL roster, and candidates
+excludes self/visited rather than dead players. This is an intentional existing
+rule contract documented in that function; it has not been changed here.
+
+Parent execution orbit3/4/5 versus child stabilizer must be distinguished. For
+representative execution3, wolf3 cannot survive. Across all three executions,
+the actor union IS3/4/5; all54 legal named joint tuples (18 positive under MAX)
+are retained. A useful quotient uses E=executed candidate, W=surviving wolf,
+C=other surviving candidate, S=seer1,V=white2. Constraints are E,W,C distinct,
+scan in{E,W,C}, bite in{S,V,C}; no self bite or dead attacker/victim. The parent
+S3 naming action transports all these jointly. After choosing representative E3,
+its S2 stabilizer swaps4/5; conditioning on own wolf further fixes W. Thus a
+role-relative quotient label can show the user's desired union without inventing
+the illegal independent set cross-product. Nine relative joint categories remain
+(three scan roles times three bite roles), with six named images across parent
+execution branches or two per representative child.
+
+Combining all scan3/4/5 is NOT a full-state automorphism: scanE,scanW,scanC differ
+in alive status, color and private history, and later reports can differ. A compact
+configured scan-law label may summarize their weighted sum while retaining those
+components. For scalar value only, bite1 kills the seer before publication, and
+biteC leaves a publicly known wolf; irrelevant scan details can be analytically
+integrated. Existing inactive-acquisition projections and terminal report moments
+already implement this kind of scalar simplification. Do not replace preserved
+full/public/private histories merely because values coincide. No broad solver
+compression or strategy change is made by the accompanying layout changes.
+Evidence:one-co-action-investigation.json and tests/test_one_co_tree_semantics.py
+(two tests pass0.233s, including all three execution members and the dead-target rule).
+
+### 2026-10-20 Recovery takeover verification
+
+Inspected existing diff before editing. Only four pre-existing Python local servers
+for this checkout were found (18801, 18802, 18803, 18804); none was a code writer.
+Preserved all processes, the user browser session and unrelated projects.
+Accepted the existing descendant-span layout/intrinsic column/pan implementation;
+changed execution wording to `3（or4or5）を処刑`. This is a display change only.
+
+Fresh verification: 18 focused tests passed (one-CO semantics, calculation tree,
+generated Current); independent representative-target audit test passed (five
+6/7-player small continuation cases, named and cold reconstructed Forecast/Table,
+full transported Q/P, history, physical outcomes and masses). The audit regenerates
+its existing benchmark JSON with timing changes; that unrelated tracked diff is
+left unstaged. Ordinary ClosedCalculation MAX admission is intentionally restricted;
+a direct ordinary-MAX comparison was rejected by its existing scope guard, not
+used as a result. No solver admission or policy was changed.
+
+Browser http://127.0.0.1:18804/main: desktop tree642px at803px viewport;
+390x844 mobile tree675px <=675.2px, no document horizontal overflow or clipped
+one-line tree items. Intrinsic widths varied by column (119,113,119,201,125,54,
+114,32px). Diagonal empty-background drag moved scrollLeft0->90 and
+scrollTop287->407, released capture/panning state, and kept the URL unchanged.
+Right-edge B4 Current navigation gave night1/2, dead3, alive4/5 each wolf1/2;
+browser Back restored the original saved1CO/white2 main view. No console errors.
+Viewport override reset. Pointercancel/lostpointercapture cleanup reviewed in
+code; real device touch cancellation was not exercised by the available drag API.
+
+Solver limitation remains distinct: complete trace/UI expansion still materializes
+named members and then canonicalizes them; scalar solver already chooses target
+and wolf-owner representatives before recursion. Full scanE/scanW/scanC histories
+are not interchangeable. No broad additional solver quotient was implemented.
