@@ -151,7 +151,9 @@ class CalculationTree:
 
     def summary(self,key,actions=False):
         row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
-        return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'alive':list(b.alive),'winner':b.winner,
+        from .board_flow import BoardFacts
+        point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
+        return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day,'column_phase':point.phase,'alive':list(b.alive),'winner':b.winner,
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],

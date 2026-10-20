@@ -12,7 +12,7 @@ while queue:
     if key in nodes:continue
     response=client.get('/game-tree',query_string={'node':key,'expand':'1'})
     if response.status_code!=200:raise RuntimeError(response.json)
-    node=response.json;nodes[key]={k:node[k] for k in ('node','day','phase','alive','winner','village_win','history')}
+    node=response.json;nodes[key]={k:node[k] for k in ('node','day','phase','column_day','column_phase','alive','winner','village_win','history')}
     for action in node['actions'] or []:
         if not action['selected']:continue
         for branch in action['branches']:

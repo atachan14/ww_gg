@@ -2246,3 +2246,51 @@ viewports stack variants with local horizontal scrolling. Both screenshots were
 visually reviewed. Preview builder asserts root7/15 and outgoing edge mass1.
 Normal UI integration awaits the user's visual choice; these fields are not a
 permanent product decision. Local comparison: http://127.0.0.1:18802/.
+
+
+### 2026-10-20 A adoption and arrival-column fix; exact Current navigation BLOCKED
+
+A compact thin-outline27px one-line rows is adopted in normal local GameTree.
+No selectors or phase inside the item; item selection inspects/expands the exact
+representative, without mutating Current. Complete groups, named member IDs and
+physical probabilities remain in the underlying API; no value-only merging.
+Edge label is exact configured group choice probability times conditional branch
+probability. Only a small shared inspect line remains. The requested one right-
+end Current control is present but disabled: exact navigation is NOT implemented.
+Do not report this task as fully completed or claim navigation tests passed.
+
+Column bug: terminal physical Boards stop with last action's phase, whereas the
+Board arrival point is the next chronological slot. Existing BoardFacts derives
+arrival day/phase from full effective history. Summary now exposes column_day/
+column_phase from that common operation, retaining original day/phase for solver
+semantics. UI uses arrival fields (and history-slot compatibility for the already
+running server). Comparison builder uses those same fields. B1 maps Day1夜;
+B23/B24 map Day2夜 generally, without hardcoded IDs or solver-state mutation.
+
+Exact blocker: normal Current is saved Game/history. app.change/advance calls
+exact.advance, which accumulates terminal outcomes into Progress.settled_village/
+settled_wolf and retains only the continuing Board. Target1 on initial5-player
+3cit/1seer/1wolf leads to continuing value1/3 with village mass1/5 already settled,
+not terminal B1 value1. No endpoint selects the physical outcome or owned Q/P
+branch; board_owned_log graph identity only encodes the action history and also
+cannot distinguish these children. Day2 actual-P actor-conditioned descendants
+also cannot be represented by only copying public target history. Replacing the
+Current history with targets would navigate to a DIFFERENT Board and potentially
+lose private/physical conditions. We did not do so. GeneratedBoard replay recipes
+already preserve exact source conditions but currently reconstruct ContinuationInputs,
+not the saved RoleState consumed by normal application views. A shared Current
+adapter/storage path is required to retain those recipes and refresh all views.
+This is a representation/integration blocker, not an approval denial or a new-rule
+requirement. No physical-conditioned Current write was attempted; controls remain
+pending and disabled instead of pretending to perform the requested transition.
+
+Verification:36 targeted Python tests pass5.728s. New tests preserve actual terminal
+phase/value while checking arrival columns, and prove ordinary /advance target1
+is NOT the terminal physical Board. Real Edge desktop1280/mobile390 verifies
+B1/B23/B24 columns, no selectors,27px unwrapped rows, exact representative selection,
+unchanged saved snapshot after inspection, reload and no JS errors/global overflow.
+Current identity/navigation, navigation repeated clicks and back/forward on those
+physical targets remain UNTESTED because no correct navigation path exists yet.
+Existing18801 was kept running independently without restart, preserving its live
+session signing state and user saved cookies. No8771/8772/8773, push, deploy,
+shared database, auth setting or solver-support changes.

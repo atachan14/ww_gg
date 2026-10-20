@@ -5,6 +5,8 @@
       "node": "0",
       "day": 1,
       "phase": "day",
+      "column_day": 1,
+      "column_phase": "day",
       "alive": [
         1,
         2,
@@ -20,6 +22,8 @@
       "node": "1",
       "day": 1,
       "phase": "day",
+      "column_day": 1,
+      "column_phase": "night",
       "alive": [
         2,
         3,
@@ -40,6 +44,8 @@
       "node": "2",
       "day": 1,
       "phase": "night",
+      "column_day": 1,
+      "column_phase": "night",
       "alive": [
         2,
         3,
@@ -60,6 +66,8 @@
       "node": "11",
       "day": 2,
       "phase": "day",
+      "column_day": 2,
+      "column_phase": "day",
       "alive": [
         2,
         4,
@@ -84,6 +92,8 @@
       "node": "23",
       "day": 2,
       "phase": "day",
+      "column_day": 2,
+      "column_phase": "night",
       "alive": [
         4,
         5
@@ -112,6 +122,8 @@
       "node": "24",
       "day": 2,
       "phase": "day",
+      "column_day": 2,
+      "column_phase": "night",
       "alive": [
         2,
         5

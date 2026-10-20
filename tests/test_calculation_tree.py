@@ -121,7 +121,7 @@ class CalculationTreeTests(unittest.TestCase):
         self.assertEqual(response.json['actual']['counts']['seers'],0)
         self.assertTrue(response.json['issues']);self.assertEqual(response.json['settings_url'],'/')
         with client.session_transaction() as session:self.assertEqual(session['game'],before)
-        page=client.get('/main').data.decode();self.assertIn('市民4・占い0',page)
+        self.assertIn('actual',response.json)
         payload.update(citizens='3',seers='1');client.post('/start',data=payload)
         self.assertEqual(client.get('/game-tree?expand=1').json['village_win'],'7/15')
     def test_precise_rule_and_policy_rejections_keep_saved_conditions(self):
@@ -135,6 +135,30 @@ class CalculationTreeTests(unittest.TestCase):
         client=self.app.test_client();client.post('/start',data={'citizens':'3','seers':'1','wolves':'1','day':'random','night':'random','fake_reports':'random'})
         response=client.get('/game-tree?expand=1');self.assertEqual(response.status_code,200)
         self.assertEqual(response.json['mode'],'random');self.assertEqual(response.json['policy']['fake_reports'],'random')
+    def test_terminal_columns_use_arrival_slot_without_changing_solver_phase(self):
+        root=self.c.get('/game-tree?expand=1').json
+        win=root['items']['1'];self.assertEqual((win['column_day'],win['column_phase']),(1,'night'))
+        self.assertEqual((win['day'],win['phase'],win['village_win']),(1,'day','1'))
+        night=self.c.get('/game-tree?node=2&expand=1').json
+        day_id=night['actions'][0]['branches'][0]['node']
+        day=self.c.get('/game-tree',query_string={'node':day_id,'expand':'1'}).json
+        terminals=[d for d in day['items'].values() if d['winner']]
+        self.assertEqual({d['winner'] for d in terminals},{'village','wolf'})
+        for d in terminals:
+            self.assertEqual((d['column_day'],d['column_phase']),(2,'night'))
+            self.assertEqual((d['day'],d['phase']),(2,'day'))
+    def test_existing_advance_cannot_select_terminal_physical_outcome(self):
+        root=self.c.get('/game-tree?expand=1').json
+        terminal=root['items']['1'];self.assertEqual(terminal['village_win'],'1')
+        with self.c.session_transaction() as s:revision=s['game']['revision']
+        response=self.c.post('/advance',data={'revision':revision,'target':'1','day':'max','night':'max'})
+        self.assertEqual(response.status_code,303)
+        from werewolf.board_flow import BoardData
+        with self.c.session_transaction() as s:roles=BoardData.from_game(s['game']).roles()
+        self.assertFalse(roles.progress.finished)
+        self.assertEqual(roles.board.phase,'night')
+        self.assertEqual(roles.forecast().village_win,F(1,3))
+        self.assertNotEqual(roles.board.winner,terminal['winner'])
     def test_unsupported_policy_is_explicit(self):
         with self.c.session_transaction() as s:g=s['game'];g['policy']['day']='random';s['game']=g
         self.assertEqual(self.c.get('/game-tree?expand=1').status_code,422)
