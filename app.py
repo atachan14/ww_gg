@@ -69,11 +69,13 @@ def create_app(test_config=None, *, deployment=False):
         game_id=session.setdefault('co_display_game',secrets.token_hex(8))
         return BoardData.from_game(state,runtime=game_runtimes.get(game_id,state))
 
-    def calculation_tree(state,role_state=None,forecast=None):
+    def calculation_tree(state,role_state=None,forecast=None,*,explain=False):
         from werewolf.calculation_tree import CalculationTree,supported
         from werewolf.information_set_forecast import Pending
         data=board_data(state);roles=role_state or data.roles()
-        if roles.progress.finished or not supported(data,roles.board):return None
+        if roles.progress.finished or not supported(data,roles.board):
+            if explain:raise Pending('game_tree_finished' if roles.progress.finished else 'game_tree_scope')
+            return None
         key=('calculation-tree',data.inputs)
         hit,tree=data.runtime.get(key)
         if not hit:
@@ -84,7 +86,9 @@ def create_app(test_config=None, *, deployment=False):
                 if stopped:raise CalculationBudgetExceeded(kind=stopped['kind'])
                 return None
             try:tree=CalculationTree(data,roles.board,result)
-            except Pending:return None
+            except Pending:
+                if explain:raise
+                return None
             data.runtime.put(key,tree)
         return tree
 
@@ -93,8 +97,11 @@ def create_app(test_config=None, *, deployment=False):
         if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
         state=game()
         if state is None:return jsonify(error='村を開始してください。'),409
-        tree=calculation_tree(state)
-        if tree is None:return jsonify(error='現在は市民3・占い1・狼1、自噛みなしの既存Closed対応Boardのみです。'),422
+        from werewolf.information_set_forecast import Pending
+        from werewolf.calculation_tree import explain_unavailable
+        try:tree=calculation_tree(state,explain=True)
+        except Pending as exc:return jsonify(explain_unavailable(state,exc.reason)),422
+        if tree is None:return jsonify(explain_unavailable(state,'forecast_pending')),422
         if request.args.get('snapshot',tree.snapshot)!=tree.snapshot:return jsonify(error='入力が変わりました。GameTreeを開き直してください。'),409
         key=request.args.get('node',tree.root)
         try:return jsonify(tree.read(key,request.args.get('expand')=='1'))

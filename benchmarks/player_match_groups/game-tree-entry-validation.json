@@ -1,0 +1,141 @@
+{
+  "scope": "ordinary entry diagnostic repair; no admission broadening",
+  "screenshot_saved_session": "not available; exact user mismatch unconfirmed",
+  "reproduced": "ordinary TOP defaults citizen4/seer0/wolf1 -> 422 with old screenshot status; requested3/1/1 -> 200 7/15",
+  "tests": {
+    "count": 34,
+    "seconds": 5.666,
+    "passed": true
+  },
+  "browser": [
+    {
+      "name": "desktop",
+      "payloads": [
+        {
+          "citizens": "4",
+          "mediums": "0",
+          "seers": "0",
+          "hunters": "0",
+          "wolves": "1",
+          "initial_seer": "random_white",
+          "allow_repeat_guard": "1",
+          "allow_self_bite": "0",
+          "day": "max",
+          "night": "max"
+        },
+        {
+          "citizens": "3",
+          "mediums": "0",
+          "seers": "1",
+          "hunters": "0",
+          "wolves": "1",
+          "initial_seer": "random_white",
+          "allow_repeat_guard": "1",
+          "allow_self_bite": "0",
+          "day": "max",
+          "night": "max"
+        }
+      ],
+      "rejection": {
+        "actual": {
+          "counts": {
+            "citizens": 4,
+            "hunters": 0,
+            "mediums": 0,
+            "seers": 0,
+            "wolves": 1
+          },
+          "history_steps": 0,
+          "policy": {
+            "day": "max",
+            "fake_reports": "max",
+            "night": "max"
+          },
+          "rules": {
+            "allow_repeat_guard": true,
+            "allow_self_bite": false,
+            "initial_seer": "random_white"
+          }
+        },
+        "error": "現在の入力ではGameTreeを表示できません。",
+        "issues": [
+          "配役が対応範囲（市民3・占い1・狼1、霊能0・狩人0）と異なります。"
+        ],
+        "preserved": true,
+        "reason": "game_tree_scope",
+        "settings_url": "/",
+        "supported_route": "新しく試す場合はTOPで市民3・占い1・狼1（霊能0・狩人0）、自噛み不可、初日占いランダム白を指定してください。既定の昼夜MAX・全公開で初日から表示できます。"
+      },
+      "errors": [],
+      "entry": "ordinary TOP form and submit; no API-created fixture"
+    },
+    {
+      "name": "mobile",
+      "payloads": [
+        {
+          "citizens": "4",
+          "mediums": "0",
+          "seers": "0",
+          "hunters": "0",
+          "wolves": "1",
+          "initial_seer": "random_white",
+          "allow_repeat_guard": "1",
+          "allow_self_bite": "0",
+          "day": "max",
+          "night": "max"
+        },
+        {
+          "citizens": "3",
+          "mediums": "0",
+          "seers": "1",
+          "hunters": "0",
+          "wolves": "1",
+          "initial_seer": "random_white",
+          "allow_repeat_guard": "1",
+          "allow_self_bite": "0",
+          "day": "max",
+          "night": "max"
+        }
+      ],
+      "rejection": {
+        "actual": {
+          "counts": {
+            "citizens": 4,
+            "hunters": 0,
+            "mediums": 0,
+            "seers": 0,
+            "wolves": 1
+          },
+          "history_steps": 0,
+          "policy": {
+            "day": "max",
+            "fake_reports": "max",
+            "night": "max"
+          },
+          "rules": {
+            "allow_repeat_guard": true,
+            "allow_self_bite": false,
+            "initial_seer": "random_white"
+          }
+        },
+        "error": "現在の入力ではGameTreeを表示できません。",
+        "issues": [
+          "配役が対応範囲（市民3・占い1・狼1、霊能0・狩人0）と異なります。"
+        ],
+        "preserved": true,
+        "reason": "game_tree_scope",
+        "settings_url": "/",
+        "supported_route": "新しく試す場合はTOPで市民3・占い1・狼1（霊能0・狩人0）、自噛み不可、初日占いランダム白を指定してください。既定の昼夜MAX・全公開で初日から表示できます。"
+      },
+      "errors": [],
+      "entry": "ordinary TOP form and submit; no API-created fixture"
+    }
+  ],
+  "visual_review": [
+    "supported desktop",
+    "unsupported desktop",
+    "supported mobile",
+    "unsupported mobile"
+  ],
+  "preserved": "existing user Board, rules and strategy; all browser tests use independent contexts"
+}

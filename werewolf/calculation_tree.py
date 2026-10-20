@@ -20,6 +20,34 @@ def supported(data,board):
             and not g.rules.allow_self_bite)
 
 
+def explain_unavailable(game,reason):
+    """Describe actual saved inputs without changing them or weakening admission."""
+    counts={role:game.get(role,0) for role in ('wolves','seers','mediums','hunters')}
+    counts['wolves']=game.get('wolves',1)
+    counts['citizens']=game['players']-sum(counts.values())
+    strategy=Strategy(**game['policy']);rules=game['rules'];issues=[]
+    if counts!=dict(citizens=3,seers=1,wolves=1,mediums=0,hunters=0):
+        issues.append('配役が対応範囲（市民3・占い1・狼1、霊能0・狩人0）と異なります。')
+    if rules.get('allow_self_bite'):issues.append('自噛み可能のルールは未対応です。')
+    if rules.get('initial_seer','random_white')!='random_white':issues.append('初日占いはランダム白のみ対応しています。')
+    if (strategy.day,strategy.night,strategy.fake_reports) not in (('max',)*3,('random',)*3):
+        issues.append('昼・夜・狼の霊能騙り報告の方針が混在しています。現経路は3項目すべてMAX、またはすべてランダムのみ対応しています。')
+    if any(strategy.disclosure_for(role)!='all' for role in ('seer','medium')):
+        issues.append('能力結果の公開方針は全公開のみ対応しています。')
+    if not issues:
+        messages={
+            'game_tree_finished':'現在の保存Boardは終局しています。',
+            'closed_saved_public_or_policy_change_pending':'過去BoardからCO・方針・公開条件が変化した履歴、または必要な公開履歴が未確定のBoardは、このGameTree経路で未対応です。',
+            'closed_saved_nonstandard_observation_pending':'特殊な死亡・観測を含む保存履歴は、このGameTree経路で未対応です。',
+            'closed_saved_late_public_event_pending':'途中の公開イベントを含む保存履歴は、このGameTree経路で未対応です。',
+            'forecast_pending':'現在のBoardの継続評価が未確定です。'}
+        issues.append(messages.get(reason,'現在の保存条件は既存の共通継続評価の対応範囲外です。'))
+    return dict(error='現在の入力ではGameTreeを表示できません。',reason=reason,issues=issues,
+        actual=dict(counts=counts,policy=dict(day=strategy.day,night=strategy.night,fake_reports=strategy.fake_reports),rules=rules,history_steps=len(game.get('history',[]))),
+        supported_route='新しく試す場合はTOPで市民3・占い1・狼1（霊能0・狩人0）、自噛み不可、初日占いランダム白を指定してください。既定の昼夜MAX・全公開で初日から表示できます。',
+        settings_url='/',preserved=True)
+
+
 class CalculationTree:
     def __init__(self,data,board,forecast):
         if not supported(data,board):raise ValueError('Five-player3citizen/1seer/1wolf scope')

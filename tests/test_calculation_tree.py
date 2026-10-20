@@ -100,6 +100,41 @@ class CalculationTreeTests(unittest.TestCase):
         self.c.post('/start',data={'players':'5','seers':'1','day':'max','night':'max'})
         self.app.config['MANUAL_CALC_MAX_WORK']=1
         r=self.c.get('/game-tree?expand=1');self.assertEqual(r.status_code,503);self.assertTrue(r.json['pending'])
+    def test_ordinary_top_form_defaults_report_actual_mismatch_without_edit(self):
+        from html.parser import HTMLParser
+        class Form(HTMLParser):
+            def __init__(self):super().__init__();self.fields={};self.select=None
+            def handle_starttag(self,tag,attrs):
+                d=dict(attrs)
+                if tag=='input' and 'name' in d:self.fields[d['name']]=d.get('value','')
+                if tag=='select':self.select=d.get('name')
+                if tag=='option' and self.select and ('selected' in d or self.select not in self.fields):self.fields[self.select]=d.get('value','')
+            def handle_endtag(self,tag):
+                if tag=='select':self.select=None
+        client=self.app.test_client();form=Form();form.feed(client.get('/').data.decode());payload=form.fields
+        self.assertEqual((payload['citizens'],payload['seers']),('4','0'))
+        client.post('/start',data=payload)
+        with client.session_transaction() as session:before=session['game'].copy()
+        response=client.get('/game-tree?expand=1');self.assertEqual(response.status_code,422)
+        self.assertEqual(response.json['reason'],'game_tree_scope')
+        self.assertEqual(response.json['actual']['counts']['citizens'],4)
+        self.assertEqual(response.json['actual']['counts']['seers'],0)
+        self.assertTrue(response.json['issues']);self.assertEqual(response.json['settings_url'],'/')
+        with client.session_transaction() as session:self.assertEqual(session['game'],before)
+        page=client.get('/main').data.decode();self.assertIn('市民4・占い0',page)
+        payload.update(citizens='3',seers='1');client.post('/start',data=payload)
+        self.assertEqual(client.get('/game-tree?expand=1').json['village_win'],'7/15')
+    def test_precise_rule_and_policy_rejections_keep_saved_conditions(self):
+        for change,expected in [({'allow_self_bite':'1'},'自噛み'),({'initial_seer':'normal'},'ランダム白'),({'day':'random'},'混在')]:
+            client=self.app.test_client();client.post('/start',data={'citizens':'3','seers':'1','wolves':'1','day':'max','night':'max',**change})
+            with client.session_transaction() as session:before=session['game'].copy()
+            result=client.get('/game-tree?expand=1');self.assertEqual(result.status_code,422)
+            self.assertTrue(any(expected in text for text in result.json['issues']),result.json)
+            with client.session_transaction() as session:self.assertEqual(before,session['game'])
+    def test_existing_all_random_entry_still_uses_actual_policy(self):
+        client=self.app.test_client();client.post('/start',data={'citizens':'3','seers':'1','wolves':'1','day':'random','night':'random','fake_reports':'random'})
+        response=client.get('/game-tree?expand=1');self.assertEqual(response.status_code,200)
+        self.assertEqual(response.json['mode'],'random');self.assertEqual(response.json['policy']['fake_reports'],'random')
     def test_unsupported_policy_is_explicit(self):
         with self.c.session_transaction() as s:g=s['game'];g['policy']['day']='random';s['game']=g
         self.assertEqual(self.c.get('/game-tree?expand=1').status_code,422)

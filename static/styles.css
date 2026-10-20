@@ -505,3 +505,5 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 .phase-grid{display:grid;position:relative;gap:18px 24px;isolation:isolate;padding:12px;align-items:start}.phase-heading{position:sticky;top:0;z-index:2;background:#f6f8f7;padding:10px;border-bottom:2px solid #8ca59b;margin:0}.phase-cell{padding:8px;z-index:1}.phase-edge{display:flex;flex-direction:column;gap:4px;color:#416f94;font-size:12px;margin-bottom:8px;background:#fff}.phase-edge select{max-width:235px}.phase-connectors{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:visible}.phase-connectors path{fill:none;stroke:#7a8d9b;stroke-width:1.5}.phase-cell .tree-item{width:230px;box-sizing:border-box}.tree-flowchart{min-width:0}
 
 .phase-cell .tree-item p{margin:6px 0}.phase-cell .tree-item{padding:10px}.phase-cell .tree-item-title{font-size:12px}
+
+.tree-unavailable{padding:16px;border:1px solid #8ca59b;border-radius:10px;background:#f6f8f7}.tree-unavailable small{display:block;margin-top:12px}.tree-flow-frame[hidden],.tree-inspector[hidden]{display:none}

@@ -2180,3 +2180,43 @@ no global overflow. Screenshots of both layouts and the completed HELP reference
 were visually reviewed; mobile uses local horizontal scrolling. No publication,
 auth/install, database action, rule change or seven-player benchmark was done.
 Evidence:benchmarks/player_match_groups/game-tree-flow-seer-validation.json.
+
+
+### 2026-10-20 GameTree ordinary-entry blank-state repair
+
+The preceding completion did not establish general TOP-entry support. Its
+browser fixture posted a seer count directly; ordinary TOP defaults are citizens4,
+seers0, wolves1. The GameTree subtitle incorrectly hardcoded citizens3/seers1.
+Ordinary default form submission reproduces HTTP422 and the screenshot's exact
+old generic status; requested citizens3/seers1/wolves1 with otherwise unchanged
+TOP defaults returns200 and7/15. This identifies a concrete entry mismatch, but
+the screenshot alone does NOT establish the user's actual saved cast/policy.
+No existing user browser cookie or saved Board was read or reset in this repair.
+
+The subtitle now reflects actual saved counts. The endpoint retains the Closed
+Pending reason and returns actual cast/rules/policy plus specific explanations
+for cast, self-bite, initial-seer rule, mixed policy or disclosure mismatches.
+Saved-history Pending cases are distinguished. Unsupported UI hides the empty
+figure and inspector, displays the reason and current conditions, and links to
+TOP to inspect the existing setup. Following that GET retains the current saved
+configuration; no corrective settings are applied automatically. Shared Closed
+admission and all mathematical paths remain unchanged. This is an honest scope
+repair, not support for four-citizen games, mixed policies, arbitrary changed
+histories, new seer MAX, or simultaneous mutual maximization.
+
+Smallest verified requested route: TOP citizens3/seers1/wolves1, others0, initial
+random-white, self-bite disallowed, default MAX/day/night/fake-report and all
+result disclosure, initial Board. Existing all-random route also remains valid.
+34 relevant Python tests passed in5.666s, including ordinary HTML form field
+extraction/submission, actual error counts, unchanged saved state, valid requested
+entry, genuine POST initial-normal/self-bite/mixed-policy rejections, and existing
+phase/group/cold reconstruction regression tests. Real Edge tests at desktop
+1280x900 and mobile390x844 submitted the actual ordinary TOP form, captured both
+POST payloads and rejected JSON, verified retained counts on returning to TOP,
+then explicitly entered the requested cast and saw3 Board cards plus aligned
+phase headers. Both existing group expansion and ordinary-entry browser suites
+passed without JS errors or global overflow. Supported and unsupported final
+screenshots were visually reviewed. Evidence: game-tree-entry-validation.json.
+User's exact previously saved unsupported condition remains unconfirmed until
+that existing session requests the new diagnostic; do not claim the screenshot
+proves the default cast or silently replace it with the test fixture.
