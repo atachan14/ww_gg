@@ -2294,3 +2294,64 @@ physical targets remain UNTESTED because no correct navigation path exists yet.
 Existing18801 was kept running independently without restart, preserving its live
 session signing state and user saved cookies. No8771/8772/8773, push, deploy,
 shared database, auth setting or solver-support changes.
+
+
+### 2026-10-20 Exact generated Current navigation completed
+
+This supersedes the preceding disabled-button blocker. The ordinary local app
+now has a small GeneratedCurrent/GeneratedRoleState adapter, consumed by the
+existing render_main, BoardOverview, BoardInfo, BoardTable and player-view path.
+Each thin27px row retains one separate right-end navigation button. Row selection
+only inspects/expands; navigation makes that exact representative/member Current.
+No /advance substitution or posterior injection into saved history is used.
+
+The cursor stores only the immutable original input snapshot, game identity and
+a bounded sequence of common child selectors: optional existing wolf-owner
+choice, legal target, physical outcome and optional public report branch. Replay
+calls existing Closed generators; export_request().roles cold reconstruction
+retains complete Q/P, observer, acquisitions, attacks, public reports and actual
+physical/history state. Public table marginals come from Q; value/action/horizon
+results use the same node.forecast over its original Q/P. Existing role_rates,
+role_summary, Progress and public player-view builders are reused. The transient
+Game projection supplies only declaration/history UI metadata; it is never the
+calculation prior and is never committed as saved evidence. The selected generated
+snapshot is displayed through the normal UI with editing controls disabled;
+original saved inputs/settings remain available on returning to the root. This
+work does not implement editing or private-view intervention on generated Current.
+
+Selection is a same-origin POST returning a game-bound signed Current URL, using
+the existing app signing key. Refresh and browser back/forward restore its exact
+recipe; app Back removes one physical transition. Repeating navigation returns
+the same cursor, not another game/branch. Root navigation returns to ordinary
+saved Current. Input edits/new games invalidate old cursors. Cache eviction
+reconstructs the same full state and stable Current identity; incidental compact
+B numbers can change when a new tree cache is enumerated. Nothing is sampled.
+
+Conditional selected-node values and original cumulative values are not mixed.
+B1/B23 show1, B24 shows0. The existing cumulative line is explicitly labelled
+起点の累積勝率 for generated snapshots and preserves the original saved root's
+configured-policy cumulative value7/15 in this fixture. It is not branch reach
+mass, a product with1/5, or the wrong aggregate continuation value1/3. Arrival
+columns remain the separate BoardFacts/history-slot correction: B1 Day1夜,
+B23/B24 Day2夜; physical source phases remain Day1昼/Day2昼 unchanged.
+
+Verification:60 targeted Python tests passed in9.281s (Current, GameTree, player
+view/row/UI, Web and HELP); a final16-test Current/GameTree check passed2.030s
+after defensive endpoint error handling. These cover full cold Q/P/secret/history
+identity, public-Q rows despite owner-conditioned P, exact terminal values,
+nonrepresentative member histories, idempotence, cache eviction, app Back, forged/
+stale/cross-game URLs and unchanged original saved game. Real Edge desktop1280x900
+and mobile390x844 verifies actual TOP entry, phase columns, exact B1/B23/B24
+Current BoardOverview values/alive/history, row-selection vs navigation events,
+repeat clicks, refresh, browser back/forward, app Back and root return. No JS
+errors/global overflow. Current and compact-tree screenshots visually reviewed.
+
+Final normal UI URL: http://127.0.0.1:18803/ (TOP citizens3/seers1/wolves1, others0;
+otherwise defaults). This is the actual create_app normal UI, not the static
+A/B comparison. dev_previews/run_current_app.py starts it independently on18803
+with a separate local cookie name, so the old18801 session cookie and saved game
+are not overwritten. Browser regression includes an existing original-session
+cookie and asserts it remains byte-for-byte equal. Original18801 and comparison
+18802 are left running;8771/8772/thdmn8773 untouched. No push/deploy, shared DB,
+auth provider/permissions, rule changes, new solver scope or large benchmarks.
+Evidence:benchmarks/player_match_groups/generated-current-validation.json.

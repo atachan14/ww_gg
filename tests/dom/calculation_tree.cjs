@@ -1,2 +1,2 @@
-// Normal GameTree regression entry point.
-require('./compact_tree_adopted.cjs');
+// Normal GameTree navigation regression entry point.
+require('./generated_current.cjs');

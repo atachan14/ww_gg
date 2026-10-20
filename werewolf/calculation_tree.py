@@ -14,6 +14,8 @@ from .exact_renaming import canonical_key
 from .calculation_budget import tick
 
 
+def input_snapshot(data):return sha256(data.inputs.encode()).hexdigest()[:20]
+
 def supported(data,board):
     g=data.game_data
     return (g.players==5 and g.wolves==1 and g.seers==1 and not(g.mediums or g.hunters)
@@ -54,7 +56,7 @@ class CalculationTree:
         self.data=data;self.rules=data.game_data.rules;self.strategy=Strategy(**data.to_game()['policy'])
         self.calculation=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True)
         self.engine=self.calculation._ClosedCalculation__engine
-        self.snapshot=sha256(data.inputs.encode()).hexdigest()[:20]
+        self.snapshot=input_snapshot(data)
         self.nodes={};self.sources={};self.keys={};self.values={};self.lock=RLock()
         self.root=self.register(self.calculation.root)
         # Root value is the actual BoardOverview result, never a fixture value.
@@ -66,11 +68,11 @@ class CalculationTree:
             self.keys[key]=canonical_key(*s,self.rules,self.strategy,target=target,physical=s.physical,max_mappings=120)
         return self.keys[key] or ('unshared',key)
 
-    def register(self,node):
+    def register(self,node,route=()):
         s=node.read()
         if s in self.sources:return self.sources[s]
         key=str(len(self.nodes));self.sources[s]=key
-        self.nodes[key]={'node':node,'value':None,'actions':None,'reused':False}
+        self.nodes[key]={'node':node,'value':None,'actions':None,'reused':False,'route':tuple(route)}
         return key
 
     def value(self,key):
@@ -97,20 +99,20 @@ class CalculationTree:
                 for target in legal_targets(s.physical,self.rules,self.strategy):
                     rows.append({'node':node,'target':target,'q_score':scores[target],
                         'policy_mass':F(1,len(selected)) if target in selected else F(),
-                        'fallback_mass':F(1,len(scores)),'information':'公開Q'})
+                        'fallback_mass':F(1,len(scores)),'information':'公開Q','owner_index':None})
             else:
                 # Selection is from PUBLIC Q conditioned by actor information;
                 # actual weights and child Boards come from the existing P split.
                 choices=node.wolf_choices();owners={}
-                for choice in choices:owners.setdefault(choice.information,(choice.node,choice.information_mass,{}))[2][choice.target]=choice.probability
-                for info,(owned,mass,policy) in owners.items():
+                for index,choice in enumerate(choices):owners.setdefault(choice.information,(choice.node,choice.information_mass,{},index))[2][choice.target]=choice.probability
+                for info,(owned,mass,policy,owner_index) in owners.items():
                     own=owned.read();q_actor=info.condition_public(s.public_state)
                     with e.actor_scope(info):
                         for target in legal_targets(own.physical,self.rules,self.strategy):
                             score=e.act(b,s.public_state,s.past,target,q_actor,None,physical=physical_board(b,q_actor))
                             rows.append({'node':owned,'target':target,'q_score':score,
                                 'policy_mass':mass*policy.get(target,F()),'fallback_mass':mass/F(len(legal_targets(own.physical,self.rules,self.strategy))),
-                                'information':f'狼本人I (初期狼集合{info.initial_roster})'})
+                                'information':f'狼本人I (初期狼集合{info.initial_roster})','owner_index':owner_index})
         return rows
 
     def expand(self,key):
@@ -128,13 +130,14 @@ class CalculationTree:
                 weight=(member['policy_mass'] if policy_mass else member['fallback_mass'])/normalizer
                 named.append({'target':target,'information':member['information'],'policy_mass':str(member['policy_mass'])})
                 if not weight:continue
-                for physical in origin.action(target):
+                for outcome_index,physical in enumerate(origin.action(target)):
                     after=physical.node
                     reports=after.reports() if s.public.phase=='night' and after.read().public.winner is None else None
-                    outcomes=[(r.probability,r.node) for r in reports] if reports else [(F(1),after)]
-                    for report_mass,child in outcomes:
+                    outcomes=[(r.probability,r.node,i) for i,r in enumerate(reports)] if reports else [(F(1),after,None)]
+                    for report_mass,child,report_index in outcomes:
                         source=child.read();chance=physical.probability*report_mass
-                        child_id=self.register(child);canonical=self.equivalence(child)
+                        route=(*record['route'],(member['owner_index'],target,outcome_index,report_index))
+                        child_id=self.register(child,route);canonical=self.equivalence(child)
                         observation=('村勝利' if source.public.winner=='village' else '狼勝利' if source.public.winner=='wolf' else '継続')
                         new_reports=[r for r in source.past if r not in s.past]
                         if new_reports:observation+='・'+','.join(f'P{r.player}→P{r.target}{r.color}' for r in new_reports)
@@ -148,6 +151,26 @@ class CalculationTree:
                 'multiplicity':len(members),'members':named,'q_score':str(members[0]['q_score']),
                 'selected':bool(policy_mass),'policy_probability':str(policy_mass),'branches':list(branches.values())})
         record['actions']=choices
+
+    def restore(self,route):
+        """Reconstruct a named physical path only through common generators."""
+        if type(route) not in (list,tuple) or len(route)>2*self.data.game_data.players:raise ValueError('Invalid Current path')
+        node=self.calculation.root;prefix=()
+        for step in route:
+            if type(step) not in (list,tuple) or len(step)!=4:raise ValueError('Invalid Current step')
+            owner,target,outcome,report=step
+            if type(target)is not int or any(v is not None and (type(v)is not int or v<0) for v in (owner,outcome,report)):raise ValueError('Invalid Current selector')
+            if outcome is None:raise ValueError('Physical outcome required')
+            try:
+                if owner is not None:node=node.wolf_choices()[owner].node
+                node=node.action(target)[outcome].node
+                if report is not None:node=node.reports()[report].node
+            except (IndexError,KeyError) as exc:raise ValueError('Current path unavailable') from exc
+            prefix=(*prefix,tuple(step));self.register(node,prefix)
+        return self.register(node,prefix)
+
+    def route(self,key):
+        with self.lock:return [list(step) for step in self.nodes[key]['route']]
 
     def summary(self,key,actions=False):
         row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
@@ -169,7 +192,12 @@ class CalculationTree:
         with self.lock:
             if key not in self.nodes:raise KeyError(key)
             if expand:self.expand(key)
-            result=self.summary(key,True);items={}
-            for choice in result['actions'] or []:
-                for branch in choice['branches']:items[branch['node']]=self.summary(branch['node'])
+            result=self.summary(key,True);items={};pending=[key];seen=set()
+            while pending:
+                parent=pending.pop()
+                if parent in seen:continue
+                seen.add(parent)
+                for choice in self.nodes[parent]['actions'] or []:
+                    for branch in choice['branches']:
+                        child=branch['node'];items[child]=self.summary(child,True);pending.append(child)
             result['items']=items;return result

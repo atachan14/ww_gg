@@ -1,0 +1,150 @@
+{
+  "status": "exact Current navigation implemented",
+  "normal_ui_url": "http://127.0.0.1:18803/",
+  "fixture": {
+    "citizens": 3,
+    "seers": 1,
+    "wolves": 1,
+    "mediums": 0,
+    "hunters": 0,
+    "claims": "latent",
+    "policy": "existing all MAX",
+    "initial": "random_white",
+    "self_bite": false
+  },
+  "python": {
+    "count": 60,
+    "seconds": 9.281,
+    "result": "pass",
+    "final_defensive_check": {
+      "count": 16,
+      "seconds": 2.03,
+      "result": "pass"
+    }
+  },
+  "browser": [
+    {
+      "name": "desktop",
+      "rows": [
+        {
+          "text": "B0 · 5人 · 村 7/15",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B1 · 4人 · 村 1",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B2 · 4人 · 村 1/3",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B11 · 3人 · 村 1/3",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B23 · 2人 · 村 1",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B24 · 2人 · 村 0",
+          "height": 27,
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "navRequests": [
+        "snapshot=4569a99217fa44fd8d1b&node=1",
+        "snapshot=4569a99217fa44fd8d1b&node=1",
+        "snapshot=4569a99217fa44fd8d1b&node=23",
+        "snapshot=4569a99217fa44fd8d1b&node=24",
+        "snapshot=4569a99217fa44fd8d1b&node=0"
+      ],
+      "verified": {
+        "B1": "1; alive4; Day1 night column",
+        "B23": "1; alive2; Day2 night column",
+        "B24": "0; alive2; Day2 night column",
+        "reload": true,
+        "repeated": true,
+        "browserBackForward": true,
+        "appBack": true,
+        "selectionDoesNotNavigate": true,
+        "originCumulative": "7/15"
+      }
+    },
+    {
+      "name": "mobile",
+      "rows": [
+        {
+          "text": "B0 · 5人 · 村 7/15",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B1 · 4人 · 村 1",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B2 · 4人 · 村 1/3",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B11 · 3人 · 村 1/3",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B23 · 2人 · 村 1",
+          "height": 27,
+          "overflow": false
+        },
+        {
+          "text": "B24 · 2人 · 村 0",
+          "height": 27,
+          "overflow": false
+        }
+      ],
+      "errors": [],
+      "navRequests": [
+        "snapshot=4569a99217fa44fd8d1b&node=1",
+        "snapshot=4569a99217fa44fd8d1b&node=1",
+        "snapshot=4569a99217fa44fd8d1b&node=23",
+        "snapshot=4569a99217fa44fd8d1b&node=24",
+        "snapshot=4569a99217fa44fd8d1b&node=0"
+      ],
+      "verified": {
+        "B1": "1; alive4; Day1 night column",
+        "B23": "1; alive2; Day2 night column",
+        "B24": "0; alive2; Day2 night column",
+        "reload": true,
+        "repeated": true,
+        "browserBackForward": true,
+        "appBack": true,
+        "selectionDoesNotNavigate": true,
+        "originCumulative": "7/15"
+      }
+    }
+  ],
+  "values": {
+    "B1": "1",
+    "B23": "1",
+    "B24": "0",
+    "original_cumulative": "7/15"
+  },
+  "snapshot_scope": "selected generated Current is a normal-UI read-only snapshot; original editable saved state preserved",
+  "source_identity": "full Q/P/history/observer/physical state cold replay; original physical phase unchanged",
+  "old_session_preservation": "separate normal UI cookie name; old session cookie retained in browser test",
+  "screenshots": [
+    ".artifacts/current-B24-desktop.png",
+    ".artifacts/current-tree-B24-desktop.png",
+    ".artifacts/current-B24-mobile.png",
+    ".artifacts/current-tree-B24-mobile.png"
+  ]
+}

@@ -92,6 +92,48 @@ def create_app(test_config=None, *, deployment=False):
             data.runtime.put(key,tree)
         return tree
 
+    def current_serializer():
+        from itsdangerous import URLSafeSerializer
+        return URLSafeSerializer(app.secret_key,salt='generated-current-v1')
+
+    def current_from_token(state,token):
+        from itsdangerous import BadSignature
+        if not isinstance(token,str) or len(token)>2048:raise ValueError('Invalid Current cursor')
+        try:cursor=current_serializer().loads(token)
+        except BadSignature as exc:raise ValueError('Currentのリンクが無効です。') from exc
+        if type(cursor)is not dict or set(cursor)!={'snapshot','route','game_id'}:raise ValueError('Invalid Current cursor')
+        if cursor['game_id']!=session.get('co_display_game'):raise ValueError('別ゲームのCurrentリンクです。')
+        from werewolf.calculation_tree import input_snapshot
+        if cursor['snapshot']!=input_snapshot(board_data(state)):raise ValueError('元のBoardが変更されました。')
+        tree=calculation_tree(state,explain=True)
+        if tree is None:raise ValueError('元のBoardを評価できません。')
+        with tree.lock:
+            key=tree.restore(cursor['route'])
+            from werewolf.generated_current import GeneratedCurrent
+            return GeneratedCurrent(tree,key)
+
+    def current_url(tree,key):
+        if not tree.route(key):return url_for('main')
+        token=current_serializer().dumps(dict(snapshot=tree.snapshot,route=tree.route(key),game_id=session.get('co_display_game')))
+        return url_for('main',current=token)
+
+    @app.post('/game-tree/current')
+    def game_tree_current():
+        if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
+        state=game()
+        if state is None:return jsonify(error='保存されたゲームがありません。'),409
+        from werewolf.information_set_forecast import Pending
+        from werewolf.calculation_tree import explain_unavailable
+        try:tree=calculation_tree(state,explain=True)
+        except Pending as exc:return jsonify(explain_unavailable(state,exc.reason)),422
+        if tree is None or request.form.get('snapshot')!=tree.snapshot:return jsonify(error='元のBoardが変更されました。'),409
+        if set(request.form)!={'snapshot','node'}:return jsonify(error='Invalid Current request'),400
+        key=request.form.get('node')
+        if key not in tree.nodes:return jsonify(error='対象Boardがありません。'),404
+        from werewolf.generated_current import GeneratedCurrent
+        with tree.lock:current=GeneratedCurrent(tree,key)
+        return jsonify(url=current_url(tree,key),current=current.metadata)
+
     @app.get('/game-tree')
     def game_tree():
         if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
@@ -104,8 +146,20 @@ def create_app(test_config=None, *, deployment=False):
         if tree is None:return jsonify(explain_unavailable(state,'forecast_pending')),422
         if request.args.get('snapshot',tree.snapshot)!=tree.snapshot:return jsonify(error='入力が変わりました。GameTreeを開き直してください。'),409
         key=request.args.get('node',tree.root)
-        try:return jsonify(tree.read(key,request.args.get('expand')=='1'))
+        try:
+            current_token=request.args.get('current')
+            path=[];current_key=tree.root
+            if current_token:
+                current=current_from_token(state,current_token);current_key=current.key
+                for length in range(len(current.route)+1):
+                    ancestor=tree.restore(current.route[:length]);path.append(ancestor)
+                    if length<len(current.route):tree.expand(ancestor)
+            result=tree.read(key,request.args.get('expand')=='1')
+            for ancestor in path:result['items'][ancestor]=tree.summary(ancestor,True)
+            result.update(current_node=current_key,display_path=path)
+            return jsonify(result)
         except KeyError:return jsonify(error='このBoardは現在の計算にありません。'),404
+        except ValueError as exc:return jsonify(error=str(exc)),409
 
     def replay(state):
         from werewolf.board_flow import BoardData
@@ -256,7 +310,9 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False):
+    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None):
+        if generated_current is not None:
+            role_state=generated_current.roles;state=generated_current.data.to_game()
         disclosure_error=None
         guard_scope_pending=False
         by_dawn_values={}
@@ -269,7 +325,7 @@ def create_app(test_config=None, *, deployment=False):
         strategy = Strategy(**state["policy"])
         manual = state.get("seer_mode") == "information-fixed-v1"
         from werewolf.seer_manual import pending as manual_pending
-        role_evidence_pending = manual_pending(state) if manual and not progress.finished else None
+        role_evidence_pending = manual_pending(state) if manual and not progress.finished and generated_current is None else None
         seer_pending=role_evidence_pending
         if disclosure_error:
             from werewolf.seer_manual import Pending
@@ -313,7 +369,7 @@ def create_app(test_config=None, *, deployment=False):
                         primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                         action_values={}
                     else:
-                        if app.config.get('GAME_TREE_PREVIEW'):
+                        if app.config.get('GAME_TREE_PREVIEW') and generated_current is None:
                             calculation_tree(state,role_state,forecast)
                         primary=Values(forecast.village_win,1-forecast.village_win)
                         cumulative=progress.total_values(primary)
@@ -344,7 +400,8 @@ def create_app(test_config=None, *, deployment=False):
                               'attack_slots': private_slots(board,1,rules,role='wolf'), 'allow_self_bite':rules.allow_self_bite,
                               'public_attacks': [{'day':e.day,'target':e.target,'color':None} for e in board.history if e.phase=='night']}
         from werewolf.player_view import ViewScope,ResultFrame,build_public_view
-        view_source=board_data(state)
+        if generated_current is not None:cumulative=generated_current.origin_cumulative
+        view_source=generated_current.data if generated_current is not None else board_data(state)
         view_stage='invalid'if disclosure_error else 'roles'if roles_only else 'pending'if seer_pending else 'complete'
         player_view=build_public_view(view_source,role_state,board,ResultFrame(ViewScope.public(view_source),view_stage,
             str(request.form.get('request_id','')),str(seer_pending.reason)if seer_pending else None),
@@ -352,9 +409,9 @@ def create_app(test_config=None, *, deployment=False):
             finished=finished,manual=manual,guard_scope_pending=guard_scope_pending,
             probability_pending=seer_pending if role_evidence_pending or disclosure_error else None)
         players=player_view.players
-        return render_template("main.html", guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context), 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
+                               players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
     def wants_calculation_stream():
         return (request.path in ('/main','/table-preview','/private-view') and
@@ -455,7 +512,7 @@ def create_app(test_config=None, *, deployment=False):
         if previous is not None:
             session.clear();session.update(previous);session.modified=True
         message=stop_message(error.kind)
-        if request.path=='/game-tree':return jsonify(error=message,pending=True,budget_kind=error.kind),503
+        if request.path.startswith('/game-tree'):return jsonify(error=message,pending=True,budget_kind=error.kind),503
         if request.method=='POST' and request.path in ('/private-view','/table-preview','/table-publish','/public-log','/dawn-report'):
             return jsonify(error=message,budget_kind=(budget_stop() or {}).get('kind',error.kind),pending=True),503
         return render_template('budget_pending.html',message=message),503
@@ -665,6 +722,12 @@ def create_app(test_config=None, *, deployment=False):
         state = game(validate_roles=not (wants_calculation_stream() or shell))
         if state is None:
             return redirect(url_for("top"), code=303)
+        token=request.args.get('current')
+        if token:
+            if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
+            try:current=current_from_token(state,token)
+            except ValueError as exc:return render_main(state,str(exc),409)
+            return render_main(state,generated_current=current)
         if shell:return render_template('main_loading.html')
         if wants_calculation_stream():
             def events():
@@ -1035,6 +1098,16 @@ def create_app(test_config=None, *, deployment=False):
 
     @app.post("/back")
     def back():
+        token=request.form.get('current')
+        if token:
+            if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
+            state=game()
+            if state is None:return redirect(url_for('top'),code=303)
+            try:
+                current=current_from_token(state,token)
+                parent=current.tree.restore(current.route[:-1])
+            except ValueError as exc:return render_main(state,str(exc),409)
+            return redirect(current_url(current.tree,parent),code=303)
         state = game()
         if state is None:
             return redirect(url_for("top"), code=303)
