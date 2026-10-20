@@ -493,3 +493,15 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 .tree-branch{margin:.5rem 0;padding:.5rem;border:1px solid #dae2df;border-radius:.35rem}
 .tree-board{width:100%;font-size:.9rem}.tree-board th,.tree-board td{text-align:left;padding:.35rem}
 @media(max-width:600px){.calculation-tree-node{padding:.35rem;margin:.4rem 0}.tree-branch{padding:.3rem}.tree-action>summary{font-size:.9rem}}
+/* HELP-style Board TreeItems, phase progression and local diagram scrolling. */
+.tree-flow-frame{overflow:auto;max-height:72vh;background:#fff;border:1px solid #dfe5e8;border-radius:10px;padding:16px}
+.tree-flowchart{min-width:740px;width:max-content}.flow-cluster,.flow-choice-row,.flow-branch-line{display:flex;align-items:center;gap:14px}
+.flow-choices,.flow-branches{display:flex;flex-direction:column;gap:22px}.tree-item{width:180px;flex:0 0 180px;border:1.5px solid #8ca59b;border-radius:7px;padding:12px;background:#f6f8f7;text-align:center}
+.tree-item.terminal{background:#eef7f2}.tree-item.loss{background:#fcf2eb;border-color:#b79989}.tree-item p{margin:.35rem 0}.tree-item strong{color:#116c58}.tree-item small{display:block;margin:.4rem 0;color:#617182}
+.tree-item-title{font-weight:650;border:0;background:transparent;padding:4px;color:inherit;text-decoration:underline}.flow-choice,.flow-edge{display:flex;flex-direction:column;text-align:center;gap:5px;max-width:190px;overflow-wrap:anywhere}.flow-choice small,.flow-edge small{font-size:12px}.flow-edge strong{color:#416f94}.flow-edge select{max-width:170px;font-size:12px}.flow-edge>span:last-child{font-size:24px;color:#7a8d9b}.tree-inspector{margin-top:14px;padding:12px;border:1px solid #dfe5e8;border-radius:7px;overflow:auto}.tree-conditions{font-size:13px;color:#586777}
+@media(max-width:600px){.tree-flow-frame{padding:10px;max-height:65vh}.tree-item{width:155px;flex-basis:155px;font-size:13px}.flow-cluster,.flow-choice-row,.flow-branch-line{gap:10px}.flow-edge{max-width:150px}.tree-board{min-width:390px}}
+
+/* Chronological columns are derived from Board day/phase, never tree depth. */
+.phase-grid{display:grid;position:relative;gap:18px 24px;isolation:isolate;padding:12px;align-items:start}.phase-heading{position:sticky;top:0;z-index:2;background:#f6f8f7;padding:10px;border-bottom:2px solid #8ca59b;margin:0}.phase-cell{padding:8px;z-index:1}.phase-edge{display:flex;flex-direction:column;gap:4px;color:#416f94;font-size:12px;margin-bottom:8px;background:#fff}.phase-edge select{max-width:235px}.phase-connectors{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:visible}.phase-connectors path{fill:none;stroke:#7a8d9b;stroke-width:1.5}.phase-cell .tree-item{width:230px;box-sizing:border-box}.tree-flowchart{min-width:0}
+
+.phase-cell .tree-item p{margin:6px 0}.phase-cell .tree-item{padding:10px}.phase-cell .tree-item-title{font-size:12px}

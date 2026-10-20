@@ -71,6 +71,7 @@ def create_app(test_config=None, *, deployment=False):
 
     def calculation_tree(state,role_state=None,forecast=None):
         from werewolf.calculation_tree import CalculationTree,supported
+        from werewolf.information_set_forecast import Pending
         data=board_data(state);roles=role_state or data.roles()
         if roles.progress.finished or not supported(data,roles.board):return None
         key=('calculation-tree',data.inputs)
@@ -82,7 +83,9 @@ def create_app(test_config=None, *, deployment=False):
                 stopped=budget_stop()
                 if stopped:raise CalculationBudgetExceeded(kind=stopped['kind'])
                 return None
-            tree=CalculationTree(data,roles.board,result);data.runtime.put(key,tree)
+            try:tree=CalculationTree(data,roles.board,result)
+            except Pending:return None
+            data.runtime.put(key,tree)
         return tree
 
     @app.get('/game-tree')
@@ -91,7 +94,7 @@ def create_app(test_config=None, *, deployment=False):
         state=game()
         if state is None:return jsonify(error='村を開始してください。'),409
         tree=calculation_tree(state)
-        if tree is None:return jsonify(error='現在は市民4・狼1、全員潜伏、自噛みなしの継続Boardのみ対応しています。'),422
+        if tree is None:return jsonify(error='現在は市民3・占い1・狼1、自噛みなしの既存Closed対応Boardのみです。'),422
         if request.args.get('snapshot',tree.snapshot)!=tree.snapshot:return jsonify(error='入力が変わりました。GameTreeを開き直してください。'),409
         key=request.args.get('node',tree.root)
         try:return jsonify(tree.read(key,request.args.get('expand')=='1'))
@@ -1055,7 +1058,7 @@ def create_app(test_config=None, *, deployment=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ww_gg local public Board v0.5.2")
     parser.add_argument("--port", type=int, default=8771)
-    parser.add_argument("--game-tree", action="store_true", help="Enable local actual calculation inspection for five-player baseline")
+    parser.add_argument("--game-tree", action="store_true", help="Enable local grouped Board flowchart for five-player seer fixture")
     parser.add_argument("--hybrid-table-preview", action="store_true", help="Enable unpublished table draft preview locally")
     parser.add_argument("--dawn-board", action="store_true", help="Preview public dawn Boards")
     parser.add_argument("--seer-future-uniform", action="store_true", help="Enable unpublished fixed-policy seer forecast locally")

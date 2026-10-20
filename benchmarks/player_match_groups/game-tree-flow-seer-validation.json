@@ -1,0 +1,83 @@
+{
+  "fixture": {
+    "citizens": 3,
+    "seers": 1,
+    "wolves": 1,
+    "claims": "all latent",
+    "day": "max",
+    "night": "max",
+    "self_bite": false
+  },
+  "root_value": "7/15",
+  "root_group_multiplicity": 5,
+  "root_branch_masses": [
+    "1/5",
+    "4/5"
+  ],
+  "tests": {
+    "count": 31,
+    "seconds": 6.003,
+    "result": "pass"
+  },
+  "browser": [
+    {
+      "name": "desktop",
+      "positions": [
+        {
+          "phase": "1-day",
+          "column": "1",
+          "x": 122
+        },
+        {
+          "phase": "1-day",
+          "column": "1",
+          "x": 122
+        },
+        {
+          "phase": "1-night",
+          "column": "2",
+          "x": 416
+        },
+        {
+          "phase": "2-day",
+          "column": "3",
+          "x": 710
+        }
+      ],
+      "errors": []
+    },
+    {
+      "name": "mobile",
+      "positions": [
+        {
+          "phase": "1-day",
+          "column": "1",
+          "x": -222
+        },
+        {
+          "phase": "1-day",
+          "column": "1",
+          "x": -222
+        },
+        {
+          "phase": "1-night",
+          "column": "2",
+          "x": 72
+        },
+        {
+          "phase": "2-day",
+          "column": "3",
+          "x": 366
+        }
+      ],
+      "errors": []
+    }
+  ],
+  "visual_review": [
+    "HELP full calculation stage",
+    "desktop",
+    "mobile"
+  ],
+  "local_url": "http://127.0.0.1:18801/",
+  "scope": "existing ClosedCalculation admission; local opt-in"
+}

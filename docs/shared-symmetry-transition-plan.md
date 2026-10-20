@@ -2135,3 +2135,48 @@ The dedicated server's PID and absolute authoritative app.py command were
 verified before restarts;8771/8772 were untouched. No push/deploy, new auth,
 installation, production database or seven-player benchmark action occurred.
 Evidence: benchmarks/player_match_groups/game-tree-five-validation.json.
+
+
+### 2026-10-20 GameTree correction: Board flowchart and chronological columns
+
+This supersedes the preceding four-citizen inspector UI and fixture. Local
+GameTree now starts with actual Board cards and branches visible, using the
+HELP five-player flowchart as the visual reference. Day1昼, Day1夜, Day2昼,
+Day2夜 headings map to actual Board day/phase; same-phase Boards stack in
+that column independently of traversal depth. Terminal Boards retain their
+actual phase (the HELP educational drawing advances its terminal boxes).
+Further branches expand on demand. Player/Q/P/history details are secondary.
+
+Fixture: three citizens, one seer, one wolf, all latent, default initial
+random-white rule, existing day/night MAX and no self bite. No CO or reports
+are invented. Initial existing Table result is 7/15. ClosedCalculation supplies
+physical transitions, legal actions, Q-based policies, actor-conditioned wolf
+choices and public report branches. No new seer MAX or mutual optimization is
+introduced. Closed admission remains authoritative; unsupported policy returns
+422 rather than silently substituting random. The preview remains local opt-in.
+
+Grouping uses existing exact_renaming canonical_key over complete Q, P, history,
+observer, physical state, rules and strategy, with a marked action target.
+Equality gives a bijection of named states/actions and preserves configured
+policy and transition laws; it does not follow merely from equal scalar values.
+Unresolved keys remain separate. Within a choice group, actual configured
+policy mass supplies member mixture weights; conditional physical/report masses
+are summed, never averaged without their weights. Nonselected counterfactual
+choices are labelled nonselected and use their explicitly separate mixture.
+Every positive named child remains selectable. Root five named actions form one
+choice, preserving village-win 1/5 and continuation 4/5, each with five named
+Boards. Night conditional actor/target members retain their owned physical state.
+
+Verification:31 targeted Python tests passed in6.003s (GameTree, Web and HELP).
+Development tests compare the no-public-information exact enumeration, cold
+export/replay with a fresh ordinary InformationSetForecast for all ten root
+named children, full-state group equality, a same-value/different-history
+counterexample, mass conservation through representative terminal branches,
+cache/saved-input consistency, stale snapshots, budget Pending and scope.
+Real Edge/Playwright at1280x900 and390x844 passed: immediate three Board cards,
+chronological headers and phase-column mapping, alternative named member
+selection retained through expansion, actual Day2 Board, no browser errors and
+no global overflow. Screenshots of both layouts and the completed HELP reference
+were visually reviewed; mobile uses local horizontal scrolling. No publication,
+auth/install, database action, rule change or seven-player benchmark was done.
+Evidence:benchmarks/player_match_groups/game-tree-flow-seer-validation.json.

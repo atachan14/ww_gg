@@ -1,69 +1,145 @@
-"""Local inspection of actual ability-free public evaluations and named Boards.
+"""Local TreeItems over real Closed nodes; exact established renaming groups.
 
-One immutable Board snapshot owns lazy records. Values use the same existing
-exchangeable public evaluator as BoardOverview; named edges use action_outcomes.
-This stores no decorative alternate model and never writes saved game evidence.
+The display quotient keeps every named member and its actual probability.
+Complete Q/P/history/physical signatures, not equal values, define groups.
 """
 from dataclasses import asdict
 from fractions import Fraction as F
 from hashlib import sha256
 from threading import RLock
-from .exact import Strategy,action_outcomes,legal_targets
-from .exchangeable_public import exchangeable_forecast
+from .closed_calculation import ClosedCalculation
+from .exact import Strategy,legal_targets
+from .evaluation_branch import physical_board
+from .exact_renaming import canonical_key
 from .calculation_budget import tick
 
 
 def supported(data,board):
     g=data.game_data
-    return (g.players==5 and g.wolves==1 and not(g.mediums or g.seers or g.hunters)
-        and not g.rules.allow_self_bite and all(c=='latent' for c in board.claims)
-        and len(board.belief)==len(board.alive)
-        and all(mask.bit_count()==1 and mask&board.alive_mask==mask and q==F(1,len(board.alive)) for mask,q in board.belief))
+    return (g.players==5 and g.wolves==1 and g.seers==1 and not(g.mediums or g.hunters)
+            and not g.rules.allow_self_bite)
 
 
 class CalculationTree:
     def __init__(self,data,board,forecast):
-        if not supported(data,board):raise ValueError('GameTree currently supports five-player4villager/1wolf, latent CO, no self-bite only')
+        if not supported(data,board):raise ValueError('Five-player3citizen/1seer/1wolf scope')
         self.data=data;self.rules=data.game_data.rules;self.strategy=Strategy(**data.to_game()['policy'])
-        if self.strategy.include_self_bite:raise ValueError('Self-bite outside current inspection scope')
+        self.calculation=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True)
+        self.engine=self.calculation._ClosedCalculation__engine
         self.snapshot=sha256(data.inputs.encode()).hexdigest()[:20]
-        self.nodes={};self.boards={};self.lock=RLock();self.root=self.register(board,forecast)
+        self.nodes={};self.sources={};self.keys={};self.values={};self.lock=RLock()
+        self.root=self.register(self.calculation.root)
+        # Root value is the actual BoardOverview result, never a fixture value.
+        self.nodes[self.root]['value']=forecast.village_win
 
-    def register(self,board,forecast=None):
-        if board in self.boards:return self.boards[board]
-        tick(0)
-        # Same production evaluator, not a separate tree-specific recurrence.
-        result=forecast if forecast is not None else exchangeable_forecast(board,self.strategy)
-        key=str(len(self.nodes));self.boards[board]=key
-        self.nodes[key]={'board':board,'forecast':result,'actions':[] if board.winner else None}
+    def equivalence(self,node,target=None):
+        s=node.read();key=(s,target)
+        if key not in self.keys:
+            self.keys[key]=canonical_key(*s,self.rules,self.strategy,target=target,physical=s.physical,max_mappings=120)
+        return self.keys[key] or ('unshared',key)
+
+    def register(self,node):
+        s=node.read()
+        if s in self.sources:return self.sources[s]
+        key=str(len(self.nodes));self.sources[s]=key
+        self.nodes[key]={'node':node,'value':None,'actions':None,'reused':False}
         return key
+
+    def value(self,key):
+        row=self.nodes[key]
+        if row['value'] is not None:return row['value']
+        node=row['node'];s=node.read();canonical=self.equivalence(node)
+        if canonical in self.values:row['value']=self.values[canonical];row['reused']=True
+        else:
+            with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
+                from .closed_calculation import _forecast_scope
+                _forecast_scope(s,self.engine)
+                row['value']=self.engine.solve(*s,physical=s.physical)
+            self.values[canonical]=row['value']
+        return row['value']
+
+    def candidates(self,node):
+        e=self.engine;s=node.read();b=s.public
+        if b.winner:return []
+        rows=[]
+        with self.calculation._ClosedCalculation__kernel(),e.group_scope(node.groups):
+            if b.phase=='day':
+                scores=dict(e.day_scores(b,s.public_state,s.past))
+                best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
+                for target in legal_targets(s.physical,self.rules,self.strategy):
+                    rows.append({'node':node,'target':target,'q_score':scores[target],
+                        'policy_mass':F(1,len(selected)) if target in selected else F(),
+                        'fallback_mass':F(1,len(scores)),'information':'公開Q'})
+            else:
+                # Selection is from PUBLIC Q conditioned by actor information;
+                # actual weights and child Boards come from the existing P split.
+                choices=node.wolf_choices();owners={}
+                for choice in choices:owners.setdefault(choice.information,(choice.node,choice.information_mass,{}))[2][choice.target]=choice.probability
+                for info,(owned,mass,policy) in owners.items():
+                    own=owned.read();q_actor=info.condition_public(s.public_state)
+                    with e.actor_scope(info):
+                        for target in legal_targets(own.physical,self.rules,self.strategy):
+                            score=e.act(b,s.public_state,s.past,target,q_actor,None,physical=physical_board(b,q_actor))
+                            rows.append({'node':owned,'target':target,'q_score':score,
+                                'policy_mass':mass*policy.get(target,F()),'fallback_mass':mass/F(len(legal_targets(own.physical,self.rules,self.strategy))),
+                                'information':f'狼本人I (初期狼集合{info.initial_roster})'})
+        return rows
+
+    def expand(self,key):
+        record=self.nodes[key]
+        if record['actions'] is not None:return
+        node=record['node'];groups={}
+        for row in self.candidates(node):groups.setdefault(self.equivalence(row['node'],row['target']),[]).append(row)
+        choices=[]
+        for members in groups.values():
+            policy_mass=sum((r['policy_mass'] for r in members),F())
+            normalizer=policy_mass or sum((r['fallback_mass'] for r in members),F())
+            branches={};named=[]
+            for member in members:
+                tick();origin=member['node'];s=origin.read();target=member['target']
+                weight=(member['policy_mass'] if policy_mass else member['fallback_mass'])/normalizer
+                named.append({'target':target,'information':member['information'],'policy_mass':str(member['policy_mass'])})
+                if not weight:continue
+                for physical in origin.action(target):
+                    after=physical.node
+                    reports=after.reports() if s.public.phase=='night' and after.read().public.winner is None else None
+                    outcomes=[(r.probability,r.node) for r in reports] if reports else [(F(1),after)]
+                    for report_mass,child in outcomes:
+                        source=child.read();chance=physical.probability*report_mass
+                        child_id=self.register(child);canonical=self.equivalence(child)
+                        observation=('村勝利' if source.public.winner=='village' else '狼勝利' if source.public.winner=='wolf' else '継続')
+                        new_reports=[r for r in source.past if r not in s.past]
+                        if new_reports:observation+='・'+','.join(f'P{r.player}→P{r.target}{r.color}' for r in new_reports)
+                        bucket=branches.setdefault(canonical,{'node':child_id,'probability':F(),'variants':[],'observation':observation})
+                        bucket['probability']+=weight*chance
+                        bucket['variants'].append({'node':child_id,'target':target,'information':member['information'],
+                            'conditional_probability':str(chance),'mixture_probability':str(weight*chance)})
+            target_ids=sorted({r['target'] for r in members})
+            for branch in branches.values():branch['probability']=str(branch['probability'])
+            choices.append({'targets':target_ids,'label':('処刑' if node.read().public.phase=='day' else '襲撃')+' '+ '/'.join('P'+str(p) for p in target_ids),
+                'multiplicity':len(members),'members':named,'q_score':str(members[0]['q_score']),
+                'selected':bool(policy_mass),'policy_probability':str(policy_mass),'branches':list(branches.values())})
+        record['actions']=choices
+
+    def summary(self,key,actions=False):
+        row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
+        return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'alive':list(b.alive),'winner':b.winner,
+            'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
+            'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
+            'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],
+            'mode':getattr(self.strategy,b.phase),'rules':asdict(self.rules),'policy':asdict(self.strategy),
+            'history':[asdict(e) for e in b.history],'reports':[asdict(r) for r in s.past],
+            'players':[{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p)),
+                'seer_probability':str(b.role_probability(p,'seer')),
+                'physical_wolf_probability':str(sum((h.mass for h in s.private.hypotheses if h.roles[0]&(1<<(p-1))),F()))} for p in range(1,b.player_count+1)],
+            'actions':row['actions'] if actions else None,'fixture':'市民3・占い1・狼1。CO・公開結果は保存入力どおり（追加なし）。',
+            'method':'完全なQ/P・履歴・物理枝の既存の名前付替え同値でまとめます。全ての成員Boardを選択できます。'}
 
     def read(self,key,expand=False):
         with self.lock:
-            if key not in self.nodes:raise KeyError('Unknown Board')
-            record=self.nodes[key];reused=record['actions'] is not None
-            b=record['board'];f=record['forecast']
-            if expand and record['actions'] is None:
-                actions=[];scored=[]
-                for target in (() if b.winner else legal_targets(b,self.rules,self.strategy)):
-                    outcomes=action_outcomes(b,target,self.rules,self.strategy);rows=[]
-                    for outcome in outcomes:
-                        tick();existed=outcome.board in self.boards
-                        child=self.register(outcome.board)
-                        label=('村勝利' if outcome.board.winner=='village' else '狼勝利' if outcome.board.winner=='wolf' else '継続（狼生存）')
-                        rows.append({'node':child,'probability':str(outcome.probability),'observation':label,'reused':existed})
-                    value=dict(f.action_values)[target]
-                    scored.append((target,value));actions.append({'target':target,'label':f'Player{target}を'+('処刑' if b.phase=='day' else '襲撃'),'village_win':str(value),'branches':rows})
-                mode=getattr(self.strategy,b.phase)
-                best=(max if b.phase=='day' else min)((v for t,v in scored),default=None)
-                selected=[t for t,v in scored if mode=='random' or v==best]
-                for action in actions:
-                    action.update(selected=action['target'] in selected,policy_probability=str(F(1,len(selected))) if action['target'] in selected else '0')
-                record['actions']=actions
-            return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'alive':list(b.alive),'winner':b.winner,
-                'viewpoint':'公開Q（夜は狼本人の合法手で条件付け）','policy_basis':('狼本人は自分以外の同点候補から選びます。選択確率は公開Qで混合した値です。' if b.phase=='night' else '同点候補はすべて均等採用。手動画面の代表選択とは別です。'),'village_win':str(f.village_win),'wolf_win':str(1-f.village_win),
-                'evaluation':'computed','expansion':'computed' if record['actions'] is not None else 'pending','reused':reused,
-                'mode':getattr(self.strategy,b.phase),'rules':asdict(self.rules),'policy':asdict(self.strategy),
-                'history':[asdict(e) for e in b.history],
-                'players':[{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p))} for p in range(1,b.player_count+1)],
-                'actions':record['actions'],'method':'BoardOverviewと同じ終局評価。対称な人数分布の共有を含みます。枝は開いたBoardだけ実際に生成・評価します。'}
+            if key not in self.nodes:raise KeyError(key)
+            if expand:self.expand(key)
+            result=self.summary(key,True);items={}
+            for choice in result['actions'] or []:
+                for branch in choice['branches']:items[branch['node']]=self.summary(branch['node'])
+            result['items']=items;return result
