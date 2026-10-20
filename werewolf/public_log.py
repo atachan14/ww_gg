@@ -94,7 +94,7 @@ def transaction(g,board,payload,finished=False):
             if set(e)!={'kind','player','day','target','color'} or type(e['day']) is not int or e['day']!=day or phase!='day':raise ValueError('取得日と公開日は同じ昼のみ対応しています。遅延公開は未対応です。')
             if type(e['target']) is not int or e['target'] not in range(1,g['players']+1) or e['color'] not in ('white','black'):raise ValueError('対象と白黒の両方を指定してください。')
             if e['kind']=='seer':
-                if not g.get('seer_mode') or e['target']==e['player'] or e['player'] not in scan:raise ValueError('占いの取得時点で生存する別プレイヤーを指定してください。')
+                if not g.get('seer_mode') or e['target']==e['player'] or e['player'] not in scan or e['target'] not in scan:raise ValueError('占いの取得時点で生存する別プレイヤーを指定してください。')
                 key=('seer',e['day'],e['player'])
             else:key=('medium',e['day'],e['player'],e['target'])
         if key in seen:raise ValueError('同時バッチ内で同じCO・結果が重複しています。')

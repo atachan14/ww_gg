@@ -40,7 +40,7 @@ def private_slots(board, player, rules,role="seer"):
     for day in range(1, board.day + 1):
         if day == 1 and rules.initial_seer == 'none':
             continue
-        slots.append({'day': day, 'targets': [p for p in (range(1,board.player_count+1) if role=='seer' else acquisition_roster(board.player_count,board.history,day)) if p != player]})
+        slots.append({'day': day, 'targets': [p for p in acquisition_roster(board.player_count,board.history,day) if p != player]})
     return slots
 
 

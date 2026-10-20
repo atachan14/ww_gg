@@ -653,13 +653,13 @@ def root_branch_forecast(branch,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_s
 
 def root_seer_forecast(branch,player,acquisitions,rules,strategy,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,_actor=None):
     """Own scan interventions over the unchanged public joint policy law."""
-    from .seer_future_uniform import candidates,scan_target_players
+    from .seer_future_uniform import candidates
     compatible=lambda h:bool(h.roles[2]&(1<<(player-1))) and all(a in h.acquisitions for a in acquisitions)
     actor=_actor if _actor is not None else root_actor_view(branch,compatible)
     if isinstance(actor,FuturePending):return actor
     histories={tuple(a for a in h.acquisitions if a.player==player) for h in actor.physical_law.hypotheses}
     if len(histories)!=1:return FuturePending('seer_view_past_private_history_unresolved')
-    choices={candidates(h,player,scan_target_players(branch.public_law,range(1,branch.public.player_count+1))) for h in actor.physical_law.hypotheses}
+    choices={candidates(h,player,branch.public.alive) for h in actor.physical_law.hypotheses}
     if len(choices)!=1:return FuturePending('seer_view_target_generation_support_unresolved')
     reason=root_scope(branch,rules,strategy)
     if reason:return FuturePending(reason)

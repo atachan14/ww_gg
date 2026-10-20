@@ -45,7 +45,7 @@ class SeerFutureForecastTests(unittest.TestCase):
   result=forecast(b,s,past,Rules(initial_seer='normal'),Strategy())
   self.assertNotIsInstance(result,FuturePending);self.assertEqual(result.village_win,F(1,3));self.assertEqual(set(dict(result.action_values).values()),{F(1,3)})
 
- def test_night_signal_includes_uninformative_corpse_scan(self):
+ def test_night_signal_excludes_previously_executed_target(self):
   from werewolf.exact import Progress,advance,value_for_action
   from werewolf.seer_future_forecast import project_private
   worlds=((10,0,1,0,F(1,2)),(18,0,1,0,F(1,2)))
@@ -53,8 +53,8 @@ class SeerFutureForecastTests(unittest.TestCase):
   s=TrueScanState(tuple(Hypothesis(r[:-1],(Acquisition(1,1,3,'white'),),r[-1]) for r in worlds),((1,2,3,4,5),))
   p=advance(Progress.initial(b),2,Rules(),Strategy());s=project_private(s,p.board)
   result=forecast(p.board,s,(SeerReport(1,1,1,3,'white'),SeerReport(1,1,2,3,'black')),Rules(),Strategy())
-  # Corpse2 gives no new information (1/3); the other two scans reveal the wolf.
-  self.assertEqual(dict(result.action_values)[3],F(1,3)*F(1,2)+F(2,3))
+  # Executed2 is excluded; either remaining unvisited target reveals the wolf.
+  self.assertEqual(dict(result.action_values)[3],F(1))
   self.assertEqual(value_for_action(p.board,3,Rules(),Strategy()).village_win,F(1,2))
   self.assertEqual(result.village_win,F(1,2))
 
@@ -104,7 +104,7 @@ class SeerFutureForecastTests(unittest.TestCase):
   reduced=project_private(s,next_board,marginalize_private=True)
   self.assertEqual(reduced.public_roles,tuple(sorted(next_board.worlds)));self.assertEqual(reduced.tracked,(2,));self.assertTrue(all(a.player==2 for h in reduced.hypotheses for a in h.acquisitions))
 
- def test_generated_morning_includes_dead_wolf_signal(self):
+ def test_generated_morning_excludes_previously_dead_wolf(self):
   from werewolf.exact import Progress,advance
   from werewolf.seer_future_forecast import project_private
   worlds=((10,0,1,0,F(1,2)),(18,0,1,0,F(1,2)))
@@ -112,9 +112,10 @@ class SeerFutureForecastTests(unittest.TestCase):
   s=TrueScanState(tuple(Hypothesis(r[:-1],(Acquisition(1,1,3,'white'),),r[-1]) for r in worlds),((1,2,3,4,5),))
   p=advance(Progress.initial(b),2,Rules(),Strategy());s=project_private(s,p.board,marginalize_private=True);s=acquire_uniform(s,p.board.alive);morning=advance(p,3,Rules(),Strategy()).board;s=project_private(s,morning,marginalize_private=True)
   past=(SeerReport(1,1,1,3,'white'),SeerReport(1,1,2,3,'black'));branches=future_publications(s,past,morning.alive,morning.claims)
-  self.assertEqual(len(branches),5);self.assertEqual({v.probability for v in branches},{F(1,3),F(1,6)})
+  self.assertEqual(len(branches),4);self.assertEqual({v.probability for v in branches},{F(1,4)})
   for v in branches:
    self.assertEqual(len(v.reports),1);self.assertEqual(v.reports[0].player,1);self.assertEqual(v.reports[0].acquired_day,2)
-   self.assertEqual(len(v.state.public_roles),2 if v.reports[0].target==2 else 1)
-   self.assertEqual(v.probability,F(1,3)if v.reports[0].target==2 else F(1,6))
+   self.assertEqual(len(v.state.public_roles),1)
+   self.assertEqual(v.probability,F(1,4))
+   self.assertNotEqual(v.reports[0].target,2)
    self.assertTrue(all(r[0]&2 for r in v.state.public_roles))

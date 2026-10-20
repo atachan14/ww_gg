@@ -47,35 +47,35 @@
       "asymmetric": false,
       "personal": false,
       "ordinary": {
-        "values": 513,
-        "actions": 1549,
+        "values": 85,
+        "actions": 265,
         "expansions": {
-          "actions": 1549,
-          "values": 513
+          "actions": 265,
+          "values": 85
         },
         "acquired": 5,
         "mornings": 4,
         "publications": 4,
         "policies": 6,
         "saved_sources": 0,
-        "resolution_cache": 1552
+        "resolution_cache": 268
       },
       "representative": {
-        "values": 433,
-        "actions": 1267,
+        "values": 2,
+        "actions": 8,
         "expansions": {
-          "actions": 1267,
-          "values": 433
+          "actions": 8,
+          "values": 2
         },
         "acquired": 5,
         "mornings": 3,
         "publications": 3,
         "policies": 6,
         "saved_sources": 0,
-        "resolution_cache": 1270,
+        "resolution_cache": 11,
         "target_orbits": {
-          "target_members": 1309,
-          "target_representatives": 1267,
+          "target_members": 13,
+          "target_representatives": 8,
           "solver_wolf_cells": 3,
           "solver_wolf_hypotheses": 3
         }
@@ -170,35 +170,35 @@
       "asymmetric": false,
       "personal": true,
       "ordinary": {
-        "values": 305,
-        "actions": 922,
+        "values": 53,
+        "actions": 166,
         "expansions": {
-          "actions": 922,
-          "values": 305
+          "actions": 166,
+          "values": 53
         },
         "acquired": 5,
         "mornings": 4,
         "publications": 4,
         "policies": 5,
         "saved_sources": 0,
-        "resolution_cache": 925
+        "resolution_cache": 169
       },
       "representative": {
-        "values": 305,
-        "actions": 912,
+        "values": 2,
+        "actions": 9,
         "expansions": {
-          "actions": 912,
-          "values": 305
+          "actions": 9,
+          "values": 2
         },
         "acquired": 5,
         "mornings": 4,
         "publications": 4,
         "policies": 5,
         "saved_sources": 0,
-        "resolution_cache": 915,
+        "resolution_cache": 12,
         "target_orbits": {
-          "target_members": 922,
-          "target_representatives": 912,
+          "target_members": 10,
+          "target_representatives": 9,
           "solver_wolf_cells": 2,
           "solver_wolf_hypotheses": 2
         }

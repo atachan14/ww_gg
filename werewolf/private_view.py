@@ -74,7 +74,7 @@ def condition_private(board, role, players, results=(), *, rules):
             continue
         # Missing fields stay unknown. They are not fabricated as white results.
         if target is None or color is None:
-            if target is not None and (type(target) is not int or not 1<=target<=board.player_count):raise ValueError('Invalid private target')
+            if target is not None and (type(target) is not int or not 1<=target<=board.player_count or role=='seer' and (target==players[0] or target not in acquisition_roster(board.player_count,board.history,day))):raise ValueError('Invalid private target')
             if color not in (None,'white','black'):raise ValueError('Invalid private color')
             continue
         if type(target) is not int or not 1<=target<=board.player_count or target==players[0] or color not in ('white','black'):
@@ -84,7 +84,7 @@ def condition_private(board, role, players, results=(), *, rules):
                 raise ValueError('Private result conflicts with initial seer rule')
             # Night N acquires result slot N+1 before that night's casualty.
             roster=acquisition_roster(board.player_count,board.history,day)
-            if players[0] not in roster:raise ValueError('Private scan owner was unavailable')
+            if players[0] not in roster or target not in roster:raise ValueError('Private scan owner or target was unavailable at night start')
             acquisitions.append(Acquisition(day,players[0],target,color))
         else:
             executions={event.target for event in board.history if event.phase=='day' and event.day==day-1}

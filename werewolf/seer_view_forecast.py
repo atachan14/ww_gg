@@ -7,7 +7,7 @@ Public decisions see the full prior, including every possible target and fake CO
 """
 from .calculation_budget import DEFAULT_MAX_WORK, DEFAULT_MAX_SECONDS
 from fractions import Fraction as F
-from .seer_future_uniform import FuturePending, candidates, scan_target_players
+from .seer_future_uniform import FuturePending, candidates
 from .information_set_forecast import InformationSetForecast, Pending
 from .seer_intervention import scan_intervention_matches, SeerObserver
 from .calculation_budget import calculation_budget, tick, CalculationBudgetExceeded
@@ -28,7 +28,7 @@ def seer_forecast(public, player, acquisitions, rules, strategy, *, scan_state, 
     histories = {tuple(a for a in h.acquisitions if a.player == player) for h in supported}
     if len(histories) != 1:
         return FuturePending('seer_view_past_private_history_unresolved')
-    choices = {candidates(h, player, scan_target_players(scan_state,range(1,public.player_count+1))) for h in supported}
+    choices = {candidates(h, player, public.alive) for h in supported}
     if len(choices) != 1:
         return FuturePending('seer_view_target_generation_support_unresolved')
     targets = next(iter(choices)); day = public.day + 1; values = []

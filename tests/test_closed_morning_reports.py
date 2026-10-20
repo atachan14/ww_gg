@@ -15,8 +15,8 @@ class ClosedMorningReportTests(unittest.TestCase):
         from werewolf.acquisition_provenance import AcquisitionLedger,UniformAcquisitionCache
         with patch.object(AcquisitionLedger,'__init__',side_effect=AssertionError('ledger')),patch.object(AcquisitionLedger,'_owner_current',side_effect=AssertionError('owner check')),patch.object(AcquisitionLedger,'_groups_record',side_effect=AssertionError('frame check')),patch.object(UniformAcquisitionCache,'__init__',side_effect=AssertionError('proof cache')):
             result=audit()
-        self.assertEqual(result['cases'][0]['generated_actual_probability'],'1/9')
-        self.assertEqual(result['cases'][0]['observed_truth_support_mass'],'1/3')
+        self.assertEqual(result['cases'][0]['generated_actual_probability'],'1/4')
+        self.assertEqual(result['cases'][0]['observed_truth_support_mass'],'1/2')
         self.assertNotEqual(result['private_report']['public_probability'],result['private_report']['actual_probability'])
         self.assertFalse(result['state_pruning'])
 

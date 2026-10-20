@@ -2511,3 +2511,43 @@ Solver limitation remains distinct: complete trace/UI expansion still materializ
 named members and then canonicalizes them; scalar solver already chooses target
 and wolf-owner representatives before recursion. Full scanE/scanW/scanC histories
 are not interchangeable. No broad additional solver quotient was implemented.
+### 2026-10-20 User correction: seer targets are alive at night start
+
+This explicitly supersedes the preceding corpse-target rule and the earlier
+one-co investigation counts. The user clarified that only a simultaneous bite
+may kill a divination target during that night; previously dead players are
+illegal. Common true acquisition now uses the supplied pre-casualty alive roster
+for targets as well as owners. Historical TrueScanState records validate both
+against that slot's roster. Own target interventions use the current public alive
+roster. Shared GameTree generation inherits the corrected acquisition law.
+
+Public/manual/private input validation and dropdowns now use the historical
+night-start acquisition roster, including incomplete private inputs. A fake's
+claimed acquisition uses its corresponding historical roster too. Same-night
+casualties remain legal targets; stored results persist after later owner/target
+death. Existing publication policy still excludes a seer killed that night from
+morning reports. No UI layout, grouping algorithm, strategy mode or MAX admission
+was added or changed.
+
+Corrected one-CO case (1->2 white, representative execution3): alive1,2,4,5;
+unvisited scan targets4/5; wolf4/5 each1/2. Twelve named joint choices become six
+display groups of2. Across executions3/4/5:36 named tuples,12 positive MAX tuples.
+Root village value2/3 and continuing-night value1/2 remain; forced wolf4 bite2
+now has village value1 (formerly5/6 under the incorrect corpse scan rule).
+Every action's outcome probabilities, joint display probabilities and named
+member masses sum exactly. Independent named MAX kernel with empty player groups
+and a separate cache matches representative root/action values.
+
+Validation:131 focused tests passed across seer generation/forecast/rules/manual,
+public/private input, morning reports, GameTree, Current navigation and independent
+named/cold representative comparisons. After adding stronger joint mass and
+separate named-MAX checks, all6 targeted rule/one-CO tests passed. Updated old
+corpse-permitting tests and small morning-report audit fixtures to legal
+same-night-bitten targets, retaining named/cold/full-Q/P comparisons. Evidence:
+.artifacts/night-start-focused-final.log and regenerated closed-morning-reports
+and representative-target benchmark JSONs. Full historical suite not rerun.
+
+Corrected normal UI: http://127.0.0.1:18805/ (HTTP200), cookie isolated. Existing
+18801-18804 servers and user sessions preserved. Restarted only the18805 server
+created in this correction. Old18804 Python process retains old loaded code;
+use18805 for this rule. No push or deployment.

@@ -1,6 +1,6 @@
 """Own scan intervention: only the owner's absence cancels a new result.
 
-Targets remain readable as corpses. Test membership in the acquisition roster,
+Targets killed during that same night remain readable. Use the acquisition roster,
 not current morning survival, so already obtained records remain mandatory.
 """
 def scan_intervention_matches(h,state,owner,day,target):

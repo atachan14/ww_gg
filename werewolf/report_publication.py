@@ -35,7 +35,7 @@ def observe_public_reports(source,seer_reports,medium_reports,rules):
     if type(medium_reports)is not tuple or any(type(r)is not MediumReport for r in medium_reports):raise ValueError('Typed medium reports required')
     due={p for p in b.alive if b.claims[p-1]=='seer'}
     if {r.player for r in seer_reports}!=due or len(seer_reports)!=len(due):raise Pending('closed_saved_new_seer_report_pending')
-    if any(r.acquired_day!=b.day or r.published_day!=b.day or r.target not in source.public_state.rosters[0] for r in seer_reports):raise ValueError('Only current same-morning reports supported')
+    if any(r.acquired_day!=b.day or r.published_day!=b.day or r.target not in source.public_state.rosters[r.acquired_day-1] for r in seer_reports):raise ValueError('Only current same-morning reports supported')
     opportunities={o for o in available_medium_opportunities(b) if o[0]==b.day and o not in b.report_resolved}
     if {(r.day,r.reporter,r.target) for r in medium_reports}!=opportunities or len(medium_reports)!=len(opportunities):raise Pending('closed_saved_new_medium_report_pending')
     if any(r.player==p.player and r.acquired_day==p.acquired_day for r in seer_reports for p in source.past):raise ValueError('Past report edits require a new snapshot')

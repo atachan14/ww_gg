@@ -7,23 +7,14 @@ from werewolf.seer_intervention import scan_intervention_matches
 
 class CorpseScanTests(unittest.TestCase):
     def seed(self):return TrueScanState((Hypothesis((2,0,1,0),(),F(1)),),((1,2,3,4,5),),'none',(1,))
-    def test_four_before_acquisition_survival_cases(self):
-        for owner,target in((True,True),(False,True),(True,False),(False,False)):
-            alive=tuple(p for p in range(1,6)if(p!=1 or owner)and(p!=2 or target))
+    def test_previously_dead_owner_or_target_is_excluded(self):
+        for owner,target in ((True,True),(False,True),(True,False),(False,False)):
+            alive=tuple(p for p in range(1,6) if (p!=1 or owner) and (p!=2 or target))
             result=acquire_uniform(self.seed(),alive)
             self.assertEqual(sum(h.mass for h in result.hypotheses),1)
             records=[a for h in result.hypotheses for a in h.acquisitions if a.day==2]
-            if owner:
-                self.assertEqual({a.target for a in records},{2,3,4,5})
-                self.assertTrue(any(a.target==2 and a.color=='black'for a in records))
-                matching=[h for h in result.hypotheses if scan_intervention_matches(h,result,1,2,2)]
-                self.assertTrue(matching)
-                self.assertTrue(all(any(a.day==2 and a.target==2 for a in h.acquisitions)for h in matching))
-                wrong=next(h for h in result.hypotheses if h.acquisitions[-1].target==3)
-                self.assertFalse(scan_intervention_matches(wrong,result,1,2,2))
-            else:
-                self.assertEqual(records,[])
-                self.assertTrue(all(scan_intervention_matches(h,result,1,2,2)for h in result.hypotheses))
+            self.assertEqual({a.target for a in records},set(alive)-{1} if owner else set())
+            if owner:self.assertEqual({h.mass for h in result.hypotheses},{F(1,len(alive)-1)})
     def test_obtained_results_survive_later_owner_and_target_death(self):
         seed=self.seed();all_alive=acquire_uniform(seed,(1,2,3,4,5))
         h=next(h for h in all_alive.hypotheses if h.acquisitions[-1].target==2)
@@ -33,9 +24,9 @@ class CorpseScanTests(unittest.TestCase):
         self.assertTrue(scan_intervention_matches(later.hypotheses[0],later,1,2,2))
         self.assertFalse(scan_intervention_matches(later.hypotheses[0],later,1,2,3))
         self.assertEqual(state,before)
-    def test_explicit_instruction_can_address_a_corpse(self):
-        result=acquire(self.seed().hypotheses,2,(1,3,4,5),{1:2},target_players=(1,2,3,4,5))
-        self.assertEqual(result[0].acquisitions,(Acquisition(2,1,2,'black'),))
+    def test_explicit_instruction_rejects_previously_dead_target(self):
+        with self.assertRaises(ValueError):
+            acquire(self.seed().hypotheses,2,(1,3,4,5),{1:2},target_players=(1,2,3,4,5))
     def test_initial_white_distribution_is_unchanged(self):
         state=TrueScanState((Hypothesis((2,0,1,0),(),F(1)),),initial_rule='random_white',tracked=(1,))
         result=acquire_uniform(state,(1,2,3,4,5))
@@ -50,7 +41,11 @@ class CorpseScanTests(unittest.TestCase):
             g=game_of(c)
             self.assertEqual(c.post('/advance',data={'revision':g['revision'],'target':target,'day':'random','night':'random'}).status_code,303)
         g=game_of(c)
-        payload={'claims':g['claims'],'seers':[{'day':day,'reporter':p,'target':3 if day==1 else 4,'color':'white'}for day in(1,2)for p in(1,2)],'mediums':[]}
+        payload={'claims':g['claims'],'seers':[{'day':day,'reporter':p,'target':3 if day==1 else 5,'color':'white'}for day in(1,2)for p in(1,2)],'mediums':[]}
+        invalid=copy.deepcopy(payload)
+        for row in invalid['seers']:
+            if row['day']==2:row['target']=4
+        self.assertEqual(c.post('/table-publish',data={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps(invalid)}).status_code,400)
         response=c.post('/table-publish',data={'revision':g['revision'],'board_id':g['public_log']['board_id'],'payload':json.dumps(payload)})
         self.assertEqual(response.status_code,200,response.data)
         saved=game_of(c);before=copy.deepcopy(saved);roles=BoardData.from_game(saved).roles()
@@ -65,11 +60,11 @@ class CorpseScanTests(unittest.TestCase):
         from werewolf.private_adapter import private_slots
         from werewolf.private_view import condition_private
         seer_slots=private_slots(roles.board,1,roles.rules)
-        self.assertIn(4,next(slot for slot in seer_slots if slot['day']==2)['targets'])
+        self.assertNotIn(4,next(slot for slot in seer_slots if slot['day']==2)['targets'])
         self.assertNotIn(4,private_slots(roles.board,1,roles.rules,role='hunter')[0]['targets'])
         self.assertNotIn(4,private_slots(roles.board,1,roles.rules,role='wolf')[0]['targets'])
-        own=condition_private(roles.board,'seer',[1],[{'day':1,'target':3,'color':'white'},{'day':2,'target':4,'color':'white'}],rules=roles.rules)
-        self.assertIn(Acquisition(2,1,4,'white'),own.acquisitions)
+        own=condition_private(roles.board,'seer',[1],[{'day':1,'target':3,'color':'white'},{'day':2,'target':5,'color':'white'}],rules=roles.rules)
+        self.assertIn(Acquisition(2,1,5,'white'),own.acquisitions)
 
         with reuse_scope(False):old=roles.forecast(max_seconds=10)
         with reuse_scope(True):new=roles.forecast(max_seconds=10)
@@ -97,7 +92,7 @@ class CorpseScanTests(unittest.TestCase):
             self.assertEqual(medium,F(1,3))
             self.assertEqual(1-medium,F(2,3))
 
-    def test_root_and_fixed_paths_both_require_the_corpse_record(self):
+    def test_root_and_fixed_paths_both_exclude_previously_dead_target(self):
         from unittest.mock import patch
         from tests.test_seer_view_forecast import fixture
         from werewolf.exact import Rules,Strategy
@@ -115,6 +110,6 @@ class CorpseScanTests(unittest.TestCase):
         with patch('werewolf.root_secret_flow.scan_intervention_matches',checked):
             root=root_seer_forecast(branch,1,(),rules,strategy,max_seconds=10)
         fixed=seer_forecast(b,1,(),rules,strategy,scan_state=s,max_seconds=10)
-        self.assertEqual(dict(root),{p:F(1,3)for p in(2,3,4,5)})
+        self.assertEqual(dict(root),{p:F(1,3)for p in(2,3,4)})
         self.assertEqual(root,fixed)
-        self.assertIn(True,checks);self.assertIn(False,checks)
+        self.assertEqual(checks,[])

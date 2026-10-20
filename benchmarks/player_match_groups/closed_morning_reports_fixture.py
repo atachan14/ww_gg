@@ -25,7 +25,7 @@ def case(n):
 
 
 def report_vector(n,asymmetric=False):
-    return tuple(SeerReport(2,2,p,1 if asymmetric and p==3 else 4,'white') for p in range(1,3 if n==5 else 4))
+    return tuple(SeerReport(2,2,p,1 if asymmetric and p==3 else (5 if n==5 else 6),'white') for p in range(1,3 if n==5 else 4))
 
 
 def outputs(node,reference,data):
@@ -101,7 +101,7 @@ def audit():
         assert cold==generated.read();outputs(generated,cold,graph.data)
         groups=check_groups(generated)
         if n==6 and not asymmetric:
-            h=next(h for h in node.read().private.hypotheses if h.roles[2]&1 and any(a.player==1 and a.day==2 and a.target==4 and a.color=='white' for a in h.acquisitions))
+            h=next(h for h in node.read().private.hypotheses if h.roles[2]&1 and any(a.player==1 and a.day==2 and a.target==6 and a.color=='white' for a in h.acquisitions))
             info=PersonalInformation(1,'seer',tuple(a for a in h.acquisitions if a.player==1))
             owner_mass,owned=node.personal(info)
             row=next(r for r in owned.reports() if tuple(x for x in r.node.read().past if x.acquired_day==2)==desired)

@@ -39,12 +39,11 @@ class PrivateViewTests(unittest.TestCase):
         with self.assertRaises(ValueError):condition_private(night,'wolf',(2,),rules=Rules())
         with self.assertRaises(ValueError):condition_private(private.board,'wolf',(3,4),rules=Rules())
 
-    def test_corpse_scan_allowed_and_future_result_rejected(self):
+    def test_execution_target_rejected_same_night_corpse_allowed(self):
         board=initial_board(7,1,0,1,0)
         night=next(o.board for o in action_outcomes(board,2,Rules(),Strategy()) if o.board.winner is None)
         morning=next(o.board for o in action_outcomes(night,3,Rules(),Strategy()) if o.board.winner is None)
-        corpse=condition_private(morning,'seer',(1,),({'day':2,'target':2,'color':'white'},),rules=Rules())
-        self.assertEqual(corpse.acquisitions[0].target,2)
+        with self.assertRaises(ValueError):condition_private(morning,'seer',(1,),({'day':2,'target':2,'color':'white'},),rules=Rules())
         with self.assertRaises(ValueError):condition_private(morning,'seer',(1,),({'day':2,'target':2,'color':'black'},),rules=Rules())
         # A target dying that same night was still available when scanned.
         view=condition_private(morning,'seer',(1,),({'day':2,'target':3,'color':'white'},),rules=Rules())

@@ -114,10 +114,10 @@ def acquire(entries, day, alive, targets, *, target_players=None):
     """
     if type(day) is not int or day<1 or len(set(alive))!=len(alive):raise ValueError('Invalid acquisition opportunity')
     legal=tuple(alive)if target_players is None else tuple(target_players)
-    if any(type(p)is not int or p<1 for p in legal)or len(set(legal))!=len(legal):raise ValueError('Original target roster required')
+    if any(type(p)is not int or p<1 for p in legal)or len(set(legal))!=len(legal) or not set(legal)<=set(alive):raise ValueError('Targets must be alive at night start')
     possible={p for h in entries for p in alive if h.roles[2] & (1<<(p-1))}
     if not possible<=set(targets) or any(targets[p] not in legal or targets[p]==p for p in possible):
-        raise ValueError('Target must be another original player; corpses are legal')
+        raise ValueError('Target must be another player alive at night start')
     result=[]
     for h in entries:
         players=tuple(p for p in alive if h.roles[2] & (1<<(p-1)))
