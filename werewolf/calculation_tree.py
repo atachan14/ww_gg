@@ -152,7 +152,7 @@ class CalculationTree:
         from .seer_future_uniform import candidates
         record=self.nodes[key];node=record['node'];s=node.read();e=self.engine
         def names(players):
-            values=list(sorted(players));return '['+','.join(map(str,values))+']から' if len(values)>1 else str(values[0])+'を'
+            values=list(sorted(players));return '['+','.join('('+str(p)+')' if p==values[0] else str(p) for p in values)+']から' if len(values)>1 else str(values[0])+'を'
         scans=[]
         for player in s.public.alive:
             if s.public.role_probability(player,'seer')==1:
@@ -203,6 +203,77 @@ class CalculationTree:
                 q_score=None,selected=bool(action.policy_mass),policy_probability=str(action.policy_mass),branches=branches))
         record['actions']=result
 
+    def _ability_columns(self,key):
+        record=self.nodes[key];node=record['node'];source=node.read()
+        if source.public.phase!='night' or source.public.winner:return
+        if any(b.get('trace_pending') for a in record['actions'] or [] for b in a['branches']):
+            record['ability_pending']='完全な占い履歴を復元できないため、既存の厳密な同時行動を表示します。'
+            return
+        from .joint_action_kernel import report_signature,compose
+        metadata={}
+        n=source.public.player_count
+        def canonical(scans):
+            mapping={};used=set()
+            for p in (*[a for a,t in scans],*[t for a,t in scans]):
+                if p in mapping:continue
+                group=next((g for g in node.groups if p in g),(p,))
+                target=next(x for x in group if x not in used);mapping[p]=target;used.add(target)
+            for group in node.groups:
+                for p,t in zip((p for p in group if p not in mapping),(p for p in group if p not in used)):mapping[p]=t
+            return tuple(mapping.get(p,p) for p in range(1,n+1))
+        def event_key(member,mapping):
+            child,transport=metadata[id(member)]
+            return (tuple(sorted(mapping[p-1] for p in member['wolves'])),tuple(sorted((mapping[a-1],mapping[t-1]) for a,t in member['scans'])),mapping[member['target']-1],repr(report_signature(child,compose(transport,mapping))))
+        identity=tuple(range(1,n+1));entries=[];lookup={}
+        for action in record['actions'] or []:
+            for branch in action['branches']:
+                for trace in branch.get('joint_actions',[]):
+                    for member in trace['members']:
+                        variant=next((v for v in branch['variants'] if v['node']==member['node']),{})
+                        metadata[id(member)]=(self.nodes[branch['node']]['node'].read(),tuple(variant.get('transport',identity)))
+                        entries.append((action,branch,member));lookup.setdefault(event_key(member,identity),member)
+        scans={};conditioned={}
+        for action,branch,member in entries:
+            mapping=canonical(member['scans']);signature=event_key(member,mapping)
+            actual=lookup.get(signature)
+            if actual is None:signature=event_key(member,identity);actual=member
+            wolves,acquisitions,victim,public_signature=signature
+            scan=scans.setdefault(acquisitions,dict(mass=F(),targets={},attacks={}))
+            for a,t in member['scans']:scan['targets'].setdefault(a,set()).add(t)
+            weight=F(member['probability']);policy=F(action['policy_probability']);mass=policy*weight
+            scan['mass']+=mass
+            attack=scan['attacks'].setdefault(victim,dict(mass=F(),counter=F(),families={},outcomes={}))
+            attack['mass']+=mass;attack['counter']+=weight
+            family=tuple(action['targets']);attack['families'][family]=True
+            outcome=attack['outcomes'].setdefault(signature,dict(mass=F(),counter=F(),member=actual,label=branch.get('outcome_label',branch['observation'])))
+            outcome['mass']+=mass;outcome['counter']+=weight
+        result=[]
+        for acquisitions,scan in scans.items():
+            parts=[]
+            for actor,target in acquisitions:
+                group=next((g for g in node.groups if target in g),(target,))
+                targets=sorted({t for a,t in (pair for _,_,m in entries for pair in m['scans']) if a==actor and t in group})
+                label='['+','.join('('+str(t)+')' if t==target else str(t) for t in targets)+']から' if len(targets)>1 else str(target)+'を'
+                owner=str(actor) if source.public.role_probability(actor,'seer')==1 else '占い師'
+                parts.append(f'{owner}が{label}占い')
+            attacks=[]
+            for victim,attack in sorted(scan['attacks'].items()):
+                branches=[];total=attack['mass'] or attack['counter']
+                for signature,outcome in attack['outcomes'].items():
+                    wolves,acquired,_,public_signature=signature
+                    selected=outcome['member'];cache=(selected['node'],wolves,acquired)
+                    if cache not in conditioned:
+                        base=self.nodes[selected['node']]['node'];full=base._with_full_trace()
+                        child=full._select_physical('joint',(source.public.day,wolves,acquired))
+                        route=self.nodes[selected['node']]['route']
+                        if full.read()!=base.read():route=(*route,{'full_trace':True})
+                        child_id=self.register(child,(*route,{'physical':'joint','value':(source.public.day,wolves,acquired)}));conditioned[cache]=child_id
+                    branches.append(dict(node=conditioned[cache],probability=str((outcome['mass'] if attack['mass'] else outcome['counter'])/total),observation=outcome['label']))
+                family_total=sum(other['counter'] for other in scan['attacks'].values() if set(other['families'])&set(attack['families']))
+                attacks.append(dict(label=f'狼が{victim}を襲撃',target=victim,policy_probability=str(attack['mass']/scan['mass'] if scan['mass'] else F()),conditional_probability=str(attack['counter']/family_total),branches=branches))
+            result.append(dict(label='・'.join(parts) if parts else '占いなし',scans=[list(p) for p in acquisitions],probability=str(scan['mass']),attacks=attacks,simultaneous=True))
+        record['ability_choices']=result
+
     def expand(self,key):
         record=self.nodes[key]
         if record['actions'] is not None:return
@@ -211,6 +282,7 @@ class CalculationTree:
             joint=node._joint_actions()
             if joint is not None:
                 self._expand_joint(key,joint)
+                self._ability_columns(key)
                 return
         for row in self.candidates(node):groups.setdefault(self.equivalence(row['node'],row['target']),[]).append(row)
         choices=[]
@@ -260,12 +332,18 @@ class CalculationTree:
                 'multiplicity':len(members),'members':named,'q_score':str(members[0]['q_score']),
                 'selected':bool(policy_mass),'policy_probability':str(policy_mass),'branches':list(branches.values())})
         record['actions']=choices
+        with self.calculation._ClosedCalculation__kernel():self._ability_columns(key)
 
     def restore(self,route):
         """Reconstruct a named physical path only through common generators."""
-        if type(route) not in (list,tuple) or len(route)>2*self.data.game_data.players:raise ValueError('Invalid Current path')
+        if type(route) not in (list,tuple) or len(route)>6*self.data.game_data.players+1:raise ValueError('Invalid Current path')
         node=self.calculation.root;prefix=()
         for step in route:
+            if type(step)is dict:
+                if step=={'full_trace':True}:node=node._with_full_trace()
+                elif set(step)=={'physical','value'}:node=node._select_physical(step['physical'],step['value'])
+                else:raise ValueError('Invalid physical selector')
+                prefix=(*prefix,step);self.register(node,prefix);continue
             if type(step) not in (list,tuple) or len(step)!=4:raise ValueError('Invalid Current step')
             owner,target,outcome,report=step
             if type(target)is not int or any(v is not None and (type(v)is not int or v<0) for v in (owner,outcome)) or report is not None and (type(report) not in (int,dict) or type(report)is int and report<0):raise ValueError('Invalid Current selector')
@@ -283,7 +361,18 @@ class CalculationTree:
         return self.register(node,prefix)
 
     def route(self,key):
-        with self.lock:return [list(step) for step in self.nodes[key]['route']]
+        with self.lock:return [dict(step) if type(step)is dict else list(step) for step in self.nodes[key]['route']]
+
+    def _composition_rows(self,key):
+        row=self.nodes[key]
+        if 'composition_rows' in row:return row['composition_rows']
+        node=row['node'];result=[];parts=node._compositions()
+        for composition,probability in parts:
+            w,m,seer,h,v=composition
+            label=f'占い{seer}市民{v}'+(f'霊能{m}' if self.data.game_data.mediums else '')+(f'狩人{h}' if self.data.game_data.hunters else '')+f'狼{w}'
+            child=key if len(parts)==1 else self.register(node._select_physical('composition',composition),(*row['route'],{'physical':'composition','value':composition}))
+            result.append(dict(node=child,counts=dict(wolves=w,mediums=m,seers=seer,hunters=h,citizens=v),label=label,probability=str(probability)))
+        row['composition_rows']=result;return result
 
     def summary(self,key,actions=False):
         row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
@@ -298,7 +387,7 @@ class CalculationTree:
             'players':[{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p)),
                 'seer_probability':str(b.role_probability(p,'seer')),
                 'physical_wolf_probability':str(sum((h.mass for h in s.private.hypotheses if h.roles[0]&(1<<(p-1))),F()))} for p in range(1,b.player_count+1)],
-            'actions':row['actions'] if actions else None,'fixture':'市民3・占い1・狼1。CO・公開結果は保存入力どおり（追加なし）。',
+            'compositions':self._composition_rows(key),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':'市民3・占い1・狼1。CO・公開結果は保存入力どおり（追加なし）。',
             'method':'完全なQ/P・履歴・物理枝の既存の名前付替え同値でまとめます。全ての成員Boardを選択できます。'}
 
     def read(self,key,expand=False):
@@ -310,6 +399,13 @@ class CalculationTree:
                 parent=pending.pop()
                 if parent in seen:continue
                 seen.add(parent)
+                for composition in self._composition_rows(parent):
+                    child=composition['node']
+                    if child!=parent:items[child]=self.summary(child,True);pending.append(child)
+                for choice in self.nodes[parent].get('ability_choices') or []:
+                    for attack in choice['attacks']:
+                        for branch in attack['branches']:
+                            child=branch['node'];items[child]=self.summary(child,True);pending.append(child)
                 for choice in self.nodes[parent]['actions'] or []:
                     for branch in choice['branches']:
                         child=branch['node'];items[child]=self.summary(child,True);pending.append(child)

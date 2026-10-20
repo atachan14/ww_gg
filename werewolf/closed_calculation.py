@@ -224,6 +224,28 @@ class _Node:
         groups=_fix(self.__groups,_owner_positions(information,s.public.player_count))
         return mass,self.__calculation._ClosedCalculation__node(child,groups,(*self.__path,('owner',information,child.observer)),view)
 
+    def _compositions(self):
+        from .physical_selection import counts
+        result={};tick(len(self.__source.private.hypotheses))
+        for h in self.__source.private.hypotheses:
+            key=counts(h,self.__source.public.alive);result[key]=result.get(key,F())+h.mass
+        return tuple(sorted(result.items()))
+
+    def _with_full_trace(self):
+        if any(op[0]=='full_trace' for op in self.__path):return self
+        from .action_tree_trace import trace_source
+        source,pending=trace_source(self)
+        if pending:raise ValueError(pending)
+        if source is self.__source:return self
+        return self.__calculation._ClosedCalculation__node(source,self.__groups,(('full_trace',),*self.__path),self.__view)
+
+    def _select_physical(self,kind,selection):
+        from .physical_selection import PhysicalSelectionEvidence,freeze
+        selection=freeze(selection);source=PhysicalSelectionEvidence(kind,selection)(self.__source)
+        groups=self.__groups
+        if kind=='joint':groups=_fix(groups,(*selection[1],*(p for pair in selection[2] for p in pair)))
+        return self.__calculation._ClosedCalculation__node(source,groups,(*self.__path,('physical',kind,selection)),self.__view)
+
     def _joint_actions(self):
         from .joint_action_kernel import supported,compile_actions
         e=self.__calculation._ClosedCalculation__engine
@@ -301,8 +323,15 @@ class _Node:
         e=InformationSetForecast(self.__calculation.data.game_data.rules,self.__calculation._ClosedCalculation__strategy,exact_renaming=False,retire_uninformative_scans=False)
         e.retain_joint_guard_history=True
         origin=SavedOrigin(self.__calculation._ClosedCalculation__origin_data,e.rules,e.strategy,project_public=False);request=GeneratedBoard(origin)
+        if any(op[0]=='full_trace' for op in self.__path):
+            from .action_tree_trace import FullTraceOrigin
+            request=GeneratedBoard(FullTraceOrigin(origin))
         for operation in self.__path:
-            if operation[0]=='owner':step=OwnerInformationEvidence(operation[1],operation[2])
+            if operation[0]=='full_trace':continue
+            if operation[0]=='physical':
+                from .physical_selection import PhysicalSelectionEvidence
+                step=PhysicalSelectionEvidence(operation[1],operation[2])
+            elif operation[0]=='owner':step=OwnerInformationEvidence(operation[1],operation[2])
             elif operation[0]=='observe':step=ObservedActionEvidence(e,operation[1])
             elif operation[0]=='observed_reports':step=ObservedPublicationEvidence(e,operation[1],operation[2])
             elif operation[0]=='action':step=ActionEvidence(e,operation[1],operation[2],False)

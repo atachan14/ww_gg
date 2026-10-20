@@ -1,12 +1,12 @@
 "use strict";
 (()=>{
  const el=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;};
- const targetLabel=(targets,action)=>(targets.length>1?'['+targets.join(',')+']から':targets[0]+'を')+action;
+ const targetLabel=(targets,action)=>(targets.length>1?'['+targets.map((p,i)=>i===0?'('+p+')':p).join(',')+']から':targets[0]+'を')+action;
  // Also format labels already cached by a running local server.
  const groupLabel=label=>label.replace(/(\d+)[（(]or(\d+(?:or\d+)*)[）)]を/g,(_,first,rest)=>'['+[first,...rest.split('or')].join(',')+']から');
  function mass(a,b){const pair=x=>x.split('/').map(BigInt),[an,ad=1n]=pair(a),[bn,bd=1n]=pair(b);let n=an*bn,d=ad*bd,x=n,y=d;while(y){const r=x%y;x=y;y=r;}n/=x;d/=x;return d===1n?String(n):`${n}/${d}`;}
  function mount(root){
-  if(root.dataset.treeBound)return;root.dataset.treeBound='1';root.querySelector('.tree-conditions').textContent='項目：村勝率 ／ 矢印：枝の確率（行動群の結果は条件付き）';
+  if(root.dataset.treeBound)return;root.dataset.treeBound='1';root.querySelector('.tree-conditions').textContent='内訳は非公開の配役分岐。能力は同時。矢印は親項目からの条件付き確率。';
   const content=root.querySelector('[data-tree-content]'),status=root.querySelector('[data-tree-status]'),inspector=root.querySelector('[data-tree-inspector]');
   const nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
   function keep(d){if(!d.column_phase){d.column_day=1+Math.floor(d.history.length/2);d.column_phase=d.history.length%2?'night':'day';}const old=nodes.get(d.node);nodes.set(d.node,old?.actions&&!d.actions?{...d,actions:old.actions}:d);for(const item of Object.values(d.items||{}))keep(item);}
@@ -16,35 +16,45 @@
   function render(anchorId){
    const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-item="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
    const entries=[],links=[],ROW=44,GAP=14;let maxPhase=3;
-   const textFor=(a,t)=>t.label+(t.multiplicity>1?'（同型'+t.multiplicity+'）':'');
-   function build(id,path=new Set()){
-    const d=nodes.get(id);if(!d)return null;const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0);maxPhase=Math.max(maxPhase,phase);const board={kind:'board',id,d,column:phase*2,groups:[],height:ROW};if(path.has(id))return board;const next=new Set([...path,id]);
-    for(const action of d.actions||[]){
-     const children=action.branches.map(branch=>{const exact=branch.variants.find(v=>displayPath.includes(v.node));const child=build(exact?exact.node:branch.node,next);if(action.grouped&&child)child.arrival=branch.outcome_label;return {branch,child};}).filter(x=>x.child);
-     if(action.grouped){const h=Math.max(ROW,children.reduce((v,x)=>v+x.child.height,0)+Math.max(0,children.length-1)*GAP);board.groups.push({kind:'joint',column:phase*2+1,action,children,height:h});}
-     else if(d.phase==='day'){const h=Math.max(ROW,children.reduce((v,x)=>v+x.child.height,0)+Math.max(0,children.length-1)*GAP);board.groups.push({kind:'execution',column:phase*2+1,action,children,height:h});}
-     else for(const {branch,child} of children){const traces=branch.joint_actions?.length?branch.joint_actions:[{label:'襲撃（占い履歴未表示）',probability:branch.probability,multiplicity:action.multiplicity,members:[]}];board.groups.push({kind:'ability',column:phase*2+1,action,branch,child,traces,height:Math.max(child.height,traces.length*ROW)});}
+   const base=phase=>Math.floor(phase/2)*7+(phase%2?3:0);
+   function make(kind,column,data,children=[]){return {kind,column,...data,children,height:Math.max(ROW,children.reduce((h,c)=>h+c.item.height,0)+Math.max(0,children.length-1)*GAP)};}
+   function choices(d,path){
+    if(d.winner)return [];
+    const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0),column=base(phase)+2;
+    if(d.phase==='night'&&d.ability_choices){
+     return d.ability_choices.map(scan=>{
+      const attacks=scan.attacks.map(attack=>{
+       const outcomes=attack.branches.map(branch=>({probability:branch.probability,item:build(branch.node,path,branch.observation)})).filter(x=>x.item);
+       return {probability:attack.policy_probability,item:make('action',column+1,{text:attack.label,title:'方策 '+attack.policy_probability+' ／ 元の行動群内の条件付き確率 '+attack.conditional_probability},outcomes)};
+      });
+      return {probability:scan.probability,item:make('action',column,{text:scan.label,title:'同時行動を表示順に分けています。狼の方策は占い・結果を観測する前に決定。'},attacks)};
+     });
     }
-    if(board.groups.length)board.height=board.groups.reduce((v,g)=>v+g.height,0)+(board.groups.length-1)*GAP;return board;
+    return (d.actions||[]).map(action=>({probability:action.policy_probability,item:make('action',d.phase==='night'?column+1:column,{text:d.phase==='day'?targetLabel(action.targets,'処刑'):groupLabel(action.label),title:(d.ability_pending?d.ability_pending+'\n':'')+action.members.map(m=>m.target+' · '+m.policy_mass).join(' / ')},action.branches.map(branch=>{const exact=branch.variants.find(v=>displayPath.includes(v.node));return {probability:branch.probability,item:build(exact?exact.node:branch.node,path,branch.outcome_label)};}).filter(x=>x.item))}));
+   }
+   function build(id,path=new Set(),arrival){
+    const d=nodes.get(id);if(!d)return null;
+    const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0);maxPhase=Math.max(maxPhase,phase);
+    const next=new Set([...path,id]),compositions=d.compositions||[{node:id,label:'内訳未取得',probability:'1'}];
+    const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id},choices(c,next))};});
+    return make('board',base(phase),{d,id,arrival},children);
    }
    const tree=build(rootId);if(!tree)return;
-   function place(board,top){board.cy=top+board.height/2;board.span=[top,top+board.height];entries.push(board);let cursor=top;
-    for(const group of board.groups){
-     if(group.kind==='execution'||group.kind==='joint'){const joint=group.kind==='joint',text=joint?groupLabel(group.action.label):targetLabel(group.action.targets,'処刑'),title=joint?'行動群の選択確率 '+group.action.policy_probability+'\n'+group.children.map(({branch})=>branch.observation+'：条件付き '+branch.probability+' ／ 到達 '+mass(group.action.policy_probability,branch.probability)).join('\n'):group.action.members.map(m=>m.target+'を処刑').join(' / ');const item={kind:'action',column:group.column,cy:cursor+group.height/2,text,title,span:[cursor,cursor+group.height]};entries.push(item);links.push([board,item,joint?group.action.policy_probability:null]);let childTop=cursor;for(const {branch,child} of group.children){place(child,childTop);links.push([item,child,joint?branch.probability:mass(group.action.policy_probability,branch.probability)]);childTop+=child.height+GAP;}}
-     else{place(group.child,cursor+(group.height-group.child.height)/2);const start=cursor+(group.height-group.traces.length*ROW)/2;group.traces.forEach((trace,index)=>{const title='代替組合せ（各組合せの襲撃者は1人）\n'+trace.members.map(m=>m.label+' · '+mass(group.action.policy_probability,m.probability)).join('\n')+(group.branch.trace_pending?'\n'+group.branch.trace_pending:'');const item={kind:'action',column:group.column,cy:start+(index+.5)*ROW,text:textFor(group.action,trace),title,trace};entries.push(item);links.push([board,item,null],[item,group.child,mass(group.action.policy_probability,trace.probability)]);});}
-     cursor+=group.height+GAP;
-    }
+   function place(item,top){item.cy=top+item.height/2;item.span=[top,top+item.height];entries.push(item);let cursor=top;for(const child of item.children){place(child.item,cursor);links.push([item,child.item,child.probability]);cursor+=child.item.height+GAP;}}
+   place(tree,12);const columns=base(maxPhase+1),canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(headers,canvas);
+   for(let phase=0;phase<=maxPhase;phase++){
+    const start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'夜':'昼'}`,'内訳',...(night?['占い','襲撃']:['選択'])];
+    labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;if(night&&index>1){h.style.top='26px';h.classList.add('ability-subheading');}headers.append(h);headings.push(h);});
+    if(night){const h=el('h3','選択','compact-tree-phase phase-heading action-heading');h.dataset.phaseGroup=phase;headers.append(h);selectionHeads.push({element:h,start:start+2,end:start+3});}
    }
-   place(tree,12);const columns=2*(maxPhase+1),canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(headers,canvas);
-   for(let column=0;column<columns;column++){const phase=Math.floor(column/2),text=column%2?(phase%2?'能力':'処刑'):`Day${Math.floor(phase/2)+1}${phase%2?'夜':'昼'}`;const h=el('h3',text,'compact-tree-phase phase-heading'+(column%2?' action-heading':''));h.dataset.column=column;headers.append(h);headings.push(h);}
    for(const item of entries){
     let row;if(item.kind==='action'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;row.onclick=()=>inspector.replaceChildren(el('span',item.title));}
-    else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);row.dataset.treeItem=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;
-     const main=el('button',(item.arrival?item.arrival+' · ':'')+`B${d.node} · ${d.alive.length}人 · 村 ${d.village_win}`,'compact-tree-select');main.type='button';main.onclick=()=>select(d.node);const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1';go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node})}),result=await response.json();if(!response.ok)throw Error(result.error);if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main,go);}
+    else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);if(item.kind==='board'||!item.hideGo)row.dataset.treeItem=d.node;else row.dataset.treeComposition=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;
+     const main=el('button',(item.kind==='composition'?item.text+' · 村 '+d.village_win:(item.arrival?item.arrival+' · ':'')+`B${d.node} · ${d.alive.length}人 · 村 ${d.village_win}`),'compact-tree-select');main.type='button';main.onclick=()=>select(d.node);const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1';go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node})}),result=await response.json();if(!response.ok)throw Error(result.error);if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo)row.append(go);}
     row.style.top=(item.cy-13.5)+'px';row.dataset.center=String(item.cy);if(item.span)row.dataset.span=item.span.join(',');item.element=row;canvas.append(row);
    }
    const widths=headings.map(h=>Math.ceil(h.getBoundingClientRect().width));for(const item of entries)widths[item.column]=Math.max(widths[item.column],Math.ceil(item.element.getBoundingClientRect().width));
-   const offsets=[];let width=6;for(let i=0;i<columns;i++){offsets.push(width);headings[i].style.left=width+'px';headings[i].style.width=widths[i]+'px';width+=widths[i]+44;}headers.style.width=width+'px';canvas.style.width=width+'px';
+   const offsets=[];let width=6;for(let i=0;i<columns;i++){offsets.push(width);headings[i].style.left=width+'px';headings[i].style.width=widths[i]+'px';width+=widths[i]+44;}headers.style.width=width+'px';canvas.style.width=width+'px';for(const h of selectionHeads){h.element.style.left=offsets[h.start]+'px';h.element.style.width=(offsets[h.end]+widths[h.end]-offsets[h.start])+'px';}
    for(const item of entries){item.x=offsets[item.column];item.width=widths[item.column];item.element.style.left=item.x+'px';item.element.style.width=item.width+'px';}
    const ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('width',String(width));svg.setAttribute('height',String(tree.height+24));svg.classList.add('compact-tree-lines');const axes={h:new Map(),v:new Map()},arrows=new Map(),fanout=new Map();for(const [from,to,p] of links)if(p!==null)fanout.set(from,(fanout.get(from)||0)+1);
    function segment(kind,at,a,b){if(a===b)return;const map=axes[kind];if(!map.has(at))map.set(at,[]);map.get(at).push([Math.min(a,b),Math.max(a,b)]);}

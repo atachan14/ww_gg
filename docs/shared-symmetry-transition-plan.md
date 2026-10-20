@@ -2644,3 +2644,41 @@ probability, representative, outcome or Current-transport change. Nine focused
 joint-kernel/Current tests pass, including exact label assertions. Browser reload
 at http://127.0.0.1:18806/main confirms these labels, root2/3/night1/2, conditional
 1/2 outcomes and selected mass0, no clipped action items and no console errors.
+### 2026-10-20 Phase compositions and separate simultaneous abilities
+
+GameTree now repeats Board / physical composition / selection columns per phase;
+night selection spans divination and attack columns. Bracketed groups mark the
+actual canonical representative with parentheses. Descendant-driven placement,
+intrinsic single-line column widths, two-axis background pan and the 80vh cap remain.
+
+PhysicalSelectionEvidence partitions only P by living role counts or the exact
+joint named wolf roster and scan records. Public Q and actor-visible histories
+remain unchanged. Initial hidden 1 seer / 3 citizens / 1 wolf execution yields
+zero-wolf, dead-seer and dead-citizen masses 1/5, 1/5 and 3/5. Zero-wolf nodes are
+terminal. Replay selectors preserve the original named Board, including full-trace
+restoration only at the boundary where required. Current roundtrips are tested.
+
+The scan-first display disintegrates the existing simultaneous joint-action law;
+it creates no intermediate policy decision. Wolf policy is never recomputed after
+observing a scan or result. Canonical scan 4 from group 4/5 retains distinct bite-4
+white/scanned-victim and bite-5 black/other-victim outcomes, each conditionally 1/2
+in the symmetric fixture, even when their MAX policy mass is zero. Latent actors
+use a generic seer label rather than pretending a secretly fixed actor is public.
+
+Remaining limits: named trace members and canonical display events are still
+enumerated; this presentation change claims no additional scalar speedup beyond
+the shared exact joint kernel. Different private histories remain distinct even
+when public text and values agree. If complete latent scan histories cannot be
+reconstructed, the tree explicitly retains its existing exact simultaneous-action
+display instead of inventing separate ability branches.
+
+Validation: 143 focused tests pass (25.837s), including independent named/grouped
+agreement, random/MAX and zero-policy masses, Q/P invariance, terminal branches,
+start-night target legality and signed Current replay. Evidence:
+tests/test_phase_compositions.py, tests/test_joint_action_kernel.py and
+.artifacts/phase-structure-final.log. JavaScript syntax and git diff checks pass.
+Desktop 720px viewport gives a 576px tree; mobile 844px gives 675px with no clipped
+items or document overflow. Two-axis pan releases without navigation; mobile
+right-edge Current reconstructs the selected scan/bite Board and browser Back
+restores the saved game. Final local server: http://127.0.0.1:18808/main; all older
+servers and sessions preserved. No push or deployment.
