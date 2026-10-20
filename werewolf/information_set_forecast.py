@@ -555,12 +555,15 @@ class InformationSetForecast:
                 value=sum((mass*self.act(*child[:3],target,child.private,child.observer,physical=child.physical)
                     for mass,child,target,proof in self.wolf_choices(frame)),F())
             else:
-                for info,mass,group in self.wolf_cells(private):
-                    group_board=physical_board(b,group,physical)
-                    with self.actor_scope(info):
-                        policy=self.wolf_policy(b,s,past,info.initial_roster,info.attacks)
-                        value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
-                                        for p,q in self.weighted_actor_targets(policy)),F())
+                shared=getattr(self,'joint_night_value',lambda frame:None)(frame)
+                if shared is not None:value=shared
+                else:
+                    for info,mass,group in self.wolf_cells(private):
+                        group_board=physical_board(b,group,physical)
+                        with self.actor_scope(info):
+                            policy=self.wolf_policy(b,s,past,info.initial_roster,info.attacks)
+                            value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
+                                            for p,q in self.weighted_actor_targets(policy)),F())
         self.values[key]=value
         return value
 

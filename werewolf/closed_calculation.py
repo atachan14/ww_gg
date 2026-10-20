@@ -176,6 +176,7 @@ class ClosedCalculation:
             acquired=len(e.acquired),mornings=len(e.mornings),publications=len(e.publication_values),policies=len(e.policies),
             saved_sources=len(e.board_sources),resolution_cache=len(e.board_action_kernels))
         if hasattr(e,'orbit_stats'):result['target_orbits']=dict(e.orbit_stats)
+        if hasattr(e,'joint_stats'):result['joint_actions']=dict(e.joint_stats)
         if getattr(e,'aggregate_reports',False):result['report_vectors']=e.report_counts()
         return result
 
@@ -222,6 +223,18 @@ class _Node:
         with self.__calculation._ClosedCalculation__kernel():mass,child=self.__calculation._ClosedCalculation__engine.personal_view(s,information)
         groups=_fix(self.__groups,_owner_positions(information,s.public.player_count))
         return mass,self.__calculation._ClosedCalculation__node(child,groups,(*self.__path,('owner',information,child.observer)),view)
+
+    def _joint_actions(self):
+        from .joint_action_kernel import supported,compile_actions
+        e=self.__calculation._ClosedCalculation__engine
+        with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups):
+            if not supported(e,self.__source):return None
+            return compile_actions(e,self.__source,self.__groups)
+
+    def _joint_child(self,plan,outcome):
+        path=(*self.__path,('owner',plan.information,self.__source.observer),('action',plan.target,outcome.death_key))
+        if outcome.report_index is not None:path=(*path,('report',publication_key(outcome.source.public,outcome.source.past)))
+        return self.__calculation._ClosedCalculation__node(outcome.source,outcome.groups,path,self.__view)
 
     def action(self,target):
         s=self.__source;e=self.__calculation._ClosedCalculation__engine

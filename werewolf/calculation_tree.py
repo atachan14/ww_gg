@@ -3,7 +3,7 @@
 The display quotient keeps every named member and its actual probability.
 Complete Q/P/history/physical signatures, not equal values, define groups.
 """
-from dataclasses import asdict
+from dataclasses import asdict,replace
 from fractions import Fraction as F
 from hashlib import sha256
 from threading import RLock
@@ -48,6 +48,13 @@ def explain_unavailable(game,reason):
         actual=dict(counts=counts,policy=dict(day=strategy.day,night=strategy.night,fake_reports=strategy.fake_reports),rules=rules,history_steps=len(game.get('history',[]))),
         supported_route='新しく試す場合はTOPで市民3・占い1・狼1（霊能0・狩人0）、自噛み不可、初日占いランダム白を指定してください。既定の昼夜MAX・全公開で初日から表示できます。',
         settings_url='/',preserved=True)
+
+
+class DeferredNode:
+    def __init__(self,resolve):self.resolve=resolve;self.node=None
+    def __getattr__(self,name):
+        if self.node is None:self.node=self.resolve()
+        return getattr(self.node,name)
 
 
 class CalculationTree:
@@ -140,10 +147,71 @@ class CalculationTree:
             rows.append((key or ('named',source,signature,target),dict(wolves=list(wolves),scans=[list(s) for s in scans],target=target,label=text,probability=probability)))
         return rows
 
+    def _expand_joint(self,key,actions):
+        from .joint_action_kernel import group_outcomes,report_signature,compose
+        from .seer_future_uniform import candidates
+        record=self.nodes[key];node=record['node'];s=node.read();e=self.engine
+        def names(players):
+            values=list(sorted(players));return str(values[0])+('（or'+'or'.join(map(str,values[1:]))+'）' if len(values)>1 else '')
+        scans=[]
+        for player in s.public.alive:
+            if s.public.role_probability(player,'seer')==1:
+                targets={t for h in s.private.hypotheses for t in candidates(h,player,s.public.alive)}
+                scans.append(f'{player}が{names(targets)}を占い')
+        result=[]
+        for action in actions:
+            normalizer=action.policy_mass or action.fallback_mass;branches=[]
+            for plan,weight,outcome in group_outcomes(e,action):
+                child=node._joint_child(plan,outcome)
+                variants=[];member_nodes=[]
+                for original in plan.members:
+                  for image_mass,image_mapping,_ in outcome.images:
+                    member=replace(original,mapping=compose(image_mapping,original.mapping))
+                    signature=report_signature(outcome.source,member.mapping) if outcome.report_index is not None else None
+                    route=(*record['route'],(member.owner_index,member.target,outcome.outcome_index,signature))
+                    if member.mapping==tuple(range(1,s.public.player_count+1)):
+                        child_id=self.register(child,route)
+                    else:
+                        # Named images are recipes until a user requests one.
+                        child_id=str(len(self.nodes))
+                        lazy=DeferredNode(lambda route=route:self.nodes[self.restore(route)]['node'])
+                        self.nodes[child_id]={'node':lazy,'value':None,'actions':None,'reused':False,'route':route}
+                    actual=(member.policy_mass if action.policy_mass else member.fallback_mass)/normalizer*outcome.probability*image_mass
+                    variants.append(dict(node=child_id,target=member.target,information='狼本人情報',conditional_probability=str(outcome.probability*image_mass),mixture_probability=str(actual),transport=list(member.mapping)))
+                    member_nodes.append((member,child_id,actual))
+                representative=next((v['node'] for v in variants if v['target']==plan.target and v['transport']==list(range(1,s.public.player_count+1))),variants[0]['node'])
+                traces=[]
+                for _,event in self.joint_trace(outcome.source,s.public.day,plan.target):
+                    members=[]
+                    for member,child_id,actual in member_nodes:
+                        wolves=[member.mapping[p-1] for p in event['wolves']]
+                        acquired=[[member.mapping[p-1],member.mapping[t-1]] for p,t in event['scans']]
+                        label='・'.join(f'{p}が{t}を占い' for p,t in acquired)+'｜'+','.join(map(str,wolves))+f'が{member.target}を襲撃'
+                        members.append(dict(wolves=wolves,scans=acquired,target=member.target,label=label,node=child_id,probability=str(actual*event['probability'])))
+                    traces.append(dict(label=members[0]['label'],probability=str(weight*outcome.probability*event['probability']),multiplicity=len(members),members=members))
+                new=[r for r in outcome.source.past if r not in s.past]
+                observation=('村勝利' if outcome.source.public.winner=='village' else '狼勝利' if outcome.source.public.winner=='wolf' else '継続')
+                if new:observation+='・'+','.join(f'P{r.player}→P{r.target}{r.color}' for r in new)
+                outcome_label=observation
+                if len(new)==1:
+                    color='白' if new[0].color=='white' else '黒'
+                    outcome_label=color+'・'+('占い先が死亡' if new[0].target==plan.target else '別の対象が死亡')
+                elif not new and outcome.source.public.winner is None:outcome_label='占い公開なし'
+                branches.append(dict(node=representative,probability=str(weight*outcome.probability),variants=variants,observation=observation,outcome_label=outcome_label,joint_actions=traces))
+            result.append(dict(targets=list(action.targets),label='・'.join(scans)+'｜狼が'+names(action.targets)+'を襲撃',grouped=True,
+                multiplicity=sum(len(p.members) for p in action.plans),members=[dict(target=m.target,information='狼本人情報',policy_mass=str(m.policy_mass)) for p in action.plans for m in p.members],
+                q_score=None,selected=bool(action.policy_mass),policy_probability=str(action.policy_mass),branches=branches))
+        record['actions']=result
+
     def expand(self,key):
         record=self.nodes[key]
         if record['actions'] is not None:return
         node=record['node'];groups={}
+        with self.calculation._ClosedCalculation__kernel():
+            joint=node._joint_actions()
+            if joint is not None:
+                self._expand_joint(key,joint)
+                return
         for row in self.candidates(node):groups.setdefault(self.equivalence(row['node'],row['target']),[]).append(row)
         choices=[]
         for members in groups.values():
@@ -200,13 +268,17 @@ class CalculationTree:
         for step in route:
             if type(step) not in (list,tuple) or len(step)!=4:raise ValueError('Invalid Current step')
             owner,target,outcome,report=step
-            if type(target)is not int or any(v is not None and (type(v)is not int or v<0) for v in (owner,outcome,report)):raise ValueError('Invalid Current selector')
+            if type(target)is not int or any(v is not None and (type(v)is not int or v<0) for v in (owner,outcome)) or report is not None and (type(report) not in (int,dict) or type(report)is int and report<0):raise ValueError('Invalid Current selector')
             if outcome is None:raise ValueError('Physical outcome required')
             try:
                 if owner is not None:node=node.wolf_choices()[owner].node
                 node=node.action(target)[outcome].node
-                if report is not None:node=node.reports()[report].node
-            except (IndexError,KeyError) as exc:raise ValueError('Current path unavailable') from exc
+                if type(report)is dict:
+                    from .joint_action_kernel import report_signature
+                    if set(report)!={'seer','medium'}:raise ValueError('Invalid report selector')
+                    node=next(r.node for r in node.reports() if report_signature(r.node.read())==report)
+                elif report is not None:node=node.reports()[report].node
+            except (IndexError,KeyError,StopIteration) as exc:raise ValueError('Current path unavailable') from exc
             prefix=(*prefix,tuple(step));self.register(node,prefix)
         return self.register(node,prefix)
 

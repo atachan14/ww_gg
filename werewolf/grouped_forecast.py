@@ -27,6 +27,27 @@ class GroupedForecast(InformationSetForecast):
         self.terminal_moments=PublicMomentCache()
         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
         self.action_policy=GroupedPolicy(self)
+        self.joint_actions={};self.joint_outcomes={}
+        self.joint_stats=dict(compiled_kernels=0,representative_actions=0,named_actions=0,resolved_actions=0,named_outcomes=0,outcome_representatives=0)
+
+    def joint_night_value(self,source):
+        from .joint_action_kernel import supported,compile_actions,group_outcomes,continuation_value
+        if not supported(self,source):return None
+        groups=compile_actions(self,source,self.groups)
+        return sum((group.policy_mass*continuation_value(self,((weight*outcome.probability,outcome)
+            for plan,weight,outcome in group_outcomes(self,group))) for group in groups if group.policy_mass),F())
+
+    def uncached_act(self,b,s,past,target,private,observer,*,physical=None):
+        from .evaluation_branch import ContinuationInputs,physical_board
+        from .joint_action_kernel import supported,resolve_outcomes,continuation_value
+        source=ContinuationInputs(b,s,past,private,observer,physical_board(b,private,physical))
+        if supported(self,source):
+            from .exact import legal_targets
+            from .information_set_forecast import Pending
+            if target not in legal_targets(source.physical,self.rules,self.strategy):raise Pending('information_set_internal_illegal_action')
+            self.expansions['actions']+=1
+            return continuation_value(self,((o.probability,o) for o in resolve_outcomes(self,source,target,self.groups)))
+        return super().uncached_act(b,s,past,target,private,observer,physical=physical)
 
     def scalar_laws(self,b,s,private,observer):
         # Only ephemeral scalar inputs; named/observed/history frames stay full.
