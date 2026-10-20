@@ -486,3 +486,10 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 .calculation-status[hidden],.calculation-wait[hidden],.calculation-position[hidden]{display:none}
 .calculation-wait{margin:0;pointer-events:none}
 .calculation-position{font-size:.85rem;color:var(--muted);overflow-wrap:anywhere;pointer-events:none;margin:.2rem 0 0}
+/* Local actual-calculation inspector; bounded indentation on narrow screens. */
+.calculation-tree-node{border-left:2px solid #8aa3a2;padding:.65rem;margin:.6rem 0;min-width:0;overflow-wrap:anywhere}
+.calculation-tree-node h3{font-size:1rem;margin:.3rem 0}.calculation-tree-node p{margin:.4rem 0}
+.tree-action{margin:.65rem 0}.tree-action>summary{cursor:pointer;padding:.5rem;background:#f0f5f4;border-radius:.35rem}
+.tree-branch{margin:.5rem 0;padding:.5rem;border:1px solid #dae2df;border-radius:.35rem}
+.tree-board{width:100%;font-size:.9rem}.tree-board th,.tree-board td{text-align:left;padding:.35rem}
+@media(max-width:600px){.calculation-tree-node{padding:.35rem;margin:.4rem 0}.tree-branch{padding:.3rem}.tree-action>summary{font-size:.9rem}}

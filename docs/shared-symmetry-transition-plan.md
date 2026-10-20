@@ -2060,3 +2060,78 @@ and previous unsupported boundaries. Evidence: payoff-vector-results.json,
 payoff-vector-expanded-terminal-results.json, payoff-vector-validation.json,
 prototype/probe and5-test log. No complete repository rerun is claimed because
 production was not changed.
+
+
+## 2026-10-20: local real-calculation GameTree, four citizens / one wolf
+
+User-approved scope is inspection before further performance work. Added a
+local-only --game-tree / GAME_TREE_PREVIEW flag (default false; hosted enable
+rejected), using the existing GameTree panel and original GameRuntime cache.
+No abilities, mutual strategic MAX, new role, approximation or horizon cutoff.
+Existing benchmark safety limits and public default evaluation are unchanged.
+
+CalculationTree owns one immutable BoardData snapshot and caches actual Board
+records. The root stores the SAME RoleState.forecast result used in
+BoardOverview. On expansion, existing action_outcomes generates each named
+physical observation; the SAME exchangeable_forecast evaluator computes its
+child value. Action values come from the actual completed Forecast, not a second
+tree recurrence. Independent enumeration and parent/child Bellman consistency
+checks live in DEVELOPMENT tests, not repeated solver authentication loops.
+
+Important distinction: the ordinary evaluator already computes through terminal
+states using symmetric count reduction. It has not expanded every named history.
+The UI says "terminal value computed / named branches not expanded" until the
+user unfolds that Board. It never pretends unvisited named histories were traced
+by the compressed evaluator. Opening a Board performs real evaluation only if
+its record is absent, then reuses it; existing count-state reuse remains intact.
+This is a lazy view of actual evaluation and common physical transitions, not
+a decorative independently computed probability tree.
+
+Eligibility is five original players, one wolf, no medium/seer/hunter, latent
+claims, self-bite forbidden, and a full uniform live single-wolf public prior.
+Uniform support is checked at the external inspection boundary so historical
+nonexchangeable evidence cannot enter a count-only inspector. The initial and
+common generated continuing Boards preserve this symmetry. All public daytime
+choices are permutation-equivalent, so existing MAX ties are uniform. At night,
+the wolf knows its own location and selects uniformly among equally good LEGAL
+nonwolf victims; the displayed target-selection probability is the public-Q
+mixture, not the wolf's within-information-set probability. The UI explains
+this distinction and separates MAX ties from the manual representative selection.
+Conditional observation probability is conditional on that named chosen action.
+
+/game-tree returns the actual Board, full action history, alive/dead locations,
+initial-role wolf probabilities, configured rules/policy, exact fraction values,
+viewpoint, candidates/selected ties and selection mass. It exposes computed
+versus pending expansion and reused results. Only one node's actions are
+serialized per expansion; nested Boards open on demand. A snapshot mismatch
+returns409, unknown Board404, unsupported scope422. Existing request budgets and
+calculation semaphore apply; a resource stop is JSON503 Pending without partial
+success. Read-only inspection never advances or rewrites the saved game.
+The cache is calculation-owned and bounded by existing per-game runtime eviction.
+
+Verification:30 relevant tests passed in6.579s (six new GameTree tests plus
+existing Web/default-opt-in/HELP tests). The independent reference uses exact
+Fractions, concrete wolf assignments and legal tied actions, without calling
+the production recurrence or Board transition. Initial value is7/15, and all
+lazy named branches are checked through village AND wolf terminal outcomes,
+conditional mass conservation, actual histories and value consistency. Repeated
+expansion reuses completed child evaluations; saved-game input remains equal.
+Nonexchangeable evidence, stale snapshot, default-off behavior, random policy,
+unsupported cast and budget Pending are explicitly covered.
+
+Real Edge/Playwright on the dedicated127.0.0.1:18801 server passed at1280x900 and
+390x844: open GameTree, expand execution, inspect a continuing Board/dead player,
+expand night bite, reach next daytime and terminal village win, reload/reuse,
+no page errors or global horizontal overflow. Both sessions retain the original
+initial saved Board. Screenshots and browser logs are saved in .artifacts.
+The optional local image-view tool encountered a transport disconnect; shell
+connectivity was checked afterward and recovered. Automated real-browser/DOM
+checks succeeded; no manual screenshot visual-review claim is made.
+
+Local use: start a default five-player village at http://127.0.0.1:18801/,
+then GameTree -> 計算を開く -> 実評価の枝を展開 -> action summary -> 次のBoardを見る.
+"このBoardを見る" opens that actual read-only Board's players, rules and history.
+The dedicated server's PID and absolute authoritative app.py command were
+verified before restarts;8771/8772 were untouched. No push/deploy, new auth,
+installation, production database or seven-player benchmark action occurred.
+Evidence: benchmarks/player_match_groups/game-tree-five-validation.json.

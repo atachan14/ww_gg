@@ -42,7 +42,7 @@ def create_app(test_config=None, *, deployment=False):
             raise RuntimeError("WW_GG_SECRET_KEY must be a 64-character hexadecimal key")
     else:
         key = (test_config or {}).get("SECRET_KEY") or secrets.token_bytes(32)
-    app.config.update(SECRET_KEY=key, EXACT_FUTURE_REUSE_PREVIEW=False, MAX_CONTENT_LENGTH=4096,
+    app.config.update(SECRET_KEY=key, EXACT_FUTURE_REUSE_PREVIEW=False, GAME_TREE_PREVIEW=False, MAX_CONTENT_LENGTH=4096,
                       MAX_FORM_PARTS=100, MAX_FORM_MEMORY_SIZE=4096,
                       SESSION_COOKIE_HTTPONLY=True, SESSION_COOKIE_SAMESITE="Lax",
                       SESSION_COOKIE_SECURE=hosted, MAX_COOKIE_SIZE=4093)
@@ -50,6 +50,8 @@ def create_app(test_config=None, *, deployment=False):
         app.config.update(test_config)
     if hosted:
         app.config.update(SECRET_KEY=key, SESSION_COOKIE_SECURE=True)
+    if hosted and app.config.get('GAME_TREE_PREVIEW'):
+        raise ValueError('GameTree inspection is local only')
     if hosted and app.config.get('EXACT_FUTURE_REUSE_PREVIEW'):
         raise ValueError('Exact future reuse is a local-only experiment')
 
@@ -66,6 +68,34 @@ def create_app(test_config=None, *, deployment=False):
         from werewolf.board_flow import BoardData
         game_id=session.setdefault('co_display_game',secrets.token_hex(8))
         return BoardData.from_game(state,runtime=game_runtimes.get(game_id,state))
+
+    def calculation_tree(state,role_state=None,forecast=None):
+        from werewolf.calculation_tree import CalculationTree,supported
+        data=board_data(state);roles=role_state or data.roles()
+        if roles.progress.finished or not supported(data,roles.board):return None
+        key=('calculation-tree',data.inputs)
+        hit,tree=data.runtime.get(key)
+        if not hit:
+            result=forecast if forecast is not None else roles.forecast()
+            from werewolf.seer_future_uniform import FuturePending
+            if isinstance(result,FuturePending):
+                stopped=budget_stop()
+                if stopped:raise CalculationBudgetExceeded(kind=stopped['kind'])
+                return None
+            tree=CalculationTree(data,roles.board,result);data.runtime.put(key,tree)
+        return tree
+
+    @app.get('/game-tree')
+    def game_tree():
+        if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
+        state=game()
+        if state is None:return jsonify(error='村を開始してください。'),409
+        tree=calculation_tree(state)
+        if tree is None:return jsonify(error='現在は市民4・狼1、全員潜伏、自噛みなしの継続Boardのみ対応しています。'),422
+        if request.args.get('snapshot',tree.snapshot)!=tree.snapshot:return jsonify(error='入力が変わりました。GameTreeを開き直してください。'),409
+        key=request.args.get('node',tree.root)
+        try:return jsonify(tree.read(key,request.args.get('expand')=='1'))
+        except KeyError:return jsonify(error='このBoardは現在の計算にありません。'),404
 
     def replay(state):
         from werewolf.board_flow import BoardData
@@ -273,6 +303,8 @@ def create_app(test_config=None, *, deployment=False):
                         primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                         action_values={}
                     else:
+                        if app.config.get('GAME_TREE_PREVIEW'):
+                            calculation_tree(state,role_state,forecast)
                         primary=Values(forecast.village_win,1-forecast.village_win)
                         cumulative=progress.total_values(primary)
                         action_values={p:Values(v,1-v) for p,v in forecast.action_values}
@@ -386,7 +418,7 @@ def create_app(test_config=None, *, deployment=False):
         scope=calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                  max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
         scope.__enter__();g.calculation_scope=scope
-        if request.method=='POST' or request.path in ('/main','/comparison'):
+        if request.method=='POST' or request.path in ('/main','/comparison','/game-tree'):
             trace=request.environ.get('wwgg.lifecycle')
             if trace is not None:trace.emit('request_wait')
             acquired=calculation_slot.acquire(timeout=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
@@ -413,6 +445,7 @@ def create_app(test_config=None, *, deployment=False):
         if previous is not None:
             session.clear();session.update(previous);session.modified=True
         message=stop_message(error.kind)
+        if request.path=='/game-tree':return jsonify(error=message,pending=True,budget_kind=error.kind),503
         if request.method=='POST' and request.path in ('/private-view','/table-preview','/table-publish','/public-log','/dawn-report'):
             return jsonify(error=message,budget_kind=(budget_stop() or {}).get('kind',error.kind),pending=True),503
         return render_template('budget_pending.html',message=message),503
@@ -1022,6 +1055,7 @@ def create_app(test_config=None, *, deployment=False):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ww_gg local public Board v0.5.2")
     parser.add_argument("--port", type=int, default=8771)
+    parser.add_argument("--game-tree", action="store_true", help="Enable local actual calculation inspection for five-player baseline")
     parser.add_argument("--hybrid-table-preview", action="store_true", help="Enable unpublished table draft preview locally")
     parser.add_argument("--dawn-board", action="store_true", help="Preview public dawn Boards")
     parser.add_argument("--seer-future-uniform", action="store_true", help="Enable unpublished fixed-policy seer forecast locally")
@@ -1029,5 +1063,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if not 1024 <= args.port <= 65535:
         parser.error("Choose a port between 1024 and 65535")
-    create_app({"DAWN_BOARD_PREVIEW":args.dawn_board,"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview,"SEER_UNIFORM_FUTURE_PREVIEW":args.seer_future_uniform,"EXACT_FUTURE_REUSE_PREVIEW":args.exact_future_reuse}).run(host="127.0.0.1", port=args.port, debug=False,
+    create_app({"GAME_TREE_PREVIEW":args.game_tree,"DAWN_BOARD_PREVIEW":args.dawn_board,"HYBRID_TABLE_PREVIEW":args.hybrid_table_preview,"SEER_UNIFORM_FUTURE_PREVIEW":args.seer_future_uniform,"EXACT_FUTURE_REUSE_PREVIEW":args.exact_future_reuse}).run(host="127.0.0.1", port=args.port, debug=False,
                      use_reloader=False, load_dotenv=False)
