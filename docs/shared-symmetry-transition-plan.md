@@ -2355,3 +2355,73 @@ cookie and asserts it remains byte-for-byte equal. Original18801 and comparison
 18802 are left running;8771/8772/thdmn8773 untouched. No push/deploy, shared DB,
 auth provider/permissions, rule changes, new solver scope or large benchmarks.
 Evidence:benchmarks/player_match_groups/generated-current-validation.json.
+
+
+### 2026-10-20 Explicit execution/ability action columns
+
+Chronology is now Day1昼 | 処刑 | Day1夜 | 能力 | Day2昼 | 処刑 | Day2夜 |
+能力 ... . Board columns still use arrival day/phase and retain27px thin-outline
+rows plus exact Current arrows. Action rows are visually distinct pale blue,
+have no Current controls or selectors, and contain actual configured choices.
+Execution lists only the existing full-state-equivalent target set (e.g.
+1,2,3,4,5を処刑). Ability labels identify a complete correlated true-scan/wolf-
+attack pair; a displayed representative plus 同型N refers to verified alternative
+pairs. Each member has exactly one wolf actor. The full named pair/mass list is
+retained in JSON and inspection/title; no independent marginal cross product is
+formed. Action rows are trace components reconverging into the existing Board's
+joint mixture; they do not create new action-conditioned Current Boards.
+
+Important source finding: the exchangeable saved-entry optimization marginalizes
+all latent seer acquisitions (tracked=()). Absence of records must not be called
+absence of actions. action_tree_trace reconstructs omitted records for an unchanged
+all-latent initial root using existing prepare_root_secrets and GeneratedBoard
+replay operations. It runs NO forecast or policy optimization. The configured
+actual action/owner/report path is replayed unchanged. Initial random white and
+later own-unvisited uniform scans use existing common generators, including
+pre-casualty scan rosters and legal original-player targets (corpses included).
+The old evaluator's Q/P role marginals/physical Board and original Current remain
+unchanged; tests compare those projections exactly. This is permitted display
+tracing, not enlarged solver/evaluation support or a new latent-seer strategy.
+
+Mathematical basis: in this fixed all-latent scope, hidden scan records do not
+enter public/wolf policies. Reintroducing their normalized configured conditional
+law therefore preserves the already retained role/action/physical marginal.
+For each retained named child P, event mass is the sum of actual hypotheses with
+that exact (wolf actor, scan actor/target, attack target) tuple. Complete joint
+conditional P frames use the existing canonical_key over full Q/P/history/observer/
+physical state with marked target; only matching full keys share display groups.
+Scan colors and earlier private records remain in those laws even though the
+compact action label omits result colors. Branch trace masses include the
+member/physical/report mixture. Displayed edge mass additionally includes the
+existing configured choice probability. All contributions and named alternatives
+remain available; no equal-value-only or actor-list-times-target-list merging.
+
+For the verified five-player3cit/1seer/1wolf all-latent fixture after execution1,
+there are156 named joint alternatives in8 verified display groups. Their masses
+are1/4,1/12,1/9,1/18,1/6,1/9,1/9,1/9, summing1. No scan occurs with mass1/4
+because the true seer was executed beforehand. A seer who is attacked that night
+still scans first. These are independently checked by raw enumeration of wolf,
+victim, seer, initial white and next unvisited target, without calling production
+acquisition or forecast code. Root7/15/night1/3 and exact Current are unchanged.
+
+Scope honesty: when required latent records were already marginalized in a
+non-latent/mixed-CO initial model, no alternative prior is invented. The API marks
+trace_pending and labels missing scans 未表示. Fully retained traces remain usable.
+The requested all-latent fixture has no missing joint action detail. Morning
+public reports remain in existing branch/Board evidence; only scan/attack actions
+are rendered in the nighttime action column. No new report policy is introduced.
+
+Checks:62 targeted Python tests passed14.795s; the final trace-only2 passed1.386s
+following defensive trace handling. Real Edge desktop1280 and mobile390 checks
+all8 headers, Board/action separation, execution labels,8 night joint groups,
+27px/no wrapping/no selectors, no overlapping probability labels, no JS errors or
+global overflow, and unchanged exact B24 Current value0. The full prior Current
+browser suite also passes on the new app (B1/B23/B24 values, repeated/reload,
+back/forward, app Back and saved-cookie preservation). Screenshots visually reviewed.
+
+Updated independently running normal UI: http://127.0.0.1:18804/ . Existing18803
+process/session is kept intact; the launcher accepts --port and isolates its
+cookie namespace for a different local port. Use the new URL for the complete
+joint-action trace API. No saved game mutation, push/deploy, auth/permission or
+solver-rule change;8771/8772/thdmn8773 untouched. Evidence:
+benchmarks/player_match_groups/action-columns-validation.json.

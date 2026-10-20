@@ -57,7 +57,7 @@ class CalculationTree:
         self.calculation=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True)
         self.engine=self.calculation._ClosedCalculation__engine
         self.snapshot=input_snapshot(data)
-        self.nodes={};self.sources={};self.keys={};self.values={};self.lock=RLock()
+        self.nodes={};self.sources={};self.keys={};self.values={};self.traces={};self.lock=RLock()
         self.root=self.register(self.calculation.root)
         # Root value is the actual BoardOverview result, never a fixture value.
         self.nodes[self.root]['value']=forecast.village_win
@@ -115,6 +115,31 @@ class CalculationTree:
                                 'information':f'狼本人I (初期狼集合{info.initial_roster})','owner_index':owner_index})
         return rows
 
+    def joint_trace(self,source,night,target):
+        """Read the correlated realized actions from retained physical hypotheses.
+
+        No marginal cross product: each complete pair carries its actual mass.
+        A display equivalence is the existing full Q/P renaming check after
+        conditioning P on that exact joint action. No solver node is replaced.
+        """
+        from .actor_information import condition_actor_state
+        def event(h):
+            wolves=tuple(p for p in range(1,source.public.player_count+1) if h.roles[0]&(1<<(p-1)))
+            scans=tuple(sorted((a.player,a.target) for a in h.acquisitions if a.day==night+1))
+            return wolves,scans
+        events={}
+        for h in source.private.hypotheses:events[event(h)]=events.get(event(h),F())+h.mass
+        rows=[]
+        for signature,probability in events.items():
+            wolves,scans=signature
+            law=condition_actor_state(source.private,lambda h:event(h)==signature)
+            physical=physical_board(source.public,law,source.physical)
+            key=canonical_key(source.public,source.public_state,source.past,law,source.observer,
+                self.rules,self.strategy,target=target,physical=physical,max_mappings=120)
+            text=('・'.join(f'{p}が{t}を占い' for p,t in scans) or '占い行動なし')+'｜'+','.join(map(str,wolves))+f'が{target}を襲撃'
+            rows.append((key or ('named',source,signature,target),dict(wolves=list(wolves),scans=[list(s) for s in scans],target=target,label=text,probability=probability)))
+        return rows
+
     def expand(self,key):
         record=self.nodes[key]
         if record['actions'] is not None:return
@@ -141,12 +166,28 @@ class CalculationTree:
                         observation=('村勝利' if source.public.winner=='village' else '狼勝利' if source.public.winner=='wolf' else '継続')
                         new_reports=[r for r in source.past if r not in s.past]
                         if new_reports:observation+='・'+','.join(f'P{r.player}→P{r.target}{r.color}' for r in new_reports)
-                        bucket=branches.setdefault(canonical,{'node':child_id,'probability':F(),'variants':[],'observation':observation})
+                        bucket=branches.setdefault(canonical,{'node':child_id,'probability':F(),'variants':[],'observation':observation,'joint_actions':{}})
                         bucket['probability']+=weight*chance
                         bucket['variants'].append({'node':child_id,'target':target,'information':member['information'],
                             'conditional_probability':str(chance),'mixture_probability':str(weight*chance)})
+                        if s.public.phase=='night':
+                            if child_id not in self.traces:
+                                from .action_tree_trace import trace_source
+                                self.traces[child_id]=trace_source(child)
+                            trace_state,trace_pending=self.traces[child_id]
+                            bucket['trace_pending']=trace_pending
+                            for trace_key,event in self.joint_trace(trace_state,s.public.day,target):
+                                if trace_pending:event['label']=event['label'].replace('占い行動なし','占い履歴未表示')
+                                trace=bucket['joint_actions'].setdefault(trace_key,dict(label=event['label'],probability=F(),members=[]))
+                                contribution=weight*chance*event['probability'];trace['probability']+=contribution
+                                trace['members'].append({**event,'node':child_id,'probability':str(contribution)})
             target_ids=sorted({r['target'] for r in members})
-            for branch in branches.values():branch['probability']=str(branch['probability'])
+            for branch in branches.values():
+                branch['probability']=str(branch['probability'])
+                branch['joint_actions']=list(branch['joint_actions'].values())
+                for trace in branch['joint_actions']:
+                    trace['probability']=str(trace['probability'])
+                    trace['multiplicity']=len(trace['members'])
             choices.append({'targets':target_ids,'label':('処刑' if node.read().public.phase=='day' else '襲撃')+' '+ '/'.join('P'+str(p) for p in target_ids),
                 'multiplicity':len(members),'members':named,'q_score':str(members[0]['q_score']),
                 'selected':bool(policy_mass),'policy_probability':str(policy_mass),'branches':list(branches.values())})
