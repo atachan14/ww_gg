@@ -2220,3 +2220,29 @@ screenshots were visually reviewed. Evidence: game-tree-entry-validation.json.
 User's exact previously saved unsupported condition remains unconfirmed until
 that existing session requests the new diagnostic; do not claim the screenshot
 proves the default cast or silently replace it with the test fixture.
+
+
+### 2026-10-20 Isolated compact GameTree visual comparison
+
+User rejected the large, verbose card/select layout. Before further main-view
+integration, dev_previews/compact_tree now presents two isolated local variants:
+A thin outlined one-line items and B borderless one-line items. Both use the
+same existing engine-derived six-Board sample. Provisional fields are Board ID,
+alive count and village value. Edges independently show configured choice-group
+mass times conditional branch mass; no invented probabilities. Full exact named
+member references remain in sample.json and the clicked representative's small
+shared inspect line. Only true phase/day controls columns, including terminal
+Boards. No phase inside an item, select menus, nested navigation or additional
+per-item controls. The item itself is the primary click/keyboard target.
+
+This is a visual comparison only: no main UI, solver, support-guard, rule or
+publication changes. The standalone18802 localhost server serves only the preview
+folder and runs independently of the18801 app; thdmn8773 was untouched. Existing
+actual main UI was inspected before prototyping. Real Edge browser QA at1440x900
+and390x844 verified identical A/B content, twelve27px one-line items with no
+clipped text, no selector/per-item extra buttons, true phase-column positions,
+click/Enter selection, no JS errors and no global horizontal overflow. Narrow
+viewports stack variants with local horizontal scrolling. Both screenshots were
+visually reviewed. Preview builder asserts root7/15 and outgoing edge mass1.
+Normal UI integration awaits the user's visual choice; these fields are not a
+permanent product decision. Local comparison: http://127.0.0.1:18802/.
