@@ -135,6 +135,7 @@ class ClosedCalculation:
         options={'aggregate_wolf':aggregate_wolf,'aggregate_reports':aggregate_reports} if grouped else {}
         engine=(GroupedForecast if grouped else InformationSetForecast)(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work,**options)
         engine.retain_joint_guard_history=True
+        engine.retain_complete_abilities=aggregate_reports
         object.__setattr__(self,'_ClosedCalculation__engine',engine)
         with calculation_budget(max_work,max_seconds=max_seconds):
             tick(0);source=SavedOrigin(origin_data,engine.rules,strategy,project_public=False)()
@@ -146,7 +147,11 @@ class ClosedCalculation:
             classes={}
             for p,claim in enumerate(source.public.claims,1):classes.setdefault(claim,[]).append(p)
             groups=_report_groups(tuple(tuple(v) for v in classes.values()),source)
-            root=self.__node(source,groups,())
+            from .action_tree_trace import FullTraceOrigin
+            if aggregate_reports:
+                full=FullTraceOrigin(SavedOrigin(origin_data,engine.rules,strategy,project_public=False))()
+                root=self.__node(full,groups,(('full_trace',),))
+            else:root=self.__node(source,groups,())
             probability=F(1)
             for target in saved_target:
                 mass,root=root.observe(target)
@@ -245,6 +250,19 @@ class _Node:
         groups=self.__groups
         if kind=='joint':groups=_fix(groups,(*selection[1],*(p for pair in selection[2] for p in pair)))
         return self.__calculation._ClosedCalculation__node(source,groups,(*self.__path,('physical',kind,selection)),self.__view)
+
+    def _night_program(self):
+        from .night_program import compile_night
+        e=self.__calculation._ClosedCalculation__engine
+        with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups):
+            return compile_night(e,self.__source,self.__groups)
+
+    def _stage_child(self,leaf):
+        from .board_future import publication_key
+        path=(*self.__path,('owner',leaf.information,self.__source.observer),('action',leaf.target,leaf.death_key))
+        if leaf.report is not None:path=(*path,('report',publication_key(leaf.source.public,leaf.source.past)))
+        path=(*path,('physical','joint',(self.__source.public.day,leaf.wolves,leaf.scans)))
+        return self.__calculation._ClosedCalculation__node(leaf.source,leaf.groups,path,self.__view)
 
     def _joint_actions(self):
         from .joint_action_kernel import supported,compile_actions

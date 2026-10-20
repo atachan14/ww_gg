@@ -9,17 +9,13 @@ class FullTraceOrigin:
     def game_data(self):return self.original.game_data
     def __call__(self):
         source=self.original()
-        if source.past or any(c!='latent' for c in source.public.claims):
-            raise ValueError('latent acquisition trace requires unchanged latent initial root')
-        from .root_secret_flow import prepare_root_secrets
-        from .seer_future_uniform import FuturePending
-        full=prepare_root_secrets(source.public,self.original.rules)
-        if isinstance(full,FuturePending):
-            from .calculation_budget import budget_stop,CalculationBudgetExceeded
-            stopped=budget_stop()
-            if stopped:raise CalculationBudgetExceeded(kind=stopped['kind'])
-            raise ValueError(full.reason)
-        return ContinuationInputs(full.public,full.public_law,full.past,full.physical_law,source.observer,full.physical)
+        if source.public.day!=1 or source.public.phase!='day' or source.public.history:
+            raise ValueError('Complete ability origin requires an initial saved root')
+        from .night_abilities import complete_initial
+        from .evaluation_branch import physical_board
+        q=complete_initial(source.public_state,source.public.alive)
+        p=q if source.private==source.public_state else complete_initial(source.private,source.public.alive)
+        return replace(source,public_state=q,private=p,physical=physical_board(source.public,p,source.physical))
 
 def trace_source(node):
     source=node.read()
@@ -28,7 +24,5 @@ def trace_source(node):
     roster=sum(1<<(p-1) for p in source.private.rosters[-1])
     if not any(h.roles[2]&roster&~tracked for h in source.private.hypotheses):return source,None
     request=node.export_request()
-    if any(c!='latent' for c in request.origin.board_data.roles().board.claims):
-        return source,'潜伏占いの取得履歴が集約済みのため一部未表示'
     full=replace(request,origin=FullTraceOrigin(request.origin)).roles()
     return full,None

@@ -2730,3 +2730,87 @@ screenshot capture returned blank images despite successful DOM/native controls,
 so final pixel-image inspection is limited; no screenshot artifact is claimed.
 All earlier servers/sessions remain. No push/deploy. Named event enumeration and
 full-state comparison remain; no new scalar computational speedup is claimed.
+
+### 2026-10-21 Shared exact night stage program
+
+The previous result-column claim was too broad. The old Tree reconstructed
+marginalized latent acquisitions after physical resolution, refused some roots
+with public claims, and the display factorizer returned the old unsplit measure
+when a leaf had multiple result records. Its frontend could render an empty
+result header over such legacy data. The normal TOP all-hidden 3citizen/1seer/
+1wolf path and the previously unsupported claim-policy/latent-history case are
+now real API regressions, rather than relying only on a known-seer fixture.
+The user's exact screenshot URL/saved snapshot was not supplied, so no unsupported
+claim is made that it was merely stale state.
+
+night_abilities.seer_paths is the shared generative acquisition program. It emits
+each true seer's target and immediate private result in ascending actor/table
+order, then proceeds to the next seer. Own-unvisited filtering reads only that
+actor's pre-night history. acquire_uniform, including ordinary scalar facades,
+consumes this generator. Simultaneous eligibility always uses the night-start
+alive roster. The existing complete grouped-report Closed mode now expands only
+missing initial private records once, preserves their original Q/P world masses,
+and retains complete histories through recursion and cold export. Ordinary
+non-stage Closed/reference facades keep their prior reconstruction contracts.
+
+night_program.compile_night commits wolf information-set policies from night-
+start public Q before any private-result partition. It builds the exact joint
+night measure through existing acquisition, casualty, projection and publication
+kernels. NightStage holds explicit P-prefix states with frozen public Q and
+unchanged later-actor information. Its conditional target/result/attack edges
+factor this SAME law. GroupedForecast's scalar night continuation and GameTree
+consume the same program and its prefix states. Death resolution stays after
+acquisition; same-night seer death retains the result but preserves existing
+publication eligibility.
+
+Target orbits are generic full-measure bijections within constructed partitions.
+One source automorphism must fix all earlier stage coordinates and transport
+every named remaining path, full child Q/P, histories, physical Board, actual
+policy mass and counterfactual mass. Results are never grouped by equal win rate
+or probability. Terminal outcomes use the same prefix stabilizer; equivalent
+full outcomes are recursively evaluated once. Every named image retains its
+cold Current recipe and display subtree. Unknown signature shapes fail closed.
+There are no fixed 4/5 IDs, one-seer restriction, sampled worlds, new strategy
+mode, horizon cut, or approximate score in this kernel. Named night actions and
+physical/publication leaves are still enumerated before quotient construction;
+this is continuation compression, not elimination of all action enumeration.
+
+Stage order interface: medium_result slots, each seer's target/result pair, guard
+target slots, wolf target. Medium/guard integration into this new program remains
+unimplemented; it declines those casts, and existing exact role laws/fallbacks
+remain unchanged. Their private-acquisition/publication timing has not been
+invented or silently moved. Tree admission expands to existing exact closed
+seer/wolf casts of 3--7 initial players; all other existing Pending/budget/
+policy gates remain. Multiple-seer columns are generated from actual role counts.
+
+Normal all-hidden execution 1 / seer-live composition uses canonical actor 2 and
+target 3: scan [3,4,5], then white 5/9 or black 4/9. Attack 2 and target 3 stay
+distinct; 4/5 form the proven attack orbit. Root-relative result reach is 1/3
+and 4/15 after the composition's 3/5 mass. Counterfactuals use a separate uniform
+legal owned-action law; zero policy reach stays zero. A two-seer all-hidden
+regression has target/result/target/result/attack, conserves joint mass and
+agrees with independent named evaluation. Actor ordering is deterministic and
+does not make the second seer or wolves observe another seer's result.
+
+Validation:157 tests passed in104.870s, including actual API setup and signed
+Current, previous latent fallback, multi-seer independent products, every named
+joint mass reconstructed from grouped probabilities/transports, asymmetric
+non-equivalence, private-information invariance, terminal/simultaneous eligibility,
+full cold reconstruction and existing reference facade checks. Evidence:
+tests/test_night_program.py and .artifacts/night-program-final-verified.log.
+JavaScript syntax and diff checks pass. Delivery URL: http://127.0.0.1:18812/main.
+All old servers/sessions and unrelated untracked artifacts remain. No push/deploy.
+
+Delivery UI evidence (18812): normal TOP form -> all-hidden Day1 day ->
+seer1/citizen2/wolf1 night composition. DOM confirms white and black are real
+action items in column6, both grouped 4/5 attack rows in column7, and five
+representative Day2 outcome Boards after full-law terminal-orbit sharing. No
+clipped items or document horizontal overflow at desktop/mobile sizing. A resize
+to a short viewport followed by empty-background drag moves scroll (0,0) to
+(100,80), releases panning and leaves the URL unchanged. B17 Current reconstructs
+Day2 day, 3 alive, village1/3; public living wolf rates remain1/3 and seer rates
+remain uncertain, rather than disclosing the private representative roles.
+Browser Back restores the saved root. Viewport reset; no console errors.
+Current-build full-page screenshot attempts on18810 and18812 timed out; actual
+new-build pixel inspection remains unverified, distinct from successful DOM/AX
+and native-input verification. No screenshot artifact is claimed.

@@ -101,14 +101,18 @@ class JointActionKernelTests(unittest.TestCase):
   packets=[o for a in actions for p,w,o in group_outcomes(engine,a)]
   self.assertTrue(any(len(o.images)>1 for o in packets))
   reference=InformationSetForecast(engine.rules,engine.strategy,exact_renaming=False,retire_uninformative_scans=False);reference.retain_joint_guard_history=True
+  from werewolf.night_program import compile_night
+  with calculation._ClosedCalculation__kernel(),engine.group_scope(node.groups):program=compile_night(engine,node.read(),node.groups)
+  program.values.clear()
   calls=[];original=engine.solve
   def evaluate(*args,physical=None):calls.append(args);return reference.solve(*args,physical=physical)
   engine.solve=evaluate
   try:
    with calculation._ClosedCalculation__kernel(),engine.group_scope(node.groups):engine.joint_night_value(node.read())
   finally:engine.solve=original
-  self.assertEqual(len(calls),len(packets))
-  self.assertLess(len(calls),sum(len(o.images) for o in packets))
+  self.assertGreater(len(calls),0)
+  self.assertLess(len(calls),len(program.leaves))
+  self.assertEqual(len(calls),len(program.values))
 
  def test_asymmetric_public_and_private_masses_do_not_authorize_swapping(self):
   calculation,node,client=fixture('max');source=node.read()

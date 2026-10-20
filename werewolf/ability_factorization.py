@@ -5,18 +5,7 @@ and pushing its complete conditional outcome law to the other target's law.
 Equal values, marginals or probabilities alone do not establish an orbit.
 """
 from fractions import Fraction as F
-from .calculation_budget import tick
-from .exact_renaming import board_signature,state_signature,observer_signature,record,Unsupported
-
-
-def signature(source,ids):
-    tick()
-    masks=tuple(sum(1<<(ids[p]-1) for p in range(len(ids)) if m&(1<<p)) for m in range(1<<len(ids)))
-    try:
-        return (board_signature(source.public,ids,masks),state_signature(source.public_state,ids,masks),
-            tuple(record(r,ids) for r in source.past),state_signature(source.private,ids,masks),
-            observer_signature(source.observer,ids,masks),board_signature(source.physical,ids,masks))
-    except Unsupported:return None
+from .exact_renaming import renamed_source_signature as signature
 
 
 def group_attacks(tree,node,scans,attacks):

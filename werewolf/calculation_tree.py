@@ -18,7 +18,7 @@ def input_snapshot(data):return sha256(data.inputs.encode()).hexdigest()[:20]
 
 def supported(data,board):
     g=data.game_data
-    return (g.players==5 and g.wolves==1 and g.seers==1 and not(g.mediums or g.hunters)
+    return (3<=g.players<=7 and g.wolves>=1 and g.seers>=1 and not(g.mediums or g.hunters)
             and not g.rules.allow_self_bite)
 
 
@@ -28,8 +28,8 @@ def explain_unavailable(game,reason):
     counts['wolves']=game.get('wolves',1)
     counts['citizens']=game['players']-sum(counts.values())
     strategy=Strategy(**game['policy']);rules=game['rules'];issues=[]
-    if counts!=dict(citizens=3,seers=1,wolves=1,mediums=0,hunters=0):
-        issues.append('配役が対応範囲（市民3・占い1・狼1、霊能0・狩人0）と異なります。')
+    if not 3<=game['players']<=7 or counts['seers']<1 or counts['mediums'] or counts['hunters']:
+        issues.append('\u73fe\u5728\u306e\u6bb5\u968eGameTree\u306f3\uff5e7\u4eba\u30fb\u5360\u3044\u5e2b1\u4eba\u4ee5\u4e0a\u306e\u914d\u5f79\u304c\u5bfe\u8c61\u3067\u3059\u3002\u970a\u80fd\u30fb\u8b77\u885b\u306e\u6bb5\u968e\u63a5\u7d9a\u306f\u672a\u5bfe\u5fdc\u3067\u3059\u3002')
     if rules.get('allow_self_bite'):issues.append('自噛み可能のルールは未対応です。')
     if rules.get('initial_seer','random_white')!='random_white':issues.append('初日占いはランダム白のみ対応しています。')
     if (strategy.day,strategy.night,strategy.fake_reports) not in (('max',)*3,('random',)*3):
@@ -46,7 +46,7 @@ def explain_unavailable(game,reason):
         issues.append(messages.get(reason,'現在の保存条件は既存の共通継続評価の対応範囲外です。'))
     return dict(error='現在の入力ではGameTreeを表示できません。',reason=reason,issues=issues,
         actual=dict(counts=counts,policy=dict(day=strategy.day,night=strategy.night,fake_reports=strategy.fake_reports),rules=rules,history_steps=len(game.get('history',[]))),
-        supported_route='新しく試す場合はTOPで市民3・占い1・狼1（霊能0・狩人0）、自噛み不可、初日占いランダム白を指定してください。既定の昼夜MAX・全公開で初日から表示できます。',
+        supported_route='\u6bb5\u968eGameTree\u306f\u5360\u3044\u5e2b1\u4eba\u4ee5\u4e0a\u30fb\u81ea\u565b\u307f\u4e0d\u53ef\u30fb\u521d\u65e5\u5360\u3044\u30e9\u30f3\u30c0\u30e0\u767d\u30fb\u5168\u516c\u958b\u3001\u65b9\u7b56\u306f\u5168MAX\u307e\u305f\u306f\u5168\u30e9\u30f3\u30c0\u30e0\u306e\u65e2\u5b58\u53b3\u5bc6\u7bc4\u56f2\u3067\u5229\u7528\u3067\u304d\u307e\u3059\u3002',
         settings_url='/',preserved=True)
 
 
@@ -59,7 +59,7 @@ class DeferredNode:
 
 class CalculationTree:
     def __init__(self,data,board,forecast):
-        if not supported(data,board):raise ValueError('Five-player3citizen/1seer/1wolf scope')
+        if not supported(data,board):raise ValueError('Closed exact seer/wolf stage scope')
         self.data=data;self.rules=data.game_data.rules;self.strategy=Strategy(**data.to_game()['policy'])
         self.calculation=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True)
         self.engine=self.calculation._ClosedCalculation__engine
@@ -275,10 +275,47 @@ class CalculationTree:
         from .ability_factorization import factor
         record['ability_choices']=factor(self,node,result)
 
+    def _stage_rows(self,key):
+        row=self.nodes[key]
+        if 'night_stages' in row:return row['night_stages']
+        from .night_program import NightStage
+        node=row['node'];program=node._night_program()
+        if program is None:return None
+        def leaf_row(leaf):
+            child=node._stage_child(leaf)
+            route=(*row['route'],(leaf.owner_index,leaf.target,leaf.outcome_index,leaf.report),{'physical':'joint','value':(node.read().public.day,leaf.wolves,leaf.scans)})
+            return self.register(child,route)
+        built={}
+        def build(stage):
+            cache=(tuple(id(leaf) for leaf in stage.leaves),stage.prefix)
+            if cache in built:return built[cache]
+            if stage.terminal:
+                total=stage.mass or stage.counter
+                return dict(leaves=[dict(node=leaf_row(leaf),probability=str((mass if stage.mass else counter)/total),variants=[dict(node=leaf_row(image),transport=list(mapping)) for image,mapping in images]) for mass,counter,leaf,images in stage.outcomes()])
+            branches=[]
+            for branch in stage.branches():
+                step=branch.step
+                owner=str(step.actor) if step.actor is not None and node.read().public.role_probability(step.actor,'seer')==1 else '\u5360\u3044\u5e2b'
+                if step.kind=='seer_target':
+                    targets=branch.targets or (step.value,)
+                    positions='['+','.join('('+str(p)+')' if p==step.value else str(p) for p in targets)+']\u304b\u3089' if len(targets)>1 else str(step.value)+'\u3092'
+                    label=owner+'\u304c'+positions+'\u5360\u3044'
+                elif step.kind=='seer_result':label={'white':'\u767d','black':'\u9ed2'}[step.value]
+                elif step.kind=='wolf_target':
+                    targets=branch.targets or (step.value,)
+                    positions='['+','.join('('+str(p)+')' if p==step.value else str(p) for p in targets)+']\u304b\u3089' if len(targets)>1 else str(step.value)+'\u3092'
+                    label='\u72fc\u304c'+positions+'\u8972\u6483'
+                else:label=step.kind
+                branches.append(dict(kind=step.kind,actor=step.actor,value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=True,public_observation=False,visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
+            result=dict(branches=branches);built[cache]=result
+            return result
+        result=build(program.root);row['night_stages']=result;return result
+
     def expand(self,key):
         record=self.nodes[key]
         if record['actions'] is not None:return
         node=record['node'];groups={}
+        if node.read().public.phase=='night' and not node.read().public.winner:self._stage_rows(key)
         with self.calculation._ClosedCalculation__kernel():
             joint=node._joint_actions()
             if joint is not None:
@@ -388,7 +425,7 @@ class CalculationTree:
             'players':[{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p)),
                 'seer_probability':str(b.role_probability(p,'seer')),
                 'physical_wolf_probability':str(sum((h.mass for h in s.private.hypotheses if h.roles[0]&(1<<(p-1))),F()))} for p in range(1,b.player_count+1)],
-            'compositions':self._composition_rows(key),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':'市民3・占い1・狼1。CO・公開結果は保存入力どおり（追加なし）。',
+            'compositions':self._composition_rows(key),'night_stages':row.get('night_stages'),'stage_roles':dict(seers=self.data.game_data.seers,mediums=self.data.game_data.mediums,hunters=self.data.game_data.hunters),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':f'{self.data.game_data.players} players / {self.data.game_data.seers} seers / {self.data.game_data.wolves} wolves',
             'method':'完全なQ/P・履歴・物理枝の既存の名前付替え同値でまとめます。全ての成員Boardを選択できます。'}
 
     def read(self,key,expand=False):
@@ -408,6 +445,16 @@ class CalculationTree:
                         for branch in attack['branches']:
                             for child in [branch['node'],*[v['node'] for v in branch.get('variants',[])]]:
                                 items[child]=self.summary(child,True);pending.append(child)
+                stage_pending=[self.nodes[parent].get('night_stages')]
+                while stage_pending:
+                    stage=stage_pending.pop()
+                    if not stage:continue
+                    for branch in stage.get('branches',[]):
+                        stage_pending.append(branch['children'])
+                        for image in branch['images']:
+                            for child in image['nodes']:items[child]=self.summary(child,True);pending.append(child)
+                    for leaf in stage.get('leaves',[]):
+                        child=leaf['node'];items[child]=self.summary(child,True);pending.append(child)
                 for choice in self.nodes[parent]['actions'] or []:
                     for branch in choice['branches']:
                         child=branch['node'];items[child]=self.summary(child,True);pending.append(child)

@@ -81,17 +81,12 @@ def acquire_uniform(state,alive,*,max_work=DEFAULT_MAX_WORK,position=('unvisited
     day=len(state.rosters)+1;entries=[];targets_roster=alive
     try:
         with calculation_budget(max_work):
+            from .night_abilities import seer_paths
             for h in state.hypotheses:
                 tick()
-                owners=tuple(p for p in alive if h.roles[2]&(1<<(p-1)) and (state.tracked is None or p in state.tracked)) if day!=1 or state.initial_rule!='none' else ()
-                choices=tuple(tuple(p for p in targets_roster if p!=owner and not h.roles[0]&(1<<(p-1))) if day==1 and state.initial_rule=='random_white' else candidates(h,owner,targets_roster) for owner in owners)
-                if any(not c for c in choices):return FuturePending('no_legal_true_seer_target; terminal handling belongs to caller')
-                count=1
-                for c in choices:count*=len(c)
-                for targets in product(*choices):
-                    tick()
-                    records=tuple(Acquisition(day,p,t,'black' if h.roles[0]&(1<<(t-1)) else 'white') for p,t in zip(owners,targets))
-                    entries.append(Hypothesis(h.roles,tuple(sorted(h.acquisitions+records)),h.mass/count,h.guards,h.attacks))
+                try:rows=seer_paths(h,alive,day,state.initial_rule,position,tracked=state.tracked)
+                except ValueError as error:return FuturePending(str(error))
+                entries.extend(row.hypothesis for row in rows)
             tick(len(entries))
             return TrueScanState(normalize(entries),state.rosters+(alive,),state.initial_rule,state.tracked,state.observed_prefix)
     except CalculationBudgetExceeded:return FuturePending('true_scan_generation_budget_exceeded')

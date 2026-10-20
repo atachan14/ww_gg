@@ -31,6 +31,9 @@ class GroupedForecast(InformationSetForecast):
         self.joint_stats=dict(compiled_kernels=0,representative_actions=0,named_actions=0,resolved_actions=0,named_outcomes=0,outcome_representatives=0)
 
     def joint_night_value(self,source):
+        from .night_program import compile_night
+        program=compile_night(self,source,self.groups)
+        if program is not None:return program.root.value(self)
         from .joint_action_kernel import supported,compile_actions,group_outcomes,continuation_value
         if not supported(self,source):return None
         groups=compile_actions(self,source,self.groups)
@@ -50,6 +53,7 @@ class GroupedForecast(InformationSetForecast):
         return super().uncached_act(b,s,past,target,private,observer,physical=physical)
 
     def scalar_laws(self,b,s,private,observer):
+        if getattr(self,'retain_complete_abilities',False):return s,private
         # Only ephemeral scalar inputs; named/observed/history frames stay full.
         if (not self.aggregate_reports or self.strategy.day!='max' or b.initial_hunter_count
             or not b.initial_seer_count or self.retire_uninformative_scans

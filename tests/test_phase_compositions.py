@@ -94,14 +94,14 @@ class PhaseCompositionTests(unittest.TestCase):
   self.assertEqual(reloaded.status_code,200,reloaded.data)
   self.assertEqual(reloaded.json['current_node'],attack['branches'][0]['node'])
 
- def test_incomplete_latent_history_keeps_exact_existing_action_fallback(self):
+ def test_previously_incomplete_latent_history_now_uses_shared_complete_stages(self):
   calculation,node,client=fixture();game=calculation.data.to_game();game['claim_policy']['seer']='none'
   data=BoardData.from_game(game);roles=data.roles();tree=CalculationTree(data,roles.board,roles.forecast());tree.expand('0')
   action=next(a for a in tree.nodes['0']['actions'] if 3 in a['targets'])
   key=next(b['node'] for b in action['branches'] if not tree.nodes[b['node']]['node'].read().public.winner)
   value=tree.value(key);tree.expand(key)
-  self.assertTrue(tree.nodes[key]['actions']);self.assertIsNone(tree.nodes[key].get('ability_choices'))
-  self.assertIn('完全な占い履歴',tree.nodes[key]['ability_pending']);self.assertEqual(tree.value(key),value)
+  self.assertTrue(tree.nodes[key]['actions']);self.assertIsNotNone(tree.nodes[key]['night_stages'])
+  self.assertTrue(all(s.get('results') for s in tree.nodes[key]['ability_choices']));self.assertEqual(tree.value(key),value)
 
  def test_composition_Current_roundtrip_and_no_saved_input_edits(self):
   tree,client=self.latent();root=client.get('/game-tree?expand=1').json

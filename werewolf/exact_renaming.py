@@ -185,3 +185,13 @@ def canonical_key(b,s,past,private,observer,rules,strategy,*,target=None,physica
     except Unsupported:return None
     result=('exact-full-renaming',best)
     return (result,best_ids) if return_mapping else result
+
+
+def renamed_source_signature(source,ids):
+    tick()
+    masks=tuple(sum(1<<(ids[p]-1) for p in range(len(ids)) if m&(1<<p)) for m in range(1<<len(ids)))
+    try:
+        return (board_signature(source.public,ids,masks),state_signature(source.public_state,ids,masks),
+            tuple(record(r,ids) for r in source.past),state_signature(source.private,ids,masks),
+            observer_signature(source.observer,ids,masks),board_signature(source.physical,ids,masks))
+    except Unsupported:return None

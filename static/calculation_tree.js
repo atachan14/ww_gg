@@ -16,11 +16,23 @@
   function render(anchorId){
    const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-item="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
    const entries=[],links=[],ROW=44,GAP=14;let maxPhase=3;
-   const base=phase=>Math.floor(phase/2)*8+(phase%2?3:0);
+   const seerCount=Math.max(0,...[...nodes.values()].map(d=>d.stage_roles?.seers||Math.max(0,...(d.compositions||[]).map(c=>c.counts?.seers||0)))),nightWidth=3+2*seerCount;
+   const base=phase=>Math.floor(phase/2)*(3+nightWidth)+(phase%2?3:0);
    function make(kind,column,data,children=[]){return {kind,column,...data,children,height:Math.max(ROW,children.reduce((h,c)=>h+c.item.height,0)+Math.max(0,children.length-1)*GAP)};}
    function choices(d,path,reach){
     if(d.winner)return [];
     const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0),column=base(phase)+2;
+    if(d.phase==='night'&&d.night_stages){
+     const walk=(stage,index,parentReach)=>{
+      if(stage.leaves)return stage.leaves.map(leaf=>{const exact=(leaf.variants||[]).find(v=>displayPath.includes(v.node));return {probability:leaf.probability,item:build(exact?exact.node:leaf.node,path,undefined,mass(parentReach,leaf.probability))};}).filter(x=>x.item);
+      return (stage.branches||[]).map(branch=>{const reach=mass(parentReach,branch.probability),position=branch.kind==='wolf_target'?2*seerCount:index;
+       const image=(branch.images||[]).find(image=>image.children&&image.nodes.some(id=>displayPath.includes(id)));
+       const descendants=walk(image?image.children:branch.children,index+1,reach);
+       return {probability:branch.probability,item:make('action',column+position,{text:branch.label,title:'\u540c\u6642\u884c\u52d5 / \u5230\u9054 '+reach+' / Q\u3068\u4ed6\u8005\u306e\u60c5\u5831\u96c6\u5408\u306f\u5909\u66f4\u3057\u307e\u305b\u3093'},descendants)};
+      });
+     };
+     return walk(d.night_stages,0,reach);
+    }
     if(d.phase==='night'&&d.ability_choices){
      return d.ability_choices.map(scan=>{
       const scanReach=mass(reach,scan.probability);
@@ -32,7 +44,7 @@
       return {probability:scan.probability,item:make('action',column,{text:scan.label,title:'\u540c\u6642\u884c\u52d5\u3092\u8868\u793a\u9806\u306b\u5206\u3051\u3066\u3044\u307e\u3059\u3002'},children)};
      });
     }
-    return (d.actions||[]).map(action=>({probability:action.policy_probability,item:make('action',d.phase==='night'?column+2:column,{text:d.phase==='day'?targetLabel(action.targets,'処刑'):groupLabel(action.label),title:(d.ability_pending?d.ability_pending+'\n':'')+action.members.map(m=>m.target+' · '+m.policy_mass).join(' / ')},action.branches.map(branch=>{const exact=branch.variants.find(v=>displayPath.includes(v.node));return {probability:branch.probability,item:build(exact?exact.node:branch.node,path,branch.outcome_label,mass(reach,mass(action.policy_probability,branch.probability)))};}).filter(x=>x.item))}));
+    return (d.actions||[]).map(action=>({probability:action.policy_probability,item:make('action',d.phase==='night'?column+2*seerCount:column,{text:d.phase==='day'?targetLabel(action.targets,'処刑'):groupLabel(action.label),title:(d.ability_pending?d.ability_pending+'\n':'')+action.members.map(m=>m.target+' · '+m.policy_mass).join(' / ')},action.branches.map(branch=>{const exact=branch.variants.find(v=>displayPath.includes(v.node));return {probability:branch.probability,item:build(exact?exact.node:branch.node,path,branch.outcome_label,mass(reach,mass(action.policy_probability,branch.probability)))};}).filter(x=>x.item))}));
    }
    function build(id,path=new Set(),arrival,reach='1'){
     const d=nodes.get(id);if(!d)return null;
@@ -45,7 +57,7 @@
    function place(item,top){item.cy=top+item.height/2;item.span=[top,top+item.height];entries.push(item);let cursor=top;for(const child of item.children){place(child.item,cursor);links.push([item,child.item,child.probability]);cursor+=child.item.height+GAP;}}
    place(tree,12);const columns=base(maxPhase+1),canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(headers,canvas);
    for(let phase=0;phase<=maxPhase;phase++){
-    const start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'\u591c':'\u663c'}`,'\u5185\u8a33',...(night?['\u5360\u3044\u4f4d\u7f6e','\u5360\u3044\u7d50\u679c','\u8972\u6483\u4f4d\u7f6e']:['\u51e6\u5211\u4f4d\u7f6e'])];
+    const start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'\u591c':'\u663c'}`,'\u5185\u8a33',...(night?[...Array.from({length:seerCount},(_,i)=>['\u5360\u3044\u4f4d\u7f6e'+(seerCount>1?i+1:''),'\u5360\u3044\u7d50\u679c'+(seerCount>1?i+1:'')]).flat(),'\u8972\u6483\u4f4d\u7f6e']:['\u51e6\u5211\u4f4d\u7f6e'])];
     labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;headers.append(h);headings.push(h);});
    }
    for(const item of entries){
