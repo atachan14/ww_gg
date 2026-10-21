@@ -140,7 +140,13 @@
   for(const type of ['pointerup','pointercancel','lostpointercapture'])frame.addEventListener(type,endPan);
   let measuredWidth=root.getBoundingClientRect().width;new ResizeObserver(entries=>{const width=entries[0].contentRect.width;if(width===measuredWidth)return;measuredWidth=width;if(rootId!==null&&root.isConnected)render();}).observe(root);
   function unavailable(error){status.textContent=error.message;root.querySelector('.tree-flow-frame').hidden=true;headerViewport.hidden=true;const box=el('div',undefined,'tree-unavailable');box.dataset.treeUnavailable='1';if(error.detail?.actual){const c=error.detail.actual.counts;box.append(el('p',`現在の配役：市民${c.citizens}・占い${c.seers}・霊能${c.mediums}・狩人${c.hunters}・狼${c.wolves}`));}for(const issue of error.detail?.issues||[])box.append(el('p',issue));if(error.detail?.supported_route)box.append(el('p',error.detail.supported_route));const link=el('a','TOPで現在の設定を確認');link.href='/';box.append(link);content.parentElement.after(box);}
-  (async()=>{try{const d=await load(null,true);rootId=d.node;render();status.textContent='';}catch(e){unavailable(e);}})();
+  (async()=>{
+   try{const d=await load(null,true);rootId=d.node;render();}catch(e){unavailable(e);return;}
+   root.dataset.treeAuto='loading';root.setAttribute('aria-busy','true');
+   try{await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,alive:()=>root.isConnected});if(root.isConnected){status.textContent='';root.dataset.treeAuto='complete';}}
+   catch(e){if(root.isConnected){status.textContent=e.message;root.dataset.treeAuto='error';}}
+   finally{root.setAttribute('aria-busy','false');}
+  })();
  }
  const init=()=>document.querySelectorAll('[data-calculation-tree]').forEach(mount);new MutationObserver(init).observe(document.documentElement,{childList:true,subtree:true});init();
 })();
