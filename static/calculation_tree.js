@@ -15,7 +15,7 @@
   function syncHeader(){if(headerScene)headerScene.style.transform=`translateX(${-frame.scrollLeft}px) scale(${scale})`;}
   function applyView(){if(!scene)return;scene.style.transform=`scale(${scale})`;content.style.width=(worldWidth*scale)+'px';content.style.height=(worldHeight*scale)+'px';headerViewport.style.height=(36*scale)+'px';headerViewport.style.width=(frame.clientWidth+2*frame.clientLeft)+'px';root.dataset.treeZoom=String(scale);syncHeader();}
   function zoom(point,delta){if(!scene)return;const next=viewport.zoomAt({scale,left:frame.scrollLeft,top:frame.scrollTop},point,delta);scale=next.scale;++renderVersion;applyView();frame.scrollLeft=next.left;frame.scrollTop=next.top;syncHeader();}
-  function wheel(event){const delta=viewport.wheelDelta(event,frame.clientHeight);if(delta===null)return;event.preventDefault();event.stopPropagation();const rect=frame.getBoundingClientRect();zoom({x:Math.max(0,event.clientX-rect.left-frame.clientLeft),y:Math.max(0,event.clientY-rect.top-frame.clientTop)},delta);}
+  function wheel(event){viewport.captureWheel(event,frame.clientHeight,delta=>{const rect=frame.getBoundingClientRect();zoom({x:Math.max(0,event.clientX-rect.left-frame.clientLeft),y:Math.max(0,event.clientY-rect.top-frame.clientTop)},delta);});}
   root.addEventListener('wheel',wheel,{passive:false});
   frame.addEventListener('scroll',syncHeader,{passive:true});
   frame.addEventListener('keydown',event=>{if(event.ctrlKey||event.metaKey||event.target!==frame)return;const delta=event.key==='+'||event.key==='='?-100:event.key==='-'?100:event.key==='0'?Math.log(scale)/.002:null;if(delta===null)return;event.preventDefault();zoom({x:frame.clientWidth/2,y:frame.clientHeight/2},delta);});
