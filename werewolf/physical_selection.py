@@ -29,6 +29,9 @@ class PhysicalSelectionEvidence:
    night,wolves,scans=selection
    if type(night)is not int or night<1 or any(type(p)is not int or not 1<=p<=source.public.player_count for p in wolves) or any(len(s)!=2 or any(type(p)is not int or not 1<=p<=source.public.player_count for p in s) for s in scans):raise ValueError('Invalid joint selection')
    keep=lambda h:tuple(p for p in range(1,source.public.player_count+1) if h.roles[0]&(1<<(p-1)))==wolves and tuple(sorted((a.player,a.target) for a in h.acquisitions if a.day==night+1))==scans
+  elif self.kind=='hypothesis':
+   roles,records=selection
+   keep=lambda h:h.roles==roles and tuple((a.day,a.player,a.target,a.color) for a in h.acquisitions)==records
   else:raise ValueError('Unknown physical selection')
   tick(len(source.private.hypotheses))
   entries=tuple(h for h in source.private.hypotheses if keep(h))

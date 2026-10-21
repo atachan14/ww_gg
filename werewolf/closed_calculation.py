@@ -111,7 +111,7 @@ class WolfChoice:
 class ClosedCalculation:
     __slots__=('__data','__strategy','__engine','__root','__max_work','__max_seconds','__origin_data','__entry_probability')
 
-    def __init__(self,data,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,grouped=False,aggregate_wolf=False,aggregate_reports=False):
+    def __init__(self,data,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS,grouped=False,aggregate_wolf=False,aggregate_reports=False,anonymous=False):
         if type(data)is not BoardData:raise TypeError('Saved immutable BoardData required')
         if type(grouped)is not bool or type(aggregate_wolf)is not bool or type(aggregate_reports)is not bool:raise TypeError('Boolean representative mode required')
         if (aggregate_wolf or aggregate_reports) and not grouped:raise ValueError('Aggregation requires the grouped consumer')
@@ -135,6 +135,7 @@ class ClosedCalculation:
         options={'aggregate_wolf':aggregate_wolf,'aggregate_reports':aggregate_reports} if grouped else {}
         engine=(GroupedForecast if grouped else InformationSetForecast)(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work,**options)
         engine.retain_joint_guard_history=True
+        engine.anonymous_nights=anonymous
         engine.retain_complete_abilities=aggregate_reports
         object.__setattr__(self,'_ClosedCalculation__engine',engine)
         with calculation_budget(max_work,max_seconds=max_seconds):
@@ -252,16 +253,17 @@ class _Node:
         return self.__calculation._ClosedCalculation__node(source,groups,(*self.__path,('physical',kind,selection)),self.__view)
 
     def _night_program(self):
-        from .night_program import compile_night
+        from .anonymous_night import shared_night
         e=self.__calculation._ClosedCalculation__engine
         with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups):
-            return compile_night(e,self.__source,self.__groups)
+            return shared_night(e,self.__source,self.__groups)
 
     def _stage_child(self,leaf):
         from .board_future import publication_key
         path=(*self.__path,('owner',leaf.information,self.__source.observer),('action',leaf.target,leaf.death_key))
         if leaf.report is not None:path=(*path,('report',publication_key(leaf.source.public,leaf.source.past)))
         path=(*path,('physical','joint',(self.__source.public.day,leaf.wolves,leaf.scans)))
+        if hasattr(leaf,'selection'):path=(*path,('physical','hypothesis',leaf.selection))
         return self.__calculation._ClosedCalculation__node(leaf.source,leaf.groups,path,self.__view)
 
     def _joint_actions(self):
@@ -349,6 +351,12 @@ class _Node:
             if operation[0]=='physical':
                 from .physical_selection import PhysicalSelectionEvidence
                 step=PhysicalSelectionEvidence(operation[1],operation[2])
+            elif operation[0]=='rename':
+                from .public_convergence import TransportEvidence
+                step=TransportEvidence(operation[1])
+            elif operation[0]=='mixture':
+                from .public_convergence import MixtureEvidence
+                step=MixtureEvidence(tuple((node.export_request(),mapping,weight) for node,mapping,weight in operation[1]))
             elif operation[0]=='owner':step=OwnerInformationEvidence(operation[1],operation[2])
             elif operation[0]=='observe':step=ObservedActionEvidence(e,operation[1])
             elif operation[0]=='observed_reports':step=ObservedPublicationEvidence(e,operation[1],operation[2])

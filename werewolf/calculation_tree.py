@@ -67,12 +67,12 @@ class DeferredNode:
 
 
 class CalculationTree:
-    def __init__(self,data,board,forecast,*,role_order=None):
+    def __init__(self,data,board,forecast,*,role_order=None,anonymous=False):
         if not supported(data,board):raise ValueError('Closed exact seer/wolf stage scope')
         from .exact import ROLES
         self.role_order=tuple(ROLES if role_order is None else role_order)
         self.data=data;self.rules=data.game_data.rules;self.strategy=Strategy(**data.to_game()['policy'])
-        self.calculation=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True)
+        self.calculation=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=anonymous)
         self.engine=self.calculation._ClosedCalculation__engine
         self.snapshot=input_snapshot(data)
         self.nodes={};self.sources={};self.keys={};self.values={};self.traces={};self.lock=RLock()
@@ -306,18 +306,26 @@ class CalculationTree:
             branches=[]
             for branch in stage.branches():
                 step=branch.step
-                from .ability_labels import stage_label
-                label,actor_groups,joint_choices=stage_label(branch)
-                branches.append(dict(kind=step.kind,actor=step.actor,actor_groups=actor_groups,joint_choices=joint_choices,actors=list(step.actors),value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=True,public_observation=False,visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
+                if getattr(program,'method',None)=='anonymous-relational-v1':
+                    from dataclasses import asdict
+                    label=step.label();symbol=lambda x:None if x is None else asdict(x)
+                    branches.append(dict(kind=step.kind,actor=None if step.actor is None else step.actor.index+1,actors=[x.index+1 for x in step.actors],value=step.value,label=label,targets=[],symbols=dict(actor=symbol(step.actor),target=symbol(step.target) if hasattr(step.target,'members') else None,actors=[symbol(x) for x in step.actors]),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),children=build(branch.state),images=[]))
+                else:
+                    from .ability_labels import stage_label
+                    label,actor_groups,joint_choices=stage_label(branch)
+                    branches.append(dict(kind=step.kind,actor=step.actor,actor_groups=actor_groups,joint_choices=joint_choices,actors=list(step.actors),value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=True,public_observation=False,visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
             result=dict(branches=branches);built[cache]=result
             return result
-        result=build(program.root);row['night_stages']=result;return result
+        result=build(program.root);result['method']=getattr(program,'method','verified-named');result['stats']=getattr(program,'stats',{});row['night_stages']=result;return result
 
     def expand(self,key):
         record=self.nodes[key]
         if record['actions'] is not None:return
         node=record['node'];groups={}
-        if node.read().public.phase=='night' and not node.read().public.winner:self._stage_rows(key)
+        if node.read().public.phase=='night' and not node.read().public.winner:
+            stages=self._stage_rows(key)
+            if stages and stages.get('method')=='anonymous-relational-v1':
+                record['actions']=[];return
         with self.calculation._ClosedCalculation__kernel():
             joint=node._joint_actions()
             if joint is not None:

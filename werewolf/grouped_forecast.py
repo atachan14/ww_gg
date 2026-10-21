@@ -31,8 +31,8 @@ class GroupedForecast(InformationSetForecast):
         self.joint_stats=dict(compiled_kernels=0,representative_actions=0,named_actions=0,resolved_actions=0,named_outcomes=0,outcome_representatives=0)
 
     def joint_night_value(self,source):
-        from .night_program import compile_night
-        program=compile_night(self,source,self.groups)
+        from .anonymous_night import shared_night
+        program=shared_night(self,source,self.groups)
         if program is not None:return program.root.value(self)
         from .joint_action_kernel import supported,compile_actions,group_outcomes,continuation_value
         if not supported(self,source):return None
