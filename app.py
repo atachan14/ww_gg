@@ -79,7 +79,11 @@ def create_app(test_config=None, *, deployment=False):
         key=('calculation-tree',data.inputs,tuple(app.jinja_env.globals['role_order']),bool(app.config.get('ANONYMOUS_NIGHT_PREVIEW',False)))
         hit,tree=data.runtime.get(key)
         if not hit:
-            result=forecast if forecast is not None else roles.forecast()
+            result=forecast
+            if result is None and app.config.get('ANONYMOUS_NIGHT_PREVIEW'):
+                from werewolf.anonymous_value import initial_forecast
+                result=initial_forecast(data)
+            if result is None:result=roles.forecast()
             from werewolf.seer_future_uniform import FuturePending
             if isinstance(result,FuturePending):
                 stopped=budget_stop()
@@ -358,7 +362,12 @@ def create_app(test_config=None, *, deployment=False):
                 with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) if manual else None):
                     from werewolf.seer_future_uniform import FuturePending
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
-                    forecast=role_state.forecast(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+                    forecast=None
+                    if app.config.get('ANONYMOUS_NIGHT_PREVIEW') and generated_current is None:
+                        from werewolf.anonymous_value import initial_forecast
+                        forecast=initial_forecast(role_state.owner)
+                    if forecast is None:
+                        forecast=role_state.forecast(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
                     if isinstance(forecast,FuturePending):
                         guard_scope_pending=forecast.reason.startswith(('guard_','root_guard_','root_actor_')) or (board.initial_hunter_count and forecast.reason=='information_set_budget_exceeded')
                         from werewolf.seer_manual import Pending

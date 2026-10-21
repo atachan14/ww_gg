@@ -135,6 +135,7 @@ class Belief:
         return self if groups==self.groups else replace(self,groups=groups,q=self.q.refine(self.groups,groups),p=self.p.refine(self.groups,groups))
     def execute(self,name):
         if self.phase!='day':raise ValueError('Execution requires day')
+        if any(winner(atom.population) is not None for mass,atom in self.p.rows):raise ValueError('Terminal belief has no actions')
         def branches(law):
             rows={}
             for mass,atom in law.rows:
@@ -169,6 +170,7 @@ class NightRow:
 class NightFlow:
     def __init__(self,before,policy_factory=None,*,acquire=True):
         if before.phase!='night':raise ValueError('Night transition requires night')
+        if any(winner(atom.population) is not None for mass,atom in before.p.rows):raise ValueError('Terminal belief has no actions')
         self.before=before;rows=[]
         for mass,atom in before.p.rows:
             # Called before any new acquisition. Later stages cannot alter it.

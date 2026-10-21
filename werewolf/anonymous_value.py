@@ -137,7 +137,9 @@ class Evaluator:
         return HorizonValues(v,w)
     def forecast(self,b):
         from .forecast_result import Forecast
-        b=self.scalar(b);actions=[];horizons=[]
+        b=self.scalar(b)
+        if all(winner(atom.population) is not None for mass,atom in b.p.rows):return Forecast(self.value(b),())
+        actions=[];horizons=[]
         for group in b.groups:
             targets=tuple(p for p in group if p in alive(b))
             if not targets:continue
@@ -155,3 +157,26 @@ class Evaluator:
         except ValueError as error:
             if str(error)!='Anonymous observation has zero support':raise
             return None
+
+
+def initial_forecast(data):
+    """Opt-in initial fixed-hidden public value; unsupported semantics return None.
+
+    Named BoardTable preparation/Current compatibility remain separate callers.
+    This entry does not reconstruct roles or create a named initial prior.
+    """
+    game=data.to_game();g=data.game_data
+    if (g.mediums or g.hunters or g.rules.allow_self_bite or game.get('history') or game.get('seer_inputs') or game.get('reports')
+        or any(c!='latent' for c in game.get('claims',())) or game.get('model')!='group'
+        or game.get('seer_mode')!='information-fixed-v1' or game.get('seer_options',{}).get('likelihood')!='compatibility'
+        or game.get('seer_options',{}).get('initial_rule')!='random_white'):
+        return None
+    from .exact import Strategy
+    policy=Strategy(**game['policy'])
+    if policy.include_self_bite or (policy.day,policy.night,policy.fake_reports) not in (('random',)*3,('max',)*3) or any(policy.disclosure_for(role)!='all' for role in ('seer','medium')):return None
+    key=('anonymous-public-no-report-v1',data.inputs)
+    hit,value=data.runtime.get(key)
+    if hit:return value
+    owner=Belief.initial((tuple(range(1,g.players+1)),),dict(wolf=g.wolves,seer=g.seers,villager=g.players-g.wolves-g.seers),g.rules.initial_seer)
+    result=Evaluator(policy.day,policy.night).forecast(owner)
+    data.runtime.put(key,result);return result

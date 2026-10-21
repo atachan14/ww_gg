@@ -128,6 +128,7 @@ class Leaf:
     bindings:tuple
     selection:tuple
     correspondence:tuple
+    belief:object=None
 
 @dataclass(frozen=True)
 class Branch:
@@ -179,7 +180,9 @@ class Program:
         self.source=source;self.groups=groups;self.leaves=tuple(leaves);self.identity=tuple(range(1,source.public.player_count+1));self.root=Stage(self,self.leaves);self.values={};self.stats=stats
     def continuation(self,engine,leaf):
         if leaf.source not in self.values:
-            with engine.group_scope(leaf.groups):self.values[leaf.source]=engine.solve(*leaf.source,physical=leaf.source.physical)
+            if leaf.belief is not None:self.values[leaf.source]=engine.anonymous_values.value(leaf.belief)
+            else:
+                with engine.group_scope(leaf.groups):self.values[leaf.source]=engine.solve(*leaf.source,physical=leaf.source.physical)
         return self.values[leaf.source]
 
 def selection(h):return (h.roles,tuple((a.day,a.player,a.target,a.color) for a in h.acquisitions))
@@ -201,7 +204,12 @@ def compile_anonymous(engine,source,groups):
         nonlocal offset
         info=WolfInformation.from_hypothesis(h)
         if info not in policies:
-            with engine.actor_scope(info):policies[info]=dict(engine.wolf_policy(b,source.public_state,source.past,info.initial_roster,info.attacks))
+            if belief is not None:
+                vector=tuple(sum(bool(info.initial_roster&(1<<(p-1))) for p in group) for group in groups)
+                policy=engine.anonymous_values.wolf_policy(engine.anonymous_values.scalar(belief),vector)
+                policies[info]={p:policy.get(index,F()) for index,group in enumerate(groups) for p in group if p in b.alive and not info.initial_roster&(1<<(p-1))}
+            else:
+                with engine.actor_scope(info):policies[info]=dict(engine.wolf_policy(b,source.public_state,source.past,info.initial_roster,info.attacks))
             offsets[info]=offset;offset+=len(policies[info])
         return info,policies[info]
     if belief is not None:
@@ -217,7 +225,7 @@ def compile_anonymous(engine,source,groups):
         def futures():
             for row in flow.rows:
                 h,transport=representative(row.before,groups)
-                yield row.counter/row.path.counter,h,transport,row.path
+                yield row.counter/row.path.counter,h,transport,row.path,row
         family_count=len(belief.p.rows)
     else:
         flow=None;families={}
@@ -233,10 +241,10 @@ def compile_anonymous(engine,source,groups):
                     def committed(choice):
                         extra=((choice.target,choice.fresh_cell),) if choice.fresh_cell is not None else ()
                         names=transport.apply((*scan.bindings,*extra));return policy.get(names[choice.target],F())
-                    for path in attacks(scan,b.day,policy=committed):yield family_mass,h,transport,path
+                    for path in attacks(scan,b.day,policy=committed):yield family_mass,h,transport,path,None
         family_count=len(families)
     leaves=[]
-    for family_mass,h,transport,path in futures():
+    for family_mass,h,transport,path,owned_row in futures():
         info,policy=commit(h)
         native_paths+=1;names=transport.apply(path.bindings);target=names[path.steps[-1].value]
         obtained=tuple(sorted(Acquisition(a.day,names[a.actor],names[a.target],a.color) for a in path.population.scans))
@@ -268,7 +276,11 @@ def compile_anonymous(engine,source,groups):
                     else:
                         _,cell,slot=ref;person=tuple(p for p in transport.free[cell] if p not in names)[slot]
                     named.append((symbol.index,person))
-                leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h),tuple(named)))
+                leaf_belief=None
+                if owned_row is not None:
+                    from .anonymous_belief import Law
+                    leaf_belief=replace(flow.branch(owned_row.observation,counter=True)[1],p=Law(((F(1),owned_row.atom),)))
+                leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h),tuple(named),leaf_belief))
     result=Program(source,groups,leaves,dict(named_prior_atoms=0 if belief is not None else len(source.private.hypotheses),relational_families=family_count,structural_joint_paths=native_paths,permutation_checks=0,belief_owned=belief is not None))
     result.belief=belief;result.belief_flow=flow
     cache[key]=result;return result

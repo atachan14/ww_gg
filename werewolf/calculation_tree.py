@@ -105,7 +105,8 @@ class CalculationTree:
             with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
                 from .closed_calculation import _forecast_scope
                 _forecast_scope(s,self.engine)
-                row['value']=self.engine.solve(*s,physical=s.physical)
+                belief=getattr(self.engine,'anonymous_beliefs',{}).get(s)
+                row['value']=self.engine.anonymous_values.value(belief) if belief is not None else self.engine.solve(*s,physical=s.physical)
             self.values[canonical]=row['value']
         return row['value']
 
@@ -115,7 +116,9 @@ class CalculationTree:
         rows=[]
         with self.calculation._ClosedCalculation__kernel(),e.group_scope(node.groups):
             if b.phase=='day':
-                scores=dict(e.day_scores(b,s.public_state,s.past))
+                belief=getattr(e,'anonymous_beliefs',{}).get(s)
+                scores=({p:v for group,v in e.anonymous_values.day_scores(e.anonymous_values.scalar(belief)) for p in group}
+                        if belief is not None else dict(e.day_scores(b,s.public_state,s.past)))
                 best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
                 legal=legal_targets(s.physical,self.rules,self.strategy)
                 orbits=e.target_orbits(legal) if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)

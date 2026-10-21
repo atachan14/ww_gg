@@ -136,6 +136,9 @@ class ClosedCalculation:
         engine=(GroupedForecast if grouped else InformationSetForecast)(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work,**options)
         engine.retain_joint_guard_history=True
         engine.anonymous_nights=anonymous
+        if anonymous:
+            from .anonymous_value import Evaluator
+            engine.anonymous_values=Evaluator(strategy.day,strategy.night)
         engine.retain_complete_abilities=aggregate_reports
         object.__setattr__(self,'_ClosedCalculation__engine',engine)
         with calculation_budget(max_work,max_seconds=max_seconds):
@@ -153,7 +156,7 @@ class ClosedCalculation:
                 full=FullTraceOrigin(SavedOrigin(origin_data,engine.rules,strategy,project_public=False))()
                 root=self.__node(full,groups,(('full_trace',),))
             else:root=self.__node(source,groups,())
-            if anonymous and not game.get('mediums',0) and not game.get('hunters',0) and all(c=='latent' for c in source.public.claims) and not source.past:
+            if anonymous and not source.public.winner and not engine.rules.allow_self_bite and not strategy.include_self_bite and not game.get('mediums',0) and not game.get('hunters',0) and all(c=='latent' for c in source.public.claims) and not source.past:
                 from .anonymous_belief import Belief
                 engine.anonymous_beliefs={root.read():Belief.initial(groups,dict(wolf=game['wolves'],seer=game.get('seers',0),villager=game['players']-game['wolves']-game.get('seers',0)),engine.rules.initial_seer)}
             else:engine.anonymous_beliefs={}
@@ -351,6 +354,8 @@ class _Node:
         e=self.__calculation._ClosedCalculation__engine;s=self.__source
         with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups):
             _forecast_scope(s,e)
+            belief=getattr(e,'anonymous_beliefs',{}).get(s)
+            if belief is not None:return e.anonymous_values.forecast(belief)
             value=e.solve(*s,physical=s.physical);targets=legal_targets(s.physical,e.rules,e.strategy)
             orbits=e.target_orbits(targets)
             values={g[0]:e.act(*s[:3],g[0],s.private,s.observer,physical=s.physical) for g in orbits}
