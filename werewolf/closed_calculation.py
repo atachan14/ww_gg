@@ -158,7 +158,6 @@ class ClosedCalculation:
             else:root=self.__node(source,groups,())
             # Rooted relational action orbits are not population partitions.
             from .public_relation_orbits import initial_orbits
-            object.__setattr__(self,'_ClosedCalculation__origin_data',origin_data)
             actual=root.read()
             engine.public_action_orbits={(actual.public,actual.public_state,actual.past):initial_orbits(origin_data.to_game())}
             if anonymous and not source.public.winner and not engine.rules.allow_self_bite and not strategy.include_self_bite and not game.get('mediums',0) and not game.get('hunters',0) and all(c=='latent' for c in source.public.claims) and not source.past:
@@ -366,7 +365,7 @@ class _Node:
             split={}
             for player in group:split.setdefault(result.source.public.claims[player-1],[]).append(player)
             groups.extend(tuple(row) for row in split.values())
-        child=self.__calculation._ClosedCalculation__node(result.source,tuple(groups),(*self.__path,('public_input',evidence,policy)),None)
+        child=self.__calculation._ClosedCalculation__node(result.source,_report_groups(tuple(groups),result.source),(*self.__path,('public_input',evidence,policy)),None)
         return result.public_mass,result.physical_mass,child
 
     def observe_reports(self,seer_reports,medium_reports=()):

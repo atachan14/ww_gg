@@ -39,3 +39,15 @@ class ManualPublicInputTests(unittest.TestCase):
   child=condition_input(source,evidence,root.data.game_data.rules if hasattr(root,'data') else root._Node__calculation.data.game_data.rules,ClaimPolicy()).source
   self.assertEqual(child.public.role_probability(1,'seer'),F(1,2))
   self.assertEqual(sum(h.mass for h in child.private.hypotheses if h.roles[2]&1),1)
+
+ def test_report_targets_refine_groups_before_future_evaluation(self):
+  from werewolf.manual_public_input import PublicInput
+  root=self.root()
+  _,_,node=root.observe_public_input(PublicInput(('seer','latent','latent','latent','latent'),(SeerReport(1,1,1,3,'white'),)))
+  self.assertFalse(any(3 in g and 4 in g for g in node.groups))
+  from werewolf.information_set_forecast import InformationSetForecast
+  engine=node._Node__calculation._ClosedCalculation__engine;s=node.read()
+  oracle=InformationSetForecast(engine.rules,engine.strategy,exact_renaming=False,retire_uninformative_scans=False)
+  oracle.retain_joint_guard_history=True
+  with node._Node__calculation._ClosedCalculation__kernel(),engine.group_scope(node.groups):
+   self.assertEqual(dict(engine.day_scores(s.public,s.public_state,s.past)),dict(oracle.day_scores(s.public,s.public_state,s.past)))

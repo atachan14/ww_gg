@@ -76,11 +76,35 @@ class CalculationTree:
         self.engine=self.calculation._ClosedCalculation__engine
         self.snapshot=input_snapshot(data)
         self.nodes={};self.sources={};self.keys={};self.values={};self.traces={};self.lock=RLock()
-        self.root=self.register(self.calculation.root)
+        self.entry_node=self.calculation.root
+        self.root=self.register(self.entry_node)
         from .navigation_history import NavigationHistory
         self.navigation=NavigationHistory(self.calculation.root)
         # Root value is the actual BoardOverview result, never a fixture value.
         self.nodes[self.root]['value']=forecast.village_win
+
+    @classmethod
+    def from_node(cls,node,*,role_order=None):
+        """A continuation view over the same exact owner, not a saved-law rebase.
+
+        View IDs/routes are local to this entry. Navigation occurrences own their
+        parents and transports; the solver state can be shared independently.
+        """
+        from .exact import ROLES
+        tree=cls.__new__(cls);tree.calculation=node._Node__calculation
+        tree.data=node.data;tree.rules=tree.data.game_data.rules
+        tree.strategy=tree.calculation._ClosedCalculation__strategy
+        tree.engine=tree.calculation._ClosedCalculation__engine
+        tree.role_order=tuple(ROLES if role_order is None else role_order)
+        tree.snapshot=input_snapshot(tree.data)
+        tree.nodes={};tree.sources={};tree.keys={};tree.values={};tree.traces={};tree.lock=RLock()
+        tree.entry_node=node;tree.root=tree.register(node)
+        from .navigation_history import NavigationHistory
+        tree.navigation=NavigationHistory(node)
+        # Recorded root input batches have already been applied. Replaying them
+        # in a manual/continuation view would mix input snapshots with evidence.
+        tree.input_updates=None
+        return tree
 
     def equivalence(self,node,target=None):
         s=node.read();key=(s,target)
@@ -499,7 +523,7 @@ class CalculationTree:
     def restore(self,route):
         """Reconstruct a named physical path only through common generators."""
         if type(route) not in (list,tuple) or len(route)>6*self.data.game_data.players+1:raise ValueError('Invalid Current path')
-        node=self.calculation.root;prefix=()
+        node=self.entry_node;prefix=()
         for step in route:
             if type(step)is dict:
                 if set(step)=={'public_night'}:

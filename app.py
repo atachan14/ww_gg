@@ -69,6 +69,18 @@ def create_app(test_config=None, *, deployment=False):
         game_id=session.setdefault('co_display_game',secrets.token_hex(8))
         return BoardData.from_game(state,runtime=game_runtimes.get(game_id,state))
 
+    if app.config.get('PERSISTENT_TREE_PREVIEW'):
+        from werewolf.navigation_store import NavigationStore
+        from werewolf.navigation_http import register_navigation
+        directory=app.config.get('NAVIGATION_DIRECTORY',os.path.join(app.root_path,'.artifacts','navigation'))
+        navigation_store=NavigationStore(directory)
+        app.extensions['navigation_store']=navigation_store
+        def navigation_owner():
+            state=game()
+            if state is None:return None,None
+            return session.setdefault('co_display_game',secrets.token_hex(8)),board_data(state)
+        register_navigation(app,navigation_store,navigation_owner)
+
     def calculation_tree(state,role_state=None,forecast=None,*,explain=False):
         from werewolf.calculation_tree import CalculationTree,supported
         from werewolf.information_set_forecast import Pending

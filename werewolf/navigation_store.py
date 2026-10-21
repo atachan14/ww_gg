@@ -15,6 +15,9 @@ class StaleNavigation(ValueError):pass
 
 class NavigationDocument:
     def __init__(self,data,game=None,revision=0):
+        if game is None and data.to_game().get('history'):
+            from .information_set_forecast import Pending
+            raise Pending('navigation_saved_history_migration_pending')
         self.data=data;self.revision=revision;self.lock=RLock()
         self.game=game or NavigationGame(ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root)
     def export(self):return dict(version=1,root=self.data.to_game(),revision=self.revision,history=self.game.export())

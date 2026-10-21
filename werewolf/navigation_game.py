@@ -43,7 +43,9 @@ class NavigationGame:
         if outcome is not None:
             if type(outcome)is not int or not 0<=outcome<len(rows):raise ValueError('Invalid public outcome')
             child=rows[outcome].node;selector=dict(kind='action',target=target,requested=requested,outcome=outcome)
-            return self._commit(child,selector,names=names,weight=selection_weight)
+            winner=child.read().public.winner
+            settled=(parent.settled_village+parent.active_mass*int(winner=='village'),parent.settled_wolf+parent.active_mass*int(winner=='wolf'))
+            return self._commit(child,selector,names=names,weight=selection_weight,settled=settled)
         # Ordinary Footer accumulates settled probability while exposing the one
         # ongoing public Board, exactly as Progress.advance does.
         village,wolf=parent.settled_village,parent.settled_wolf;ongoing=[]
@@ -75,4 +77,12 @@ class NavigationGame:
                 added=game.public_input(claims,reports)
             else:added=game.action(names.display(step.get('requested',step['target'])),outcome=step.get('outcome') if kind=='action' else None,names=NameMap(tuple(row['names'])))
             if added.key!=row['key']:raise ValueError('Invalid history order')
-        game.current=document['current'];game.history.occurrence(game.current);game._forward=dict(document.get('forward',{}));return game
+        # Saved files are evidence recipes, not authority to inject weights/maps.
+        import json
+        if json.dumps(game.history.export(),sort_keys=True)!=json.dumps(document['rows'],sort_keys=True):raise ValueError('Saved navigation differs from exact replay')
+        game.current=document['current'];game.history.occurrence(game.current)
+        forward=dict(document.get('forward',{}))
+        for parent,child in forward.items():
+            game.history.occurrence(parent)
+            if game.history.occurrence(child).parent!=parent:raise ValueError('Invalid saved forward path')
+        game._forward=forward;return game

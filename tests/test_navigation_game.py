@@ -44,3 +44,11 @@ class NavigationGameTests(unittest.TestCase):
   self.assertEqual(chosen.names.forward,(2,1,4,3,5))
   self.assertEqual(transport_source(game.node.read(),chosen.names.forward),root.action(2)[0].node.read())
   restored=NavigationGame.restore(root,game.export());self.assertEqual(restored.export(),game.export())
+
+ def test_restore_rejects_injected_weights_and_unrelated_forward_path(self):
+  from copy import deepcopy
+  root=self.root();game=NavigationGame(root);game.action(3)
+  record=deepcopy(game.export());record['rows'][1]['selection_weight']='0'
+  with self.assertRaises(ValueError):NavigationGame.restore(root,record)
+  record=deepcopy(game.export());record['forward']={'h1':'h0'}
+  with self.assertRaises(ValueError):NavigationGame.restore(root,record)

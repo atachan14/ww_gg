@@ -3124,3 +3124,36 @@ choices2–5, coupled (1 2)(3 4), cold restore, repeated manual updates, Q/P sep
 settled mass and failed-save rollback. These APIs are not yet wired to HTTP/Tree;
 18821 still serves the accepted UI. Persistent Tree occurrences, ordinary editable
 Current and UI regression verification remain required before enabling them.
+
+
+### Ordinary Current adapter and local navigation API foundation
+
+NavigationCurrent projects the exact occurrence through one full name bijection
+into existing RoleState/Progress contracts. Terminal Footer mixtures retain all
+outcomes and settled mass. CalculationTree.from_node reuses the same calculation
+owner, restores relative routes from that entry, and suppresses already-applied
+root input timelines. It does not import a display Board as a solver prior.
+
+A local PERSISTENT_TREE_PREVIEW flag registers /navigation read/mutation APIs.
+The flag is off in the accepted preview. Requests accept only semantic actions
+and revisions; arbitrary weights, posteriors and transports are rejected. Cold
+replay validates derived weights/maps/settled masses and forward parentage.
+Manual report targets now refine population groups using _report_groups before
+continuation evaluation; an independent named day-score comparison verifies it.
+
+Verification: 30 tests pass across navigation_history, manual_public_input,
+navigation_game, navigation_store, navigation_current, navigation_http,
+public_relation_orbits and tree_public_updates. Includes failed disk write,
+revision conflict, concrete target transport, linked CO pairs, Q/P separation,
+source value invariance, repeated zero-weight updates, terminal mixtures and
+relative Tree restore. No frontend behavior is claimed changed or visually tested.
+
+Remaining integration: persistent Day1 view graph with distinct occurrence IDs
+and transports; initial migration of pre-existing saved action histories;
+ordinary editable Current/BoardTable preview and publish; Footer/Current partial
+render retaining the Tree DOM and expansion/pan; zero-weight manual edges and
+collapsed old continuations; full desktop/mobile flow verification on 18821.
+Legacy histories currently return navigation_saved_history_migration_pending at
+the new boundary rather than silently making their current Board the Day1 root.
+Historical report edits/unsupported role input remain explicitly unsupported.
+No preview process, cookies, live user data, other app, or port was changed.
