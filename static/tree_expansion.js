@@ -20,7 +20,7 @@
   async auto(root,ensure,refresh,{current=null,path=[],alive=()=>true}={}){
    const run={blocked:new Set()};automatic=run;
    const required=new Set(),memo=new Map(),allowed=new Set(path);
-   function reaches(item){if(!item)return false;if(item.id===current||item.d?.node===current){required.add(item.key);return true;}if(memo.has(item.key))return memo.get(item.key);if(allowed.size&&item.kind==='board'&&item.id!==undefined&&!allowed.has(item.id)){memo.set(item.key,false);return false;}memo.set(item.key,false);let found=false;for(const edge of item.next)if(reaches(edge.item)){required.add(item.key);found=true;}memo.set(item.key,found);return found;}
+   function reaches(item){if(!item)return false;if(item.id===current||item.d?.node===current){required.add(item.key);return true;}if(memo.has(item.key))return memo.get(item.key);if(allowed.size&&item.kind==='board'&&!item.d?.snapshot_only&&item.id!==undefined&&!allowed.has(item.id)){memo.set(item.key,false);return false;}memo.set(item.key,false);let found=false;for(const edge of item.next)if(reaches(edge.item)){required.add(item.key);found=true;}memo.set(item.key,found);return found;}
    if(current!==null)reaches(items.get(root));
    const queue=[{key:root,parents:[]}],visited=new Set();let dirty=false;
    const live=entry=>automatic===run&&alive()&&!entry.parents.concat(entry.key).some(key=>run.blocked.has(key));

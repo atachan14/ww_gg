@@ -16,7 +16,7 @@
   async function openAnalysis(d,id=d.node){
    if(analysisOpen.has(id)){analysisOpen.delete(id);render();return;}
    analysisOpen.add(id);render();
-   if(distributions.has(id))return;
+   if(d.snapshot_only||distributions.has(id))return;
    try{const data=await expansion.load('analysis:'+id,()=>load(id,false,true));if(data.distribution)distributions.set(id,data.distribution);if(root.isConnected)render();}
    catch(error){analysisErrors.set(id,error.message);if(root.isConnected)render();}
   }
@@ -59,14 +59,21 @@
   function render(anchorId){
    const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-key="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
    const entries=[],links=[],ROW=44,GAP=14;let maxPhase=3;
-   const seerCount=Math.max(0,...[...nodes.values()].map(d=>d.stage_roles?.seers||Math.max(0,...(d.compositions||[]).map(c=>c.counts?.seers||0)))),native=[...nodes.values()].some(d=>d.native_mode),publication=[...nodes.values()].some(d=>(d.public_claims||[]).some(c=>c==='seer'||c==='medium')),dayWidth=native?2:3,nightWidth=(native?3+(publication?1:0):3)+2*seerCount;
-   const base=phase=>Math.floor(phase/2)*(dayWidth+nightWidth)+(phase%2?dayWidth:0);
+   const seerCount=Math.max(0,...[...nodes.values()].map(d=>d.stage_roles?.seers||Math.max(0,...(d.compositions||[]).map(c=>c.counts?.seers||0)))),native=[...nodes.values()].some(d=>d.native_mode),publication=[...nodes.values()].some(d=>(d.public_claims||[]).some(c=>c==='seer'||c==='medium')),timeline=nodes.get(rootId)?.input_timeline;
+   const updateCount=phase=>native?(phase===0?(timeline?.updates.length||0):(publication?1:0)):0;
+   const dayWidth=phase=>(native?2:3)+updateCount(phase),nightWidth=(native?3:3)+2*seerCount;
+   const base=phase=>{let start=0;for(let p=0;p<phase;p++)start+=p%2?nightWidth:dayWidth(p);return start;};
    function make(kind,column,data,children=[]){return {kind,column,...data,children,height:Math.max(ROW,children.reduce((h,c)=>h+c.item.height,0)+Math.max(0,children.length-1)*GAP)};}
    function choices(d,path,reach){
     if(d.winner)return [];
-    const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0),column=base(phase)+(native?1:2);
+    const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0),column=base(phase)+(native?1+(d.phase==='day'?updateCount(phase):0):2);
     if(d.phase==='night'&&d.night_stages){
      const walk=(stage,index,parentReach)=>{
+      if(native&&stage.branches?.length&&stage.branches.every(b=>b.kind==='publication')){
+       const leaves=[];const gather=s=>{if(s.leaves)leaves.push(...s.leaves);else for(const b of s.branches||[])gather(b.children);};gather(stage);
+       const first=leaves.find(leaf=>nodes.get(leaf.node)?.day_arrival);
+       if(first)return [{probability:'1',item:build(first.node,path,undefined,parentReach,first.context_node)}];
+      }
       if(stage.leaves)return stage.leaves.map(leaf=>{const exact=(leaf.variants||[]).find(v=>displayPath.includes(v.node));return {probability:leaf.probability,item:build(exact?exact.node:leaf.node,path,undefined,mass(parentReach,leaf.probability),leaf.context_node)};}).filter(x=>x.item);
       return (stage.branches||[]).map(branch=>{const reach=mass(parentReach,branch.probability),position=branch.kind==='wolf_target'?2*seerCount:branch.kind==='death_notice'?2*seerCount+1:branch.kind==='publication'?2*seerCount+2:index;
        const image=(branch.images||[]).find(image=>image.children&&image.nodes.some(id=>displayPath.includes(id)));
@@ -90,10 +97,26 @@
     return (d.actions||[]).map(action=>({probability:action.policy_probability,item:make('action',d.phase==='night'?column+2*seerCount:column,{text:d.phase==='day'?targetLabel(action.targets,'処刑'):groupLabel(action.label),title:(d.ability_pending?d.ability_pending+'\n':'')+action.members.map(m=>m.target+' · '+m.policy_mass).join(' / ')},action.branches.map(branch=>{const exact=branch.variants.find(v=>displayPath.includes(v.node));return {probability:branch.probability,item:build(exact?exact.node:branch.node,path,branch.outcome_label,mass(reach,mass(action.policy_probability,branch.probability)))};}).filter(x=>x.item))}));
    }
    const sharedBoards=new Map();
+   function updated(d,label,column,path,reach){
+    const identity='updated:'+d.node;
+    if(d.public_bundle&&sharedBoards.has(identity))return sharedBoards.get(identity);
+    const next=new Set([...path,d.node]),item=make('board',column,{d,id:d.node,text:label,update:true,shared:!!d.public_bundle,contexts:new Set(),lazy:!d.winner&&!d.actions},path.has(d.node)?[]:choices(d,next,reach));
+    if(d.public_bundle)sharedBoards.set(identity,item);return item;
+   }
    function build(id,path=new Set(),arrival,reach='1',context){
     const d=nodes.get(id);if(!d)return null;
-    if(native&&d.public_bundle&&sharedBoards.has(id)){const item=sharedBoards.get(id);if(context)item.contexts.add(context);return item;}
     const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0);maxPhase=Math.max(maxPhase,phase);
+    if(native&&d.day_arrival){
+     const a=d.day_arrival;if(sharedBoards.has(a.id))return sharedBoards.get(a.id);
+     const children=a.updates.map(update=>{const after=nodes.get(update.node);return after?{probability:update.probability,item:updated(after,update.label,base(phase)+1,path,mass(reach,update.probability))}:null;}).filter(Boolean);
+     const item=make('board',base(phase),{d:a.state,id:a.id,shared:true,contexts:new Set(context?[context]:[])},children);sharedBoards.set(a.id,item);return item;
+    }
+    if(native&&id===rootId&&timeline?.updates.length){
+     const rows=timeline.updates;let tail=updated(d,rows[rows.length-1].label,base(phase)+rows.length,path,reach);
+     for(let i=rows.length-2;i>=0;i--)tail=make('board',base(phase)+i+1,{d:rows[i].state,id:rows[i].state.node,text:rows[i].label,update:true},[{probability:null,item:tail}]);
+     return make('board',base(phase),{d:timeline.before,id:timeline.before.node},[{probability:null,item:tail}]);
+    }
+    if(native&&d.public_bundle&&sharedBoards.has(id)){const item=sharedBoards.get(id);if(context)item.contexts.add(context);return item;}
     if(native){const next=new Set([...path,id]),item=make('board',base(phase),{d,id,arrival,shared:!!d.public_bundle,contexts:new Set(context?[context]:[]),lazy:!d.winner&&!d.actions},path.has(id)?[]:choices(d,next,reach));if(d.public_bundle)sharedBoards.set(id,item);return item;}
     const next=new Set([...path,id]),compositions=d.compositions||[{node:id,label:'内訳未取得',probability:'1'}];
     const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id,lazy:!c.winner&&!c.actions},choices(c,next,mass(reach,composition.probability)))};});
@@ -103,14 +126,14 @@
    const seen=new Set();function collect(item){if(seen.has(item))return;seen.add(item);entries.push(item);for(const child of item.children){collect(child.item);links.push([item,child.item,child.probability,child]);}}collect(tree);
    const columns=base(maxPhase+1),canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(canvas);headerViewport.replaceChildren(headers);scene=canvas;headerScene=headers;
    for(let phase=0;phase<=maxPhase;phase++){
-    const start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'\u591c':'\u663c'}`,...(native?[]:['\u5185\u8a33']),...(night?[...Array.from({length:seerCount},(_,i)=>['\u5360\u3044\u4f4d\u7f6e'+(seerCount>1?i+1:''),'\u5360\u3044\u7d50\u679c'+(seerCount>1?i+1:'')]).flat(),'\u8972\u6483\u4f4d\u7f6e',...(native?['死亡通知',...(publication?['公開結果']:[])]:[])]:['\u51e6\u5211\u4f4d\u7f6e'])];
+    const start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'夜':'昼'}`,...(native?[]:['内訳']),...(night?[...Array.from({length:seerCount},(_,i)=>['占い位置'+(seerCount>1?i+1:''),'占い結果'+(seerCount>1?i+1:'')]).flat(),'襲撃位置',...(native?['死亡通知']:[])]:[...Array(updateCount(phase)).fill('盤面更新'),'処刑位置'])];
     const group=el('div',undefined,'compact-phase-group'+(night?' night':''));group.dataset.phaseGroup=phase;headers.append(group);selectionHeads.push({element:group,start,end:start+labels.length-1});
     labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;headers.append(h);headings.push(h);});
    }
    for(const item of entries){
     let row;if(item.kind==='action'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;}
     else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);if(item.kind==='board'||!item.hideGo)row.dataset.treeItem=d.node;else row.dataset.treeComposition=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;
-     const main=el('button',(item.kind==='composition'?item.text+' · 村 '+d.village_win:(item.arrival?item.arrival+' · ':'')+`B${d.node} · ${d.alive.length}人 · 村 ${d.village_win}`),'compact-tree-select');main.type='button';main.onclick=()=>{inspect(d);openAnalysis(d,item.id);};main.disabled=item.kind!=='board';if(item.kind==='board')main.setAttribute('aria-haspopup','dialog');const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1'||d.public_current===false;go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node})}),result=await response.json();if(!response.ok)throw Error(result.error);if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo&&item.kind==='board'&&d.public_current!==false)row.append(go);}
+     const main=el('button',item.update?item.text+(d.village_win==null?'':' · 村 '+d.village_win):(item.kind==='composition'?item.text+' · 村 '+d.village_win:(item.arrival?item.arrival+' · ':'')+(d.snapshot_only?'昼開始':`B${d.node}`)+` · ${d.alive.length}人`+(d.village_win==null?'':' · 村 '+d.village_win)),'compact-tree-select');main.type='button';main.onclick=()=>{inspect(d);openAnalysis(d,item.id);};main.disabled=item.kind!=='board';if(item.kind==='board')main.setAttribute('aria-haspopup','dialog');const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1'||d.public_current===false;go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node})}),result=await response.json();if(!response.ok)throw Error(result.error);if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo&&item.kind==='board'&&d.public_current!==false)row.append(go);}
     if(item.kind!=='action')row.querySelectorAll('button').forEach(guardDragClick);row.dataset.treeKey=item.key;row.style.top=(item.cy-13.5)+'px';row.dataset.center=String(item.cy);if(item.span)row.dataset.span=item.span.join(',');item.element=row;canvas.append(row);
     item.ownHeight=ROW;
     if(item.kind==='board'&&analysisOpen.has(item.id)){const panel=inlineAnalysis(item);panel.style.maxWidth=Math.min(420,Math.max(220,frame.clientWidth-40))+'px';canvas.append(panel);item.panel=panel;item.ownHeight=ROW+8+panel.getBoundingClientRect().height;}

@@ -337,7 +337,35 @@ class CalculationTree:
                 child_key=self.register(child,route);entry['node']=child_key
                 self.nodes[child_key].update(public_bundle=True,public_digest=public,public_reach=str(reach if not counter else F()),counterfactual=counter,hidden_contexts=[])
                 self.nodes[child_key]['distribution_origin']=(key,program,public)
-        record['public_bundles']=result;return result
+        record['public_bundles']=result
+        if any(step.kind=='publication' for leaf in program.leaves for step in leaf.steps):
+            from .tree_public_updates import state_summary,publication_label
+            with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
+                arrivals={}
+                for group in groups:
+                    living=tuple(p for p in group if p in node.read().public.alive)
+                    if not living:continue
+                    for counter in (False,True):
+                        for reach,before in public_observation_orbits(self.engine,node.read(),living[0],groups,counter=counter,publish=False):
+                            if before.public.winner:continue
+                            total=reach*len(living)
+                            updates=[]
+                            for public,entry in result.items():
+                                if entry['target']!=living[0] or counter not in entry['sources']:continue
+                                weight,after=entry['sources'][counter]
+                                if after.public.winner!=before.public.winner:continue
+                                updates.append(dict(node=entry['node'],probability=str(weight/total),label=publication_label(before,after)))
+                            if not updates:continue
+                            identity='arrival:'+key+':'+digest(before)+':'+str(counter)
+                            value=sum((F(u['probability'])*self.value(u['node']) for u in updates),F())
+                            arrival=dict(id=identity,state=state_summary(before.public,before.private,identity,self.data.game_data,self.role_order,value=value,past=before.past),updates=updates,kind='generated_updates')
+                            arrivals[identity]=arrival
+                            record.setdefault('arrival_sources',{})[identity]=before
+                            for update in updates:
+                                record_after=self.nodes[update['node']]
+                                if 'day_arrival' not in record_after or not counter:record_after['day_arrival']=arrival
+                record['day_arrivals']=arrivals
+        return result
 
     def _public_context(self,key,public,prefix,counter=False):
         from .public_convergence import condition_prefix
@@ -579,7 +607,7 @@ class CalculationTree:
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
         return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day,'column_phase':point.phase,'alive':list(b.alive),'winner':b.winner,
-            'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
+            'day_arrival':row.get('day_arrival'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],
@@ -621,4 +649,10 @@ class CalculationTree:
                 for choice in self.nodes[parent]['actions'] or []:
                     for branch in choice['branches']:
                         child=branch['node'];items[child]=self.summary(child,True);pending.append(child)
-            result['items']=items;return result
+            result['items']=items
+            if key==self.root:
+                if not hasattr(self,'input_updates'):
+                    from .tree_public_updates import input_timeline
+                    self.input_updates=input_timeline(self.calculation._ClosedCalculation__origin_data,self.role_order)
+                result['input_timeline']=self.input_updates
+            return result

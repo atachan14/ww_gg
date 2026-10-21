@@ -75,7 +75,7 @@ class MixtureEvidence:
     def __call__(self,source):return mix(tuple((weight,transport_source(request.roles(),mapping)) for request,mapping,weight in self.components))
 
 
-def observation_branches(engine,source,target,*,counter=False):
+def observation_branches(engine,source,target,*,counter=False,publish=True):
     from .actor_information import wolf_information_keys,condition_wolf_choice
     from .evaluation_branch import ActionInputs
     b=source.public;policies={}
@@ -91,14 +91,14 @@ def observation_branches(engine,source,target,*,counter=False):
     rows=[]
     for death in engine.action_policy.outcomes(b,payload,target):
         child=engine.action_policy._project_roles(b,payload,death,target)
-        reports=engine.report_children(child) if child.public.winner is None else ()
+        reports=engine.report_children(child) if publish and child.public.winner is None else ()
         for weight,after in (tuple((p,c) for q,p,c in reports) if reports else ((F(1),child),)):
             rows.append((mass*death.probability*weight,replace(after,board_data=None,provenance=None)))
     return tuple(rows)
 
-def public_observation_orbits(engine,source,target,groups,*,counter=False):
+def public_observation_orbits(engine,source,target,groups,*,counter=False,publish=True):
     buckets={}
-    for weight,after in observation_branches(engine,source,target,counter=counter):
+    for weight,after in observation_branches(engine,source,target,counter=counter,publish=publish):
         mapping=public_transport(source,after,groups);moved=transport_source(after,mapping)
         buckets.setdefault(public_key(moved),[]).append((weight,moved))
     return tuple((sum((w for w,s in rows),F()),mix(rows)) for rows in buckets.values())
