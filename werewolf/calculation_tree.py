@@ -298,14 +298,33 @@ class CalculationTree:
         if 'public_bundles' in record:return record['public_bundles']
         node=record['node'];program=node._night_program();groups=program.groups;result={}
         with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
-            for group in groups:
-                alive=tuple(p for p in group if p in node.read().public.alive)
-                if not alive:continue
-                target=alive[0]
-                for counter in (False,True):
-                    for reach,source in public_observation_orbits(self.engine,node.read(),target,groups,counter=counter):
-                        public=digest(source);entry=result.setdefault(public,dict(target=target,sources={}))
-                        entry['sources'][counter]=(reach*len(alive),source)
+            if getattr(program,'belief_flow',None) is not None:
+                from .anonymous_materialization import source as named_boundary
+                from .public_convergence import public_transport,transport_source
+                flow=program.belief_flow;templates={}
+                for leaf in program.leaves:
+                    mapping=public_transport(node.read(),leaf.source,groups)
+                    moved=transport_source(leaf.source,mapping)
+                    templates.setdefault((mapping[leaf.target-1],moved.public.winner),moved)
+                for observation in flow.observations():
+                    for counter in (False,True):
+                        try:reach,owned=flow.branch(observation,counter=counter)
+                        except ValueError as error:
+                            if str(error)!='Anonymous observation has zero support':raise
+                            continue
+                        source=named_boundary(owned,templates[observation])
+                        self.engine.anonymous_beliefs[source]=owned
+                        public=digest(source);entry=result.setdefault(public,dict(target=observation[0],sources={},owned={},flow=flow,observation=observation))
+                        entry['sources'][counter]=(reach,source);entry['owned'][counter]=owned
+            else:
+                for group in groups:
+                    alive=tuple(p for p in group if p in node.read().public.alive)
+                    if not alive:continue
+                    target=alive[0]
+                    for counter in (False,True):
+                        for reach,source in public_observation_orbits(self.engine,node.read(),target,groups,counter=counter):
+                            public=digest(source);entry=result.setdefault(public,dict(target=target,sources={}))
+                            entry['sources'][counter]=(reach*len(alive),source)
             for public,entry in result.items():
                 counter=False if False in entry['sources'] else True
                 reach,source=entry['sources'][counter]
@@ -319,7 +338,11 @@ class CalculationTree:
         from .public_convergence import condition_prefix
         from dataclasses import asdict
         bundles=self._public_night_bundles(key);entry=bundles[public];mass,source=entry['sources'][counter]
-        if prefix:
+        if 'owned' in entry:
+            from .anonymous_materialization import source as named_boundary
+            relative,owned=entry['flow'].branch(entry['observation'],prefix,counter)
+            source=named_boundary(owned,source);self.engine.anonymous_beliefs[source]=owned
+        elif prefix:
             relative,source=condition_prefix(source,self.nodes[key]['node'].read(),self.nodes[key]['node']._night_program().groups,prefix)
         child=self.nodes[key]['node']._public_night(source,entry['target'],public,self.nodes[key]['node']._night_program().groups,prefix,counter)
         route=(*self.nodes[key]['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[asdict(step) for step in prefix],counter=counter)})

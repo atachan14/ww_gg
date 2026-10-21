@@ -153,6 +153,10 @@ class ClosedCalculation:
                 full=FullTraceOrigin(SavedOrigin(origin_data,engine.rules,strategy,project_public=False))()
                 root=self.__node(full,groups,(('full_trace',),))
             else:root=self.__node(source,groups,())
+            if anonymous and not game.get('mediums',0) and not game.get('hunters',0) and all(c=='latent' for c in source.public.claims) and not source.past:
+                from .anonymous_belief import Belief
+                engine.anonymous_beliefs={root.read():Belief.initial(groups,dict(wolf=game['wolves'],seer=game.get('seers',0),villager=game['players']-game['wolves']-game.get('seers',0)),engine.rules.initial_seer)}
+            else:engine.anonymous_beliefs={}
             probability=F(1)
             for target in saved_target:
                 mass,root=root.observe(target)
@@ -231,6 +235,8 @@ class _Node:
         return mass,self.__calculation._ClosedCalculation__node(child,groups,(*self.__path,('owner',information,child.observer)),view)
 
     def _compositions(self):
+        belief=getattr(self.__calculation._ClosedCalculation__engine,'anonymous_beliefs',{}).get(self.__source)
+        if belief is not None:return belief.compositions()
         from .physical_selection import counts
         result={};tick(len(self.__source.private.hypotheses))
         for h in self.__source.private.hypotheses:
@@ -249,6 +255,15 @@ class _Node:
         from .physical_selection import PhysicalSelectionEvidence,freeze
         selection=freeze(selection);source=PhysicalSelectionEvidence(kind,selection)(self.__source)
         groups=self.__groups
+        e=self.__calculation._ClosedCalculation__engine
+        belief=getattr(e,'anonymous_beliefs',{}).get(self.__source)
+        if belief is not None and kind=='composition':
+            from dataclasses import replace
+            def living(atom):
+                pop=atom.population
+                count=lambda role:sum(p.alive and p.role==role for p in pop.people)+sum(c.count for c in pop.cells if c.alive and c.role==role)
+                return count('wolf'),0,count('seer'),0,count('villager')
+            e.anonymous_beliefs[source]=replace(belief,p=belief.p.condition(lambda atom:living(atom)==selection)[1])
         if kind=='joint':groups=_fix(groups,(*selection[1],*(p for pair in selection[2] for p in pair)))
         return self.__calculation._ClosedCalculation__node(source,groups,(*self.__path,('physical',kind,selection)),self.__view)
 
@@ -290,6 +305,10 @@ class _Node:
             acquired,outcomes=resolve_action(s.public,payload,target,e.action_policy,terminal_payoffs=False)
             children=tuple((o,e.action_policy.project(s.public,acquired,o,target)) for o in outcomes)
         groups=_fix(self.__groups,(target,))
+        belief=e.anonymous_beliefs.get(s) if getattr(e,'anonymous_nights',False) else None
+        if belief is not None and s.public.phase=='day':
+            owned={key:child for mass,key,child in belief.execute(target)}
+            for outcome,child in children:e.anonymous_beliefs[child]=owned[child.public.winner].refine(groups)
         return tuple(ActionBranch(o.probability,self.__calculation._ClosedCalculation__node(c,groups,(*self.__path,('action',target,outcome_key(o))),self.__view)) for o,c in children)
 
     def observe(self,target):

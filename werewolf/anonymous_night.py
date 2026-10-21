@@ -194,56 +194,83 @@ def compile_anonymous(engine,source,groups):
     cache=getattr(engine,'anonymous_programs',None)
     if cache is None:engine.anonymous_programs={};cache=engine.anonymous_programs
     if key in cache:return cache[key]
-    families={}
-    for h in source.private.hypotheses:
-        tick();population,transport=ingest(h,groups,b.alive)
-        if population not in families:families[population]=[F(),h,transport]
-        families[population][0]+=h.mass
-    # Named Q is acquired once using the existing exact public kernel.
-    public=engine.acquire(b,source.public_state);leaves=[];policies={};offsets={};offset=0;native_paths=0
-    for population,(family_mass,h,transport) in families.items():
+    belief=getattr(engine,'anonymous_beliefs',{}).get(source)
+    if belief is not None:belief=belief.refine(groups)
+    policies={};offsets={};offset=0;native_paths=0
+    def commit(h):
+        nonlocal offset
         info=WolfInformation.from_hypothesis(h)
         if info not in policies:
             with engine.actor_scope(info):policies[info]=dict(engine.wolf_policy(b,source.public_state,source.past,info.initial_roster,info.attacks))
             offsets[info]=offset;offset+=len(policies[info])
-        policy=policies[info]
-        for scan in scans(population,b.day+1):
-            def committed(choice):
+        return info,policies[info]
+    if belief is not None:
+        from .anonymous_materialization import representative,expand
+        def factory(atom):
+            h,transport=representative(atom,groups);info,policy=commit(h)
+            def committed(choice,bindings):
                 extra=((choice.target,choice.fresh_cell),) if choice.fresh_cell is not None else ()
-                names=transport.apply((*scan.bindings,*extra));return policy.get(names[choice.target],F())
-            for path in attacks(scan,b.day,policy=committed):
-                native_paths+=1;names=transport.apply(path.bindings);target=names[path.steps[-1].value]
-                obtained=tuple(sorted(Acquisition(a.day,names[a.actor],names[a.target],a.color) for a in path.population.scans))
-                own=replace(source.private,hypotheses=(replace(h,acquisitions=obtained,mass=F(1)),),rosters=source.private.rosters+(b.alive,))
-                payload=ActionInputs(public,source.past,own,None,physical_board(b,own,source.physical))
-                deaths=engine.action_policy.outcomes(b,payload,target)
-                symbols,binding_map=symbolic_steps(path,groups)
-                for index,death in enumerate(deaths):
-                    # Pure common Q/P projection; do not regenerate scans from
-                    # the representative's named action recipe here.
-                    child=engine.action_policy._project_roles(b,payload,death,target)
-                    reports=engine.report_children(child) if child.public.winner is None else ()
-                    rows=tuple((mass,after,report_signature(after)) for q,mass,after in reports) if reports else ((F(1),child,None),)
-                    for report_mass,after,report in rows:
-                        steps=tuple(replace(step,public_fact=child.public.winner) if step.kind=='death_notice' else step for step in symbols)
-                        if child.public.winner is None and any(claim in ('seer','medium') for claim in b.claims):
-                            from .public_convergence import public_transport,transport_record
-                            mapping=public_transport(source,after,groups)
-                            published=[transport_record(r,mapping) for r in after.past if r not in source.past]
-                            text='／'.join('Player'+str(r.player)+'：Player'+str(r.target)+('白' if r.color=='white' else '黒') for r in published)
-                            steps=(*steps,SymbolStep('publication',None,text or '公開なし'))
-                        wolves=tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1)))
-                        acquired=tuple(sorted((a.player,a.target) for a in obtained if a.day==b.day+1))
-                        factor=family_mass*death.probability*report_mass
-                        leaf_h=after.private.hypotheses[0]
-                        named=[]
-                        for ref,symbol in binding_map:
-                            if type(ref)is int:person=names[ref]
-                            else:
-                                _,cell,slot=ref;person=tuple(p for p in transport.free[cell] if p not in names)[slot]
-                            named.append((symbol.index,person))
-                        leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h),tuple(named)))
-    result=Program(source,groups,leaves,dict(named_prior_atoms=len(source.private.hypotheses),relational_families=len(families),structural_joint_paths=native_paths,permutation_checks=0))
+                names=transport.apply((*bindings,*extra));return policy.get(names[choice.target],F())
+            return committed
+        flow=belief.night(factory)
+        public=replace(source.public_state,hypotheses=expand(flow.acquired_q,groups),rosters=source.public_state.rosters+(b.alive,))
+        def futures():
+            for row in flow.rows:
+                h,transport=representative(row.before,groups)
+                yield row.counter/row.path.counter,h,transport,row.path
+        family_count=len(belief.p.rows)
+    else:
+        flow=None;families={}
+        for h in source.private.hypotheses:
+            tick();population,transport=ingest(h,groups,b.alive)
+            if population not in families:families[population]=[F(),h,transport]
+            families[population][0]+=h.mass
+        public=engine.acquire(b,source.public_state)
+        def futures():
+            for population,(family_mass,h,transport) in families.items():
+                info,policy=commit(h)
+                for scan in scans(population,b.day+1):
+                    def committed(choice):
+                        extra=((choice.target,choice.fresh_cell),) if choice.fresh_cell is not None else ()
+                        names=transport.apply((*scan.bindings,*extra));return policy.get(names[choice.target],F())
+                    for path in attacks(scan,b.day,policy=committed):yield family_mass,h,transport,path
+        family_count=len(families)
+    leaves=[]
+    for family_mass,h,transport,path in futures():
+        info,policy=commit(h)
+        native_paths+=1;names=transport.apply(path.bindings);target=names[path.steps[-1].value]
+        obtained=tuple(sorted(Acquisition(a.day,names[a.actor],names[a.target],a.color) for a in path.population.scans))
+        own=replace(source.private,hypotheses=(replace(h,acquisitions=obtained,mass=F(1)),),rosters=source.private.rosters+(b.alive,))
+        payload=ActionInputs(public,source.past,own,None,physical_board(b,own,source.physical))
+        deaths=engine.action_policy.outcomes(b,payload,target)
+        symbols,binding_map=symbolic_steps(path,groups)
+        for index,death in enumerate(deaths):
+            # Pure common Q/P projection; do not regenerate scans from
+            # the representative's named action recipe here.
+            child=engine.action_policy._project_roles(b,payload,death,target)
+            reports=engine.report_children(child) if child.public.winner is None else ()
+            rows=tuple((mass,after,report_signature(after)) for q,mass,after in reports) if reports else ((F(1),child,None),)
+            for report_mass,after,report in rows:
+                steps=tuple(replace(step,public_fact=child.public.winner) if step.kind=='death_notice' else step for step in symbols)
+                if child.public.winner is None and any(claim in ('seer','medium') for claim in b.claims):
+                    from .public_convergence import public_transport,transport_record
+                    mapping=public_transport(source,after,groups)
+                    published=[transport_record(r,mapping) for r in after.past if r not in source.past]
+                    text='／'.join('Player'+str(r.player)+'：Player'+str(r.target)+('白' if r.color=='white' else '黒') for r in published)
+                    steps=(*steps,SymbolStep('publication',None,text or '公開なし'))
+                wolves=tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1)))
+                acquired=tuple(sorted((a.player,a.target) for a in obtained if a.day==b.day+1))
+                factor=family_mass*death.probability*report_mass
+                leaf_h=after.private.hypotheses[0]
+                named=[]
+                for ref,symbol in binding_map:
+                    if type(ref)is int:person=names[ref]
+                    else:
+                        _,cell,slot=ref;person=tuple(p for p in transport.free[cell] if p not in names)[slot]
+                    named.append((symbol.index,person))
+                leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h),tuple(named)))
+    result=Program(source,groups,leaves,dict(named_prior_atoms=0 if belief is not None else len(source.private.hypotheses),relational_families=family_count,structural_joint_paths=native_paths,permutation_checks=0,belief_owned=belief is not None))
+    result.belief=belief;result.belief_flow=flow
     cache[key]=result;return result
 
 
