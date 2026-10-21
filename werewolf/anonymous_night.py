@@ -61,7 +61,7 @@ def ingest(h,groups,alive):
 class Symbol:
     index:int
     members:tuple
-    def label(self):return '['+','.join(map(str,self.members))+'の'+alias(self.index)+']'
+    def label(self):return str(self.members[0]) if len(self.members)==1 else '['+','.join(map(str,self.members))+'の'+alias(self.index)+']'
 
 @dataclass(frozen=True)
 class SymbolStep:

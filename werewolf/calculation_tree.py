@@ -121,7 +121,8 @@ class CalculationTree:
                         if belief is not None else dict(e.day_scores(b,s.public_state,s.past)))
                 best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
                 legal=legal_targets(s.physical,self.rules,self.strategy)
-                orbits=e.target_orbits(legal) if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)
+                orbits=(getattr(e,'public_action_orbits',{}).get((b,s.public_state,s.past))
+                        or (e.target_orbits(legal) if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)))
                 for orbit in orbits:
                     target=orbit[0]
                     rows.append({'node':node,'target':target,'orbit':orbit,'q_score':scores[target],

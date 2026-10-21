@@ -209,6 +209,13 @@ class GroupedForecast(InformationSetForecast):
         groups=() if self.strategy.day=='max' and b.initial_hunter_count else _frame_groups(self.groups,b,past,observer,target=target)
         with self.group_scope(groups):yield
 
+    def score_day_targets(self,b,s,past):
+        orbits=getattr(self,'public_action_orbits',{}).get((b,s,past))
+        if orbits is None:yield from super().score_day_targets(b,s,past);return
+        for orbit in orbits:
+            value=self.act(b,s,past,orbit[0],s,None)
+            for player in orbit:yield player,value
+
     def equivalent_targets(self,b,s,x,y,past=()):
         if self.max_grouped and any(x in group and y in group for group in self.groups):return True
         return super().equivalent_targets(b,s,x,y,past)

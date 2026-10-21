@@ -156,6 +156,10 @@ class ClosedCalculation:
                 full=FullTraceOrigin(SavedOrigin(origin_data,engine.rules,strategy,project_public=False))()
                 root=self.__node(full,groups,(('full_trace',),))
             else:root=self.__node(source,groups,())
+            # Rooted relational action orbits are not population partitions.
+            from .public_relation_orbits import initial_orbits
+            actual=root.read()
+            engine.public_action_orbits={(actual.public,actual.public_state,actual.past):initial_orbits(origin_data.to_game())}
             if anonymous and not source.public.winner and not engine.rules.allow_self_bite and not strategy.include_self_bite and not game.get('mediums',0) and not game.get('hunters',0) and all(c=='latent' for c in source.public.claims) and not source.past:
                 from .anonymous_belief import Belief
                 engine.anonymous_beliefs={root.read():Belief.initial(groups,dict(wolf=game['wolves'],seer=game.get('seers',0),villager=game['players']-game['wolves']-game.get('seers',0)),engine.rules.initial_seer)}
