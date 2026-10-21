@@ -77,6 +77,8 @@ class CalculationTree:
         self.snapshot=input_snapshot(data)
         self.nodes={};self.sources={};self.keys={};self.values={};self.traces={};self.lock=RLock()
         self.root=self.register(self.calculation.root)
+        from .navigation_history import NavigationHistory
+        self.navigation=NavigationHistory(self.calculation.root)
         # Root value is the actual BoardOverview result, never a fixture value.
         self.nodes[self.root]['value']=forecast.village_win
 
