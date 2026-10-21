@@ -1,38 +1,30 @@
 "use strict";
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory();else root.TreeLayout=factory();})(typeof globalThis==='object'?globalThis:this,()=>{
- // Solve top[i+1] >= top[i] + height[i] + gap with the least squared
- // displacement from the children's centers (isotonic regression).
- function pack(rows,gap){
-  const blocks=[];let offset=0;
-  for(let i=0;i<rows.length;i++){
-   const item=rows[i],block={start:i,end:i,sum:item.cy-13.5-offset,count:1};
-   item.offset=offset;blocks.push(block);offset+=item.ownHeight+gap;
-   while(blocks.length>1){const b=blocks.at(-1),a=blocks.at(-2);if(a.sum/a.count<=b.sum/b.count)break;blocks.splice(-2,2,{start:a.start,end:b.end,sum:a.sum+b.sum,count:a.count+b.count});}
-  }
-  for(const block of blocks)for(let i=block.start;i<=block.end;i++)rows[i].cy=block.sum/block.count+rows[i].offset+13.5;
- }
  function arrange(entries,{row=44,gap=14,padding=12}={}){
   // A skipped ability column still needs a visible lane. Without these routing
   // slots, a long edge can pass directly behind an unrelated collapsed Item.
-  const proxies=new Map(entries.map(item=>[item,{column:item.column,ownHeight:Math.max(row,item.ownHeight||row),children:[]} ])),all=[...proxies.values()];
+  const proxies=new Map(entries.map(item=>[item,{column:item.column,ownHeight:Math.max(row,item.ownHeight||row),children:[],incoming:0,shared:!!item.shared} ])),all=[];
   for(const item of entries)for(const edge of item.children){
    const route=[];let parent=proxies.get(item);
    for(let column=item.column+1;column<edge.item.column;column++){
-    const slot={column,ownHeight:row,children:[]};all.push(slot);route.push(slot);parent.children.push({item:slot});parent=slot;
+    const slot={column,ownHeight:row,children:[],incoming:1};route.push(slot);parent.children.push({item:slot});parent=slot;
    }
-   parent.children.push({item:proxies.get(edge.item)});edge.route=route;
+   const target=proxies.get(edge.item);target.incoming++;parent.children.push({item:target});edge.route=route;
   }
-  const columns=new Map();
-  all.forEach((item,index)=>{item.order=index;if(!columns.has(item.column))columns.set(item.column,[]);columns.get(item.column).push(item);});
-  // All links point to a later stage. Shared descendants remain one entry.
-  // Process final children before every ancestor, without old subtree spacers.
-  for(const column of [...columns.keys()].sort((a,b)=>b-a)){
-   const rows=columns.get(column);
-   for(const item of rows){const centers=item.children.map(edge=>edge.item.cy);item.cy=centers.length?(Math.min(...centers)+Math.max(...centers))/2:13.5;}
-   rows.sort((a,b)=>a.cy-b.cy||a.order-b.order);pack(rows,gap);
-  }
-  const shift=padding-Math.min(...all.map(item=>item.cy-13.5));
-  for(const item of all)item.cy+=shift;
+  // Visit original edges in their semantic order, including their empty-column
+  // footprint. Shared destinations are visited once, never used to sort rows.
+  const seen=new Set();function visit(item){if(seen.has(item))return;seen.add(item);all.push(item);for(const edge of item.children)visit(edge.item);}visit(proxies.get(entries[0]));
+  const columns=new Map();for(const item of all){if(!columns.has(item.column))columns.set(item.column,[]);columns.get(item.column).push(item);}
+  // First-child chains share a starting row. Shared Boards start independent
+  // blocks, so their future expansion cannot reorder the incoming branches.
+  const owner=new Map(all.map(item=>[item,item]));function find(item){const parent=owner.get(item);if(parent===item)return item;const root=find(parent);owner.set(item,root);return root;}
+  for(const item of all){const first=item.children[0]?.item;if(first&&first.incoming===1&&!first.shared)owner.set(find(first),find(item));}
+  const blocks=new Map();for(const item of all){const root=find(item);if(!blocks.has(root))blocks.set(root,{top:padding,next:new Map(),pending:0});}
+  // Only original per-column order and measured occupied heights constrain
+  // spacing. Longest paths remove all slack; no centers or barycenters exist.
+  for(const rows of columns.values())for(let i=1;i<rows.length;i++){const before=blocks.get(find(rows[i-1])),after=blocks.get(find(rows[i])),distance=rows[i-1].ownHeight+gap;if(!before.next.has(after))after.pending++;before.next.set(after,Math.max(before.next.get(after)||0,distance));}
+  const ready=[...blocks.values()].filter(block=>!block.pending);for(let i=0;i<ready.length;i++){const block=ready[i];for(const [next,distance] of block.next){next.top=Math.max(next.top,block.top+distance);if(!--next.pending)ready.push(next);}}
+  for(const item of all)item.cy=blocks.get(find(item)).top+13.5;
   for(const item of entries){item.cy=proxies.get(item).cy;item.span=[item.cy-13.5,item.cy-13.5+Math.max(row,item.ownHeight||row)];}
   return Math.max(...all.map(item=>item.cy-13.5+item.ownHeight));
  }
