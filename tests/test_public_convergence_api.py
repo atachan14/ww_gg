@@ -55,3 +55,18 @@ class PublicConvergenceAPITests(unittest.TestCase):
    source=tree.nodes[context]['node'].read();current=GeneratedCurrent(tree,context);self.assertEqual(tuple(current.source),tuple(source))
   for bundle in tree.nodes[key]['public_bundles'].values():
    self.assertGreaterEqual(sum(weight for weight,source in bundle['sources'].values()),0)
+
+ def test_actual_API_keeps_seer_present_and_absent_alternatives_before_expansion(self):
+  from app import create_app
+  for policy in ('random','max'):
+   app=create_app({'TESTING':True,'SECRET_KEY':'partial-layout-api','GAME_TREE_PREVIEW':True,'ANONYMOUS_NIGHT_PREVIEW':True})
+   client=app.test_client();client.post('/start',data={'citizens':'3','seers':'1','wolves':'1','day':policy,'night':policy,'fake_reports':policy})
+   root=client.get('/game-tree?expand=1').json
+   night=next(b['node'] for a in root['actions'] for b in a['branches'] if not root['items'][b['node']]['winner'])
+   stages=client.get('/game-tree',query_string=dict(node=night,expand='1')).json['night_stages']['branches']
+   self.assertEqual(len(stages),2)
+   by_kind={b['kind']:b for b in stages}
+   self.assertEqual({kind:F(b['probability']) for kind,b in by_kind.items()},{'wolf_target':F(1,4),'seer_target':F(3,4)})
+   self.assertNotEqual(by_kind['wolf_target']['label'],by_kind['seer_target']['label'])
+   self.assertEqual({b['kind'] for b in by_kind['wolf_target']['children']['branches']},{'death_notice'})
+   self.assertEqual({b['kind'] for b in by_kind['seer_target']['children']['branches']},{'seer_result'})
