@@ -3100,3 +3100,27 @@ Verification:49JS tests pass (formatting plus existing expansion, variable-heigh
 Added `NavigationHistory` over immutable `SolverState` and immutable `Occurrence` records. An occurrence owns its parent, JSON-owned selector, exact selection weight and branch-local bijection; a repeated solver input can be referenced by multiple paths without replacing the first parent. Solver identity includes fixed rules, configured strategy and constructed groups as well as complete Q/P source. This avoids accidentally sharing different policies after editable-board integration. Manual-public edges require selection weight0; the history is not an evaluator and cannot alter the original solver expectation. Selectors are copied through canonical JSON, and all name maps are full validated bijections. `CalculationTree` owns this new history but existing UI/routes are intentionally unchanged until the cursor integration is verified.
 
 Phase1 evidence:4 new tests cover reconvergence with different parent/path/name mapping, exact shared node cold reconstruction, manual zero-edge source value/old-child invariance, selector immutability, policy separation and mapping/inverse/composition. Together with existing publication/relation tests13pass. No preview restart or new persistent port in this phase. Remaining migration is cursor/ordinary Board integration, manual observation adapters and persistent root ownership, then concrete representative transports. Footer's existing `Progress.settled_village/settled_wolf` must travel with navigation occurrences, so moving to a continuing child cannot drop settled terminal mass; this is a discovered adapter requirement, not a gameplay rule change.
+
+
+### Navigation controller and replay journal (development, not yet enabled in UI)
+
+NavigationGame now owns a cursor over immutable solver states. Footer actions keep
+settled probability separately from the continuing conditional Board; manual CO
+and current-day reports condition Q and P independently through existing support
+filters, append zero-selection-weight occurrences, and never modify source values.
+Historical report edits and unsupported medium input remain explicit unsupported
+operations rather than invented evidence or a reseeded prior.
+
+NavigationStore writes only immutable root inputs and replay recipes atomically,
+with revision checks and in-memory rollback on validation/persistence failure.
+Fresh stores rebuild exact sources instead of importing posterior snapshots.
+Representative selection constructs full bijections from population groups or
+rooted public-relation forests. Linked CO reports move together; no independent
+actor/target swaps, permutation search, or payoff equality test is used.
+
+Evidence: 19 focused tests pass (navigation history4, manual input3, controller4,
+journal2, existing public relation6), including independent named transitions for
+choices2–5, coupled (1 2)(3 4), cold restore, repeated manual updates, Q/P separation,
+settled mass and failed-save rollback. These APIs are not yet wired to HTTP/Tree;
+18821 still serves the accepted UI. Persistent Tree occurrences, ordinary editable
+Current and UI regression verification remain required before enabling them.
