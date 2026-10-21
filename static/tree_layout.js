@@ -37,37 +37,21 @@
   return Math.max(...all.map(item=>item.cy-13.5+item.ownHeight));
  }
 
- // Keep at least 26px clear after the 22px collapsed arrow before a track. Only the
- // first trunk of siblings from the same source can share a vertical track.
- function wiring(entries,columnCount){
-  const gaps=Array.from({length:columnCount},()=>[]),edges=[],incoming=new Map();
-  for(const from of entries)for(const edge of from.children){const connection={from,to:edge.item,probability:edge.probability,original:edge,route:[from,...edge.route,edge.item],tracks:[]};edges.push(connection);if(!incoming.has(edge.item))incoming.set(edge.item,[]);incoming.get(edge.item).push(connection);
-   for(let i=0;i<connection.route.length-1;i++){const column=connection.route[i].column,key=i===0?from:connection;let track=gaps[column].indexOf(key);if(track<0){track=gaps[column].length;gaps[column].push(key);}connection.tracks.push(track);}
-  }
-  const labelWidth=p=>Math.max(12,String(p).length*6+4),reserve=Math.max(32,...edges.map(e=>labelWidth(e.probability)+16));
-  const widths=gaps.map(tracks=>48+Math.max(1,tracks.length)*12+reserve);
-  function draw(offsets,columns){
-   const stubs=entries.filter(n=>n.closedContinuation).map(n=>({from:n,points:[[n.x+n.width,n.cy],[n.x+n.width+22,n.cy]]})),labels=[];
-   for(const edge of edges){edge.route=[edge.from,...edge.original.route,edge.to];const points=[[edge.from.x+edge.from.width,edge.from.cy]],peers=incoming.get(edge.to),port=peers.length>1?(peers.indexOf(edge)/(peers.length-1)-.5)*16:0;
-    for(let i=0;i<edge.route.length-1;i++){const a=edge.route[i],b=edge.route[i+1],column=a.column,x=offsets[column]+columns[column],track=x+48+edge.tracks[i]*12,y=i===edge.route.length-2?b.cy+port:b.cy;
-     points.push([track,points.at(-1)[1]],[track,y],[offsets[b.column],y]);if(i<edge.route.length-2)points.push([offsets[b.column]+columns[b.column],y]);
-    }
-    edge.points=points.filter((p,i)=>!i||p[0]!==points[i-1][0]||p[1]!==points[i-1][1]);
+ // Wiring consumes final geometry only. No per-edge track allocation, port
+ // displacement, widening, or label obstacle search changes the node layout.
+ function connect(entries,offsets,widths){
+  const edges=entries.flatMap(from=>from.children.map(edge=>({from,to:edge.item,probability:edge.probability,route:[from,...edge.route.map(slot=>({...slot,x:offsets[slot.column],width:widths[slot.column]})),edge.item]}))),incoming=new Map(),joins=new Map();
+  for(const edge of edges)incoming.set(edge.to,(incoming.get(edge.to)||0)+1);
+  for(const edge of edges){const start=edge.from.x+edge.from.width;let d=`M${start},${edge.from.cy}`;
+   for(let i=1;i<edge.route.length;i++){const a=edge.route[i-1],b=edge.route[i],last=i===edge.route.length-1,merge=last&&incoming.get(edge.to)>1,x=a.x+a.width,guard=x+20,end=b.x-(merge?14:0),mid=(guard+end)/2;
+    d+=` H${guard} C${mid},${a.cy} ${mid},${b.cy} ${end},${b.cy}`;
+    if(!last)d+=` H${b.x+b.width}`;
+    else if(merge)joins.set(edge.to,{to:edge.to,x:end,y:b.cy,d:`M${end},${b.cy} H${b.x}`});
    }
-   // Prefer labels near their destination, after the split, and avoid other
-   // wires and labels. Dense convergences can use earlier free segments.
-   const segments=points=>points.slice(1).map((p,i)=>({a:points[i],b:p}));
-   const intersects=(r,s)=>{const [a,b]=[s.a,s.b];return a[0]===b[0]?a[0]>r.x&&a[0]<r.x+r.width&&Math.max(a[1],b[1])>r.y&&Math.min(a[1],b[1])<r.y+r.height:a[1]>r.y&&a[1]<r.y+r.height&&Math.max(a[0],b[0])>r.x&&Math.min(a[0],b[0])<r.x+r.width;};
-   const rectangles=entries.map(n=>({x:n.x-2,y:n.cy-15.5,width:n.width+4,height:n.ownHeight+4}));
-   for(const edge of edges){if(edge.probability===null)continue;const width=labelWidth(edge.probability),candidates=[];
-    for(const segment of segments(edge.points).reverse()){const [a,b]=[segment.a,segment.b];if(a[1]!==b[1]||b[0]-a[0]<width+4)continue;for(const y of [a[1]-18,a[1]+4])candidates.push({x:b[0]-width-2,y,width,height:14});}
-    const obstacles=edges.filter(e=>e!==edge).flatMap(e=>segments(e.points)).concat(stubs.flatMap(s=>segments(s.points)));
-    edge.label=candidates.find(r=>!rectangles.concat(labels).some(b=>r.x<b.x+b.width&&r.x+r.width>b.x&&r.y<b.y+b.height&&r.y+r.height>b.y)&&!obstacles.some(s=>intersects(r,s)))||candidates.at(-1);
-    if(edge.label)labels.push(edge.label);
-   }
-   return {edges,stubs};
+   edge.d=d;edge.arrow=incoming.get(edge.to)===1;
+   const branch=edge.from.children.length>1,next=edge.route[1];edge.label={x:branch?next.x-30:start+2,y:(branch?next.cy:edge.from.cy)-17};
   }
-  return {widths,draw};
+  return {edges,joins:[...joins.values()],stubs:entries.filter(n=>n.closedContinuation).map(from=>({from,d:`M${from.x+from.width},${from.cy} h12`,x:from.x+from.width+12,y:from.cy}))};
  }
- return {arrange,wiring};
+ return {arrange,connect};
 });
