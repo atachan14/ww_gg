@@ -42,3 +42,11 @@ class TablePreviewTests(unittest.TestCase):
   p=self.draft();p['seers'].append({'day':2,'reporter':1,'target':4,'color':'black'});self.assertEqual(self.send(p,True).status_code,200);before=self.g();cookie=self.c.get_cookie('session');cold=self.a.test_client();cold.set_cookie('session',cookie.value);self.assertEqual(cold.get('/main').status_code,200)
   with cold.session_transaction() as q:self.assertEqual(q['game'],before)
   self.c.post('/back',data={'revision':str(before['revision'])});g=self.g();self.assertEqual(len(g['public_log']['batches']),1);self.assertTrue(all(r['day']==1 for r in g['seer_inputs']))
+
+ def test_cell_editor_page_omits_readonly_legacy_co_add_rows(self):
+  html=self.c.get('/main').get_data(as_text=True)
+  self.assertIn('data-hybrid-table',html)
+  self.assertIn('board_table.js',html)
+  self.assertIn('data-table-update',html)
+  self.assertNotIn('class="co-add-row"',html)
+  self.assertNotIn('id="co-add-1"',html)
