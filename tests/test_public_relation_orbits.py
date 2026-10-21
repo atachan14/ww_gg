@@ -59,3 +59,11 @@ class PublicRelationOrbitTests(unittest.TestCase):
   def labels(stage):
    return [b['label'] for b in stage.get('branches',[])]+[v for b in stage.get('branches',[]) for v in labels(b['children'])]
   text=labels(staged);self.assertTrue(any('2が3を襲撃'==label for label in text));self.assertFalse(any('[2の' in label or '[3の' in label for label in text))
+
+ def test_current_fixed_CO_model_cannot_be_reused_as_a_sequential_Bayes_update(self):
+  two=self.game();one=deepcopy(two);one['claims'][1]='latent';one['seer_inputs']=one['seer_inputs'][:1]
+  laws=[]
+  for game in (one,two):
+   c=ClosedCalculation(BoardData.from_game(game),grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True)
+   source=c.root.read();laws.append((source.public.role_probability(1,'wolf'),sum(h.mass for h in source.private.hypotheses if h.roles[0]&1)))
+  self.assertEqual(laws,[(F(0),F(0)),(F(1,2),F(1,2))])
