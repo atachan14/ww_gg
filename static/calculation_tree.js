@@ -34,11 +34,11 @@
   async function toggle(item){
    if(!item.expandable)return;
    const opened=expansion.toggle(item.key);render(item.key);
-   const d=item.d;
-   if(!opened||!d||d.winner||d.actions||(item.kind==='board'&&d.compositions?.length))return;
-   try{await expansion.load(d.node,()=>load(d.node,true));if(root.isConnected){status.textContent='';render(item.key);}}
+   if(!opened)return;
+   try{await expansion.chain(item.key,entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected){status.textContent='';render(item.key);}});}
    catch(error){if(root.isConnected&&expansion.isOpen(item.key))status.textContent=error.message;}
   }
+
   function render(anchorId){
    const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-key="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
    const entries=[],links=[],ROW=44,GAP=14;let maxPhase=3;
@@ -77,7 +77,7 @@
     const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0);maxPhase=Math.max(maxPhase,phase);
     const next=new Set([...path,id]),compositions=d.compositions||[{node:id,label:'内訳未取得',probability:'1'}];
     const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id,lazy:!c.winner&&!c.actions},choices(c,next,mass(reach,composition.probability)))};});
-    return make('board',base(phase),{d,id,arrival,lazy:!d.winner&&!d.actions},children);
+    return make('board',base(phase),{d,id,arrival,lazy:!d.winner&&!d.compositions?.length},children);
    }
    const complete=build(rootId);if(!complete)return;const tree=expansion.project(complete);
    function place(item,top){item.cy=top+item.height/2;item.span=[top,top+item.height];entries.push(item);let cursor=top;for(const child of item.children){place(child.item,cursor);links.push([item,child.item,child.probability]);cursor+=child.item.height+GAP;}}
@@ -100,6 +100,7 @@
    function segment(kind,at,a,b){if(a===b)return;const map=axes[kind];if(!map.has(at))map.set(at,[]);map.get(at).push([Math.min(a,b),Math.max(a,b)]);}
    for(const [from,to,probability] of links){const x=from.x+from.width,u=to.x,y=from.cy,v=to.cy,mid=(x+u)/2;segment('h',y,x,mid);segment('v',mid,y,v);segment('h',v,mid,u);arrows.set(u+','+v,[u,v]);if(probability!==null){const single=fanout.get(from)===1,label=el('span',probability,'compact-tree-edge');label.style.left=(single?x+2:u-40)+'px';label.style.top=((single?y:v)-17)+'px';label.dataset.edgeProbability=probability;canvas.append(label);}}
    for(const [kind,map] of Object.entries(axes))for(const [at,raw] of map){raw.sort((a,b)=>a[0]-b[0]);const merged=[];for(const interval of raw){const last=merged.at(-1);if(last&&interval[0]<=last[1])last[1]=Math.max(last[1],interval[1]);else merged.push([...interval]);}for(const [a,b] of merged){const path=document.createElementNS(ns,'path');path.dataset.treeSegment=kind;path.dataset.at=at;path.dataset.start=a;path.dataset.end=b;path.setAttribute('d',kind==='h'?`M${a},${at} H${b}`:`M${at},${a} V${b}`);svg.append(path);}}
+   for(const item of entries)if(item.closedContinuation){const x=item.x+item.width,y=item.cy,end=x+22,path=document.createElementNS(ns,'path');path.dataset.treeStub=item.key;path.setAttribute('d',`M${x},${y} H${end}`);svg.append(path);arrows.set(end+','+y,[end,y]);}
    for(const [x,y] of arrows.values()){const tip=document.createElementNS(ns,'polygon');tip.setAttribute('points',`${x-5},${y-3} ${x},${y} ${x-5},${y+3}`);tip.setAttribute('fill','#94aa9e');svg.append(tip);}canvas.prepend(svg);worldWidth=width;worldHeight=tree.height+24;applyView();frame.scrollLeft=oldLeft;frame.scrollTop=oldTop;syncHeader();
    requestAnimationFrame(()=>{if(version!==renderVersion)return;if(anchorId){const target=root.querySelector(`[data-tree-key="${anchorId}"]`);if(!target)return;const rect=target.getBoundingClientRect();if(anchorRect){frame.scrollLeft+=rect.left-anchorRect.left;frame.scrollTop+=rect.top-anchorRect.top;syncHeader();}else{frame.scrollLeft=Math.max(0,parseFloat(target.style.left)*scale-frame.clientWidth/2);frame.scrollTop=Math.max(0,parseFloat(target.dataset.center)*scale-frame.clientHeight/2);syncHeader();}}});
   }
