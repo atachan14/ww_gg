@@ -100,7 +100,7 @@
    function updated(d,label,column,path,reach){
     const identity='updated:'+d.node;
     if(d.public_bundle&&sharedBoards.has(identity))return sharedBoards.get(identity);
-    const next=new Set([...path,d.node]),item=make('board',column,{d,id:d.node,text:label,update:true,shared:!!d.public_bundle,contexts:new Set(),lazy:!d.winner&&!d.actions},path.has(d.node)?[]:choices(d,next,reach));
+    const next=new Set([...path,d.node]),item=make('board',column,{d,id:d.node,text:label,update:true,sharedIdentity:!!d.public_bundle,contexts:new Set(),lazy:!d.winner&&!d.actions},path.has(d.node)?[]:choices(d,next,reach));
     if(d.public_bundle)sharedBoards.set(identity,item);return item;
    }
    function build(id,path=new Set(),arrival,reach='1',context){
@@ -109,7 +109,7 @@
     if(native&&d.day_arrival){
      const a=d.day_arrival;if(sharedBoards.has(a.id))return sharedBoards.get(a.id);
      const children=a.updates.map(update=>{const after=nodes.get(update.node);return after?{probability:update.probability,item:updated(after,update.label,base(phase)+1,path,mass(reach,update.probability))}:null;}).filter(Boolean);
-     const item=make('board',base(phase),{d:a.state,id:a.id,shared:true,contexts:new Set(context?[context]:[])},children);sharedBoards.set(a.id,item);return item;
+     const item=make('board',base(phase),{d:a.state,id:a.id,sharedIdentity:true,contexts:new Set(context?[context]:[])},children);sharedBoards.set(a.id,item);return item;
     }
     if(native&&id===rootId&&timeline?.updates.length){
      const rows=timeline.updates;let tail=updated(d,rows[rows.length-1].label,base(phase)+rows.length,path,reach);
