@@ -8,7 +8,7 @@ window.initializeParallelLayout=function(){
  scroll.scrollLeft=Number(main.dataset.tableScroll||0);
  function refresh(){
   if(!main.isConnected)return;
-  document.querySelector('.page-shell').style.paddingBottom=(footer.offsetHeight+16)+'px';
+  document.querySelector('.page-shell').style.paddingBottom=(footer.getBoundingClientRect().height+(document.querySelector('[data-calculation-tree]')?0:16))+'px';
   const active=panes.find(p=>p.open);grid.classList.toggle('settings-open',!!active);
   if(innerWidth>=1040){const height=info.offsetHeight+14+player.offsetHeight;column.style.maxHeight='none';if(active){const body=active.querySelector('.settings-body');body.style.maxHeight='none';const chrome=column.offsetHeight-body.offsetHeight;body.style.maxHeight=Math.max(80,height-chrome)+'px';}column.style.maxHeight=height+'px';}
   else {column.style.maxHeight='none';panes.forEach(p=>p.querySelector('.settings-body').style.maxHeight='320px');}

@@ -538,3 +538,6 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 
 /* Internal movement is drag/programmatic pan; ordinary wheel chains to the page. */
 [data-calculation-tree] .tree-flow-frame{overflow:hidden;overscroll-behavior:auto}
+
+/* Reserve exactly the fixed controls height after the final Tree edge. */
+.page-shell:has([data-calculation-tree]){padding-bottom:var(--tree-footer-height,0px)}

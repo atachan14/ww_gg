@@ -21,5 +21,5 @@ class TreePresentationTests(unittest.TestCase):
   self.assertEqual(second['compositions'][0]['label'],'\u5360\u30441\u5e02\u6c113\u72fc1')
   self.assertEqual(first['village_win'],second['village_win']);self.assertEqual(first['snapshot'],second['snapshot'])
   html=client.get('/main').data.decode()
-  self.assertNotIn('tree-conditions',html);self.assertNotIn('data-tree-inspector',html)
+  self.assertNotIn('class="site-foot"',html);self.assertNotIn('tree-conditions',html);self.assertNotIn('data-tree-inspector',html)
   self.assertIn('data-tree-status',html);self.assertIn('tree-flow-frame',html);self.assertIn('data-tree-navigation="1"',html)
