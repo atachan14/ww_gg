@@ -2887,3 +2887,10 @@ gap0 (floating-point geometry tolerance). Selecting the seer-live night branch
 does not recreate the inspector; no clipped items or console errors. Right-edge
 B17 Current reaches Day2 day with3 survivors and likewise has neither row. Back
 restores the saved root. Existing sessions/artifacts remain; no push/deploy.
+
+### Footer-sized Tree viewport and zoom (2026-10-21)
+UI-only migration: the explanatory row is removed. A dedicated opaque, clipped header sibling is outside the vertically scrollable scene, with phase background bands and synchronized horizontal translation/scale. Dynamic ability columns and intrinsic widths are unchanged. The Tree remains in document flow; its title and header are included in the allotted viewport-minus-footer height, and the existing GameTree navigation aligns its top. Footer ResizeObserver plus window/visualViewport resize use the actual rendered footer height.
+
+Wheel zoom is pointer-anchored, bounded to 0.5–2.5, and captured only within Tree. Ctrl/Cmd modifiers retain browser behavior. Existing background pointer pan and Current buttons remain; keyboard +/−/0 on the focused frame is also supported. No solver, stage, grouping, policy, probability, or saved Board changes.
+
+Validation: 4 Node viewport tests (anchor invariant, bounds/reset, modifier/delta modes, measured height) and 13 existing presentation/calculation-tree tests pass; JavaScript syntax check passes. Real browser wheel reached both bounds without changing page scrollY; mobile drag changed horizontal scroll by 200px and released panning state. Desktop DOM measured viewport800/footer65.104/Tree734.896px; mobile measured viewport937.778/footer132.674/Tree805.104px, with Tree bottom matching footer top within fractional-pixel rounding after navigation. Header stays a separate clipped sibling and tracks the body transform. Temporary responsive viewport override was reset. Capture limitation: desktop capture returned a view inconsistent with current DOM header position; mobile capture timed out. Therefore current pixel-level header appearance/overlap is not certified by those captures.

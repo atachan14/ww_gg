@@ -1,0 +1,6 @@
+const test=require('node:test'),assert=require('node:assert/strict');
+const view=require('../static/tree_viewport.js');
+test('zoom keeps the pointer world coordinate fixed',()=>{const old={scale:1,left:400,top:300},point={x:170,y:90};for(const delta of [-120,120]){const next=view.zoomAt(old,point,delta);assert.ok(Math.abs((next.left+point.x)/next.scale-(old.left+point.x)/old.scale)<1e-10);assert.ok(Math.abs((next.top+point.y)/next.scale-(old.top+point.y)/old.scale)<1e-10);}});
+test('zoom bounds and reset are finite',()=>{assert.equal(view.zoomAt({scale:1,left:0,top:0},{x:0,y:0},1e9).scale,view.MIN);assert.equal(view.zoomAt({scale:1,left:0,top:0},{x:0,y:0},-1e9).scale,view.MAX);assert.equal(view.zoomAt({scale:2,left:0,top:0},{x:0,y:0},Math.log(2)/.002).scale,1);});
+test('native Ctrl/Cmd zoom is not captured; delta modes agree',()=>{assert.equal(view.wheelDelta({ctrlKey:true,deltaY:1},500),null);assert.equal(view.wheelDelta({metaKey:true,deltaY:1},500),null);assert.equal(view.wheelDelta({deltaMode:1,deltaY:3},500),48);assert.equal(view.wheelDelta({deltaMode:2,deltaY:1},500),500);assert.equal(view.wheelDelta({deltaX:20},500),20);});
+test('available area uses actual footer and viewport heights',()=>{assert.equal(view.areaHeight(844,117.5),726.5);assert.equal(view.areaHeight(600,48),552);assert.equal(view.areaHeight(30,48),0);});
