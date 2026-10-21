@@ -42,16 +42,17 @@
  function connect(entries,offsets,widths){
   const edges=entries.flatMap(from=>from.children.map(edge=>({from,to:edge.item,probability:edge.probability,route:[from,...edge.route.map(slot=>({...slot,x:offsets[slot.column],width:widths[slot.column]})),edge.item]}))),incoming=new Map(),joins=new Map();
   for(const edge of edges)incoming.set(edge.to,(incoming.get(edge.to)||0)+1);
-  for(const edge of edges){const start=edge.from.x+edge.from.width;let d=`M${start},${edge.from.cy}`;
+  for(const edge of edges){const start=edge.from.x+edge.from.width,points=[[start,edge.from.cy]];let d=`M${start},${edge.from.cy}`;
    for(let i=1;i<edge.route.length;i++){const a=edge.route[i-1],b=edge.route[i],last=i===edge.route.length-1,merge=last&&incoming.get(edge.to)>1,x=a.x+a.width,guard=x+20,end=b.x-(merge?14:0),mid=(guard+end)/2;
-    d+=` H${guard} C${mid},${a.cy} ${mid},${b.cy} ${end},${b.cy}`;
-    if(!last)d+=` H${b.x+b.width}`;
+    d+=` H${mid} V${b.cy} H${end}`;points.push([mid,a.cy],[mid,b.cy],[end,b.cy]);
+    if(!last){d+=` H${b.x+b.width}`;points.push([b.x+b.width,b.cy]);}
     else if(merge)joins.set(edge.to,{to:edge.to,x:end,y:b.cy,d:`M${end},${b.cy} H${b.x}`});
    }
-   edge.d=d;edge.arrow=incoming.get(edge.to)===1;
+   edge.d=d;edge.points=points;edge.merging=incoming.get(edge.to)>1;edge.arrow=incoming.get(edge.to)===1;
    const branch=edge.from.children.length>1,next=edge.route[1];edge.label={x:branch?next.x-30:start+2,y:(branch?next.cy:edge.from.cy)-17};
   }
-  return {edges,joins:[...joins.values()],stubs:entries.filter(n=>n.closedContinuation).map(from=>({from,d:`M${from.x+from.width},${from.cy} h12`,x:from.x+from.width+12,y:from.cy}))};
+  const groups=new Map();for(const edge of edges){const key=edge.merging?'merge:'+edge.to.key:'split:'+edge.from.key;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(edge);}
+  return {edges,strokes:[...groups.values()],joins:[...joins.values()],stubs:entries.filter(n=>n.closedContinuation).map(from=>({from,d:`M${from.x+from.width},${from.cy} h12`,x:from.x+from.width+12,y:from.cy}))};
  }
  return {arrange,connect};
 });
