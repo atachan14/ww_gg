@@ -541,3 +541,5 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 
 /* Reserve exactly the fixed controls height after the final Tree edge. */
 .page-shell:has([data-calculation-tree]){padding-bottom:var(--tree-footer-height,0px)}
+
+[data-calculation-tree] button.compact-action-item{min-height:0;cursor:pointer;text-align:left;box-shadow:none}.compact-action-item:disabled,.compact-tree-select:disabled{opacity:1;cursor:default}

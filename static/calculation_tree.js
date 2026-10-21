@@ -9,7 +9,7 @@
   if(root.dataset.treeBound)return;root.dataset.treeBound='1';
   root.querySelectorAll('.tree-conditions,.compact-tree-legend,[data-tree-inspector]').forEach(e=>e.remove());
   const content=root.querySelector('[data-tree-content]'),status=root.querySelector('[data-tree-status]');
-  const nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
+  const expansion=window.TreeExpansion.create(),nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
   const viewport=window.TreeViewport,headerViewport=el('div',undefined,'tree-header-viewport');headerViewport.dataset.treeHeader='';frame.before(headerViewport);
   let scale=1,worldWidth=0,worldHeight=0,scene=null,headerScene=null;
   function syncHeader(){if(headerScene)headerScene.style.transform=`translateX(${-frame.scrollLeft}px) scale(${scale})`;}
@@ -25,9 +25,22 @@
   function keep(d){if(!d.column_phase){d.column_day=1+Math.floor(d.history.length/2);d.column_phase=d.history.length%2?'night':'day';}const old=nodes.get(d.node);nodes.set(d.node,old?.actions&&!d.actions?{...d,actions:old.actions}:d);for(const item of Object.values(d.items||{}))keep(item);}
   async function load(id,expand=false){const q=new URLSearchParams();if(id!==null)q.set('node',id);if(snapshot)q.set('snapshot',snapshot);if(expand)q.set('expand','1');const current=new URL(location.href).searchParams.get('current');if(current)q.set('current',current);const response=await fetch('/game-tree?'+q,{cache:'no-store'}),d=await response.json();if(!response.ok)throw Object.assign(Error(d.error),{detail:d});snapshot=d.snapshot;currentNode=d.current_node||'0';displayPath=d.display_path||[];keep(d);return d;}
   function inspect(d){root.querySelectorAll('.tree-item').forEach(e=>e.classList.toggle('selected',e.dataset.treeItem===d.node));}
-  async function select(id){if(busy)return;busy=true;try{let d=nodes.get(id);if(!d.winner&&!d.actions){d=await load(id,true);render(id);}inspect(d);}catch(e){status.textContent=e.message;}finally{busy=false;}}
+  function guardDragClick(button){let start=null,moved=false;
+   button.addEventListener('pointerdown',event=>{start={clientX:event.clientX,clientY:event.clientY};moved=false;});
+   button.addEventListener('pointermove',event=>{moved ||= window.TreeExpansion.isDrag(start,event);});
+   button.addEventListener('pointercancel',()=>{moved=true;});
+   button.addEventListener('click',event=>{const dragged=moved||window.TreeExpansion.isDrag(start,event);start=null;moved=false;if(event.detail&&dragged){event.preventDefault();event.stopImmediatePropagation();}},true);
+  }
+  async function toggle(item){
+   if(!item.expandable)return;
+   const opened=expansion.toggle(item.key);render(item.key);
+   const d=item.d;
+   if(!opened||!d||d.winner||d.actions||(item.kind==='board'&&d.compositions?.length))return;
+   try{await expansion.load(d.node,()=>load(d.node,true));if(root.isConnected){status.textContent='';render(item.key);}}
+   catch(error){if(root.isConnected&&expansion.isOpen(item.key))status.textContent=error.message;}
+  }
   function render(anchorId){
-   const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-item="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
+   const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-key="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
    const entries=[],links=[],ROW=44,GAP=14;let maxPhase=3;
    const seerCount=Math.max(0,...[...nodes.values()].map(d=>d.stage_roles?.seers||Math.max(0,...(d.compositions||[]).map(c=>c.counts?.seers||0)))),nightWidth=3+2*seerCount;
    const base=phase=>Math.floor(phase/2)*(3+nightWidth)+(phase%2?3:0);
@@ -63,10 +76,10 @@
     const d=nodes.get(id);if(!d)return null;
     const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0);maxPhase=Math.max(maxPhase,phase);
     const next=new Set([...path,id]),compositions=d.compositions||[{node:id,label:'内訳未取得',probability:'1'}];
-    const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id},choices(c,next,mass(reach,composition.probability)))};});
-    return make('board',base(phase),{d,id,arrival},children);
+    const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id,lazy:!c.winner&&!c.actions},choices(c,next,mass(reach,composition.probability)))};});
+    return make('board',base(phase),{d,id,arrival,lazy:!d.winner&&!d.actions},children);
    }
-   const tree=build(rootId);if(!tree)return;
+   const complete=build(rootId);if(!complete)return;const tree=expansion.project(complete);
    function place(item,top){item.cy=top+item.height/2;item.span=[top,top+item.height];entries.push(item);let cursor=top;for(const child of item.children){place(child.item,cursor);links.push([item,child.item,child.probability]);cursor+=child.item.height+GAP;}}
    place(tree,12);const columns=base(maxPhase+1),canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(canvas);headerViewport.replaceChildren(headers);scene=canvas;headerScene=headers;
    for(let phase=0;phase<=maxPhase;phase++){
@@ -75,10 +88,10 @@
     labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;headers.append(h);headings.push(h);});
    }
    for(const item of entries){
-    let row;if(item.kind==='action'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;}
+    let row;if(item.kind==='action'){row=el('button',item.text,'compact-action-item');row.type='button';row.dataset.actionColumn=item.column;row.title=item.title;row.onclick=()=>toggle(item);}
     else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);if(item.kind==='board'||!item.hideGo)row.dataset.treeItem=d.node;else row.dataset.treeComposition=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;
-     const main=el('button',(item.kind==='composition'?item.text+' · 村 '+d.village_win:(item.arrival?item.arrival+' · ':'')+`B${d.node} · ${d.alive.length}人 · 村 ${d.village_win}`),'compact-tree-select');main.type='button';main.onclick=()=>select(d.node);const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1';go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node})}),result=await response.json();if(!response.ok)throw Error(result.error);if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo)row.append(go);}
-    row.style.top=(item.cy-13.5)+'px';row.dataset.center=String(item.cy);if(item.span)row.dataset.span=item.span.join(',');item.element=row;canvas.append(row);
+     const main=el('button',(item.kind==='composition'?item.text+' · 村 '+d.village_win:(item.arrival?item.arrival+' · ':'')+`B${d.node} · ${d.alive.length}人 · 村 ${d.village_win}`),'compact-tree-select');main.type='button';main.onclick=()=>{inspect(d);toggle(item);};main.disabled=!item.expandable;if(item.expandable)main.setAttribute('aria-expanded',String(item.expanded));const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1';go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node})}),result=await response.json();if(!response.ok)throw Error(result.error);if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo)row.append(go);}
+    if(item.kind==='action')guardDragClick(row);else row.querySelectorAll('button').forEach(guardDragClick);row.dataset.treeKey=item.key;if(item.kind==='action'){row.disabled=!item.expandable;if(item.expandable)row.setAttribute('aria-expanded',String(item.expanded));}row.style.top=(item.cy-13.5)+'px';row.dataset.center=String(item.cy);if(item.span)row.dataset.span=item.span.join(',');item.element=row;canvas.append(row);
    }
    const widths=headings.map(h=>Math.ceil(h.getBoundingClientRect().width));for(const item of entries)widths[item.column]=Math.max(widths[item.column],Math.ceil(item.element.getBoundingClientRect().width));
    const offsets=[];let width=6;for(let i=0;i<columns;i++){offsets.push(width);headings[i].style.left=width+'px';headings[i].style.width=widths[i]+'px';width+=widths[i]+44;}headers.style.width=width+'px';canvas.style.width=width+'px';for(const h of selectionHeads){h.element.style.left=(offsets[h.start]-3)+'px';h.element.style.width=(offsets[h.end]+widths[h.end]-offsets[h.start]+6)+'px';}
@@ -88,7 +101,7 @@
    for(const [from,to,probability] of links){const x=from.x+from.width,u=to.x,y=from.cy,v=to.cy,mid=(x+u)/2;segment('h',y,x,mid);segment('v',mid,y,v);segment('h',v,mid,u);arrows.set(u+','+v,[u,v]);if(probability!==null){const single=fanout.get(from)===1,label=el('span',probability,'compact-tree-edge');label.style.left=(single?x+2:u-40)+'px';label.style.top=((single?y:v)-17)+'px';label.dataset.edgeProbability=probability;canvas.append(label);}}
    for(const [kind,map] of Object.entries(axes))for(const [at,raw] of map){raw.sort((a,b)=>a[0]-b[0]);const merged=[];for(const interval of raw){const last=merged.at(-1);if(last&&interval[0]<=last[1])last[1]=Math.max(last[1],interval[1]);else merged.push([...interval]);}for(const [a,b] of merged){const path=document.createElementNS(ns,'path');path.dataset.treeSegment=kind;path.dataset.at=at;path.dataset.start=a;path.dataset.end=b;path.setAttribute('d',kind==='h'?`M${a},${at} H${b}`:`M${at},${a} V${b}`);svg.append(path);}}
    for(const [x,y] of arrows.values()){const tip=document.createElementNS(ns,'polygon');tip.setAttribute('points',`${x-5},${y-3} ${x},${y} ${x-5},${y+3}`);tip.setAttribute('fill','#94aa9e');svg.append(tip);}canvas.prepend(svg);worldWidth=width;worldHeight=tree.height+24;applyView();frame.scrollLeft=oldLeft;frame.scrollTop=oldTop;syncHeader();
-   requestAnimationFrame(()=>{if(version!==renderVersion)return;if(anchorId){const target=root.querySelector(`[data-tree-item="${anchorId}"]`);if(!target)return;const rect=target.getBoundingClientRect();if(anchorRect){frame.scrollLeft+=rect.left-anchorRect.left;frame.scrollTop+=rect.top-anchorRect.top;syncHeader();}else{frame.scrollLeft=Math.max(0,parseFloat(target.style.left)*scale-frame.clientWidth/2);frame.scrollTop=Math.max(0,parseFloat(target.dataset.center)*scale-frame.clientHeight/2);syncHeader();}}});
+   requestAnimationFrame(()=>{if(version!==renderVersion)return;if(anchorId){const target=root.querySelector(`[data-tree-key="${anchorId}"]`);if(!target)return;const rect=target.getBoundingClientRect();if(anchorRect){frame.scrollLeft+=rect.left-anchorRect.left;frame.scrollTop+=rect.top-anchorRect.top;syncHeader();}else{frame.scrollLeft=Math.max(0,parseFloat(target.style.left)*scale-frame.clientWidth/2);frame.scrollTop=Math.max(0,parseFloat(target.dataset.center)*scale-frame.clientHeight/2);syncHeader();}}});
   }
   let pan=null;
   frame.addEventListener('pointerdown',event=>{if(pan||event.button!==0||event.target.closest('button,a,input,select,textarea,.compact-tree-item,.compact-action-item,.compact-tree-edge,.phase-heading'))return;pan={id:event.pointerId,x:event.clientX,y:event.clientY,left:frame.scrollLeft,top:frame.scrollTop};frame.setPointerCapture(event.pointerId);frame.classList.add('is-panning');event.preventDefault();});
@@ -97,7 +110,7 @@
   for(const type of ['pointerup','pointercancel','lostpointercapture'])frame.addEventListener(type,endPan);
   let measuredWidth=root.getBoundingClientRect().width;new ResizeObserver(entries=>{const width=entries[0].contentRect.width;if(width===measuredWidth)return;measuredWidth=width;if(rootId!==null&&root.isConnected)render();}).observe(root);
   function unavailable(error){status.textContent=error.message;root.querySelector('.tree-flow-frame').hidden=true;headerViewport.hidden=true;const box=el('div',undefined,'tree-unavailable');box.dataset.treeUnavailable='1';if(error.detail?.actual){const c=error.detail.actual.counts;box.append(el('p',`現在の配役：市民${c.citizens}・占い${c.seers}・霊能${c.mediums}・狩人${c.hunters}・狼${c.wolves}`));}for(const issue of error.detail?.issues||[])box.append(el('p',issue));if(error.detail?.supported_route)box.append(el('p',error.detail.supported_route));const link=el('a','TOPで現在の設定を確認');link.href='/';box.append(link);content.parentElement.after(box);}
-  (async()=>{try{const d=await load(null,true);rootId=d.node;render(currentNode);status.textContent='';}catch(e){unavailable(e);}})();
+  (async()=>{try{const d=await load(null,true);rootId=d.node;render();status.textContent='';}catch(e){unavailable(e);}})();
  }
  const init=()=>document.querySelectorAll('[data-calculation-tree]').forEach(mount);new MutationObserver(init).observe(document.documentElement,{childList:true,subtree:true});init();
 })();
