@@ -332,6 +332,7 @@ class CalculationTree:
                 route=(*record['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[],counter=counter)})
                 child_key=self.register(child,route);entry['node']=child_key
                 self.nodes[child_key].update(public_bundle=True,public_digest=public,public_reach=str(reach if not counter else F()),counterfactual=counter,hidden_contexts=[])
+                self.nodes[child_key]['distribution_origin']=(key,program,public)
         record['public_bundles']=result;return result
 
     def _public_context(self,key,public,prefix,counter=False):
@@ -511,12 +512,70 @@ class CalculationTree:
             result.append(dict(node=child,counts=dict(wolves=w,mediums=m,seers=seer,hunters=h,citizens=v),label=label,probability=str(probability)))
         row['composition_rows']=result;return result
 
+    def public_current(self,key):
+        row=self.nodes[key]
+        if row.get('public_parent_bundle') and not row.get('public_bundle'):return False
+        for step in row['route']:
+            if type(step)is dict:
+                if 'physical' in step:return False
+                if step.get('public_night',{}).get('prefix'):return False
+            elif len(step)==4 and step[0] is not None:return False
+        return True
+
+    def distribution(self,key):
+        """Inline analysis only; no navigation ids or changed public state."""
+        with self.lock,self.calculation._ClosedCalculation__kernel():
+            row=self.nodes[key]
+            if 'distribution' in row:return row['distribution']
+            from .physical_selection import counts
+            from .anonymous_relations import alias
+            node=row['node'];source=node.read();events=[]
+            origin=row.get('distribution_origin')
+            program=node._night_program() if not origin and source.public.phase=='night' and not source.public.winner else None
+            if origin:
+                base,program,public=origin
+                from .public_convergence import public_transport,transport_source,digest
+            if program is not None:
+                for leaf in program.leaves:
+                    if origin:
+                        mapping=public_transport(self.nodes[base]['node'].read(),leaf.source,program.groups)
+                        if digest(transport_source(leaf.source,mapping))!=public:continue
+                    mass=leaf.counter if row.get('counterfactual') else leaf.mass
+                    if not mass:continue
+                    composition=counts(leaf.source.private.hypotheses[0],leaf.source.public.alive if origin else source.public.alive)
+                    results=[];actions=[]
+                    for step in leaf.steps:
+                        if step.kind=='seer_result':
+                            actor=step.actor.index if hasattr(step.actor,'index') else step.actor
+                            results.append((actor,step.target if hasattr(step,'target') else step.value))
+                        elif step.kind in ('seer_target','wolf_target'):
+                            if hasattr(step,'label'):actions.append(step.label())
+                            else:actions.append(str(step.actor or '狼')+'が'+str(step.value)+('を占い' if step.kind=='seer_target' else 'を襲撃'))
+                    events.append((composition,tuple(results),tuple(actions),mass))
+            output=[]
+            for index,part in enumerate(self._composition_rows(key)):
+                composition=(part['counts']['wolves'],part['counts']['mediums'],part['counts']['seers'],part['counts']['hunters'],part['counts']['citizens'])
+                rows=[(results,actions,mass) for c,results,actions,mass in events if c==composition]
+                total=sum((mass for r,a,mass in rows),F());children=[];buckets={}
+                for results,actions,mass in rows:buckets.setdefault(results,[]).append((actions,mass))
+                for result_index,(results,paths) in enumerate(buckets.items()):
+                    subtotal=sum((mass for a,mass in paths),F());grouped={}
+                    for actions,mass in paths:grouped[actions]=grouped.get(actions,F())+mass
+                    leaves=[dict(id=f'{index}/r{result_index}/a{i}',label=' → '.join(actions),probability=str(mass/subtotal),children=[]) for i,(actions,mass) in enumerate(grouped.items())]
+                    if not results and len(buckets)==1:children=leaves
+                    else:
+                        colors=lambda color:'白' if color=='white' else '黒'
+                        label='占いなし' if not results else ('占い結果：'+colors(results[0][1]) if len(results)==1 else '占い結果：'+'・'.join(alias(actor)+' '+colors(color) for actor,color in results))
+                        children.append(dict(id=f'{index}/r{result_index}',label=label,probability=str(subtotal/total),children=leaves))
+                output.append(dict(id=str(index),label=part['label'],probability=part['probability'],village_win=str(self.value(part['node'])),children=children))
+            row['distribution']=output;return output
+
     def summary(self,key,actions=False):
         row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
         return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day,'column_phase':point.phase,'alive':list(b.alive),'winner':b.winner,
-            'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
+            'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],

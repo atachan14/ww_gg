@@ -130,6 +130,7 @@ def create_app(test_config=None, *, deployment=False):
         if set(request.form)!={'snapshot','node'}:return jsonify(error='Invalid Current request'),400
         key=request.form.get('node')
         if key not in tree.nodes:return jsonify(error='対象Boardがありません。'),404
+        if not tree.public_current(key):return jsonify(error='公開Boardを選択してください。'),409
         from werewolf.generated_current import GeneratedCurrent
         with tree.lock:current=GeneratedCurrent(tree,key)
         return jsonify(url=current_url(tree,key),current=current.metadata)
@@ -155,6 +156,7 @@ def create_app(test_config=None, *, deployment=False):
                     ancestor=tree.restore(current.route[:length]);path.append(ancestor)
                     if length<len(current.route):tree.expand(ancestor)
             result=tree.read(key,request.args.get('expand')=='1')
+            if request.args.get('analysis')=='1':result['distribution']=tree.distribution(key)
             for ancestor in path:result['items'][ancestor]=tree.summary(ancestor,True)
             result.update(current_node=current_key,display_path=path)
             return jsonify(result)

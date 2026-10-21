@@ -46,10 +46,9 @@ class NightProgramTests(unittest.TestCase):
     if r['label']=='\u767d':self.assertIn([3],groups)
     self.assertEqual(sum(F(a['probability']) for a in attacks),1)
     for a in attacks:self.assertTrue(a['children']['leaves'])
-   # Exercise the real signed endpoint from a staged named leaf.
+   # Staged secret leaves remain reconstructible internally, but are no longer Current navigation targets.
    selected=next(a for a in results[0]['children']['branches'] if a['targets']==[5])['children']['leaves'][0]['node']
-   result=client.post('/game-tree/current',data={'snapshot':root['snapshot'],'node':selected});self.assertEqual(result.status_code,200,result.data)
-   self.assertEqual(client.get(result.json['url']).status_code,200)
+   result=client.post('/game-tree/current',data={'snapshot':root['snapshot'],'node':selected});self.assertEqual(result.status_code,409,result.data)
  def test_two_seers_have_target_result_pairs_and_same_named_scalar_value(self):
   c,node,client=self.case(2,'random');e=c._ClosedCalculation__engine
   with c._ClosedCalculation__kernel(),e.group_scope(node.groups):

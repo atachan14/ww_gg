@@ -156,5 +156,4 @@ class JointActionKernelTests(unittest.TestCase):
   family=next(a for a in expanded['actions'] if a['targets']==[4,5])
   other=next(v['node'] for b in family['branches'] for v in b['variants'] if v['transport']!=list(range(1,6)))
   result=client.post('/game-tree/current',data={'snapshot':expanded['snapshot'],'node':other})
-  self.assertEqual(result.status_code,200,result.data)
-  self.assertEqual(client.get(result.json['url']).status_code,200)
+  self.assertEqual(result.status_code,409,result.data) # Cold transport above is retained; secret Current UI is removed.
