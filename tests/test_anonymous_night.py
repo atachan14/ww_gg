@@ -74,3 +74,18 @@ class AnonymousNightTests(unittest.TestCase):
   response=client.get('/game-tree',query_string={'node':key,'expand':'1'});self.assertEqual(response.status_code,200,response.data)
   data=response.json;self.assertEqual(data['night_stages']['method'],'anonymous-relational-v1');self.assertEqual(data['actions'],[])
   self.assertTrue(all('symbols' in b for b in data['night_stages']['branches']))
+
+ def test_distinguishable_prior_uses_refined_classes_and_named_exact_value(self):
+  from dataclasses import replace
+  from werewolf.seer_acquisition import normalize
+  from werewolf.evaluation_branch import physical_board
+  c,node=self.case();e=c._ClosedCalculation__engine;s=node.read()
+  own=replace(s.private,hypotheses=normalize(tuple(replace(h,mass=h.mass*(3 if h.roles[0]&8 else 1)) for h in s.private.hypotheses)))
+  source=replace(s,private=own,physical=physical_board(s.public,own,s.physical))
+  groups=tuple((p,) for p in range(1,s.public.player_count+1))
+  with c._ClosedCalculation__kernel(),e.group_scope(groups):
+   p=compile_anonymous(e,source,groups)
+   oracle=InformationSetForecast(e.rules,e.strategy,retire_uninformative_scans=False);oracle.retain_joint_guard_history=True
+   self.assertEqual(sum(l.mass for l in p.leaves),1)
+   self.assertEqual(p.root.value(e),oracle.solve(*source,physical=source.physical))
+   self.assertEqual(p.stats['permutation_checks'],0)

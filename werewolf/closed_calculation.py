@@ -252,6 +252,10 @@ class _Node:
         if kind=='joint':groups=_fix(groups,(*selection[1],*(p for pair in selection[2] for p in pair)))
         return self.__calculation._ClosedCalculation__node(source,groups,(*self.__path,('physical',kind,selection)),self.__view)
 
+    def _public_night(self,source,target,public_digest,groups,prefix=(),counter=False):
+        path=(*self.__path,('public_night',target,public_digest,tuple(groups),tuple(prefix),counter))
+        return self.__calculation._ClosedCalculation__node(source,groups,path,self.__view)
+
     def _night_program(self):
         from .anonymous_night import shared_night
         e=self.__calculation._ClosedCalculation__engine
@@ -351,6 +355,9 @@ class _Node:
             if operation[0]=='physical':
                 from .physical_selection import PhysicalSelectionEvidence
                 step=PhysicalSelectionEvidence(operation[1],operation[2])
+            elif operation[0]=='public_night':
+                from .public_convergence import NightObservationEvidence
+                step=NightObservationEvidence(e,*operation[1:])
             elif operation[0]=='rename':
                 from .public_convergence import TransportEvidence
                 step=TransportEvidence(operation[1])

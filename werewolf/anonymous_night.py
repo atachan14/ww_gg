@@ -91,7 +91,7 @@ class SymbolStep:
         raise ValueError('Unknown anonymous stage')
 
 def symbolic_steps(path,groups):
-    symbols={};by_ref={};result=[]
+    by_ref={};result=[]
     def symbol(ref,group=None):
         if ref not in by_ref:
             index=len(by_ref);g=path.population.people[ref].group if group is None else group
@@ -127,6 +127,7 @@ class Leaf:
     multiplicity:int
     bindings:tuple
     selection:tuple
+    correspondence:tuple
 
 @dataclass(frozen=True)
 class Branch:
@@ -226,13 +227,22 @@ def compile_anonymous(engine,source,groups):
                     for report_mass,after,report in rows:
                         steps=tuple(replace(step,public_fact=child.public.winner) if step.kind=='death_notice' else step for step in symbols)
                         if child.public.winner is None and any(claim in ('seer','medium') for claim in b.claims):
-                            text='／'.join('Player'+str(r.player)+'：Player'+str(r.target)+('白' if r.color=='white' else '黒') for r in after.past if r not in source.past)
+                            from .public_convergence import public_transport,transport_record
+                            mapping=public_transport(source,after,groups)
+                            published=[transport_record(r,mapping) for r in after.past if r not in source.past]
+                            text='／'.join('Player'+str(r.player)+'：Player'+str(r.target)+('白' if r.color=='white' else '黒') for r in published)
                             steps=(*steps,SymbolStep('publication',None,text or '公開なし'))
                         wolves=tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1)))
                         acquired=tuple(sorted((a.player,a.target) for a in obtained if a.day==b.day+1))
                         factor=family_mass*death.probability*report_mass
                         leaf_h=after.private.hypotheses[0]
-                        leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h)))
+                        named=[]
+                        for ref,symbol in binding_map:
+                            if type(ref)is int:person=names[ref]
+                            else:
+                                _,cell,slot=ref;person=tuple(p for p in transport.free[cell] if p not in names)[slot]
+                            named.append((symbol.index,person))
+                        leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h),tuple(named)))
     result=Program(source,groups,leaves,dict(named_prior_atoms=len(source.private.hypotheses),relational_families=len(families),structural_joint_paths=native_paths,permutation_checks=0))
     cache[key]=result;return result
 

@@ -82,6 +82,9 @@ class CalculationTree:
 
     def equivalence(self,node,target=None):
         s=node.read();key=(s,target)
+        if getattr(self.engine,'anonymous_nights',False):
+            group=next((tuple(g) for g in node.groups if target in g),(target,)) if target is not None else None
+            return ('constructed-native',s,group)
         if key not in self.keys:
             self.keys[key]=canonical_key(*s,self.rules,self.strategy,target=target,physical=s.physical,max_mappings=120)
         return self.keys[key] or ('unshared',key)
@@ -114,10 +117,13 @@ class CalculationTree:
             if b.phase=='day':
                 scores=dict(e.day_scores(b,s.public_state,s.past))
                 best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
-                for target in legal_targets(s.physical,self.rules,self.strategy):
-                    rows.append({'node':node,'target':target,'q_score':scores[target],
-                        'policy_mass':F(1,len(selected)) if target in selected else F(),
-                        'fallback_mass':F(1,len(scores)),'information':'公開Q','owner_index':None})
+                legal=legal_targets(s.physical,self.rules,self.strategy)
+                orbits=e.target_orbits(legal) if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)
+                for orbit in orbits:
+                    target=orbit[0]
+                    rows.append({'node':node,'target':target,'orbit':orbit,'q_score':scores[target],
+                        'policy_mass':F(sum(p in selected for p in orbit),len(selected)),
+                        'fallback_mass':F(len(orbit),len(scores)),'information':'公開Q','owner_index':None})
             else:
                 # Selection is from PUBLIC Q conditioned by actor information;
                 # actual weights and child Boards come from the existing P split.
@@ -286,6 +292,46 @@ class CalculationTree:
         from .ability_factorization import factor
         record['ability_choices']=factor(self,node,result)
 
+    def _public_night_bundles(self,key):
+        from .public_convergence import public_observation_orbits,digest
+        record=self.nodes[key]
+        if 'public_bundles' in record:return record['public_bundles']
+        node=record['node'];program=node._night_program();groups=program.groups;result={}
+        with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
+            for group in groups:
+                alive=tuple(p for p in group if p in node.read().public.alive)
+                if not alive:continue
+                target=alive[0]
+                for counter in (False,True):
+                    for reach,source in public_observation_orbits(self.engine,node.read(),target,groups,counter=counter):
+                        public=digest(source);entry=result.setdefault(public,dict(target=target,sources={}))
+                        entry['sources'][counter]=(reach*len(alive),source)
+            for public,entry in result.items():
+                counter=False if False in entry['sources'] else True
+                reach,source=entry['sources'][counter]
+                child=node._public_night(source,entry['target'],public,groups,counter=counter)
+                route=(*record['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[],counter=counter)})
+                child_key=self.register(child,route);entry['node']=child_key
+                self.nodes[child_key].update(public_bundle=True,public_digest=public,public_reach=str(reach if not counter else F()),counterfactual=counter,hidden_contexts=[])
+        record['public_bundles']=result;return result
+
+    def _public_context(self,key,public,prefix,counter=False):
+        from .public_convergence import condition_prefix
+        from dataclasses import asdict
+        bundles=self._public_night_bundles(key);entry=bundles[public];mass,source=entry['sources'][counter]
+        if prefix:
+            relative,source=condition_prefix(source,self.nodes[key]['node'].read(),self.nodes[key]['node']._night_program().groups,prefix)
+        child=self.nodes[key]['node']._public_night(source,entry['target'],public,self.nodes[key]['node']._night_program().groups,prefix,counter)
+        route=(*self.nodes[key]['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[asdict(step) for step in prefix],counter=counter)})
+        child_key=self.register(child,route)
+        self.nodes[child_key]['public_parent_bundle']=entry['node']
+        if counter:self.nodes[child_key]['counterfactual']=True
+        contexts=self.nodes[entry['node']]['hidden_contexts']
+        if child_key!=entry['node'] and not any(row['node']==child_key for row in contexts):
+            label=' → '.join(step.label() for step in prefix if step.kind in ('seer_result','wolf_target'))
+            contexts.append(dict(node=child_key,label=(label or '経路')+(' · 方策0' if counter else '')))
+        return child_key
+
     def _stage_rows(self,key):
         row=self.nodes[key]
         if 'night_stages' in row:return row['night_stages']
@@ -296,12 +342,22 @@ class CalculationTree:
             child=node._stage_child(leaf)
             route=(*row['route'],(leaf.owner_index,leaf.target,leaf.outcome_index,leaf.report),{'physical':'joint','value':(node.read().public.day,leaf.wolves,leaf.scans)})
             return self.register(child,route)
+        native=getattr(program,'method',None)=='anonymous-relational-v1'
+        base_key=row.get('public_parent',key)
+        bundles=self._public_night_bundles(base_key) if native else None
         built={}
         def build(stage):
             cache=(tuple(id(leaf) for leaf in stage.leaves),stage.prefix)
             if cache in built:return built[cache]
             if stage.terminal:
                 total=stage.mass or stage.counter
+                if native:
+                    from .public_convergence import public_transport,transport_source,digest
+                    grouped={}
+                    for mass,counter,leaf,images in stage.outcomes():
+                        mapping=public_transport(self.nodes[base_key]['node'].read(),leaf.source,self.nodes[base_key]['node']._night_program().groups)
+                        public=digest(transport_source(leaf.source,mapping));entry=grouped.setdefault(public,F());grouped[public]=entry+(mass if stage.mass else counter)
+                    return dict(leaves=[dict(node=bundles[public]['node'],context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)),probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
                 return dict(leaves=[dict(node=leaf_row(leaf),probability=str((mass if stage.mass else counter)/total),variants=[dict(node=leaf_row(image),transport=list(mapping)) for image,mapping in images]) for mass,counter,leaf,images in stage.outcomes()])
             branches=[]
             for branch in stage.branches():
@@ -341,7 +397,7 @@ class CalculationTree:
             for member in members:
                 tick();origin=member['node'];s=origin.read();target=member['target']
                 weight=(member['policy_mass'] if policy_mass else member['fallback_mass'])/normalizer
-                named.append({'target':target,'information':member['information'],'policy_mass':str(member['policy_mass'])})
+                named.extend({'target':p,'information':member['information'],'policy_mass':str(member['policy_mass']/len(member.get('orbit',(target,))))} for p in member.get('orbit',(target,)))
                 if not weight:continue
                 for outcome_index,physical in enumerate(origin.action(target)):
                     after=physical.node
@@ -369,7 +425,7 @@ class CalculationTree:
                                 trace=bucket['joint_actions'].setdefault(trace_key,dict(label=event['label'],probability=F(),members=[]))
                                 contribution=weight*chance*event['probability'];trace['probability']+=contribution
                                 trace['members'].append({**event,'node':child_id,'probability':str(contribution)})
-            target_ids=sorted({r['target'] for r in members})
+            target_ids=sorted({p for r in members for p in r.get('orbit',(r['target'],))})
             for branch in branches.values():
                 branch['probability']=str(branch['probability'])
                 branch['joint_actions']=list(branch['joint_actions'].values())
@@ -377,7 +433,7 @@ class CalculationTree:
                     trace['probability']=str(trace['probability'])
                     trace['multiplicity']=len(trace['members'])
             choices.append({'targets':target_ids,'label':('処刑' if node.read().public.phase=='day' else '襲撃')+' '+ '/'.join('P'+str(p) for p in target_ids),
-                'multiplicity':len(members),'members':named,'q_score':str(members[0]['q_score']),
+                'multiplicity':sum(len(r.get('orbit',(r['target'],))) for r in members),'members':named,'q_score':str(members[0]['q_score']),
                 'selected':bool(policy_mass),'policy_probability':str(policy_mass),'branches':list(branches.values())})
         record['actions']=choices
         with self.calculation._ClosedCalculation__kernel():self._ability_columns(key)
@@ -388,7 +444,16 @@ class CalculationTree:
         node=self.calculation.root;prefix=()
         for step in route:
             if type(step)is dict:
-                if step=={'full_trace':True}:node=node._with_full_trace()
+                if set(step)=={'public_night'}:
+                    from .anonymous_night import Symbol,SymbolStep
+                    selector=step['public_night'];base=self.register(node,prefix);bundles=self._public_night_bundles(base)
+                    public=selector['public']
+                    if public not in bundles or selector['target']!=bundles[public]['target']:raise ValueError('Public night selector unavailable')
+                    def symbol(value):return None if value is None else Symbol(value['index'],tuple(value['members']))
+                    pattern=tuple(SymbolStep(r['kind'],symbol(r['actor']),symbol(r['target']) if type(r['target'])is dict else r['target'],tuple(symbol(a) for a in r['actors']),r.get('public_fact')) for r in selector['prefix'])
+                    selected=self._public_context(base,public,pattern,selector.get('counter',False)) if pattern else bundles[public]['node']
+                    node=self.nodes[selected]['node']
+                elif step=={'full_trace':True}:node=node._with_full_trace()
                 elif set(step)=={'physical','value'}:node=node._select_physical(step['physical'],step['value'])
                 else:raise ValueError('Invalid physical selector')
                 prefix=(*prefix,step);self.register(node,prefix);continue
@@ -419,6 +484,7 @@ class CalculationTree:
             w,m,seer,h,v=composition
             label=composition_label(composition,self.data.game_data,self.role_order)
             child=key if len(parts)==1 else self.register(node._select_physical('composition',composition),(*row['route'],{'physical':'composition','value':composition}))
+            if child!=key:self.nodes[child]['public_parent']=row.get('public_parent',key)
             result.append(dict(node=child,counts=dict(wolves=w,mediums=m,seers=seer,hunters=h,citizens=v),label=label,probability=str(probability)))
         row['composition_rows']=result;return result
 
@@ -427,6 +493,7 @@ class CalculationTree:
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
         return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day,'column_phase':point.phase,'alive':list(b.alive),'winner':b.winner,
+            'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],

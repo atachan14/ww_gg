@@ -96,6 +96,13 @@ def observation_branches(engine,source,target,*,counter=False):
             rows.append((mass*death.probability*weight,replace(after,board_data=None,provenance=None)))
     return tuple(rows)
 
+def public_observation_orbits(engine,source,target,groups,*,counter=False):
+    buckets={}
+    for weight,after in observation_branches(engine,source,target,counter=counter):
+        mapping=public_transport(source,after,groups);moved=transport_source(after,mapping)
+        buckets.setdefault(public_key(moved),[]).append((weight,moved))
+    return tuple((sum((w for w,s in rows),F()),mix(rows)) for rows in buckets.values())
+
 def prefix_likelihood(h,before,after,groups,prefix):
     """Bind a visible anonymous relation pattern against an existing named atom.
 
@@ -173,7 +180,7 @@ class NightObservationEvidence:
     prefix:tuple=()
     counter:bool=False
     def __call__(self,source):
-        rows=observation_branches(self.engine,source,self.target,counter=self.counter)
+        rows=public_observation_orbits(self.engine,source,self.target,self.groups,counter=self.counter)
         selected=next((after for weight,after in rows if digest(after)==self.public_digest),None)
         if selected is None:raise ValueError('Public night observation unavailable')
         return condition_prefix(selected,source,self.groups,self.prefix)[1] if self.prefix else selected
