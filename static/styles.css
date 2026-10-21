@@ -554,3 +554,9 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 .tree-distribution-branch>summary:focus-visible{outline:2px solid #20765d;outline-offset:1px}
 .tree-distribution-children{margin-left:13px;padding-left:8px;border-left:1px solid #dce5df}
 .tree-distribution-leaf{padding:2px 0 2px 13px}
+
+/* Only publication cards grow with their individual LogRows. */
+.compact-tree-item.compact-tree-update{height:auto;min-height:27px;overflow:visible;align-items:stretch}
+.compact-tree-update .compact-tree-select{white-space:normal}
+.tree-log-row{display:block;white-space:nowrap}
+.tree-win-corner{position:absolute;right:0;top:-12px;height:12px;font:10px/12px system-ui,sans-serif;background:white;color:#5f786c;white-space:nowrap;pointer-events:none}

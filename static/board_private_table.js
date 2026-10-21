@@ -24,7 +24,7 @@
   };
   const probability=(value)=>{
    const node=document.createElement('strong');node.className='probability';
-   const [n,d='1']=value.split('/');const percent=String(Math.round(Number(n)/Number(d)*10000)/100)+'%';
+   const {percent}=window.ProbabilityDisplay.formats(value);
    node.dataset.fraction=value;node.dataset.percent=percent;
    let fraction=false;try{fraction=localStorage.getItem('ww_gg.probability-format')==='fraction';}catch(_){}
    node.textContent=fraction?value:percent;return node;

@@ -1,0 +1,3 @@
+const test=require('node:test'),assert=require('node:assert/strict'),{formats,text}=require('../static/probability_display.js');
+test('shared Board and Tree display keeps exact fractions and existing two-decimal percentages',()=>{for(const [value,percent] of [['0','0%'],['1','100%'],['1/3','33.33%'],['2/3','66.67%'],['7/15','46.67%']]){assert.deepEqual(formats(value),{fraction:value,percent});assert.equal(text(value,'fraction'),value);assert.equal(text(value,'percent'),percent);}});
+test('display rounding never changes the underlying exact value',()=>{const value='1/100000000000000000000000000000000000';assert.equal(formats(value).percent,'0%');assert.equal(formats(value).fraction,value);});

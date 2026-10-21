@@ -63,6 +63,7 @@ function initializeUI() {
       element.textContent = probabilityFormat === "fraction" ? element.dataset.fraction : element.dataset.percent;
     });
     formatInputs.forEach((input) => { input.checked = input.value === probabilityFormat; });
+    document.dispatchEvent(new CustomEvent('probability-format-change',{detail:{format:probabilityFormat}}));
     window.refreshParallelLayout?.();
   }
 
