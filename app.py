@@ -76,7 +76,7 @@ def create_app(test_config=None, *, deployment=False):
         if roles.progress.finished or not supported(data,roles.board):
             if explain:raise Pending('game_tree_finished' if roles.progress.finished else 'game_tree_scope')
             return None
-        key=('calculation-tree',data.inputs)
+        key=('calculation-tree',data.inputs,tuple(app.jinja_env.globals['role_order']))
         hit,tree=data.runtime.get(key)
         if not hit:
             result=forecast if forecast is not None else roles.forecast()
@@ -85,7 +85,7 @@ def create_app(test_config=None, *, deployment=False):
                 stopped=budget_stop()
                 if stopped:raise CalculationBudgetExceeded(kind=stopped['kind'])
                 return None
-            try:tree=CalculationTree(data,roles.board,result)
+            try:tree=CalculationTree(data,roles.board,result,role_order=app.jinja_env.globals['role_order'])
             except Pending:
                 if explain:raise
                 return None

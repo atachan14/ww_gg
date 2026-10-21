@@ -2860,3 +2860,30 @@ seers with separate actors, single known actors, split seven-player wolf orbits,
 two wolves in one orbit and self-target exclusions. Evidence:
 tests/test_actor_labels.py and .artifacts/actor-labels-verified.log. JavaScript
 syntax and diff checks pass. No new role-law/solver-scope capability is claimed.
+
+### 2026-10-21 Minimal composition order and supplementary-row cleanup
+
+Composition counts now iterate the existing configured role_order, shared with
+the actual cast form and cast summary. Default order is citizen/medium/seer/
+hunter/wolf; the ordinary fixture reads citizen3/seer1/wolf1. Configured roles
+with zero survivors retain their zero count; initially absent roles are omitted.
+The Tree cache includes the display order so an order change on the same saved
+inputs cannot retain stale labels. This affects presentation only, not phase
+ordering, policy, Q/P, actor/target orbits or Current evidence.
+
+Both supplementary DOM rows are removed entirely: the explanatory legend and
+the dynamic selected-Board/live-player inspector. Board selection still expands
+and highlights nodes. Action hover titles remain. Empty status paragraphs are
+display:none and frame top/bottom margins are zero; essential loading/error status
+remains available. 80vh, panning, headers and intrinsic column geometry remain.
+
+20 focused tests pass in9.954s, including a reordered cast-table configuration
+and same-input API cache, zero-survivor ordering, removed-row HTML and existing
+composition/Current/Tree regressions. JavaScript syntax and diff checks pass.
+Actual TOP all-hidden UI at http://127.0.0.1:18814/main shows citizen-first count
+labels, white/black and existing correlated actor labels. DOM shows both removed
+selectors count0, empty status display:none, frame margins0/0 and header-to-frame
+gap0 (floating-point geometry tolerance). Selecting the seer-live night branch
+does not recreate the inspector; no clipped items or console errors. Right-edge
+B17 Current reaches Day2 day with3 survivors and likewise has neither row. Back
+restores the saved root. Existing sessions/artifacts remain; no push/deploy.

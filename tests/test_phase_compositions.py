@@ -12,7 +12,7 @@ class PhaseCompositionTests(unittest.TestCase):
   with client.session_transaction() as ss:data=BoardData.from_game(ss['game'])
   roles=data.roles();tree=CalculationTree(data,roles.board,roles.forecast());return tree,client
  def test_initial_latent_compositions_terminal_and_probability_conservation(self):
-  tree,client=self.latent();root=tree.read('0',True);self.assertEqual(root['compositions'][0]['label'],'占い1市民3狼1')
+  tree,client=self.latent();root=tree.read('0',True);self.assertEqual(root['compositions'][0]['label'],'市民3占い1狼1')
   labels={};total=F()
   for action in root['actions']:
    for branch in action['branches']:
@@ -28,7 +28,7 @@ class PhaseCompositionTests(unittest.TestCase):
       tree.expand(composition['node']);self.assertEqual(tree.nodes[composition['node']]['actions'],[]);self.assertEqual(tree.value(composition['node']),1)
     self.assertEqual(sum(F(c['probability']) for c in child['compositions']),1)
     self.assertEqual(sum(F(c['probability'])*tree.value(c['node']) for c in child['compositions']),tree.value(child['node']))
-  self.assertEqual(total,1);self.assertEqual(labels,{'占い1市民3狼0':F(1,5),'占い0市民3狼1':F(1,5),'占い1市民2狼1':F(3,5)})
+  self.assertEqual(total,1);self.assertEqual(labels,{'市民3占い1狼0':F(1,5),'市民3占い0狼1':F(1,5),'市民2占い1狼1':F(3,5)})
  def test_hidden_composition_never_conditions_public_wolf_policy(self):
   tree,client=self.latent();root=tree.read('0',True)
   night=next(b['node'] for a in root['actions'] for b in a['branches'] if tree.nodes[b['node']]['node'].read().public.winner is None)

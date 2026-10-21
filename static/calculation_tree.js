@@ -6,12 +6,12 @@
  const groupLabel=label=>label.replace(/(\d+)[（(]or(\d+(?:or\d+)*)[）)]を/g,(_,first,rest)=>'['+[first,...rest.split('or')].join(',')+']から');
  function mass(a,b){const pair=x=>x.split('/').map(BigInt),[an,ad=1n]=pair(a),[bn,bd=1n]=pair(b);let n=an*bn,d=ad*bd,x=n,y=d;while(y){const r=x%y;x=y;y=r;}n/=x;d/=x;return d===1n?String(n):`${n}/${d}`;}
  function mount(root){
-  if(root.dataset.treeBound)return;root.dataset.treeBound='1';root.querySelector('.tree-conditions').textContent='内訳は非公開の配役分岐。能力は同時。矢印は親項目からの条件付き確率。';
-  const content=root.querySelector('[data-tree-content]'),status=root.querySelector('[data-tree-status]'),inspector=root.querySelector('[data-tree-inspector]');
+  if(root.dataset.treeBound)return;root.dataset.treeBound='1';
+  const content=root.querySelector('[data-tree-content]'),status=root.querySelector('[data-tree-status]');
   const nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
   function keep(d){if(!d.column_phase){d.column_day=1+Math.floor(d.history.length/2);d.column_phase=d.history.length%2?'night':'day';}const old=nodes.get(d.node);nodes.set(d.node,old?.actions&&!d.actions?{...d,actions:old.actions}:d);for(const item of Object.values(d.items||{}))keep(item);}
   async function load(id,expand=false){const q=new URLSearchParams();if(id!==null)q.set('node',id);if(snapshot)q.set('snapshot',snapshot);if(expand)q.set('expand','1');const current=new URL(location.href).searchParams.get('current');if(current)q.set('current',current);const response=await fetch('/game-tree?'+q,{cache:'no-store'}),d=await response.json();if(!response.ok)throw Object.assign(Error(d.error),{detail:d});snapshot=d.snapshot;currentNode=d.current_node||'0';displayPath=d.display_path||[];keep(d);return d;}
-  function inspect(d){inspector.replaceChildren(el('span',`B${d.node} · 生存 ${d.alive.map(p=>'P'+p).join(' ')}${d.history.length?' · '+d.history.map(e=>`${e.phase==='day'?'処刑':'襲撃'}P${e.target}`).join(' → '):''}`));root.querySelectorAll('.tree-item').forEach(e=>e.classList.toggle('selected',e.dataset.treeItem===d.node));}
+  function inspect(d){root.querySelectorAll('.tree-item').forEach(e=>e.classList.toggle('selected',e.dataset.treeItem===d.node));}
   async function select(id){if(busy)return;busy=true;try{let d=nodes.get(id);if(!d.winner&&!d.actions){d=await load(id,true);render(id);}inspect(d);}catch(e){status.textContent=e.message;}finally{busy=false;}}
   function render(anchorId){
    const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-item="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
@@ -61,7 +61,7 @@
     labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;headers.append(h);headings.push(h);});
    }
    for(const item of entries){
-    let row;if(item.kind==='action'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;row.onclick=()=>inspector.replaceChildren(el('span',item.title));}
+    let row;if(item.kind==='action'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;}
     else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);if(item.kind==='board'||!item.hideGo)row.dataset.treeItem=d.node;else row.dataset.treeComposition=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;
      const main=el('button',(item.kind==='composition'?item.text+' · 村 '+d.village_win:(item.arrival?item.arrival+' · ':'')+`B${d.node} · ${d.alive.length}人 · 村 ${d.village_win}`),'compact-tree-select');main.type='button';main.onclick=()=>select(d.node);const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1';go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node})}),result=await response.json();if(!response.ok)throw Error(result.error);if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo)row.append(go);}
     row.style.top=(item.cy-13.5)+'px';row.dataset.center=String(item.cy);if(item.span)row.dataset.span=item.span.join(',');item.element=row;canvas.append(row);
@@ -82,8 +82,8 @@
   function endPan(event){if(!pan||pan.id!==event.pointerId)return;const id=pan.id;pan=null;frame.classList.remove('is-panning');if(frame.hasPointerCapture(id))frame.releasePointerCapture(id);}
   for(const type of ['pointerup','pointercancel','lostpointercapture'])frame.addEventListener(type,endPan);
   let measuredWidth=root.getBoundingClientRect().width;new ResizeObserver(entries=>{const width=entries[0].contentRect.width;if(width===measuredWidth)return;measuredWidth=width;if(rootId!==null&&root.isConnected)render();}).observe(root);
-  function unavailable(error){status.textContent=error.message;root.querySelector('.tree-flow-frame').hidden=true;inspector.hidden=true;const box=el('div',undefined,'tree-unavailable');box.dataset.treeUnavailable='1';if(error.detail?.actual){const c=error.detail.actual.counts;box.append(el('p',`現在の配役：市民${c.citizens}・占い${c.seers}・霊能${c.mediums}・狩人${c.hunters}・狼${c.wolves}`));}for(const issue of error.detail?.issues||[])box.append(el('p',issue));if(error.detail?.supported_route)box.append(el('p',error.detail.supported_route));const link=el('a','TOPで現在の設定を確認');link.href='/';box.append(link);content.parentElement.after(box);}
-  (async()=>{try{const d=await load(null,true);rootId=d.node;render(currentNode);status.textContent='';inspector.replaceChildren();}catch(e){unavailable(e);}})();
+  function unavailable(error){status.textContent=error.message;root.querySelector('.tree-flow-frame').hidden=true;const box=el('div',undefined,'tree-unavailable');box.dataset.treeUnavailable='1';if(error.detail?.actual){const c=error.detail.actual.counts;box.append(el('p',`現在の配役：市民${c.citizens}・占い${c.seers}・霊能${c.mediums}・狩人${c.hunters}・狼${c.wolves}`));}for(const issue of error.detail?.issues||[])box.append(el('p',issue));if(error.detail?.supported_route)box.append(el('p',error.detail.supported_route));const link=el('a','TOPで現在の設定を確認');link.href='/';box.append(link);content.parentElement.after(box);}
+  (async()=>{try{const d=await load(null,true);rootId=d.node;render(currentNode);status.textContent='';}catch(e){unavailable(e);}})();
  }
  const init=()=>document.querySelectorAll('[data-calculation-tree]').forEach(mount);new MutationObserver(init).observe(document.documentElement,{childList:true,subtree:true});init();
 })();

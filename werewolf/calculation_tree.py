@@ -50,6 +50,15 @@ def explain_unavailable(game,reason):
         settings_url='/',preserved=True)
 
 
+def composition_label(composition,game_data,role_order):
+    from .exact import ROLE_LABELS
+    w,m,seer,h,v=composition
+    counts=dict(wolf=w,medium=m,seer=seer,hunter=h,villager=v)
+    initial=dict(wolf=game_data.wolves,medium=game_data.mediums,seer=game_data.seers,hunter=game_data.hunters,
+        villager=game_data.players-game_data.wolves-game_data.mediums-game_data.seers-game_data.hunters)
+    return ''.join(('\u5360\u3044' if role=='seer' else ROLE_LABELS[role])+str(counts[role]) for role in role_order if initial[role])
+
+
 class DeferredNode:
     def __init__(self,resolve):self.resolve=resolve;self.node=None
     def __getattr__(self,name):
@@ -58,8 +67,10 @@ class DeferredNode:
 
 
 class CalculationTree:
-    def __init__(self,data,board,forecast):
+    def __init__(self,data,board,forecast,*,role_order=None):
         if not supported(data,board):raise ValueError('Closed exact seer/wolf stage scope')
+        from .exact import ROLES
+        self.role_order=tuple(ROLES if role_order is None else role_order)
         self.data=data;self.rules=data.game_data.rules;self.strategy=Strategy(**data.to_game()['policy'])
         self.calculation=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True)
         self.engine=self.calculation._ClosedCalculation__engine
@@ -398,7 +409,7 @@ class CalculationTree:
         node=row['node'];result=[];parts=node._compositions()
         for composition,probability in parts:
             w,m,seer,h,v=composition
-            label=f'占い{seer}市民{v}'+(f'霊能{m}' if self.data.game_data.mediums else '')+(f'狩人{h}' if self.data.game_data.hunters else '')+f'狼{w}'
+            label=composition_label(composition,self.data.game_data,self.role_order)
             child=key if len(parts)==1 else self.register(node._select_physical('composition',composition),(*row['route'],{'physical':'composition','value':composition}))
             result.append(dict(node=child,counts=dict(wolves=w,mediums=m,seers=seer,hunters=h,citizens=v),label=label,probability=str(probability)))
         row['composition_rows']=result;return result
