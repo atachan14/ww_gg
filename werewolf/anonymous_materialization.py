@@ -40,9 +40,20 @@ def hypothesis(pop,names,cell_roles,mass=F(1)):
     guards=tuple(GuardIntent(m.day,names[m.actor],names[m.participants[0]]) for m in pop.memories if m.kind=='guard')
     return Hypothesis(masks,acquired,mass,guards,bitten)
 
-def expand(law,groups):
-    rows=[]
-    for mass,atom in law.rows:
+def expand_laws(laws,groups):
+    """Materialize common atoms once, keeping each exact law's weights separate.
+
+    Q and P may share structural atoms without sharing posterior masses. This
+    request-local join saves duplicate name assignment/record construction; it
+    never identifies different relational memories or changes normalization.
+    """
+    laws=tuple(laws);unique=tuple(dict.fromkeys(laws));weights={}
+    for index,law in enumerate(unique):
+        for mass,atom in law.rows:
+            owned=weights.setdefault(atom,{})
+            owned[index]=owned.get(index,F())+mass
+    rows=[[] for law in unique]
+    for atom,owned in weights.items():
         count=1
         for index,group in enumerate(groups):
             free=len(group)-sum(name in group for name,ref in atom.pins)
@@ -50,8 +61,21 @@ def expand(law,groups):
             for cell in atom.population.cells:
                 if cell.group==index:count//=factorial(cell.count)
         for names,cell_roles in assignments(atom,groups):
-            tick();rows.append(hypothesis(atom.population,names,cell_roles,mass/count))
-    return normalize(tuple(rows))
+            tick();first_mass=next(iter(owned.values()))/count
+            template=hypothesis(atom.population,names,cell_roles,first_mass)
+            # Hypothesis is immutable. Equal masses may safely share the same
+            # validated row, while unequal Q/P masses always get separate rows.
+            by_mass={first_mass:template}
+            for index,mass in owned.items():
+                weight=mass/count
+                if weight not in by_mass:by_mass[weight]=replace(template,mass=weight)
+                rows[index].append(by_mass[weight])
+    completed={law:normalize(tuple(entries)) for law,entries in zip(unique,rows)}
+    return tuple(completed[law] for law in laws)
+
+
+def expand(law,groups):return expand_laws((law,),groups)[0]
+
 
 def representative(atom,groups):
     from .anonymous_night import Transport
@@ -69,7 +93,7 @@ def representative(atom,groups):
 def source(belief,template):
     from .exact import replace_worlds
     from .phase_updates import acquisition_roster
-    q=expand(belief.q,belief.groups);p=expand(belief.p,belief.groups)
+    q,p=expand_laws((belief.q,belief.p),belief.groups)
     n=template.public.player_count
     rosters=tuple(acquisition_roster(n,belief.history,day) for day in range(1,belief.day+1))
     public=replace_worlds(template.public,public_worlds(q))
