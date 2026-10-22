@@ -51,7 +51,20 @@ function initializeCOEditor() {
   }));
 }
 
+// Scope the read-only list, never its evidence seed or inherited Table state.
+// The aria fallback also supports HTML already cached by a running preview.
+function initializeBoardLog(root = document) {
+  const log = root.querySelector('#system-log'), seed = root.querySelector('#public-log-seed');
+  if (!log || !seed) return;
+  const day = JSON.parse(seed.textContent).day;
+  log.querySelectorAll('.board-log-item').forEach(item => {
+    const published = item.dataset.logDay || item.getAttribute('aria-label')?.match(/\bDay(\d+)\b/)?.[1];
+    if (published !== undefined) item.hidden = Number(published) !== day;
+  });
+}
+
 function initializeUI() {
+  initializeBoardLog();
   const formatInputs = document.querySelectorAll('input[name="probability-format"]');
   let probabilityFormat = "percent";
   try {
