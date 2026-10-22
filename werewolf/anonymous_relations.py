@@ -36,6 +36,14 @@ class Population:
     people:tuple=()
     scans:tuple=()
     attacks:tuple=()
+    memories:tuple=()
+    effects:tuple=()
+    def bind_roles(self,roles):
+        result=self
+        for index,cell in enumerate(self.cells):
+            if cell.role in roles:
+                for _ in range(cell.count):result,_=result.bind(index)
+        return result
     def bind(self,index):
         cell=self.cells[index]
         if not cell.count:raise ValueError('Empty anonymous class')
@@ -63,12 +71,7 @@ class Population:
     def wolves(self):
         return (tuple(i for i,p in enumerate(self.people) if p.alive and p.role=='wolf'),
                 tuple((i,c.count) for i,c in enumerate(self.cells) if c.alive and c.role=='wolf' and c.count))
-    def bind_seers(self):
-        result=self
-        for index,cell in enumerate(self.cells):
-            if cell.role=='seer':
-                for _ in range(cell.count):result,_=result.bind(index)
-        return result
+    def bind_seers(self):return self.bind_roles(('seer',))
 
 @dataclass(frozen=True)
 class Choice:
@@ -94,42 +97,20 @@ class Path:
     bindings:tuple=() # (new binder, originating cell); existing binders keep identity
 
 def scans(population,day,*,initial_white=False,initial_none=False):
-    actors=tuple(i for i,p in enumerate(population.people) if p.role=='seer' and p.alive)
-    rows=(Path(population),)
-    if initial_none:return rows
-    for actor in actors:
-        generated=[]
-        for row in rows:
-            # Only this actor's previous targets affect legal choice. Other
-            # actors' new private results never condition this choice policy.
-            options=row.population.choices(actor=actor,unvisited=not initial_white,nonwolf=initial_white)
-            total=sum(c.multiplicity for c in options)
-            if not total:raise ValueError('no_legal_true_seer_target')
-            for choice in options:
-                tick();child,color=choice.population.acquire(day,actor,choice.target)
-                bindings=row.bindings+(((choice.target,choice.fresh_cell),) if choice.fresh_cell is not None else ())
-                generated.append(Path(child,row.mass*F(choice.multiplicity,total),row.multiplicity*choice.multiplicity,
-                    (*row.steps,Step('seer_target',actor,choice.target),Step('seer_result',actor,color)),row.mass*F(choice.multiplicity,total),bindings))
-        rows=tuple(generated)
-    return rows
+    from .anonymous_abilities import Context,run
+    from .ability_adapters import Divination
+    if initial_none:return (Path(population),)
+    return run(population,(Divination(),),Context(day-1,day,initial_white=initial_white))
+
 
 def attacks(path,night,*,include_self_bite=False,policy=None):
-    """policy(choice) is per-slot mass committed at night start from actor Q.
+    from .anonymous_abilities import Context,choices,resolve
+    from .ability_adapters import WolfAttack
+    context=Context(night,night+1,include_self_bite=include_self_bite)
+    committed=None if policy is None else lambda choice,bindings:policy(choice)
+    rows=choices(path,WolfAttack(),None,context,committed)
+    return tuple(resolve(row,context)[0] for row in rows)
 
-    Default is uniform. Never normalize a supplied policy using the physical
-    role partition or a newly revealed result: it may include zero-mass rows.
-    """
-    options=path.population.choices(nonwolf=not include_self_bite)
-    total=sum(c.multiplicity for c in options)
-    if not total:return ()
-    rows=[]
-    for choice in options:
-        tick();weight=F(1,total) if policy is None else policy(choice)
-        if not isinstance(weight,F) or weight<0:raise ValueError('Exact nonnegative committed policy required')
-        bindings=path.bindings+(((choice.target,choice.fresh_cell),) if choice.fresh_cell is not None else ())
-        rows.append(Path(choice.population.death(choice.target,night),path.mass*choice.multiplicity*weight,
-            path.multiplicity*choice.multiplicity,(*path.steps,Step('wolf_target',None,choice.target,choice.population.wolves())),path.mass*F(choice.multiplicity,total),bindings))
-    return tuple(rows)
 
 def alias(index):
     text=''

@@ -10,7 +10,7 @@ from math import factorial
 from .anonymous_relations import Cell,Person,Population,scans,attacks
 from .calculation_budget import tick
 
-ROLES=('wolf','seer','villager')
+# Named role keys belong to the rules/schema boundary, not the count algebra.
 
 def allocations(total,counts):
     if len(counts)==1:
@@ -96,7 +96,8 @@ class Law:
         return Law.weighted(result)[1]
 
 def initial_law(groups,counts,initial_rule='random_white'):
-    counts=tuple(counts.get(role,0) for role in ROLES)
+    roles=tuple(counts)
+    counts=tuple(counts[role] for role in roles)
     if sum(counts)!=sum(map(len,groups)):raise ValueError('Role counts do not fill population')
     denominator=multinomial(counts);rows=[]
     def visit(index,left,cells,ways):
@@ -104,7 +105,7 @@ def initial_law(groups,counts,initial_rule='random_white'):
             if not any(left):rows.append((F(ways,denominator),Atom(Population(cells))))
             return
         for chosen in allocations(len(groups[index]),left):
-            tick();visit(index+1,tuple(a-b for a,b in zip(left,chosen)),(*cells,*(Cell(index,role,n) for role,n in zip(ROLES,chosen))),ways*multinomial(chosen))
+            tick();visit(index+1,tuple(a-b for a,b in zip(left,chosen)),(*cells,*(Cell(index,role,n) for role,n in zip(roles,chosen))),ways*multinomial(chosen))
     visit(0,counts,(),1)
     return Law.weighted(rows)[1].acquire(1,initial_rule)
 
@@ -153,7 +154,7 @@ class Belief:
         for mass,atom in self.p.rows:
             pop=atom.population
             count=lambda role:sum(p.alive and p.role==role for p in pop.people)+sum(c.count for c in pop.cells if c.alive and c.role==role)
-            key=(count('wolf'),0,count('seer'),0,count('villager'));rows[key]=rows.get(key,F())+mass
+            key=tuple(count(role) for role in ('wolf','medium','seer','hunter','villager'));rows[key]=rows.get(key,F())+mass
         return tuple(sorted(rows.items()))
     def night(self,policy_factory=None,*,acquire=True):return NightFlow(self,policy_factory,acquire=acquire)
 
