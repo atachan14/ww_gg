@@ -27,10 +27,11 @@
    try{for(let i=0;i<queue.length;i++){
     const entry=queue[i];if(!live(entry)||visited.has(entry.key))continue;let item=items.get(entry.key);if(!item)continue;
     if(item.d?.pending)continue;
-    if(item.d?.win_certificate&&(!required.has(item.key)||item.id===current||item.d?.node===current))continue;
+    const marker=item.next.some(edge=>edge.item.kind==='cutoff');
+    if(item.d?.win_certificate&&!marker&&(!required.has(item.key)||item.id===current||item.d?.node===current))continue;
     if(item.lazy){if(dirty){refresh();dirty=false;}await ensure(item);refresh();if(!live(entry))continue;item=items.get(entry.key);if(!item||item.lazy)continue;}
     visited.add(entry.key);if(!item.expandable)continue;open.add(entry.key);dirty=true;
-    for(const edge of item.next)if((!item.d?.win_certificate||required.has(edge.item.key))&&(!onlyPathUntilCurrent||!required.has(item.key)||item.id===current||item.d?.node===current||required.has(edge.item.key))&&(!isZero(edge.probability)||required.has(edge.item.key)))queue.push({key:edge.item.key,parents:entry.parents.concat(entry.key)});
+    for(const edge of item.next)if((!item.d?.win_certificate||edge.item.kind==='cutoff'||required.has(edge.item.key))&&(!onlyPathUntilCurrent||edge.item.kind==='cutoff'||!required.has(item.key)||item.id===current||item.d?.node===current||required.has(edge.item.key))&&(!isZero(edge.probability)||required.has(edge.item.key)))queue.push({key:edge.item.key,parents:entry.parents.concat(entry.key)});
    }}finally{if(automatic===run)automatic=null;if(dirty&&alive())refresh();}
   },
   project(item,id='root'){if(id==='root'){items.clear();projected=new Map();}if(projected.has(item))return projected.get(item);projected.set(item,item);if(item.shared||item.sharedIdentity)id='public:'+item.id;item.key=id;item.expandable=item.children.length>0||!!item.lazy;item.expanded=item.expandable&&open.has(id);const children=item.children.map((edge,index)=>({...edge,item:this.project(edge.item,id+'/'+edge.item.kind+':'+(edge.item.id??index)+':'+index)}));item.next=children;item.closedContinuation=item.expandable&&!item.expanded;items.set(id,item);item.children=item.expanded?children:[];item.height=Math.max(44,item.children.reduce((height,edge)=>height+edge.item.height,0)+Math.max(0,item.children.length-1)*14);return item;}

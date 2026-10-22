@@ -33,3 +33,15 @@ test('certified ancestors preserve manual zero Current path only; Current certif
  const root=refresh();assert.equal(root.expanded,true);assert.equal(root.children[0].item.expanded,false);assert.equal(root.children[1].item.expanded,false);
  state.toggle(root.children[0].item.key);refresh();assert.equal(state.item(root.children[0].item.key).expanded,true);
 });
+
+
+test('a pruning marker opens as a terminal explanation without requesting any future policy',async()=>{
+ const make=()=>n('board','cert',[e(n('cutoff',undefined,[],false,{text:'rope2 candidates2'}),null),e(n('action','uncomputed',[e(n('board','lazy',[],true))]))],false,{d:{win_certificate:{}}});
+ const {state,refresh}=setup(make);await state.auto('root',()=>assert.fail('marker must not calculate'),refresh,{current:'cert',path:['cert']});
+ const root=refresh();assert.equal(root.expanded,true);assert.equal(root.children[0].item.kind,'cutoff');assert.equal(root.children[0].probability,null);assert.equal(root.children[0].item.expandable,false);assert.equal(root.children[0].item.closedContinuation,false);assert.equal(root.children[1].item.expanded,false);
+});
+test('pruning markers coexist with required manual Current paths and keep siblings collapsed',async()=>{
+ const make=()=>n('board','cert',[e(n('cutoff')),e(n('board','manual'))],false,{d:{win_certificate:{}}});
+ const {state,refresh}=setup(make);await state.auto('root',()=>assert.fail(),refresh,{current:'manual',path:['cert','manual'],onlyPathUntilCurrent:true});
+ const root=refresh();assert.equal(root.expanded,true);assert.equal(root.children[0].item.kind,'cutoff');assert.equal(root.children[1].item.id,'manual');
+});

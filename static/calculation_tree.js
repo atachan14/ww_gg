@@ -70,6 +70,10 @@
    function make(kind,column,data,children=[]){return {kind,column,...data,children,height:Math.max(ROW,children.reduce((h,c)=>h+c.item.height,0)+Math.max(0,children.length-1)*GAP)};}
    function choices(d,path,reach){
     if(d.winner)return [];
+    if(d.cutoff_marker&&d.actions===null){
+     const marker=d.cutoff_marker,phase=(marker.day-1)*2;maxPhase=Math.max(maxPhase,phase);
+     return [{probability:null,item:make('cutoff',base(phase)+dayWidth(phase)-1,{text:marker.label,title:'',explanatory:true})}];
+    }
     const phase=(d.column_day-1)*2+(d.column_phase==='night'?1:0),column=base(phase)+(native?1+(d.phase==='day'?updateCount(phase):0):2);
     if(d.phase==='night'&&d.night_stages){
      const walk=(stage,index,parentReach)=>{
@@ -127,6 +131,7 @@
     }
     if(native&&d.public_bundle&&sharedBoards.has(id)){const item=sharedBoards.get(id);if(context)item.contexts.add(context);return item;}
     if(native){const next=new Set([...path,id]),children=path.has(id)?[]:[...choices(d,next,reach),...(d.manual_updates||[]).map(update=>({probability:update.probability,item:build(update.node,next,undefined,reach)})).filter(edge=>edge.item)],item=make('board',base(phase)+(d.navigation_depth||0),{d,id,arrival,text:d.navigation_label,update:!!d.navigation_label,shared:!!d.public_bundle,contexts:new Set(context?[context]:[]),lazy:!d.winner&&!d.win_certificate&&!d.actions},children);if(d.public_bundle)sharedBoards.set(id,item);return item;}
+    if(d.cutoff_marker&&d.actions===null)return make('board',base(phase),{d,id,arrival},path.has(id)?[]:choices(d,new Set([...path,id]),reach));
     const next=new Set([...path,id]),compositions=d.compositions||[{node:id,label:'内訳未取得',probability:'1'}];
     const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id,lazy:!c.winner&&!c.actions},choices(c,next,mass(reach,composition.probability)))};});
     return make('board',base(phase),{d,id,arrival,lazy:!d.winner&&!d.win_certificate&&!d.compositions?.length},children);
@@ -140,7 +145,7 @@
     labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;headers.append(h);headings.push(h);});
    }
    for(const item of entries){
-    let row;if(item.kind==='action'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;}
+    let row;if(item.kind==='action'||item.kind==='cutoff'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;if(item.kind==='cutoff')row.dataset.cutoffMarker='';}
     else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);if(item.kind==='board'||!item.hideGo)row.dataset.treeItem=d.node;else row.dataset.treeComposition=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;
      const main=el('button',item.update?undefined:(item.kind==='composition'?item.text:(item.arrival?item.arrival+' · ':'')+(d.snapshot_only?'昼開始':`B${d.board_number??d.node}`)+` · ${d.alive.length}人`),'compact-tree-select');if(item.update){row.classList.add('compact-tree-update');for(const line of item.text.split(' / '))main.append(el('span',line,'tree-log-row'));}if(item.kind==='board')row.classList.add('compact-tree-board');if(d.village_win!=null){if(item.kind==='board')row.append(win(d.village_win,'tree-win-corner'));else{main.append(' \u00b7 \u6751 ');main.append(win(d.village_win));}};main.type='button';main.onclick=()=>{inspect(d);openAnalysis(d,item.id);};main.disabled=item.kind!=='board';if(item.kind==='board')main.setAttribute('aria-haspopup','dialog');const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1'||d.public_current===false;go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.board_number??d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node,...(root.dataset.navigationRevision!==undefined?{revision:root.dataset.navigationRevision}:{})})}),result=await response.json();if(!response.ok)throw Error(result.error);if(result.html&&window.BoardNavigation){await window.BoardNavigation.install(result);busy=false;}else if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo&&item.kind==='board'&&d.public_current!==false)row.append(go);}
     if(item.kind!=='action')row.querySelectorAll('button').forEach(guardDragClick);row.dataset.treeKey=item.key;row.style.top=(item.cy-13.5)+'px';row.dataset.center=String(item.cy);if(item.span)row.dataset.span=item.span.join(',');item.element=row;canvas.append(row);

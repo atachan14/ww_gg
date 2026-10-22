@@ -35,7 +35,7 @@ window.initializeStrategyEditor = function () {
   }
   function itemSpec(s,o) {
     const scalar=(title,key,candidates,ordered=false,disabled=false)=>({title,key,candidates,ordered,disabled,min:1,max:1,values:[String(key==='model'?model:policy[key]??'max')],supported:candidates.map(([id])=>id)});
-    if(o==='cutoff'&&s==='village')return {...scalar('勝利確定の省略','win_cutoff',[['false','Off'],['true','On']]),values:[String(policy.win_cutoff)]};
+    if(o==='cutoff'&&s==='village')return {...scalar('縄が足りたらロラを省略','win_cutoff',[['false','Off'],['true','On']]),values:[String(policy.win_cutoff)]};
     if(o==='position'&&s==='village'&&policy.win_cutoff)return scalar('処刑位置','day',[['max','期待勝率最大化']],true,true);
     if(o==='position'&&['village','wolfCommon'].includes(s))return scalar(s==='village'?'処刑位置':'噛み位置',s==='village'?'day':'night',[['max','期待勝率最大化'],['random','均等化']],true);
     if(o==='position'&&s==='hunter')return {title:'護衛位置',key:'guard_position',ordered:true,min:1,max:1,values:clone(policy.guard_position),candidates:[['uniform','均等化'],['max','期待勝率最大化']],supported:['uniform']};

@@ -28,6 +28,34 @@ class WinCertificateTests(unittest.TestCase):
     self.assertIsNone(bound(range(1,m+1),range(1,2*m+extra),phase))
     self.assertIsNotNone(bound(range(1,m+1),range(1,2*m+extra+1),phase))
   b,s=self.source(5,5);self.assertIsNone(certify(b,s,s,Strategy(win_cutoff=True),Rules()))
+ def test_explanatory_marker_budget_phase_and_explicit_full_calculation(self):
+  for phase,extra in [('day',1),('night',2)]:
+   for n in range(3,10):
+    for m in range(1,5):
+     certificate=bound(range(1,m+1),tuple(range(1,n+1)),phase)
+     if certificate is None:continue
+     marker=certificate.marker(2)
+     self.assertEqual(marker['executions'],(n-extra)//2)
+     self.assertGreaterEqual(marker['executions'],m)
+     self.assertEqual(marker['candidate_count'],m)
+     self.assertEqual(marker['day'],2+(phase=='night'))
+  from werewolf.navigation_store import NavigationDocument
+  from werewolf.navigation_tree import NavigationTree
+  game=relations.PublicRelationOrbitTests().game();game['policy']['win_cutoff']=True
+  doc=NavigationDocument(BoardData.from_game(game));view=NavigationTree(doc)
+  shown=view.read(view.current_key(),True);before=doc.game.node.read()
+  self.assertEqual(shown['cutoff_marker'],dict(label='縄数2狼位置数2',executions=2,candidate_count=2,day=1,phase='day'))
+  self.assertIsNone(shown['actions']);self.assertEqual(before,doc.game.node.read())
+  parent=view.current_key();doc.game.action(1);current=view.current_key();restored=view.read(parent,True)
+  self.assertIsNone(restored['cutoff_marker'])
+  self.assertTrue(any(b['node']==current for a in restored['actions'] for b in a['branches']))
+  night=view.read(current,True)
+  self.assertEqual(night['cutoff_marker'],dict(label='縄数1狼位置数1',executions=1,candidate_count=1,day=2,phase='day'))
+  tree,unused=view.view(doc.game.current);tree.expand(tree.root)
+  self.assertIsNone(tree.summary(tree.root,True)['cutoff_marker'])
+  game['policy']['win_cutoff']=False
+  off=NavigationDocument(BoardData.from_game(game));shown=NavigationTree(off).read(expand=True)
+  self.assertIsNone(shown['cutoff_marker'])
  def test_analytic_hit_never_calls_future_search_or_completes_scores(self):
   b,s=self.source(5,2);e=self.engine(True)
   with patch.object(e,'act',side_effect=AssertionError('recursive action')),patch.object(e,'day_scores',side_effect=AssertionError('score vector')):
@@ -121,7 +149,7 @@ class WinCertificateTests(unittest.TestCase):
  def test_default_UI_interlock_legacy_and_lazy_public_details(self):
   with tempfile.TemporaryDirectory() as directory:
    app=create_app(dict(TESTING=True,SECRET_KEY='cutoff-test',GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,PERSISTENT_TREE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
-   client=app.test_client();self.assertIn('name="win_cutoff" data-setup-cutoff><option value="1" selected',client.get('/').get_data(as_text=True))
+   client=app.test_client();self.assertIn('縄が足りたらロラを省略',client.get('/').get_data(as_text=True));self.assertIn('name="win_cutoff" data-setup-cutoff><option value="1" selected',client.get('/').get_data(as_text=True))
    response=client.post('/start',data=dict(citizens='3',seers='1',wolves='1',day='random',night='max',fake_reports='max',win_cutoff='1'))
    self.assertEqual(response.status_code,303)
    with client.session_transaction() as ss:

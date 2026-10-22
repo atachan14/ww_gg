@@ -302,7 +302,7 @@ def create_app(test_config=None, *, deployment=False):
                 except json.JSONDecodeError as exc:raise ValueError('占い位置を確認してください。') from exc
             elif state and key in state['policy']:extra[key]=state['policy'][key]
         cutoff=request.form.getlist('win_cutoff')
-        if cutoff not in ([],['0'],['1']):raise ValueError('勝利確定の省略を確認してください。')
+        if cutoff not in ([],['0'],['1']):raise ValueError('縄が足りたらロラを省略を確認してください。')
         # Missing field is the legacy API/saved-policy compatibility path.
         extra['win_cutoff']=cutoff==['1'] if cutoff else (state or {}).get('policy',{}).get('win_cutoff',False)
         strategy = Strategy('max' if extra['win_cutoff'] else one("day"), one("night"), inclusion == ["1"],report_mode,**extra)

@@ -13,6 +13,13 @@ class RollCertificate:
     phase:str
     rule:str='public-roll-v1'
 
+    def marker(self,day):
+        # Worst-case one death per night; this is a roll budget, not a fake turn.
+        executions=(self.alive-(1 if self.phase=='day' else 2))//2
+        return dict(label=f'縄数{executions}狼位置数{len(self.candidates)}',
+                    executions=executions,candidate_count=len(self.candidates),
+                    day=day+(self.phase=='night'),phase='day')
+
 def bound(candidates,alive,phase):
     candidates=tuple(sorted(candidates));n=len(alive)
     if phase not in ('day','night') or not candidates:return None

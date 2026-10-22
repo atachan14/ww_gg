@@ -106,6 +106,11 @@ class NavigationTree:
 
     def _summary(self,owner,local,raw):
         tree,names=self.view(owner);row=self.document.game.history.occurrence(self.owner(owner))
+        # A recorded action is an explicit detail request. Restore its real
+        # edges before presenting a certificate-only stop, so Current stays
+        # reachable and its parent is not mistaken for the pruned endpoint.
+        if local==tree.root and raw.get('actions') is None and any(c.selector.get('requested') is not None for c in self.document.game.history.children(self.owner(owner))):
+            tree.expand(local);raw=tree.summary(local,True)
         out=deepcopy(raw);out.pop('items',None);out['node']=self.key(owner,local)
         out['board_number']=self.board_numbers.setdefault(out['node'],len(self.board_numbers))
         s=transport_source(tree.nodes[local]['node'].read(),names.forward);b=s.public

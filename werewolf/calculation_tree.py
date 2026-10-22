@@ -652,11 +652,13 @@ class CalculationTree:
         row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
+        certificate=node.win_certificate()
         return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day,'column_phase':point.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
-            'win_certificate':asdict(node.win_certificate()) if node.win_certificate() else None,
+            'win_certificate':asdict(certificate) if certificate else None,
+            'cutoff_marker':certificate.marker(point.day) if certificate and row['actions'] is None else None,
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],
             'mode':getattr(self.strategy,b.phase),'rules':asdict(self.rules),'policy':asdict(self.strategy),
             'history':[asdict(e) for e in b.history],'reports':[asdict(r) for r in s.past],

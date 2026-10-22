@@ -3370,3 +3370,47 @@ Final focused regression:59 Python tests and50 JS tests pass. Support scans use
 existing tick/cancellation/work deadlines; a dedicated one-unit budget test
 rejects the scan rather than bypassing limits. The bound is checked before full
 support hashing, so unsupported count cases do not build that extra set.
+
+
+### Roll-pruning explanation marker
+
+The visible option is now exactly 縄が足りたらロラを省略. A certificate-only
+Tree summary (no expanded action table) carries a presentation marker with
+縄数X狼位置数Y. Y counts the distinct live public-Q candidates, not orbits.
+X=floor((n-1)/2) in day, floor((n-2)/2) in night. Under the admitted at-most-one
+night-death rules, these budgets are exactly the integer version of the
+certificate inequalities X>=Y. The roll invariant above guarantees enough
+safe executions; X is available roll capacity, not a promise to keep playing
+after an earlier real victory.
+
+The marker is placed in the current day's next execution-position column, or
+the following daytime execution-position column for a night certificate. It is
+a terminal presentation item, with a probability-free explanatory connector,
+no Current navigation, no real action/Board/history entry and no continuation
+stub. It opens automatically without loading policies. Required Current/manual
+paths remain independently visible. Off and already-expanded full Tree action
+tables do not carry the marker. BoardTable's explicit detail computation remains
+a separate request and does not pretend to expand a future Tree.
+
+Focused verification:28 Python tests,37 JS tests, including phase/odd-even rope
+bounds, actual candidate counts, next-day night placement, full/Off absence,
+manual/cold history, exact action values, marker-only auto expansion and no
+policy request for explanation nodes. Mathematical evaluation is unchanged.
+
+Visual verification exposed a previously hidden cutoff-path omission: a manual
+execution recorded after a certified parent did not itself materialize the
+presentation parent's action edges. NavigationTree now treats an existing
+recorded requested action as an explicit detail request and reconstructs that
+parent's exact action edges before summary. This removes the stale parent
+pruning marker and keeps Current reachable, placing the explanation at the
+actual later pruned endpoint. No solver state, policy weight or history entry is
+invented. The new regression verifies parent->recorded night Current identity,
+night marker placement and cold/manual navigation alongside the existing tests.
+
+Final real Edge evidence: day 縄数2狼位置数2 under phase0/処刑位置;
+night 縄数1狼位置数1 under phase2/処刑位置 (following Day2昼).
+Both markers have no button/Board identity/stub/probability label. Off has zero
+markers. Desktop and panned narrow screenshots, including the night jump over
+ability/death columns, were actually viewed: labels and headers remain aligned,
+without card overlap. Manual3/back/manual1 uses explicit candidate detail
+requests and preserves the recorded Current path. Zero Runtime exceptions.
