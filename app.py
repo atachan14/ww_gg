@@ -490,7 +490,9 @@ def create_app(test_config=None, *, deployment=False):
             finished=finished,manual=manual,guard_scope_pending=guard_scope_pending,
             probability_pending=seer_pending if role_evidence_pending or disclosure_error else None)
         players=player_view.players
-        return render_template("main.html", cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        from werewolf.seer_manual import report_slots
+        seer_slots=report_slots(board,rules,navigation_current.source.public_state.rosters if navigation_current is not None else None)
+        return render_template("main.html", seer_slots=seer_slots,navigation_log=navigation_current.public_log if navigation_current is not None else None, cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None or navigation_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
@@ -1040,6 +1042,7 @@ def create_app(test_config=None, *, deployment=False):
             new={}
             for r in proposed:
                 if not isinstance(r,dict) or set(r)!={'day','reporter','target','color'}:raise ValueError('能力結果を確認してください。')
+                if kind=='seer' and r['day']==1 and state['rules'].get('initial_seer','random_white')=='none':raise ValueError('初日占いなしのためDay1の結果は公開できません。')
                 key=(r['day'],r['reporter']) if kind=='seer' else (r['day'],r['reporter'],r['target'])
                 if key in new:raise ValueError('能力結果が重複しています。')
                 new[key]=r
@@ -1113,10 +1116,16 @@ def create_app(test_config=None, *, deployment=False):
             doc=navigation_document()
             with doc.lock:
                 if request.form.get('revision')!=str(doc.revision):return jsonify(error='Board changed'),409
+                from werewolf.navigation_current import NavigationCurrent
+                from werewolf.public_log import migrate
+                actual=NavigationCurrent(doc.game);before=actual.data.updated(revision=doc.revision).to_game()
+                if request.form.get('board_id') is not None and request.form['board_id']!=migrate(before)['board_id']:
+                    return jsonify(error='Board changed'),409
                 payload=json.loads(request.form.get('payload',''))
                 if type(payload)is not dict or set(payload)!={'claims','seers','mediums'}:raise ValueError('Invalid declaration fields')
                 if payload['mediums']:raise Pending('manual_medium_input_pending')
-                reports=tuple(SeerReport(r['day'],r['day'],r['reporter'],r['target'],r['color']) for r in payload['seers'])
+                previous={(r.acquired_day,r.player):r for r in actual.source.past}
+                reports=tuple(SeerReport(r['day'],previous[(r['day'],r['reporter'])].published_day if (r['day'],r['reporter']) in previous else actual.source.public.day,r['reporter'],r['target'],r['color']) for r in payload['seers'])
                 if publish:
                     identity,data=navigation_owner()
                     parent=doc.game.current

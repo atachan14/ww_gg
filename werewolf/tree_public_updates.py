@@ -14,7 +14,9 @@ def event_label(events):
     for event in events:
         actor=event['player'];parts=rows.setdefault(actor,[])
         if event['kind']=='co':text=role_names[event['role']]+'CO'
-        else:text=str(event['target'])+('白' if event['color']=='white' else '黒')
+        else:
+            text=str(event['target'])+('白' if event['color']=='white' else '黒')
+            if event.get('published_day',event['day'])!=event['day']:text=f"Day{event['day']} "+text
         if event.get('action')=='withdraw':text+='撤回'
         parts.append(text)
     return ' / '.join(str(actor)+' '+ '・'.join(parts) for actor,parts in rows.items())
@@ -69,7 +71,7 @@ def input_timeline(data,role_order):
     return dict(before=before,updates=snapshots,kind='recorded_inputs')
 
 def publication_label(before,after):
-    events=[dict(kind='seer',player=r.player,day=r.acquired_day,target=r.target,color=r.color) for r in after.past if r not in before.past]
+    events=[dict(kind='seer',player=r.player,day=r.acquired_day,published_day=r.published_day,target=r.target,color=r.color) for r in after.past if r not in before.past]
     events.extend(dict(kind='medium',player=r.reporter,day=r.day,target=r.target,color=r.color) for r in after.public.reports if r not in before.public.reports)
     events.extend(dict(kind='co',player=p,role=claim) for p,claim in enumerate(after.public.claims,1) if claim!=before.public.claims[p-1])
     return event_label(events) or '更新なし'

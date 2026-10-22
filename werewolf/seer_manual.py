@@ -143,3 +143,15 @@ def timeline(g,board,player,finished=False):
         row=data.get((day,player),{'target':None,'color':None})
         rows.append({'day':day,'target':row['target'],'color':row['color'],'targets':tuple(i for i in sorted(scan) if i!=player),'editable':not finished,'initial_none':day==1 and g['seer_options']['initial_rule']=='none' and row['target'] is None and row['color'] is None})
     return rows
+
+
+def report_slots(board,rules,rosters=None):
+    """Public acquisition rosters, before simultaneous night deaths; no role truth."""
+    rows=[]
+    for day in range(1,board.day+1):
+        if rosters is not None and day<=len(rosters):alive=tuple(rosters[day-1])
+        else:
+            dead={e.target for e in board.history if e.day<day-1 or (e.day==day-1 and e.phase=='day')}
+            alive=tuple(p for p in range(1,board.player_count+1) if p not in dead)
+        rows.append(dict(day=day,players=alive,available=not(day==1 and rules.initial_seer=='none')))
+    return rows

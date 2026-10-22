@@ -3452,3 +3452,58 @@ Current paths; the existing CO-cell/navigation probe covers Current/Footer,
 fraction switching, header bounds, Ctrl-wheel zoom, page wheel and two-axis pan.
 Both report zero Runtime exceptions. The local preview remains18821 with the
 same cookie name. No other app, port or cookie was changed; no push/deploy.
+
+
+### Delayed seer CO and read-only public history
+
+Reproduced both reports through real Edge controls before editing: Day2 Table
+publication of acquired Day1/Day2 results returned422 manual_report_timing_pending;
+Log offered only acquired day2 and its publish returned409 from the legacy
+cookie-game revision path while navigation used a later document revision.
+Artifacts delayed-co-before.json/log retain this evidence; no stale error was
+suppressed. The historical reproduction script lives under.artifacts.
+
+PublicInput now accepts past acquired days published on the current day, using
+actual stored acquisition rosters and publication_support independently for Q/P.
+Existing reports retain their original published_day and are not reapplied or
+edited. Future/missing acquisition history, already-dead targets, dead new
+reporters and unavailable Day1 results remain rejected. Same-night bite victims
+remain eligible. The Table adapter assigns the current day only to newly
+published results, preserving existing dates; NavigationCurrent projects the
+legacy widget day as acquired_day rather than published_day, so two results
+published together do not collide. No role/world prior is reseeded or sampled.
+
+Table slots share public roster derivation, use exact navigation rosters where
+available, show no fabricated Day1 result when initial_seer=none, and keep already
+published rows read-only. Corrections use ordinary back navigation to a prior
+Board and append a new zero-selection-weight manual branch. The parent/source
+solver states and values, old branches, Q/P histories and full name transports
+remain unchanged. A genuine concurrent duplicate still commits one200/one409;
+provided Board identity is checked as well as the monotone navigation revision.
+Legacy clients omitting identity retain revision protection.
+
+BoardLog removes current add/edit/delete/dialog controls while keeping public
+history and the Table's seed. Navigation history renders only public claims and
+reports, with acquired and published days separated (e.g. Day1 result, Day2
+publication), mapped consistently to current displayed people. Legacy batches
+also use their publication day for labels. Public-input APIs and future SystemLog
+adapter code remain separate and available; no historical records were deleted.
+Tree update labels distinguish a late Day1 report from a current-day report.
+
+103 Python tests pass, including independent support filtering retaining fake
+claims when the true seer is dead, normalized Q/P, named exact action values,
+Day3 additions retaining original publication dates, cold replay, alternative
+updates, scan eligibility, initial-none, initial CO, legacy Log and setup/cutoff.
+37 JS expansion/layout/routing/viewport tests pass. Actual Edge follows Footer
+execution3/bite4, reveals Day1white3 and Day2white4 through Table, previews and
+publishes, goes back for Day2black2, and returns to the old branch via Current.
+Active values are parent1/3 unchanged, first9/10 unchanged, alternate18/19;
+cumulative Footer values remain distinct (23/25 and91/95). Both manual updates
+have selection weight0. Public Log has no entry controls; historical rows are
+read-only. Desktop/narrow screenshots were actually viewed, with no new clipping
+or overlap. Initial-none UI has Day1-- and no target input. Its previously
+unsupported Tree scope was not broadened or replaced with guessed values.
+TOP/Main transfer and initial-CO/Current/Footer/zoom/pan/page-scroll browser probes
+also pass with zero Runtime exceptions. Evidence is in delayed-co-*.json/log/png.
+Only local18821 was restarted with its existing cookie name; other apps/ports/
+cookies untouched, no push or external deployment.

@@ -32,7 +32,7 @@ class NavigationCurrent:
         game=root.to_game();base={k:game[k] for k in ('policy','claim_policy','seer_options','strategy_ui','result_disclosure_model') if k in game}
         history=[{**base,'target':e.target,'claims':list(b.claims)} for e in b.history]
         view={**game,'history':history,'claims':list(b.claims),'selection':None,
-              'seer_inputs':[dict(day=r.published_day,reporter=r.player,target=r.target,color=r.color) for r in self.source.past],
+              'seer_inputs':[dict(day=r.acquired_day,reporter=r.player,target=r.target,color=r.color) for r in self.source.past],
               'reports':[asdict(r) for r in b.reports]}
         view.pop('public_log',None);view.pop('public_draft',None)
         self.prefilled_selection=False
@@ -57,6 +57,18 @@ class NavigationCurrent:
             progress=Progress(None,row.settled_village,row.settled_wolf,prior,outcomes)
         groups,counts=role_summary(progress)
         self.roles=NavigationRoleState(self.data,progress,role_rates(progress),groups,counts,navigation)
+    @property
+    def public_log(self):
+        """Read-only public history on this cursor path, in the current name map."""
+        rows=[];claims=('latent',)*self.source.public.player_count;known=()
+        for row in self.navigation.history.path(self.occurrence.key):
+            source=transport_source(self.navigation.history.state(row.key).source,self.occurrence.names.forward)
+            events=[dict(kind='co',player=p,role=c) for p,c in enumerate(source.public.claims,1) if c!=claims[p-1]]
+            events.extend(dict(kind='seer',player=r.player,day=r.acquired_day,published_day=r.published_day,target=r.target,color=r.color) for r in source.past if r not in known)
+            if events:rows.append(dict(day=source.public.day,phase=source.public.phase,events=events,occurrence=row.key))
+            claims=source.public.claims;known=source.past
+        return rows
+
     def automatic_update(self):
         row=self.occurrence;step=row.selector
         if step is None or step.get('kind')!='generated' or not any(isinstance(s,dict) and 'public_arrival' in s for s in step['route']):return None

@@ -346,6 +346,7 @@ window.addEventListener("pageshow", (event) => {
 function initializePublicLog() {
   const seedNode=document.querySelector('#public-log-seed');if(!seedNode)return;
   const seed=JSON.parse(seedNode.textContent),root=document.querySelector('#system-log'),dialog=root.querySelector('#board-log-dialog');
+  if(!root||!dialog)return; // Current BoardLog is read-only; keep the future input adapter separate.
   const rows=root.querySelector('[data-public-rows]'),status=root.querySelector('[data-public-status]'),editor=root.querySelector('[data-public-editor]'),picker=root.querySelector('[data-legacy-picker]'),mode=root.querySelector('[data-public-mode]');
   const labels={villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'人狼'};
   let disabledStates=new Map();

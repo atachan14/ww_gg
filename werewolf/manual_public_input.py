@@ -43,7 +43,9 @@ def condition_input(source,evidence,rules,claim_policy):
         if old is not None:
             if old!=r:raise UnsupportedPublicInput('historical_report_edit_requires_baseline')
             continue
-        if r.acquired_day!=b.day or r.published_day!=b.day:raise UnsupportedPublicInput('manual_report_timing_pending')
+        if r.acquired_day>b.day or r.published_day!=b.day:raise UnsupportedPublicInput('manual_report_timing_pending')
+        if r.acquired_day==1 and rules.initial_seer=='none':raise ValueError('初日占いなしのためDay1の結果は公開できません。')
+        if r.acquired_day>len(source.public_state.rosters):raise UnsupportedPublicInput('manual_acquisition_history_missing')
         if r.player not in b.alive or evidence.claims[r.player-1]!='seer':raise ValueError('Reporter must be an alive seer claimant')
         roster=source.public_state.rosters[r.acquired_day-1]
         if r.target not in roster or r.target==r.player or r.color not in ('white','black'):raise ValueError('Illegal divination report')
