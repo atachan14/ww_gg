@@ -51,14 +51,22 @@ class NavigationTree:
         for child in reversed(candidates):
             step=child.selector
             is_start=step.get('kind')=='generated' and any(isinstance(s,dict) and 'public_arrival' in s for s in step['route'])
-            if start!=is_start:continue
+            if start!=is_start or child.names!=names:continue
             if child.edge_kind!='manual_public' and self.document.game.history.state(child.key).source==source and self.document.game.history.state(child.key).node.solver_identity==tree.nodes[local]['node'].solver_identity:return child.key
         return None
     def _id(self,owner,local):
         if local is None:return None
         if local not in self.view(owner)[0].nodes:return self.key(owner,local)
         child=self._binding(owner,local)
-        return self.key(child,'0') if child else self.key(owner,local)
+        if child:
+            tree,names=self.view(owner)
+            if tree.nodes[local].get('public_bundle'):
+                # Binding preserves the complete source and name map. Keep the
+                # presentation sharing marker on this same history occurrence.
+                bound,_=self.view(child)
+                bound.nodes[bound.root]['public_bundle']=True
+            return self.key(child,'0')
+        return self.key(owner,local)
     def _stage(self,stage,owner,names):
         if not stage:return stage
         out=deepcopy(stage)

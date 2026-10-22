@@ -117,6 +117,44 @@ class NavigationTreeTests(unittest.TestCase):
   for item in result['items'].values():
    if item['column_phase']=='night':self.assertEqual(item['navigation_depth'],0)
 
+class BoundPublicSharingTests(unittest.TestCase):
+ def fixture(self):
+  doc=NavigationDocument(fixtures.ManualPublicInputTests().root().data)
+  doc.game.action(1);doc.game.action(2)
+  return doc,NavigationTree(doc)
+ def leaves(self,stage):
+  return stage.get('leaves',[])+[leaf for b in stage.get('branches',[]) for leaf in self.leaves(b['children'])]
+ def test_bound_six_paths_keep_one_public_board_and_manual_branch(self):
+  from werewolf.seer_acquisition import SeerReport
+  doc,view=self.fixture();before=doc.game.node.read()
+  doc.game.public_input(('latent','latent','seer','latent','latent'),(SeerReport(1,2,3,4,'white'),SeerReport(2,2,3,5,'black')))
+  data=view.read('h1~0',True);leaves=self.leaves(data['night_stages'])
+  self.assertEqual(len(leaves),6);self.assertEqual({r['node'] for r in leaves},{'h2~0'})
+  board=data['items']['h2~0'];self.assertTrue(board['public_bundle'])
+  self.assertEqual(board['manual_updates'],[dict(node='h3~0',probability='0')])
+  self.assertEqual(doc.game.history.state('h2').source,before)
+  self.assertEqual(sum(h.mass for h in before.private.hypotheses),1)
+  distribution=view.read('h2~0',analysis=True)['distribution']
+  self.assertEqual(sum(F(r['probability']) for r in distribution),1)
+  view.select('h2~0');self.assertEqual(doc.game.current,'h2')
+  view.select('h3~0');self.assertEqual(doc.game.current,'h3')
+ def test_different_mapping_does_not_bind_identical_solver_source(self):
+  from dataclasses import replace
+  from werewolf.navigation_history import NameMap
+  doc,view=self.fixture();row=doc.game.history.occurrence('h2')
+  doc.game.history._occurrences['h2']=replace(row,names=NameMap((1,2,4,3,5)))
+  data=view.read('h1~0',True);leaves=self.leaves(data['night_stages'])
+  self.assertNotIn('h2~0',{r['node'] for r in leaves})
+  self.assertFalse(view.read('h2~0')['public_bundle'])
+ def test_identical_state_in_other_history_is_not_rebound(self):
+  doc,view=self.fixture();second_parent=doc.game.current
+  doc.game.move('h0');doc.game.action(1,_replay=True);doc.game.action(2)
+  # An equal calculation can belong to distinct sibling navigation occurrences.
+  self.assertNotEqual(doc.game.current,second_parent)
+  original=view.read('h1~0',True)
+  self.assertEqual({r['node'] for r in self.leaves(original['night_stages'])},{'h2~0'})
+  self.assertNotIn(doc.game.current+'~0',{r['node'] for r in self.leaves(original['night_stages'])})
+
 class NavigationIntegratedHttpTests(unittest.TestCase):
  def setUp(self):
   temp=tempfile.TemporaryDirectory();self.addCleanup(temp.cleanup)
