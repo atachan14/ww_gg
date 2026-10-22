@@ -119,5 +119,10 @@ window.initializeStrategyEditor = function () {
   dialog.querySelector('[data-editor-apply]').addEventListener('click',()=>close(true));
   dialog.addEventListener('cancel',e=>e.preventDefault());
   dialog.addEventListener('keydown',e=>{if(e.key==='Escape')e.preventDefault();});
+  if(seed.setup)document.addEventListener('setup-settings-change',event=>{
+    seed.roles=event.detail.roles;seed.allow_self_bite=event.detail.allowSelfBite;
+    if(!seed.allow_self_bite)policy.include_self_bite=false;
+    renderOuter();sync();
+  });
   renderOuter();sync();
 };

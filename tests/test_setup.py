@@ -150,7 +150,7 @@ class SetupWebTests(unittest.TestCase):
         game = self.state()
         self.assertEqual(game['history'], [])
         self.assertEqual(game['claims'], ['latent']*5)
-        self.assertEqual(game['policy'], {'day':'max','night':'max','include_self_bite':False})
+        self.assertEqual(game['policy'], {'day':'max','night':'max','include_self_bite':False,'win_cutoff':False})
         self.assertEqual(game['revision'], previous['revision']+1)
         self.assertNotIn('preset', game)
         self.assertNotIn('draft', game)

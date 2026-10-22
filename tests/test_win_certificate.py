@@ -149,7 +149,7 @@ class WinCertificateTests(unittest.TestCase):
  def test_default_UI_interlock_legacy_and_lazy_public_details(self):
   with tempfile.TemporaryDirectory() as directory:
    app=create_app(dict(TESTING=True,SECRET_KEY='cutoff-test',GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,PERSISTENT_TREE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
-   client=app.test_client();self.assertIn('縄が足りたらロラを省略',client.get('/').get_data(as_text=True));self.assertIn('name="win_cutoff" data-setup-cutoff><option value="1" selected',client.get('/').get_data(as_text=True))
+   client=app.test_client();self.assertIn('<input type="hidden" name="win_cutoff" value="1">',client.get('/').get_data(as_text=True));self.assertIn('data-settings-pane="strategy"',client.get('/').get_data(as_text=True))
    response=client.post('/start',data=dict(citizens='3',seers='1',wolves='1',day='random',night='max',fake_reports='max',win_cutoff='1'))
    self.assertEqual(response.status_code,303)
    with client.session_transaction() as ss:

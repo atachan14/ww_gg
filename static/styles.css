@@ -563,3 +563,8 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 
 /* Board win labels share the update card corner slot, outside the card. */
 .compact-tree-item.compact-tree-board{overflow:visible}
+
+/* TOP uses the same settings stack as Main. */
+main[data-screen="top"] .top-grid { grid-template-columns:minmax(0,1fr) 360px;align-items:start; }
+main[data-screen="top"] .settings-column { min-width:0;width:360px;max-width:100%;justify-self:end; }
+@media(max-width:900px){main[data-screen="top"] .top-grid{grid-template-columns:1fr}main[data-screen="top"] .settings-column{width:100%}}

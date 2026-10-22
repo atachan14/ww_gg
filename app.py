@@ -341,6 +341,16 @@ def create_app(test_config=None, *, deployment=False):
         ClaimPolicy(**result)
         return result
 
+    def parse_co_settings(state=None):
+        values=request.form.getlist('strategy_ui')
+        if values:
+            if len(values)!=1 or any(k.startswith(('cco_', 'cco_present_', 'cco_conditions_')) for k in request.form):
+                raise ValueError('CO設定の入力形式を確認してください。')
+            try:return resolve_co_editor(json.loads(values[0]))
+            except (json.JSONDecodeError,TypeError) as exc:raise ValueError('CO設定の入力を確認してください。') from exc
+        policy=parse_claim_policy(state)
+        return co_editor(policy),policy
+
     def parse_claims(state):
         claims = list(state.get('claims', ['latent'] * state['players']))
         for i in range(1, state['players'] + 1):
@@ -657,8 +667,26 @@ def create_app(test_config=None, *, deployment=False):
             return render_template('comparison_results.html',result=result)
         return render_template('comparison.html',inputs=inputs,result=result,claim_policy=ClaimPolicy(**inputs['claim_policy']),finished=False)
 
-    def render_setup(draft, error=None):
-        return render_template("top.html", future_preview=app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), error=error, draft=draft, setup_presets=preset_data(), seer_mode=request.form.get("seer_mode",session.get("game",{}).get("seer_mode","")))
+    def render_setup(draft, error=None, state_seed=None):
+        from dataclasses import asdict
+        policy=asdict(Strategy(win_cutoff=True));editor=co_editor({});claim_policy={}
+        if state_seed:
+            policy=asdict(Strategy(**state_seed['policy']));claim_policy=state_seed.get('claim_policy',{})
+            editor=state_seed.get('strategy_ui',co_editor(claim_policy))
+        if request.method=='POST':
+            try:
+                rules=Rules(draft.allow_self_bite=='1',draft.initial_seer,draft.allow_repeat_guard is True)
+                policy=parse_policy(rules);editor,claim_policy=parse_co_settings()
+            except ValueError:pass  # Keep the original validation error and counts draft.
+        roles=[]
+        for role,key in [('villager','citizens'),('medium','mediums'),('seer','seers'),('hunter','hunters'),('wolf','wolves')]:
+            try:
+                if setup_count(draft.counts[key])>0:roles.append(role)
+            except ValueError:pass
+        state=dict(policy=policy,claim_policy=claim_policy,model='group')
+        seed=dict(setup=True,co=editor,policy=policy,model='group',finished=False,model_locked=True,
+                  allow_self_bite=draft.allow_self_bite=='1',board_key='setup',future_available=True,roles=roles)
+        return render_template("top.html",state=state,strategy_seed=seed,board=dict(day=1,phase='day'),future_preview=app.config.get("SEER_UNIFORM_FUTURE_PREVIEW",False), error=error, draft=draft, setup_presets=preset_data(), seer_mode=request.form.get("seer_mode",session.get("game",{}).get("seer_mode","")))
 
     @app.get('/help')
     def help_route():return render_template('help.html')
@@ -719,13 +747,13 @@ def create_app(test_config=None, *, deployment=False):
     def top():
         state = game()
         config = GameConfig.from_game(state) if state else GameConfig.default()
-        return render_setup(config.draft())
+        return render_setup(config.draft(),state_seed=state)
 
     @app.post("/start")
     def start():
         draft = SetupDraft.from_form(request.form)
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "allow_repeat_guard", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy", "win_cutoff"}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "allow_repeat_guard", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy", "win_cutoff", "strategy_ui"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
@@ -752,7 +780,7 @@ def create_app(test_config=None, *, deployment=False):
             if modes not in ([],[""],["information-fixed-v1"]):raise ValueError("占い計算モデルを確認してください。")
             seer_mode="information-fixed-v1" if seers else (modes[0] if modes else "")
             initial_board(players, wolves, mediums, seers, hunters, experimental_cast=bool(seer_mode))
-            claim_policy = parse_claim_policy()
+            editor,claim_policy = parse_co_settings()
             models=request.form.getlist("model")
             if models not in ([],["group"]):
                 raise ValueError("計算モデルを確認してください。")
@@ -776,6 +804,7 @@ def create_app(test_config=None, *, deployment=False):
                            "model": model, "claims": ['latent'] * players, "claim_policy": claim_policy, "rules": {"allow_self_bite": rules.allow_self_bite,"initial_seer":rules.initial_seer,"allow_repeat_guard":rules.allow_repeat_guard},
                            "policy": policy, "history": [], "selection": None,
                            "revision": previous["revision"] + 1 if previous else 0}
+        if request.form.getlist('strategy_ui'):session['game']['strategy_ui']=editor
         if seer_mode:
             session["game"].update(seer_mode=seer_mode,seer_options={"initial_rule":rules.initial_seer,"likelihood":"compatibility"},seer_inputs=[])
             session.modified=True
@@ -948,17 +977,7 @@ def create_app(test_config=None, *, deployment=False):
                 raise ValueError('このBoardのモデルは変更できません。TOPから新規開始してください。')
             policy = parse_policy(rules,state,require_supported=advancing)
             claims = parse_claims(state)
-            editor_values=request.form.getlist('strategy_ui')
-            if editor_values:
-                if len(editor_values)!=1 or any(k.startswith(('cco_', 'cco_present_', 'cco_conditions_')) for k in request.form):
-                    raise ValueError('CO設定の入力形式を確認してください。')
-                try:
-                    editor, claim_policy = resolve_co_editor(json.loads(editor_values[0]))
-                except (json.JSONDecodeError, TypeError) as exc:
-                    raise ValueError('CO設定の入力を確認してください。') from exc
-            else:
-                claim_policy = parse_claim_policy(state)
-                editor = co_editor(claim_policy)
+            editor,claim_policy=parse_co_settings(state)
             reports=parse_reports(state,progress.board)
             proposed={**state,'model':model,'policy':policy,'claims':claims,'claim_policy':claim_policy,'strategy_ui':editor}
             if reports or 'reports' in state:proposed['reports']=reports

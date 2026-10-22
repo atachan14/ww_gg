@@ -7,7 +7,8 @@
   <p class="hint calculation-estimate">計算時間は配役・履歴で変わり、1回の計算は最大約5分です。計算中も編集でき、変更が続いた場合は最後の入力を順番に反映します。</p>
   <script type="application/json" id="setup-presets">{{ setup_presets|tojson }}</script>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
-  <form method="post" action="{{ url_for('start') }}" data-submit-once>
+  <form id="display-options-form"></form>
+  <form id="setup-form" method="post" action="{{ url_for('start') }}" data-submit-once>
     <div class="top-grid">
       <section class="panel cast-panel" aria-labelledby="game-cast-title">
         <div class="panel-heading setup-heading"><h2 id="game-cast-title">配役</h2>
@@ -30,15 +31,9 @@
         </div>
         <p class="hint" id="cast-validation">合計1〜9人。3人以上では人狼より村陣営が多い配役にしてください。</p>
       </section>
-    <section class="panel rules-panel" aria-labelledby="game-rule-title">
-      <div class="panel-heading setup-heading"><h2 id="game-rule-title">ルール</h2>
-      <label class="setup-preset" for="rule-preset"><span>プリセット：</span><select id="rule-preset">{% for key,preset in setup_presets.rules.items() %}<option value="{{ key }}" {% if draft.rule_preset == key %}selected{% endif %}>{{ preset.label }}</option>{% endfor %}<option value="custom" {% if draft.rule_preset == 'custom' %}selected{% endif %}>カスタム</option></select></label></div>
-      {% with editable=true %}{% include 'rules.html' %}{% endwith %}
-    </section>
+      {% with setup_settings=true %}{% include 'settings_column.html' %}{% endwith %}
     </div>
 
-    <label class="exclusive-field">縄が足りたらロラを省略<select name="win_cutoff" data-setup-cutoff><option value="1" selected>On</option><option value="0">Off</option></select></label>
-    <label class="exclusive-field">処刑位置<select name="day" data-setup-day><option value="max">期待勝率最大化</option><option value="random" disabled>均等化</option></select></label><input type="hidden" name="night" value="max">
     <div class="phase-footer"><div class="footer-inner">{% include 'footer_help.html' %}{{ phase_button(1, 'day') }}</div></div>
   </form>
 </main>

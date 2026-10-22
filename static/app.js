@@ -75,6 +75,12 @@ function initializeUI() {
     });
   });
   applyProbabilityFormat();
+  const roleDetailOption=document.querySelector('#display-role-details'),displayMain=document.querySelector('main');
+  if(roleDetailOption&&displayMain){
+    try{displayMain.dataset.roleDetails ??= localStorage.getItem('ww_gg.role-details')||'true';}catch(_){displayMain.dataset.roleDetails ??= 'true';}
+    roleDetailOption.checked=displayMain.dataset.roleDetails!=='false';
+    roleDetailOption.addEventListener('change',()=>{displayMain.dataset.roleDetails=String(roleDetailOption.checked);try{localStorage.setItem('ww_gg.role-details',displayMain.dataset.roleDetails);}catch(_){}});
+  }
 
 
   document.querySelectorAll("form[data-submit-once]").forEach((form) => {
@@ -131,10 +137,11 @@ function initializeUI() {
     rulePreset.addEventListener('change', () => {
       const preset = setupPresets.rules[rulePreset.value];
       if (preset) {ruleInput.value = preset.values.allow_self_bite ? '1' : '0';initialSeerInput.value=preset.values.initial_seer;repeatGuardInput.value=preset.values.allow_repeat_guard ? '1' : '0';}
-      refreshSetupPresets();
+      refreshSetupPresets();updateCast();
     });
     rulePreset.addEventListener('blur',refreshSetupPresets);
     ruleInput.addEventListener('change', refreshSetupPresets);
+    ruleInput.addEventListener('change',()=>updateCast());
     initialSeerInput.addEventListener('change',refreshSetupPresets);
     repeatGuardInput.addEventListener('change',refreshSetupPresets);
   }
@@ -148,6 +155,8 @@ function initializeUI() {
     refreshSetupPresets();
     const village = Number(citizens.value) + Number(mediums.value) + Number(seers.value) + Number(hunters.value);
     const total = village + Number(wolves.value);
+    const roles=[['villager',citizens],['medium',mediums],['seer',seers],['hunter',hunters],['wolf',wolves]].filter(([,input])=>Number(input.value)>0).map(([role])=>role);
+    document.dispatchEvent(new CustomEvent('setup-settings-change',{detail:{roles,allowSelfBite:ruleInput.value==='1'}}));
     const experimental = Number(seers.value)>0;
     wolves.max = experimental ? '9' : '4';
     document.querySelector('#villager-count').innerHTML = `${village}<small>人</small>`;
@@ -495,12 +504,3 @@ document.addEventListener('DOMContentLoaded',async()=>{
   }else install(doc);
  }catch(error){if(mounted.isConnected&&!generation){const pending=mounted.querySelector('[data-seer-pending]');if(pending)pending.textContent='勝率は未計算です。役職率は表示済みです。';mounted.querySelectorAll('[data-value-cell="dawn"],[data-value-cell="final"]').forEach(cell=>cell.textContent='未計算');const note=document.createElement('p');note.className='error';note.setAttribute('role','alert');note.textContent=error.message;mounted.append(note);}}
 });
-
-
-// The new-game option owns a fixed policy for all subsequent days.
-(() => {
- const cutoff=document.querySelector('[data-setup-cutoff]'),day=document.querySelector('[data-setup-day]');
- if(!cutoff||!day)return;
- const sync=()=>{const on=cutoff.value==='1';day.querySelector('[value="random"]').disabled=on;if(on)day.value='max';};
- cutoff.addEventListener('change',sync);sync();
-})();

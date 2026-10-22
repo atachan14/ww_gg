@@ -3414,3 +3414,41 @@ markers. Desktop and panned narrow screenshots, including the night jump over
 ability/death columns, were actually viewed: labels and headers remain aligned,
 without card overlap. Manual3/back/manual1 uses explicit candidate detail
 requests and preserves the recorded Current path. Zero Runtime exceptions.
+
+
+### Shared TOP/Main settings stack
+
+TOP now uses the same settings_column.html as Main, in display/rules/strategy
+order and Game/Board groups. The existing rules and strategy partials remain
+shared; TOP permits rule editing and its independent rule preset. Cast stays
+left, with the same360px right settings stack as Main and single-column narrow
+layout. The standalone TOP cutoff/day selects were replaced by the common
+strategy editor; the same On/MAX interlock and supported policy definitions are
+used. Policy and CO validation now share parse_co_settings between start and
+Main, with duplicate/mixed input rejection unchanged. TOP submits its normalized
+strategy editor into the new game; saved game data is not edited by visiting TOP.
+
+Changing cast/presets refreshes active role controls while preserving edited
+policy/CO values. Rule permission changes update self-bite availability and clear
+an ineligible inclusion as before. A valid running setup restores its current
+strategy when returning to TOP, while a first visit still defaults cutoff On.
+Invalid cast submissions keep valid strategy drafts and do not mutate the game.
+Display fraction/percentage remains a local preference; the shared role-detail
+preference now also transfers between TOP and Main without entering solver data.
+The display radios belong to the external display form and never pollute /start.
+
+33 Python regressions pass (setup, shared settings, strategy, role terminology,
+cutoff) and37 JS expansion/layout/routing/viewport tests pass. Isolated Edge
+verifies active seer controls after cast preset, Off/random then On/MAX lock,
+independent presets, modified CO/fake-seer/rule state reaching Main and restoring
+on TOP, fraction and role-detail transfer, desktop1440/rightwidth360 and
+narrow390/fullwidth stack. Both screenshots were actually inspected. No solver
+formula, branch generation, probabilities or persistent history semantics changed.
+Evidence: top-settings-*.log/json/png under.artifacts.
+
+Final live regression probes also pass: the updated common-editor cutoff probe
+covers On/MAX lock, day/night explanation markers, lazy exact details and manual
+Current paths; the existing CO-cell/navigation probe covers Current/Footer,
+fraction switching, header bounds, Ctrl-wheel zoom, page wheel and two-axis pan.
+Both report zero Runtime exceptions. The local preview remains18821 with the
+same cookie name. No other app, port or cookie was changed; no push/deploy.
