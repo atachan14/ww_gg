@@ -95,6 +95,8 @@ class RoleStagedTreeTests(unittest.TestCase):
   g=data(5).to_game();g['hunters']=1
   with self.assertRaises(Pending) as error:ClosedCalculation(BoardData.from_game(g),grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True)
   self.assertEqual(error.exception.reason,'closed_guard_stage_policy_unimplemented')
+  from werewolf.calculation_tree import explain_unavailable
+  self.assertTrue(any('MAX' in issue and '狩人' in issue for issue in explain_unavailable(g,error.exception.reason)['issues']))
   g['hunters']=2
   with self.assertRaises(Pending) as error:ClosedCalculation(BoardData.from_game(g),grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True)
   self.assertEqual(error.exception.reason,'guard_multiple_hunters_unimplemented')

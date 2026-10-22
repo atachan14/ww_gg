@@ -23,12 +23,14 @@ const {spawn}=require('node:child_process'),fs=require('node:fs/promises'),os=re
   await evaluate(`(async()=>{await fetch('/start',{method:'POST',body:new URLSearchParams({citizens:'${kind==='medium'?3:2}',seers:'0',mediums:'${kind==='medium'?1:0}',hunters:'${kind==='hunter'?1:0}',wolves:'1',day:'random',night:'random',fake_reports:'random',win_cutoff:'0'})});})()`);
   await navigate('http://127.0.0.1:18821/main');await wait(()=>evaluate(`document.querySelector('main')?.dataset.tableInitialized==='true'`));
   await evaluate(`(()=>{const original=window.fetch;window.fetch=async(...args)=>{const r=await original(...args);if(!r.ok)window.__httpFailure=await r.clone().text();return r;};})()`);
+  await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.dataset.treeAuto==='complete'`),180000);
   const choose=async target=>{await evaluate(`document.querySelector('[data-status-target="${target}"]').click();document.querySelector('#advance-button').click()`);await wait(()=>evaluate(`window.__httpFailure||document.querySelector('main')?.dataset.navigationOccurrence==='h1'&&document.querySelector('main')?.dataset.tableInitialized==='true'`));assert.equal(await evaluate('window.__httpFailure'),undefined);};
   await choose(3);
   const result=await evaluate(`(async()=>{const r=await fetch('/game-tree?node=h1~0&expand=1'),tree=await r.json(),leaves=[],kinds=new Set();function walk(s,p=1){for(const l of s?.leaves||[])leaves.push(l);for(const b of s?.branches||[]){kinds.add(b.kind);walk(b.children);}}walk(tree.night_stages);return {status:r.status,method:tree.night_stages?.method,kinds:[...kinds],leaves,items:tree.items,headers:document.querySelector('[data-calculation-tree]').innerText};})()`);
   assert.equal(result.status,200);assert.equal(result.method,'role-staged-exact-v1');assert.ok(result.kinds.includes(kind==='hunter'?'guard_target':'medium_result'));assert.ok(result.kinds.includes('death_notice'));assert.ok(result.leaves.length);
   await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.innerText.includes('${kind==='hunter'?'護衛位置':'霊能結果'}')`));
   const headers=await evaluate(`document.querySelector('[data-calculation-tree]').innerText`);assert.ok(headers.includes(kind==='hunter'?'護衛位置':'霊能結果'));
+  await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.dataset.navigationUpdate==='complete'`),180000);
   const candidate=result.leaves.find(l=>result.items[l.node]?.alive?.length===(kind==='hunter'?3:3))||result.leaves[0];
   // Select a real rendered public Current button, preserving normal navigation.
   await wait(()=>evaluate(`!!document.querySelector('[data-tree-item="${candidate.node}"] .compact-tree-go')`));
