@@ -80,7 +80,7 @@ class NavigationGame:
         for step in route:
             pending.append(step);tree=CalculationTree.from_node(self.node);key=tree.restore(pending)
             child=tree.nodes[key]['node'];before=self.node.read();after=child.read()
-            visible=(before.public.history!=after.public.history or before.past!=after.past or before.public.claims!=after.public.claims)
+            visible=((before.public.day,before.public.phase,before.public.alive)!=(after.public.day,after.public.phase,after.public.alive) or before.public.history!=after.public.history or before.past!=after.past or before.public.reports!=after.public.reports or before.public.claims!=after.public.claims)
             if not visible:continue
             if not tree.public_current(key):continue
             arrival=tree.nodes[key].get('day_arrival')

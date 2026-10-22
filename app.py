@@ -1123,7 +1123,8 @@ def create_app(test_config=None, *, deployment=False):
                     return jsonify(error='Board changed'),409
                 payload=json.loads(request.form.get('payload',''))
                 if type(payload)is not dict or set(payload)!={'claims','seers','mediums'}:raise ValueError('Invalid declaration fields')
-                if payload['mediums']:raise Pending('manual_medium_input_pending')
+                medium=tuple(MediumReport(**r) for r in payload['mediums'])
+                if tuple(sorted(medium,key=repr))!=tuple(sorted(actual.source.public.reports,key=repr)):raise Pending('manual_medium_input_pending')
                 previous={(r.acquired_day,r.player):r for r in actual.source.past}
                 reports=tuple(SeerReport(r['day'],previous[(r['day'],r['reporter'])].published_day if (r['day'],r['reporter']) in previous else actual.source.public.day,r['reporter'],r['target'],r['color']) for r in payload['seers'])
                 if publish:

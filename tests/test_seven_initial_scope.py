@@ -37,6 +37,6 @@ class SevenInitialScopeTests(unittest.TestCase):
             g=case(7,'single').data.to_game();g['policy'][field]='max'
             with self.assertRaises(Pending) as caught:self.calc(g)
             self.assertEqual(caught.exception.reason,'closed_initial_uniform_H0_snapshot_only')
-        g=case(7,'single').data.to_game();g['hunters']=1
+        g=case(7,'single').data.to_game();g['hunters']=2
         with self.assertRaises(Pending) as caught:self.calc(g)
-        self.assertEqual(caught.exception.reason,'closed_initial_uniform_H0_snapshot_only')
+        self.assertEqual(caught.exception.reason,'guard_multiple_hunters_unimplemented')

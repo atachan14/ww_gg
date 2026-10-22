@@ -113,10 +113,17 @@ class ClosedCalculation:
         if type(grouped)is not bool or type(aggregate_wolf)is not bool or type(aggregate_reports)is not bool:raise TypeError('Boolean representative mode required')
         if (aggregate_wolf or aggregate_reports) and not grouped:raise ValueError('Aggregation requires the grouped consumer')
         game=data.to_game();strategy=Strategy(**game['policy'])
-        if (game.get('hunters',0) or game.get('model')!='group'
-            or game.get('seer_mode')!='information-fixed-v1'
-            or game.get('seer_options',{}).get('likelihood')!='compatibility'
-            or game.get('seer_options',{}).get('initial_rule')!='random_white'
+        if game.get('hunters',0)>1:raise Pending('guard_multiple_hunters_unimplemented')
+        if game.get('hunters',0) and (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3:
+            raise Pending('closed_guard_stage_policy_unimplemented')
+        if game.get('hunters',0):
+            from .root_secret_flow import root_policy_supported
+            if not root_policy_supported(strategy,hunters=game['hunters'],seers=game.get('seers',0),mediums=game.get('mediums',0)):
+                raise Pending('closed_guard_policy_scope_unimplemented')
+        if (game.get('model')!='group'
+            or game.get('seers',0) and (game.get('seer_mode')!='information-fixed-v1'
+                or game.get('seer_options',{}).get('likelihood')!='compatibility'
+                or game.get('seer_options',{}).get('initial_rule')!='random_white')
             or ((strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3
                 and not (grouped and aggregate_reports and (strategy.day,strategy.night,strategy.fake_reports)==('max',)*3))
             or strategy.disclosure_for('seer')!='all' or strategy.disclosure_for('medium')!='all'):
@@ -130,7 +137,10 @@ class ClosedCalculation:
         object.__setattr__(self,'_ClosedCalculation__max_seconds',max_seconds)
         from .grouped_forecast import GroupedForecast
         options={'aggregate_wolf':aggregate_wolf,'aggregate_reports':aggregate_reports} if grouped else {}
-        engine=(GroupedForecast if grouped else InformationSetForecast)(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work,**options)
+        if game.get('hunters',0):
+            from .root_secret_flow import RootSecretEngine
+            engine=RootSecretEngine(data.game_data.rules,strategy,exact_renaming=False,max_work=max_work)
+        else:engine=(GroupedForecast if grouped else InformationSetForecast)(data.game_data.rules,strategy,exact_renaming=False,retire_uninformative_scans=False,max_work=max_work,**options)
         engine.retain_joint_guard_history=True
         engine.anonymous_nights=anonymous
         if anonymous:
@@ -147,7 +157,7 @@ class ClosedCalculation:
             # caller-supplied partition can enter this constructor.
             classes={}
             for p,claim in enumerate(source.public.claims,1):classes.setdefault(claim,[]).append(p)
-            groups=_report_groups(tuple(tuple(v) for v in classes.values()),source)
+            groups=tuple((p,) for p in source.public.alive) if game.get('mediums',0) or game.get('hunters',0) else _report_groups(tuple(tuple(v) for v in classes.values()),source)
             from .action_tree_trace import FullTraceOrigin
             if aggregate_reports:
                 full=FullTraceOrigin(SavedOrigin(origin_data,engine.rules,strategy,project_public=False))()
@@ -438,8 +448,16 @@ class _Node:
             if belief is not None:return e.anonymous_values.forecast(belief)
             value=e.solve(*s,physical=s.physical);targets=legal_targets(s.physical,e.rules,e.strategy)
             orbits=e.target_orbits(targets)
-            values={g[0]:e.act(*s[:3],g[0],s.private,s.observer,physical=s.physical) for g in orbits}
-            horizons={g[0]:horizon_for_action(e,s.public,s.public_state,s.past,g[0],s.private,observer=s.observer) for g in orbits}
+            laws={g[0]:s.private for g in orbits}
+            if s.public.phase=='night' and s.public.initial_hunter_count:
+                # Same forced-target intervention as root_branch_forecast: retain Q,
+                # restrict physical private worlds to legally compatible victims.
+                from .belief_projection import project_private
+                from .exact import forced_action_worlds,replace_worlds
+                laws={g[0]:project_private(s.private,replace_worlds(s.physical,
+                    forced_action_worlds(s.physical,g[0],e.rules,e.strategy)),marginalize_private=False) for g in orbits}
+            values={g[0]:e.act(*s[:3],g[0],laws[g[0]],s.observer,physical=physical_board(s.public,laws[g[0]],s.physical)) for g in orbits}
+            horizons={g[0]:horizon_for_action(e,s.public,s.public_state,s.past,g[0],laws[g[0]],observer=s.observer) for g in orbits}
             representatives={p:g[0] for g in orbits for p in g}
             actions=tuple((p,values[representatives[p]]) for p in targets)
             dawn=tuple((p,horizons[representatives[p]]) for p in targets)
@@ -448,7 +466,10 @@ class _Node:
     def export_request(self):
         # Fresh replay engine/cache per exported recipe. Callers cannot mutate
         # the live calculation through exported evidence or its engine fields.
-        e=InformationSetForecast(self.__calculation.data.game_data.rules,self.__calculation._ClosedCalculation__strategy,exact_renaming=False,retire_uninformative_scans=False)
+        if self.__calculation.data.game_data.hunters:
+            from .root_secret_flow import RootSecretEngine
+            e=RootSecretEngine(self.__calculation.data.game_data.rules,self.__calculation._ClosedCalculation__strategy,exact_renaming=False)
+        else:e=InformationSetForecast(self.__calculation.data.game_data.rules,self.__calculation._ClosedCalculation__strategy,exact_renaming=False,retire_uninformative_scans=False)
         e.retain_joint_guard_history=True
         origin=SavedOrigin(self.__calculation._ClosedCalculation__origin_data,e.rules,e.strategy,project_public=False);request=GeneratedBoard(origin)
         if any(op[0]=='full_trace' for op in self.__path):

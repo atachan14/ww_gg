@@ -191,6 +191,7 @@ def compile_anonymous(engine,source,groups):
     # Native future-choice generator. Existing named priors, public Q updates,
     # morning publications and continuation are explicit compatibility boundaries.
     from .night_program import supported
+    if source.public.initial_medium_count or source.public.initial_hunter_count:return None
     if not supported(engine,source) or not hasattr(engine,'aggregate_wolf') or engine.strategy.include_self_bite:return None
     b=source.public;groups=tuple(groups)+tuple((p,) for p in range(1,b.player_count+1) if not any(p in g for g in groups))
     key=(source,groups)

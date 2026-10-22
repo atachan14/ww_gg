@@ -72,6 +72,8 @@ class NightStage:
         groups=[]
         ordered=sorted(buckets.items(),key=lambda pair:(pair[0].kind,pair[0].actor or 0,pair[0].actors,{'white':0,'black':1}.get(pair[0].value,pair[0].value)))
         for step,leaves in ordered:
+            if self.program.method=='role-staged-exact-v1':
+                groups.append([step,leaves,[(step,tuple(leaves),self.program.identity)]]);continue
             found=False
             for group in groups:
                 for mapping in self.program.automorphisms:
@@ -95,6 +97,11 @@ class NightStage:
     def outcomes(self):
         if self._outcomes is not None:return self._outcomes
         groups=[];identity=self.program.identity
+        if self.program.method=='role-staged-exact-v1':
+            buckets={}
+            for leaf in self.leaves:buckets.setdefault(leaf.source,[]).append(leaf)
+            self._outcomes=tuple((sum(r.mass for r in rows),sum(r.counter for r in rows),rows[0],tuple((r,identity) for r in rows)) for rows in buckets.values())
+            return self._outcomes
         for leaf in self.leaves:
             found=False
             for group in groups:
@@ -117,7 +124,10 @@ class NightStage:
 
 class NightProgram:
     def __init__(self,engine,source,groups,leaves):
+        self.method='role-staged-exact-v1' if source.public.initial_medium_count or source.public.initial_hunter_count else 'verified-named'
         self.source=source;self.leaves=tuple(leaves);self.groups=groups;self.identity=tuple(range(1,source.public.player_count+1));self.values={};self.signatures={};self.measures={}
+        if self.method=='role-staged-exact-v1':
+            self.automorphisms=(self.identity,);self.root=NightStage(self,self.leaves);return
         original=signature(source,self.identity);parts=tuple(groups)+tuple((p,) for p in self.identity if not any(p in g for g in groups))
         maps=[]
         if original is not None:
@@ -146,7 +156,7 @@ class NightProgram:
             k=(key_state,self.moved_steps(r.steps,mapping));old=result.get(k,(F(),F()));result[k]=(old[0]+r.mass,old[1]+r.counter)
         self.measures[key]=result;return result
     def continuation(self,engine,leaf):
-        s=leaf.source;key=signature(s,self.identity) or ('named',s)
+        s=leaf.source;key=s if self.method=='role-staged-exact-v1' else signature(s,self.identity) or ('named',s)
         if key not in self.values:
             with engine.group_scope(leaf.groups):self.values[key]=engine.solve(*s,physical=s.physical)
         return self.values[key]
@@ -154,7 +164,7 @@ class NightProgram:
 
 def supported(engine,source):
     b=source.public
-    return (b.phase=='night' and not b.winner and not b.initial_hunter_count and not b.initial_medium_count
+    return (b.phase=='night' and not b.winner and b.initial_hunter_count<=1
         and source.observer is None and source.public_state.tracked is None and source.private.tracked is None
         and getattr(engine,'retain_joint_guard_history',False) and hasattr(engine,'group_scope')
         and engine.acquisition_provenance is None and engine.trace is None
@@ -187,8 +197,20 @@ def compile_night(engine,source,groups):
                         events={}
                         for h in after.private.hypotheses:
                             steps=recorded_steps(h,b.day+1)
+                            if b.initial_medium_count:
+                                execution=next((e.target for e in reversed(b.history) if e.phase=='day'),None)
+                                if execution is not None:
+                                    medium=tuple(AbilityStep('medium_result',p,(execution,'black' if h.roles[0]&(1<<(execution-1)) else 'white'),(p,)) for p in b.alive if h.roles[1]&(1<<(p-1)))
+                                    steps=(*medium,*steps)
                             if not steps or steps[-1].kind!='wolf_target':steps=(*steps,AbilityStep('wolf_target',None,target,()))
                             steps=tuple(replace(step,actors=wolves) if step.kind=='wolf_target' else step for step in steps)
+                            if b.initial_medium_count or b.initial_hunter_count:
+                                dead=tuple(p for p in b.alive if p not in child.public.alive)
+                                if len(dead)>1:raise engine.pending('staged_multiple_deaths_unimplemented')
+                                steps=(*steps,AbilityStep('death_notice',None,dead[0] if dead else None))
+                                if any(claim in ('seer','medium') for claim in b.claims):
+                                    from .tree_public_updates import publication_label
+                                    steps=(*steps,AbilityStep('publication',None,publication_label(child,after)))
                             scans=tuple(sorted((a.player,a.target) for a in h.acquisitions if a.day==b.day+1))
                             events.setdefault((steps,scans),[]).append(h)
                         for (steps,scans),hypotheses in events.items():

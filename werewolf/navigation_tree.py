@@ -83,12 +83,18 @@ class NavigationTree:
                     b['symbols']=dict(actor=None if step.actor is None else asdict(step.actor),target=asdict(step.target) if hasattr(step.target,'members') else None,actors=[asdict(a) for a in step.actors])
                     b['label']=step.label()
                     if b['kind']=='death_notice':b['label']='襲撃死：'+marked(tuple(names.display(p) for p in sy['target']['members']),(names.display(sy['target']['members'][0]),))
-                elif b['kind'] in ('seer_target','wolf_target'):
+                elif b['kind'] in ('seer_target','guard_target','wolf_target'):
                     groups=b.get('actor_groups',[])
                     for g in groups:g['members']=[names.display(p) for p in g['members']];g['representatives']=[names.display(p) for p in g['representatives']]
                     owner_label='と'.join(marked(g['members'],g['representatives'])+(f"（{g['count']}人）" if g['count']>1 else '') for g in groups)
                     targets=[names.display(p) for p in b['targets']] or [names.display(b['value'])]
-                    b['label']=owner_label+'が'+marked(targets,(names.display(b['value']),))+('から占い' if b['kind']=='seer_target' and len(targets)>1 else 'を占い' if b['kind']=='seer_target' else 'を襲撃')
+                    b['label']=owner_label+'が'+marked(targets,(names.display(b['value']),))+('から占い' if b['kind']=='seer_target' and len(targets)>1 else 'を占い' if b['kind']=='seer_target' else 'を護衛' if b['kind']=='guard_target' else 'を襲撃')
+                if not b.get('symbols') and b['kind']=='medium_result':
+                    target,color=b['value'];b['value']=(names.display(target),color)
+                    b['label']=str(names.display(b['actor']))+'：'+str(names.display(target))+('黒' if color=='black' else '白')
+                if not b.get('symbols') and b['kind']=='death_notice':
+                    b['value']=None if b['value'] is None else names.display(b['value'])
+                    b['label']='襲撃死：'+('なし' if b['value'] is None else str(b['value']))
                 if not b.get('symbols'):
                     if b.get('actor') is not None:b['actor']=names.display(b['actor'])
                     b['actors']=[names.display(p) for p in b.get('actors',())]

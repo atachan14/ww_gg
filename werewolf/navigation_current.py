@@ -60,13 +60,14 @@ class NavigationCurrent:
     @property
     def public_log(self):
         """Read-only public history on this cursor path, in the current name map."""
-        rows=[];claims=('latent',)*self.source.public.player_count;known=()
+        rows=[];claims=('latent',)*self.source.public.player_count;known=();known_medium=()
         for row in self.navigation.history.path(self.occurrence.key):
             source=transport_source(self.navigation.history.state(row.key).source,self.occurrence.names.forward)
             events=[dict(kind='co',player=p,role=c) for p,c in enumerate(source.public.claims,1) if c!=claims[p-1]]
             events.extend(dict(kind='seer',player=r.player,day=r.acquired_day,published_day=r.published_day,target=r.target,color=r.color) for r in source.past if r not in known)
+            events.extend(dict(kind='medium',player=r.reporter,day=r.day,published_day=source.public.day,target=r.target,color=r.color) for r in source.public.reports if r not in known_medium)
             if events:rows.append(dict(day=source.public.day,phase=source.public.phase,events=events,occurrence=row.key))
-            claims=source.public.claims;known=source.past
+            claims=source.public.claims;known=source.past;known_medium=source.public.reports
         return rows
 
     def automatic_update(self):

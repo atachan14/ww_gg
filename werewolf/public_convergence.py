@@ -87,9 +87,10 @@ def observation_branches(engine,source,target,*,counter=False,publish=True):
             with engine.actor_scope(info):policies[info.initial_roster,info.attacks]=engine.wolf_policy(b,source.public_state,source.past,info.initial_roster,info.attacks)
     try:mass,own=condition_wolf_choice(source.private,policies,target)
     except ValueError:return ()
-    payload=engine.action_policy.acquire(b,ActionInputs(source.public_state,source.past,own,None,physical_board(b,own,source.physical)))
+    from .action_flow import resolve_action
+    payload,outcomes=resolve_action(b,ActionInputs(source.public_state,source.past,own,None,physical_board(b,own,source.physical)),target,engine.action_policy)
     rows=[]
-    for death in engine.action_policy.outcomes(b,payload,target):
+    for death in outcomes:
         child=engine.action_policy._project_roles(b,payload,death,target)
         reports=engine.report_children(child) if publish and child.public.winner is None else ()
         for weight,after in (tuple((p,c) for q,p,c in reports) if reports else ((F(1),child),)):
@@ -102,6 +103,18 @@ def public_observation_orbits(engine,source,target,groups,*,counter=False,publis
         mapping=public_transport(source,after,groups);moved=transport_source(after,mapping)
         buckets.setdefault(public_key(moved),[]).append((weight,moved))
     return tuple((sum((w for w,s in rows),F()),mix(rows)) for rows in buckets.values())
+
+def public_night_observations(engine,source,groups,*,counter=False,publish=True):
+    """Integrate unobserved bites too, notably every bite behind a guard success."""
+    buckets={}
+    for group in groups:
+        living=tuple(p for p in group if p in source.public.alive)
+        if not living:continue
+        target=living[0]
+        for mass,after in public_observation_orbits(engine,source,target,groups,counter=counter,publish=publish):
+            buckets.setdefault(public_key(after),[]).append((mass*len(living),after,target))
+    return tuple((sum(mass for mass,after,target in rows),mix(tuple((mass,after) for mass,after,target in rows)),rows[0][2]) for rows in buckets.values())
+
 
 def prefix_likelihood(h,before,after,groups,prefix):
     """Bind a visible anonymous relation pattern against an existing named atom.
@@ -180,8 +193,8 @@ class NightObservationEvidence:
     prefix:tuple=()
     counter:bool=False
     def __call__(self,source):
-        rows=public_observation_orbits(self.engine,source,self.target,self.groups,counter=self.counter)
-        selected=next((after for weight,after in rows if digest(after)==self.public_digest),None)
+        rows=public_night_observations(self.engine,source,self.groups,counter=self.counter)
+        selected=next((after for weight,after,target in rows if digest(after)==self.public_digest),None)
         if selected is None:raise ValueError('Public night observation unavailable')
         return condition_prefix(selected,source,self.groups,self.prefix)[1] if self.prefix else selected
 
@@ -194,7 +207,7 @@ class ArrivalObservationEvidence:
     groups:tuple
     counter:bool=False
     def __call__(self,source):
-        rows=public_observation_orbits(self.engine,source,self.target,self.groups,counter=self.counter,publish=False)
-        selected=next((after for weight,after in rows if digest(after)==self.public_digest),None)
+        rows=public_night_observations(self.engine,source,self.groups,counter=self.counter,publish=False)
+        selected=next((after for weight,after,target in rows if digest(after)==self.public_digest),None)
         if selected is None:raise ValueError('Pre-report public arrival unavailable')
         return selected

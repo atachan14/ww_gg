@@ -18,7 +18,7 @@ def input_snapshot(data):return sha256(data.inputs.encode()).hexdigest()[:20]
 
 def supported(data,board):
     g=data.game_data
-    return (g.wolves>=1 and g.seers>=1 and not(g.mediums or g.hunters)
+    return (g.wolves>=1 and g.hunters<=1
             and not g.rules.allow_self_bite)
 
 
@@ -28,10 +28,10 @@ def explain_unavailable(game,reason):
     counts['wolves']=game.get('wolves',1)
     counts['citizens']=game['players']-sum(counts.values())
     strategy=Strategy(**game['policy']);rules=game['rules'];issues=[]
-    if counts['seers']<1 or counts['mediums'] or counts['hunters']:
-        issues.append('\u73fe\u5728\u306e\u6bb5\u968eGameTree\u306f\u5360\u3044\u5e2b1\u4eba\u4ee5\u4e0a\u306e\u914d\u5f79\u304c\u5bfe\u8c61\u3067\u3059\u3002\u970a\u80fd\u30fb\u8b77\u885b\u306e\u6bb5\u968e\u63a5\u7d9a\u306f\u672a\u5bfe\u5fdc\u3067\u3059\u3002')
+    if counts['hunters']>1:issues.append('複数狩人の護衛は未対応です。')
+    if counts['hunters'] and (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3:issues.append('狩人を含む段階GameTreeは全ランダム方策のみ対応しています。MAX方策は未対応です。')
     if rules.get('allow_self_bite'):issues.append('自噛み可能のルールは未対応です。')
-    if rules.get('initial_seer','random_white')!='random_white':issues.append('初日占いはランダム白のみ対応しています。')
+    if counts['seers'] and rules.get('initial_seer','random_white')!='random_white':issues.append('初日占いはランダム白のみ対応しています。')
     if (strategy.day,strategy.night,strategy.fake_reports) not in (('max',)*3,('random',)*3):
         issues.append('昼・夜・人狼の霊能騙り報告の方針が混在しています。現経路は3項目すべてMAX、またはすべてランダムのみ対応しています。')
     if any(strategy.disclosure_for(role)!='all' for role in ('seer','medium')):
@@ -46,7 +46,7 @@ def explain_unavailable(game,reason):
         issues.append(messages.get(reason,'現在の保存条件は既存の共通継続評価の対応範囲外です。'))
     return dict(error='現在の入力ではGameTreeを表示できません。',reason=reason,issues=issues,
         actual=dict(counts=counts,policy=dict(day=strategy.day,night=strategy.night,fake_reports=strategy.fake_reports),rules=rules,history_steps=len(game.get('history',[]))),
-        supported_route='\u6bb5\u968eGameTree\u306f\u5360\u3044\u5e2b1\u4eba\u4ee5\u4e0a\u30fb\u81ea\u565b\u307f\u4e0d\u53ef\u30fb\u521d\u65e5\u5360\u3044\u30e9\u30f3\u30c0\u30e0\u767d\u30fb\u5168\u516c\u958b\u3001\u65b9\u7b56\u306f\u5168MAX\u307e\u305f\u306f\u5168\u30e9\u30f3\u30c0\u30e0\u306e\u65e2\u5b58\u53b3\u5bc6\u7bc4\u56f2\u3067\u5229\u7528\u3067\u304d\u307e\u3059\u3002',
+        supported_route='段階GameTreeは自噛み不可・全公開の既存厳密範囲で利用できます。占い師がいる場合は初日ランダム白が必要です。霊能は既存報告規則、狩人は1人・全ランダム方策に対応します。',
         settings_url='/',preserved=True)
 
 
@@ -323,7 +323,7 @@ class CalculationTree:
         record['ability_choices']=factor(self,node,result)
 
     def _public_night_bundles(self,key):
-        from .public_convergence import public_observation_orbits,digest
+        from .public_convergence import public_observation_orbits,public_night_observations,digest
         record=self.nodes[key]
         if 'public_bundles' in record:return record['public_bundles']
         node=record['node'];program=node._night_program();groups=program.groups;result={}
@@ -347,14 +347,10 @@ class CalculationTree:
                         public=digest(source);entry=result.setdefault(public,dict(target=observation[0],sources={},owned={},flow=flow,observation=observation))
                         entry['sources'][counter]=(reach,source);entry['owned'][counter]=owned
             else:
-                for group in groups:
-                    alive=tuple(p for p in group if p in node.read().public.alive)
-                    if not alive:continue
-                    target=alive[0]
-                    for counter in (False,True):
-                        for reach,source in public_observation_orbits(self.engine,node.read(),target,groups,counter=counter):
-                            public=digest(source);entry=result.setdefault(public,dict(target=target,sources={}))
-                            entry['sources'][counter]=(reach*len(alive),source)
+                for counter in (False,True):
+                    for reach,source,target in public_night_observations(self.engine,node.read(),groups,counter=counter):
+                        public=digest(source);entry=result.setdefault(public,dict(target=target,sources={}))
+                        entry['sources'][counter]=(reach,source)
             for public,entry in result.items():
                 counter=False if False in entry['sources'] else True
                 reach,source=entry['sources'][counter]
@@ -368,34 +364,31 @@ class CalculationTree:
             from .tree_public_updates import state_summary,publication_label
             with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
                 arrivals={}
-                for group in groups:
-                    living=tuple(p for p in group if p in node.read().public.alive)
-                    if not living:continue
-                    for counter in (False,True):
-                        for reach,before in public_observation_orbits(self.engine,node.read(),living[0],groups,counter=counter,publish=False):
-                            if before.public.winner:continue
-                            total=reach*len(living)
-                            updates=[]
-                            for public,entry in result.items():
-                                if entry['target']!=living[0] or counter not in entry['sources']:continue
-                                weight,after=entry['sources'][counter]
-                                if after.public.winner!=before.public.winner:continue
-                                updates.append(dict(node=entry['node'],probability=str(weight/total),label=publication_label(before,after)))
-                            if not updates:continue
-                            identity='arrival:'+key+':'+digest(before)+':'+str(counter)
-                            value=sum((F(u['probability'])*self.value(u['node']) for u in updates),F())
-                            arrival=dict(id=identity,state=state_summary(before.public,before.private,identity,self.data.game_data,self.role_order,value=value,past=before.past),updates=updates,kind='generated_updates')
-                            arrival_node=node._public_arrival(before,living[0],digest(before),groups,counter)
-                            selector=dict(public_arrival=dict(target=living[0],public=digest(before),counter=counter))
-                            arrival_key='start:'+identity
-                            self.nodes[arrival_key]=dict(node=arrival_node,value=value,actions=[],reused=False,route=(*record['route'],selector),public_bundle=True,day_start=True,public_updates=updates)
-                            arrival['node']=arrival_key
-                            record.setdefault('arrival_selectors',{})[(living[0],digest(before),counter)]=arrival_key
-                            arrivals[identity]=arrival
-                            record.setdefault('arrival_sources',{})[identity]=before
-                            for update in updates:
-                                record_after=self.nodes[update['node']]
-                                if 'day_arrival' not in record_after or not counter:record_after['day_arrival']=arrival
+                for counter in (False,True):
+                    for reach,before,target in public_night_observations(self.engine,node.read(),groups,counter=counter,publish=False):
+                        if before.public.winner:continue
+                        total=reach
+                        updates=[]
+                        for public,entry in result.items():
+                            if entry['target']!=target or counter not in entry['sources']:continue
+                            weight,after=entry['sources'][counter]
+                            if after.public.winner!=before.public.winner:continue
+                            updates.append(dict(node=entry['node'],probability=str(weight/total),label=publication_label(before,after)))
+                        if not updates:continue
+                        identity='arrival:'+key+':'+digest(before)+':'+str(counter)
+                        value=sum((F(u['probability'])*self.value(u['node']) for u in updates),F())
+                        arrival=dict(id=identity,state=state_summary(before.public,before.private,identity,self.data.game_data,self.role_order,value=value,past=before.past),updates=updates,kind='generated_updates')
+                        arrival_node=node._public_arrival(before,target,digest(before),groups,counter)
+                        selector=dict(public_arrival=dict(target=target,public=digest(before),counter=counter))
+                        arrival_key='start:'+identity
+                        self.nodes[arrival_key]=dict(node=arrival_node,value=value,actions=[],reused=False,route=(*record['route'],selector),public_bundle=True,day_start=True,public_updates=updates)
+                        arrival['node']=arrival_key
+                        record.setdefault('arrival_selectors',{})[(target,digest(before),counter)]=arrival_key
+                        arrivals[identity]=arrival
+                        record.setdefault('arrival_sources',{})[identity]=before
+                        for update in updates:
+                            record_after=self.nodes[update['node']]
+                            if 'day_arrival' not in record_after or not counter:record_after['day_arrival']=arrival
                 record['day_arrivals']=arrivals
         return result
 
@@ -430,7 +423,8 @@ class CalculationTree:
             child=node._stage_child(leaf)
             route=(*row['route'],(leaf.owner_index,leaf.target,leaf.outcome_index,leaf.report),{'physical':'joint','value':(node.read().public.day,leaf.wolves,leaf.scans)})
             return self.register(child,route)
-        native=getattr(program,'method',None)=='anonymous-relational-v1'
+        symbolic=getattr(program,'method',None)=='anonymous-relational-v1'
+        native=symbolic or getattr(program,'method',None)=='role-staged-exact-v1'
         base_key=row.get('public_parent',key)
         bundles=self._public_night_bundles(base_key) if native else None
         built={}
@@ -445,7 +439,7 @@ class CalculationTree:
                     for mass,counter,leaf,images in stage.outcomes():
                         mapping=public_transport(self.nodes[base_key]['node'].read(),leaf.source,self.nodes[base_key]['node']._night_program().groups)
                         public=digest(transport_source(leaf.source,mapping));entry=grouped.setdefault(public,F());grouped[public]=entry+(mass if stage.mass else counter)
-                    return dict(leaves=[dict(node=bundles[public]['node'],context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)),probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
+                    return dict(leaves=[dict(node=bundles[public]['node'],context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)) if symbolic else None,probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
                 return dict(leaves=[dict(node=leaf_row(leaf),probability=str((mass if stage.mass else counter)/total),variants=[dict(node=leaf_row(image),transport=list(mapping)) for image,mapping in images]) for mass,counter,leaf,images in stage.outcomes()])
             branches=[]
             for branch in stage.branches():
@@ -457,7 +451,11 @@ class CalculationTree:
                 else:
                     from .ability_labels import stage_label
                     label,actor_groups,joint_choices=stage_label(branch)
-                    branches.append(dict(kind=step.kind,actor=step.actor,actor_groups=actor_groups,joint_choices=joint_choices,actors=list(step.actors),value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=True,public_observation=False,visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
+                    prefix=stage.prefix;role_column=None
+                    if native:
+                        mediums=self.data.game_data.mediums;seers=self.data.game_data.seers;hunters=self.data.game_data.hunters
+                        role_column=(sum(s.kind=='medium_result' for s in prefix) if step.kind=='medium_result' else mediums+sum(s.kind in ('seer_target','seer_result') for s in prefix) if step.kind in ('seer_target','seer_result') else mediums+2*seers+sum(s.kind=='guard_target' for s in prefix) if step.kind=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
+                    branches.append(dict(stage_column=role_column,kind=step.kind,actor=step.actor,actor_groups=actor_groups,joint_choices=joint_choices,actors=list(step.actors),value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
             result=dict(branches=branches);built[cache]=result
             return result
         result=build(program.root);result['method']=getattr(program,'method','verified-named');result['stats']=getattr(program,'stats',{});row['night_stages']=result;return result
@@ -468,7 +466,7 @@ class CalculationTree:
         node=record['node'];groups={}
         if node.read().public.phase=='night' and not node.read().public.winner:
             stages=self._stage_rows(key)
-            if stages and stages.get('method')=='anonymous-relational-v1':
+            if stages and stages.get('method') in ('anonymous-relational-v1','role-staged-exact-v1'):
                 record['actions']=[];return
         with self.calculation._ClosedCalculation__kernel():
             joint=node._joint_actions()
@@ -621,14 +619,18 @@ class CalculationTree:
                         if step.kind=='seer_result':
                             actor=step.actor.index if hasattr(step.actor,'index') else step.actor
                             results.append((actor,step.target if hasattr(step,'target') else step.value))
-                        elif step.kind in ('seer_target','wolf_target'):
+                        elif step.kind=='medium_result':results.append(('medium',step.actor,step.value[0],step.value[1]))
+                        elif step.kind in ('seer_target','guard_target','wolf_target'):
                             if hasattr(step,'label'):
                                 if names is None:actions.append(step.label())
                                 else:
                                     from .anonymous_night import Symbol,SymbolStep
                                     sym=lambda x:Symbol(x.index,tuple(names.display(p) for p in x.members))
                                     actions.append(SymbolStep(step.kind,None if step.actor is None else sym(step.actor),sym(step.target) if hasattr(step.target,'members') else step.target,tuple(sym(a) for a in step.actors)).label())
-                            else:actions.append(str((names.display(step.actor) if names is not None and step.actor else step.actor) or '人狼')+'が'+str(names.display(step.value) if names is not None else step.value)+('を占い' if step.kind=='seer_target' else 'を襲撃'))
+                            else:
+                                display=lambda p:names.display(p) if names is not None else p
+                                owner='と'.join(str(display(p)) for p in step.actors) if step.kind=='wolf_target' else str(display(step.actor))
+                                actions.append(owner+'が'+str(display(step.value))+('を占い' if step.kind=='seer_target' else 'を護衛' if step.kind=='guard_target' else 'を襲撃'))
                     events.append((composition,tuple(results),tuple(actions),mass))
             output=[]
             for index,part in enumerate(self._composition_rows(key)):
@@ -643,7 +645,10 @@ class CalculationTree:
                     if not results and len(buckets)==1:children=leaves
                     else:
                         colors=lambda color:'白' if color=='white' else '黒'
-                        label='占いなし' if not results else ('占い結果：'+colors(results[0][1]) if len(results)==1 else '占い結果：'+'・'.join(alias(actor)+' '+colors(color) for actor,color in results))
+                        if any(r[0]=='medium' for r in results):
+                            display=lambda p:names.display(p) if names is not None else p
+                            label='・'.join(('霊能結果：'+str(display(r[1]))+'→'+str(display(r[2]))+colors(r[3])) if r[0]=='medium' else ('占い結果：'+alias(r[0])+' '+colors(r[1])) for r in results)
+                        else:label='占いなし' if not results else ('占い結果：'+colors(results[0][1]) if len(results)==1 else '占い結果：'+'・'.join(alias(actor)+' '+colors(color) for actor,color in results))
                         children.append(dict(id=f'{index}/r{result_index}',label=label,probability=str(subtotal/total),children=leaves))
                 output.append(dict(id=str(index),label=part['label'],probability=part['probability'],village_win=str(self.value(part['node'])),children=children))
             row[cache]=output;return output
@@ -653,7 +658,7 @@ class CalculationTree:
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
         certificate=node.win_certificate()
-        return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day,'column_phase':point.phase,'alive':list(b.alive),'winner':b.winner,
+        return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',

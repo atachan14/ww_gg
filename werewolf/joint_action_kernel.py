@@ -16,7 +16,7 @@ from .calculation_budget import tick
 
 def supported(engine,source):
     b=source.public
-    if (engine.strategy.day=='max' and not engine.max_grouped):return False
+    if (engine.strategy.day=='max' and not getattr(engine,'max_grouped',False)):return False
     if (b.phase!='night' or b.winner or b.initial_hunter_count or source.observer is not None
         or engine.acquisition_provenance is not None or engine.trace is not None
         or engine.retire_uninformative_scans
