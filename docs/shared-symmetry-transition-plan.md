@@ -3157,3 +3157,74 @@ Legacy histories currently return navigation_saved_history_migration_pending at
 the new boundary rather than silently making their current Board the Day1 root.
 Historical report edits/unsupported role input remain explicitly unsupported.
 No preview process, cookies, live user data, other app, or port was changed.
+
+
+### Persistent public navigation integration — 2026-10-22
+
+The new local 18821 flow is wired through NavigationDocument/NavigationGame and
+NavigationTree. Day1 remains the immutable root; Current is an occurrence cursor.
+Footer and public Tree transitions install the ordinary Board while retaining the
+same Tree DOM/closure, expansion state, inline panels, scale and pan. Returning
+forward without a new target reuses its occurrence; explicitly choosing another
+target creates another branch. Source expectations remain computed by the exact
+solver and never sum manually added branches.
+
+Manual public input owns a zero-selection-weight edge, filters Q/P separately,
+keeps old continuation reopenable/collapsed, and uses existing compatibility
+support rather than a fabricated action likelihood. Contradictions and unsupported
+historical edits remain distinct. Initial recorded logs are independent input
+snapshots with no occurrence-probability label: simultaneous updates share one
+stage and separated updates retain their own stages. The known zero-to-half
+legacy snapshot example is tested without treating snapshots as Bayesian edges.
+
+Day-start Boards now have actual pre-report Q/P nodes, using the existing
+public_observation_orbits(..., publish=False) operation and an exported arrival
+recipe. Separate publication occurrences retain the original weighted report
+kernel. Identical no-update solver states can therefore have different cursor
+occurrences. A unique public update is traversed before execution; branching
+updates remain visible and editable without giving hidden reports to policies.
+
+Canonical solver frames and complete occurrence name bijections remain separate.
+The selected concrete representative is marked in sorted groups in every outcome,
+including a terminal alternative. Public/private acquisitions, role masks, public
+corpses and inverse input mapping use that same bijection. Constructed relational
+forest transports retain simultaneous reporter-target incidence, including
+(1 2)(3 4). Initial public timing context is owned immutably by each node and scoped
+for its action orbits: equal Q/P cannot erase separate disclosure timing or let
+one branch mutate an earlier node's representative construction. No swap search
+or equal-winrate grouping was added.
+
+Geometry uses the accepted stable branch order and orthogonal routing. Update
+column depth is local to its own phase; it does not shift later night Boards into
+ability columns. Existing single-child expansion, exact-nonzero auto expansion,
+old-branch collapse, shared public joins and right-edge Current controls remain.
+
+Verification: 69 Python tests pass across navigation, manual input, public relation,
+public updates, original CalculationTree/presentation and BoardTable suites;
+48 JS tests pass for expansion, exact zero detection, layout, routing and viewport.
+Multi-seer and multi-wolf named transport checks preserve every Q/P atom and
+history; only complete-world tuple ordering is normalized in that comparison.
+The older five-variants assertion was reproduced failing at 4d52e9c before this
+integration; it now checks the already-established representative contract while
+retaining independent value and mass comparisons.
+
+Live verification uses an isolated installed Edge profile via CDP and only the
+18821 preview. Evidence is kept in .artifacts/navigation-*.png and
+navigation-browser-probe.json. It checks real CO-cell/report publication, Footer
+movement, reopening the old continuation, public terminal Current, Tree DOM
+identity, Ctrl-wheel/page wheel, drag and fraction display/resize. No package
+installation, user-profile cookie cleanup, other app or port changes, push or
+public deployment is involved.
+
+Admission/remaining limits are explicit, not approximations: this retains the
+existing Closed exact seer/wolf scope and fixed start policy. In-Tree policy
+changes are not supported and cannot silently mutate only the old cookie.
+Supported unchanged-public random-H0 saved histories migrate with their Day1 root;
+legacy MAX or changed-policy/public histories that the existing observed-action
+kernel cannot replay stay in the original Board flow with their data untouched.
+They may remain there or be started afresh through setup; destructive migration
+was not performed. Extending those histories needs the common observed-action
+Q/P kernel, not a UI relabel/rebase. Old-report replacement/delayed/medium input
+continues to return explicit unsupported rather than an invented posterior.
+Named initial-law materialization and existing exact fallback remain; this is not
+a claim that the anonymous solver has universally replaced them.

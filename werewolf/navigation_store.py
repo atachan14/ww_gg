@@ -15,11 +15,26 @@ class StaleNavigation(ValueError):pass
 
 class NavigationDocument:
     def __init__(self,data,game=None,revision=0):
-        if game is None and data.to_game().get('history'):
-            from .information_set_forecast import Pending
-            raise Pending('navigation_saved_history_migration_pending')
-        self.data=data;self.revision=revision;self.lock=RLock()
-        self.game=game or NavigationGame(ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root)
+        self.data=data;self.revision=revision;self.lock=RLock();self.views=None
+        if game is not None:self.game=game;return
+        saved=data.to_game();origin=data;targets=()
+        if saved.get('history'):
+            from .closed_calculation import _entry_origin
+            from .exact import Strategy
+            origin,targets=_entry_origin(data,saved,Strategy(**saved['policy']))
+        from .tree_public_updates import recorded_games
+        baseline,records=recorded_games(origin)
+        self.data=baseline
+        self.game=NavigationGame(ClosedCalculation(baseline,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root)
+        for snapshot,events in records:self.game.recorded(snapshot,events)
+        if targets:
+            from .exact import MediumReport
+            from .seer_acquisition import SeerReport
+            for target in targets:
+                day=self.game.node.read().public.day+(self.game.node.read().public.phase=='night')
+                reports=tuple(SeerReport(day,day,r['reporter'],r['target'],r['color']) for r in saved.get('seer_inputs',()) if r['day']==day) if self.game.node.read().public.phase=='night' else ()
+                medium=tuple(MediumReport(**r) for r in saved.get('reports',()) if r['day']==day) if reports else ()
+                self.game.observed(target,reports,medium)
     def export(self):return dict(version=1,root=self.data.to_game(),revision=self.revision,history=self.game.export())
     @classmethod
     def restore(cls,record):
@@ -57,6 +72,6 @@ class NavigationStore:
                 result=action(doc.game);doc.revision+=1;self.save(identity,doc)
             except Exception:
                 doc.game=NavigationGame.restore(doc.game.history.state(doc.game.history.root).node,before)
-                doc.revision=old_revision
+                doc.revision=old_revision;doc.views=None
                 raise
             return doc,result

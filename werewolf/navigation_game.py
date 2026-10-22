@@ -17,7 +17,9 @@ class NavigationGame:
     @property
     def node(self):return self.history.state(self.current).node
     def move(self,key):
-        self.history.occurrence(key);self.current=key;return self.occurrence
+        row=self.history.occurrence(key)
+        if row.parent is not None:self._forward[row.parent]=key
+        self.current=key;return self.occurrence
     def back(self):
         parent=self.occurrence.parent
         if parent is not None:self._forward[parent]=self.current;self.current=parent
@@ -32,7 +34,7 @@ class NavigationGame:
         parent=self.current
         row=self.history.append(parent,node,selector,names=names,kind=kind,selection_weight=weight,settled=settled)
         self._forward[parent]=row.key;self.current=row.key;return row
-    def action(self,display_target,*,outcome=None,selection_weight=None,names=None):
+    def action(self,display_target,*,outcome=None,selection_weight=None,names=None,_replay=False):
         parent=self.occurrence;requested=parent.names.canonical(display_target)
         target,lift=self.node.representative_action(requested)
         mapping=lift.then(parent.names)
@@ -45,6 +47,9 @@ class NavigationGame:
             child=rows[outcome].node;selector=dict(kind='action',target=target,requested=requested,outcome=outcome)
             winner=child.read().public.winner
             settled=(parent.settled_village+parent.active_mass*int(winner=='village'),parent.settled_wolf+parent.active_mass*int(winner=='wolf'))
+            if not _replay:
+                old=next((r for r in self.history.children(self.current) if r.selector==selector and r.names==names),None)
+                if old:return self.move(old.key)
             return self._commit(child,selector,names=names,weight=selection_weight,settled=settled)
         # Ordinary Footer accumulates settled probability while exposing the one
         # ongoing public Board, exactly as Progress.advance does.
@@ -56,7 +61,77 @@ class NavigationGame:
             else:ongoing.append((index,row.node))
         if len(ongoing)>1:raise ValueError('Footer requires a public observation to distinguish ongoing Boards')
         index,child=ongoing[0] if ongoing else (0,rows[0].node)
-        return self._commit(child,dict(kind='advance',target=target,requested=requested),names=names,weight=selection_weight,settled=(village,wolf))
+        selector=dict(kind='advance',target=target,requested=requested)
+        if not _replay:
+            old=next((r for r in self.history.children(self.current) if r.selector==selector and r.names==names),None)
+            if old:return self.move(old.key)
+        return self._commit(child,selector,names=names,weight=selection_weight,settled=(village,wolf))
+    def fork(self):
+        from copy import copy
+        game=copy(self);game.history=copy(self.history)
+        for name in ('_states','_by_source','_occurrences'):setattr(game.history,name,dict(getattr(self.history,name)))
+        game.history._children={key:list(rows) for key,rows in self.history._children.items()}
+        game._forward=dict(self._forward);return game
+
+    def generated(self,route):
+        """Select public continuation occurrences through common Tree recipes."""
+        from .calculation_tree import CalculationTree
+        pending=[]
+        for step in route:
+            pending.append(step);tree=CalculationTree.from_node(self.node);key=tree.restore(pending)
+            child=tree.nodes[key]['node'];before=self.node.read();after=child.read()
+            visible=(before.public.history!=after.public.history or before.past!=after.past or before.public.claims!=after.public.claims)
+            if not visible:continue
+            if not tree.public_current(key):continue
+            arrival=tree.nodes[key].get('day_arrival')
+            if arrival and arrival.get('node'):
+                night=self.current;before_key=arrival['node'];before=tree.nodes[before_key]['node']
+                self.generated(tree.route(before_key))
+                self.published(night,tree.route(key));pending=[];continue
+            selector=dict(kind='generated',route=tree.route(key))
+            old=next((r for r in self.history.children(self.current) if r.selector==selector),None)
+            if old:self.move(old.key)
+            else:
+                parent=self.occurrence;winner=after.public.winner
+                settled=(parent.settled_village+parent.active_mass*int(winner=='village'),parent.settled_wolf+parent.active_mass*int(winner=='wolf'))
+                self._commit(child,selector,settled=settled)
+            pending=[]
+        if pending:raise ValueError('Choose a public Board rather than a private stage')
+        return self.occurrence
+
+    def replay_generated(self,route):
+        """One persisted occurrence; new UI staging never rewrites old history."""
+        from .calculation_tree import CalculationTree
+        tree=CalculationTree.from_node(self.node);key=tree.restore(route)
+        if not tree.public_current(key):raise ValueError('Choose a public Board')
+        child=tree.nodes[key]['node'];parent=self.occurrence;winner=child.read().public.winner
+        settled=(parent.settled_village+parent.active_mass*int(winner=='village'),parent.settled_wolf+parent.active_mass*int(winner=='wolf'))
+        return self._commit(child,dict(kind='generated',route=tree.route(key)),settled=settled)
+
+    def published(self,night,route):
+        from .calculation_tree import CalculationTree
+        if night not in {r.key for r in self.history.path(self.current)}:raise ValueError('Publication origin must be an ancestor')
+        tree=CalculationTree.from_node(self.history.state(night).node);key=tree.restore(route)
+        if not tree.public_current(key):raise ValueError('Choose a public update')
+        selector=dict(kind='published',night=night,route=tree.route(key))
+        old=next((r for r in self.history.children(self.current) if r.selector==selector),None)
+        return self.move(old.key) if old else self._commit(tree.nodes[key]['node'],selector)
+
+    def recorded(self,game,events):
+        from .board_flow import BoardData
+        from .closed_calculation import ClosedCalculation
+        root=self.history.state(self.history.root).node.data
+        data=BoardData.from_game(game,game_data=root.game_data,runtime=root.runtime)
+        if data.game_data!=root.game_data or game.get('history'):raise ValueError('Initial recorded inputs require unchanged game rules')
+        child=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root
+        return self._commit(child,dict(kind='recorded',game=game,events=events),kind='recorded_input',weight=F())
+
+    def observed(self,target,reports=(),medium=()):
+        """Replay a supported saved public observation without reseeding its law."""
+        mass,child=self.node.observe(target)
+        if reports or medium:_,child=child.observe_reports(tuple(reports),tuple(medium))
+        return self._commit(child,dict(kind='observed',target=target,reports=[dict(acquired_day=r.acquired_day,published_day=r.published_day,player=r.player,target=r.target,color=r.color) for r in reports],medium=[dict(day=r.day,reporter=r.reporter,target=r.target,color=r.color) for r in medium]))
+
     def public_input(self,claims,reports=()):
         parent=self.occurrence;names=parent.names
         canonical_claims=tuple(claims[names.display(p)-1] for p in range(1,len(names.forward)+1))
@@ -75,7 +150,13 @@ class NavigationGame:
                 claims=tuple(step['claims'][names.canonical(p)-1] for p in range(1,len(names.forward)+1))
                 reports=tuple(SeerReport(r['acquired_day'],r['published_day'],names.display(r['player']),names.display(r['target']),r['color']) for r in step['reports'])
                 added=game.public_input(claims,reports)
-            else:added=game.action(names.display(step.get('requested',step['target'])),outcome=step.get('outcome') if kind=='action' else None,names=NameMap(tuple(row['names'])))
+            elif kind=='generated':added=game.replay_generated(step['route'])
+            elif kind=='published':added=game.published(step['night'],step['route'])
+            elif kind=='recorded':added=game.recorded(step['game'],step['events'])
+            elif kind=='observed':
+                from .exact import MediumReport
+                added=game.observed(step['target'],tuple(SeerReport(**r) for r in step['reports']),tuple(MediumReport(**r) for r in step['medium']))
+            else:added=game.action(names.display(step.get('requested',step['target'])),outcome=step.get('outcome') if kind=='action' else None,names=NameMap(tuple(row['names'])),_replay=True)
             if added.key!=row['key']:raise ValueError('Invalid history order')
         # Saved files are evidence recipes, not authority to inject weights/maps.
         import json

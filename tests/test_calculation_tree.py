@@ -41,7 +41,9 @@ class CalculationTreeTests(unittest.TestCase):
         self.assertEqual(a['policy_probability'],'1')
         self.assertEqual({b['probability'] for b in a['branches']},{'1/5','4/5'})
         for branch in a['branches']:
-            self.assertEqual(len(branch['variants']),5)
+            # The established grouped kernel emits one representative with the
+            # full orbit mass; named cases are checked independently below.
+            self.assertEqual(len(branch['variants']),1)
             self.assertEqual(sum(F(v['mixture_probability']) for v in branch['variants']),F(branch['probability']))
             for v in branch['variants']:
                 d=self.c.get('/game-tree',query_string={'node':v['node']}).json

@@ -128,7 +128,7 @@ class CalculationTree:
         node=row['node'];s=node.read();canonical=self.equivalence(node)
         if canonical in self.values:row['value']=self.values[canonical];row['reused']=True
         else:
-            with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
+            with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
                 from .closed_calculation import _forecast_scope
                 _forecast_scope(s,self.engine)
                 belief=getattr(self.engine,'anonymous_beliefs',{}).get(s)
@@ -140,7 +140,7 @@ class CalculationTree:
         e=self.engine;s=node.read();b=s.public
         if b.winner:return []
         rows=[]
-        with self.calculation._ClosedCalculation__kernel(),e.group_scope(node.groups):
+        with self.calculation._ClosedCalculation__kernel(),e.group_scope(node.groups),node.relation_scope():
             if b.phase=='day':
                 belief=getattr(e,'anonymous_beliefs',{}).get(s)
                 scores=({p:v for group,v in e.anonymous_values.day_scores(e.anonymous_values.scalar(belief)) for p in group}
@@ -327,7 +327,7 @@ class CalculationTree:
         record=self.nodes[key]
         if 'public_bundles' in record:return record['public_bundles']
         node=record['node'];program=node._night_program();groups=program.groups;result={}
-        with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
+        with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
             if getattr(program,'belief_flow',None) is not None:
                 from .anonymous_materialization import source as named_boundary
                 from .public_convergence import public_transport,transport_source
@@ -366,7 +366,7 @@ class CalculationTree:
         record['public_bundles']=result
         if any(step.kind=='publication' for leaf in program.leaves for step in leaf.steps):
             from .tree_public_updates import state_summary,publication_label
-            with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups):
+            with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
                 arrivals={}
                 for group in groups:
                     living=tuple(p for p in group if p in node.read().public.alive)
@@ -385,6 +385,12 @@ class CalculationTree:
                             identity='arrival:'+key+':'+digest(before)+':'+str(counter)
                             value=sum((F(u['probability'])*self.value(u['node']) for u in updates),F())
                             arrival=dict(id=identity,state=state_summary(before.public,before.private,identity,self.data.game_data,self.role_order,value=value,past=before.past),updates=updates,kind='generated_updates')
+                            arrival_node=node._public_arrival(before,living[0],digest(before),groups,counter)
+                            selector=dict(public_arrival=dict(target=living[0],public=digest(before),counter=counter))
+                            arrival_key='start:'+identity
+                            self.nodes[arrival_key]=dict(node=arrival_node,value=value,actions=[],reused=False,route=(*record['route'],selector),public_bundle=True,day_start=True,public_updates=updates)
+                            arrival['node']=arrival_key
+                            record.setdefault('arrival_selectors',{})[(living[0],digest(before),counter)]=arrival_key
                             arrivals[identity]=arrival
                             record.setdefault('arrival_sources',{})[identity]=before
                             for update in updates:
@@ -523,10 +529,16 @@ class CalculationTree:
     def restore(self,route):
         """Reconstruct a named physical path only through common generators."""
         if type(route) not in (list,tuple) or len(route)>6*self.data.game_data.players+1:raise ValueError('Invalid Current path')
-        node=self.entry_node;prefix=()
+        node=self.entry_node;prefix=();view_key=None
         for step in route:
+            view_key=None
             if type(step)is dict:
-                if set(step)=={'public_night'}:
+                if set(step)=={'public_arrival'}:
+                    selector=step['public_arrival'];base=self.register(node,prefix);self._public_night_bundles(base)
+                    view_key=self.nodes[base].get('arrival_selectors',{}).get((selector['target'],selector['public'],selector.get('counter',False)))
+                    if view_key is None:raise ValueError('Public arrival unavailable')
+                    node=self.nodes[view_key]['node']
+                elif set(step)=={'public_night'}:
                     from .anonymous_night import Symbol,SymbolStep
                     selector=step['public_night'];base=self.register(node,prefix);bundles=self._public_night_bundles(base)
                     public=selector['public']
@@ -538,7 +550,9 @@ class CalculationTree:
                 elif step=={'full_trace':True}:node=node._with_full_trace()
                 elif set(step)=={'physical','value'}:node=node._select_physical(step['physical'],step['value'])
                 else:raise ValueError('Invalid physical selector')
-                prefix=(*prefix,step);self.register(node,prefix);continue
+                prefix=(*prefix,step)
+                if view_key is None:self.register(node,prefix)
+                continue
             if type(step) not in (list,tuple) or len(step)!=4:raise ValueError('Invalid Current step')
             owner,target,outcome,report=step
             if type(target)is not int or any(v is not None and (type(v)is not int or v<0) for v in (owner,outcome)) or report is not None and (type(report) not in (int,dict) or type(report)is int and report<0):raise ValueError('Invalid Current selector')
@@ -553,7 +567,7 @@ class CalculationTree:
                 elif report is not None:node=node.reports()[report].node
             except (IndexError,KeyError,StopIteration) as exc:raise ValueError('Current path unavailable') from exc
             prefix=(*prefix,tuple(step));self.register(node,prefix)
-        return self.register(node,prefix)
+        return view_key if view_key is not None else self.register(node,prefix)
 
     def route(self,key):
         with self.lock:return [dict(step) if type(step)is dict else list(step) for step in self.nodes[key]['route']]
@@ -580,11 +594,12 @@ class CalculationTree:
             elif len(step)==4 and step[0] is not None:return False
         return True
 
-    def distribution(self,key):
+    def distribution(self,key,*,names=None):
         """Inline analysis only; no navigation ids or changed public state."""
         with self.lock,self.calculation._ClosedCalculation__kernel():
             row=self.nodes[key]
-            if 'distribution' in row:return row['distribution']
+            cache='distribution' if names is None else ('distribution',names.forward)
+            if cache in row:return row[cache]
             from .physical_selection import counts
             from .anonymous_relations import alias
             node=row['node'];source=node.read();events=[]
@@ -607,8 +622,13 @@ class CalculationTree:
                             actor=step.actor.index if hasattr(step.actor,'index') else step.actor
                             results.append((actor,step.target if hasattr(step,'target') else step.value))
                         elif step.kind in ('seer_target','wolf_target'):
-                            if hasattr(step,'label'):actions.append(step.label())
-                            else:actions.append(str(step.actor or '狼')+'が'+str(step.value)+('を占い' if step.kind=='seer_target' else 'を襲撃'))
+                            if hasattr(step,'label'):
+                                if names is None:actions.append(step.label())
+                                else:
+                                    from .anonymous_night import Symbol,SymbolStep
+                                    sym=lambda x:Symbol(x.index,tuple(names.display(p) for p in x.members))
+                                    actions.append(SymbolStep(step.kind,None if step.actor is None else sym(step.actor),sym(step.target) if hasattr(step.target,'members') else step.target,tuple(sym(a) for a in step.actors)).label())
+                            else:actions.append(str((names.display(step.actor) if names is not None and step.actor else step.actor) or '狼')+'が'+str(names.display(step.value) if names is not None else step.value)+('を占い' if step.kind=='seer_target' else 'を襲撃'))
                     events.append((composition,tuple(results),tuple(actions),mass))
             output=[]
             for index,part in enumerate(self._composition_rows(key)):
@@ -626,14 +646,14 @@ class CalculationTree:
                         label='占いなし' if not results else ('占い結果：'+colors(results[0][1]) if len(results)==1 else '占い結果：'+'・'.join(alias(actor)+' '+colors(color) for actor,color in results))
                         children.append(dict(id=f'{index}/r{result_index}',label=label,probability=str(subtotal/total),children=leaves))
                 output.append(dict(id=str(index),label=part['label'],probability=part['probability'],village_win=str(self.value(part['node'])),children=children))
-            row['distribution']=output;return output
+            row[cache]=output;return output
 
     def summary(self,key,actions=False):
         row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
         return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day,'column_phase':point.phase,'alive':list(b.alive),'winner':b.winner,
-            'day_arrival':row.get('day_arrival'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
+            'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],
@@ -654,6 +674,11 @@ class CalculationTree:
                 parent=pending.pop()
                 if parent in seen:continue
                 seen.add(parent)
+                for update in self.nodes[parent].get('public_updates') or ():
+                    child=update['node'];items[child]=self.summary(child,True);pending.append(child)
+                arrival=self.nodes[parent].get('day_arrival')
+                if arrival and arrival.get('node'):
+                    child=arrival['node'];items[child]=self.summary(child,True);pending.append(child)
                 for composition in self._composition_rows(parent):
                     child=composition['node']
                     if child!=parent:items[child]=self.summary(child,True);pending.append(child)

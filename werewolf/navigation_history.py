@@ -67,9 +67,9 @@ class NavigationHistory:
         return row
     def append(self,parent,node,selector,*,names=None,kind='strategy',selection_weight=F(1),settled=None):
         owner=self.occurrence(parent)
-        if kind not in ('strategy','manual_public'):raise ValueError('Unknown navigation edge kind')
+        if kind not in ('strategy','manual_public','recorded_input'):raise ValueError('Unknown navigation edge kind')
         weight=F(selection_weight)
-        if not 0<=weight<=1 or kind=='manual_public' and weight!=0:raise ValueError('Manual input must have zero strategy selection weight')
+        if not 0<=weight<=1 or kind in ('manual_public','recorded_input') and weight!=0:raise ValueError('Manual input must have zero strategy selection weight')
         mapping=owner.names if names is None else names
         if len(mapping.forward)!=node.read().public.player_count:raise ValueError('Player mapping size mismatch')
         # Append only after the caller's common generator accepted the input.

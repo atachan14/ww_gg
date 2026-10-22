@@ -71,3 +71,26 @@ class PublicInputEvidence:
     rules:object
     claim_policy:object
     def __call__(self,source):return condition_input(source,self.evidence,self.rules,self.claim_policy).source
+
+
+def initial_relation_game(root,path,evidence,source):
+    """Construct the public incidence/timing colours of initial manual updates."""
+    from copy import deepcopy
+    game=deepcopy(root);n=game['players'];batches=[]
+    prior=list(root.get('claims',['latent']*n));base=[]
+    for p,c in enumerate(prior,1):
+        if c!='latent':base.append(dict(kind='co',player=p,role=c))
+    for r in root.get('seer_inputs',()):base.append(dict(kind='seer',player=r['reporter'],day=r['day'],target=r['target'],color=r['color']))
+    if base:batches.append(dict(slot=0,mode='simultaneous',events=base))
+    batches.extend(deepcopy(root.get('public_log',{}).get('batches',())))
+    seen={(r['day'],r['reporter'],r['target'],r['color']) for r in root.get('seer_inputs',())}
+    updates=[step[1] for step in path if step[0]=='public_input']+[evidence]
+    for update in updates:
+        events=[dict(kind='co',player=p,role=c) for p,c in enumerate(update.claims,1) if c!=prior[p-1]]
+        for r in update.seer_reports:
+            key=(r.acquired_day,r.player,r.target,r.color)
+            if key not in seen:events.append(dict(kind='seer',player=r.player,day=r.acquired_day,target=r.target,color=r.color));seen.add(key)
+        if events:batches.append(dict(slot=0,mode='simultaneous',events=events))
+        prior=list(update.claims)
+    game.update(history=[],claims=list(source.public.claims),seer_inputs=[dict(day=r.acquired_day,reporter=r.player,target=r.target,color=r.color) for r in source.past],public_log=dict(batches=batches))
+    return game

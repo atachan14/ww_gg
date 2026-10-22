@@ -184,3 +184,17 @@ class NightObservationEvidence:
         selected=next((after for weight,after in rows if digest(after)==self.public_digest),None)
         if selected is None:raise ValueError('Public night observation unavailable')
         return condition_prefix(selected,source,self.groups,self.prefix)[1] if self.prefix else selected
+
+
+@dataclass(frozen=True)
+class ArrivalObservationEvidence:
+    engine:object
+    target:int
+    public_digest:str
+    groups:tuple
+    counter:bool=False
+    def __call__(self,source):
+        rows=public_observation_orbits(self.engine,source,self.target,self.groups,counter=self.counter,publish=False)
+        selected=next((after for weight,after in rows if digest(after)==self.public_digest),None)
+        if selected is None:raise ValueError('Pre-report public arrival unavailable')
+        return selected

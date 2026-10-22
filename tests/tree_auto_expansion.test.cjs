@@ -13,3 +13,10 @@ test('a zero incoming edge does not close a shared Board already opened through 
 test('display-only input ancestors do not hide forced Current paths',async()=>{const make=()=>n('board','input:0',[e(n('board','input:1',[e(n('board','0',[e(n('action','zero',[e(n('board','current'))]),'0')]))],false,{d:{snapshot_only:true}}))],false,{d:{snapshot_only:true}});const {state,refresh}=setup(make);await state.auto('root',()=>assert.fail(),refresh,{current:'current',path:['0','current']});const zero=[...state.item('root').next[0].item.next[0].item.next][0].item;assert.equal(zero.expanded,true);});
 
 test('publication identity is reused without claiming an independent layout block',()=>{const state=create(),shared=n('board','arrival',[e(n('board','after'))],false,{sharedIdentity:true});const root=state.project(n('board','root',[e(shared),e(shared)]));assert.equal(shared.shared,undefined);assert.equal(shared.key,'public:arrival');state.toggle('root');state.toggle(shared.key);assert.equal(state.item('public:arrival'),shared);});
+
+test('manual zero update opens its path and future while old nonzero alternatives remain collapsed',async()=>{
+ const make=()=>n('board','0',[e(n('action','old',[e(n('board','old-board',[e(n('action','old-future'))]))])),e(n('board','manual',[e(n('action','new-future',[e(n('board','leaf'))]))]),'0')]);
+ const {state,refresh}=setup(make);await state.auto('root',()=>assert.fail(),refresh,{current:'manual',path:['0','manual'],onlyPathUntilCurrent:true});
+ const root=refresh();assert.equal(root.children[0].item.expanded,false);assert.equal(root.children[1].item.expanded,true);assert.equal(root.children[1].item.children[0].item.expanded,true);
+ state.toggle(root.children[0].item.key);refresh();assert.equal(state.item(root.children[0].item.key).expanded,true);
+});

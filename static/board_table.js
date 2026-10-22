@@ -116,7 +116,7 @@
       if(!main.isConnected){document.querySelector('[data-table-update]')?.click();return;}
     }
     try{await draft.submit(async(current)=>{
-      clearTimeout(timer);controller?.abort();await clearSavedPromise;const response=await fetch('/table-publish',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify(current)})});const data=await response.json();if(!response.ok)throw Error(data.error);try{sessionStorage.removeItem(storageKey);}catch(_){}navigating=true;location.reload();return current;
+      clearTimeout(timer);controller?.abort();await clearSavedPromise;const response=await fetch('/table-publish',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify(current)})});const data=await response.json();if(!response.ok)throw Error(data.error);try{sessionStorage.removeItem(storageKey);}catch(_){}navigating=true;if(window.BoardNavigation&&main.dataset.navigationOccurrence)await window.BoardNavigation.install(data);else location.reload();return current;
     });}catch(e){status.textContent=`保存できません: ${e.message}`;}
   });
   document.querySelector('#action-form').addEventListener('submit',event=>{if(draft.isDirty()){event.preventDefault();event.stopImmediatePropagation();status.textContent='先に更新またはキャンセルしてください。';}},true);

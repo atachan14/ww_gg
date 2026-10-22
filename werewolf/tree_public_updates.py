@@ -73,3 +73,36 @@ def publication_label(before,after):
     events.extend(dict(kind='medium',player=r.reporter,day=r.day,target=r.target,color=r.color) for r in after.public.reports if r not in before.public.reports)
     events.extend(dict(kind='co',player=p,role=claim) for p,claim in enumerate(after.public.claims,1) if claim!=before.public.claims[p-1])
     return event_label(events) or '更新なし'
+
+
+def recorded_games(data):
+    """Initial saved input revisions, each an independent input snapshot.
+
+    No CO occurrence likelihood is inferred. This mirrors input_timeline's
+    evidence projection, while retaining complete inputs for ordinary Boards.
+    """
+    from .public_log import migrate
+    g=data.to_game();log=migrate(g);legacy=[]
+    for p,role in enumerate(log['base_claims'][0],1):
+        if role!='latent':legacy.append(dict(kind='co',player=p,role=role))
+    for key,kind in (('base_seer','seer'),('base_medium','medium')):
+        legacy.extend(dict(kind=kind,player=r['reporter'],day=r['day'],target=r['target'],color=r['color']) for r in log[key])
+    groups=([legacy] if legacy else [])+[b['events'] for b in log['batches'] if b.get('slot',0)==0]
+    if not groups:return data,()
+    base=deepcopy(g);base.pop('public_log',None);base.pop('public_draft',None)
+    base.update(history=[],claims=['latent']*g['players'],seer_inputs=[],reports=[])
+    active={};rows=[];batches=[]
+    for group in groups:
+        for event in group:
+            key=(event['kind'],event['player']) if event['kind']=='co' else (event['kind'],event['day'],event['player'],event.get('target') if event['kind']=='medium' else None)
+            if event.get('action')=='withdraw':active.pop(key,None)
+            else:active[key]=event
+        changed=deepcopy(base)
+        for event in active.values():
+            if event['kind']=='co':changed['claims'][event['player']-1]=event['role']
+            else:changed['seer_inputs' if event['kind']=='seer' else 'reports'].append(dict(day=event['day'],reporter=event['player'],target=event['target'],color=event['color']))
+        batches.append(dict(id=len(batches)+1,slot=0,day=1,phase='day',mode='simultaneous',events=deepcopy(group)))
+        changed['public_log']=dict(version=1,legacy=False,base_claims=[['latent']*g['players']],base_seer=[],base_medium=[],batches=deepcopy(batches),next_id=len(batches)+1)
+        rows.append((changed,deepcopy(group)))
+    from .board_flow import BoardData
+    return BoardData.from_game(base,game_data=data.game_data,runtime=data.runtime),tuple(rows)

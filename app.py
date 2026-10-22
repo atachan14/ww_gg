@@ -79,7 +79,27 @@ def create_app(test_config=None, *, deployment=False):
             state=game()
             if state is None:return None,None
             return session.setdefault('co_display_game',secrets.token_hex(8)),board_data(state)
-        register_navigation(app,navigation_store,navigation_owner)
+        def navigation_document(state=None):
+            identity,data=navigation_owner()
+            return navigation_store.get(identity,data)
+        def navigation_view(doc):
+            if doc.views is None:
+                from werewolf.navigation_tree import NavigationTree
+                doc.views=NavigationTree(doc,app.jinja_env.globals['role_order'])
+            return doc.views
+        def render_navigation(doc,*,roles_only=False):
+            from werewolf.navigation_current import NavigationCurrent
+            current=NavigationCurrent(doc.game)
+            current.data=current.data.updated(revision=doc.revision)
+            html,status=render_main(current.data.to_game(),role_state=current.roles,roles_only=roles_only,navigation_current=current)
+            return html
+        register_navigation(app,navigation_store,navigation_owner,render_navigation)
+
+    def navigation_active():
+        if not app.config.get('PERSISTENT_TREE_PREVIEW'):return False
+        from werewolf.information_set_forecast import Pending
+        try:navigation_document();return True
+        except Pending:return False
 
     def calculation_tree(state,role_state=None,forecast=None,*,explain=False):
         from werewolf.calculation_tree import CalculationTree,supported
@@ -139,6 +159,16 @@ def create_app(test_config=None, *, deployment=False):
         state=game()
         if state is None:return jsonify(error='保存されたゲームがありません。'),409
         from werewolf.information_set_forecast import Pending
+        if navigation_active():
+            try:
+                doc=navigation_document()
+                if request.form.get('snapshot')!=navigation_view(doc).snapshot:return jsonify(error='Tree changed'),409
+                revision=int(request.form.get('revision','-1'))
+                identity,data=navigation_owner()
+                doc,row=navigation_store.apply(identity,data,revision,lambda game:navigation_view(doc).select(request.form['node']))
+                return jsonify(ok=True,html=render_navigation(doc),navigation_revision=doc.revision,current=navigation_view(doc).current_key())
+            except Pending as exc:return jsonify(error=exc.reason,unsupported=True),422
+            except (ValueError,KeyError) as exc:return jsonify(error=str(exc)),409
         from werewolf.calculation_tree import explain_unavailable
         try:tree=calculation_tree(state,explain=True)
         except Pending as exc:return jsonify(explain_unavailable(state,exc.reason)),422
@@ -156,6 +186,13 @@ def create_app(test_config=None, *, deployment=False):
         if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
         state=game()
         if state is None:return jsonify(error='村を開始してください。'),409
+        if navigation_active():
+            from werewolf.information_set_forecast import Pending
+            try:
+                doc=navigation_document()
+                with doc.lock:return jsonify(navigation_view(doc).read(request.args.get('node'),request.args.get('expand')=='1',request.args.get('analysis')=='1'))
+            except Pending as exc:return jsonify(error=exc.reason,unsupported=True),422
+            except (ValueError,KeyError) as exc:return jsonify(error=str(exc)),409
         from werewolf.information_set_forecast import Pending
         from werewolf.calculation_tree import explain_unavailable
         try:tree=calculation_tree(state,explain=True)
@@ -328,7 +365,9 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None):
+    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None):
+        if navigation_current is not None:
+            role_state=navigation_current.roles;state=navigation_current.data.to_game()
         if generated_current is not None:
             role_state=generated_current.roles;state=generated_current.data.to_game()
         disclosure_error=None
@@ -375,7 +414,7 @@ def create_app(test_config=None, *, deployment=False):
                     from werewolf.seer_future_uniform import FuturePending
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
                     forecast=None
-                    if app.config.get('ANONYMOUS_NIGHT_PREVIEW') and generated_current is None:
+                    if app.config.get('ANONYMOUS_NIGHT_PREVIEW') and generated_current is None and navigation_current is None:
                         from werewolf.anonymous_value import initial_forecast
                         forecast=initial_forecast(role_state.owner)
                     if forecast is None:
@@ -392,7 +431,7 @@ def create_app(test_config=None, *, deployment=False):
                         primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
                         action_values={}
                     else:
-                        if app.config.get('GAME_TREE_PREVIEW') and generated_current is None:
+                        if app.config.get('GAME_TREE_PREVIEW') and generated_current is None and navigation_current is None:
                             calculation_tree(state,role_state,forecast)
                         primary=Values(forecast.village_win,1-forecast.village_win)
                         cumulative=progress.total_values(primary)
@@ -424,7 +463,7 @@ def create_app(test_config=None, *, deployment=False):
                               'public_attacks': [{'day':e.day,'target':e.target,'color':None} for e in board.history if e.phase=='night']}
         from werewolf.player_view import ViewScope,ResultFrame,build_public_view
         if generated_current is not None:cumulative=generated_current.origin_cumulative
-        view_source=generated_current.data if generated_current is not None else board_data(state)
+        view_source=navigation_current.data if navigation_current is not None else generated_current.data if generated_current is not None else board_data(state)
         view_stage='invalid'if disclosure_error else 'roles'if roles_only else 'pending'if seer_pending else 'complete'
         player_view=build_public_view(view_source,role_state,board,ResultFrame(ViewScope.public(view_source),view_stage,
             str(request.form.get('request_id','')),str(seer_pending.reason)if seer_pending else None),
@@ -432,9 +471,9 @@ def create_app(test_config=None, *, deployment=False):
             finished=finished,manual=manual,guard_scope_pending=guard_scope_pending,
             probability_pending=seer_pending if role_evidence_pending or disclosure_error else None)
         players=player_view.players
-        return render_template("main.html", generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
-                               players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
+                               players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None or navigation_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
     def wants_calculation_stream():
         return (request.path in ('/main','/table-preview','/private-view') and
@@ -745,6 +784,11 @@ def create_app(test_config=None, *, deployment=False):
         state = game(validate_roles=not (wants_calculation_stream() or shell))
         if state is None:
             return redirect(url_for("top"), code=303)
+        if app.config.get('PERSISTENT_TREE_PREVIEW'):
+            from werewolf.information_set_forecast import Pending
+            try:return render_navigation(navigation_document())
+            except Pending as exc:
+                return render_main(state,'この履歴は従来の盤面表示を維持しています：'+exc.reason)
         token=request.args.get('current')
         if token:
             if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
@@ -858,6 +902,17 @@ def create_app(test_config=None, *, deployment=False):
         state = game()
         if state is None:
             return redirect(url_for("top"), code=303)
+        if navigation_active() and not advancing:
+            from werewolf.navigation_current import NavigationCurrent
+            current=NavigationCurrent(navigation_document().game)
+            return render_main(current.data.to_game(),'このTreeの政策はゲーム開始時の設定です。変更はゲーム設定から新規開始してください。',409,role_state=current.roles,navigation_current=current)
+        if navigation_active() and advancing:
+            try:
+                doc=navigation_document();identity,data=navigation_owner()
+                target=int(request.form.get('target','0'))
+                navigation_store.apply(identity,data,int(request.form.get('revision','-1')),lambda game:game.action(target))
+                return redirect(url_for('main'),code=303)
+            except (ValueError,KeyError) as exc:return render_main(state,str(exc),409)
         rules, progress = structural_replay(state)
         if progress.finished:
             return redirect(url_for("result"), code=303)
@@ -1023,10 +1078,36 @@ def create_app(test_config=None, *, deployment=False):
         except (ValueError, TypeError, KeyError, DisclosureInconsistent) as exc:
             return jsonify(error=str(exc)), 400
 
+    def navigation_table(publish=False):
+        from werewolf.information_set_forecast import Pending
+        from werewolf.seer_acquisition import SeerReport
+        try:
+            doc=navigation_document()
+            if request.form.get('revision')!=str(doc.revision):return jsonify(error='Board changed'),409
+            payload=json.loads(request.form.get('payload',''))
+            if type(payload)is not dict or set(payload)!={'claims','seers','mediums'}:raise ValueError('Invalid declaration fields')
+            if payload['mediums']:raise Pending('manual_medium_input_pending')
+            reports=tuple(SeerReport(r['day'],r['day'],r['reporter'],r['target'],r['color']) for r in payload['seers'])
+            if publish:
+                identity,data=navigation_owner()
+                parent=doc.game.current
+                doc,row=navigation_store.apply(identity,data,doc.revision,lambda game:game.public_input(tuple(payload['claims']),reports))
+                return jsonify(ok=True,revision=doc.revision,html=render_navigation(doc),collapse_owner=parent+'~0')
+            from werewolf.navigation_current import NavigationCurrent
+            preview=doc.game.fork();preview.public_input(tuple(payload['claims']),reports)
+            current=NavigationCurrent(preview);current.data=current.data.updated(revision=doc.revision)
+            html,status=render_main(current.data.to_game(),role_state=current.roles,navigation_current=current)
+            from werewolf.public_log import migrate
+            before=NavigationCurrent(doc.game).data.to_game();before['revision']=doc.revision
+            return jsonify(html=html,batch=None,request_id=request.form.get('request_id'),revision=doc.revision,board_id=migrate(before)['board_id']),status
+        except Pending as exc:return jsonify(error=exc.reason,unsupported=True),422
+        except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc)),400
+
     @app.post('/table-preview')
     def table_preview():
         from flask import jsonify
         if not app.config.get('HYBRID_TABLE_PREVIEW'):return jsonify(error='Not enabled'),404
+        if navigation_active():return navigation_table()
         state=game(validate_roles=not wants_calculation_stream())
         if state is None or not revision_matches(state):return jsonify(error='確定状態が変わりました。再読み込みしてください。'),409
         try:
@@ -1052,6 +1133,7 @@ def create_app(test_config=None, *, deployment=False):
     def table_publish():
         from flask import jsonify
         if not app.config.get('HYBRID_TABLE_PREVIEW'):return jsonify(error='Not enabled'),404
+        if navigation_active():return navigation_table(True)
         state=game()
         if state is None or not revision_matches(state):return jsonify(error='確定状態が変わりました。再読み込みしてください。'),409
         try:
@@ -1121,6 +1203,10 @@ def create_app(test_config=None, *, deployment=False):
 
     @app.post("/back")
     def back():
+        if navigation_active():
+            doc=navigation_document();identity,data=navigation_owner()
+            navigation_store.apply(identity,data,int(request.form.get('revision','-1')),lambda game:game.back())
+            return redirect(url_for('main'),code=303)
         token=request.form.get('current')
         if token:
             if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
