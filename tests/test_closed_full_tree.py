@@ -53,8 +53,8 @@ class ClosedFullTreeTests(unittest.TestCase):
         with patch.object(AcquisitionLedger,'__init__',side_effect=AssertionError('ledger')),patch.object(UniformAcquisitionCache,'__init__',side_effect=AssertionError('proof cache')):
             self.assertEqual(str(c.root.forecast().village_win),'7/15')
         eight=ClosedCalculation(case(8,'single').data,max_work=250000,max_seconds=30)
-        with self.assertRaises(Pending) as caught:eight.root.forecast()
-        self.assertEqual(caught.exception.reason,'closed_forecast_seven_alive_limit')
+        with self.assertRaises(CalculationBudgetExceeded):
+            with calculation_budget(1):eight.root.forecast()
         self.assertEqual(eight.stats()['values'],0)
 
     def test_missing_initial_declaration_is_not_synthesized_as_future_policy(self):

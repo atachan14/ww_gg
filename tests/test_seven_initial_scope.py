@@ -23,13 +23,11 @@ class SevenInitialScopeTests(unittest.TestCase):
             with self.assertRaises(Pending) as caught:n.forecast()
             self.assertEqual(caught.exception.reason,'multiple_fake_report_correlation_unselected')
         self.assertEqual(c.stats()['values'],0)
-    def test_seven_night_and_eight_root_do_not_gain_entry(self):
+    def test_eight_root_and_seven_night_use_semantic_scope_not_count_gate(self):
         c=ClosedCalculation(case(8,'single').data,grouped=True)
-        with self.assertRaises(Pending) as caught:c.root.forecast()
-        self.assertEqual(caught.exception.reason,'closed_forecast_seven_alive_limit')
+        _forecast_scope(c.root.read(),c._ClosedCalculation__engine)
         child=c.root.observe(2)[1]
-        with self.assertRaises(Pending) as caught:child.forecast()
-        self.assertEqual(caught.exception.reason,'closed_forecast_seven_initial_only')
+        _forecast_scope(child.read(),c._ClosedCalculation__engine)
         self.assertEqual(c.stats()['values'],0)
     def test_seven_self_bite_max_and_guard_are_not_admitted(self):
         g=case(7,'single').data.to_game();g['rules']['allow_self_bite']=True;g['policy']['include_self_bite']=True;c=self.calc(g)

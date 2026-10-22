@@ -18,7 +18,7 @@ def input_snapshot(data):return sha256(data.inputs.encode()).hexdigest()[:20]
 
 def supported(data,board):
     g=data.game_data
-    return (3<=g.players<=7 and g.wolves>=1 and g.seers>=1 and not(g.mediums or g.hunters)
+    return (g.wolves>=1 and g.seers>=1 and not(g.mediums or g.hunters)
             and not g.rules.allow_self_bite)
 
 
@@ -28,8 +28,8 @@ def explain_unavailable(game,reason):
     counts['wolves']=game.get('wolves',1)
     counts['citizens']=game['players']-sum(counts.values())
     strategy=Strategy(**game['policy']);rules=game['rules'];issues=[]
-    if not 3<=game['players']<=7 or counts['seers']<1 or counts['mediums'] or counts['hunters']:
-        issues.append('\u73fe\u5728\u306e\u6bb5\u968eGameTree\u306f3\uff5e7\u4eba\u30fb\u5360\u3044\u5e2b1\u4eba\u4ee5\u4e0a\u306e\u914d\u5f79\u304c\u5bfe\u8c61\u3067\u3059\u3002\u970a\u80fd\u30fb\u8b77\u885b\u306e\u6bb5\u968e\u63a5\u7d9a\u306f\u672a\u5bfe\u5fdc\u3067\u3059\u3002')
+    if counts['seers']<1 or counts['mediums'] or counts['hunters']:
+        issues.append('\u73fe\u5728\u306e\u6bb5\u968eGameTree\u306f\u5360\u3044\u5e2b1\u4eba\u4ee5\u4e0a\u306e\u914d\u5f79\u304c\u5bfe\u8c61\u3067\u3059\u3002\u970a\u80fd\u30fb\u8b77\u885b\u306e\u6bb5\u968e\u63a5\u7d9a\u306f\u672a\u5bfe\u5fdc\u3067\u3059\u3002')
     if rules.get('allow_self_bite'):issues.append('自噛み可能のルールは未対応です。')
     if rules.get('initial_seer','random_white')!='random_white':issues.append('初日占いはランダム白のみ対応しています。')
     if (strategy.day,strategy.night,strategy.fake_reports) not in (('max',)*3,('random',)*3):
