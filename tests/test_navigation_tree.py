@@ -166,3 +166,16 @@ class NavigationIntegratedHttpTests(unittest.TestCase):
   self.assertIn('saved_action_uniform_H0_only',page.get_data(as_text=True));self.assertNotIn('data-navigation-occurrence=',page.get_data(as_text=True))
   with self.client.session_transaction() as ss:self.assertEqual(ss['game']['history'],game['history']);self.assertEqual(ss['game']['claims'],game['claims'])
   self.assertEqual(self.client.get('/navigation').status_code,422)
+
+ def test_duplicate_concurrent_CO_publish_commits_once(self):
+  from concurrent.futures import ThreadPoolExecutor
+  from copy import deepcopy
+  with self.client.session_transaction() as session:base=deepcopy(dict(session))
+  payload=dict(claims=['seer','latent','latent','latent','latent'],seers=[dict(day=1,reporter=1,target=3,color='white')],mediums=[])
+  def publish():
+   with self.app.test_client() as client:
+    with client.session_transaction() as session:session.update(deepcopy(base))
+    return client.post('/table-publish',data=dict(revision='0',payload=json.dumps(payload))).status_code
+  with ThreadPoolExecutor(max_workers=2) as pool:statuses=list(pool.map(lambda _:publish(),range(2)))
+  self.assertEqual(sorted(statuses),[200,409])
+  self.assertEqual(len(self.client.get('/navigation').json['occurrences']),2)

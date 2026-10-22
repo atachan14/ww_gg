@@ -88,11 +88,12 @@ def create_app(test_config=None, *, deployment=False):
                 doc.views=NavigationTree(doc,app.jinja_env.globals['role_order'])
             return doc.views
         def render_navigation(doc,*,roles_only=False):
-            from werewolf.navigation_current import NavigationCurrent
-            current=NavigationCurrent(doc.game)
-            current.data=current.data.updated(revision=doc.revision)
-            html,status=render_main(current.data.to_game(),role_state=current.roles,roles_only=roles_only,navigation_current=current)
-            return html
+            with doc.lock:
+                from werewolf.navigation_current import NavigationCurrent
+                current=NavigationCurrent(doc.game)
+                current.data=current.data.updated(revision=doc.revision)
+                html,status=render_main(current.data.to_game(),role_state=current.roles,roles_only=roles_only,navigation_current=current)
+                return html
         register_navigation(app,navigation_store,navigation_owner,render_navigation)
 
     def navigation_active():
@@ -1083,23 +1084,24 @@ def create_app(test_config=None, *, deployment=False):
         from werewolf.seer_acquisition import SeerReport
         try:
             doc=navigation_document()
-            if request.form.get('revision')!=str(doc.revision):return jsonify(error='Board changed'),409
-            payload=json.loads(request.form.get('payload',''))
-            if type(payload)is not dict or set(payload)!={'claims','seers','mediums'}:raise ValueError('Invalid declaration fields')
-            if payload['mediums']:raise Pending('manual_medium_input_pending')
-            reports=tuple(SeerReport(r['day'],r['day'],r['reporter'],r['target'],r['color']) for r in payload['seers'])
-            if publish:
-                identity,data=navigation_owner()
-                parent=doc.game.current
-                doc,row=navigation_store.apply(identity,data,doc.revision,lambda game:game.public_input(tuple(payload['claims']),reports))
-                return jsonify(ok=True,revision=doc.revision,html=render_navigation(doc),collapse_owner=parent+'~0')
-            from werewolf.navigation_current import NavigationCurrent
-            preview=doc.game.fork();preview.public_input(tuple(payload['claims']),reports)
-            current=NavigationCurrent(preview);current.data=current.data.updated(revision=doc.revision)
-            html,status=render_main(current.data.to_game(),role_state=current.roles,navigation_current=current)
-            from werewolf.public_log import migrate
-            before=NavigationCurrent(doc.game).data.to_game();before['revision']=doc.revision
-            return jsonify(html=html,batch=None,request_id=request.form.get('request_id'),revision=doc.revision,board_id=migrate(before)['board_id']),status
+            with doc.lock:
+                if request.form.get('revision')!=str(doc.revision):return jsonify(error='Board changed'),409
+                payload=json.loads(request.form.get('payload',''))
+                if type(payload)is not dict or set(payload)!={'claims','seers','mediums'}:raise ValueError('Invalid declaration fields')
+                if payload['mediums']:raise Pending('manual_medium_input_pending')
+                reports=tuple(SeerReport(r['day'],r['day'],r['reporter'],r['target'],r['color']) for r in payload['seers'])
+                if publish:
+                    identity,data=navigation_owner()
+                    parent=doc.game.current
+                    doc,row=navigation_store.apply(identity,data,int(request.form['revision']),lambda game:game.public_input(tuple(payload['claims']),reports))
+                    return jsonify(ok=True,revision=doc.revision,html=render_navigation(doc),collapse_owner=parent+'~0')
+                from werewolf.navigation_current import NavigationCurrent
+                preview=doc.game.fork();preview.public_input(tuple(payload['claims']),reports)
+                current=NavigationCurrent(preview);current.data=current.data.updated(revision=doc.revision)
+                html,status=render_main(current.data.to_game(),role_state=current.roles,navigation_current=current)
+                from werewolf.public_log import migrate
+                before=NavigationCurrent(doc.game).data.to_game();before['revision']=doc.revision
+                return jsonify(html=html,batch=None,request_id=request.form.get('request_id'),revision=doc.revision,board_id=migrate(before)['board_id']),status
         except Pending as exc:return jsonify(error=exc.reason,unsupported=True),422
         except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc)),400
 

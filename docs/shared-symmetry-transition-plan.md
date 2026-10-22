@@ -3199,7 +3199,7 @@ column depth is local to its own phase; it does not shift later night Boards int
 ability columns. Existing single-child expansion, exact-nonzero auto expansion,
 old-branch collapse, shared public joins and right-edge Current controls remain.
 
-Verification: 69 Python tests pass across navigation, manual input, public relation,
+Verification: 70 Python tests pass across navigation, manual input, public relation,
 public updates, original CalculationTree/presentation and BoardTable suites;
 48 JS tests pass for expansion, exact zero detection, layout, routing and viewport.
 Multi-seer and multi-wolf named transport checks preserve every Q/P atom and
@@ -3228,3 +3228,22 @@ Q/P kernel, not a UI relabel/rebase. Old-report replacement/delayed/medium input
 continues to return explicit unsupported rather than an invented posterior.
 Named initial-law materialization and existing exact fallback remain; this is not
 a claim that the anonymous solver has universally replaced them.
+
+
+Final live evidence: installed Edge completed the real Board/Tree sequence with
+zero Runtime exceptions. The same Tree DOM survives CO publication, Footer and
+Current moves. Ctrl-wheel changed Tree scale 1 -> 1.221402758 with browser DPR1
+and unchanged page position; ordinary wheel moved the page 1070 -> 920. Drag
+moved horizontal scroll 120 -> 170 and, with actual overflow, vertical0 ->25.
+Fraction switching retained the Tree and pan and displayed7/15. Day-start h5 and
+published h6 both own exact state s5 in the no-update case, with distinct cursor
+parents; Footer back/forward reuses h6. Night Board headers align with Day1夜.
+Desktop1440 and narrow390 screenshots were actually inspected. Area935 plus
+measured Footer65 equals viewport1000. The preview remains on18821 with the same
+cookie name; no other listener was stopped.
+
+A final concurrent-publication regression passes: two equal-revision submissions
+produce one200 and one409 and exactly one new occurrence. Rendering, preview and
+publish share the document lock, and CAS uses the submitted revision. Final logs:
+.artifacts/navigation-final-python.log (70 passed), navigation-final-js.log
+(48 passed), navigation-browser-probe.json and navigation-*.png.
