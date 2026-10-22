@@ -19,6 +19,8 @@ const {spawn}=require('node:child_process'),fs=require('node:fs/promises'),os=re
   await evaluate(`(async()=>{const r=await fetch('/start',{method:'POST',body:new URLSearchParams({citizens:'3',wolves:'1',seers:'1',day:'max',night:'max',fake_reports:'max'})});return r.status;})()`);
   await navigate('http://127.0.0.1:18821/main');
   await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.dataset.treeAuto==='complete'`));
+  const cornerBounds=()=>evaluate(`(()=>{const rows=[...document.querySelectorAll('.compact-tree-board')];return rows.map(row=>{const label=row.querySelector('.tree-win-corner'),r=row.getBoundingClientRect(),b=label?.getBoundingClientRect();return {id:row.dataset.treeItem,inline:!!row.querySelector('.compact-tree-select .probability'),outside:!!b&&b.bottom<=r.top+2.5,within:!!b&&b.left>=r.left-1&&b.right<=r.right+1,update:row.classList.contains('compact-tree-update')};});})()`);
+  const initialCorners=await cornerBounds();assert.ok(initialCorners.length>0);assert.ok(initialCorners.every(r=>!r.inline&&r.outside&&r.within));
   const baseline=await evaluate(`(()=>{window.__savedTree=document.querySelector('[data-calculation-tree]');window.__savedTree.dataset.verificationIdentity='same-tree';return {occ:document.querySelector('main').dataset.navigationOccurrence,cards:document.querySelectorAll('.tree-item').length,body:document.querySelector('main').innerText.slice(0,400)}})()`);
   assert.equal(baseline.occ,'h0');assert.ok(baseline.cards>3);
   await evaluate(`document.querySelector('[data-calculation-tree]').scrollIntoView({block:'start'})`);
@@ -83,8 +85,9 @@ const {spawn}=require('node:child_process'),fs=require('node:fs/promises'),os=re
   await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await new Promise(r=>setTimeout(r,300));
   await evaluate(`document.querySelector('[data-calculation-tree]').scrollIntoView({block:'start'})`);
   await fs.writeFile('.artifacts/navigation-mobile.png',Buffer.from((await call('Page.captureScreenshot',{format:'png',captureBeyondViewport:false})).data,'base64'));
-  await fs.writeFile('.artifacts/navigation-browser-probe.json',JSON.stringify({baseline,advanced,updated,zoomed,wheel,geometry,terminal,panned,formatted,nightAligned,dayStart,published,vertical,errors},null,2));
-  console.log(JSON.stringify({baseline,advanced,updated,zoomed,wheel,geometry,terminal,panned,formatted,nightAligned,dayStart,published,vertical,errors}));assert.deepEqual(errors,[]);
+  const narrowCorners=await cornerBounds();assert.ok(narrowCorners.length>0);assert.ok(narrowCorners.every(r=>!r.inline&&r.outside&&r.within));
+  await fs.writeFile('.artifacts/navigation-browser-probe.json',JSON.stringify({baseline,advanced,updated,zoomed,wheel,geometry,terminal,panned,formatted,nightAligned,dayStart,published,vertical,initialCorners,narrowCorners,errors},null,2));
+  console.log(JSON.stringify({baseline,advanced,updated,zoomed,wheel,geometry,terminal,panned,formatted,nightAligned,dayStart,published,vertical,initialCorners,narrowCorners,errors}));assert.deepEqual(errors,[]);
   await call('Browser.close',{},null).catch(()=>{});
  }finally{if(ws)ws.close();if(child.exitCode===null)child.kill();}
 })().catch(error=>{console.error(error.stack);process.exitCode=1;});

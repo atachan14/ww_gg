@@ -3247,3 +3247,17 @@ produce one200 and one409 and exactly one new occurrence. Rendering, preview and
 publish share the document lock, and CAS uses the submitted revision. Final logs:
 .artifacts/navigation-final-python.log (70 passed), navigation-final-js.log
 (48 passed), navigation-browser-probe.json and navigation-*.png.
+
+
+### Phase-start Board win labels — presentation only
+
+Phase-start/terminal/day-start Board cards now use the same external upper-right
+win label as publication cards; Board ID, population and Current remain in-body.
+The existing fraction/percentage formatter is reused. Label width participates in
+intrinsic column measurement and the Board overflow permits its corner slot.
+No solver, navigation, probability or row-order/routing algorithm was changed.
+22 layout/routing/viewport tests pass. Isolated Edge verifies root/continuing/
+terminal cards, CO update, day-start and publication navigation, 1440/390 widths,
+Ctrl zoom, pan and fraction switching; every inspected Board label is outside the
+body and within its card's horizontal bounds, with zero Runtime exceptions.
+The static update is served by the existing18821 process without session reset.

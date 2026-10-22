@@ -560,3 +560,6 @@ main[data-screen="top"] .cast-panel { padding:12px 14px; }
 .compact-tree-update .compact-tree-select{white-space:normal}
 .tree-log-row{display:block;white-space:nowrap}
 .tree-win-corner{position:absolute;right:0;top:-12px;height:12px;font:10px/12px system-ui,sans-serif;background:white;color:#5f786c;white-space:nowrap;pointer-events:none}
+
+/* Board win labels share the update card corner slot, outside the card. */
+.compact-tree-item.compact-tree-board{overflow:visible}
