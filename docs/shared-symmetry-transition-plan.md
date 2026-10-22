@@ -3632,3 +3632,24 @@ regressions. Isolated Edge hunter/medium real Table/Footer/Tree/Current flows
 passed with desktop/narrow screenshots. Isolated seven-player browser HTTP
 flow returned one representative night Board and exact 2/7,4/7,1/7 stages;
 night expansion took about 87s. No normal listener restart or cookie changes.
+
+
+## Explicit dead ability stages (2026-10-23)
+
+The common ability adapter declares its stage kinds. If its role exists but has
+no night-start living holder, the scheduler emits deterministic ability_dead
+steps for those columns (medium result, seer target/result, guard target). An
+absent role, an observation without an execution, and voluntary/inactive rules
+do not become dead markers. Multiple holders skip the whole role only when none
+are alive. Same-night casualties remain eligible until simultaneous resolution.
+The named exact fallback uses the same predicate and adapter stage descriptors.
+Markers carry no actor observation, public fact, action or probability factor;
+existing Q/P/continuation identities and weights are retained. Old stored symbolic
+prefixes without these presentation steps remain supported.
+
+Validation: 40 role/common ability/navigation/overnight regressions and six
+factorization tests passed; nine day-quotient tests passed in the additional
+combined run. The dead/live/absent/multiple-holder suite verifies actual Tree
+columns and conditional masses. Isolated Edge medium/hunter Table/Footer/Current
+flows pass; desktop screenshot shows the medium dead marker in its result column.
+Normal18821 is kept running unchanged, requiring a later restart to activate.

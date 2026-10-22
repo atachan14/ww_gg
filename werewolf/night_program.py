@@ -202,6 +202,13 @@ def compile_night(engine,source,groups):
                                 if execution is not None:
                                     medium=tuple(AbilityStep('medium_result',p,(execution,'black' if h.roles[0]&(1<<(execution-1)) else 'white'),(p,)) for p in b.alive if h.roles[1]&(1<<(p-1)))
                                     steps=(*medium,*steps)
+                            from .anonymous_abilities import dead_stage_kinds
+                            from .ability_adapters import Medium,Divination,Guard
+                            ordered=[]
+                            for mask,ability in ((h.roles[1],Medium()),(h.roles[2],Divination()),(h.roles[3],Guard())):
+                                ordered.extend(step for step in steps if step.kind in ability.stages)
+                                ordered.extend(AbilityStep('ability_dead',None,kind) for kind in dead_stage_kinds(bool(mask),any(mask&(1<<(p-1)) for p in b.alive),ability.stages))
+                            steps=(*ordered,*(step for step in steps if step.kind=='wolf_target'))
                             if not steps or steps[-1].kind!='wolf_target':steps=(*steps,AbilityStep('wolf_target',None,target,()))
                             steps=tuple(replace(step,actors=wolves) if step.kind=='wolf_target' else step for step in steps)
                             if b.initial_medium_count or b.initial_hunter_count:

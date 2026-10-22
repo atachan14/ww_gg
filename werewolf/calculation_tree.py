@@ -452,7 +452,9 @@ class CalculationTree:
                     from dataclasses import asdict
                     label=step.label();symbol=lambda x:None if x is None else asdict(x)
                     mediums=self.data.game_data.mediums;seers=self.data.game_data.seers;hunters=self.data.game_data.hunters;prefix=stage.prefix
-                    position=(sum(s.kind=='medium_result' for s in prefix) if step.kind=='medium_result' else mediums+sum(s.kind in ('seer_target','seer_result') for s in prefix) if step.kind in ('seer_target','seer_result') else mediums+2*seers+sum(s.kind=='guard_target' for s in prefix) if step.kind=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
+                    stage_kind=lambda s:s.value if s.kind=='ability_dead' else s.kind
+                    effective=stage_kind(step)
+                    position=(sum(stage_kind(s)=='medium_result' for s in prefix) if effective=='medium_result' else mediums+sum(stage_kind(s) in ('seer_target','seer_result') for s in prefix) if effective in ('seer_target','seer_result') else mediums+2*seers+sum(stage_kind(s)=='guard_target' for s in prefix) if effective=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
                     branches.append(dict(stage_column=position,public_fact=step.public_fact,kind=step.kind,actor=None if step.actor is None else step.actor.index+1,actors=[x.index+1 for x in step.actors],value=step.value,label=label,targets=[],symbols=dict(actor=symbol(step.actor),target=symbol(step.target) if hasattr(step.target,'members') else None,actors=[symbol(x) for x in step.actors]),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),children=build(branch.state),images=[]))
                 else:
                     from .ability_labels import stage_label
@@ -460,7 +462,9 @@ class CalculationTree:
                     prefix=stage.prefix;role_column=None
                     if native:
                         mediums=self.data.game_data.mediums;seers=self.data.game_data.seers;hunters=self.data.game_data.hunters
-                        role_column=(sum(s.kind=='medium_result' for s in prefix) if step.kind=='medium_result' else mediums+sum(s.kind in ('seer_target','seer_result') for s in prefix) if step.kind in ('seer_target','seer_result') else mediums+2*seers+sum(s.kind=='guard_target' for s in prefix) if step.kind=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
+                        stage_kind=lambda s:s.value if s.kind=='ability_dead' else s.kind
+                        effective=stage_kind(step)
+                        role_column=(sum(stage_kind(s)=='medium_result' for s in prefix) if effective=='medium_result' else mediums+sum(stage_kind(s) in ('seer_target','seer_result') for s in prefix) if effective in ('seer_target','seer_result') else mediums+2*seers+sum(stage_kind(s)=='guard_target' for s in prefix) if effective=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
                     branches.append(dict(stage_column=role_column,kind=step.kind,actor=step.actor,actor_groups=actor_groups,joint_choices=joint_choices,actors=list(step.actors),value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
             result=dict(branches=branches);built[cache]=result
             return result

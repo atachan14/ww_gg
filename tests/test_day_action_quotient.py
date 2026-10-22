@@ -32,7 +32,7 @@ class DayActionQuotientTests(unittest.TestCase):
    night=choice['branches'][0]['node'];shown=view.read(night,True);stages=shown['night_stages']['branches']
    colors={b['value'][1]:F(b['probability']) for b in stages if b['kind']=='medium_result'}
    self.assertEqual(colors,{'black':F(2,7),'white':F(4,7)})
-   self.assertEqual(sum(F(b['probability']) for b in stages if b['kind']=='seer_target'),F(1,7))
+   self.assertEqual(sum(F(b['probability']) for b in stages if b['kind']=='ability_dead' and b['value']=='medium_result'),F(1,7))
    self.assertEqual(sum(F(b['probability']) for b in stages),1)
  def test_every_named_execution_has_the_same_full_transported_state(self):
   with calculation_budget(200000,max_seconds=15):

@@ -77,7 +77,7 @@ class RoleStagedTreeTests(unittest.TestCase):
   with calculation_budget(250000,max_seconds=20):
    doc=self.doc('guard');self.assertEqual(doc.game.node.forecast().village_win,F(7,24));doc.game.action(3);view=NavigationTree(doc);shown=view.read(view.current_key(),True);rows=self.leaves(shown['night_stages'])
    self.assertEqual(sum(p for p,r,path in rows),1)
-   self.assertTrue(any(path[0]['kind']=='guard_target' for p,r,path in rows));self.assertTrue(any(path[0]['kind']=='wolf_target' for p,r,path in rows))
+   self.assertTrue(any(path[0]['kind']=='guard_target' for p,r,path in rows));self.assertTrue(any(path[0]['kind']=='ability_dead' and path[0]['value']=='guard_target' for p,r,path in rows))
    ongoing={r['node'] for p,r,path in rows if shown['items'][r['node']]['winner'] is None}
    self.assertEqual(len(ongoing),1);key=ongoing.pop();self.assertEqual(sum(p for p,r,path in rows if r['node']==key),F(1,6))
    for p,r,path in rows:

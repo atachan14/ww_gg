@@ -191,7 +191,9 @@ class NightFlow:
         self.rows=tuple(rows);self.acquired_q=before.q.acquire(before.day+1) if acquire else before.q;self._branches={}
     def branch(self,observation,prefix=(),counter=False):
         name,result=observation
-        def matching(row):return row.observation==observation and row.steps[:len(prefix)]==tuple(prefix)
+        def matching(row):
+            steps=row.steps if any(s.kind=='ability_dead' for s in prefix) else tuple(s for s in row.steps if s.kind!='ability_dead')
+            return row.observation==observation and steps[:len(prefix)]==tuple(prefix)
         mass,p=Law.weighted(((row.counter if counter else row.mass),row.atom) for row in self.rows if matching(row))
         if observation not in self._branches:
             public=[]

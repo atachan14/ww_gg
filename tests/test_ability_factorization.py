@@ -43,7 +43,7 @@ class AbilityFactorizationTests(unittest.TestCase):
     if latent:tree,key,scan=self.latent(mode)
     else:
      calculation,node,client=fixture(mode);roles=calculation.data.roles();tree=CalculationTree(calculation.data,roles.board,roles.forecast());tree.expand('0')
-     key=next(b['node'] for a in tree.nodes['0']['actions'] if a['targets']==[3,4,5] for b in a['branches'] if not tree.nodes[b['node']]['node'].read().public.winner)
+     key=next(b['node'] for a in tree.nodes['0']['actions'] if 3 in a['targets'] for b in a['branches'] if not tree.nodes[b['node']]['node'].read().public.winner)
      tree.expand(key);scan=tree.nodes[key]['ability_choices'][0]
      self.assertTrue(all(a['multiplicity']==1 for a in scan['attacks']))
     before=defaultdict(F);after=defaultdict(F);value=F()

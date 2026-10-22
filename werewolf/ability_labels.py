@@ -31,6 +31,7 @@ def stage_label(branch):
         action='\u304b\u3089\u5360\u3044' if step.kind=='seer_target' and len(targets)>1 else ('\u3092\u5360\u3044' if step.kind=='seer_target' else '\u3092\u8972\u6483')
         if step.kind=='guard_target':action='を護衛'
         label=owner+'\u304c'+positions+action
+    elif step.kind=='ability_dead':label='\u6b7b\u4ea1\u6e08\u307f'
     elif step.kind=='seer_result':label={'white':'\u767d','black':'\u9ed2'}[step.value]
     elif step.kind=='medium_result':label=str(step.actor)+'：'+str(step.value[0])+('黒' if step.value[1]=='black' else '白')
     elif step.kind=='death_notice':label='襲撃死：'+('なし' if step.value is None else str(step.value))

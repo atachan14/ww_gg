@@ -89,6 +89,7 @@ class SymbolStep:
     @property
     def visible_to(self):return (self.actor.index+1,) if self.actor else ()
     def label(self):
+        if self.kind=='ability_dead':return '\u6b7b\u4ea1\u6e08\u307f'
         if self.kind=='seer_target':return self.actor.label()+'が'+self.target.label()+'を占い'
         if self.kind=='guard_target':return self.actor.label()+'が'+self.target.label()+'を護衛'
         if self.kind=='medium_result':return self.actor.label()+'：'+self.target.label()+('黒' if self.public_fact=='black' else '白')
@@ -115,7 +116,8 @@ def symbolic_steps(path,groups):
             by_ref[ref]=Symbol(index,groups[g])
         return by_ref[ref]
     for step in path.steps:
-        if step.kind=='medium_result':result.append(SymbolStep(step.kind,symbol(step.actor),symbol(step.value[0]),public_fact=step.value[1]))
+        if step.kind=='ability_dead':result.append(SymbolStep(step.kind,None,step.value))
+        elif step.kind=='medium_result':result.append(SymbolStep(step.kind,symbol(step.actor),symbol(step.value[0]),public_fact=step.value[1]))
         elif step.kind in ('seer_target','guard_target'):result.append(SymbolStep(step.kind,symbol(step.actor),symbol(step.value)))
         elif step.kind=='seer_result':result.append(SymbolStep(step.kind,symbol(step.actor),step.value))
         else:

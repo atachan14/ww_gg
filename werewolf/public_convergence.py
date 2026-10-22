@@ -155,7 +155,10 @@ def prefix_likelihood(h,before,after,groups,prefix):
     for step in prefix:
         next_rows=[]
         for mapping,actors,weight in rows:
-            if step.kind=='seer_target':
+            if step.kind=='ability_dead':
+                role={'medium_result':1,'seer_target':2,'seer_result':2,'guard_target':3}[step.target]
+                if h.roles[role] and not any(h.roles[role]&(1<<(p-1)) for p in living):next_rows.append((mapping,actors,weight))
+            elif step.kind=='seer_target':
                 group_index=groups.index(step.actor.members)
                 earlier={p for group in groups[:group_index] for p in group}
                 if any(p in earlier and p not in actors for p in records):continue

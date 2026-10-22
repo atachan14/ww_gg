@@ -69,18 +69,29 @@ def choices(path,ability,actor,context,committed=None):
     return tuple(rows)
 
 
+def dead_stage_kinds(present,living,stages):
+    """An absent role and an inactive observation are not a dead holder."""
+    return tuple(stages) if present and not living else ()
+
+
 def run(population,abilities,context,policy_factory=None):
-    from .anonymous_relations import Path
+    from .anonymous_relations import Path,Step
     roles=tuple(dict.fromkeys(role for ability in abilities for role in ability.roles))
     population=population.bind_roles(roles)
-    schedule=tuple((ability,actor) for ability in abilities for actor in ability.actors(population))
+    schedule=[]
+    for ability in abilities:
+        actors=ability.actors(population)
+        if actors:schedule.extend((ability,actor) for actor in actors)
+        elif dead_stage_kinds(any(p.role in ability.roles for p in population.people),actors,getattr(ability,'stages',())):schedule.append((ability,'dead'))
+    schedule=tuple(schedule)
     # Factories see only the initial state, before any stage result is obtained.
-    policies={(ability.key,actor):None if policy_factory is None else policy_factory(ability,actor,population) for ability,actor in schedule}
+    policies={(ability.key,actor):None if actor=='dead' or policy_factory is None else policy_factory(ability,actor,population) for ability,actor in schedule}
     rows=(Path(population),)
     for ability,actor in schedule:
         following=[]
         for path in rows:
-            if getattr(ability,'observation_only',False):following.append(ability.observe(path,actor,context))
+            if actor=='dead':following.append(replace(path,steps=(*path.steps,*(Step('ability_dead',None,kind) for kind in ability.stages))))
+            elif getattr(ability,'observation_only',False):following.append(ability.observe(path,actor,context))
             else:following.extend(choices(path,ability,actor,context,policies[ability.key,actor]))
         rows=tuple(following)
     return rows

@@ -8,6 +8,7 @@ class Personal:
 
 @dataclass(frozen=True)
 class Divination(Personal):
+    stages:tuple=('seer_target','seer_result')
     key:str='seer'
     roles:tuple=('seer',)
     def choices(self,pop,actor,context):
@@ -23,6 +24,7 @@ class Divination(Personal):
 
 @dataclass(frozen=True)
 class Medium(Personal):
+    stages:tuple=('medium_result',)
     key:str='medium'
     roles:tuple=('medium',)
     observation_only:bool=True
@@ -34,6 +36,7 @@ class Medium(Personal):
 
 @dataclass(frozen=True)
 class Guard(Personal):
+    stages:tuple=('guard_target',)
     key:str='guard'
     roles:tuple=('hunter',)
     def choices(self,pop,actor,context):

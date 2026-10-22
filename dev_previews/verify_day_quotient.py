@@ -18,7 +18,7 @@ with tempfile.TemporaryDirectory(prefix='wwgg-quotient-') as directory:
   const action=result.tree.actions[0];assert.deepEqual(action.targets,[1,2,3,4,5,6,7]);assert.equal(action.branches.length,1);assert.equal(action.branches[0].probability,'1');
   const night=await evaluate(`(async()=>{const r=await fetch('/game-tree?node=${action.branches[0].node}&expand=1');return {status:r.status,tree:await r.json()}})()`);
   assert.equal(night.status,200);const branches=night.tree.night_stages.branches;
-  assert.equal(branches.find(b=>b.kind==='medium_result'&&b.value[1]==='black').probability,'2/7');assert.equal(branches.find(b=>b.kind==='medium_result'&&b.value[1]==='white').probability,'4/7');assert.equal(branches.find(b=>b.kind==='seer_target').probability,'1/7');
+  assert.equal(branches.find(b=>b.kind==='medium_result'&&b.value[1]==='black').probability,'2/7');assert.equal(branches.find(b=>b.kind==='medium_result'&&b.value[1]==='white').probability,'4/7');const skipped=branches.find(b=>b.kind==='ability_dead'&&b.value==='medium_result');assert.equal(skipped.probability,'1/7');assert.equal(skipped.label,'死亡済み');assert.equal(skipped.stage_column,0);
   assert.deepEqual(errors,[]);console.log('seven-player browser HTTP path passed: one execution, one night; medium 2/7,4/7,1/7');await call('Browser.close',{},null).catch(()=>{});
 """
   text=(prefix+body+suffix).replace('http://127.0.0.1:18821','http://127.0.0.1:'+str(server.server_port));probe=Path(directory)/'verify.cjs';probe.write_text(text,encoding='utf-8');subprocess.run(['node',str(probe)],check=True)
