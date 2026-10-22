@@ -12,7 +12,9 @@ class Divination(Personal):
     roles:tuple=('seer',)
     def choices(self,pop,actor,context):
         seen={s.target for s in pop.scans if s.actor==actor} if not context.initial_white else set()
-        return slots(pop,lambda p,ref:p.alive and ref!=actor and ref not in seen and (not context.initial_white or p.role!='wolf'))
+        legal=lambda p,ref:p.alive and ref!=actor and (not context.initial_white or p.role!='wolf')
+        preferred=slots(pop,lambda p,ref:legal(p,ref) and ref not in seen)
+        return preferred or slots(pop,legal)
     def apply(self,path,actor,choice,context):
         pop=path.population;target=choice.target;color='black' if pop.people[target].role=='wolf' else 'white'
         memory=Memory('divination',context.acquisition_day,actor,(target,),color,(actor,))
@@ -37,7 +39,7 @@ class Guard(Personal):
     def choices(self,pop,actor,context):
         previous=next((m.participants[0] for m in reversed(pop.memories) if m.kind=='guard' and m.actor==actor and m.day==context.day-1),None)
         if context.day>1 and not context.allow_repeat_guard and previous is None:raise ValueError('Previous guard history required by no-repeat rule')
-        return slots(pop,lambda p,ref:p.alive and ref!=actor and (context.allow_repeat_guard or ref!=previous))
+        return slots(pop,lambda p,ref:p.alive and ref!=actor and (context.allow_repeat_guard or previous is None or ref!=previous))
     def apply(self,path,actor,choice,context):
         pop=path.population;target=choice.target
         record=Memory('guard',context.day,actor,(target,),None,(actor,))

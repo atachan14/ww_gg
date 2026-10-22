@@ -439,7 +439,7 @@ class CalculationTree:
                     for mass,counter,leaf,images in stage.outcomes():
                         mapping=public_transport(self.nodes[base_key]['node'].read(),leaf.source,self.nodes[base_key]['node']._night_program().groups)
                         public=digest(transport_source(leaf.source,mapping));entry=grouped.setdefault(public,F());grouped[public]=entry+(mass if stage.mass else counter)
-                    return dict(leaves=[dict(node=bundles[public]['node'],context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)) if symbolic else None,probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
+                    return dict(leaves=[dict(node=bundles[public]['node'],context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)) if symbolic and getattr(program,'private_contexts',True) else None,probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
                 return dict(leaves=[dict(node=leaf_row(leaf),probability=str((mass if stage.mass else counter)/total),variants=[dict(node=leaf_row(image),transport=list(mapping)) for image,mapping in images]) for mass,counter,leaf,images in stage.outcomes()])
             branches=[]
             for branch in stage.branches():
@@ -447,7 +447,9 @@ class CalculationTree:
                 if getattr(program,'method',None)=='anonymous-relational-v1':
                     from dataclasses import asdict
                     label=step.label();symbol=lambda x:None if x is None else asdict(x)
-                    branches.append(dict(kind=step.kind,actor=None if step.actor is None else step.actor.index+1,actors=[x.index+1 for x in step.actors],value=step.value,label=label,targets=[],symbols=dict(actor=symbol(step.actor),target=symbol(step.target) if hasattr(step.target,'members') else None,actors=[symbol(x) for x in step.actors]),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),children=build(branch.state),images=[]))
+                    mediums=self.data.game_data.mediums;seers=self.data.game_data.seers;hunters=self.data.game_data.hunters;prefix=stage.prefix
+                    position=(sum(s.kind=='medium_result' for s in prefix) if step.kind=='medium_result' else mediums+sum(s.kind in ('seer_target','seer_result') for s in prefix) if step.kind in ('seer_target','seer_result') else mediums+2*seers+sum(s.kind=='guard_target' for s in prefix) if step.kind=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
+                    branches.append(dict(stage_column=position,public_fact=step.public_fact,kind=step.kind,actor=None if step.actor is None else step.actor.index+1,actors=[x.index+1 for x in step.actors],value=step.value,label=label,targets=[],symbols=dict(actor=symbol(step.actor),target=symbol(step.target) if hasattr(step.target,'members') else None,actors=[symbol(x) for x in step.actors]),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),children=build(branch.state),images=[]))
                 else:
                     from .ability_labels import stage_label
                     label,actor_groups,joint_choices=stage_label(branch)
@@ -619,7 +621,15 @@ class CalculationTree:
                         if step.kind=='seer_result':
                             actor=step.actor.index if hasattr(step.actor,'index') else step.actor
                             results.append((actor,step.target if hasattr(step,'target') else step.value))
-                        elif step.kind=='medium_result':results.append(('medium',step.actor,step.value[0],step.value[1]))
+                        elif step.kind=='medium_result':
+                            if hasattr(step,'label'):
+                                if names is None:label=step.label()
+                                else:
+                                    from .anonymous_night import Symbol,SymbolStep
+                                    sym=lambda x:Symbol(x.index,tuple(names.display(p) for p in x.members))
+                                    label=SymbolStep(step.kind,sym(step.actor),sym(step.target),public_fact=step.public_fact).label()
+                                results.append(('medium',label))
+                            else:results.append(('medium',step.actor,step.value[0],step.value[1]))
                         elif step.kind in ('seer_target','guard_target','wolf_target'):
                             if hasattr(step,'label'):
                                 if names is None:actions.append(step.label())
@@ -647,7 +657,7 @@ class CalculationTree:
                         colors=lambda color:'白' if color=='white' else '黒'
                         if any(r[0]=='medium' for r in results):
                             display=lambda p:names.display(p) if names is not None else p
-                            label='・'.join(('霊能結果：'+str(display(r[1]))+'→'+str(display(r[2]))+colors(r[3])) if r[0]=='medium' else ('占い結果：'+alias(r[0])+' '+colors(r[1])) for r in results)
+                            label='・'.join(('霊能結果：'+(r[1] if len(r)==2 else str(display(r[1]))+'→'+str(display(r[2]))+colors(r[3]))) if r[0]=='medium' else ('占い結果：'+alias(r[0])+' '+colors(r[1])) for r in results)
                         else:label='占いなし' if not results else ('占い結果：'+colors(results[0][1]) if len(results)==1 else '占い結果：'+'・'.join(alias(actor)+' '+colors(color) for actor,color in results))
                         children.append(dict(id=f'{index}/r{result_index}',label=label,probability=str(subtotal/total),children=leaves))
                 output.append(dict(id=str(index),label=part['label'],probability=part['probability'],village_win=str(self.value(part['node'])),children=children))

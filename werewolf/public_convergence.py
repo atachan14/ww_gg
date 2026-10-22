@@ -107,7 +107,10 @@ def public_observation_orbits(engine,source,target,groups,*,counter=False,publis
 def public_night_observations(engine,source,groups,*,counter=False,publish=True):
     """Integrate unobserved bites too, notably every bite behind a guard success."""
     buckets={}
-    for group in groups:
+    # Named-Q boundary: a prevented attack leaves its target unobserved.
+    # Integrate every name instead of pinning an invisible representative.
+    target_groups=tuple((p,) for p in source.public.alive) if source.public.initial_hunter_count else groups
+    for group in target_groups:
         living=tuple(p for p in group if p in source.public.alive)
         if not living:continue
         target=living[0]
@@ -171,7 +174,8 @@ def prefix_likelihood(h,before,after,groups,prefix):
                 if chosen is not None:next_rows.append((chosen,actors,weight))
             elif step.kind=='publication':
                 text='／'.join('Player'+str(r.player)+'：Player'+str(r.target)+('白' if r.color=='white' else '黒') for r in after.past if r not in before.past) or '公開なし'
-                if text==step.target:next_rows.append((mapping,actors,weight))
+                from .tree_public_updates import publication_label
+                if step.target in (text,publication_label(before,after)):next_rows.append((mapping,actors,weight))
         rows=next_rows
     return sum((weight for mapping,actors,weight in rows),F())
 

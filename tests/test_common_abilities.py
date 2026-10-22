@@ -57,3 +57,11 @@ class CommonAbilitiesTests(unittest.TestCase):
   a=replace(pop,memories=(Memory('medium',2,2,(3,),'white',(2,)),))
   b=replace(pop,memories=(Memory('medium',2,2,(0,),'white',(2,)),))
   self.assertNotEqual(a,b)
+
+ def test_ingestion_does_not_invent_result_for_executed_medium(self):
+  from werewolf.anonymous_night import ingest
+  from werewolf.seer_acquisition import Hypothesis
+  from werewolf.exact import PublicEvent
+  h=Hypothesis((4,1,0,0),(),F(1))
+  pop,transport=ingest(h,((1,),(2,3)),(2,3),(PublicEvent(1,'day',1),))
+  self.assertFalse(any(m.kind=='medium' for m in pop.memories))

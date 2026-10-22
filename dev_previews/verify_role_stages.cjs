@@ -26,8 +26,8 @@ const {spawn}=require('node:child_process'),fs=require('node:fs/promises'),os=re
   await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.dataset.treeAuto==='complete'`),180000);
   const choose=async target=>{await evaluate(`document.querySelector('[data-status-target="${target}"]').click();document.querySelector('#advance-button').click()`);await wait(()=>evaluate(`window.__httpFailure||document.querySelector('main')?.dataset.navigationOccurrence==='h1'&&document.querySelector('main')?.dataset.tableInitialized==='true'`));assert.equal(await evaluate('window.__httpFailure'),undefined);};
   await choose(3);
-  const result=await evaluate(`(async()=>{const r=await fetch('/game-tree?node=h1~0&expand=1'),tree=await r.json(),leaves=[],kinds=new Set();function walk(s,p=1){for(const l of s?.leaves||[])leaves.push(l);for(const b of s?.branches||[]){kinds.add(b.kind);walk(b.children);}}walk(tree.night_stages);return {status:r.status,method:tree.night_stages?.method,kinds:[...kinds],leaves,items:tree.items,headers:document.querySelector('[data-calculation-tree]').innerText};})()`);
-  assert.equal(result.status,200);assert.equal(result.method,'role-staged-exact-v1');assert.ok(result.kinds.includes(kind==='hunter'?'guard_target':'medium_result'));assert.ok(result.kinds.includes('death_notice'));assert.ok(result.leaves.length);
+  const result=await evaluate(`(async()=>{const r=await fetch('/game-tree?node=h1~0&expand=1'),tree=await r.json(),leaves=[],kinds=new Set();function walk(s,p=1){for(const l of s?.leaves||[])leaves.push(l);for(const b of s?.branches||[]){kinds.add(b.kind);walk(b.children);}}walk(tree.night_stages);return {status:r.status,method:tree.night_stages?.method,stats:tree.night_stages?.stats,kinds:[...kinds],leaves,items:tree.items,headers:document.querySelector('[data-calculation-tree]').innerText};})()`);
+  assert.equal(result.status,200);assert.equal(result.method,'anonymous-relational-v1');assert.ok(result.kinds.includes(kind==='hunter'?'guard_target':'medium_result'));assert.ok(result.kinds.includes('death_notice'));assert.ok(result.leaves.length);assert.equal(result.stats.ability_adapters,true);assert.ok(result.stats.relational_families<result.stats.named_prior_atoms);
   await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.innerText.includes('${kind==='hunter'?'護衛位置':'霊能結果'}')`));
   const headers=await evaluate(`document.querySelector('[data-calculation-tree]').innerText`);assert.ok(headers.includes(kind==='hunter'?'護衛位置':'霊能結果'));
   await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.dataset.navigationUpdate==='complete'`),180000);
@@ -36,7 +36,10 @@ const {spawn}=require('node:child_process'),fs=require('node:fs/promises'),os=re
   await wait(()=>evaluate(`!!document.querySelector('[data-tree-item="${candidate.node}"] .compact-tree-go')`));
   await evaluate(`document.querySelector('[data-tree-item="${candidate.node}"] .compact-tree-go').click()`);
   await wait(()=>evaluate(`document.querySelector('main')?.dataset.tableInitialized==='true'&&document.querySelector('main')?.dataset.navigationOccurrence==='h2'`));
+  const analysis=await evaluate(`(async()=>{const r=await fetch('/game-tree?node=h1~0&analysis=1');return {status:r.status,data:await r.json()};})()`);assert.equal(analysis.status,200);assert.ok(analysis.data.distribution.length);
   const nav=await evaluate(`(async()=>{return await(await fetch('/navigation')).json()})()`);assert.equal(nav.board.day,2);
+  await wait(()=>evaluate(`!!document.querySelector('[data-tree-item="h2~0"] .compact-tree-select')`));
+  await evaluate(`document.querySelector('[data-tree-item="h2~0"] .compact-tree-select').click()`);await wait(()=>evaluate(`!!document.querySelector('[data-distribution-for="h2~0"]')`));
   await evaluate(`document.querySelector('[data-calculation-tree]').scrollIntoView({block:'start'})`);
   await fs.writeFile('.artifacts/role-'+kind+'-desktop.png',Buffer.from((await call('Page.captureScreenshot',{format:'png'})).data,'base64'));
   await call('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});await new Promise(r=>setTimeout(r,200));

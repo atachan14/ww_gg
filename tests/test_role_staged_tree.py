@@ -32,10 +32,10 @@ class RoleStagedTreeTests(unittest.TestCase):
  def test_medium_result_seer_attack_death_then_public_update(self):
   with calculation_budget(250000,max_seconds=20):
    doc=self.doc('medium');doc.game.action(3);view=NavigationTree(doc);shown=view.read(view.current_key(),True);source=doc.game.node.read();rows=self.leaves(shown['night_stages'])
-   self.assertEqual(shown['night_stages']['method'],'role-staged-exact-v1');self.assertEqual(sum(p for p,r,path in rows),1)
+   self.assertEqual(shown['night_stages']['method'],'anonymous-relational-v1');self.assertEqual(sum(p for p,r,path in rows),1)
    for mass,row,path in rows:
     kinds=[b['kind'] for b in path];self.assertEqual(kinds[:3],['medium_result','seer_target','seer_result']);self.assertEqual(kinds[-3:],['wolf_target','death_notice','publication'])
-    self.assertEqual([b['stage_column'] for b in path],[0,1,2,3,4,5]);self.assertTrue(path[0]['private']);self.assertEqual(path[0]['visible_to'],[2]);self.assertTrue(path[-2]['public_observation'])
+    self.assertEqual([b['stage_column'] for b in path],[0,1,2,3,4,5]);self.assertTrue(path[0]['private']);self.assertEqual(tuple(path[0]['symbols']['actor']['members']),(2,));self.assertTrue(path[-2]['public_observation'])
    engine=InformationSetForecast(doc.data.game_data.rules,Strategy(**doc.data.to_game()['policy']),exact_renaming=False,retire_uninformative_scans=False);engine.retain_joint_guard_history=True
    self.assertEqual(doc.game.node.forecast().village_win,engine.solve(*source,physical=source.physical))
    for mass,row,path in rows:
@@ -72,7 +72,7 @@ class RoleStagedTreeTests(unittest.TestCase):
    g=data(5,'random').to_game();g.update(mediums=1,claims=['seer','medium','medium','latent','latent'],seer_inputs=[dict(day=1,reporter=1,target=4,color='white')])
    doc=NavigationDocument(BoardData.from_game(g));doc.game.action(4);view=NavigationTree(doc);shown=view.read(view.current_key(),True)
    self.assertEqual(sum(p for p,r,path in self.leaves(shown['night_stages'])),1)
-   self.assertEqual({b['actor'] for b in shown['night_stages']['branches']},{2,3})
+   self.assertEqual({p for b in shown['night_stages']['branches'] for p in b['symbols']['actor']['members']},{2,3})
  def test_guard_success_merges_all_hidden_attacks_and_Current_replays(self):
   with calculation_budget(250000,max_seconds=20):
    doc=self.doc('guard');self.assertEqual(doc.game.node.forecast().village_win,F(7,24));doc.game.action(3);view=NavigationTree(doc);shown=view.read(view.current_key(),True);rows=self.leaves(shown['night_stages'])

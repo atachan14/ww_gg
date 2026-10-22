@@ -78,11 +78,11 @@ class NavigationTree:
             for b in s.get('branches',()):
                 if b.get('symbols'):
                     sy=b['symbols'];target=symbol(sy['target']) if sy['target'] else b['value']
-                    step=SymbolStep(b['kind'],symbol(sy['actor']),target,tuple(symbol(a) for a in sy['actors']))
+                    step=SymbolStep(b['kind'],symbol(sy['actor']),target,tuple(symbol(a) for a in sy['actors']),b.get('public_fact'))
                     from dataclasses import asdict
                     b['symbols']=dict(actor=None if step.actor is None else asdict(step.actor),target=asdict(step.target) if hasattr(step.target,'members') else None,actors=[asdict(a) for a in step.actors])
                     b['label']=step.label()
-                    if b['kind']=='death_notice':b['label']='襲撃死：'+marked(tuple(names.display(p) for p in sy['target']['members']),(names.display(sy['target']['members'][0]),))
+                    if b['kind']=='death_notice' and sy['target']:b['label']='襲撃死：'+marked(tuple(names.display(p) for p in sy['target']['members']),(names.display(sy['target']['members'][0]),))
                 elif b['kind'] in ('seer_target','guard_target','wolf_target'):
                     groups=b.get('actor_groups',[])
                     for g in groups:g['members']=[names.display(p) for p in g['members']];g['representatives']=[names.display(p) for p in g['representatives']]

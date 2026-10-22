@@ -36,7 +36,9 @@ def hypothesis(pop,names,cell_roles,mass=F(1)):
     masks=tuple(sum(1<<(p-1) for p,r in roles.items() if r==role) for role in ('wolf','medium','seer','hunter'))
     acquired=tuple(sorted(Acquisition(a.day,names[a.actor],names[a.target],a.color) for a in pop.scans))
     bitten=tuple(WolfAttack(day,names[ref]) for day,ref in pop.attacks)
-    return Hypothesis(masks,acquired,mass,(),bitten)
+    from .guard_effect import GuardIntent
+    guards=tuple(GuardIntent(m.day,names[m.actor],names[m.participants[0]]) for m in pop.memories if m.kind=='guard')
+    return Hypothesis(masks,acquired,mass,guards,bitten)
 
 def expand(law,groups):
     rows=[]

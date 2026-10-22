@@ -157,7 +157,7 @@ class ClosedCalculation:
             # caller-supplied partition can enter this constructor.
             classes={}
             for p,claim in enumerate(source.public.claims,1):classes.setdefault(claim,[]).append(p)
-            groups=tuple((p,) for p in source.public.alive) if game.get('mediums',0) or game.get('hunters',0) else _report_groups(tuple(tuple(v) for v in classes.values()),source)
+            groups=_report_groups(tuple(tuple(v) for v in classes.values()),source)
             from .action_tree_trace import FullTraceOrigin
             if aggregate_reports:
                 full=FullTraceOrigin(SavedOrigin(origin_data,engine.rules,strategy,project_public=False))()

@@ -16,10 +16,10 @@ from .group_partition import _fix
 from .board_future import outcome_key
 from .joint_action_kernel import report_signature
 
-ROLES=('wolf','seer','villager')
+ROLES=('wolf','medium','seer','hunter','villager')
 
 def role(h,p):
-    return 'wolf' if h.roles[0]&(1<<(p-1)) else ('seer' if h.roles[2]&(1<<(p-1)) else 'villager')
+    return next((r for r,mask in zip(ROLES,h.roles) if mask&(1<<(p-1))),'villager')
 
 @dataclass(frozen=True)
 class Transport:
@@ -32,7 +32,7 @@ class Transport:
             people.append(free[index].pop(0))
         return tuple(people)
 
-def ingest(h,groups,alive):
+def ingest(h,groups,alive,history=()):
     cells=[];free=[]
     for index,group in enumerate(groups):
         for r in ROLES:
@@ -49,12 +49,24 @@ def ingest(h,groups,alive):
     # knowledge of other seers. Actor policies still read the original Q.
     for group in groups:
         for name in group:
-            if role(h,name)=='seer':bind(name)
+            if role(h,name) in ('seer','medium','hunter'):bind(name)
     records=[]
     for a in sorted(h.acquisitions,key=lambda a:(a.day,lookup[a.player])):
         records.append(Scan(a.day,lookup[a.player],bind(a.target),a.color))
     old_attacks=tuple((a.night,bind(a.target)) for a in h.attacks)
-    pop=replace(pop,scans=tuple(records),attacks=old_attacks)
+    for event in history:bind(event.target)
+    from .anonymous_abilities import Memory
+    memories=[Memory('divination',a.day,a.actor,(a.target,),a.color,(a.actor,)) for a in records]
+    for g in h.guards:
+        actor=bind(g.actor);target=bind(g.target);memories.append(Memory('guard',g.night,actor,(target,),None,(actor,)))
+    dead=set()
+    for event in history:
+        if event.phase=='day':
+            for actor in range(1,max((p for group in groups for p in group),default=0)+1):
+                if actor not in dead and actor!=event.target and role(h,actor)=='medium':
+                    ref=bind(actor);target=bind(event.target);memories.append(Memory('medium',event.day+1,ref,(target,),'black' if role(h,event.target)=='wolf' else 'white',(ref,)))
+        dead.add(event.target)
+    pop=replace(pop,scans=tuple(records),attacks=old_attacks,memories=tuple(memories))
     return pop,Transport(tuple(people),tuple(tuple(row) for row in free))
 
 @dataclass(frozen=True)
@@ -71,11 +83,15 @@ class SymbolStep:
     actors:tuple=()
     public_fact:object=None
     @property
-    def value(self):return self.target.index+1 if isinstance(self.target,Symbol) else self.target
+    def value(self):
+        if self.kind=='medium_result':return (self.target.index+1,self.public_fact)
+        return self.target.index+1 if isinstance(self.target,Symbol) else self.target
     @property
     def visible_to(self):return (self.actor.index+1,) if self.actor else ()
     def label(self):
         if self.kind=='seer_target':return self.actor.label()+'が'+self.target.label()+'を占い'
+        if self.kind=='guard_target':return self.actor.label()+'が'+self.target.label()+'を護衛'
+        if self.kind=='medium_result':return self.actor.label()+'：'+self.target.label()+('黒' if self.public_fact=='black' else '白')
         if self.kind=='seer_result':return {'white':'白','black':'黒'}[self.target]
         if self.kind=='wolf_target':
             grouped={}
@@ -85,6 +101,7 @@ class SymbolStep:
                 parts.append(symbols[0].label() if len(symbols)==1 else '['+','.join(map(str,members))+'の{'+','.join(alias(s.index) for s in symbols)+'}]')
             return ('人狼集合' if len(self.actors)>1 else '')+'と'.join(parts)+'が'+self.target.label()+'を襲撃'
         if self.kind=='death_notice':
+            if self.target is None:return '襲撃死：なし'
             names=self.target.members
             return '襲撃死：'+('['+','.join(('('+str(p)+')') if i==0 else str(p) for i,p in enumerate(names))+']' if len(names)>1 else str(names[0]))
         if self.kind=='publication':return str(self.target)
@@ -98,7 +115,8 @@ def symbolic_steps(path,groups):
             by_ref[ref]=Symbol(index,groups[g])
         return by_ref[ref]
     for step in path.steps:
-        if step.kind=='seer_target':result.append(SymbolStep(step.kind,symbol(step.actor),symbol(step.value)))
+        if step.kind=='medium_result':result.append(SymbolStep(step.kind,symbol(step.actor),symbol(step.value[0]),public_fact=step.value[1]))
+        elif step.kind in ('seer_target','guard_target'):result.append(SymbolStep(step.kind,symbol(step.actor),symbol(step.value)))
         elif step.kind=='seer_result':result.append(SymbolStep(step.kind,symbol(step.actor),step.value))
         else:
             bound,free=step.wolves
@@ -106,7 +124,7 @@ def symbolic_steps(path,groups):
             for cell,count in free:
                 owners.extend(symbol(('wolf',cell,index),path.population.cells[cell].group) for index in range(count))
             victim=symbol(step.value)
-            result.extend((SymbolStep('wolf_target',None,victim,tuple(owners)),SymbolStep('death_notice',None,victim)))
+            result.extend((SymbolStep('wolf_target',None,victim,tuple(owners)),SymbolStep('death_notice',None,None if path.population.people[step.value].alive else victim)))
     return tuple(result),tuple(by_ref.items())
 
 @dataclass(frozen=True)
@@ -191,7 +209,9 @@ def compile_anonymous(engine,source,groups):
     # Native future-choice generator. Existing named priors, public Q updates,
     # morning publications and continuation are explicit compatibility boundaries.
     from .night_program import supported
-    if source.public.initial_medium_count or source.public.initial_hunter_count:return None
+    if getattr(engine,'anonymous_beliefs',{}).get(source) is None:
+        from .anonymous_role_night import compile_abilities
+        return compile_abilities(engine,source,groups)
     if not supported(engine,source) or not hasattr(engine,'aggregate_wolf') or engine.strategy.include_self_bite:return None
     b=source.public;groups=tuple(groups)+tuple((p,) for p in range(1,b.player_count+1) if not any(p in g for g in groups))
     key=(source,groups)
@@ -228,22 +248,6 @@ def compile_anonymous(engine,source,groups):
                 h,transport=representative(row.before,groups)
                 yield row.counter/row.path.counter,h,transport,row.path,row
         family_count=len(belief.p.rows)
-    else:
-        flow=None;families={}
-        for h in source.private.hypotheses:
-            tick();population,transport=ingest(h,groups,b.alive)
-            if population not in families:families[population]=[F(),h,transport]
-            families[population][0]+=h.mass
-        public=engine.acquire(b,source.public_state)
-        def futures():
-            for population,(family_mass,h,transport) in families.items():
-                info,policy=commit(h)
-                for scan in scans(population,b.day+1):
-                    def committed(choice):
-                        extra=((choice.target,choice.fresh_cell),) if choice.fresh_cell is not None else ()
-                        names=transport.apply((*scan.bindings,*extra));return policy.get(names[choice.target],F())
-                    for path in attacks(scan,b.day,policy=committed):yield family_mass,h,transport,path,None
-        family_count=len(families)
     leaves=[]
     for family_mass,h,transport,path,owned_row in futures():
         info,policy=commit(h)
