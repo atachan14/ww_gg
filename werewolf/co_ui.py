@@ -1,7 +1,7 @@
 """Role-specific CO presentation; existing single-CO and report semantics stay intact."""
 from .exact import available_medium_opportunities
 
-CO_LABELS = dict(latent="潜伏", villager="市民", medium="霊能", seer="占い師", hunter="狩人", wolf="狼")
+CO_LABELS = dict(latent="潜伏", villager="市民", medium="霊能", seer="占い師", hunter="狩人", wolf="人狼")
 CO_RENDERERS = {"medium":"co_roles/medium.html", "seer":"co_roles/unavailable.html", "hunter":"co_roles/hunter.html", "villager":"co_roles/no_ability.html", "wolf":"co_roles/no_ability.html"}
 
 

@@ -5,7 +5,7 @@ window.initializeStrategyEditor = function () {
   const seed = JSON.parse(root.dataset.seed), form = root.closest('form'), dialog = form.querySelector('.strategy-dialog');
   const clone = v => JSON.parse(JSON.stringify(v));
   let co = clone(seed.co), policy = {disclosure_common:'all',seer_disclosure:'inherit',medium_disclosure:'inherit',guard_position:['uniform'],seer_position:['unvisited','uniform'],fake_seer_policy:['noncontradictory','uniform'],...clone(seed.policy)}, model = seed.model, context, draft, opener;
-  const labels = {village:'共通',wolfCommon:'共通',villager:'市民',medium:'霊能者',seer:'占い師',hunter:'狩人',wolf:'狼'};
+  const labels = {village:'共通',wolfCommon:'共通',villager:'市民',medium:'霊能者',seer:'占い師',hunter:'狩人',wolf:'人狼'};
   const options = {fakeable:'騙れる役職',co:'COのお約束',result:'可能な結果騙り'};
   const definitions = {fakeable:[['all','すべて'],...seed.roles.map(r=>[r,labels[r]])],co:[['filled','対抗が埋まったらCCO'],['counter','対抗が出たらCCO'],['dayX','X日にCO'],['blackX','黒をX人見つけたらCO']],result:[['all','すべて'],['white','白と報告'],['black','黒と報告']]};
   // Gray X parameters are a local preview, never serialized to a calculation policy.

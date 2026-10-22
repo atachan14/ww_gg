@@ -13,7 +13,7 @@ class COGroupDisplayTests(unittest.TestCase):
    h=render_template('co_groups.html',co_groups=co_group_compositions(board),role_labels=ROLE_LABELS,co_display_main=True)
   self.assertIn('COグループ内訳',h)
   self.assertEqual(re.findall(r'<th>(.*?)</th>',h),['CO','生存位置','内訳','確率'])
-  self.assertIn('市民3，占い師1，狼1',h)
+  self.assertIn('市民3，占い師1，人狼1',h)
   self.assertNotIn('霊能0',h);self.assertNotIn('手動のみ',h)
   self.assertIn('data-fraction="1"',h)
   self.assertEqual(board.worlds,before)
@@ -23,4 +23,4 @@ class COGroupDisplayTests(unittest.TestCase):
   groups=[dict(claim='seer',ids=(1,2),roles=('villager','medium','seer','wolf'),visible_roles=('villager','seer','wolf'),compositions=((0,0,1,1,F(1)),))]
   with app.test_request_context('/'):
    h=render_template('co_groups.html',co_groups=groups,role_labels=ROLE_LABELS,co_display_main=True)
-  self.assertIn('占い師1，狼1',h);self.assertNotIn('市民0',h)
+  self.assertIn('占い師1，人狼1',h);self.assertNotIn('市民0',h)

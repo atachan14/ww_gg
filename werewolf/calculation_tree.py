@@ -33,7 +33,7 @@ def explain_unavailable(game,reason):
     if rules.get('allow_self_bite'):issues.append('自噛み可能のルールは未対応です。')
     if rules.get('initial_seer','random_white')!='random_white':issues.append('初日占いはランダム白のみ対応しています。')
     if (strategy.day,strategy.night,strategy.fake_reports) not in (('max',)*3,('random',)*3):
-        issues.append('昼・夜・狼の霊能騙り報告の方針が混在しています。現経路は3項目すべてMAX、またはすべてランダムのみ対応しています。')
+        issues.append('昼・夜・人狼の霊能騙り報告の方針が混在しています。現経路は3項目すべてMAX、またはすべてランダムのみ対応しています。')
     if any(strategy.disclosure_for(role)!='all' for role in ('seer','medium')):
         issues.append('能力結果の公開方針は全公開のみ対応しています。')
     if not issues:
@@ -166,7 +166,7 @@ class CalculationTree:
                             score=e.act(b,s.public_state,s.past,target,q_actor,None,physical=physical_board(b,q_actor))
                             rows.append({'node':owned,'target':target,'q_score':score,
                                 'policy_mass':mass*policy.get(target,F()),'fallback_mass':mass/F(len(legal_targets(own.physical,self.rules,self.strategy))),
-                                'information':f'狼本人I (初期狼集合{info.initial_roster})','owner_index':owner_index})
+                                'information':f'人狼本人I (初期人狼集合{info.initial_roster})','owner_index':owner_index})
         return rows
 
     def joint_trace(self,source,night,target):
@@ -224,7 +224,7 @@ class CalculationTree:
                         lazy=DeferredNode(lambda route=route:self.nodes[self.restore(route)]['node'])
                         self.nodes[child_id]={'node':lazy,'value':None,'actions':None,'reused':False,'route':route}
                     actual=(member.policy_mass if action.policy_mass else member.fallback_mass)/normalizer*outcome.probability*image_mass
-                    variants.append(dict(node=child_id,target=member.target,information='狼本人情報',conditional_probability=str(outcome.probability*image_mass),mixture_probability=str(actual),transport=list(member.mapping)))
+                    variants.append(dict(node=child_id,target=member.target,information='人狼本人情報',conditional_probability=str(outcome.probability*image_mass),mixture_probability=str(actual),transport=list(member.mapping)))
                     member_nodes.append((member,child_id,actual))
                 representative=next((v['node'] for v in variants if v['target']==plan.target and v['transport']==list(range(1,s.public.player_count+1))),variants[0]['node'])
                 traces=[]
@@ -245,8 +245,8 @@ class CalculationTree:
                     outcome_label=color+'・'+('占い先が死亡' if new[0].target==plan.target else '別の対象が死亡')
                 elif not new and outcome.source.public.winner is None:outcome_label='占い公開なし'
                 branches.append(dict(node=representative,probability=str(weight*outcome.probability),variants=variants,observation=observation,outcome_label=outcome_label,joint_actions=traces))
-            result.append(dict(targets=list(action.targets),label='・'.join(scans)+'｜狼が'+names(action.targets)+'襲撃',grouped=True,
-                multiplicity=sum(len(p.members) for p in action.plans),members=[dict(target=m.target,information='狼本人情報',policy_mass=str(m.policy_mass)) for p in action.plans for m in p.members],
+            result.append(dict(targets=list(action.targets),label='・'.join(scans)+'｜人狼が'+names(action.targets)+'襲撃',grouped=True,
+                multiplicity=sum(len(p.members) for p in action.plans),members=[dict(target=m.target,information='人狼本人情報',policy_mass=str(m.policy_mass)) for p in action.plans for m in p.members],
                 q_score=None,selected=bool(action.policy_mass),policy_probability=str(action.policy_mass),branches=branches))
         record['actions']=result
 
@@ -317,7 +317,7 @@ class CalculationTree:
                         child_id=self.register(child,(*route,{'physical':'joint','value':(source.public.day,wolves,acquired)}));conditioned[cache]=child_id
                     branches.append(dict(node=conditioned[cache],probability=str((outcome['mass'] if attack['mass'] else outcome['counter'])/total),mass=str(outcome['mass']),counter=str(outcome['counter']),observation=outcome['label']))
                 family_total=sum(other['counter'] for other in scan['attacks'].values() if set(other['families'])&set(attack['families']))
-                attacks.append(dict(label=f'狼が{victim}を襲撃',target=victim,targets=[victim],mass=str(attack['mass']),counter=str(attack['counter']),policy_probability=str(attack['mass']/scan['mass'] if scan['mass'] else F()),conditional_probability=str(attack['counter']/family_total),branches=branches))
+                attacks.append(dict(label=f'人狼が{victim}を襲撃',target=victim,targets=[victim],mass=str(attack['mass']),counter=str(attack['counter']),policy_probability=str(attack['mass']/scan['mass'] if scan['mass'] else F()),conditional_probability=str(attack['counter']/family_total),branches=branches))
             result.append(dict(label='・'.join(parts) if parts else '占いなし',scans=[list(p) for p in acquisitions],probability=str(scan['mass']),attacks=attacks,simultaneous=True))
         from .ability_factorization import factor
         record['ability_choices']=factor(self,node,result)
@@ -628,7 +628,7 @@ class CalculationTree:
                                     from .anonymous_night import Symbol,SymbolStep
                                     sym=lambda x:Symbol(x.index,tuple(names.display(p) for p in x.members))
                                     actions.append(SymbolStep(step.kind,None if step.actor is None else sym(step.actor),sym(step.target) if hasattr(step.target,'members') else step.target,tuple(sym(a) for a in step.actors)).label())
-                            else:actions.append(str((names.display(step.actor) if names is not None and step.actor else step.actor) or '狼')+'が'+str(names.display(step.value) if names is not None else step.value)+('を占い' if step.kind=='seer_target' else 'を襲撃'))
+                            else:actions.append(str((names.display(step.actor) if names is not None and step.actor else step.actor) or '人狼')+'が'+str(names.display(step.value) if names is not None else step.value)+('を占い' if step.kind=='seer_target' else 'を襲撃'))
                     events.append((composition,tuple(results),tuple(actions),mass))
             output=[]
             for index,part in enumerate(self._composition_rows(key)):

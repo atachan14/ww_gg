@@ -15,7 +15,7 @@
   {% with co_role='medium' %}{% include 'co_conditions.html' %}{% endwith %}
   <label class="field-label">結果騙り</label><select aria-label="真霊能の結果騙り" disabled><option>認めない</option></select>
 <label class="field-label">結果の開示</label><select aria-label="霊能結果の開示" disabled><option>全て開示（将来の報告機会）</option></select>
-<label class="field-label" for="fake-reports">狼の霊能騙り報告</label><select id="fake-reports" name="fake_reports" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.get('fake_reports','max')=='max' %}selected{% endif %}>狼の最大勝率</option><option value="random" {% if state and state.policy.get('fake_reports')=='random' %}selected{% endif %}>ランダム（報告Action等重み）</option></select>
+<label class="field-label" for="fake-reports">人狼の霊能騙り報告</label><select id="fake-reports" name="fake_reports" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.get('fake_reports','max')=='max' %}selected{% endif %}>狼陣営の最大勝率</option><option value="random" {% if state and state.policy.get('fake_reports')=='random' %}selected{% endif %}>ランダム（報告Action等重み）</option></select>
 <p class="hint">現在の空欄は申告なし。将来の翌朝に生存するCO者の白黒を共同で分岐します。</p>
 </details>
 {% for role,count_key in [('seer','seers'),('hunter','hunters')] %}
@@ -24,11 +24,11 @@
 {% with co_role=role %}{% include 'co_conditions.html' %}{% endwith %}<p class="hint">人数・COだけを扱います。占い・護衛効果はありません。</p></details>
 {% endfor %}
 <details class="calculation-group" data-disclosure><summary>狼陣営</summary>
-  <label class="field-label" for="night-strategy">自動噛み先（値の集約）</label><select id="night-strategy" name="night" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.night == 'max' %}selected{% endif %}>狼の最大勝率</option><option value="random" {% if state and state.policy.night == 'random' %}selected{% endif %}>ランダム（候補等重み）</option></select>
+  <label class="field-label" for="night-strategy">自動噛み先（値の集約）</label><select id="night-strategy" name="night" {% if finished %}disabled{% endif %}><option value="max" {% if not state or state.policy.night == 'max' %}selected{% endif %}>狼陣営の最大勝率</option><option value="random" {% if state and state.policy.night == 'random' %}selected{% endif %}>ランダム（候補等重み）</option></select>
   <label class="field-label spaced" for="include-self-bite">自噛み</label><select name="include_self_bite" id="include-self-bite" {% if finished or not rules or not rules.allow_self_bite %}disabled{% endif %}><option value="0" {% if not state or not state.policy.include_self_bite %}selected{% endif %}>行わない</option><option value="1" {% if state and state.policy.include_self_bite %}selected{% endif %}>行う</option></select>
 </details>
-<details class="calculation-group" data-disclosure><summary>狼</summary>
-  <label class="field-label">騙れる役職</label><select aria-label="狼が騙れる役職" disabled><option>全て（配役にある役職）</option></select>
-  <label class="field-label spaced">CO必須</label><select aria-label="狼のCO必須" disabled><option>なし</option></select>
+<details class="calculation-group" data-disclosure><summary>人狼</summary>
+  <label class="field-label">騙れる役職</label><select aria-label="人狼が騙れる役職" disabled><option>全て（配役にある役職）</option></select>
+  <label class="field-label spaced">CO必須</label><select aria-label="人狼のCO必須" disabled><option>なし</option></select>
 </details>
 <p class="hint">最大値やランダムは計算の集約条件です。進行する対象は手動で指定します。騙り制約はCO操作を禁止せず、適合する候補を計算します。</p>

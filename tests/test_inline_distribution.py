@@ -17,7 +17,7 @@ class InlineDistributionTests(unittest.TestCase):
    check(rows);self.assertEqual(tuple(tree.nodes[key]['node'].read()),before)
    self.assertTrue(all('village_win' in row for row in rows))
   after=tree.distribution(public)
-  self.assertEqual({r['label']:F(r['probability']) for r in after},{'市民2占い0狼1':F(1,2),'市民1占い1狼1':F(1,2)})
+  self.assertEqual({r['label']:F(r['probability']) for r in after},{'市民2占い0人狼1':F(1,2),'市民1占い1人狼1':F(1,2)})
  def test_secret_contexts_are_not_new_Current_navigation_targets(self):
   helper=public_tests.PublicConvergenceAPITests();tree=helper.tree();night,data=helper.night(tree)
   leaves=helper.leaves(data['night_stages']);self.assertTrue(tree.public_current(leaves[0]['node']))

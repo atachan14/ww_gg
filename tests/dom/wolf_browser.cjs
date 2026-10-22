@@ -15,7 +15,7 @@ const {chromium}=require('playwright'),assert=require('assert');
  assert.equal(await value(1),'33.33% / 66.67%');assert.equal(await value(3),'33.33% / 66.67%');assert.equal(await value(4),'33.33% / 66.67%');
  assert.equal(await value(2),'—');assert.equal(await value(5),'—');
  assert(await page.locator('#advance-button').isDisabled());
- assert((await page.locator('[data-table-scope]').textContent()).includes('狼視点'));
+ assert((await page.locator('[data-table-scope]').textContent()).includes('人狼視点'));
  if(process.env.WW_GG_WOLF_SCREENSHOT)await page.screenshot({path:process.env.WW_GG_WOLF_SCREENSHOT,fullPage:true});
  await wolf.click();await page.locator('tr[data-player="3"]').click();await viewing();
  assert.equal(await value(2),'33.33% / 66.67%');assert.equal(await cookie(),before);

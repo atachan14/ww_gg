@@ -20,7 +20,7 @@
             {% endfor %}
           </section>
           <section class="role-column"><h3>狼陣営</h3>
-            <label class="role-count-row" for="wolf-count"><span>狼</span><input type="number" id="wolf-count" name="wolves" value="{{ draft.counts.wolves }}" min="0" max="{{ 9 if seer_mode=='information-fixed-v1' else 4 }}" required></label>
+            <label class="role-count-row" for="wolf-count"><span>人狼</span><input type="number" id="wolf-count" name="wolves" value="{{ draft.counts.wolves }}" min="0" max="{{ 9 if seer_mode=='information-fixed-v1' else 4 }}" required></label>
           </section>
         </div>
         <div class="cast-grid cast-summary">
@@ -28,7 +28,7 @@
           <div class="cast-card wolf"><span>狼陣営</span><strong id="wolf-summary">{{ draft.summary.wolves }}<small>人</small></strong></div>
           <div class="cast-card total"><span>合計</span><strong id="total-count">{{ draft.summary.total }}人<small>（最大9人）</small></strong></div>
         </div>
-        <p class="hint" id="cast-validation">合計1〜9人。3人以上では狼より村陣営が多い配役にしてください。</p>
+        <p class="hint" id="cast-validation">合計1〜9人。3人以上では人狼より村陣営が多い配役にしてください。</p>
       </section>
     <section class="panel rules-panel" aria-labelledby="game-rule-title">
       <div class="panel-heading setup-heading"><h2 id="game-rule-title">ルール</h2>

@@ -19,7 +19,7 @@
       <div class="information-head">{% if generated_current %}<span class="current-board-label">Current B{{ generated_current.node }}</span>{% endif %}
         <div><p class="eyebrow" id="board-overview-title">BoardOverview</p><h1 id="phase-title">{{ '決着結果' if finished else 'Day ' ~ board.day ~ ' · ' ~ ('昼' if board.phase == 'day' else '夜') }}</h1></div>
       </div>
-      <div class="overview-facts"><span>生存 <strong>{{ players|selectattr('alive')|list|length }}人</strong></span>{% if not finished %}<span>生存狼 {% for count, weight in counts.items() %}<strong>{{ count }}w {{ probability(weight) }}</strong>{% if not loop.last %} / {% endif %}{% endfor %}</span>{% endif %}</div>
+      <div class="overview-facts"><span>生存 <strong>{{ players|selectattr('alive')|list|length }}人</strong></span>{% if not finished %}<span>生存人狼 {% for count, weight in counts.items() %}<strong>{{ count }}w {{ probability(weight) }}</strong>{% if not loop.last %} / {% endif %}{% endfor %}</span>{% endif %}</div>
       <div class="rate-cards">
         <div class="rate-card village"><small>{{ '最終勝率' if finished else '現在勝率' }} · 村陣営</small>{{ probability(rates.village_win, 'village-rate') }}</div>
         <div class="rate-card wolf"><small>{{ '最終勝率' if finished else '現在勝率' }} · 狼陣営</small>{{ probability(rates.wolf_win, 'wolf-rate') }}</div>

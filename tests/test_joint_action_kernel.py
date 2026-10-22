@@ -133,7 +133,7 @@ class JointActionKernelTests(unittest.TestCase):
   key=next(b['node'] for b in root['branches'] if tree.nodes[b['node']]['node'].read().public.winner is None)
   tree.expand(key);actions=tree.nodes[key]['actions']
   self.assertEqual(len(actions),3);self.assertTrue(all(a['grouped'] for a in actions))
-  self.assertEqual({a['label'] for a in actions},{'1が[(4),5]から占い｜狼が1を襲撃','1が[(4),5]から占い｜狼が2を襲撃','1が[(4),5]から占い｜狼が[(4),5]から襲撃'})
+  self.assertEqual({a['label'] for a in actions},{'1が[(4),5]から占い｜人狼が1を襲撃','1が[(4),5]から占い｜人狼が2を襲撃','1が[(4),5]から占い｜人狼が[(4),5]から襲撃'})
   candidate=next(a for a in actions if a['targets']==[4,5])
   self.assertEqual(candidate['policy_probability'],'0')
   self.assertEqual([b['probability'] for b in candidate['branches']],['1/2','1/2'])

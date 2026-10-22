@@ -13,7 +13,7 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
     if seers:counts['seer']=seers
     if hunters:counts['hunter']=hunters
     if mode=='trial' and (seers or hunters):
-        return dict(mode=mode,issues=['2段階試作は市民・霊能・狼の定義を維持します。占い師・狩人を含む残差配分は未定義です。'],rows=[],totals={},rates=None,valid=False)
+        return dict(mode=mode,issues=['2段階試作は市民・霊能・人狼の定義を維持します。占い師・狩人を含む残差配分は未定義です。'],rows=[],totals={},rates=None,valid=False)
     roles=('villager','wolf','medium')+tuple(r for r in ('seer','hunter') if r in counts)
     def compatible(role, claim):
         return claim == 'latent' or role == claim or role == 'wolf'
@@ -42,7 +42,7 @@ def compare_initial(citizens, mediums, wolves, claims, policy=ClaimPolicy(), mod
         for role in ('villager','wolf'):
             eligible = [i for i,c in enumerate(claims) if compatible(role,c)]
             if not eligible and counts[role]:
-                issues.append(('市民' if role=='villager' else '狼') + 'の前段配分候補がありません。')
+                issues.append(('市民' if role=='villager' else '人狼') + 'の前段配分候補がありません。')
             for i in eligible:
                 values[i][role] = F(counts[role], len(eligible))
         rows = []

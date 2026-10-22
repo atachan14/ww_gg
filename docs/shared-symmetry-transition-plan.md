@@ -3261,3 +3261,51 @@ terminal cards, CO update, day-start and publication navigation, 1440/390 widths
 Ctrl zoom, pan and fraction switching; every inspected Board label is outside the
 body and within its card's horizontal bounds, with zero Runtime exceptions.
 The static update is served by the existing18821 process without session reset.
+
+### Role terminology and guaranteed-win proposal audit
+
+Visible role names now use 人狼, including setup/CO, roster, composition,
+private actor descriptions and help examples. Faction 狼陣営 and faction score
+shorthand 村 / 狼 remain unchanged. Internal wolf/wolves keys remain unchanged.
+No evaluation rule, cutoff, strategy option or saved-state format was changed.
+
+Read-only exact evidence: citizen3/seer1/wolf1, simultaneous seer claims1/2,
+white reports1->3 and2->4, no village bluff. MAX root value1, forced CO-external
+execution3 value1/2; random root7/15, CO execution1 value2/3. Thus existence of a
+winning roll strategy is not enough to replace configured-policy evaluation.
+All-hidden5 has one exchangeability class but five possible wolf individuals;
+group count must never substitute for distinct candidate count.
+
+A possible conservative public roll certificate (not implemented): let C cover
+all living wolves across the relevant public Q and physical P histories, m=|C|.
+At day start n>=2m+1, or before a night with at most one death n>=2m+2, executing
+one remaining C member each day preserves a clean outside-C majority until all
+wolves die. This certifies a public strategy, not arbitrary random play. Applying
+it to configured MAX also needs public-policy/support compatibility (including
+private histories), or a policy-closed proof for every positive-policy action.
+A scalar value1 certificate does not supply all forced-action values or the
+complete MAX tie distribution; those must remain exact. Never set Board.winner
+while wolves still live. A future enabled cutoff should carry a proof scope,
+preserve saved/current/manual paths and fall back exactly outside that scope.
+
+Madman and fox are not current ROLES and there is no ballot/PP model. Extending
+C to all hostile candidates can support the same clean-majority argument only
+under specified coordinated voting, tie, death and terminal rules. Fox must be
+proved absent/dead in every relevant supported history, not merely one private
+component. No such future role semantics were added.
+
+Before approval/implementation: differential On/Off tests against named exact
+values, action vectors and policy ties; MAX/random; day/night parity boundaries;
+multiwolf, candidate false positives, CO/bluff histories, Q/P support/private
+knowledge, self-target/guard/no-death and simultaneous-seer-death rules; forced
+CO-external actions; proof-cache transport and Current reconstruction. Record
+actual recursion reductions separately from equality of outputs.
+
+Terminology verification: focused23 Python tests passed; wider72 run had69
+passes and3 failures, all three independently reproduced on unchanged50a68a5
+(legacy secret-conditioned Current2, existing cast-summary expectation1).
+22 JS layout/routing/viewport tests passed. Isolated Edge18821 passed CO cells,
+public Current/Footer persistence, inline distribution, fraction toggle,
+Ctrl-wheel zoom, ordinary page wheel and two-axis drag, desktop/narrow bounds;
+zero Runtime exceptions. Desktop/narrow screenshots were actually inspected.
+Only18821 was restarted, same cookie name; other apps/ports/cookies untouched.

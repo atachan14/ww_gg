@@ -68,7 +68,7 @@ def validate_strategy(rules: Rules, strategy: Strategy):
 
 ROLES = ('villager', 'medium', 'seer', 'hunter', 'wolf')
 VILLAGE_ROLES = ROLES[:-1]
-ROLE_LABELS = {'villager':'市民','medium':'霊能','seer':'占い師（能力なし）','hunter':'狩人','wolf':'狼','latent':'潜伏'}
+ROLE_LABELS = {'villager':'市民','medium':'霊能','seer':'占い師（能力なし）','hunter':'狩人','wolf':'人狼','latent':'潜伏'}
 
 
 @dataclass(frozen=True)

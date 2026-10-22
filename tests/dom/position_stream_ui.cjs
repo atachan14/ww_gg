@@ -49,7 +49,7 @@ await context.request.post('/start',{form:{citizens:'4',wolves:'1',day:'max',nig
 const state=await context.request.get('/main');const html=await state.text();const revision=html.match(/name="revision" value="(\d+)"/)[1];
 await context.request.post('/advance',{form:{revision,target:'1',day:'max',night:'max'}});
 await page.goto('/main');await gate('/main');await page.waitForSelector('[data-viewpoint-role="wolf"]');await release('/main');await page.waitForSelector('#village-rate[data-fraction="1/3"]');
-await page.locator('[data-viewpoint-role="wolf"]').click();await page.locator('tr[data-player="2"]').click();await gate('/private-view');await emit('/private-view');await shown();assert((await page.locator('.calculation-position').textContent()).includes('狼本人'));
+await page.locator('[data-viewpoint-role="wolf"]').click();await page.locator('tr[data-player="2"]').click();await gate('/private-view');await emit('/private-view');await shown();assert((await page.locator('.calculation-position').textContent()).includes('人狼本人'));
 assert.equal(await page.locator('#village-rate').getAttribute('data-fraction'),'1/3');await page.locator('[data-viewpoint-role="public"]').click();await hidden();await emit('/private-view');await page.waitForTimeout(30);await hidden();await release('/private-view');
 assert.equal(await page.evaluate(()=>window.intervalCalls),0);assert.deepEqual(errors,[]);
 console.log(JSON.stringify({nonblocking:true,statusVisibleWhileScrolling:true,positionNotPercentage:true,staleRevisionRejected:true,staleRunRejected:true,hiddenStopsDOMAndNoIntervals:true,reeditHidesOldPosition:true,failureAndCompleteClear:true,privatePublicGenerationIsolated:true,errors}));await browser.close();})().catch(e=>{console.error(e);process.exit(1)});

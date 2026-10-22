@@ -155,7 +155,7 @@ function initializeUI() {
     document.querySelector('#total-count').innerHTML = `${total}人<small>（最大9人）</small>`;
     const valid = [citizens, mediums, wolves, seers, hunters].every(input => input.value !== "" && Number.isInteger(Number(input.value)) && Number(input.value) >= 0 && input.checkValidity()) && total >= 1 && total <= 9 && (experimental || total <= 2 || Number(wolves.value) >= 1 && Number(wolves.value) < village);
     const validation = document.querySelector('#cast-validation');
-    validation.textContent = valid ? '' : experimental ? '合計1～9人、各役職0～9人の配役にしてください。' : '合計1～9人。3人以上では狼より村陣営が多い配役にしてください。';
+    validation.textContent = valid ? '' : experimental ? '合計1～9人、各役職0～9人の配役にしてください。' : '合計1～9人。3人以上では人狼より村陣営が多い配役にしてください。';
     validation.hidden = valid;
     document.querySelector('form[action$="/start"] button[type="submit"]').disabled = !valid;
     const mediumSettings=document.querySelector('[data-medium-calculation]');
@@ -338,7 +338,7 @@ function initializePublicLog() {
   const seedNode=document.querySelector('#public-log-seed');if(!seedNode)return;
   const seed=JSON.parse(seedNode.textContent),root=document.querySelector('#system-log'),dialog=root.querySelector('#board-log-dialog');
   const rows=root.querySelector('[data-public-rows]'),status=root.querySelector('[data-public-status]'),editor=root.querySelector('[data-public-editor]'),picker=root.querySelector('[data-legacy-picker]'),mode=root.querySelector('[data-public-mode]');
-  const labels={villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'};
+  const labels={villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'人狼'};
   let disabledStates=new Map();
   let saved=seed.draft?.revision===seed.revision&&seed.draft.board_id===seed.board_id?seed.draft.payload:null,editing=null,legacyKey=null,busy=false,navigating=false,contextDay=seed.day,contextPhase=seed.phase,returnFocus=null;
   document.querySelector('#public-log-draft-form').addEventListener('submit',event=>event.preventDefault());

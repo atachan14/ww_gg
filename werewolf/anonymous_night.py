@@ -83,7 +83,7 @@ class SymbolStep:
             parts=[]
             for members,symbols in grouped.items():
                 parts.append(symbols[0].label() if len(symbols)==1 else '['+','.join(map(str,members))+'の{'+','.join(alias(s.index) for s in symbols)+'}]')
-            return ('狼集合' if len(self.actors)>1 else '')+'と'.join(parts)+'が'+self.target.label()+'を襲撃'
+            return ('人狼集合' if len(self.actors)>1 else '')+'と'.join(parts)+'が'+self.target.label()+'を襲撃'
         if self.kind=='death_notice':
             names=self.target.members
             return '襲撃死：'+('['+','.join(('('+str(p)+')') if i==0 else str(p) for i,p in enumerate(names))+']' if len(names)>1 else str(names[0]))

@@ -43,7 +43,7 @@ def group_attacks(tree,node,scans,attacks):
     for attack in groups:
         targets=attack['targets'];attack['multiplicity']=len(targets)
         suffix=('['+','.join('('+str(p)+')' if p==attack['target'] else str(p) for p in targets)+']\u304b\u3089') if len(targets)>1 else str(attack['target'])+'\u3092'
-        attack['label']='\u72fc\u304c'+suffix+'\u8972\u6483'
+        attack['label']='\u4eba\u72fc\u304c'+suffix+'\u8972\u6483'
     return groups
 
 

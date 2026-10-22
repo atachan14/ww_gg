@@ -10,7 +10,7 @@ class HelpTests(unittest.TestCase):
   self.assertIn('class="header-help" href="/help"',h)
   self.assertNotIn('id="help-button"',h);self.assertNotIn('data-future-preview-top',h)
  def test_help_routes_preserve_game_and_explain_full_disclosure_consistency(self):
-  before=self.g();h=self.c.get('/help').get_data(as_text=True);self.assertIn('サンプル2：市民4狼1での計算例',h);self.assertIn('仕様の補足',h);s=self.c.get('/help/specs').get_data(as_text=True);self.assertIn('未公開なら真候補から外します',s);self.assertIn('不整合',s);self.assertIn('共通',s);self.assertEqual(self.g(),before)
+  before=self.g();h=self.c.get('/help').get_data(as_text=True);self.assertIn('サンプル2：市民4人狼1での計算例',h);self.assertIn('仕様の補足',h);s=self.c.get('/help/specs').get_data(as_text=True);self.assertIn('未公開なら真候補から外します',s);self.assertIn('不整合',s);self.assertIn('共通',s);self.assertEqual(self.g(),before)
  def test_existing_five_example_and_only_required_assets_served(self):
   before=self.g();response=self.c.get('/help/five/');h=response.get_data(as_text=True);response.close();self.assertIn('id="stepnav"',h);self.assertIn('id="rootvalue"',h);self.assertIn('id="step-description"',h);self.assertIn('tree-prototype.js',h)
   for name in ('tree-prototype.css','tree-prototype.js'):

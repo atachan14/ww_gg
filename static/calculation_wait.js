@@ -78,7 +78,7 @@
     if(!Array.isArray(event.path)||!event.path.length||event.path.length>12||!Number.isInteger(event.depth)||event.depth<event.path.length||event.path.some(step=>!Number.isInteger(step.day)||step.day<1||!['day','night'].includes(step.phase)))return;
     mountStatus();status.hidden=false;
     const current=event.path?.at(-1);if(!current)return;
-    const viewLabel={public:'公開',wolf:'狼本人',seer:'占い本人',hunter:'狩人本人'}[event.view];if(!viewLabel)return;
+    const viewLabel={public:'公開',wolf:'人狼本人',seer:'占い本人',hunter:'狩人本人'}[event.view];if(!viewLabel)return;
     positionRun=event.run_id;position.hidden=false;
     position.textContent=`探索位置［${viewLabel}］：Day ${current.day} ${current.phase==='day'?'昼':'夜'}・呼出し深さ ${event.depth}（進捗率ではありません）`;
     position.dataset.runId=event.run_id;position.dataset.sampleId=String(event.sample_id);

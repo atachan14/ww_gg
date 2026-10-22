@@ -6,8 +6,8 @@ PAGES={'index':'プログラム詳細（仮）','current':'プログラム詳細
 AUDIT_VERSION='v0.5.2（共通フロー基準79b487b・上限追補）'
 REVIEW_VERSION='9a0463a（軽量化区切り）'
 PUBLIC_SHA='79b487b422f89d8cec57c57ec46688c2baceeb89'
-TERMS=(('world','役職世界 W','狼・霊能・占い師・狩人の位置を表すマスクの組。一つを実役職として抽選してはいない。'),
-       ('public','公開信念 Q','公開Boardの役職候補と重み。狼の行動選択尤度で役職を推測しないmodel Aの入力。'),
+TERMS=(('world','役職世界 W','人狼・霊能・占い師・狩人の位置を表すマスクの組。一つを実役職として抽選してはいない。'),
+       ('public','公開信念 Q','公開Boardの役職候補と重み。人狼の行動選択尤度で役職を推測しないmodel Aの入力。'),
        ('physical','物理分布 P','候補世界を真と置いて、政策と能力の確率から列挙する結果・情報状態の分布。'),
        ('information','情報集合 I','行動者に区別できない状態の集合。同じ情報集合には同じ政策を使う。'),
        ('policy','政策 π(a | I)','情報集合に基づく行動の分布。maxの同率の期待勝率最大化候補は均等化する。'),
@@ -21,7 +21,7 @@ REFERENCES=(('公開状態','exact.py','Board / initial_board / replace_worlds',
  ('情報集合・再帰','information_set_forecast.py','wolf_policy / solve / scalar','test_information_set_model_a'),
  ('共通行動順序','action_flow.py','NightFrame / resolve_action / action_flow','test_action_flow'),
  ('物理継続の受渡し','evaluation_branch.py','ActionInputs / ContinuationInputs / physical_board','test_evaluation_branch'),
- ('本人条件・狼情報集合','actor_information.py','condition_actor_state / WolfInformation / wolf_information_groups','test_actor_information'),
+ ('本人条件・人狼情報集合','actor_information.py','condition_actor_state / WolfInformation / wolf_information_groups','test_actor_information'),
  ('根の完全秘密状態','root_secret_flow.py','prepare_root_secrets / root_actor_view / observe_root_public / step_root_action / root_secret_value','test_root_secret_flow'),
  ('設定方針下の期待値同率選択','policy_choice.py','optimal_targets / uniform_policy','test_root_secret_flow'),
  ('初日均等画面の接続','root_secret_flow.py','root_screen_eligible / root_screen_forecast','test_root_secret_screen'),

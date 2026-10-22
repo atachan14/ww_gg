@@ -9,7 +9,7 @@
   const conflicts=document.querySelectorAll('[data-public-open],[data-public-edit],[data-public-delete],[data-legacy-open],#advance-button,#back-button');
   const draft=window.createBoardDeclarationDraft(baseline,{update,cancel:document.querySelector('[data-table-cancel]'),conflictingButtons:conflicts});
   let version=0,timer,controller,lastPreview=null,rendering=false,navigating=false,clearedSavedDraft=false,clearSavedPromise=Promise.resolve();
-  const labels={latent:'--',villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'};
+  const labels={latent:'--',villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'人狼'};
   const clone=x=>JSON.parse(JSON.stringify(x));
   const selectors=[];const roleStash=new Map();
   const storageKey=`wwgg-table-draft:${main.dataset.coGame}:${seed.board_id}`;

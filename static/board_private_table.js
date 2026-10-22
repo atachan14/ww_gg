@@ -40,7 +40,7 @@
    const team=role==='wolf'?players:[];
    const draft=store.open({player,role,team,claims:role==='wolf'?['wolf']:[seed.claims[player-1]],publicResults:role==='hunter'?[]:role==='wolf'?(seed.public_attacks||[]).map(r=>({...r,player,role:'wolf'})):seed.public_results});
    if(!table.querySelector(`[data-private-details="${player}:${role}"]`)){
-    const row=window.renderBoardPrivateRow({table,player,role,label:role==='seer'?'占い師':role==='wolf'?'狼':'狩人',
+    const row=window.renderBoardPrivateRow({table,player,role,label:role==='seer'?'占い師':role==='wolf'?'人狼':'狩人',
      slots:role==='seer'?seed.slots[String(player)]:role==='wolf'?(seed.attack_slots||[]).map(slot=>({...slot,targets:slot.targets.filter(p=>seed.allow_self_bite||!team.includes(p))})):(seed.guard_slots?.[String(player)]||[]),draft,onChange:edit=>{store.edit({...edit,team});controller.refresh();}});
 
    }
@@ -52,7 +52,7 @@
    if(scope)scope.textContent=`${seed.roles[role].label}（公開情報＋秘密情報）`;
    heading();
    if(mode==='selecting'){
-    pending('選択中');status.textContent=`${seed.roles[role].label}：行をクリックして ${seed.roles[role].required}人選択してください。死亡済みの狼仲間も選択できます。`;
+    pending('選択中');status.textContent=`${seed.roles[role].label}：行をクリックして ${seed.roles[role].required}人選択してください。死亡済みの人狼仲間も選択できます。`;
    }else if(mode==='loading'){
     pending('計算中');status.textContent='私的情報で再計算中です。BoardOverviewの勝率は公開情報の計算です。';
    }

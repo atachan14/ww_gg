@@ -46,7 +46,7 @@ class AnonymousNightTests(unittest.TestCase):
    program=compile_anonymous(e,node.read(),node.groups)
    self.assertEqual(sum(leaf.mass for leaf in program.leaves),1)
    for leaf in program.leaves:
-    attack=next(s for s in leaf.steps if s.kind=='wolf_target');expected=sum(1 for p in node.read().public.alive if leaf.information.initial_roster&(1<<(p-1)));self.assertEqual(len(attack.actors),expected);self.assertEqual(attack.label().startswith('狼集合'),expected>1)
+    attack=next(s for s in leaf.steps if s.kind=='wolf_target');expected=sum(1 for p in node.read().public.alive if leaf.information.initial_roster&(1<<(p-1)));self.assertEqual(len(attack.actors),expected);self.assertEqual(attack.label().startswith('人狼集合'),expected>1)
 
  def test_MAX_committed_policy_zero_mass_and_named_value(self):
   from tests.test_joint_action_kernel import fixture

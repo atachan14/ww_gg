@@ -14,7 +14,7 @@ from .seer_future_uniform import FuturePending
 from .board_roles import prepare_compat_prior as prepare_public_prior
 
 
-LABELS = {'seer': '占い視点', 'hunter': '狩人視点', 'wolf': '狼視点'}
+LABELS = {'seer': '占い視点', 'hunter': '狩人視点', 'wolf': '人狼視点'}
 
 
 def viewpoint_roles(board):
@@ -120,14 +120,14 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                 result = seer_forecast(public, players[0], view.acquisitions, rules, strategy,
                                        scan_state=state, past=past, max_work=max_work, max_seconds=max_seconds)
         reasons = {'seer_view_unpublished_own_action_unimplemented': 'なし開示：未公開結果を本人の後続行動へ使う評価は未対応です。',
-                   'information_set_budget_exceeded': '狼情報集合の評価が計算予算を超えたため最終勝率は未計算です。',
+                   'information_set_budget_exceeded': '人狼情報集合の評価が計算予算を超えたため最終勝率は未計算です。',
                    'multiple_fake_report_correlation_unselected': '複数偽占いの共同報告モデルが未対応のため最終勝率は未計算です。',
                    'seer_view_latent_future_co_unimplemented': '潜伏中の将来COと秘密結果利用は未対応です。占いCO済み・すべて開示の範囲に対応します。'}
         if isinstance(result, FuturePending):
             reason = reasons.get(result.reason, '占いの公開取得履歴・未来報告モデルまたは計算予算が未対応のため未計算です。')
         else:
             final_values = dict(result); targets = tuple(final_values)
-            reason = '占い先別の最終勝率です。狼は仲間を知って行動し、公開推理は死体との矛盾除外を維持します。すべて開示・CO固定・未訪問先優先。次の朝までの勝率は未対応です。'
+            reason = '占い先別の最終勝率です。人狼は仲間を知って行動し、公開推理は死体との矛盾除外を維持します。すべて開示・CO固定・未訪問先優先。次の朝までの勝率は未対応です。'
         if root_entry and not isinstance(result,FuturePending):
             reason = '本人の役職・取得結果・行動履歴で共同分布を条件付け、同じ公開方針の下で次の占い先を比較します。'
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
@@ -184,7 +184,7 @@ def evaluate_private_table(public, role, players, results, rules, strategy, *, g
                         own=condition_actor_state(state,lambda h:h.roles[0]==mask and h.roles in {w[:-1] for w in private.worlds} and matches(h.attacks,view.attacks),attacks=view.attacks)
                         guard_dawn={p:horizon_for_action(engine,public,state,past,p,own) for p in final_values}
                 except CalculationBudgetExceeded:guard_dawn={}
-            reason += ' 狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'
+            reason += ' 人狼は仲間の情報集合内で期待値を比較し、公開推理は死体との矛盾除外を維持します。'
             if set(targets) - set(final_values): reason += ' 公開側の全仮説で合法にならない襲撃先は未対応です。'
 
         if public.initial_hunter_count: reason += ' 護衛位置は均等化です。公開分布と本人の私的分布を分離しています。'
