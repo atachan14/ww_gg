@@ -110,15 +110,18 @@ class CalculationTree:
         s=node.read();key=(s,target)
         if getattr(self.engine,'anonymous_nights',False):
             group=next((tuple(g) for g in node.groups if target in g),(target,)) if target is not None else None
-            return ('constructed-native',s,group)
+            from .public_convergence import state_key
+            return ('constructed-native',state_key(s),group)
         if key not in self.keys:
             self.keys[key]=canonical_key(*s,self.rules,self.strategy,target=target,physical=s.physical,max_mappings=120)
         return self.keys[key] or ('unshared',key)
 
     def register(self,node,route=()):
         s=node.read()
-        if s in self.sources:return self.sources[s]
-        key=str(len(self.nodes));self.sources[s]=key
+        from .public_convergence import state_key
+        signature=state_key(s)
+        if signature in self.sources:return self.sources[signature]
+        key=str(len(self.nodes));self.sources[signature]=key
         self.nodes[key]={'node':node,'value':None,'actions':None,'reused':False,'route':tuple(route)}
         return key
 
@@ -147,8 +150,7 @@ class CalculationTree:
                         if belief is not None else dict(e.day_scores(b,s.public_state,s.past)))
                 best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
                 legal=legal_targets(s.physical,self.rules,self.strategy)
-                orbits=(getattr(e,'public_action_orbits',{}).get((b,s.public_state,s.past))
-                        or (e.target_orbits(legal) if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)))
+                orbits=node.action_orbits() if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)
                 for orbit in orbits:
                     target=orbit[0]
                     rows.append({'node':node,'target':target,'orbit':orbit,'q_score':scores[target],
@@ -384,6 +386,8 @@ class CalculationTree:
                         self.nodes[arrival_key]=dict(node=arrival_node,value=value,actions=[],reused=False,route=(*record['route'],selector),public_bundle=True,day_start=True,public_updates=updates)
                         arrival['node']=arrival_key
                         record.setdefault('arrival_selectors',{})[(target,digest(before),counter)]=arrival_key
+                        from .public_convergence import legacy_digest
+                        record['arrival_selectors'][(target,legacy_digest(before),counter)]=arrival_key
                         arrivals[identity]=arrival
                         record.setdefault('arrival_sources',{})[identity]=before
                         for update in updates:
@@ -542,6 +546,9 @@ class CalculationTree:
                     from .anonymous_night import Symbol,SymbolStep
                     selector=step['public_night'];base=self.register(node,prefix);bundles=self._public_night_bundles(base)
                     public=selector['public']
+                    if public not in bundles:
+                        from .public_convergence import matches_digest
+                        public=next((code for code,entry in bundles.items() if any(matches_digest(source,public) for mass,source in entry['sources'].values())),public)
                     if public not in bundles or selector['target']!=bundles[public]['target']:raise ValueError('Public night selector unavailable')
                     def symbol(value):return None if value is None else Symbol(value['index'],tuple(value['members']))
                     pattern=tuple(SymbolStep(r['kind'],symbol(r['actor']),symbol(r['target']) if type(r['target'])is dict else r['target'],tuple(symbol(a) for a in r['actors']),r.get('public_fact')) for r in selector['prefix'])

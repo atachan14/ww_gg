@@ -5,7 +5,7 @@ manual input adds a zero selection edge, never an evaluator child or payoff term
 """
 from copy import deepcopy
 from .calculation_tree import CalculationTree,input_snapshot
-from .public_convergence import transport_source
+from .public_convergence import transport_source,state_key
 from .anonymous_night import Symbol,SymbolStep
 from .ability_labels import marked
 from .tree_public_updates import event_label,publication_label
@@ -43,6 +43,14 @@ class NavigationTree:
     def _binding(self,owner,local):
         tree,names=self.view(owner);source=tree.nodes[local]['node'].read()
         start=bool(tree.nodes[local].get('day_start'))
+        if '@' in owner:
+            # A selected historical occurrence may predate representative
+            # support. Match only its anchored full displayed state, using the
+            # constructed branch lift; unrelated occurrences/maps stay separate.
+            anchor=self.document.game.history.occurrence(owner.split('@',1)[1])
+            old=self.document.game.history.state(anchor.key).source
+            if state_key(transport_source(source,names.forward))==state_key(transport_source(old,anchor.names.forward)):
+                return anchor.key
         candidates=list(self.document.game.history.children(self.owner(owner)))
         for row in tuple(candidates):
             step=row.selector
@@ -52,7 +60,7 @@ class NavigationTree:
             step=child.selector
             is_start=step.get('kind')=='generated' and any(isinstance(s,dict) and 'public_arrival' in s for s in step['route'])
             if start!=is_start or child.names!=names:continue
-            if child.edge_kind!='manual_public' and self.document.game.history.state(child.key).source==source and self.document.game.history.state(child.key).node.solver_identity==tree.nodes[local]['node'].solver_identity:return child.key
+            if child.edge_kind!='manual_public' and state_key(self.document.game.history.state(child.key).source)==state_key(source) and self.document.game.history.state(child.key).node.solver_identity==tree.nodes[local]['node'].solver_identity:return child.key
         return None
     def _id(self,owner,local):
         if local is None:return None
@@ -168,7 +176,9 @@ class NavigationTree:
                 for action in out.get('actions') or ():
                     if requested in action['targets']:
                         action['representative']=requested
-                        branch_owner=owner+'@'+child.key;self.views[branch_owner]=(tree,child.names)
+                        branch_owner=owner+'@'+child.key
+                        _,lift=tree.entry_node.representative_action(step.get('requested',step['target']))
+                        self.views[branch_owner]=(tree,lift.then(names))
                         original=next(a for a in raw['actions'] if step['target'] in a['targets'])
                         for branch,canonical in zip(action['branches'],original['branches']):
                             branch['node']=self._id(branch_owner,canonical['node'])

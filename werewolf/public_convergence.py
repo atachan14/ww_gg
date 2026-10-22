@@ -50,7 +50,22 @@ def public_transport(before,after,groups):
             chosen[person]=target;used.add(target)
     return tuple(chosen.get(p,p) for p in range(1,before.public.player_count+1))
 
-def public_key(source):return source.public,source.public_state,source.past
+def canonical_board(board):
+    # Only probability tables are unordered. Histories, names, public timing and
+    # private directed memories retain their full original meaning.
+    updates={name:tuple(sorted(getattr(board,name))) for name in ('belief','role_belief','world_belief') if tuple(sorted(getattr(board,name)))!=getattr(board,name)}
+    return replace(board,**updates) if updates else board
+
+
+def state_key(source):
+    return (canonical_board(source.public),source.public_state,source.past,source.private,source.observer,canonical_board(source.physical))
+
+
+def public_key(source):return canonical_board(source.public),source.public_state,source.past
+
+def legacy_digest(source):return sha256(repr((source.public,source.public_state,source.past)).encode()).hexdigest()[:24]
+
+def matches_digest(source,value):return value in (digest(source),legacy_digest(source))
 
 def digest(source):return sha256(repr(public_key(source)).encode()).hexdigest()[:24]
 
@@ -198,7 +213,7 @@ class NightObservationEvidence:
     counter:bool=False
     def __call__(self,source):
         rows=public_night_observations(self.engine,source,self.groups,counter=self.counter)
-        selected=next((after for weight,after,target in rows if digest(after)==self.public_digest),None)
+        selected=next((after for weight,after,target in rows if matches_digest(after,self.public_digest)),None)
         if selected is None:raise ValueError('Public night observation unavailable')
         return condition_prefix(selected,source,self.groups,self.prefix)[1] if self.prefix else selected
 
@@ -212,6 +227,6 @@ class ArrivalObservationEvidence:
     counter:bool=False
     def __call__(self,source):
         rows=public_night_observations(self.engine,source,self.groups,counter=self.counter,publish=False)
-        selected=next((after for weight,after,target in rows if digest(after)==self.public_digest),None)
+        selected=next((after for weight,after,target in rows if matches_digest(after,self.public_digest)),None)
         if selected is None:raise ValueError('Pre-report public arrival unavailable')
         return selected

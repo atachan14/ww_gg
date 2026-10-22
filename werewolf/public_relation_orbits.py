@@ -11,7 +11,7 @@ their existing refined population groups; they never inherit these action orbits
 
 def _forest(game):
     n=game['players'];single=tuple((p,) for p in range(1,n+1))
-    if game.get('history') or game.get('mediums') or game.get('hunters'):return None
+    if game.get('history'):return None
     claims=game.get('claims',['latent']*n)
     marks=[[] for _ in claims];edges={};times={}
     for order,batch in enumerate(game.get('public_log',{}).get('batches',())):
@@ -20,11 +20,15 @@ def _forest(game):
             player=event['player']
             if event['kind']=='co':marks[player-1].append((stamp,event['role']))
             else:times[(event['kind'],player,event['day'],event['target'])]=stamp
-    for row in game.get('seer_inputs',()):
-        a,b=row['reporter'],row['target']
-        if a==b:return None
-        pair=tuple(sorted((a,b)))
-        edges.setdefault(pair,[]).append((a,b,('seer',row['day'],row['color'],times.get(('seer',a,row['day'],b),(-1,'legacy',0)))))
+    # Every public reporter->target relation carries its ability and timing.
+    # Role counts alone never distinguish otherwise exchangeable people.
+    for kind,key in (('seer','seer_inputs'),('medium','reports')):
+        for row in game.get(key,()):
+            a,b=row['reporter'],row['target']
+            if a==b:return None
+            pair=tuple(sorted((a,b)))
+            stamp=times.get((kind,a,row['day'],b),(-1,'legacy',0))
+            edges.setdefault(pair,[]).append((a,b,(kind,row['day'],row['color'],stamp)))
     adjacency={p:[] for p in range(1,n+1)}
     for (a,b),records in edges.items():
         adjacency[a].append((b,tuple(sorted((('out' if reporter==a else 'in',label) for reporter,target,label in records),key=repr))))

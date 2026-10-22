@@ -85,10 +85,10 @@ class RoleStagedTreeTests(unittest.TestCase):
    self.assertEqual((shown['items'][key]['column_day'],shown['items'][key]['column_phase']),(2,'day'))
    view.select(key);s=doc.game.node.read();self.assertEqual(s.public.day,2);self.assertFalse(any(e.phase=='night' and e.day==1 for e in s.public.history))
    # No-death reveals neither the target nor the private guard/attack relation.
-   self.assertEqual({h.attacks[-1].target for h in s.private.hypotheses},{1,2,4})
+   self.assertEqual({h.attacks[-1].target for h in NavigationCurrent(doc.game).source.private.hypotheses},{1,2,4})
    self.assertTrue(all(h.guards[-1].target==h.attacks[-1].target for h in s.private.hypotheses))
    self.assertEqual(sum(h.mass for h in s.private.hypotheses),1);self.assertEqual(doc.game.node.forecast().village_win,F(1,3))
-   self.assertEqual(NavigationCurrent(doc.game).source.public,s.public)
+   self.assertEqual(NavigationCurrent(doc.game).source.public.history[-1].target,3)
    cold=NavigationDocument.restore(json.loads(json.dumps(doc.export())));self.assertEqual(cold.game.node.read(),s)
  def test_unsupported_guard_policies_and_multiplicity_remain_explicit(self):
   from werewolf.closed_calculation import ClosedCalculation

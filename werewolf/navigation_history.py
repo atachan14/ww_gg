@@ -57,7 +57,8 @@ class NavigationHistory:
         state=self._intern(node)
         self.root=self._append(None,state,None,NameMap.identity(node.read().public.player_count),'root',F(1)).key
     def _intern(self,node):
-        source=(node.read(),node.solver_identity)
+        from .public_convergence import state_key
+        source=(state_key(node.read()),node.solver_identity)
         if source in self._by_source:return self._by_source[source]
         key='s'+str(len(self._states));self._states[key]=SolverState(key,node);self._by_source[source]=key;return key
     def _append(self,parent,state,selector,names,kind,weight,settled=(F(),F())):

@@ -219,7 +219,7 @@ class ClosedCalculation:
         object.__setattr__(node,'_Node__path',path)
         object.__setattr__(node,'_Node__view',view)
         relation=None;orbits=None;relation_key=None
-        if not source.public.history and source.observer is None:
+        if not source.public.history and source.observer is None and not any(op[0]=='physical' for op in path):
             from .public_relation_orbits import initial_orbits
             from .manual_public_input import initial_relation_game
             import json
@@ -310,6 +310,7 @@ class _Node:
                 return count('wolf'),0,count('seer'),0,count('villager')
             e.anonymous_beliefs[source]=replace(belief,p=belief.p.condition(lambda atom:living(atom)==selection)[1])
         if kind=='joint':groups=_fix(groups,(*selection[1],*(p for pair in selection[2] for p in pair)))
+        elif kind=='hypothesis':groups=tuple((p,) for group in groups for p in group)
         return self.__calculation._ClosedCalculation__node(source,groups,(*self.__path,('physical',kind,selection)),self.__view)
 
     def _public_night(self,source,target,public_digest,groups,prefix=(),counter=False):
@@ -355,11 +356,17 @@ class _Node:
                 return F(1,len(chosen)) if target in chosen else F()
             return sum((choice.mass for choice in self.wolf_choices() if choice.target==target),F())
 
+    def action_orbits(self):
+        """Constructed action classes shared by scalar, Tree and navigation."""
+        s=self.__source;e=self.__calculation._ClosedCalculation__engine
+        legal=set(legal_targets(s.physical,e.rules,e.strategy))
+        return tuple(tuple(p for p in group if p in legal) for group in (self.__orbits or self.__groups) if any(p in legal for p in group))
+
     def representative_action(self,target):
         """Canonical action and complete display lift, constructed by grouping."""
         from .navigation_history import NameMap
         source=self.__source;engine=self.__calculation._ClosedCalculation__engine
-        groups=self.__orbits or self.__groups
+        groups=self.action_orbits()
         group=next((g for g in groups if target in g),None)
         if group is None:raise ValueError('Unknown action target')
         representative=group[0];n=source.public.player_count

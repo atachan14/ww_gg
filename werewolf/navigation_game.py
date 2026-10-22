@@ -34,12 +34,20 @@ class NavigationGame:
         parent=self.current
         row=self.history.append(parent,node,selector,names=names,kind=kind,selection_weight=weight,settled=settled)
         self._forward[parent]=row.key;self.current=row.key;return row
-    def action(self,display_target,*,outcome=None,selection_weight=None,names=None,_replay=False):
+    def action(self,display_target,*,outcome=None,selection_weight=None,names=None,_replay=False,_saved_target=None):
         parent=self.occurrence;requested=parent.names.canonical(display_target)
         target,lift=self.node.representative_action(requested)
         mapping=lift.then(parent.names)
-        if names is not None and names!=mapping:raise ValueError('Saved action mapping differs from constructed transport')
-        names=mapping
+        if _replay and _saved_target is not None:
+            # Old journals may explicitly name an action before its orbit was
+            # supported. Replay that literal generator, never reinterpret its
+            # stored target/map as a different physical history.
+            literal=(_saved_target==requested and names==parent.names)
+            canonical=(_saved_target==target and names==mapping)
+            if not (literal or canonical):raise ValueError('Saved action mapping differs from constructed transport')
+            target=_saved_target
+        elif names is not None and names!=mapping:raise ValueError('Saved action mapping differs from constructed transport')
+        else:names=mapping
         selection_weight=self.node.selection_probability(target) if selection_weight is None else selection_weight
         rows=self.node.action(target)
         if outcome is not None:
@@ -156,7 +164,7 @@ class NavigationGame:
             elif kind=='observed':
                 from .exact import MediumReport
                 added=game.observed(step['target'],tuple(SeerReport(**r) for r in step['reports']),tuple(MediumReport(**r) for r in step['medium']))
-            else:added=game.action(names.display(step.get('requested',step['target'])),outcome=step.get('outcome') if kind=='action' else None,names=NameMap(tuple(row['names'])),_replay=True)
+            else:added=game.action(names.display(step.get('requested',step['target'])),outcome=step.get('outcome') if kind=='action' else None,names=NameMap(tuple(row['names'])),_replay=True,_saved_target=step['target'])
             if added.key!=row['key']:raise ValueError('Invalid history order')
         # Saved files are evidence recipes, not authority to inject weights/maps.
         import json

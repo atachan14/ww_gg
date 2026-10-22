@@ -3599,3 +3599,36 @@ Initial SavedOrigin still enumerates named joint roles/acquisitions before the s
 Hunter MAX: existing guard targeting is uniform (`guard_choices`), NOT a newly optimized guard policy. The unresolved dependency is primarily the optimizing wolf/public continuation policy: its observation likelihood determines future public support, whose values determine that same policy. `require_profile` only accepts a completed selected certificate; cyclic/incomplete/multiple profiles stay Pending. A future safe task is to isolate and solve the complete same-context dependency component, retaining original information sets and tie rules; changing Q semantics or selecting an arbitrary profile is not authorized.
 
 Automatic DayX/blackX CO remains a gray editor preview (`static/strategy.js`), not serialized as a calculation policy. Connecting it needs jointly specified true/fake actor-visible disclosure opportunities and old-result publication, separate from deterministic recorded manual inputs. Neither deferred semantic change was implemented overnight.
+
+
+## Representative day actions across supported roles (2026-10-23)
+
+Initial action orbits now use the common coloured public-relation forest for all
+supported role counts. Medium reports carry directed incidence and publication
+timing just like seer reports. These are joint action orbits, not independently
+exchangeable reporter/target sets. Cycles remain a conservative named fallback.
+CalculationTree consumes one representative action with its exact policy mass
+and multiplicity; concrete Footer selections retain a constructed bijection.
+Physical/private selections never reuse initial public action orbits; fully
+selected hypotheses conservatively retain named actions.
+
+Probability-table order is excluded from shared state identity, while public
+history, Q, physical P, private relational memories and observer identity remain
+in the key. Saved literal-action journals and prior public-state digest selectors
+remain replayable. Only the specific anchored occurrence may bind through its
+constructed displayed mapping; unrelated histories/maps are not merged.
+
+Regression case: citizen3/medium1/seer1/wolf2 all-hidden random has one Day1
+execution calculation and one Day1-night Board, value 8/35; first medium black
+2/7, white 4/7 and dead-medium continuation 1/7. This removes redundant child
+calculation, not the existing named prior/public-Q materialization boundaries.
+Normal 18821 is intentionally not restarted: its ephemeral signing key would
+invalidate the active session. Isolated app/browser verification is separate.
+
+Validation: 52 focused tests passed (135.165s), including named seven-victim
+transport agreement, private-memory separation, old literal journal replay,
+forged-map rejection, Current naming, linked CO timing and existing public-bundle
+regressions. Isolated Edge hunter/medium real Table/Footer/Tree/Current flows
+passed with desktop/narrow screenshots. Isolated seven-player browser HTTP
+flow returned one representative night Board and exact 2/7,4/7,1/7 stages;
+night expansion took about 87s. No normal listener restart or cookie changes.
