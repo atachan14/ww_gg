@@ -3507,3 +3507,14 @@ TOP/Main transfer and initial-CO/Current/Footer/zoom/pan/page-scroll browser pro
 also pass with zero Runtime exceptions. Evidence is in delayed-co-*.json/log/png.
 Only local18821 was restarted with its existing cookie name; other apps/ports/
 cookies untouched, no push or external deployment.
+
+
+### Manual public input: preserve joint role priors (2026-10-22)
+
+`manual_public_input.condition_input` now treats hand-entered public evidence as compatibility, not a sampled report event. For each Q/P law separately, let M(r) be the incoming joint role-assignment mass and T(r) the compatible private-history mass. Remove assignments with T(r)=0; multiply every compatible history by M(r)/T(r), then normalize across surviving assignments. Unequal prior masses and within-assignment history ratios survive. Returned support masses describe surviving role support, not a CO/report generation probability. Manual navigation edges remain zero selection weight; parent states and forecasts remain immutable.
+
+Q-supported input outside all physical P support is explicitly unsupported, rather than fabricating physical histories or misreporting a public contradiction. Report timing/acquisition legality and old-publication immutability still apply. Sequential reports under the same claims equal the batched reveal; genuinely different CO event order can impose different existing CCO constraints. Existing role marginals already reflect prior deaths/actions: this update does not reconstruct a uniform initial prior or remove past automatic strategy likelihoods.
+
+Automatic `morning_publications` generation and ex-ante action policies remain unchanged. The delayed CO example (execute1, bite2, claimant3: initial white4, next black5) keeps three compatible assignments equally weighted: true seer3=1/3. Its automatic generated-report posterior remains13/25, which is intentionally a different experiment. Correlated private histories remain available for subsequent exact evaluation.
+
+Saved navigation records contain evidence and cold-replay through this adapter, so replayed manual descendants adopt the new semantics; their pre-input ancestors remain unchanged. Existing running preview18821 is not restarted: its per-process session signing key cannot be preserved by the launcher without handling signing credentials. Browser validation uses an ephemeral server, temporary journal directory and isolated Edge profile; no user Board reset, persistent port or cookie migration.

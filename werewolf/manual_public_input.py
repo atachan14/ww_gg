@@ -1,7 +1,8 @@
 """Supported hand evidence, independent of strategy selection probability.
 
-Q and P are filtered independently. No parent is changed and no initial prior is
-reseeded. This adapter adds public observations, not edits to old acquisitions.
+Q and P keep their own role-assignment marginals. Private histories are
+conditioned within each surviving assignment, without acquisition-rarity evidence.
+No parent is changed and no initial prior is reseeded. This adapter adds public observations, not edits to old acquisitions.
 """
 from dataclasses import dataclass,replace
 from fractions import Fraction as F
@@ -58,11 +59,23 @@ def condition_input(source,evidence,rules,claim_policy):
         raise ContradictoryPublicInput(str(error)) from error
     roles={row[:-1] for row in public.worlds}
     def filtered(law):
+        from .calculation_budget import tick
+        tick(len(law.hypotheses))
+        prior={}
+        for h in law.hypotheses:prior[h.roles]=prior.get(h.roles,F())+h.mass
         kept=tuple(h for h in publication_support(law.hypotheses,tuple(reports)) if h.roles in roles)
-        total=sum((h.mass for h in kept),F())
-        if not total:raise ContradictoryPublicInput('Public input has zero evidence support')
-        return total,replace(law,hypotheses=normalize(kept))
-    qmass,q=filtered(source.public_state);pmass,p=filtered(source.private)
+        supported={}
+        for h in kept:supported[h.roles]=supported.get(h.roles,F())+h.mass
+        total=sum((prior[role] for role in supported),F())
+        if not total:return F(),None
+        # Keep each compatible assignment's prior mass, then condition its
+        # correlated histories. This is manual compatibility, not report chance.
+        adjusted=tuple(replace(h,mass=h.mass*prior[h.roles]/supported[h.roles]) for h in kept)
+        return total,replace(law,hypotheses=normalize(adjusted))
+    qmass,q=filtered(source.public_state)
+    if q is None:raise ContradictoryPublicInput('Public input has zero evidence support')
+    pmass,p=filtered(source.private)
+    if p is None:raise UnsupportedPublicInput('manual_evidence_outside_physical_support')
     public=physical_board(public,q)
     child=ContinuationInputs(public,q,tuple(sorted((*source.past,*reports))),p,None,physical_board(public,p,source.physical))
     return ConditionedInput(qmass,pmass,child)

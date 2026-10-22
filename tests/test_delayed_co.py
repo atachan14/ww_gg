@@ -31,7 +31,10 @@ class DelayedCOTests(unittest.TestCase):
     records={(a.day,a.player):(a.target,a.color) for a in h.acquisitions}
     true=bool(h.roles[2]&1);dead_seer=not(h.roles[2]&actual.public.alive_mask)
     if (true and records.get((1,1))==(3,'white') and records.get((2,1))==(4,'white')) or (h.roles[0]&1 and dead_seer):kept.append(h)
-   self.assertEqual(law.hypotheses,normalize(tuple(kept)));self.assertEqual(sum(h.mass for h in law.hypotheses),1)
+   prior={r:sum(h.mass for h in before.hypotheses if h.roles==r) for r in {h.roles for h in kept}}
+   support={r:sum(h.mass for h in kept if h.roles==r) for r in prior}
+   expected=normalize(tuple(replace(h,mass=h.mass*prior[h.roles]/support[h.roles]) for h in kept))
+   self.assertEqual(law.hypotheses,expected);self.assertEqual(sum(h.mass for h in law.hypotheses),1)
   self.assertEqual(row.selection_weight,0)
   from werewolf.information_set_forecast import InformationSetForecast
   e=InformationSetForecast(doc.game.node.data.game_data.rules,Strategy(**doc.game.node.data.to_game()['policy']),exact_renaming=False,retire_uninformative_scans=False)
@@ -52,7 +55,7 @@ class DelayedCOTests(unittest.TestCase):
   self.assertEqual(doc.game.history.state(parent).source,source);self.assertEqual(doc.game.history.state(parent).node.forecast(),value)
   self.assertEqual([c.selection_weight for c in doc.game.history.children(parent)],[0,0])
   # A dead true seer still permits a lying claimant; black is not certain truth.
-  self.assertEqual(doc.game.node.forecast().village_win,F(18,19))
+  self.assertEqual(doc.game.node.forecast().village_win,F(2,3))
   tree=NavigationTree(doc);shown=tree.read(tree.current_key());self.assertIn('Day1',shown['navigation_label'])
  def test_targets_use_acquisition_roster_and_reject_dead_reporter_or_future(self):
   from werewolf.seer_manual import report_slots
