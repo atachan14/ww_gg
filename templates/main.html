@@ -24,6 +24,7 @@
         <div class="rate-card village"><small>{{ '最終勝率' if finished else '現在勝率' }} · 村陣営</small>{{ probability(rates.village_win, 'village-rate') }}</div>
         <div class="rate-card wolf"><small>{{ '最終勝率' if finished else '現在勝率' }} · 狼陣営</small>{{ probability(rates.wolf_win, 'wolf-rate') }}</div>
       </div>
+      {% if cutoff_details %}<a class="secondary" data-cutoff-details href="{{ url_for('main', details='1') }}">候補別の勝率を計算</a>{% endif %}
       <div class="cumulative-line"><span>{{ '起点の累積勝率' if generated_current else '累積勝率' }}</span><span>村 {{ probability(cumulative.village_win, 'cumulative-village-rate') }} ／ 狼 {{ probability(cumulative.wolf_win, 'cumulative-wolf-rate') }}</span></div>
       {% if seer_pending %}<p class="hint" data-seer-pending>{{ '不整合' if disclosure_error else 'Pending' }}: {{ seer_pending.reason }} <a href="{{ url_for('help_specs') }}#pending">Help</a></p>{% endif %}
       {% if finished and not disclosure_error %}<p class="result-note">すべての可能性で決着しました。</p>{% endif %}

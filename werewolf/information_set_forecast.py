@@ -524,6 +524,10 @@ class InformationSetForecast:
             if reduced is None:reduced=private_value_key(self.reduced_descriptors[source],private)
             if reduced is not None:key=reduced
         if key in self.values:return self.values[key]
+        from .win_certificate import certify
+        if certify(b,s,private,self.strategy,self.rules,observer) is not None:
+            self.cutoff_hits=getattr(self,'cutoff_hits',0)+1
+            self.values[key]=F(1);return F(1)
         self.expansions["values"]+=1
         tick(len(private.hypotheses))
         if b.winner is not None:return F(b.winner=='village')

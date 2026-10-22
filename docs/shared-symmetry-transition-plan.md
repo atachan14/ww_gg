@@ -3309,3 +3309,64 @@ public Current/Footer persistence, inline distribution, fraction toggle,
 Ctrl-wheel zoom, ordinary page wheel and two-axis drag, desktop/narrow bounds;
 zero Runtime exceptions. Desktop/narrow screenshots were actually inspected.
 Only18821 was restarted, same cookie name; other apps/ports/cookies untouched.
+
+
+### Analytic public roll cutoff — exact value only
+
+New games expose 勝利確定の省略, default On, with execution MAX locked while
+On. Off permits random execution. win_cutoff is a boolean Strategy field,
+included in BoardData inputs, calculation ownership, solver identity, cold
+navigation root/history and existing strategy cache keys. Missing legacy fields
+mean Off; old fixed-policy documents are never silently rewritten. Changing a
+fixed navigation policy requires a new game, as before. Missing-field legacy API
+clients also preserve their original strategy; the new setup always submits it.
+
+The certificate module does no recursion: C is the union of live wolf candidates
+in public Q, m counts actual people (not groups), n counts survivors. Require
+day n>=2m+1 or night n>=2m+2. Execute remaining C members: execution plus a
+worst-case outside-C night death preserves n-2m>=1; inside-C deaths help. Every
+wolf remains in C, so eventual elimination is forced. The current public MAX
+policy has all living targets available and therefore attains value1. This does
+not force a particular roll ordering or alter MAX uniform ties. Private scan,
+report and wolf strategies need not cooperate with the witness.
+
+Admitted named scope: citizen/seer/wolf, no self-bite rule, public observer,
+positive full physical support contained in Q (roles, acquisitions, guard and
+attack histories). Unsupported roles/rules or support disagreement fail closed
+to unchanged exact evaluation. Count-native no-report evaluation applies the
+same bound with atom-support containment and pins/residual cell membership;
+private certainty never shrinks public C. No madman/fox/vote rules were added.
+
+Only scalar value caches receive1. Complete action tables, dawn values, MAX
+scores and tie policies still use their normal exact generators. Tree read does
+not automatically expand a certified Board; frontend auto expansion stops there,
+except ancestors needed to retain a recorded Current/manual path. No terminal
+winner is invented and saved/manual continuation remains navigable. Explicit
+routing/history restoration still uses normal action kernels. Public main uses a
+value-only Forecast with an explicit pending-metric marker and empty action
+values; 候補別の勝率を計算 requests the normal exact detail table. /navigation's
+summary likewise avoids calculating unused detail tables. No partial action table
+is cached as complete. Legacy/non-navigation detail consumers remain exact.
+
+Verification: independent named oracle comparisons, On/Off action vectors and
+policy ties, day/night boundary cases, multiple wolves, random/MAX night policy,
+private certainty and full-history mismatch, count-native owner, manual CO and
+CO-external execution, cold history and separate option/cache identity. Exact
+benchmark for actual5-player2CO fixture: Off actions16/values14 versus On0/0,
+both value1 with2 input hypotheses. A7-player/m3/w2 fixture saves44 value
+expansions (44->0). These are scalar savings; explicitly requested full detail
+computation remains, and support/prior preparation is not claimed eliminated.
+
+Isolated Edge at18821 verifies real setup default/interlock, manual public input,
+certified value1 with actions=null/winner=null, automatic Tree stop (two visible
+Board cards on that manual path), fraction switching, lazy detail table with
+CO-external1/2, then real Footer execution3 yielding1/2 on preserved h0/h1/h2.
+Desktop1440/narrow390 screenshots were actually inspected. Existing full browser
+CO-cell/Current/Footer/zoom/pan/page-wheel probe also passes without Runtime
+exceptions. Only18821 was restarted with its existing cookie name; no other
+ports/apps/cookies were touched. Evidence: cutoff-*.json/log/png under.artifacts.
+
+Final focused regression:59 Python tests and50 JS tests pass. Support scans use
+existing tick/cancellation/work deadlines; a dedicated one-unit budget test
+rejects the scan rather than bypassing limits. The bound is checked before full
+support hashing, so unsupported count cases do not build that extra set.

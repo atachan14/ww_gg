@@ -39,8 +39,11 @@ class Strategy:
     seer_position: tuple[str,...] = ("unvisited","uniform")
     fake_seer_policy: tuple[str,...] = ("noncontradictory","uniform")
     guard_position: tuple[str,...] = ("uniform",)
+    win_cutoff: bool = False  # Legacy saved policies stay unchanged; new UI defaults On.
 
     def __post_init__(self):
+        if type(self.win_cutoff) is not bool:raise ValueError("Boolean win cutoff required")
+        if self.win_cutoff and self.day!="max":raise ValueError("Win cutoff requires MAX execution")
         if self.disclosure_common not in ('none','all') or self.seer_disclosure not in ('inherit','none','all') or self.medium_disclosure not in ('inherit','none','all'):raise ValueError('Choose none/all disclosure or inherit')
         if isinstance(self.guard_position,list):object.__setattr__(self,'guard_position',tuple(self.guard_position))
         if self.guard_position!=('uniform',):raise ValueError('Only uniform ordered guard-position items are supported')

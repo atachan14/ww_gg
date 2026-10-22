@@ -301,7 +301,11 @@ def create_app(test_config=None, *, deployment=False):
                 try:extra[key]=json.loads(values[0]) if key in ('seer_position','guard_position','fake_seer_policy') else values[0]
                 except json.JSONDecodeError as exc:raise ValueError('占い位置を確認してください。') from exc
             elif state and key in state['policy']:extra[key]=state['policy'][key]
-        strategy = Strategy(one("day"), one("night"), inclusion == ["1"],report_mode,**extra)
+        cutoff=request.form.getlist('win_cutoff')
+        if cutoff not in ([],['0'],['1']):raise ValueError('勝利確定の省略を確認してください。')
+        # Missing field is the legacy API/saved-policy compatibility path.
+        extra['win_cutoff']=cutoff==['1'] if cutoff else (state or {}).get('policy',{}).get('win_cutoff',False)
+        strategy = Strategy('max' if extra['win_cutoff'] else one("day"), one("night"), inclusion == ["1"],report_mode,**extra)
         validate_strategy(rules, strategy)
         if not rules.allow_repeat_guard and (hunters if hunters is not None else (state or {}).get('hunters',0)):
             if (hunters if hunters is not None else state.get('hunters',0))!=1:
@@ -381,6 +385,7 @@ def create_app(test_config=None, *, deployment=False):
         except DisclosureInconsistent as exc:
             disclosure_error=str(exc);role_state=structural_roles(state);rules,progress=role_state.replay_result
         strategy = Strategy(**state["policy"])
+        cutoff_details=False
         manual = state.get("seer_mode") == "information-fixed-v1"
         from werewolf.seer_manual import pending as manual_pending
         role_evidence_pending = manual_pending(state) if manual and not progress.finished and generated_current is None else None
@@ -418,6 +423,9 @@ def create_app(test_config=None, *, deployment=False):
                     if app.config.get('ANONYMOUS_NIGHT_PREVIEW') and generated_current is None and navigation_current is None:
                         from werewolf.anonymous_value import initial_forecast
                         forecast=initial_forecast(role_state.owner)
+                    if forecast is None and navigation_current is not None and request.args.get('details')!='1' and navigation_current.navigation.node.win_certificate():
+                        from werewolf.forecast_result import Forecast
+                        forecast=Forecast(Fraction(1),(),pending_metrics=('win_cutoff_details',));cutoff_details=True
                     if forecast is None:
                         forecast=role_state.forecast(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
                     if isinstance(forecast,FuturePending):
@@ -447,7 +455,7 @@ def create_app(test_config=None, *, deployment=False):
                 event_history,alive=board.history,board.alive
         if roles_only and night_context:night_context={**night_context,'pending':True}
         display_selection = (night_context['observation']['deaths'][0] if night_context and night_context['observation'] and len(night_context['observation']['deaths'])==1 else None) if night_context else state['selection']
-        if not night_context and not finished and not seer_pending and display_selection is None and getattr(strategy, board.phase) == 'max':
+        if not night_context and not finished and not seer_pending and display_selection is None and action_values and getattr(strategy, board.phase) == 'max':
             score = 'village_win' if board.phase == 'day' else 'wolf_win'
             best = max(getattr(value, score) for value in action_values.values())
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
@@ -472,7 +480,7 @@ def create_app(test_config=None, *, deployment=False):
             finished=finished,manual=manual,guard_scope_pending=guard_scope_pending,
             probability_pending=seer_pending if role_evidence_pending or disclosure_error else None)
         players=player_view.players
-        return render_template("main.html", navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None or navigation_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
@@ -717,7 +725,7 @@ def create_app(test_config=None, *, deployment=False):
     def start():
         draft = SetupDraft.from_form(request.form)
         try:
-            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "allow_repeat_guard", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy"}
+            allowed = {"players", "wolves", "citizens", "mediums", "seers", "hunters", "day", "night", "allow_self_bite", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "seer_mode", "initial_seer", "allow_repeat_guard", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy", "win_cutoff"}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if not set(request.form) <= allowed:
@@ -922,7 +930,7 @@ def create_app(test_config=None, *, deployment=False):
         if not revision_matches(state):
             return render_main(state, "画面が更新されています。現在の画面で選び直してください。", 409)
         try:
-            allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "strategy_ui", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
+            allowed = {"revision", "target", "day", "night", "include_self_bite", "fake_reports", "cco_villager", "cco_medium", "model", "strategy_ui", "disclosure_common", "seer_disclosure", "medium_disclosure", "seer_position", "guard_position", "fake_seer_policy", "win_cutoff"} | {'co_' + str(i) for i in range(1, state['players'] + 1)}
             allowed |= {'cco_'+role for role in VILLAGE_ROLES}
             allowed |= {'cco_present_' + role for role in VILLAGE_ROLES} | {'cco_conditions_' + role for role in VILLAGE_ROLES}
             if state.get("seer_mode") == "information-fixed-v1":

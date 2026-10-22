@@ -37,7 +37,8 @@
     </section>
     </div>
 
-    <input type="hidden" name="day" value="max"><input type="hidden" name="night" value="max">
+    <label class="exclusive-field">勝利確定の省略<select name="win_cutoff" data-setup-cutoff><option value="1" selected>On</option><option value="0">Off</option></select></label>
+    <label class="exclusive-field">処刑位置<select name="day" data-setup-day><option value="max">期待勝率最大化</option><option value="random" disabled>均等化</option></select></label><input type="hidden" name="night" value="max">
     <div class="phase-footer"><div class="footer-inner">{% include 'footer_help.html' %}{{ phase_button(1, 'day') }}</div></div>
   </form>
 </main>

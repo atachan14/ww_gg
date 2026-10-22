@@ -138,7 +138,7 @@ class ClosedCalculation:
         engine.anonymous_nights=anonymous
         if anonymous:
             from .anonymous_value import Evaluator
-            engine.anonymous_values=Evaluator(strategy.day,strategy.night)
+            engine.anonymous_values=Evaluator(strategy.day,strategy.night,strategy.win_cutoff)
         engine.retain_complete_abilities=aggregate_reports
         object.__setattr__(self,'_ClosedCalculation__engine',engine)
         with calculation_budget(max_work,max_seconds=max_seconds):
@@ -427,6 +427,11 @@ class _Node:
                 for target,p in e.wolf_policy(s.public,s.public_state,s.past,info.initial_roster,info.attacks):
                     result.append(WolfChoice(info,mass,target,p,owned))
         return tuple(result)
+
+    def win_certificate(self):
+        from .win_certificate import certify
+        s=self.__source;e=self.__calculation._ClosedCalculation__engine
+        return certify(s.public,s.public_state,s.private,e.strategy,e.rules,s.observer)
 
     def forecast(self):
         e=self.__calculation._ClosedCalculation__engine;s=self.__source

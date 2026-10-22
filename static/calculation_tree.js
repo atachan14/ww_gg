@@ -104,7 +104,7 @@
    function updated(d,label,column,path,reach){
     const identity='updated:'+d.node;
     if(d.public_bundle&&sharedBoards.has(identity))return sharedBoards.get(identity);
-    const next=new Set([...path,d.node]),item=make('board',column,{d,id:d.node,text:label,update:true,sharedIdentity:!!d.public_bundle,contexts:new Set(),lazy:!d.winner&&!d.actions},path.has(d.node)?[]:choices(d,next,reach));
+    const next=new Set([...path,d.node]),item=make('board',column,{d,id:d.node,text:label,update:true,sharedIdentity:!!d.public_bundle,contexts:new Set(),lazy:!d.winner&&!d.win_certificate&&!d.actions},path.has(d.node)?[]:choices(d,next,reach));
     if(d.public_bundle)sharedBoards.set(identity,item);return item;
    }
    function build(id,path=new Set(),arrival,reach='1',context){
@@ -126,10 +126,10 @@
      return make('board',base(phase),{d:timeline.before,id:timeline.before.node},[{probability:null,item:tail}]);
     }
     if(native&&d.public_bundle&&sharedBoards.has(id)){const item=sharedBoards.get(id);if(context)item.contexts.add(context);return item;}
-    if(native){const next=new Set([...path,id]),children=path.has(id)?[]:[...choices(d,next,reach),...(d.manual_updates||[]).map(update=>({probability:update.probability,item:build(update.node,next,undefined,reach)})).filter(edge=>edge.item)],item=make('board',base(phase)+(d.navigation_depth||0),{d,id,arrival,text:d.navigation_label,update:!!d.navigation_label,shared:!!d.public_bundle,contexts:new Set(context?[context]:[]),lazy:!d.winner&&!d.actions},children);if(d.public_bundle)sharedBoards.set(id,item);return item;}
+    if(native){const next=new Set([...path,id]),children=path.has(id)?[]:[...choices(d,next,reach),...(d.manual_updates||[]).map(update=>({probability:update.probability,item:build(update.node,next,undefined,reach)})).filter(edge=>edge.item)],item=make('board',base(phase)+(d.navigation_depth||0),{d,id,arrival,text:d.navigation_label,update:!!d.navigation_label,shared:!!d.public_bundle,contexts:new Set(context?[context]:[]),lazy:!d.winner&&!d.win_certificate&&!d.actions},children);if(d.public_bundle)sharedBoards.set(id,item);return item;}
     const next=new Set([...path,id]),compositions=d.compositions||[{node:id,label:'内訳未取得',probability:'1'}];
     const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id,lazy:!c.winner&&!c.actions},choices(c,next,mass(reach,composition.probability)))};});
-    return make('board',base(phase),{d,id,arrival,lazy:!d.winner&&!d.compositions?.length},children);
+    return make('board',base(phase),{d,id,arrival,lazy:!d.winner&&!d.win_certificate&&!d.compositions?.length},children);
    }
    const complete=build(rootId);if(!complete)return;const tree=expansion.project(complete);
    const seen=new Set();function collect(item){if(seen.has(item))return;seen.add(item);entries.push(item);for(const child of item.children){collect(child.item);links.push([item,child.item,child.probability,child]);}}collect(tree);

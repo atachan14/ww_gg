@@ -30,8 +30,9 @@ def alive(b):
     dead={d.target for d in b.history};return tuple(p for group in b.groups for p in group if p not in dead)
 
 class Evaluator:
-    def __init__(self,day='random',night='random'):
+    def __init__(self,day='random',night='random',win_cutoff=False):
         if day not in ('random','max') or night not in ('random','max'):raise ValueError('Existing random/MAX choices required')
+        self.win_cutoff=win_cutoff and day=='max';self.cutoff_hits=0
         self.day=day;self.night=night;self.values={};self.policies={};self.scores={}
     def scalar(self,b):
         living=set(alive(b));groups=[]
@@ -44,6 +45,9 @@ class Evaluator:
     def value(self,b):
         b=self.scalar(b)
         if b in self.values:return self.values[b]
+        from .win_certificate import certify_anonymous
+        if certify_anonymous(b,self.win_cutoff) is not None:
+            self.cutoff_hits+=1;self.values[b]=F(1);return F(1)
         tick();terminal={winner(a.population) for m,a in b.p.rows}
         if len(terminal)==1 and None not in terminal:result=F(next(iter(terminal))=='village')
         elif None not in terminal or len(terminal)>1:raise ValueError('Separate observed terminal states before evaluation')
@@ -178,5 +182,5 @@ def initial_forecast(data):
     hit,value=data.runtime.get(key)
     if hit:return value
     owner=Belief.initial((tuple(range(1,g.players+1)),),dict(wolf=g.wolves,seer=g.seers,villager=g.players-g.wolves-g.seers),g.rules.initial_seer)
-    result=Evaluator(policy.day,policy.night).forecast(owner)
+    result=Evaluator(policy.day,policy.night,policy.win_cutoff).forecast(owner)
     data.runtime.put(key,result);return result

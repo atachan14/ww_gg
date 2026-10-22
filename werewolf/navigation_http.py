@@ -19,7 +19,9 @@ def register_navigation(app,store,owner,render=None):
         return identity,data,store.get(identity,data)
     def summary(doc):
         current=NavigationCurrent(doc.game);row=doc.game.occurrence
-        forecast=current.roles.forecast() if not current.roles.progress.finished else None
+        from .forecast_result import Forecast
+        from fractions import Fraction
+        forecast=(Forecast(Fraction(1),()) if doc.game.node.win_certificate() else current.roles.forecast()) if not current.roles.progress.finished else None
         pending=getattr(forecast,'reason',None)
         total=None if pending else current.roles.progress.total_values(forecast)
         result=dict(revision=doc.revision,current=current.metadata,root=doc.game.history.root,

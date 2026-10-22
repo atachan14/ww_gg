@@ -1,6 +1,7 @@
 
 <div id="strategy-editor" data-seed='{{ strategy_seed|tojson }}'></div>
 <input type="hidden" name="model" value="{{ state.get('model','equal') }}">
+<input type="hidden" name="win_cutoff" value="{{ '1' if state.policy.get('win_cutoff',false) else '0' }}">
 <input type="hidden" name="day" value="{{ state.policy.day }}">
 <input type="hidden" name="night" value="{{ state.policy.night }}">
 <input type="hidden" name="include_self_bite" value="{{ '1' if state.policy.include_self_bite else '0' }}">

@@ -20,3 +20,16 @@ test('manual zero update opens its path and future while old nonzero alternative
  const root=refresh();assert.equal(root.children[0].item.expanded,false);assert.equal(root.children[1].item.expanded,true);assert.equal(root.children[1].item.children[0].item.expanded,true);
  state.toggle(root.children[0].item.key);refresh();assert.equal(state.item(root.children[0].item.key).expanded,true);
 });
+
+
+test('certified values stop automatic futures without fabricating terminal winner',async()=>{
+ const make=()=>n('board','0',[e(n('board','cert',[e(n('action','unknown',[e(n('board','future',[],true))]))],false,{d:{win_certificate:{rule:'public-roll-v1'}}}))]);
+ const {state,refresh}=setup(make);await state.auto('root',()=>assert.fail('certificate must not explore'),refresh,{current:'0',path:['0']});
+ const cert=refresh().children[0].item;assert.equal(cert.expanded,false);assert.equal(cert.d.winner,undefined);
+});
+test('certified ancestors preserve manual zero Current path only; Current certificate stops',async()=>{
+ const make=()=>n('board','cert',[e(n('action','old',[e(n('board','future',[],true))])),e(n('board','manual',[e(n('board','later',[],true))],false,{d:{win_certificate:{}}}),'0')],false,{d:{win_certificate:{}}});
+ const {state,refresh}=setup(make);await state.auto('root',()=>assert.fail('no automatic future requests'),refresh,{current:'manual',path:['cert','manual']});
+ const root=refresh();assert.equal(root.expanded,true);assert.equal(root.children[0].item.expanded,false);assert.equal(root.children[1].item.expanded,false);
+ state.toggle(root.children[0].item.key);refresh();assert.equal(state.item(root.children[0].item.key).expanded,true);
+});

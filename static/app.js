@@ -495,3 +495,12 @@ document.addEventListener('DOMContentLoaded',async()=>{
   }else install(doc);
  }catch(error){if(mounted.isConnected&&!generation){const pending=mounted.querySelector('[data-seer-pending]');if(pending)pending.textContent='勝率は未計算です。役職率は表示済みです。';mounted.querySelectorAll('[data-value-cell="dawn"],[data-value-cell="final"]').forEach(cell=>cell.textContent='未計算');const note=document.createElement('p');note.className='error';note.setAttribute('role','alert');note.textContent=error.message;mounted.append(note);}}
 });
+
+
+// The new-game option owns a fixed policy for all subsequent days.
+(() => {
+ const cutoff=document.querySelector('[data-setup-cutoff]'),day=document.querySelector('[data-setup-day]');
+ if(!cutoff||!day)return;
+ const sync=()=>{const on=cutoff.value==='1';day.querySelector('[value="random"]').disabled=on;if(on)day.value='max';};
+ cutoff.addEventListener('change',sync);sync();
+})();
