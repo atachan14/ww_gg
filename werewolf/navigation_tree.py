@@ -13,7 +13,7 @@ from .tree_public_updates import event_label,publication_label
 class NavigationTree:
     def __init__(self,document,role_order=None):
         self.document=document;self.role_order=role_order;self.views={};self.board_numbers={};self.origins={};self.origin_owners={}
-        self.snapshot=view_snapshot(document.data,document.game.history.state(document.game.history.root).source)
+        self.snapshot=view_snapshot(document.data,document.game.history.state(document.game.history.root).source,document.game.history.occurrence(document.game.history.root).names)
     def owner(self,key):return key.split('@',1)[0]
     def view(self,owner):
         if '@' in owner and owner not in self.views:

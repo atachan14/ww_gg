@@ -9,8 +9,8 @@ from .manual_public_input import PublicInput
 from .seer_acquisition import SeerReport
 
 class NavigationGame:
-    def __init__(self,node):
-        self.history=NavigationHistory(node);self.current=self.history.root
+    def __init__(self,node,*,names=None):
+        self.history=NavigationHistory(node,names=names);self.current=self.history.root
         self._forward={}
     @property
     def occurrence(self):return self.history.occurrence(self.current)
@@ -150,8 +150,8 @@ class NavigationGame:
         return self._commit(child,selector,kind='manual_public',weight=F())
     def export(self):return dict(rows=self.history.export(),current=self.current,forward=dict(self._forward))
     @classmethod
-    def restore(cls,node,document):
-        game=cls(node)
+    def restore(cls,node,document,*,names=None):
+        game=cls(node,names=names)
         for row in document['rows'][1:]:
             game.move(row['parent']);step=row['selector'];kind=step['kind'];names=game.occurrence.names
             if kind=='public_input':

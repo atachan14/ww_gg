@@ -68,6 +68,13 @@ class GuardObserver:
         return h.roles in self.allowed_roles
 
 
+def selected_guard(observer,board,actor,choices):
+    from .actor_information import GuardSelection
+    night=observer.board.day if isinstance(observer,GuardObserver) else observer.night if type(observer)is GuardSelection else None
+    if night==board.day and observer.actor==actor and observer.target in {p for p,q in choices}:return observer.target
+    return None
+
+
 @dataclass(frozen=True)
 class GuardContext:
     public: object
@@ -236,9 +243,8 @@ def guarded_outcomes(frame,outcomes,engine):
     for h in private.hypotheses:
         actor=next((p for p in b.alive if h.roles[3]&(1<<(p-1))),None)
         choices=((None,F(1)),) if actor is None else guard_choices(b,actor,engine.rules,engine.strategy.guard_position,guards=h.guards)
-        if (actor is not None and isinstance(observer,GuardObserver) and observer.actor==actor and
-                observer.board.day==b.day and observer.target in {p for p,q in choices}):
-            choices=((observer.target,F(1)),)
+        selected=selected_guard(observer,b,actor,choices) if actor is not None else None
+        if selected is not None:choices=((selected,F(1)),)
         if not choices:raise engine.pending('guard_no_legal_target_unselected')
         for target,q in choices:
             intent=GuardIntent(b.day,actor,target) if actor is not None else None

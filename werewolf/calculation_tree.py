@@ -16,10 +16,10 @@ from .calculation_budget import tick
 
 def input_snapshot(data):return sha256(data.inputs.encode()).hexdigest()[:20]
 
-def view_snapshot(data,source):
+def view_snapshot(data,source,names=None):
     if source.observer is None:return input_snapshot(data)
     from .public_convergence import state_key
-    return sha256(repr((input_snapshot(data),state_key(source))).encode()).hexdigest()[:20]
+    return sha256(repr((input_snapshot(data),state_key(source),tuple(range(1,source.public.player_count+1)) if names is None else names.forward)).encode()).hexdigest()[:20]
 
 def supported(data,board):
     g=data.game_data

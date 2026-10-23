@@ -79,9 +79,9 @@ class EvaluationGraph:
  def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={};self.day_decisions={};self.actions={};self.mornings={}
  def hunter_flow_scope(self,board,payload):
   e=self.engine
-  from .actor_information import PersonalInformation
+  from .actor_information import PersonalInformation,GuardInformation,GuardSelection
   from .seer_intervention import SeerObserver
-  return (board.initial_hunter_count==1 and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver))
+  return (board.initial_hunter_count==1 and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection))
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
  def record_action(self,board,payload,target,acquired,outcomes,value):
   if not self.hunter_flow_scope(board,payload):return

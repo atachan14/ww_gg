@@ -15,7 +15,7 @@ from .board_future import (SavedOrigin,GeneratedBoard,ActionEvidence,Publication
     OwnerInformationEvidence,ObservedActionEvidence,ObservedPublicationEvidence,outcome_key,publication_key,kernel_calculation)
 from .information_set_forecast import InformationSetForecast,Pending
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
-from .actor_information import PersonalInformation,WolfInformation,wolf_information_groups
+from .actor_information import PersonalInformation,WolfInformation,GuardInformation,GuardSelection,wolf_information_groups
 from .seer_intervention import SeerObserver
 from .exact import Strategy,ClaimPolicy,legal_targets
 from .action_flow import resolve_action
@@ -263,7 +263,7 @@ class _Node:
             else:engine.public_action_games[key]=game
 
     def personal(self,information):
-        if type(information) not in (PersonalInformation,SeerObserver,WolfInformation):raise ValueError('Typed owner information required')
+        if type(information) not in (PersonalInformation,SeerObserver,WolfInformation,GuardInformation,GuardSelection):raise ValueError('Typed owner information required')
         if type(information)is SeerObserver:
             from .seer_acquisition import Acquisition
             if type(information.acquisitions)is not tuple or any(type(a)is not Acquisition or a.player!=information.actor for a in information.acquisitions):
@@ -275,9 +275,18 @@ class _Node:
             raise ValueError('Use the generated past attack history')
         view=('wolf',information.initial_roster) if type(information)is WolfInformation else ('person',information.actor)
         if self.__view is not None and self.__view!=view:raise ValueError('Choose a personal view from the public root; do not combine owners')
-        if type(information) in (PersonalInformation,SeerObserver):
+        if type(information) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection):
             if type(information.actor)is not int or not 1<=information.actor<=s.public.player_count:raise ValueError('Owner outside original players')
             if type(information)is SeerObserver and (type(information.day)is not int or information.day<1 or type(information.target)is not int or not 1<=information.target<=s.public.player_count or information.target==information.actor):raise ValueError('Invalid owner scan intervention')
+        if type(information) in (GuardInformation,GuardSelection):
+            if any(g.night>=s.public.day for g in information.guards):raise ValueError('Only past guard records allowed')
+            if type(information)is GuardSelection:
+                if s.public.phase!='night' or information.night!=s.public.day:raise ValueError('Guard instruction belongs to current night')
+                from .guard_model import guard_choices
+                compatible=[h for h in s.private.hypotheses if information(h,s.private)]
+                choices={tuple(p for p,q in guard_choices(s.public,information.actor,self.__calculation.data.game_data.rules,self.__calculation._ClosedCalculation__strategy.guard_position,guards=h.guards)) for h in compatible}
+                if len(choices)!=1:raise Pending('guard_view_target_generation_support_unresolved')
+                if information.target not in next(iter(choices)):raise ValueError('Illegal owner guard target')
         with self.__calculation._ClosedCalculation__kernel():mass,child=self.__calculation._ClosedCalculation__engine.personal_view(s,information)
         groups=_fix(self.__groups,_owner_positions(information,s.public.player_count))
         return mass,self.__calculation._ClosedCalculation__node(child,groups,(*self.__path,('owner',information,child.observer)),view)

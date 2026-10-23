@@ -16,6 +16,7 @@
  async function send(operation,payload={}){
   if(busy)return;busy=true;
   try{
+   if(window.PersonalNavigation?.context){const result=await window.PersonalNavigation.request(operation==='advance'?'forward':operation);await window.PersonalNavigation.install(result);return result;}
    const response=await fetch('/navigation/'+operation,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({revision:Number(main().dataset.navigationRevision),...payload})});
    const result=await response.json();if(!response.ok)throw Error(result.error);await install(result);return result;
   }finally{busy=false;}

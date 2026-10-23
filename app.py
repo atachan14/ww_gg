@@ -95,6 +95,14 @@ def create_app(test_config=None, *, deployment=False):
                 html,status=render_main(current.data.to_game(),role_state=current.roles,roles_only=roles_only,navigation_current=current)
                 return html
         register_navigation(app,navigation_store,navigation_owner,render_navigation)
+        def render_personal(view):
+            from werewolf.navigation_current import NavigationCurrent
+            current=NavigationCurrent(view.game)
+            current.data=current.data.updated(revision=view.revision)
+            return render_main(current.data.to_game(),navigation_current=current,private_context=dict(view=view.export(),public_revision=view.public.revision))[0]
+        from werewolf.personal_navigation_http import register as register_personal_navigation
+        register_personal_navigation(app,navigation_document,render_personal,render_navigation)
+
 
     def navigation_active():
         if not app.config.get('PERSISTENT_TREE_PREVIEW'):return False
@@ -380,7 +388,7 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None):
+    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None, private_context=None):
         if navigation_current is not None:
             role_state=navigation_current.roles;state=navigation_current.data.to_game()
         if generated_current is not None:
@@ -471,10 +479,10 @@ def create_app(test_config=None, *, deployment=False):
             display_selection = min(target for target, value in action_values.items() if getattr(value, score) == best)
         from werewolf.public_log import migrate
         viewpoint_seed = None
-        if night_context and not finished and not disclosure_error:
+        if (night_context or navigation_current is not None and board.phase=='night') and not finished and not disclosure_error:
             from werewolf.private_adapter import viewpoint_roles, private_slots
             viewpoint_seed = {'roles': viewpoint_roles(board), 'revision': state['revision'],
-                              'board_id': state['public_log']['board_id'],
+                              'board_id': migrate(state)['board_id'],
                               'claims': list(board.claims), 'public_results': state.get('seer_inputs', []),
                               'slots': {str(p): private_slots(board, p, rules) for p in board.alive},
                               'guard_slots': {str(p): private_slots(board,p,rules,role='hunter') for p in board.alive},
@@ -492,7 +500,7 @@ def create_app(test_config=None, *, deployment=False):
         players=player_view.players
         from werewolf.seer_manual import report_slots
         seer_slots=report_slots(board,rules,navigation_current.source.public_state.rosters if navigation_current is not None else None)
-        return render_template("main.html", seer_slots=seer_slots,navigation_log=navigation_current.public_log if navigation_current is not None else None, cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", private_context=private_context,seer_slots=seer_slots,navigation_log=navigation_current.public_log if navigation_current is not None else None, cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None or navigation_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
@@ -1062,10 +1070,18 @@ def create_app(test_config=None, *, deployment=False):
     @app.post('/private-view')
     def private_view():
         from flask import jsonify
+        from werewolf.information_set_forecast import Pending
         state = game(validate_roles=not wants_calculation_stream())
         if state is None or not dawn_enabled(state):
             return jsonify(error='夜の視点表示はこのBoardでは利用できません。'), 404
-        if (not revision_matches(state) or request.form.getlist('board_id') != [state['public_log']['board_id']]):
+        private_owner=None
+        if navigation_active():
+            from werewolf.navigation_current import NavigationCurrent
+            private_owner=navigation_document()
+            state=NavigationCurrent(private_owner.game).data.updated(revision=private_owner.revision).to_game()
+            from werewolf.public_log import migrate,project
+            state=project(state,migrate(state))
+        if (request.form.getlist('revision') != [str(state['revision'])] or request.form.getlist('board_id') != [state['public_log']['board_id']]):
             return jsonify(error='Boardが変更されています。再読み込みしてください。'), 409
         try:
             if set(request.form) != {'revision', 'board_id', 'payload'} or len(request.form.getlist('payload')) != 1:
@@ -1075,6 +1091,20 @@ def create_app(test_config=None, *, deployment=False):
                     payload['role'] not in ('wolf', 'seer', 'hunter') or
                     type(payload['players']) is not list or type(payload['results']) is not list):
                 raise ValueError('視点入力の形式が不正です。')
+            if private_owner is not None and payload['role']=='hunter':
+                from werewolf.guard_view_document import GuardViewDocument
+                with private_owner.lock:
+                    if request.form.get('revision')!=str(private_owner.revision):return jsonify(error='Board changed'),409
+                    view=GuardViewDocument(private_owner,private_owner.game.current,payload['players'],payload['results'])
+                    from werewolf.personal_navigation_http import remember
+                    remember(private_owner,view)
+                def guard_events():
+                    result=view.result(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+                        max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+                    yield dict(event='complete',**result,board_id=state['public_log']['board_id'],revision=state['revision'])
+                if wants_calculation_stream():return calculation_stream(guard_events,view='hunter')
+                result=next(guard_events());result.pop('event')
+                return jsonify(result)
             if wants_calculation_stream():
                 def events():
                     from werewolf.board_roles import prepare_private
@@ -1106,6 +1136,8 @@ def create_app(test_config=None, *, deployment=False):
                                             max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
             if budget_stop() is not None:result={**result,'reason':stop_message(),'budget_kind':budget_stop()['kind']}
             return jsonify(**result, board_id=state['public_log']['board_id'], revision=state['revision'])
+        except Pending as exc:
+            return jsonify(error=exc.reason,unsupported=True),422
         except (ValueError, TypeError, KeyError, DisclosureInconsistent) as exc:
             return jsonify(error=str(exc)), 400
 

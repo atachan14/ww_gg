@@ -1,6 +1,7 @@
 /* Mount private navigation without writing public forms, cookies or logs. */
 (() => {
  window.initializeBoardPrivateTable=()=>{
+  if(document.querySelector('#personal-navigation-seed'))return;
   const seedNode=document.querySelector('#board-viewpoint-seed');
   if(!seedNode||seedNode.dataset.initialized)return;
   seedNode.dataset.initialized='true';
@@ -48,7 +49,8 @@
   };
   root.addEventListener('viewpointchange',event=>{
    const {mode,role,selected}=event.detail;
-   if(mode==='public')return;
+   if(mode==='selecting'&&window.PersonalNavigation?.context)window.PersonalNavigation.activate(null);
+   if(mode==='public'){if(controller&&window.PersonalNavigation?.context)window.PersonalNavigation.activate(null);return;}
    if(scope)scope.textContent=`${seed.roles[role].label}（公開情報＋秘密情報）`;
    heading();
    if(mode==='selecting'){
@@ -67,6 +69,7 @@
     return result;
    },
    show:result=>{
+    if(result.private_view)window.PersonalNavigation?.activate({view:result.private_view,public_revision:result.revision});
     for(const player of result.players){
      const row=table.querySelector(`tr[data-player="${player.id}"]`);
      for(const cell of row.querySelectorAll('[data-value-cell]')){

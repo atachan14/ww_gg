@@ -4128,3 +4128,72 @@ wiring are not claimed migrated. Covered navigation starts from an explicitly
 owned typed personal node. Non-hunter personal, incomplete ordinary adapters and
 native anonymous-belief ownership retain their documented boundaries. Legitimate
 value-only reductions do not gain invented detailed states or child values.
+
+
+Table guard adapter checkpoint: added immutable GuardInformation (owner past
+GuardIntent records) and GuardSelection (one current-night instruction), using the
+same selected_guard predicate as existing GuardObserver in full/reduced physical
+kernels. Current instructions expire by night number; subsequent choices remain
+configured uniform choices. This adds no hunter MAX or new guard semantics.
+
+GuardViewDocument takes the existing Table role/players/results evidence, validates
+it through condition_private, maps it to the exact public occurrence and conditions
+P through its common node. Actor role-table belief is conditioned from Q separately,
+matching the old Table contract. It owns an independent cursor/history and saves
+only user evidence, public-owner anchor and generator selectors. Public navigation
+is untouched. Optional root NameMaps preserve a public representative's displayed
+numbers and are checked again on cold history restore.
+
+Focused tests3 passed in10.896s: exact final/dawn results vs existing guard_forecast
+with/without repeat guard; Day2 past guard inputs and no-repeat target exclusion;
+cold public plus private-view reconstruction; complete public journal invariance;
+typed guard/target bijection; rejection of injected posterior/selection weights.
+Actual /private-view HTTP/UI wiring, broader regression and real-browser guard
+input/persist/Tree integration remain pending. Uncommitted; normal18821 remains
+1aae531. No saved data was deleted and no normal server was restarted.
+
+
+Table guard HTTP checkpoint: persistent /private-view now binds hunter evidence to
+NavigationCurrent's exact occurrence, not a replayed root game. Public Board ID
+and revision are projected with the existing public-log adapter. Evidence creates
+an independent GuardViewDocument; public history and cursor are not edited.
+JSON and NDJSON return the same exact table values and a cold-restorable input
+recipe, with unsupported states remaining explicit rather than fabricated.
+The existing Table widget already consumes this endpoint; no private Tree context
+switch or private Current HTML binding is claimed in this checkpoint.
+
+Focused real HTTP test passed: stale revision409, JSON/stream exact equality,
+owner-conditioned input reconstruction and public journal invariance. Combined
+44 tests passed in34.621s (guard view document, existing private adapter,
+no-repeat guard, guard forecast, personal evaluated records and projections).
+Normal18821 remains1aae531; no server restart/commit applied for this partial unit.
+Remaining: scoped private Tree transport and Table view switching/cursor binding,
+client evidence restore, actual browser integrated verification, then activation.
+
+
+Table guard stage delivery: /private-navigation consumes the same owned input
+recipes and evaluator records. Tree requests, private Current/back/forward and
+cold restoration have a separate cursor, snapshot and revision. Failed cursor
+updates roll back through NavigationGame.fork. Public history/revision is unchanged.
+The normal night Table now exposes its existing viewpoint controls on persistent
+Boards. Existing guard-history inputs feed /private-view; the shared Tree widget
+switches scope and private Current renders a labeled, read-only personal Board.
+Public return restores the public cursor. Only known private history is traversed
+by Footer; additional futures are selected from evaluated Tree nodes. Public edits
+are not submitted from a private projection. Client storage retains validated input
+recipes, never trusted computed posteriors; stale/foreign views are rejected.
+
+Verified:82 Python tests57.285s;52 Tree interaction/layout JS tests; final HTTP
+negative tests; isolated actual Table guard input, own-memory/no-repeat edit,
+owner4/5 switching, evaluator Tree, private Current/Table Day2, actual Footer
+back/forward, browser cold restore and public return. Desktop Tree and narrow
+personal Board captures inspected. A duplicated guard-validation block accidentally
+inserted into public observe was found by broad restore tests and removed.
+
+Finite remaining adapter inventory: nonhunter Table views still use their existing
+standalone adapters; generic personal daytime policy/transition recording and native
+anonymous-belief personal ownership are not migrated by this stage. Hunter MAX and
+other previously unsupported strategies remain unsupported as before. Value-only
+reductions remain valid boundaries, with no fabricated detailed child states. This
+stage does not add new role/strategy semantics or enable public editing in a private
+future projection. No saved data deleted and no external push/deployment performed.

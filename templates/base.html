@@ -10,6 +10,7 @@
   <script src="{{ url_for('static', filename='calculation_wait.js') }}" defer></script>
   <script src="{{ url_for('static', filename='probability_display.js') }}" defer></script>
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+  {% if config.get("PERSISTENT_TREE_PREVIEW") %}<script src="{{ url_for('static', filename='personal_navigation.js') }}" defer></script>{% endif %}
   {% if config.get("PERSISTENT_TREE_PREVIEW") %}<script src="{{ url_for('static', filename='board_navigation.js') }}" defer></script>{% endif %}
   {% if config.get('GAME_TREE_PREVIEW') %}<script src="{{ url_for('static', filename='tree_viewport.js') }}" defer></script><script src="{{ url_for('static', filename='tree_expansion.js') }}" defer></script><script src="{{ url_for('static', filename='tree_layout.js') }}" defer></script><script src="{{ url_for('static', filename='calculation_tree.js') }}" defer></script>{% endif %}
 {% if config.get("HYBRID_TABLE_PREVIEW") %}<script src="{{ url_for('static',filename='board_draft.js') }}" defer></script><script src="{{ url_for('static',filename='board_table.js') }}" defer></script>{% endif %}

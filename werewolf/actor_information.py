@@ -81,10 +81,30 @@ class PersonalInformation:
         return owns and all(a in h.acquisitions for a in self.acquisitions)
 
 
+@dataclass(frozen=True)
+class GuardInformation:
+    actor:int
+    guards:tuple=()
+    def __post_init__(self):
+        from .guard_effect import GuardIntent
+        if type(self.actor)is not int or self.actor<1:raise ValueError('Guard owner required')
+        if type(self.guards)is not tuple or any(type(g)is not GuardIntent or g.actor!=self.actor or type(g.night)is not int or g.night<1 or type(g.target)is not int or g.target<1 or g.target==self.actor for g in self.guards):raise ValueError('Only owner past guard records allowed')
+        if len({g.night for g in self.guards})!=len(self.guards):raise ValueError('One guard per night required')
+    def __call__(self,h,state):return bool(h.roles[3]&(1<<(self.actor-1))) and all(g in h.guards for g in self.guards)
+
+@dataclass(frozen=True)
+class GuardSelection(GuardInformation):
+    night:int=0
+    target:int=0
+    def __post_init__(self):
+        super().__post_init__()
+        if type(self.night)is not int or self.night<1 or type(self.target)is not int or self.target<1 or self.target==self.actor:raise ValueError('Current guard instruction required')
+
+
 def condition_personal(state,observation):
     """One semantic filtering pass, normalized complete histories and mass."""
     from .seer_intervention import SeerObserver
-    if type(observation) not in (PersonalInformation,SeerObserver,WolfInformation):
+    if type(observation) not in (PersonalInformation,SeerObserver,WolfInformation,GuardInformation,GuardSelection):
         raise ValueError('Typed owner information required')
     if type(observation)is WolfInformation:
         known={a.night:a.target for a in observation.attacks}
@@ -130,5 +150,6 @@ def information_positions(info,n):
     """Named owner evidence that a constructed partition must fix."""
     if type(info)is WolfInformation:
         return tuple(p for p in range(1,n+1) if info.initial_roster&(1<<(p-1)))+tuple(a.target for a in info.attacks)
+    if type(info) in (GuardInformation,GuardSelection):return (info.actor,*(g.target for g in info.guards),*((info.target,) if type(info)is GuardSelection else ()))
     from .seer_intervention import SeerObserver
     return (info.actor,*(a.target for a in info.acquisitions),*((info.target,) if type(info)is SeerObserver else ()))

@@ -3,6 +3,7 @@
  const isZero=value=>value!==null&&value!==undefined&&/^[+-]?0+(?:\.0+)?$/.test(String(value).split('/')[0]);
  function create(){let automatic=null;const open=new Set(),pending=new Map(),runs=new Map(),items=new Map();let projected=new Map();return {
   isOpen:id=>open.has(id),
+  cancel(){automatic=null;runs.clear();},
   toggle(id){automatic?.blocked.add(id);if(open.has(id)){
    open.delete(id);const descendants=new Set(),collect=item=>{if(!item||descendants.has(item.key))return;descendants.add(item.key);for(const edge of item.next||[])collect(edge.item);};collect(items.get(id));
    const visible=new Set(),visit=item=>{if(!item||visible.has(item.key))return;visible.add(item.key);if(open.has(item.key))for(const edge of item.next||[])visit(edge.item);};visit(items.get('root'));

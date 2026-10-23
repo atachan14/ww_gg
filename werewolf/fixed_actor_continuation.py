@@ -106,10 +106,9 @@ def physical_hypothesis_outcomes(b,h,engine,p,observer=None):
     actor=next((a for a in b.alive if h.roles[3]&(1<<(a-1))),None)
     if b.phase=='night' and actor is not None:
         choices=guard_choices(b,actor,rules,engine.strategy.guard_position,guards=h.guards)
-        from .guard_model import GuardObserver
-        if (isinstance(observer,GuardObserver) and observer.actor==actor and
-                observer.board.day==b.day and observer.target in {g for g,q in choices}):
-            choices=((observer.target,F(1)),)
+        from .guard_model import selected_guard
+        selected=selected_guard(observer,b,actor,choices)
+        if selected is not None:choices=((selected,F(1)),)
         if not choices:raise engine.pending('guard_no_legal_target_unselected')
         resolved=tuple((q,resolve_fixed_guard_night(single,GuardIntent(b.day,actor,g),p,rules,
                         previous=previous_guard(h.guards,actor,b.day))[0].board,

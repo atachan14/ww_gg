@@ -52,10 +52,12 @@ class Occurrence:
     def selector(self):return json.loads(self._selector)
 
 class NavigationHistory:
-    def __init__(self,node):
+    def __init__(self,node,*,names=None):
         self._states={};self._by_source={};self._occurrences={};self._children={}
         state=self._intern(node)
-        self.root=self._append(None,state,None,NameMap.identity(node.read().public.player_count),'root',F(1)).key
+        mapping=NameMap.identity(node.read().public.player_count) if names is None else names
+        if type(mapping)is not NameMap or len(mapping.forward)!=node.read().public.player_count:raise ValueError('Root player mapping required')
+        self.root=self._append(None,state,None,mapping,'root',F(1)).key
     def _intern(self,node):
         from .public_convergence import state_key
         source=(state_key(node.read()),node.solver_identity)
