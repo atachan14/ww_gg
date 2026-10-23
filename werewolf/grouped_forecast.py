@@ -33,7 +33,11 @@ class GroupedForecast(InformationSetForecast):
     def joint_night_value(self,source):
         from .anonymous_night import shared_night
         program=shared_night(self,source,self.groups)
-        if program is not None:return program.root.value(self)
+        if program is not None:
+            value=program.root.value(self)
+            graph=getattr(self,'evaluation_graph',None)
+            if graph is not None:graph.record_program(source,self.groups,program,value)
+            return value
         from .joint_action_kernel import supported,compile_actions,group_outcomes,continuation_value
         if not supported(self,source):return None
         groups=compile_actions(self,source,self.groups)

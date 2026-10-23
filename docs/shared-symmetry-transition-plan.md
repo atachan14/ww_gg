@@ -3696,3 +3696,33 @@ advances with Footer and Current reaches Day2 retaining actual execution6. Deskt
 and narrow screenshots were captured; no browser exceptions. Separate Current
 Board forecast/render still took roughly40s and is not included in the fast Tree
 expansion measurements. This remains outside the first graph migration scope.
+
+
+## Completed CO ability-program records: partial next stage (2026-10-23)
+
+The next general scope is an ordinary CO/public-report night with all-random
+policies, no hunter/self-bite/personal observer and a named-source input.
+GroupedForecast records ProgramRecord only AFTER shared_night.root.value
+completes. The record retains that exact program object, exact value and the
+continuation sources actually evaluated. Tree requests the evaluator record
+first; a shortcut/cache route that never produced this program stays an explicit
+fallback rather than compiling detail and calling it an evaluated trace. MAX and
+zero-policy alternative evaluation remain unchanged and are not newly certified.
+
+This unit is deliberately partial: ability stages are evaluator-owned, while
+public convergence, morning arrival/update projection and old Current recipes
+still use the established reconstruction. API owner=mixed-evaluator-program,
+ability_program=evaluated, public_projection=legacy-reconstruction makes that
+boundary explicit. It is NOT a fully migrated CO path or a new speed claim.
+
+Validation: 35 targeted graph/navigation/public-convergence/public-update tests
+passed (81.316s). The four new record tests were rerun with an independent
+InformationSetForecast named oracle (4 passed, 0.345s). Tests prove exact weighted
+stage value, object identity, full-source identity, MAX exclusion and that Tree
+can expand the recorded CO program with shared_night patched to reject another
+compilation. Normal18821 remains on tested2ba5916.
+
+Next unit: retain the pre-publication states already formed during evaluation,
+then derive public convergence and arrival/update edges from those records,
+comparing full Q/P/private histories against the current reconstruction. Only
+after that passes should CO public projection claim evaluator ownership.

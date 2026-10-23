@@ -26,8 +26,15 @@ class Refinement:
  edges:tuple
  reason:str='public-state-refinement'
 
+@dataclass(frozen=True)
+class ProgramRecord:
+ program:object
+ value:F
+ evaluated_sources:tuple
+ reason:str='evaluated-role-ordered-program'
+
 class EvaluationGraph:
- def __init__(self,engine):self.engine=engine;self.values={};self.refinements={}
+ def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={}
  def supports(self,source):
   e=self.engine;b=source.public
   return (source not in getattr(e,'anonymous_beliefs',{})
@@ -35,6 +42,25 @@ class EvaluationGraph:
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
    and not any(c!='latent' for c in b.claims) and not source.past and not b.reports
    and e.exchangeable(b))
+ def program_scope(self,source):
+  e=self.engine;b=source.public
+  return (b.phase=='night' and not b.winner and source.observer is None
+   and not b.initial_hunter_count and not e.strategy.include_self_bite
+   and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
+   and any(c in ('seer','medium') for c in b.claims)
+   and source not in getattr(e,'anonymous_beliefs',{}))
+ def record_program(self,source,groups,program,value):
+  if not self.program_scope(source) or program.method!='anonymous-relational-v1':return
+  # Record only after the evaluator has completed this exact owned program.
+  # No zero-policy path receives an invented continuation value.
+  self.programs[source,tuple(groups)]=ProgramRecord(program,value,tuple(program.values))
+ def evaluated_program(self,source,groups,*,evaluate=False):
+  key=(source,tuple(groups))
+  if key not in self.programs and evaluate and self.program_scope(source):
+   self.engine.solve(*source,physical=source.physical)
+  # A count/value shortcut may never have formed an ability program. It remains
+  # an explicit fallback, rather than compiling detail to pretend it was traced.
+  return self.programs.get(key)
  def record_counts(self,source,value):
   if not self.supports(source):return
   b=source.public;counts={}

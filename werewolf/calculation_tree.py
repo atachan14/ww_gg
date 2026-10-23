@@ -324,6 +324,14 @@ class CalculationTree:
         from .ability_factorization import factor
         record['ability_choices']=factor(self,node,result)
 
+    def _program(self,node):
+        graph=getattr(self.engine,'evaluation_graph',None)
+        if graph is not None:
+            with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
+                record=graph.evaluated_program(node.read(),node.groups,evaluate=True)
+            if record is not None:return record.program
+        return node._night_program()
+
     def _recorded_night(self,key):
         row=self.nodes[key];node=row['node']
         graph=getattr(self.engine,'evaluation_graph',None)
@@ -353,7 +361,7 @@ class CalculationTree:
         if 'public_bundles' in record:return record['public_bundles']
         recorded=self._recorded_night(key)
         if recorded is not None:return recorded
-        node=record['node'];program=node._night_program();groups=program.groups;result={}
+        node=record['node'];program=self._program(node);groups=program.groups;result={}
         with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
             if getattr(program,'belief_flow',None) is not None:
                 from .anonymous_materialization import source as named_boundary
@@ -430,8 +438,8 @@ class CalculationTree:
             relative,owned=entry['flow'].branch(entry['observation'],prefix,counter)
             source=named_boundary(owned,source);self.engine.anonymous_beliefs[source]=owned
         elif prefix:
-            relative,source=condition_prefix(source,self.nodes[key]['node'].read(),self.nodes[key]['node']._night_program().groups,prefix)
-        child=self.nodes[key]['node']._public_night(source,entry['target'],public,self.nodes[key]['node']._night_program().groups,prefix,counter)
+            relative,source=condition_prefix(source,self.nodes[key]['node'].read(),self._program(self.nodes[key]['node']).groups,prefix)
+        child=self.nodes[key]['node']._public_night(source,entry['target'],public,self._program(self.nodes[key]['node']).groups,prefix,counter)
         route=(*self.nodes[key]['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[asdict(step) for step in prefix],counter=counter)})
         child_key=self.register(child,route)
         self.nodes[child_key]['public_parent_bundle']=entry['node']
@@ -446,7 +454,7 @@ class CalculationTree:
         row=self.nodes[key]
         if 'night_stages' in row:return row['night_stages']
         from .night_program import NightStage
-        node=row['node'];program=node._night_program()
+        node=row['node'];program=self._program(node)
         if program is None:return None
         def leaf_row(leaf):
             child=node._stage_child(leaf)
@@ -466,7 +474,7 @@ class CalculationTree:
                     from .public_convergence import public_transport,transport_source,digest
                     grouped={}
                     for mass,counter,leaf,images in stage.outcomes():
-                        mapping=public_transport(self.nodes[base_key]['node'].read(),leaf.source,self.nodes[base_key]['node']._night_program().groups)
+                        mapping=public_transport(self.nodes[base_key]['node'].read(),leaf.source,self._program(self.nodes[base_key]['node']).groups)
                         public=digest(transport_source(leaf.source,mapping));entry=grouped.setdefault(public,F());grouped[public]=entry+(mass if stage.mass else counter)
                     return dict(leaves=[dict(node=bundles[public]['node'],context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)) if symbolic and getattr(program,'private_contexts',True) else None,probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
                 return dict(leaves=[dict(node=leaf_row(leaf),probability=str((mass if stage.mass else counter)/total),variants=[dict(node=leaf_row(image),transport=list(mapping)) for image,mapping in images]) for mass,counter,leaf,images in stage.outcomes()])
@@ -643,7 +651,7 @@ class CalculationTree:
             origin=row.get('distribution_origin')
             graph=getattr(self.engine,'evaluation_graph',None)
             recorded=graph is not None and graph.supports(source)
-            program=node._night_program() if not recorded and not origin and source.public.phase=='night' and not source.public.winner else None
+            program=self._program(node) if not recorded and not origin and source.public.phase=='night' and not source.public.winner else None
             if origin:
                 base,program,public=origin
                 from .public_convergence import public_transport,transport_source,digest
@@ -710,7 +718,10 @@ class CalculationTree:
         graph=getattr(self.engine,'evaluation_graph',None)
         recorded=graph is not None and graph.supports(s)
         if recorded:graph.value(s)
-        return {'evaluation_trace':dict(owner='evaluator' if recorded else 'legacy-reconstruction',reduction=graph.values[s].reduction if recorded else None),'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
+        program_record=graph.evaluated_program(s,node.groups) if graph is not None else None
+        trace=dict(owner='evaluator' if recorded else 'mixed-evaluator-program' if program_record else 'legacy-reconstruction',reduction=graph.values[s].reduction if recorded else program_record.reason if program_record else None)
+        if program_record is not None:trace.update(ability_program='evaluated',public_projection='legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
+        return {'evaluation_trace':trace,'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
