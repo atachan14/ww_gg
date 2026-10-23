@@ -68,6 +68,42 @@ class AnonymousNode:
         representative=eligible[0];mapping=list(range(1,self.read().public.player_count+1));mapping[target-1],mapping[representative-1]=representative,target
         return representative,NameMap(tuple(mapping))
     def full_belief(self):return self.owned.recipe.resolve(self.calculation.evaluator)
+    def project_named(self):
+        from .closed_calculation import ClosedCalculation
+        c=ClosedCalculation(self.data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True)
+        source=AnonymousProjectionEvidence(self.owned.recipe)(c.root.read())
+        return c._ClosedCalculation__node(source,self.groups,(('full_trace',),('anonymous_owned',self.owned.recipe)))
+    def export_request(self):return self.project_named().export_request()
+    def observe_public_input(self,evidence):return self.project_named().observe_public_input(evidence)
+    def selection_probability(self,target):
+        from fractions import Fraction as F
+        from .anonymous_value import information
+        b=self.owned.belief
+        if target not in alive(b) or self.read().public.winner:return F()
+        if b.phase=='day':return F(1,len(alive(b)))
+        return sum((mass*q*self.calculation.evaluator.wolf_policy(b,information(atom,b.groups)).get(child.population.people[ref].group,F())
+          for mass,atom in b.p.rows for q,child,ref in atom.pin(target,b.groups)
+          if child.population.people[ref].role!='wolf'),F())
+
+
+@dataclass(frozen=True)
+class AnonymousProjectionEvidence:
+    recipe:AcquisitionRecipe
+    def __call__(self,template):
+        from .anonymous_materialization import expand_laws
+        from .seer_acquisition import public_worlds
+        from .exact import PublicEvent,replace_worlds
+        from .phase_updates import acquisition_roster
+        b=self.recipe.resolve(Evaluator('random','random'))
+        q,p=expand_laws((b.q,b.p),b.groups)
+        history=tuple(PublicEvent(r.day,r.phase,r.target) for r in b.history)
+        facts=dict(alive=alive(b),day=b.day,phase=b.phase,history=history,wolf_count=None)
+        public=replace_worlds(template.public,public_worlds(q),**facts)
+        physical=replace_worlds(template.physical,public_worlds(p),**facts)
+        rosters=tuple(acquisition_roster(public.player_count,history,day) for day in range(1,b.day+1))
+        return replace(template,public=public,physical=physical,
+          public_state=replace(template.public_state,hypotheses=q,rosters=rosters),
+          private=replace(template.private,hypotheses=p,rosters=rosters),board_data=None,provenance=None)
 
 class AnonymousCalculation:
     @staticmethod

@@ -512,7 +512,10 @@ class _Node:
             request=GeneratedBoard(FullTraceOrigin(origin))
         for operation in self.__path:
             if operation[0]=='full_trace':continue
-            if operation[0]=='physical':
+            if operation[0]=='anonymous_owned':
+                from .anonymous_owned import AnonymousProjectionEvidence
+                step=AnonymousProjectionEvidence(operation[1])
+            elif operation[0]=='physical':
                 from .physical_selection import PhysicalSelectionEvidence
                 step=PhysicalSelectionEvidence(operation[1],operation[2])
             elif operation[0]=='public_arrival':

@@ -24,10 +24,15 @@ class NavigationRoleState(RoleState):
     def private(self,*args,**kwargs):
         raise ValueError('Personal views require the exact occurrence owner')
 
+def _current_source(node):
+    # This module is the explicit ordinary-Board boundary. History/Tree never
+    # use this helper merely to identify or move an anonymous occurrence.
+    return (node.project_named() if hasattr(node,'project_named') else node).read()
+
 class NavigationCurrent:
     def __init__(self,navigation):
         self.navigation=navigation;self.occurrence=navigation.occurrence
-        row=self.occurrence;self.source=transport_source(navigation.node.read(),row.names.forward)
+        row=self.occurrence;self.source=transport_source(_current_source(navigation.node),row.names.forward)
         b=self.source.public;root=navigation.history.state(navigation.history.root).node.data
         game=root.to_game();base={k:game[k] for k in ('policy','claim_policy','seer_options','strategy_ui','result_disclosure_model') if k in game}
         # A prevented bite advances the public phase without adding a corpse
@@ -63,8 +68,8 @@ class NavigationCurrent:
             parent=navigation.history.occurrence(row.parent) if row.parent else None
             if parent is not None and row.selector['kind']=='advance':
                 node=navigation.history.state(parent.key).node
-                outcomes=tuple(BoardOutcome(r.probability,transport_source(r.node.read(),row.names.forward).public) for r in node.action(row.selector['target']))
-                prior=transport_source(node.read(),row.names.forward).public
+                outcomes=tuple(BoardOutcome(r.probability,transport_source(_current_source(r.node),row.names.forward).public) for r in node.action(row.selector['target']))
+                prior=transport_source(_current_source(node),row.names.forward).public
             else:outcomes=(BoardOutcome(F(1),b),);prior=b
             progress=Progress(None,row.settled_village,row.settled_wolf,prior,outcomes)
         groups,counts=role_summary(progress)
@@ -74,7 +79,9 @@ class NavigationCurrent:
         """Read-only public history on this cursor path, in the current name map."""
         rows=[];claims=('latent',)*self.source.public.player_count;known=();known_medium=()
         for row in self.navigation.history.path(self.occurrence.key):
-            source=transport_source(self.navigation.history.state(row.key).source,self.occurrence.names.forward)
+            node=self.navigation.history.state(row.key).node
+            if hasattr(node,'owned'):continue # No public disclosures on the anonymous admitted path.
+            source=transport_source(node.read(),self.occurrence.names.forward)
             events=[dict(kind='co',player=p,role=c) for p,c in enumerate(source.public.claims,1) if c!=claims[p-1]]
             events.extend(dict(kind='seer',player=r.player,day=r.acquired_day,published_day=r.published_day,target=r.target,color=r.color) for r in source.past if r not in known)
             events.extend(dict(kind='medium',player=r.reporter,day=r.day,published_day=source.public.day,target=r.target,color=r.color) for r in source.public.reports if r not in known_medium)
