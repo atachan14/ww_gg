@@ -10,7 +10,7 @@ from fractions import Fraction as F
 from .seer_acquisition import from_board,normalize
 from .seer_future_uniform import TrueScanState,FuturePending,acquire_uniform
 from .actor_information import condition_actor_state
-from .evaluation_branch import ActionInputs,physical_board
+from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
 from .information_set_forecast import InformationSetForecast,InformationSetActionPolicy,Pending
 from .action_flow import resolve_action
 from .night_knowledge import WolfAttack
@@ -129,6 +129,8 @@ def root_scope(branch,rules,strategy,*,_known_publications=()):
 
 class RootSecretPolicy(InformationSetActionPolicy):
     def action_recorder(self,board,payload):
+        day=super().action_recorder(board,payload)
+        if day is not None:return day
         graph=getattr(self.engine,'evaluation_graph',None)
         if graph is None or board.phase!='night' or not graph.hunter_flow_scope(board,payload):return None
         return lambda target,acquired,outcomes,value:graph.record_action(board,payload,target,acquired,outcomes,value)
@@ -406,7 +408,10 @@ class RootSecretEngine(InformationSetForecast):
         if self.strategy.day=='random' and self.strategy.night=='random' and observer is None:
             from .fixed_actor_continuation import fixed_uniform_action_value
             uniform=fixed_uniform_action_value(b,s,private,self,None,physical=physical_board(b,private,physical),past=past)
-            if uniform is not None:return uniform
+            if uniform is not None:
+                graph=getattr(self,'evaluation_graph',None)
+                if graph is not None:graph.record_day_value(ContinuationInputs(b,s,past,private,observer,physical_board(b,private,physical)),uniform,'uniform-value-reduction')
+                return uniform
         if self.verifying_actor_mask is not None and observer is None:
             from .actor_information import wolf_information_groups
             groups=wolf_information_groups(private)

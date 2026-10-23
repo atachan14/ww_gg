@@ -525,7 +525,10 @@ class InformationSetForecast:
             reduced=self.renamed_value_key(b,s,past,private) if self.memoize_flows else None
             if reduced is None:reduced=private_value_key(self.reduced_descriptors[source],private)
             if reduced is not None:key=reduced
-        if key in self.values:return self.values[key]
+        if key in self.values:
+            value=self.values[key];graph=getattr(self,'evaluation_graph',None)
+            if graph is not None:graph.record_day_value(ContinuationInputs(b,s,past,private,observer,physical),value,'cached-random-day-value')
+            return value
         from .win_certificate import certify
         if certify(b,s,private,self.strategy,self.rules,observer) is not None:
             self.cutoff_hits=getattr(self,'cutoff_hits',0)+1
@@ -541,6 +544,7 @@ class InformationSetForecast:
             if graph is not None:
                 from .evaluation_branch import ContinuationInputs as GraphInputs
                 graph.record_counts(GraphInputs(b,s,past,private,observer,physical),value)
+                graph.record_day_value(GraphInputs(b,s,past,private,observer,physical),value,'exchangeable-count-recurrence')
             return value
         if b.phase=='day':
             if (not b.initial_hunter_count and self.strategy.day=='max' and observer is None and self.memoize_flows and
@@ -576,6 +580,8 @@ class InformationSetForecast:
                             value+=mass*sum((q*self.act(b,s,past,p,group,observer,physical=group_board)
                                             for p,q in self.weighted_actor_targets(policy)),F())
         self.values[key]=value
+        graph=getattr(self,'evaluation_graph',None)
+        if graph is not None:graph.record_day_value(ContinuationInputs(b,s,past,private,observer,physical),value)
         return value
 
 
@@ -597,6 +603,11 @@ class InformationSetActionPolicy:
     terminal_preflight_safe = False
 
     def __init__(self,engine):self.engine=engine
+
+    def action_recorder(self,board,payload):
+        graph=getattr(self.engine,'evaluation_graph',None)
+        if graph is None or not graph.random_day_scope(board,payload):return None
+        return lambda target,acquired,outcomes,value:graph.record_action(board,payload,target,acquired,outcomes,value)
 
     def acquire(self,b,payload):
         s,past,private,observer,physical=payload;e=self.engine

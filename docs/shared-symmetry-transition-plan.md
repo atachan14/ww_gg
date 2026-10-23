@@ -4288,3 +4288,12 @@ to the committed sources. Tracked worktree/index clean; pre-existing untracked
 .artifacts and docs/previews outputs intentionally preserved. No push, external
 deployment or saved-data deletion. Remaining adapter families and unsupported
 strategies are unchanged from the finite inventory above.
+
+
+### Common random daytime evaluator records (2026-10-23)
+
+The ordinary all-random public and typed personal daytime paths now retain actual action-flow outcomes and continuation values. This includes hunter-containing day states. Tree refinement consumes these records with uniform public selection weights, without requesting public day-score tables merely for rendering. Terminal observations project from their retained evaluator context without replaying the transition kernel. Value-only reductions remain value-only; an explicit missing-detail request uses the same evaluator/action kernel and checks its value against the cached scalar.
+
+Scope excludes native anonymous-belief ownership and WolfInformation observers, plus existing unsupported strategies. MAX daytime behavior is unchanged. No full-migration claim applies to these excluded paths.
+
+Verification so far: focused 5 tests passed (11.383s), including independent named Q/P/observer child-state equality, no transition/solve/score replay on retained records, shortcut laziness, terminal projection, representative Current/back/forward and cold route restoration. Affected regression 53 tests passed (65.584s), including MAX day, hunter/personal records and navigation. Final focused rerun: 5 tests passed (9.008s). Isolated browser verification passed: real Table hunter selection, evaluator Tree, Day2 Current, private back/forward, view switching, cold restore, public return, and past guard/no-repeat input. No public history mutation occurred. Normal activation follows this verified local commit.

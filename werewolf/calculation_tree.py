@@ -156,13 +156,19 @@ class CalculationTree:
                 belief=getattr(e,'anonymous_beliefs',{}).get(s)
                 graph=getattr(e,'evaluation_graph',None)
                 decision=graph.day_decision(s,evaluate=True) if graph is not None else None
-                scores=(dict(decision.scores) if decision is not None else
-                        {p:v for group,v in e.anonymous_values.day_scores(e.anonymous_values.scalar(belief)) for p in group}
-                        if belief is not None else dict(e.day_scores(b,s.public_state,s.past)))
-                if decision is not None:weights=dict(decision.policy)
+                if graph is not None and graph.random_day_scope(b,s):
+                    # Random policy does not request a new public-Q score table.
+                    known=dict(e.scores.get((b,s.public_state,s.past),()))
+                    scores={p:known.get(p) for p in legal_targets(b,self.rules,self.strategy)}
+                    weights={p:F(1,len(scores)) for p in scores}
                 else:
-                    best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
-                    weights={t:F(1,len(selected)) if t in selected else F() for t in scores}
+                    scores=(dict(decision.scores) if decision is not None else
+                            {p:v for group,v in e.anonymous_values.day_scores(e.anonymous_values.scalar(belief)) for p in group}
+                            if belief is not None else dict(e.day_scores(b,s.public_state,s.past)))
+                    if decision is not None:weights=dict(decision.policy)
+                    else:
+                        best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
+                        weights={t:F(1,len(selected)) if t in selected else F() for t in scores}
                 legal=legal_targets(s.physical,self.rules,self.strategy)
                 orbits=node.action_orbits() if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)
                 for orbit in orbits:
@@ -618,7 +624,7 @@ class CalculationTree:
             graph=getattr(self.engine,'evaluation_graph',None)
             recorded=graph is not None and all((r['node'].read(),tuple(r['node'].groups),r['target']) in graph.refinements for r in members)
             choices.append({'evaluation_transition':'evaluated' if recorded else 'legacy-reconstruction','targets':target_ids,'label':('処刑' if node.read().public.phase=='day' else '襲撃')+' '+ '/'.join('P'+str(p) for p in target_ids),
-                'multiplicity':sum(len(r.get('orbit',(r['target'],))) for r in members),'members':named,'q_score':str(members[0]['q_score']),
+                'multiplicity':sum(len(r.get('orbit',(r['target'],))) for r in members),'members':named,'q_score':None if members[0]['q_score'] is None else str(members[0]['q_score']),
                 'selected':bool(policy_mass),'policy_probability':str(policy_mass),'branches':list(branches.values())})
         record['actions']=choices
         with self.calculation._ClosedCalculation__kernel():self._ability_columns(key)
@@ -787,6 +793,9 @@ class CalculationTree:
         if program_record is None and 'evaluation_projection' in row:
             trace.update(owner='mixed-evaluator-public',public_projection='evaluated',ability_program='legacy-reconstruction')
         if row.get('recorded_arrival'):trace=dict(owner='evaluator',reduction='recorded-pre-report-mixture',public_projection='evaluated')
+        if graph is not None and graph.random_day_scope(b,s):
+            complete=bool(row.get('actions')) and all(action.get('evaluation_transition')=='evaluated' for action in row['actions'])
+            trace.update(owner='evaluator' if complete else 'mixed-evaluator-day',selection='fixed-uniform-day',transition='evaluated' if complete else 'not-requested')
         decision=graph.day_decision(s) if graph is not None else None
         if decision is not None:
             transitions=bool(row.get('actions')) and all(action.get('evaluation_transition')=='evaluated' for action in row['actions'])

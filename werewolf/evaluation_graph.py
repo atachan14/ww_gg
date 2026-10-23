@@ -77,6 +77,67 @@ class MorningRecord:
 
 class EvaluationGraph:
  def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={};self.day_decisions={};self.actions={};self.mornings={}
+ def random_day_scope(self,board,payload):
+  from .actor_information import PersonalInformation,GuardInformation,GuardSelection
+  from .seer_intervention import SeerObserver
+  from .evaluation_branch import ContinuationInputs
+  source=ContinuationInputs(board,payload.public_state,payload.past,payload.private,payload.observer,payload.physical)
+  return (board.phase=='day' and not board.winner
+   and (self.engine.strategy.day,self.engine.strategy.night,self.engine.strategy.fake_reports)==('random',)*3
+   and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection))
+   and source not in getattr(self.engine,'anonymous_beliefs',{}))
+ def record_day_value(self,source,value,reduction='evaluated-random-day-value'):
+  if self.random_day_scope(source.public,source):self.values.setdefault(source,ValueRecord(value,reduction))
+ def day_refinement(self,source,groups,target,*,evaluate=True):
+  if not self.random_day_scope(source.public,source):return None
+  from .exact import legal_targets
+  from .evaluation_branch import ActionInputs
+  from .action_flow import action_flow,resolve_action
+  from .board_future import outcome_key
+  b=source.public;e=self.engine;groups=tuple(groups)
+  if target not in legal_targets(source.physical,e.rules,e.strategy):raise ValueError('Legal execution target required')
+  key=(source,groups,target)
+  if key in self.refinements:return self.refinements[key]
+  payload=ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical)
+  record=self.recorded_action(b,payload,target);requested=False
+  if record is None and evaluate:
+   expected=e.act(*source[:3],target,source.private,source.observer,physical=source.physical)
+   record=self.recorded_action(b,payload,target)
+   if record is None:
+    # A cached scalar/shortcut retained no transition. Only an explicit detail
+    # request enters the SAME evaluator flow; normal value solving is unchanged.
+    actual=action_flow(b,payload,target,e.action_policy);requested=True
+    if actual!=expected:raise ValueError('Requested day detail changed scalar value')
+    record=self.recorded_action(b,payload,target)
+  if record is None:return None
+  acquired=record.acquired;rows=record.outcomes
+  if any(row.source is None and row.outcome.context is None for row in rows):
+   if not evaluate:return None
+   # Compact terminal payoffs have no posterior. Obtain full context only at
+   # this requested history boundary, never invent it from a payoff/count.
+   acquired,outcomes=resolve_action(b,payload,target,e.action_policy,terminal_payoffs=False)
+   old={outcome_key(row.outcome):row for row in rows}
+   if len(old)!=len(rows):raise ValueError('Ambiguous retained day observations')
+   rebuilt=[]
+   for outcome in outcomes:
+    row=old[outcome_key(outcome)]
+    if row.outcome.probability!=outcome.probability:raise ValueError('Day detail changed outcome mass')
+    child=row.source if row.source is not None else e.action_policy._project_roles(b,acquired,outcome,target)
+    rebuilt.append(EvaluatedOutcome(outcome,child,row.value))
+   rows=tuple(rebuilt);requested=True
+  edges=[];weighted=F()
+  for row in rows:
+   child=row.source
+   if child is None:
+    if row.outcome.board.winner is None:raise ValueError('Missing continuing day state')
+    child=e.action_policy._project_roles(b,acquired,row.outcome,target)
+   self.values.setdefault(child,ValueRecord(row.value,'evaluated-day-child' if row.source is not None else 'retained-terminal-context'))
+   edges.append(Edge(row.outcome.probability,child,target,outcome_key(row.outcome)));weighted+=row.outcome.probability*row.value
+  if sum(edge.probability for edge in edges)!=1 or weighted!=record.value:raise ValueError('Recorded day mass/value changed')
+  probability=F(1,len(legal_targets(source.public,e.rules,e.strategy)))
+  result=Refinement(record.value,tuple(edges),'requested-evaluated-day-detail' if requested else 'evaluated-random-day-action',probability)
+  self.refinements[key]=result
+  return result
  def hunter_flow_scope(self,board,payload):
   e=self.engine
   from .actor_information import PersonalInformation,GuardInformation,GuardSelection
@@ -84,9 +145,9 @@ class EvaluationGraph:
   return (board.initial_hunter_count==1 and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection))
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
  def record_action(self,board,payload,target,acquired,outcomes,value):
-  if not self.hunter_flow_scope(board,payload):return
+  if not (self.random_day_scope(board,payload) or self.hunter_flow_scope(board,payload)):return
   from .actor_information import wolf_information_keys
-  policies=tuple((info,self.engine.policies.get((board,payload.public_state,payload.past,info))) for info in wolf_information_keys(payload.private))
+  policies=() if board.phase=='day' else tuple((info,self.engine.policies.get((board,payload.public_state,payload.past,info))) for info in wolf_information_keys(payload.private))
   self.actions[board,payload,target]=ActionRecord(acquired,tuple(EvaluatedOutcome(*row) for row in outcomes),value,policies)
  def recorded_action(self,board,payload,target):
   return self.actions.get((board,payload,target))
@@ -304,6 +365,7 @@ class EvaluationGraph:
   if source not in self.values:self.values[source]=ValueRecord(value,'terminal' if source.public.winner else 'exact-continuation')
   return value
  def refine(self,source,groups,target=None):
+  if self.random_day_scope(source.public,source):return self.day_refinement(source,groups,target)
   decision=self.day_decision(source)
   maximum=decision is not None and self.day_scope(source)
   # A value-only shortcut is not permission to force a full MAX policy table.
