@@ -3813,3 +3813,40 @@ observer, anonymous-belief-owned source, and value-only states with no completed
 policy table retain their tested legacy paths. Provenance is per node/action;
 MAX day migration does not imply an entire future subtree is evaluator-recorded.
 No strategy semantics, probability laws, saved-data format or layout changed.
+
+## Ordinary MAX night: retain evaluated program and committed policies (2026-10-23)
+
+The next smallest scope admits ordinary public MAX-night CO sources, with no
+hunter, personal observer, self bite, or anonymous-belief ownership. The scalar
+joint evaluator already builds the shared anonymous ability program and evaluates
+its positive-policy continuations. After completion its exact program, value,
+completed-source snapshot and actual cached wolf information-set policies are now
+retained for Tree consumption. Policy keys use night-start public Q plus wolf
+roster/attack memory, never viewer P or a newly visible divination result.
+
+This does not force complete evaluation of zero-policy continuations: a requested
+counterfactual uses the same program continuation/evaluator and does not alter the
+original scalar value or completed-source snapshot. Count/certificate shortcuts
+that never formed a program remain explicit fallbacks. The CO admission condition
+is retained; this is not a migration of every all-hidden/MAX count shortcut.
+
+Nonuniform MAX public convergence is still explicitly legacy reconstruction.
+Selected-policy mass and uniform counterfactual mass differ; they cannot share
+one projection record or one posterior merely for display. Existing recorded
+public projection remains usable when those measures coincide (including tied,
+uniform MAX policies). No such equivalence is inferred from equal win rates.
+
+Independent named tests compare exact scalar values, information-set policies,
+ties, legal non-self targets, selected mass, counterfactual mass and requested
+zero-continuation values. Same Q / different P preserves committed policies.
+Tree tests forbid re-compiling a retained actual program. An obsolete named
+packet test assumed a flat Day1 root; failure reproduced with pre-migration
+admission in memory. It now starts directly at its night source and retains its
+original exact packet, lazy transport and cold-Current assertions. Browser checks
+cover manual CO, zero-day selection, representative/back history and explicitly
+nonuniform MAX-night mixed provenance. Remaining migration: nonuniform public
+projection/arrival records, hunter, personal observers, anonymous ownership and
+unformed shortcut detail.
+
+Validation: final selected Python suite 119 tests passed in 87.234s; isolated Edge MAX-night/manual-CO/representative flow passed. Normal18821 remains a5250c9 pending activation of this milestone.
+

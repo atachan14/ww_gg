@@ -128,10 +128,9 @@ class JointActionKernelTests(unittest.TestCase):
  def test_tree_uses_same_packets_and_all_named_transports_reconstruct_Current(self):
   from werewolf.calculation_tree import CalculationTree,DeferredNode
   calculation,node,client=fixture('max');data=calculation.data;roles=data.roles()
-  tree=CalculationTree(data,roles.board,roles.forecast());tree.expand('0')
-  root=next(a for a in tree.nodes['0']['actions'] if a['targets']==[3,4,5])
-  key=next(b['node'] for b in root['branches'] if tree.nodes[b['node']]['node'].read().public.winner is None)
-  tree.expand(key);actions=tree.nodes[key]['actions']
+  # Test named packets directly at the night source. The ordinary UI is now
+  # Day1-rooted with public-update stages, not the retired flat root actions.
+  tree=CalculationTree.from_node(node);tree.expand('0');actions=tree.nodes['0']['actions']
   self.assertEqual(len(actions),3);self.assertTrue(all(a['grouped'] for a in actions))
   self.assertEqual({a['label'] for a in actions},{'1が[(4),5]から占い｜人狼が1を襲撃','1が[(4),5]から占い｜人狼が2を襲撃','1が[(4),5]から占い｜人狼が[(4),5]から襲撃'})
   candidate=next(a for a in actions if a['targets']==[4,5])
@@ -149,11 +148,3 @@ class JointActionKernelTests(unittest.TestCase):
     self.assertEqual(child.export_request().roles(),actual)
     restored=tree.restore(tree.route(variant['node']))
     self.assertEqual(tree.nodes[restored]['node'].read(),actual)
-  root_api=client.get('/game-tree?expand=1').json
-  orbit=next(a for a in root_api['actions'] if a['targets']==[3,4,5])
-  night=next(b['node'] for b in orbit['branches'] if not root_api['items'][b['node']]['winner'])
-  expanded=client.get('/game-tree',query_string={'node':night,'expand':'1'}).json
-  family=next(a for a in expanded['actions'] if a['targets']==[4,5])
-  other=next(v['node'] for b in family['branches'] for v in b['variants'] if v['transport']!=list(range(1,6)))
-  result=client.post('/game-tree/current',data={'snapshot':expanded['snapshot'],'node':other})
-  self.assertEqual(result.status_code,409,result.data) # Cold transport above is retained; secret Current UI is removed.

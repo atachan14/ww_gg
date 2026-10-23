@@ -32,6 +32,7 @@ class ProgramRecord:
  program:object
  value:F
  evaluated_sources:tuple
+ policies:tuple=()
  reason:str='evaluated-role-ordered-program'
 
 @dataclass(frozen=True)
@@ -69,7 +70,7 @@ class EvaluationGraph:
   e=self.engine;b=source.public
   return (b.phase=='night' and not b.winner and source.observer is None
    and not b.initial_hunter_count and not e.strategy.include_self_bite
-   and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
+   and ((e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3 or e.strategy.night=='max')
    and any(c in ('seer','medium') for c in b.claims)
    and source not in getattr(e,'anonymous_beliefs',{}))
  def day_scope(self,source):
@@ -95,7 +96,10 @@ class EvaluationGraph:
   if not self.program_scope(source) or program.method!='anonymous-relational-v1':return
   # Record only after the evaluator has completed this exact owned program.
   # No zero-policy path receives an invented continuation value.
-  self.programs[source,tuple(groups)]=ProgramRecord(program,value,tuple(program.values))
+  # Policies were committed from night-start public Q and actor memory before
+  # result partitions. Retain those actual cache entries, not viewer-P choices.
+  policies=tuple((info,self.engine.policies[source.public,source.public_state,source.past,info]) for info in dict.fromkeys(leaf.information for leaf in program.leaves))
+  self.programs[source,tuple(groups)]=ProgramRecord(program,value,tuple(program.values),policies)
  def evaluated_program(self,source,groups,*,evaluate=False):
   key=(source,tuple(groups))
   if key not in self.programs and evaluate and self.program_scope(source):
