@@ -19,11 +19,16 @@ class WolfViewDocument(GuardViewDocument):
   return (board.initial_hunter_count<=1 and policy==('random',)*3 or
    not board.initial_hunter_count and policy==('max',)*3)
  @staticmethod
+ def observation_scope(board):
+  # Existing random guard action-flow records do not require a public seer.
+  # Without a guard, retain the declared-seer entry and value-only fallback.
+  return board.initial_hunter_count==1 or any(board.claims[p-1]=='seer' for p in board.alive)
+ @staticmethod
  def supports(public,players):
   if hasattr(public.game.node,'owned'):return False # Explicit private request retains its existing compatibility adapter.
   s=public.game.node.read();e=public.game.node._Node__calculation._ClosedCalculation__engine
   return (WolfViewDocument.policy_scope(s.public,e) and s.public.initial_role_counts['wolf']>0
-   and any(s.public.claims[p-1]=='seer' for p in s.public.alive)
+   and WolfViewDocument.observation_scope(s.public)
    and not e.rules.allow_self_bite and not e.strategy.include_self_bite
    and e.strategy.disclosure_for('seer')=='all')
  def __init__(self,public,owner,players,results,*,target=None):
@@ -31,7 +36,7 @@ class WolfViewDocument(GuardViewDocument):
   source=base.read();e=base._Node__calculation._ClosedCalculation__engine;self.names=occurrence.names
   if (not self.policy_scope(source.public,e) or source.public.initial_role_counts['wolf']<1
    or e.rules.allow_self_bite or e.strategy.include_self_bite or e.strategy.disclosure_for('seer')!='all'
-   or not any(source.public.claims[p-1]=='seer' for p in source.public.alive)):raise Pending('wolf_table_recorded_scope_unimplemented')
+   or not self.observation_scope(source.public)):raise Pending('wolf_table_recorded_scope_unimplemented')
   if source.observer is not None or source.public.phase!='night' or source.public.winner:raise ValueError('Choose pack view from an ongoing public night')
   if target is not None:raise ValueError('Pack targets are compared as exact action rows')
   self.public=public;self.owner=owner;self.data=public.data;self.lock=RLock();self.revision=0;self.views=None
