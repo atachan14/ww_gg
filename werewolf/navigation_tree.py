@@ -108,7 +108,9 @@ class NavigationTree:
                     b['actors']=[names.display(p) for p in b.get('actors',())]
                     b['targets']=[names.display(p) for p in b.get('targets',())]
                     b['visible_to']=[names.display(p) for p in b.get('visible_to',())]
-                    if b['kind'].endswith('_target'):b['value']=names.display(b['value'])
+                    if b['kind'].endswith('_target') or b['kind']=='public_attack':b['value']=names.display(b['value'])
+                    if b['kind']=='public_attack':b['label']='人狼が'+marked(b['targets'],(b['value'],))+'を襲撃'
+                    if b['kind']=='death_notice' and b.get('targets'):b['label']='襲撃死：'+marked(b['targets'],(b['value'],))
                     for choice in b.get('joint_choices',()):
                         choice['actors']=[names.display(p) for p in choice['actors']];choice['target']=names.display(choice['target'])
                 walk(b['children'])

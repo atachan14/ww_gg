@@ -30,10 +30,11 @@ class DayActionQuotientTests(unittest.TestCase):
    self.assertEqual(choice['targets'],list(range(1,8)));self.assertEqual(choice['multiplicity'],7);self.assertEqual(choice['policy_probability'],'1')
    self.assertEqual(len(choice['branches']),1);self.assertEqual(choice['branches'][0]['probability'],'1')
    night=choice['branches'][0]['node'];shown=view.read(night,True);stages=shown['night_stages']['branches']
-   colors={b['value'][1]:F(b['probability']) for b in stages if b['kind']=='medium_result'}
-   self.assertEqual(colors,{'black':F(2,7),'white':F(4,7)})
-   self.assertEqual(sum(F(b['probability']) for b in stages if b['kind']=='ability_dead' and b['value']=='medium_result'),F(1,7))
+   self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+   self.assertEqual(shown['night_stages']['method'],'evaluation-recorded-v1')
+   self.assertEqual({b['kind'] for b in stages},{'public_attack'})
    self.assertEqual(sum(F(b['probability']) for b in stages),1)
+   self.assertEqual(shown['stage_roles'],dict(seers=0,mediums=0,hunters=0))
  def test_every_named_execution_has_the_same_full_transported_state(self):
   with calculation_budget(200000,max_seconds=15):
    doc=NavigationDocument(self.data());node=doc.game.node;before=node.read();canonical=None

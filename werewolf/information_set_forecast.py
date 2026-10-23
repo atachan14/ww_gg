@@ -534,7 +534,12 @@ class InformationSetForecast:
         if self.exchangeable(b):
             value=sum((h.mass*exchangeable_value(len(b.alive),(h.roles[0]&b.alive_mask).bit_count(),b.phase,self.strategy)
                        for h in private.hypotheses),F())
-            self.values[key]=value;return value
+            self.values[key]=value
+            graph=getattr(self,'evaluation_graph',None)
+            if graph is not None:
+                from .evaluation_branch import ContinuationInputs as GraphInputs
+                graph.record_counts(GraphInputs(b,s,past,private,observer,physical),value)
+            return value
         if b.phase=='day':
             if (not b.initial_hunter_count and self.strategy.day=='max' and observer is None and self.memoize_flows and
                     self.public_day_max(b,s,past)==1 and

@@ -144,6 +144,9 @@ class ClosedCalculation:
         engine.retain_joint_guard_history=True
         engine.anonymous_nights=anonymous
         if anonymous:
+            from .evaluation_graph import EvaluationGraph
+            engine.evaluation_graph=EvaluationGraph(engine)
+        if anonymous:
             from .anonymous_value import Evaluator
             engine.anonymous_values=Evaluator(strategy.day,strategy.night,strategy.win_cutoff)
         engine.retain_complete_abilities=aggregate_reports
@@ -321,6 +324,13 @@ class _Node:
         path=(*self.__path,('public_arrival',target,public_digest,tuple(groups),counter))
         return self.__calculation._ClosedCalculation__node(source,groups,path,self.__view)
 
+    def _evaluation_refinement(self,target=None):
+        e=self.__calculation._ClosedCalculation__engine
+        graph=getattr(e,'evaluation_graph',None)
+        if graph is None:return None
+        with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups),self.relation_scope():
+            return graph.refine(self.__source,self.__groups,target)
+
     def _night_program(self):
         from .anonymous_night import shared_night
         e=self.__calculation._ClosedCalculation__engine
@@ -382,6 +392,11 @@ class _Node:
     def action(self,target):
         s=self.__source;e=self.__calculation._ClosedCalculation__engine
         if s.public.winner is not None or type(target)is not int or target not in legal_targets(s.physical,e.rules,e.strategy):raise ValueError('Illegal action target')
+        if s.public.phase=='day':
+            recorded=self._evaluation_refinement(target)
+            if recorded is not None:
+                groups=_fix(self.__groups,(target,))
+                return tuple(ActionBranch(edge.probability,self.__calculation._ClosedCalculation__node(edge.source,groups,(*self.__path,('action',target,edge.observation)),self.__view)) for edge in recorded.edges)
         payload=ActionInputs(s.public_state,s.past,s.private,s.observer,s.physical)
         with self.__calculation._ClosedCalculation__kernel():
             acquired,outcomes=resolve_action(s.public,payload,target,e.action_policy,terminal_payoffs=False)

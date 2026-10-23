@@ -324,10 +324,35 @@ class CalculationTree:
         from .ability_factorization import factor
         record['ability_choices']=factor(self,node,result)
 
+    def _recorded_night(self,key):
+        row=self.nodes[key];node=row['node']
+        graph=getattr(self.engine,'evaluation_graph',None)
+        if graph is None or node.read().public.phase!='night' or not graph.supports(node.read()):return None
+        if 'recorded_bundles' in row:return row['recorded_bundles']
+        from .public_convergence import digest
+        from .ability_labels import marked
+        refinement=node._evaluation_refinement();bundles={};branches=[]
+        for edge in refinement.edges:
+            public=digest(edge.source)
+            child=node._public_night(edge.source,edge.target,public,node.groups)
+            route=(*row['route'],{'public_night':dict(target=edge.target,public=public,prefix=[],counter=False)})
+            child_key=self.register(child,route)
+            self.nodes[child_key].update(public_bundle=True,public_digest=public,public_reach=str(edge.probability),hidden_contexts=[])
+            bundles[public]=dict(target=edge.target,sources={False:(edge.probability,edge.source)},node=child_key)
+            members=tuple(p for group in node.groups if edge.target in group for p in group if p in node.read().public.alive)
+            common=dict(actor=None,actors=[],targets=[],symbols=None,policy_probability='1',counter_probability='1',mass=str(edge.probability),private=False,public_observation=True,visible_to=[],images=[])
+            death=dict(common,kind='death_notice',stage_column=1,value=edge.target,targets=list(members),label='襲撃死：'+marked(members,(edge.target,)),probability='1',children=dict(leaves=[dict(node=child_key,context_node=None,probability='1',variants=[])]))
+            branches.append(dict(common,kind='public_attack',stage_column=0,value=edge.target,targets=list(members),label='人狼が'+marked(members,(edge.target,))+'を襲撃',probability=str(edge.probability),children=dict(branches=[death])))
+        row['night_stages']=dict(method='evaluation-recorded-v1',branches=branches,simultaneous=True,reduction='exchangeable-count-recurrence')
+        row['recorded_bundles']=bundles;row['public_bundles']=bundles
+        return bundles
+
     def _public_night_bundles(self,key):
         from .public_convergence import public_observation_orbits,public_night_observations,digest
         record=self.nodes[key]
         if 'public_bundles' in record:return record['public_bundles']
+        recorded=self._recorded_night(key)
+        if recorded is not None:return recorded
         node=record['node'];program=node._night_program();groups=program.groups;result={}
         with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
             if getattr(program,'belief_flow',None) is not None:
@@ -475,6 +500,7 @@ class CalculationTree:
         if record['actions'] is not None:return
         node=record['node'];groups={}
         if node.read().public.phase=='night' and not node.read().public.winner:
+            if self._recorded_night(key) is not None:record['actions']=[];return
             stages=self._stage_rows(key)
             if stages and stages.get('method') in ('anonymous-relational-v1','role-staged-exact-v1'):
                 record['actions']=[];return
@@ -615,7 +641,9 @@ class CalculationTree:
             from .anonymous_relations import alias
             node=row['node'];source=node.read();events=[]
             origin=row.get('distribution_origin')
-            program=node._night_program() if not origin and source.public.phase=='night' and not source.public.winner else None
+            graph=getattr(self.engine,'evaluation_graph',None)
+            recorded=graph is not None and graph.supports(source)
+            program=node._night_program() if not recorded and not origin and source.public.phase=='night' and not source.public.winner else None
             if origin:
                 base,program,public=origin
                 from .public_convergence import public_transport,transport_source,digest
@@ -679,7 +707,10 @@ class CalculationTree:
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
         certificate=node.win_certificate()
-        return {'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
+        graph=getattr(self.engine,'evaluation_graph',None)
+        recorded=graph is not None and graph.supports(s)
+        if recorded:graph.value(s)
+        return {'evaluation_trace':dict(owner='evaluator' if recorded else 'legacy-reconstruction',reduction=graph.values[s].reduction if recorded else None),'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
@@ -691,7 +722,7 @@ class CalculationTree:
             'players':[{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p)),
                 'seer_probability':str(b.role_probability(p,'seer')),
                 'physical_wolf_probability':str(sum((h.mass for h in s.private.hypotheses if h.roles[0]&(1<<(p-1))),F()))} for p in range(1,b.player_count+1)],
-            'compositions':self._composition_rows(key),'night_stages':row.get('night_stages'),'stage_roles':dict(seers=self.data.game_data.seers,mediums=self.data.game_data.mediums,hunters=self.data.game_data.hunters),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':f'{self.data.game_data.players} players / {self.data.game_data.seers} seers / {self.data.game_data.wolves} wolves',
+            'compositions':self._composition_rows(key),'night_stages':row.get('night_stages'),'stage_roles':dict(seers=0,mediums=0,hunters=0) if recorded else dict(seers=self.data.game_data.seers,mediums=self.data.game_data.mediums,hunters=self.data.game_data.hunters),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':f'{self.data.game_data.players} players / {self.data.game_data.seers} seers / {self.data.game_data.wolves} wolves',
             'method':'完全なQ/P・履歴・物理枝の既存の名前付替え同値でまとめます。全ての成員Boardを選択できます。'}
 
     def read(self,key,expand=False):

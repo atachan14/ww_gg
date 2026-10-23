@@ -3653,3 +3653,46 @@ combined run. The dead/live/absent/multiple-holder suite verifies actual Tree
 columns and conditional masses. Isolated Edge medium/hunter Table/Footer/Current
 flows pass; desktop screenshot shows the medium dead marker in its result column.
 Normal18821 is kept running unchanged, requiring a later restart to activate.
+
+
+## Evaluator-owned graph: first migration scope (2026-10-23)
+
+EvaluationGraph owns immutable ValueRecord, Edge and Refinement records per
+calculation. Exchangeable count-recurrence results record the exact rational
+value, reduction reason and P-weighted live-count components. Lazy representative
+public-state refinement calls existing evaluator transition/project kernels,
+evaluates each retained child and checks both mass=1 and weighted child value
+equality before publishing the record. No named state is invented from counts.
+Named full Q/P/history sources remain available for Current and manual updates.
+
+The first migrated scope is exchangeable all-hidden, all-random, no-hunter,
+no-self-bite states at the existing named-source boundary. It is independent of
+player count and includes the citizen3/medium1/seer1/wolf2 case. Existing
+belief-owned anonymous inputs deliberately retain their tested native route;
+claims/public reports, MAX, personal observers, hunter states and other semantics
+also retain the previous exact implementation. API evaluation_trace.owner marks
+evaluator vs legacy-reconstruction. This is not a claim of complete migration.
+
+Tree consumes recorded representative attack/death/public Board edges and does
+not compile hidden medium/seer action-detail products in the migrated path.
+Physical private histories and public Q are retained, not replaced by marginals.
+Inline composition analysis does not generate unrecorded ability paths. Stage
+headers honor explicit zero stage counts while preserving mixed legacy views.
+
+Validation for this scope: 135 applicable Python regressions passed (178.453s),
+including legacy named-law parity, exact Q/P/private-history equality, manual
+zero-weight updates, cold history and concrete representative navigation. Existing
+UI expansion/layout/routing/viewport/format tests: 54 passed. Unprofiled isolated
+seven-player measurements: forecast 1.882s, day Tree 0.4212s, initial night Tree
+2.8179s, repeat 0.0549s; ability-detail program count zero. These timings do not
+include the remaining separate Board forecast work when Current changes.
+Phase-local role widths retain explicit zero role counts and prevent later CO
+views from putting earlier recorded attack nodes under seer/medium headers.
+
+Latest isolated Edge validation passed with phase-local column sizing: seven-player
+all-hidden initial Tree has attack/death columns and no seer/medium detail
+columns; nonzero auto-expansion completes; visible Table representative6 selection
+advances with Footer and Current reaches Day2 retaining actual execution6. Desktop
+and narrow screenshots were captured; no browser exceptions. Separate Current
+Board forecast/render still took roughly40s and is not included in the fast Tree
+expansion measurements. This remains outside the first graph migration scope.

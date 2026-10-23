@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from fractions import Fraction as F
 from dataclasses import replace
 from werewolf.anonymous_relations import Population,Person,Cell
@@ -27,7 +28,11 @@ class DeadAbilityStagesTests(unittest.TestCase):
  def test_real_tree_dead_holder_columns_and_mass(self):
   for role,counts,stages,columns in [('medium',(1,0,0),('medium_result',),(0,)),('seer',(0,0,1),('seer_target','seer_result'),(0,1)),('hunter',(0,1,0),('guard_target',),(0,))]:
    with self.subTest(role=role),calculation_budget(400000,max_seconds=35):
-    m,h,s=counts;doc=NavigationDocument(quotient.DayActionQuotientTests().data(5,m,h,s,1));doc.game.action(1);view=NavigationTree(doc);shown=view.read(view.current_key(),True)
+    m,h,s=counts;doc=NavigationDocument(quotient.DayActionQuotientTests().data(5,m,h,s,1));doc.game.action(1);view=NavigationTree(doc)
+    graph=doc.game.node._Node__calculation._ClosedCalculation__engine.evaluation_graph
+    # Dead-stage rendering remains available on the explicitly unmigrated detail path.
+    with patch.object(graph,'supports',return_value=False):shown=view.read(view.current_key(),True)
+    self.assertEqual(shown['evaluation_trace']['owner'],'legacy-reconstruction')
     dead=next(b for b in shown['night_stages']['branches'] if b['kind']=='ability_dead')
     self.assertEqual(F(dead['probability']),F(1,4))
     for stage,column in zip(stages,columns):

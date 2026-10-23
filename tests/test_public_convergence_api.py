@@ -66,7 +66,8 @@ class PublicConvergenceAPITests(unittest.TestCase):
    stages=client.get('/game-tree',query_string=dict(node=night,expand='1')).json['night_stages']['branches']
    self.assertEqual(len(stages),2)
    by_kind={b['kind']:b for b in stages}
-   self.assertEqual({kind:F(b['probability']) for kind,b in by_kind.items()},{'wolf_target':F(1,4),'seer_target':F(3,4)})
-   self.assertNotEqual(by_kind['wolf_target']['label'],by_kind['seer_target']['label'])
-   self.assertEqual({b['kind'] for b in by_kind['wolf_target']['children']['branches']},{'death_notice'})
+   self.assertEqual({kind:F(b['probability']) for kind,b in by_kind.items()},{'ability_dead':F(1,4),'seer_target':F(3,4)})
+   self.assertNotEqual(by_kind['ability_dead']['label'],by_kind['seer_target']['label'])
+   self.assertEqual(by_kind['ability_dead']['value'],'seer_target')
+   self.assertEqual({b['kind'] for b in by_kind['ability_dead']['children']['branches']},{'ability_dead'})
    self.assertEqual({b['kind'] for b in by_kind['seer_target']['children']['branches']},{'seer_result'})
