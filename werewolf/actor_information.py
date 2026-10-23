@@ -46,6 +46,14 @@ class WolfInformation:
         return condition_actor_state(state,compatible,attacks=self.attacks)
 
 
+
+@dataclass(frozen=True)
+class WolfObserver(WolfInformation):
+    """Pack-owned initial membership and known past attacks, not public truth."""
+    def __call__(self,h,state):
+        return h.roles[0]==self.initial_roster and all(a in h.attacks for a in self.attacks)
+
+
 def wolf_information_groups(state):
     """Return (owned information, actual mass, conditional branch law)."""
     groups={}
@@ -104,7 +112,7 @@ class GuardSelection(GuardInformation):
 def condition_personal(state,observation):
     """One semantic filtering pass, normalized complete histories and mass."""
     from .seer_intervention import SeerObserver
-    if type(observation) not in (PersonalInformation,SeerObserver,WolfInformation,GuardInformation,GuardSelection):
+    if type(observation) not in (PersonalInformation,SeerObserver,WolfInformation,WolfObserver,GuardInformation,GuardSelection):
         raise ValueError('Typed owner information required')
     if type(observation)is WolfInformation:
         known={a.night:a.target for a in observation.attacks}
@@ -148,7 +156,7 @@ def wolf_information_orbits(state,partition):
 
 def information_positions(info,n):
     """Named owner evidence that a constructed partition must fix."""
-    if type(info)is WolfInformation:
+    if type(info) in (WolfInformation,WolfObserver):
         return tuple(p for p in range(1,n+1) if info.initial_roster&(1<<(p-1)))+tuple(a.target for a in info.attacks)
     if type(info) in (GuardInformation,GuardSelection):return (info.actor,*(g.target for g in info.guards),*((info.target,) if type(info)is GuardSelection else ()))
     from .seer_intervention import SeerObserver

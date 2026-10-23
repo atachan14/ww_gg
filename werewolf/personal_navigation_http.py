@@ -29,7 +29,8 @@ def register(app,document,render,public_render):
     views=getattr(public,'private_views',{});view=views.get(key(record))
     if view is None:
      from .seer_view_document import SeerViewDocument
-     kind={'hunter':GuardViewDocument,'seer':SeerViewDocument}.get(record.get('role'))
+     from .wolf_view_document import WolfViewDocument
+     kind={'hunter':GuardViewDocument,'seer':SeerViewDocument,'wolf':WolfViewDocument}.get(record.get('role'))
      if kind is None:raise ValueError('Unsupported private navigation role')
      view=remember(public,kind.restore(public,record))
     elif json.dumps(record,sort_keys=True)!=json.dumps(view.export(),sort_keys=True):return jsonify(error='Private view changed'),409

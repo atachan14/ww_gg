@@ -15,7 +15,7 @@ from .board_future import (SavedOrigin,GeneratedBoard,ActionEvidence,Publication
     OwnerInformationEvidence,ObservedActionEvidence,ObservedPublicationEvidence,outcome_key,publication_key,kernel_calculation)
 from .information_set_forecast import InformationSetForecast,Pending
 from .evaluation_branch import ActionInputs,ContinuationInputs,physical_board
-from .actor_information import PersonalInformation,WolfInformation,GuardInformation,GuardSelection,wolf_information_groups
+from .actor_information import PersonalInformation,WolfInformation,WolfObserver,GuardInformation,GuardSelection,wolf_information_groups
 from .seer_intervention import SeerObserver
 from .exact import Strategy,ClaimPolicy,legal_targets
 from .action_flow import resolve_action
@@ -263,7 +263,7 @@ class _Node:
             else:engine.public_action_games[key]=game
 
     def personal(self,information):
-        if type(information) not in (PersonalInformation,SeerObserver,WolfInformation,GuardInformation,GuardSelection):raise ValueError('Typed owner information required')
+        if type(information) not in (PersonalInformation,SeerObserver,WolfInformation,WolfObserver,GuardInformation,GuardSelection):raise ValueError('Typed owner information required')
         if type(information)is SeerObserver:
             from .seer_acquisition import Acquisition
             if type(information.acquisitions)is not tuple or any(type(a)is not Acquisition or a.player!=information.actor for a in information.acquisitions):
@@ -273,7 +273,8 @@ class _Node:
         # A personal observation cannot invent a future/missing action.
         if type(information)is WolfInformation and information.attacks!=s.private.hypotheses[0].attacks:
             raise ValueError('Use the generated past attack history')
-        view=('wolf',information.initial_roster) if type(information)is WolfInformation else ('person',information.actor)
+        if type(information)is WolfObserver and any(a.night>=s.public.day for a in information.attacks):raise ValueError('Only past pack attacks allowed')
+        view=('wolf',information.initial_roster) if type(information) in (WolfInformation,WolfObserver) else ('person',information.actor)
         if self.__view is not None and self.__view!=view:raise ValueError('Choose a personal view from the public root; do not combine owners')
         if type(information) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection):
             if type(information.actor)is not int or not 1<=information.actor<=s.public.player_count:raise ValueError('Owner outside original players')

@@ -78,13 +78,13 @@ class MorningRecord:
 class EvaluationGraph:
  def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={};self.day_decisions={};self.actions={};self.mornings={}
  def random_day_scope(self,board,payload):
-  from .actor_information import PersonalInformation,GuardInformation,GuardSelection
+  from .actor_information import PersonalInformation,GuardInformation,GuardSelection,WolfObserver
   from .seer_intervention import SeerObserver
   from .evaluation_branch import ContinuationInputs
   source=ContinuationInputs(board,payload.public_state,payload.past,payload.private,payload.observer,payload.physical)
   return (board.phase=='day' and not board.winner
    and (self.engine.strategy.day,self.engine.strategy.night,self.engine.strategy.fake_reports)==('random',)*3
-   and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection))
+   and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection,WolfObserver))
    and source not in getattr(self.engine,'anonymous_beliefs',{}))
  def personal_max_scope(self,board,payload):
   from .actor_information import PersonalInformation
@@ -164,8 +164,15 @@ class EvaluationGraph:
    (type(observer)is SeerObserver or type(observer)is PersonalInformation and observer.role=='seer')
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
    and any(c in ('seer','medium') for c in board.claims) and e.strategy.disclosure_for('seer')=='all')
+ def wolf_observer_scope(self,board,payload):
+  from .actor_information import WolfObserver
+  e=self.engine
+  return (type(payload.observer)is WolfObserver and not board.initial_hunter_count
+   and board.initial_role_counts['wolf']==1 and any(c=='seer' for c in board.claims)
+   and e.strategy.disclosure_for('seer')=='all'
+   and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
  def recorded_flow_scope(self,board,payload):
-  return self.hunter_flow_scope(board,payload) or self.personal_flow_scope(board,payload) or self.personal_max_scope(board,payload)
+  return self.hunter_flow_scope(board,payload) or self.personal_flow_scope(board,payload) or self.personal_max_scope(board,payload) or self.wolf_observer_scope(board,payload)
  def record_action(self,board,payload,target,acquired,outcomes,value):
   if not (self.recorded_day_scope(board,payload) or self.recorded_flow_scope(board,payload)):return
   from .actor_information import wolf_information_keys
@@ -256,7 +263,7 @@ class EvaluationGraph:
        if self.recorded_action(b,payload,target) is None:
         actual=action_flow(b,payload,target,e.action_policy)
         if actual!=expected:raise ValueError('Requested personal detail changed scalar value')
-      if self.personal_max_scope(b,source):self.complete_personal_action(b,payload,target)
+      if self.personal_max_scope(b,source) or self.wolf_observer_scope(b,source):self.complete_personal_action(b,payload,target)
    record=self._recorded_action_program(source,groups)
   if record is not None and evaluate and record.value!=self.engine.solve(*source,physical=source.physical):raise ValueError('Requested personal program changed scalar value')
   if record is not None:self.values.setdefault(source,ValueRecord(record.value,'evaluated-personal-action-flow'))

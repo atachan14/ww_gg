@@ -4,17 +4,21 @@ Q is renamed bijectively, never conditioned by owner facts. Only components with
 one identical immutable observer may mix. Public-only convergence stays separate.
 """
 from dataclasses import replace
-from .actor_information import PersonalInformation,GuardInformation,GuardSelection,information_positions
+from .actor_information import PersonalInformation,GuardInformation,GuardSelection,WolfObserver,information_positions
 from .seer_intervention import SeerObserver
 from .public_convergence import transport_record,public_key,mix as public_mix
 from .group_partition import _fix
 
-def supported(observer):return type(observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection)
+def supported(observer):return type(observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection,WolfObserver)
 
 def transport_source(source,mapping):
  if not supported(source.observer):raise ValueError('Typed personal observer required')
  from .public_convergence import transport_source as public_transport_source
  observer=source.observer
+ if type(observer)is WolfObserver:
+  mask=sum(1<<(mapping[p-1]-1) for p in range(1,len(mapping)+1) if observer.initial_roster&(1<<(p-1)))
+  moved=public_transport_source(replace(source,observer=None),mapping)
+  return replace(moved,observer=WolfObserver(mask,tuple(transport_record(a,mapping) for a in observer.attacks)))
  values=dict(actor=mapping[observer.actor-1])
  if type(observer) in (GuardInformation,GuardSelection):values['guards']=tuple(transport_record(g,mapping) for g in observer.guards)
  else:values['acquisitions']=tuple(transport_record(a,mapping) for a in observer.acquisitions)

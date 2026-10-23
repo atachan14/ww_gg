@@ -1093,11 +1093,12 @@ def create_app(test_config=None, *, deployment=False):
                     type(payload['players']) is not list or type(payload['results']) is not list):
                 raise ValueError('視点入力の形式が不正です。')
             from werewolf.seer_view_document import SeerViewDocument
-            if private_owner is not None and (payload['role']=='hunter' or payload['role']=='seer' and SeerViewDocument.supports(private_owner,payload['players'])):
+            from werewolf.wolf_view_document import WolfViewDocument
+            if private_owner is not None and (payload['role']=='hunter' or payload['role']=='seer' and SeerViewDocument.supports(private_owner,payload['players']) or payload['role']=='wolf' and WolfViewDocument.supports(private_owner,payload['players'])):
                 from werewolf.guard_view_document import GuardViewDocument
                 with private_owner.lock:
                     if request.form.get('revision')!=str(private_owner.revision):return jsonify(error='Board changed'),409
-                    kind=GuardViewDocument if payload['role']=='hunter' else SeerViewDocument
+                    kind={'hunter':GuardViewDocument,'seer':SeerViewDocument,'wolf':WolfViewDocument}[payload['role']]
                     view=kind(private_owner,private_owner.game.current,payload['players'],payload['results'])
                     from werewolf.personal_navigation_http import remember
                     remember(private_owner,view)

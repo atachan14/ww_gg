@@ -40,9 +40,9 @@ def _frame_groups(groups,board,past,observer=None,*,target=None):
     Inputs are common generated frames, not marginally inferred automorphisms.
     No law scan, authentication or merging of previously separated classes.
     """
-    from .actor_information import PersonalInformation,GuardInformation,GuardSelection,information_positions
+    from .actor_information import PersonalInformation,GuardInformation,GuardSelection,WolfObserver,information_positions
     from .seer_intervention import SeerObserver
-    if observer is not None and type(observer) not in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection):return ()
+    if observer is not None and type(observer) not in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection,WolfObserver):return ()
     fixed={event.target for event in board.history}
     fixed.update(p for p in range(1,board.player_count+1) if p not in board.alive)
     if target is not None:fixed.add(target)
