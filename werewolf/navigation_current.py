@@ -32,7 +32,14 @@ def _current_source(node):
 class NavigationCurrent:
     def __init__(self,navigation):
         self.navigation=navigation;self.occurrence=navigation.occurrence
-        row=self.occurrence;self.source=transport_source(_current_source(navigation.node),row.names.forward)
+        row=self.occurrence;node=navigation.node
+        # One immutable mapped source per navigation owner. Widget projections
+        # may be requested repeatedly; never retain another view or old node.
+        cached=getattr(navigation,'_current_projection',None)
+        if cached is None or cached[0] is not node or cached[1]!=row.names:
+            cached=(node,row.names,transport_source(_current_source(node),row.names.forward))
+            navigation._current_projection=cached
+        self.source=cached[2]
         b=self.source.public;root=navigation.history.state(navigation.history.root).node.data
         game=root.to_game();base={k:game[k] for k in ('policy','claim_policy','seer_options','strategy_ui','result_disclosure_model') if k in game}
         # A prevented bite advances the public phase without adding a corpse

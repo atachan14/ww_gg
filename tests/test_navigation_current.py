@@ -35,3 +35,24 @@ class NavigationCurrentTests(unittest.TestCase):
    for branch in row['branches']:
     restored=tree.restore(tree.route(branch['node']))
     self.assertEqual(tree.nodes[restored]['node'].read(),tree.nodes[branch['node']]['node'].read())
+
+class CurrentProjectionReuseTests(unittest.TestCase):
+ def test_same_immutable_node_and_names_reuse_but_cursor_and_mapping_changes_do_not(self):
+  from unittest.mock import patch
+  from dataclasses import replace
+  from werewolf.navigation_history import NameMap
+  from werewolf.public_convergence import transport_view_source
+  game=NavigationGame(fixtures.ManualPublicInputTests().root());game.action(3)
+  with patch('werewolf.navigation_current.transport_source',wraps=transport_view_source) as move:
+   first=NavigationCurrent(game);again=NavigationCurrent(game)
+   self.assertIs(first.source,again.source);self.assertEqual(move.call_count,1)
+   row=game.occurrence
+   game.history._occurrences[row.key]=replace(row,names=NameMap((1,2,4,3,5)))
+   changed=NavigationCurrent(game)
+   self.assertEqual(move.call_count,2)
+   self.assertEqual(changed.source,transport_view_source(game.node.read(),game.occurrence.names.forward))
+   game.back();NavigationCurrent(game)
+   self.assertEqual(move.call_count,3)
+   # A separate calculation owner cannot inherit another view's source.
+   other=NavigationGame(fixtures.ManualPublicInputTests().root())
+   NavigationCurrent(other);self.assertEqual(move.call_count,4)

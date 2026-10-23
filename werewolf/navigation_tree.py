@@ -11,12 +11,16 @@ from .ability_labels import marked
 from .tree_public_updates import event_label,publication_label
 
 def _presentation_source(node,names):
-    if not hasattr(node,'owned'):return transport_source(node.read(),names.forward)
-    from dataclasses import replace
+    """Only public label metadata: never rename a hidden law to render a card."""
     from types import SimpleNamespace
     from .public_convergence import transport_record
-    b=node.read().public
-    return SimpleNamespace(public=replace(b,alive=tuple(sorted(names.display(p) for p in b.alive)),history=tuple(transport_record(e,names.forward) for e in b.history)),past=())
+    source=node.read();b=source.public;mapping=names.forward
+    public=SimpleNamespace(
+        alive=tuple(sorted(names.display(p) for p in b.alive)),
+        claims=tuple(claim for p,claim in sorted((names.display(p),claim) for p,claim in enumerate(b.claims,1))),
+        history=tuple(transport_record(e,mapping) for e in b.history),
+        reports=tuple(transport_record(r,mapping) for r in b.reports))
+    return SimpleNamespace(public=public,past=tuple(sorted(transport_record(r,mapping) for r in getattr(source,'past',()))))
 
 class NavigationTree:
     def __init__(self,document,role_order=None):
@@ -68,8 +72,12 @@ class NavigationTree:
             # constructed branch lift; unrelated occurrences/maps stay separate.
             anchor=self.document.game.history.occurrence(owner.split('@',1)[1])
             old=self.document.game.history.state(anchor.key).source
-            if state_key(transport_source(source,names.forward))==state_key(transport_source(old,anchor.names.forward)):
-                return anchor.key
+            # Equal bijections preserve equality of the complete immutable
+            # Q/P state. Different bijections still require the full transport.
+            same=names==anchor.names and state_key(source)==state_key(old)
+            if not same:
+                same=state_key(transport_source(source,names.forward))==state_key(transport_source(old,anchor.names.forward))
+            if same:return anchor.key
         candidates=list(self.document.game.history.children(self.owner(owner)))
         for row in tuple(candidates):
             step=row.selector
