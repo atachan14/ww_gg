@@ -4205,3 +4205,26 @@ existing exact owner regardless of that old preview flag; nonpersistent behavior
 is unchanged. The HTTP/current/restore test now runs with DAWN_BOARD_PREVIEW=False.
 Eight affected real HTTP/private adapter tests passed10.914s. Initial normal smoke
 failed on that404 and is retained as evidence, not counted as passed.
+
+
+Final-verification repair checkpoint: the CO normal18821 smoke passed. The default
+all-hidden diagnostic selected the real controller (mode loading, selected4), and
+/private-view completed143961work in39.141s. Its180s browser wrapper nevertheless
+expired during subsequent Tree work; default end-to-end success is NOT claimed.
+The server process later was absent and18821 had no listener; no exit/OOM cause
+was established. Preserve these failures and do not infer unsupported semantics.
+
+A separate real defect was found: Pending for incomplete no-repeat guard evidence
+escaped the NDJSON generator. Guard streams now frame it as event:error, while
+JSON retains422; entering valid past guard evidence recovers to complete using the
+same adapter. Five guard document/HTTP tests passed27.908s, including this recovery.
+Default/CO smoke probes now wait for the actual Table controller and emit bounded
+selection/error diagnostics; --co explicitly selects the CO scenario. The isolated
+browser probe uses the normal legacy-dawn flag setting. These probe updates are
+intentional; full default materialization remains a verification/performance item.
+
+At parent request, normal serving is being restored from a separate1aae531 archive
+without resetting this checkout or deleting saved navigation data. New changes
+remain reviewable in commits; this stage is not declared fully delivered until
+actual default and CO browser paths both finish under an appropriate measured
+verification envelope and the process exit cause is understood.

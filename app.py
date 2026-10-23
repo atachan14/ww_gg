@@ -1098,13 +1098,17 @@ def create_app(test_config=None, *, deployment=False):
                     view=GuardViewDocument(private_owner,private_owner.game.current,payload['players'],payload['results'])
                     from werewolf.personal_navigation_http import remember
                     remember(private_owner,view)
-                def guard_events():
-                    result=view.result(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
+                def guard_result():
+                    return view.result(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                         max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+                def guard_events():
+                    try:result=guard_result()
+                    except Pending as exc:
+                        yield dict(event='error',error=exc.reason,unsupported=True)
+                        return
                     yield dict(event='complete',**result,board_id=state['public_log']['board_id'],revision=state['revision'])
                 if wants_calculation_stream():return calculation_stream(guard_events,view='hunter')
-                result=next(guard_events());result.pop('event')
-                return jsonify(result)
+                return jsonify(**guard_result(),board_id=state['public_log']['board_id'],revision=state['revision'])
             if wants_calculation_stream():
                 def events():
                     from werewolf.board_roles import prepare_private

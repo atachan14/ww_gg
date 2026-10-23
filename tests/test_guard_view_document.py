@@ -130,3 +130,23 @@ class GuardViewHttpTests(unittest.TestCase):
     normal=nav('public');self.assertIsNone(normal['private_view'])
 
    self.assertEqual(public.export(),before)
+
+ def test_missing_past_guard_stream_is_explicit_pending_then_edit_recovers(self):
+  from app import create_app
+  from tempfile import TemporaryDirectory
+  from unittest.mock import patch
+  from werewolf.public_log import migrate
+  with TemporaryDirectory() as directory:
+   public=GuardViewDocumentTests().later(False)
+   app=create_app(dict(TESTING=True,SECRET_KEY='guard-pending',PERSISTENT_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
+   client=app.test_client();client.post('/start',data=dict(citizens='2',seers='1',hunters='1',wolves='1',day='random',night='random',win_cutoff='0'))
+   state=NavigationCurrent(public.game).data.to_game();form=dict(revision='0',board_id=migrate(state)['board_id'])
+   def submit(results,stream=False):
+    return client.post('/private-view',data={**form,'payload':json.dumps(dict(role='hunter',players=[4],results=results))},headers={'Accept':'application/x-ndjson'} if stream else {})
+   with patch.object(app.extensions['navigation_store'],'get',return_value=public):
+    response=submit([],True);events=[json.loads(line) for line in response.get_data(as_text=True).splitlines() if line]
+    self.assertTrue(any(e.get('event')=='error' and e.get('error')=='guard_view_target_generation_support_unresolved' for e in events))
+    self.assertEqual(submit([]).status_code,422)
+    recovered=submit([dict(day=1,target=1,color=None)],True)
+    events=[json.loads(line) for line in recovered.get_data(as_text=True).splitlines() if line]
+    self.assertTrue(any(e.get('event')=='complete' and e.get('private_view') for e in events))

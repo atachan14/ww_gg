@@ -10,7 +10,7 @@ import subprocess
 with TemporaryDirectory() as directory:
  public=GuardViewDocumentTests().public();before=public.export()
  later=GuardViewDocumentTests().later(False);later_before=later.export();active=[public]
- app=create_app(dict(TESTING=True,SECRET_KEY='isolated-guard-table',GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,DAWN_BOARD_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,PERSISTENT_TREE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
+ app=create_app(dict(TESTING=True,SECRET_KEY='isolated-guard-table',GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,DAWN_BOARD_PREVIEW=False,ANONYMOUS_NIGHT_PREVIEW=True,PERSISTENT_TREE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
  app.extensions['navigation_store'].get=lambda *_:active[0]
  @app.post('/fixture/later')
  def use_later():active[0]=later;return 'ok'
