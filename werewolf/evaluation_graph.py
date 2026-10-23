@@ -184,10 +184,13 @@ class EvaluationGraph:
  def record_morning(self,payload,branches,value):
   self.mornings[payload]=MorningRecord(tuple(branches),value)
  def supports(self,source):
+  # Hidden exchangeable MAX night choices are already equal-score ties in
+  # wolf_policy's count recurrence. Day MAX keeps its explicit score table.
   e=self.engine;b=source.public
   return (source not in getattr(e,'anonymous_beliefs',{})
    and source.observer is None and not b.initial_hunter_count and not e.strategy.include_self_bite
-   and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
+   and ((e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
+    or b.phase=='night' and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('max',)*3)
    and not any(c!='latent' for c in b.claims) and not source.past and not b.reports
    and e.exchangeable(b))
  def program_scope(self,source):

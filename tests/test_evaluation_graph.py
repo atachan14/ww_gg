@@ -44,13 +44,19 @@ class EvaluationGraphTests(unittest.TestCase):
     self.assertEqual(sum(edge.probability for edge in row.edges),1)
     self.assertTrue(all(edge.source.public_state and edge.source.private for edge in row.edges))
     self.assertEqual(node.forecast().village_win,value)
- def test_claimed_or_guard_or_nonrandom_states_keep_explicit_fallback(self):
+ def test_claimed_or_guard_keep_count_fallback_and_record_random_day(self):
   with calculation_budget(4000000,max_seconds=30):
    from tests.test_role_staged_tree import RoleStagedTreeTests
    for doc in (RoleStagedTreeTests().doc('medium'),RoleStagedTreeTests().doc('guard')):
     graph=doc.game.node._Node__calculation._ClosedCalculation__engine.evaluation_graph
     self.assertFalse(graph.supports(doc.game.node.read()))
-    self.assertIsNone(doc.game.node._evaluation_refinement(3))
+    self.assertTrue(graph.recorded_day_scope(doc.game.node.read().public,doc.game.node.read()))
+    record=doc.game.node._evaluation_refinement(3);self.assertIsNotNone(record)
+    self.assertEqual(record.selection_probability,F(1,len(doc.game.node.read().public.alive)))
+    self.assertEqual(sum(edge.probability for edge in record.edges),1)
+    engine=doc.game.node._Node__calculation._ClosedCalculation__engine
+    with patch.object(engine,'solve',side_effect=AssertionError('recorded day solved again')),patch.object(engine,'act',side_effect=AssertionError('recorded day acted again')),patch('werewolf.action_flow.resolve_action',side_effect=AssertionError('recorded day resolved again')):
+     self.assertIs(doc.game.node._evaluation_refinement(3),record)
 
  def test_existing_owned_belief_route_is_preserved_as_explicit_fallback(self):
   with calculation_budget(4000000,max_seconds=20):
