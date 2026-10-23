@@ -257,3 +257,84 @@ class WolfTableRecordTests(unittest.TestCase):
     graph=e.evaluation_graph;projection=graph.personal_projection(view.root.read(),view.root.groups)
     self.assertEqual(sum(r.probability for r in projection.edges),1)
     self.assertTrue(all(len(h.attacks)==1 for r in projection.edges for h in r.source.private.hypotheses),'pack produced independent attacks')
+
+ def max_document(self):
+  from werewolf.navigation_store import NavigationDocument
+  game=data(6,'max').to_game();game.update(claims=['seer',*['latent']*5],seer_inputs=[dict(day=1,reporter=1,target=2,color='white')])
+  public=NavigationDocument(BoardData.from_game(game));public.game.action(3);return public
+ def test_MAX_pack_records_selected_and_inspection_laws(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from tests.test_max_seer_records import MaxSeerRecordTests
+  from werewolf.information_set_forecast import InformationSetForecast
+  with calculation_budget(4000000,max_seconds=90):
+   public=self.max_document();policies={}
+   for pack in ([4],[5]):
+    view=WolfViewDocument(public,public.game.current,pack,[]);result=view.result();s=view.root.read();e=view.root._Node__calculation._ClosedCalculation__engine;g=e.evaluation_graph
+    oracle=InformationSetForecast(e.rules,e.strategy,exact_renaming=False,retire_uninformative_scans=False)
+    self.assertIs(s.public_state,public.game.node.read().public_state)
+    with e.group_scope(view.root.groups),view.root.relation_scope():
+     self.assertEqual(e.solve(*s,physical=s.physical),oracle.solve(*s,physical=s.physical))
+     record=g.personal_program(s,view.root.groups,evaluate=True)
+    self.assertIsNotNone(record)
+    self.assertEqual(sum(r.mass for r in record.program.leaves),1);self.assertEqual(sum(r.counter for r in record.program.leaves),1)
+    self.assertTrue(any(r.mass==0 and r.counter>0 for r in record.program.leaves),'fixture lacks zero-policy inspected branch')
+    for player in result['players']:
+     if player.get('final'):self.assertEqual(F(player['final']['village']),oracle.act(*s[:3],view.names.canonical(player['id']),s.private,s.observer,physical=s.physical))
+    expected={counter:MaxSeerRecordTests().named_night(e,s,view.root.groups,counter) for counter in (False,True)}
+    with patch('werewolf.action_flow.resolve_action',side_effect=AssertionError('MAX pack projection replayed')),patch.object(e,'solve',side_effect=AssertionError('MAX pack projection solved')),patch.object(e,'wolf_policy',side_effect=AssertionError('MAX pack policy reselected')):
+     for counter in (False,True):
+      projection=g.personal_projection(s,view.root.groups,counter=counter)
+      self.assertTrue({state_key(r.source):r.probability for r in projection.edges}==expected[counter],'MAX pack selected/inspection law differs')
+     shown=view.tree().read(view.tree().current_key(),True);self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+    policies.update({k:v for k,v in e.policies.items() if k[:3]==(s.public,s.public_state,s.past)})
+   self.assertEqual(policies,{k:v for k,v in e.policies.items() if k[:3]==(s.public,s.public_state,s.past)})
+
+ def test_MAX_pack_Current_inspection_cold_and_public_day_policy(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.navigation_store import NavigationDocument
+  from werewolf.calculation_tree import CalculationTree
+  with calculation_budget(4000000,max_seconds=90):
+   public=self.max_document();before=public.export();view=WolfViewDocument(public,public.game.current,[4],[]);view.result()
+   tree=view.tree();shown=tree.read(tree.current_key(),True);self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+   self.assertTrue(any(r.get('counterfactual') for r in shown['items'].values()))
+   raw,_=tree.view('h0');checked=0
+   for key,row in tuple(raw.nodes.items()):
+    if not row.get('public_bundle'):continue
+    cold=CalculationTree.from_node(view.root);restored=cold.restore(raw.route(key))
+    self.assertTrue(state_key(cold.nodes[restored]['node'].read())==state_key(row['node'].read()),'MAX pack selected/inspection cold state differs');checked+=1
+   self.assertGreater(checked,1)
+   target=next(k for k,r in shown['items'].items() if r.get('day_start') and not r.get('counterfactual'))
+   tree.select(target);current=view.game.node.read();e=view.root._Node__calculation._ClosedCalculation__engine;g=e.evaluation_graph
+   self.assertTrue(g.personal_max_scope(current.public,current))
+   if not current.public.winner:
+    decision=g.day_decision(current,evaluate=True);self.assertIsNotNone(decision)
+    from dataclasses import replace
+    self.assertEqual(decision,g.day_decision(replace(current,private=current.public_state,observer=None),evaluate=True))
+   cold=WolfViewDocument.restore(NavigationDocument.restore(json.loads(json.dumps(public.export()))),json.loads(json.dumps(view.export())))
+   self.assertTrue(state_key(cold.game.node.read())==state_key(current),'MAX pack Current/cold differs');self.assertEqual(public.export(),before)
+ def test_MAX_full_original_pack_excludes_dead_and_live_teammates(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.navigation_store import NavigationDocument
+  game=data(5,'max',wolves=2).to_game();game.update(claims=['seer',*['latent']*4],seer_inputs=[dict(day=1,reporter=1,target=2,color='white')])
+  with calculation_budget(4000000,max_seconds=90):
+   public=NavigationDocument(BoardData.from_game(game));public.game.action(3)
+   view=WolfViewDocument(public,public.game.current,[3,4],[]);result=view.result()
+   self.assertFalse({3,4}&set(view.targets()));self.assertTrue(all(h.roles[0]==(1<<2)|(1<<3) for h in view.root.read().private.hypotheses))
+   shown=view.tree().read(view.tree().current_key(),True);self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+
+ def test_MAX_pack_prior_attack_and_mixed_policy_boundary(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.navigation_tree import NavigationTree
+  with calculation_budget(4000000,max_seconds=90):
+   public=self.max_document();tree=NavigationTree(public);shown=tree.read(tree.current_key(),True)
+   choice=next(k for k,r in shown['items'].items() if r.get('day_arrival') and set(r['alive'])=={1,4,5,6} and any(a['acquired_day']==2 and a['target']==4 and a['color']=='black' for a in r['reports']))
+   tree.select(choice);public.game.action(6)
+   view=WolfViewDocument(public,public.game.current,[4],[dict(day=1,target=2,color=None)])
+   self.assertEqual(view.root.read().observer.attacks,(WolfAttack(1,2),));view.result()
+   self.assertTrue(all(h.attacks==(WolfAttack(1,2),) for h in view.root.read().private.hypotheses))
+   with self.assertRaises(ValueError):WolfViewDocument(public,public.game.current,[4],[dict(day=1,target=1,color=None)])
+   from types import SimpleNamespace
+   e=view.root._Node__calculation._ClosedCalculation__engine;b=view.root.read().public
+   from dataclasses import replace
+   mixed=SimpleNamespace(strategy=replace(e.strategy,day='random'))
+   self.assertFalse(WolfViewDocument.policy_scope(b,mixed))

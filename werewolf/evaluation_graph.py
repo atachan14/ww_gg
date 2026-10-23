@@ -87,12 +87,13 @@ class EvaluationGraph:
    and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection,WolfObserver))
    and source not in getattr(self.engine,'anonymous_beliefs',{}))
  def personal_max_scope(self,board,payload):
-  from .actor_information import PersonalInformation
+  from .actor_information import PersonalInformation,WolfObserver
   from .seer_intervention import SeerObserver
   observer=payload.observer;e=self.engine
-  return (not board.initial_hunter_count and
+  owner=(type(observer)is WolfObserver and any(c=='seer' for c in board.claims) or
    (type(observer)is SeerObserver or type(observer)is PersonalInformation and observer.role=='seer')
-   and board.claims[observer.actor-1]=='seer' and e.strategy.disclosure_for('seer')=='all'
+   and board.claims[observer.actor-1]=='seer')
+  return (not board.initial_hunter_count and owner and e.strategy.disclosure_for('seer')=='all'
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('max',)*3)
  def recorded_day_scope(self,board,payload):
   return self.random_day_scope(board,payload) or board.phase=='day' and not board.winner and self.personal_max_scope(board,payload)

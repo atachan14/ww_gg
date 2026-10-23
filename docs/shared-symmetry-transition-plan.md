@@ -4385,3 +4385,19 @@ Resource limitation, not a passing test: an initial six-person/two-live-wolf/hun
 The previously reproduced baseline failures remain disclosed and unmodified: test_minimal_three_alive_counterexample_is_resolved expects targets {2,3,4}, actual {2,3} (dead target4); test_future_seer_signals_use_public_joint_ledger_and_public_policy expects target3 value 5/6, actual 1. This stage's affected suites pass, but the historical broad suite is not claimed fully passing.
 
 Remaining finite wolf adapters: nonrandom/MAX observer policy records; no living public seer/value-only or hidden declaration paths; self-attack enabled; selective-publication; nonpersistent compatibility. More than one hunter is outside this typed adapter. Multiple-fake joint reporting and hunter MAX are existing semantic/policy limitations, not enabled by this migration. Anonymous ownership is unchanged.
+
+
+### No-hunter all-MAX wolf observer records (2026-10-24)
+
+The existing personal MAX record contract now accepts WolfObserver as well as seer ownership. Public Q still owns day rankings/ties and pack-information-set wolf policy; private P retains the full original pack and generated prior attack prefix. No public-P transition is reused as a private-P transition. The shared MAX record consumer separately carries selected policy mass and uniform legal-target inspection mass, requesting missing detail only through the same evaluator. All-random with at most one hunter remains admitted; hunter MAX and mixed policy admission are unchanged/closed in this Table adapter.
+
+Verified complete selected and inspection event laws against independently enumerated named transitions, exact action values and root values, zero selected/positive inspection leaves, mass one for both measures, public day decision equality under private/public P, alternative pack cache isolation, complete original pack with a dead teammate, legal target exclusions and prior attack consistency. Both measures' cold recipes preserve full Q/P/observer state and selected Current/cold export remains independent of public history. Recorded projection AND actual Tree rendering run with resolve_action, solve and wolf_policy forbidden once records exist. Isolated real browser passed all-MAX wolf Table -> recorded Tree with counterfactual branches -> selected Current -> reload -> back -> public -> wolf return.
+
+Affected regression: 44 passed in 83.221s. Additional prior attack/mixed boundary test passed in 1.392s; final strengthened actual-Tree no-replay test passed in 1.752s. The previously recorded six-person/two-live-wolf/hunter oracle timeout was not retried in this slice and remains unverified. The two baseline assertion mismatches documented above remain unchanged; no full historical-suite pass is claimed.
+
+Remaining route classification:
+* Actual supported adapters still to migrate/assess: no-hunter mixed policy tuples, self-attack-enabled wolf observers, and already-supported selective-disclosure private routes where exact evaluator transitions exist. They retain their compatibility behavior; this commit does not relax those guards.
+* Legitimate value-only: pure all-hidden/uninformative root reductions may retain no concrete ability graph. Future detail must be an explicit same-evaluator request, not a fabricated named Tree. No living public seer also includes other supported compatibility cases not covered by this typed entry; these need separate finite admission assessment.
+* No cursor migration requirement: nonpersistent standalone compatibility value APIs have no persistent Table/Current contract.
+* Unsupported semantics remain unsupported: hunter MAX dependency/mixed hunter policies not selected by the existing engine, multiple fake-CO joint report laws, and deferred automatic future CO timing. No new policy law was inferred.
+* Anonymous-belief ownership is a separate remaining architecture unit and unchanged.
