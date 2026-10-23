@@ -371,6 +371,9 @@ class _Node:
         s=self.__source;e=self.__calculation._ClosedCalculation__engine
         with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups),self.relation_scope():
             if s.public.phase=='day':
+                if e.strategy.day=='random':
+                    targets=legal_targets(s.public,e.rules,e.strategy)
+                    return F(1,len(targets)) if target in targets else F()
                 graph=getattr(e,'evaluation_graph',None)
                 decision=graph.day_decision(s,evaluate=True) if graph is not None else None
                 if decision is not None:return dict(decision.policy).get(target,F())
