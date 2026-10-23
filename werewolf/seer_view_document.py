@@ -15,13 +15,18 @@ from .information_set_forecast import Pending
 class SeerViewDocument(GuardViewDocument):
  role='seer'
  @staticmethod
+ def observation_scope(board):
+  # Guard effects already have retained exact records even without a CO.
+  # Unguarded all-hidden roots keep their legitimate value-only adapter.
+  return board.initial_hunter_count==1 or any(board.claims[p-1] in ('seer','medium') for p in board.alive)
+ @staticmethod
  def supports(public,players):
   if hasattr(public.game.node,'owned'):return False # Explicit private request retains its existing compatibility adapter.
   if len(players)!=1:return False
   node=public.game.node
   s=node.read();strategy=node._Node__calculation._ClosedCalculation__strategy
   return (type(players[0])is int and 1<=players[0]<=s.public.player_count
-   and any(s.public.claims[p-1] in ('seer','medium') for p in s.public.alive)
+   and SeerViewDocument.observation_scope(s.public)
    and strategy.disclosure_for('seer')=='all'
    and ((strategy.day,strategy.night,strategy.fake_reports)==('random',)*3 or
     not s.public.initial_hunter_count and (strategy.day,strategy.night,strategy.fake_reports)==('max',)*3
@@ -42,7 +47,7 @@ class SeerViewDocument(GuardViewDocument):
   acquisitions=tuple(transport_record(a,inverse) for a in view.acquisitions)
   information=PersonalInformation(self.names.canonical(self.players[0]),'seer',acquisitions)
   if strategy.day=='max' and (source.public.initial_hunter_count or source.public.claims[information.actor-1]!='seer'):raise Pending('seer_table_recorded_strategy_unimplemented')
-  if not any(source.public.claims[p-1] in ('seer','medium') for p in source.public.alive):raise Pending('seer_table_value_only_root_reduction')
+  if not self.observation_scope(source.public):raise Pending('seer_table_value_only_root_reduction')
   _,self.belief=condition_personal(source.public_state,information)
   _,root=base.personal(information);self.root=root
   histories={tuple(a for a in h.acquisitions if a.player==information.actor) for h in root.read().private.hypotheses}

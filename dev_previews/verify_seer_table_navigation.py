@@ -7,7 +7,7 @@ from app import create_app
 from tests.test_seer_table_records import SeerTableRecordTests
 import subprocess,sys
 with TemporaryDirectory() as directory:
- hiddenhunterwolf='--wolf-hidden-hunter' in sys.argv;hidden='--hidden' in sys.argv;maximum='--max' in sys.argv;multiwolf='--multiwolf' in sys.argv;hunterwolf='--wolf-hunter' in sys.argv or hiddenhunterwolf;maxwolf='--wolf-max' in sys.argv;wolf='--wolf' in sys.argv or multiwolf or hunterwolf or maxwolf
+ hiddenhunterseer='--seer-hidden-hunter' in sys.argv;hiddenhunterwolf='--wolf-hidden-hunter' in sys.argv;hidden='--hidden' in sys.argv or hiddenhunterseer;maximum='--max' in sys.argv;multiwolf='--multiwolf' in sys.argv;hunterwolf='--wolf-hunter' in sys.argv or hiddenhunterwolf;maxwolf='--wolf-max' in sys.argv;wolf='--wolf' in sys.argv or multiwolf or hunterwolf or maxwolf
  if maximum:
   from tests.test_max_seer_records import MaxSeerRecordTests
   from werewolf.navigation_store import NavigationDocument
@@ -19,6 +19,9 @@ with TemporaryDirectory() as directory:
   else:
    from tests.test_wolf_table_records import WolfTableRecordTests
    public=WolfTableRecordTests().max_document() if maxwolf else WolfTableRecordTests().hunter_document() if hunterwolf else WolfTableRecordTests().multi_document() if multiwolf else WolfTableRecordTests().document()
+ elif hiddenhunterseer:
+  from tests.test_hidden_hunter_seer_table import HiddenHunterSeerTableTests
+  public=HiddenHunterSeerTableTests().document()
  else:public=SeerTableRecordTests().hidden_document() if hidden else SeerTableRecordTests().document()
 
  before=public.export()
@@ -58,6 +61,10 @@ with TemporaryDirectory() as directory:
   if hunterwolf:
    body=body.replace("citizens:'4',seers:'1',wolves:'1'","citizens:'2',seers:'1',hunters:'1',wolves:'1'")
    body=body.replace('PASS wolf Table','PASS hunter wolf Table deathless Current')
+  if hiddenhunterseer:
+   body=body.replace("citizens:'4',seers:'1',wolves:'1'", "citizens:'2',seers:'1',hunters:'1',wolves:'1'")
+   body=body.replace("row.day_start&&row.alive.length===4", "row.public_current&&row.column_day===2&&row.column_phase==='day'&&row.alive.length===4")
+   body=body.replace('PASS seer Table','PASS hunter hidden seer Table')
   if hiddenhunterwolf:
    body=body.replace("row.day_start&&row.alive.length===4", "row.public_current&&row.column_day===2&&row.column_phase==='day'&&row.alive.length===4")
    marker="  assert.deepEqual(errors,[]);"
