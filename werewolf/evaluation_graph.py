@@ -25,6 +25,7 @@ class Refinement:
  value:F
  edges:tuple
  reason:str='public-state-refinement'
+ selection_probability:F|None=None
 
 @dataclass(frozen=True)
 class ProgramRecord:
@@ -182,18 +183,23 @@ class EvaluationGraph:
   if source not in self.values:self.values[source]=ValueRecord(value,'terminal' if source.public.winner else 'exact-continuation')
   return value
  def refine(self,source,groups,target=None):
-  if not self.supports(source):return None
+  decision=self.day_decision(source)
+  maximum=decision is not None and self.day_scope(source)
+  # A value-only shortcut is not permission to force a full MAX policy table.
+  # Ordinary selection/inspection requests complete that table separately.
+  if not self.supports(source) and not maximum:return None
   key=(source,tuple(groups),target)
   if key in self.refinements:return self.refinements[key]
   e=self.engine;b=source.public
   if b.phase=='day':
    if target is None:raise ValueError('Execution refinement requires a target')
+   if maximum and source.private==source.public_state and source.physical==source.public:value=dict(decision.scores)[target]
+   else:value=e.act(*source[:3],target,source.private,source.observer,physical=source.physical)
    from .action_flow import resolve_action
    from .evaluation_branch import ActionInputs
    from .board_future import outcome_key
    acquired,outcomes=resolve_action(b,ActionInputs(source.public_state,source.past,source.private,source.observer,source.physical),target,e.action_policy)
    edges=tuple(Edge(o.probability,e.action_policy.project(b,acquired,o,target),target,outcome_key(o)) for o in outcomes)
-   value=e.act(*source[:3],target,source.private,source.observer,physical=source.physical)
   else:
    if target is not None:raise ValueError('Public night refinement integrates attack policy')
    from .public_convergence import public_night_observations
@@ -202,4 +208,6 @@ class EvaluationGraph:
   if sum((edge.probability for edge in edges),F())!=1:raise ValueError('Evaluator refinement lost probability mass')
   refined=sum((edge.probability*self.value(edge.source) for edge in edges),F())
   if refined!=value:raise ValueError('Evaluator refinement changed exact value')
-  result=Refinement(value,edges);self.refinements[key]=result;return result
+  probability=dict(decision.policy)[target] if maximum else F(1,len(b.alive)) if b.phase=='day' else None
+  result=Refinement(value,edges,'MAX-execution-refinement' if maximum else 'public-state-refinement',probability)
+  self.refinements[key]=result;return result

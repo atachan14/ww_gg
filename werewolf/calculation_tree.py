@@ -587,7 +587,9 @@ class CalculationTree:
                 for trace in branch['joint_actions']:
                     trace['probability']=str(trace['probability'])
                     trace['multiplicity']=len(trace['members'])
-            choices.append({'targets':target_ids,'label':('処刑' if node.read().public.phase=='day' else '襲撃')+' '+ '/'.join('P'+str(p) for p in target_ids),
+            graph=getattr(self.engine,'evaluation_graph',None)
+            recorded=graph is not None and all((r['node'].read(),tuple(r['node'].groups),r['target']) in graph.refinements for r in members)
+            choices.append({'evaluation_transition':'evaluated' if recorded else 'legacy-reconstruction','targets':target_ids,'label':('処刑' if node.read().public.phase=='day' else '襲撃')+' '+ '/'.join('P'+str(p) for p in target_ids),
                 'multiplicity':sum(len(r.get('orbit',(r['target'],))) for r in members),'members':named,'q_score':str(members[0]['q_score']),
                 'selected':bool(policy_mass),'policy_probability':str(policy_mass),'branches':list(branches.values())})
         record['actions']=choices
@@ -750,7 +752,9 @@ class CalculationTree:
             trace.update(owner='evaluator' if projected else 'mixed-evaluator-program',ability_program='evaluated',public_projection='evaluated' if projected else 'legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
         if row.get('recorded_arrival'):trace=dict(owner='evaluator',reduction='recorded-pre-report-mixture',public_projection='evaluated')
         decision=graph.day_decision(s) if graph is not None else None
-        if decision is not None:trace.update(owner='mixed-evaluator-selection',selection='evaluated-public-MAX',selection_complete=decision.complete,transition='legacy-reconstruction')
+        if decision is not None:
+            transitions=bool(row.get('actions')) and all(action.get('evaluation_transition')=='evaluated' for action in row['actions'])
+            trace.update(owner='evaluator' if transitions else 'mixed-evaluator-selection',selection='evaluated-public-MAX',selection_complete=decision.complete,transition='evaluated' if transitions else 'legacy-reconstruction')
         return {'evaluation_trace':trace,'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),

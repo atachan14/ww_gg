@@ -40,7 +40,7 @@ class MaxDayDecisionRecordTests(unittest.TestCase):
    tree=CalculationTree.from_node(node)
    with patch.object(e,'score_day_targets',side_effect=AssertionError('complete MAX scores re-evaluated')):tree.expand('0')
    shown=tree.summary('0',True);self.assertEqual(shown['evaluation_trace']['selection'],'evaluated-public-MAX')
-   self.assertEqual(shown['evaluation_trace']['transition'],'legacy-reconstruction')
+   self.assertEqual(shown['evaluation_trace']['transition'],'evaluated')
    self.assertEqual(sum(F(a['policy_probability']) for a in shown['actions']),1)
    self.assertTrue(any(a['policy_probability']=='0' and a['branches'] for a in shown['actions']))
    for action in shown['actions']:self.assertEqual(F(action['policy_probability']),sum(dict(record.policy)[p] for p in action['targets']))

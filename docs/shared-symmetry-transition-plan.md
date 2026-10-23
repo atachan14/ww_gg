@@ -3787,3 +3787,29 @@ partial win bounds have no decision record, Tree does not rerun completed target
 scoring, private P shares the same public policy, and concrete tied/nonchosen
 choices preserve named Current and cold history. Normal18821 stays on2d97cdc
 until a separately verified coherent MAX stage is ready for activation.
+
+## MAX daytime concrete transition records (2026-10-23)
+
+For ordinary public MAX day states without hunter or anonymous-belief ownership,
+completed evaluator day scores/policy now admit evaluator-owned execution
+refinements. Each record retains the exact physical conditional child law and
+forced-action value separately from the public-Q selection probability. Tree
+consumes these cached edges; zero-policy interventions remain valid inspections.
+The common action generator/projector supplies concrete Board metadata lazily;
+this is not a retained full search graph or a claim that scalar shortcuts formed
+all concrete children. A value-only shortcut never forces a complete choice table.
+Only after a complete table exists can this path record concrete transitions.
+
+Independent named evaluation compares every child source (including private law,
+public Q, physical P and history), conditional masses and forced values for both
+ordinary and hypothesis-conditioned P sharing the same Q. Ties and zero weights,
+cache identity, cold history and concrete representative navigation are tested.
+112 selected Python regressions and 54 Tree/layout/display JS tests pass. Isolated
+Edge verifies manual linked CO, zero-choice 4, back navigation and representative
+choice 2 with public selection weight 1/2.
+
+Remaining explicit boundaries: MAX night program/projection, hunter, personal
+observer, anonymous-belief-owned source, and value-only states with no completed
+policy table retain their tested legacy paths. Provenance is per node/action;
+MAX day migration does not imply an entire future subtree is evaluator-recorded.
+No strategy semantics, probability laws, saved-data format or layout changed.
