@@ -144,8 +144,19 @@ class EvaluationGraph:
   from .seer_intervention import SeerObserver
   return (board.initial_hunter_count==1 and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection))
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
+ def personal_flow_scope(self,board,payload):
+  """Supported seer ownership through the ordinary evaluated action flow."""
+  from .actor_information import PersonalInformation
+  from .seer_intervention import SeerObserver
+  e=self.engine;observer=payload.observer
+  return (not board.initial_hunter_count and
+   (type(observer)is SeerObserver or type(observer)is PersonalInformation and observer.role=='seer')
+   and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
+   and board.claims[observer.actor-1]=='seer' and e.strategy.disclosure_for('seer')=='all')
+ def recorded_flow_scope(self,board,payload):
+  return self.hunter_flow_scope(board,payload) or self.personal_flow_scope(board,payload)
  def record_action(self,board,payload,target,acquired,outcomes,value):
-  if not (self.random_day_scope(board,payload) or self.hunter_flow_scope(board,payload)):return
+  if not (self.random_day_scope(board,payload) or self.recorded_flow_scope(board,payload)):return
   from .actor_information import wolf_information_keys
   policies=() if board.phase=='day' else tuple((info,self.engine.policies.get((board,payload.public_state,payload.past,info))) for info in wolf_information_keys(payload.private))
   self.actions[board,payload,target]=ActionRecord(acquired,tuple(EvaluatedOutcome(*row) for row in outcomes),value,policies)
@@ -195,7 +206,7 @@ class EvaluationGraph:
   policies=tuple((info,self.engine.policies[source.public,source.public_state,source.past,info]) for info in dict.fromkeys(leaf.information for leaf in program.leaves))
   self.programs[source,tuple(groups)]=ProgramRecord(program,value,tuple(program.values),policies)
  def _recorded_action_program(self,source,groups):
-  if source.public.phase!='night' or source.public.winner or not self.hunter_flow_scope(source.public,source) or source in getattr(self.engine,'anonymous_beliefs',{}):return None
+  if source.public.phase!='night' or source.public.winner or not self.recorded_flow_scope(source.public,source) or source in getattr(self.engine,'anonymous_beliefs',{}):return None
   key=(source,tuple(groups))
   if key not in self.programs:
    found=self.hunter_rows(source)
@@ -207,7 +218,7 @@ class EvaluationGraph:
    reason='factored-evaluated-personal-action-flow' if source.observer is not None else 'factored-evaluated-action-flow'
    self.programs[key]=ProgramRecord(program,found[1],tuple(program.values),policies,reason)
   return self.programs[key]
- def personal_program(self,source,groups):
+ def personal_program(self,source,groups,*,evaluate=False):
   """Read completed observer-conditioned records; never request missing detail.
 
   Public convergence deliberately excludes these sources. Keep this explicit
@@ -215,6 +226,23 @@ class EvaluationGraph:
   """
   if source.observer is None:return None
   record=self._recorded_action_program(source,groups)
+  if record is None and evaluate and self.personal_flow_scope(source.public,source):
+   # Explicit detail requests enter the existing evaluator action flow. A
+   # reused scalar alone is not evidence that its transition was retained.
+   from .actor_information import wolf_information_groups
+   from .evaluation_branch import ActionInputs,physical_board
+   from .action_flow import action_flow
+   e=self.engine;b=source.public
+   for info,mass,own in wolf_information_groups(source.private):
+    for target,q in e.wolf_policy(b,source.public_state,source.past,info.initial_roster,info.attacks):
+     if not q:continue
+     payload=ActionInputs(source.public_state,source.past,own,source.observer,physical_board(b,own,source.physical))
+     if self.recorded_action(b,payload,target) is None:
+      expected=e.act(b,payload.public_state,payload.past,target,own,source.observer,physical=payload.physical)
+      if self.recorded_action(b,payload,target) is None:
+       actual=action_flow(b,payload,target,e.action_policy)
+       if actual!=expected:raise ValueError('Requested personal detail changed scalar value')
+   record=self._recorded_action_program(source,groups)
   if record is not None:self.values.setdefault(source,ValueRecord(record.value,'evaluated-personal-action-flow'))
   return record
  def evaluated_program(self,source,groups,*,evaluate=False):
@@ -251,7 +279,7 @@ class EvaluationGraph:
   return replace(template,private=own,physical=physical_board(template.public,own,template.physical),board_data=None,provenance=None)
  def hunter_rows(self,source):
   b=source.public;e=self.engine
-  if b.phase!='night' or b.winner or not self.hunter_flow_scope(b,source) or source in getattr(e,'anonymous_beliefs',{}):return None
+  if b.phase!='night' or b.winner or not self.recorded_flow_scope(b,source) or source in getattr(e,'anonymous_beliefs',{}):return None
   from .actor_information import wolf_information_groups
   from .evaluation_branch import ActionInputs,physical_board
   rows=[];expected=F();offset=0

@@ -45,7 +45,7 @@
    }
    for(const kind of ['dawn','final']){const cell=main.querySelector(`[data-value-cell="${kind}"]`);if(cell)cell.closest('table').tHead.rows[0].cells[cell.cellIndex].textContent=kind==='dawn'?'能力使用後・次の昼まで 村 / 狼':'能力使用後・最終 村 / 狼';}
   }
-  main.querySelector('[data-table-scope]').textContent='狩人 '+context.view.players.join(',')+' の視点';
+  main.querySelector('[data-table-scope]').textContent=({hunter:'狩人',seer:'占い師'}[context.view.role]||context.view.role)+' '+context.view.players.join(',')+' の視点';
   main.querySelector('[data-personal-public]').onclick=()=>exit().catch(error=>{main.querySelector('[data-personal-scope]').append(error.message);});
  }
  async function cold(){

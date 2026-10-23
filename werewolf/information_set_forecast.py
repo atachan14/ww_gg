@@ -606,8 +606,13 @@ class InformationSetActionPolicy:
 
     def action_recorder(self,board,payload):
         graph=getattr(self.engine,'evaluation_graph',None)
-        if graph is None or not graph.random_day_scope(board,payload):return None
+        if graph is None or not (graph.random_day_scope(board,payload) or graph.personal_flow_scope(board,payload)):return None
         return lambda target,acquired,outcomes,value:graph.record_action(board,payload,target,acquired,outcomes,value)
+
+    def morning_recorder(self,payload):
+        graph=getattr(self.engine,'evaluation_graph',None)
+        if graph is None or not graph.personal_flow_scope(payload.public,payload):return None
+        return lambda branches,value:graph.record_morning(payload,branches,value)
 
     def acquire(self,b,payload):
         s,past,private,observer,physical=payload;e=self.engine

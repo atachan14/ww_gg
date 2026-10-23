@@ -27,7 +27,11 @@ def register(app,document,render,public_render):
    if type(record)is not dict:raise ValueError('Private evidence required')
    with public.lock:
     views=getattr(public,'private_views',{});view=views.get(key(record))
-    if view is None:view=remember(public,GuardViewDocument.restore(public,record))
+    if view is None:
+     from .seer_view_document import SeerViewDocument
+     kind={'hunter':GuardViewDocument,'seer':SeerViewDocument}.get(record.get('role'))
+     if kind is None:raise ValueError('Unsupported private navigation role')
+     view=remember(public,kind.restore(public,record))
     elif json.dumps(record,sort_keys=True)!=json.dumps(view.export(),sort_keys=True):return jsonify(error='Private view changed'),409
    with view.lock:
     tree=view.tree()

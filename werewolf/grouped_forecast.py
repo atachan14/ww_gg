@@ -10,10 +10,13 @@ class GroupedPolicy(InformationSetActionPolicy):
     def morning_value(self,payload):
         e=self.engine;value=e.terminal_report_value(payload)
         if value is not None:return value
-        value=F()
+        value=F();recorder=self.morning_recorder(payload);recorded=[] if recorder is not None else None
         for q,mass,child in e.report_children(payload):
             with e.group_scope(_report_groups(e.groups,child)):
-                value+=mass*e.solve(*child,physical=child.physical)
+                child_value=e.solve(*child,physical=child.physical)
+                value+=mass*child_value
+            if recorded is not None:recorded.append((mass,child,child_value))
+        if recorder is not None:recorder(tuple(recorded),value)
         return value
 
 

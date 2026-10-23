@@ -1092,11 +1092,13 @@ def create_app(test_config=None, *, deployment=False):
                     payload['role'] not in ('wolf', 'seer', 'hunter') or
                     type(payload['players']) is not list or type(payload['results']) is not list):
                 raise ValueError('視点入力の形式が不正です。')
-            if private_owner is not None and payload['role']=='hunter':
+            from werewolf.seer_view_document import SeerViewDocument
+            if private_owner is not None and (payload['role']=='hunter' or payload['role']=='seer' and SeerViewDocument.supports(private_owner,payload['players'])):
                 from werewolf.guard_view_document import GuardViewDocument
                 with private_owner.lock:
                     if request.form.get('revision')!=str(private_owner.revision):return jsonify(error='Board changed'),409
-                    view=GuardViewDocument(private_owner,private_owner.game.current,payload['players'],payload['results'])
+                    kind=GuardViewDocument if payload['role']=='hunter' else SeerViewDocument
+                    view=kind(private_owner,private_owner.game.current,payload['players'],payload['results'])
                     from werewolf.personal_navigation_http import remember
                     remember(private_owner,view)
                 def guard_result():
@@ -1108,7 +1110,7 @@ def create_app(test_config=None, *, deployment=False):
                         yield dict(event='error',error=exc.reason,unsupported=True)
                         return
                     yield dict(event='complete',**result,board_id=state['public_log']['board_id'],revision=state['revision'])
-                if wants_calculation_stream():return calculation_stream(guard_events,view='hunter')
+                if wants_calculation_stream():return calculation_stream(guard_events,view=payload['role'])
                 return jsonify(**guard_result(),board_id=state['public_log']['board_id'],revision=state['revision'])
             if wants_calculation_stream():
                 def events():

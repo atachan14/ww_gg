@@ -351,7 +351,7 @@ class CalculationTree:
                 if node.read().observer is not None:
                     record=graph.personal_program(node.read(),node.groups)
                     if record is None:
-                        graph.value(node.read());record=graph.personal_program(node.read(),node.groups)
+                        graph.value(node.read());record=graph.personal_program(node.read(),node.groups,evaluate=True)
                     if record is None:
                         from .information_set_forecast import Pending
                         raise Pending('personal_evaluated_night_detail_not_retained')

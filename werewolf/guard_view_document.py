@@ -19,6 +19,7 @@ from .calculation_budget import calculation_budget,DEFAULT_MAX_WORK,DEFAULT_MAX_
 from .information_set_forecast import Pending
 
 class GuardViewDocument:
+ role='hunter'
  def __init__(self,public,owner,players,results,*,target=None):
   occurrence=public.game.history.occurrence(owner);base=public.game.history.state(owner).node
   source=base.read();self.names=occurrence.names
@@ -84,10 +85,10 @@ class GuardViewDocument:
   from .forecast_result import Forecast
   return result,Forecast(value,())
  def export(self):
-  return dict(version=1,owner=self.owner,anchor=self.anchor,role='hunter',players=list(self.players),results=[dict(r) for r in self.results],target=self.target,revision=self.revision,history=self.game.export())
+  return dict(version=1,owner=self.owner,anchor=self.anchor,role=self.role,players=list(self.players),results=[dict(r) for r in self.results],target=self.target,revision=self.revision,history=self.game.export())
  @classmethod
  def restore(cls,public,record):
-  if type(record)is not dict or set(record)!={'version','owner','anchor','role','players','results','target','revision','history'} or type(record['version'])is not int or record['version']!=1 or record['role']!='hunter' or type(record['revision'])is not int or record['revision']<0:raise ValueError('Guard view evidence document required')
+  if type(record)is not dict or set(record)!={'version','owner','anchor','role','players','results','target','revision','history'} or type(record['version'])is not int or record['version']!=1 or record['role']!=cls.role or type(record['revision'])is not int or record['revision']<0:raise ValueError('Guard view evidence document required')
   view=cls(public,record['owner'],record['players'],record['results'],target=record['target'])
   if view.anchor!=record['anchor']:raise ValueError('Public owner changed')
   view.game=NavigationGame.restore(view.root,record['history'],names=view.names);view.revision=record['revision']
