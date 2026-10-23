@@ -86,10 +86,20 @@ class EvaluationGraph:
    and (self.engine.strategy.day,self.engine.strategy.night,self.engine.strategy.fake_reports)==('random',)*3
    and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection))
    and source not in getattr(self.engine,'anonymous_beliefs',{}))
+ def personal_max_scope(self,board,payload):
+  from .actor_information import PersonalInformation
+  from .seer_intervention import SeerObserver
+  observer=payload.observer;e=self.engine
+  return (not board.initial_hunter_count and
+   (type(observer)is SeerObserver or type(observer)is PersonalInformation and observer.role=='seer')
+   and board.claims[observer.actor-1]=='seer' and e.strategy.disclosure_for('seer')=='all'
+   and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('max',)*3)
+ def recorded_day_scope(self,board,payload):
+  return self.random_day_scope(board,payload) or board.phase=='day' and not board.winner and self.personal_max_scope(board,payload)
  def record_day_value(self,source,value,reduction='evaluated-random-day-value'):
-  if self.random_day_scope(source.public,source):self.values.setdefault(source,ValueRecord(value,reduction))
+  if self.recorded_day_scope(source.public,source):self.values.setdefault(source,ValueRecord(value,reduction))
  def day_refinement(self,source,groups,target,*,evaluate=True):
-  if not self.random_day_scope(source.public,source):return None
+  if not self.recorded_day_scope(source.public,source):return None
   from .exact import legal_targets
   from .evaluation_branch import ActionInputs
   from .action_flow import action_flow,resolve_action
@@ -134,8 +144,9 @@ class EvaluationGraph:
    self.values.setdefault(child,ValueRecord(row.value,'evaluated-day-child' if row.source is not None else 'retained-terminal-context'))
    edges.append(Edge(row.outcome.probability,child,target,outcome_key(row.outcome)));weighted+=row.outcome.probability*row.value
   if sum(edge.probability for edge in edges)!=1 or weighted!=record.value:raise ValueError('Recorded day mass/value changed')
-  probability=F(1,len(legal_targets(source.public,e.rules,e.strategy)))
-  result=Refinement(record.value,tuple(edges),'requested-evaluated-day-detail' if requested else 'evaluated-random-day-action',probability)
+  probability=(dict(self.day_decision(source,evaluate=True).policy)[target] if self.personal_max_scope(b,source) else F(1,len(legal_targets(source.public,e.rules,e.strategy))))
+  reason='evaluated-private-MAX-day-action' if self.personal_max_scope(b,source) else 'evaluated-random-day-action'
+  result=Refinement(record.value,tuple(edges),'requested-evaluated-day-detail' if requested else reason,probability)
   self.refinements[key]=result
   return result
  def hunter_flow_scope(self,board,payload):
@@ -154,9 +165,9 @@ class EvaluationGraph:
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
    and any(c in ('seer','medium') for c in board.claims) and e.strategy.disclosure_for('seer')=='all')
  def recorded_flow_scope(self,board,payload):
-  return self.hunter_flow_scope(board,payload) or self.personal_flow_scope(board,payload)
+  return self.hunter_flow_scope(board,payload) or self.personal_flow_scope(board,payload) or self.personal_max_scope(board,payload)
  def record_action(self,board,payload,target,acquired,outcomes,value):
-  if not (self.random_day_scope(board,payload) or self.recorded_flow_scope(board,payload)):return
+  if not (self.recorded_day_scope(board,payload) or self.recorded_flow_scope(board,payload)):return
   from .actor_information import wolf_information_keys
   policies=() if board.phase=='day' else tuple((info,self.engine.policies.get((board,payload.public_state,payload.past,info))) for info in wolf_information_keys(payload.private))
   self.actions[board,payload,target]=ActionRecord(acquired,tuple(EvaluatedOutcome(*row) for row in outcomes),value,policies)
@@ -181,7 +192,7 @@ class EvaluationGraph:
  def day_scope(self,source):
   e=self.engine;b=source.public
   return (b.phase=='day' and not b.winner and e.strategy.day=='max'
-   and not b.initial_hunter_count and source.observer is None
+   and not b.initial_hunter_count and (source.observer is None or self.personal_max_scope(b,source))
    and source not in getattr(e,'anonymous_beliefs',{}))
  def record_day_scores(self,board,public,past,scores):
   if self.engine.strategy.day!='max' or board.phase!='day' or board.winner or board.initial_hunter_count:return
@@ -209,24 +220,24 @@ class EvaluationGraph:
   if source.public.phase!='night' or source.public.winner or not self.recorded_flow_scope(source.public,source) or source in getattr(self.engine,'anonymous_beliefs',{}):return None
   key=(source,tuple(groups))
   if key not in self.programs:
-   found=self.hunter_rows(source)
+   found=self.max_seer_rows(source) if self.personal_max_scope(source.public,source) else self.hunter_rows(source)
    if found is None:return None
    from .recorded_hunter_program import factor
-   program=factor(source,tuple(groups),found[0])
+   program=factor(source,tuple(groups),found[0],counter_weights=found[2] if len(found)==3 else None)
    if program is None:return None
    policies=tuple((info,self.engine.policies[source.public,source.public_state,source.past,info]) for info in dict.fromkeys(row[5] for row in found[0]))
    reason='factored-evaluated-personal-action-flow' if source.observer is not None else 'factored-evaluated-action-flow'
    self.programs[key]=ProgramRecord(program,found[1],tuple(program.values),policies,reason)
   return self.programs[key]
  def personal_program(self,source,groups,*,evaluate=False):
-  """Read completed observer-conditioned records; never request missing detail.
+  """Read completed observer-conditioned records; explicit requests use the evaluator.
 
   Public convergence deliberately excludes these sources. Keep this explicit
   boundary; observer-aware projection/navigation uses its separate entry.
   """
   if source.observer is None:return None
   record=self._recorded_action_program(source,groups)
-  if record is None and evaluate and self.personal_flow_scope(source.public,source):
+  if record is None and evaluate and self.recorded_flow_scope(source.public,source):
    # Explicit detail requests enter the existing evaluator action flow. A
    # reused scalar alone is not evidence that its transition was retained.
    from .actor_information import wolf_information_groups
@@ -234,15 +245,20 @@ class EvaluationGraph:
    from .action_flow import action_flow
    e=self.engine;b=source.public
    for info,mass,own in wolf_information_groups(source.private):
-    for target,q in e.wolf_policy(b,source.public_state,source.past,info.initial_roster,info.attacks):
-     if not q:continue
+    with e.actor_scope(info):
+     policy=e.wolf_policy(b,source.public_state,source.past,info.initial_roster,info.attacks)
      payload=ActionInputs(source.public_state,source.past,own,source.observer,physical_board(b,own,source.physical))
-     if self.recorded_action(b,payload,target) is None:
-      expected=e.act(b,payload.public_state,payload.past,target,own,source.observer,physical=payload.physical)
+     from .exact import legal_targets
+     targets=legal_targets(payload.physical,e.rules,e.strategy) if self.personal_max_scope(b,source) else tuple(t for t,q in policy if q)
+     for target in targets:
       if self.recorded_action(b,payload,target) is None:
-       actual=action_flow(b,payload,target,e.action_policy)
-       if actual!=expected:raise ValueError('Requested personal detail changed scalar value')
+       expected=e.act(b,payload.public_state,payload.past,target,own,source.observer,physical=payload.physical)
+       if self.recorded_action(b,payload,target) is None:
+        actual=action_flow(b,payload,target,e.action_policy)
+        if actual!=expected:raise ValueError('Requested personal detail changed scalar value')
+      if self.personal_max_scope(b,source):self.complete_personal_action(b,payload,target)
    record=self._recorded_action_program(source,groups)
+  if record is not None and evaluate and record.value!=self.engine.solve(*source,physical=source.physical):raise ValueError('Requested personal program changed scalar value')
   if record is not None:self.values.setdefault(source,ValueRecord(record.value,'evaluated-personal-action-flow'))
   return record
  def evaluated_program(self,source,groups,*,evaluate=False):
@@ -277,6 +293,57 @@ class EvaluationGraph:
   law=Law.weighted(((F(1),Atom(pop,tuple(pins))),))[1]
   own=replace(template.private,hypotheses=expand(law,groups))
   return replace(template,private=own,physical=physical_board(template.public,own,template.physical),board_data=None,provenance=None)
+ def complete_personal_action(self,b,payload,target):
+  """Explicit evaluator detail request after a scalar/terminal reduction."""
+  from .action_flow import resolve_action
+  from .board_future import outcome_key
+  from .group_partition import _report_groups
+  e=self.engine;record=self.recorded_action(b,payload,target)
+  if record is None:return
+  acquired=record.acquired;rows=record.outcomes
+  if any(r.source is None and r.outcome.context is None for r in rows):
+   acquired,outcomes=resolve_action(b,payload,target,e.action_policy,terminal_payoffs=False)
+   previous={outcome_key(r.outcome):r for r in rows}
+   rows=tuple(EvaluatedOutcome(o,None,previous[outcome_key(o)].value) for o in outcomes)
+  rebuilt=[]
+  for row in rows:
+   before=row.source or e.action_policy._project_roles(b,acquired,row.outcome,target)
+   rebuilt.append(EvaluatedOutcome(row.outcome,before,row.value))
+   if before in self.mornings:continue
+   if before.public.winner:branches=((F(1),before,row.value),)
+   else:
+    branches=[]
+    for public,mass,child in e.report_children(before):
+     with e.group_scope(_report_groups(e.groups,child)):value=e.solve(*child,physical=child.physical)
+     branches.append((mass,child,value))
+    branches=tuple(branches)
+   if sum(p for p,s,v in branches)!=1 or sum(p*v for p,s,v in branches)!=row.value:raise ValueError('Requested morning detail changed scalar value')
+   self.record_morning(before,branches,row.value)
+  self.actions[b,payload,target]=ActionRecord(acquired,tuple(rebuilt),record.value,record.policies)
+ def max_seer_rows(self,source):
+  if source.public.phase!='night' or source.public.winner or not self.personal_max_scope(source.public,source):return None
+  from .actor_information import wolf_information_groups
+  from .evaluation_branch import ActionInputs,physical_board
+  from .exact import legal_targets
+  b=source.public;e=self.engine;rows=[];counters=[];expected=F();offset=0
+  for info,mass,own in wolf_information_groups(source.private):
+   policy=e.policies.get((b,source.public_state,source.past,info))
+   if policy is None:return None
+   policy=dict(policy);payload=ActionInputs(source.public_state,source.past,own,source.observer,physical_board(b,own,source.physical))
+   targets=legal_targets(payload.physical,e.rules,e.strategy)
+   for target in targets:
+    action=self.recorded_action(b,payload,target)
+    if action is None:return None
+    q=policy.get(target,F());expected+=mass*q*action.value
+    for index,outcome in enumerate(action.outcomes):
+     if outcome.source is None:return None
+     morning=self.mornings.get(outcome.source)
+     if morning is None:return None
+     for p,after,value in morning.branches:
+      weight=mass*outcome.outcome.probability*p
+      rows.append((weight*q,outcome.source,after,target,value,info,offset,index,outcome.outcome));counters.append(weight/F(len(targets)))
+   offset+=len(targets)
+  return tuple(rows),expected,tuple(counters)
  def hunter_rows(self,source):
   b=source.public;e=self.engine
   if b.phase!='night' or b.winner or not self.recorded_flow_scope(b,source) or source in getattr(e,'anonymous_beliefs',{}):return None
@@ -307,11 +374,13 @@ class EvaluationGraph:
   return self._public_mixture(source,groups,(row[:5] for row in rows),expected=expected)
  def personal_projection(self,source,groups,*,counter=False):
   if source.observer is None:return None
-  key=(source,tuple(groups),'personal')
+  maximum=self.personal_max_scope(source.public,source)
+  key=(source,tuple(groups),'personal',counter if maximum else False)
   if key in self.projections:return self.projections[key]
-  found=self.hunter_rows(source)
+  found=self.max_seer_rows(source) if maximum else self.hunter_rows(source)
   if found is None:return None
-  result=self._public_mixture(source,groups,(row[:5] for row in found[0]),expected=found[1],personal=True)
+  rows=(tuple((weight,*row[1:5]) for row,weight in zip(found[0],found[2])) if maximum and counter else tuple(row[:5] for row in found[0] if row[0]))
+  result=self._public_mixture(source,groups,rows,expected=None if maximum and counter else found[1],personal=True,counter=maximum and counter)
   from dataclasses import replace
   result=replace(result,reason='evaluated-personal-mixture')
   self.projections[key]=result;return result
@@ -393,7 +462,7 @@ class EvaluationGraph:
   if source not in self.values:self.values[source]=ValueRecord(value,'terminal' if source.public.winner else 'exact-continuation')
   return value
  def refine(self,source,groups,target=None):
-  if self.random_day_scope(source.public,source):return self.day_refinement(source,groups,target)
+  if self.recorded_day_scope(source.public,source):return self.day_refinement(source,groups,target)
   decision=self.day_decision(source)
   maximum=decision is not None and self.day_scope(source)
   # A value-only shortcut is not permission to force a full MAX policy table.

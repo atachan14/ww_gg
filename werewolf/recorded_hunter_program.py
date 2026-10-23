@@ -24,12 +24,14 @@ class RecordedProgram(Program):
   return self.values[leaf.source]
 
 
-def factor(source,groups,rows):
+def factor(source,groups,rows,*,counter_weights=None):
  b=source.public
+ if counter_weights is not None and len(counter_weights)!=len(rows):raise ValueError('Recorded inspection weights must match evaluated rows')
  groups=groups+tuple((p,) for p in range(1,b.player_count+1) if not any(p in g for g in groups))
  medium_used=any(r.day==b.day+1 and r not in b.reports and any(h.roles[1]&(1<<(r.reporter-1)) for h in after.private.hypotheses) for row in rows for after in (row[2],) for r in after.public.reports)
  leaves=[];values={};medium_recorded=0;medium_reduced=0
- for weight,before,after,target,value,info,owner,index,outcome in rows:
+ for row,counter in zip(rows,counter_weights if counter_weights is not None else tuple(r[0] for r in rows)):
+  weight,before,after,target,value,info,owner,index,outcome=row
   values[after]=value
   for h in after.private.hypotheses:
    tick();symbols={};steps=[]
@@ -73,7 +75,7 @@ def factor(source,groups,rows):
    own=replace(after.private,hypotheses=(replace(h,mass=F(1)),))
    child=replace(after,private=own,physical=physical_board(after.public,own,after.physical),board_data=None,provenance=None)
    mass=weight*h.mass
-   leaves.append(Leaf(mass,mass,child,tuple(steps),info,owner,target,index,outcome_key(outcome),report_signature(after),tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1))),scans,_fix(groups,tuple(symbols)),1,(),selection(h),tuple((s.index,p) for p,s in symbols.items()),arrival=before))
+   leaves.append(Leaf(mass,counter*h.mass,child,tuple(steps),info,owner,target,index,outcome_key(outcome),report_signature(after),tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1))),scans,_fix(groups,tuple(symbols)),1,(),selection(h),tuple((s.index,p) for p,s in symbols.items()),arrival=before))
  program_type=RecordedProgram if source.observer is not None else Program
  program=program_type(source,groups,leaves,dict(recorded_action_flow=True,generated_actions=0,permutation_checks=0,medium_results_recorded=medium_recorded,medium_results_reduced=medium_reduced,medium_stage_omitted=bool(b.initial_medium_count and not medium_used)))
  program.stage_roles=dict(mediums=b.initial_medium_count if medium_used else 0,seers=b.initial_seer_count,hunters=b.initial_hunter_count)

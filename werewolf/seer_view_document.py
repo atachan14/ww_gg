@@ -22,12 +22,14 @@ class SeerViewDocument(GuardViewDocument):
   return (type(players[0])is int and 1<=players[0]<=s.public.player_count
    and any(s.public.claims[p-1] in ('seer','medium') for p in s.public.alive)
    and strategy.disclosure_for('seer')=='all'
-   and (strategy.day,strategy.night,strategy.fake_reports)==('random',)*3)
+   and ((strategy.day,strategy.night,strategy.fake_reports)==('random',)*3 or
+    not s.public.initial_hunter_count and (strategy.day,strategy.night,strategy.fake_reports)==('max',)*3
+    and s.public.claims[public.game.occurrence.names.canonical(players[0])-1]=='seer'))
  def __init__(self,public,owner,players,results,*,target=None):
   occurrence=public.game.history.occurrence(owner);base=public.game.history.state(owner).node
   source=base.read();self.names=occurrence.names
   strategy=base._Node__calculation._ClosedCalculation__strategy
-  if (strategy.day,strategy.night,strategy.fake_reports)!=('random',)*3 or strategy.disclosure_for('seer')!='all':raise Pending('seer_table_recorded_strategy_unimplemented')
+  if (strategy.day,strategy.night,strategy.fake_reports) not in (('random',)*3,('max',)*3) or strategy.disclosure_for('seer')!='all':raise Pending('seer_table_recorded_strategy_unimplemented')
   if source.observer is not None:raise ValueError('Choose seer view from public occurrence')
   if source.public.phase!='night' or source.public.winner:raise ValueError('Seer Table view requires ongoing night')
   self.public=public;self.owner=owner;self.data=public.data;self.lock=RLock();self.revision=0;self.views=None
@@ -38,6 +40,7 @@ class SeerViewDocument(GuardViewDocument):
   inverse=tuple(self.names.canonical(p) for p in range(1,source.public.player_count+1))
   acquisitions=tuple(transport_record(a,inverse) for a in view.acquisitions)
   information=PersonalInformation(self.names.canonical(self.players[0]),'seer',acquisitions)
+  if strategy.day=='max' and (source.public.initial_hunter_count or source.public.claims[information.actor-1]!='seer'):raise Pending('seer_table_recorded_strategy_unimplemented')
   if not any(source.public.claims[p-1] in ('seer','medium') for p in source.public.alive):raise Pending('seer_table_value_only_root_reduction')
   _,self.belief=condition_personal(source.public_state,information)
   _,root=base.personal(information);self.root=root

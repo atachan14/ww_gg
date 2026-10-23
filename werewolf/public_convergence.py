@@ -222,7 +222,7 @@ class NightObservationEvidence:
     def __call__(self,source):
         if source.observer is not None:
             from .personal_convergence import observe
-            selected=observe(self.engine,source,self.groups,self.public_digest,arrival=False)
+            selected=observe(self.engine,source,self.groups,self.public_digest,arrival=False,counter=self.counter)
             return condition_prefix(selected,source,self.groups,self.prefix)[1] if getattr(self,'prefix',()) else selected
         graph=getattr(self.engine,'evaluation_graph',None)
         projection=graph.public_projection(source,self.groups,evaluate=True,counter=self.counter) if graph is not None else None
@@ -242,7 +242,7 @@ class ArrivalObservationEvidence:
     def __call__(self,source):
         if source.observer is not None:
             from .personal_convergence import observe
-            selected=observe(self.engine,source,self.groups,self.public_digest,arrival=True)
+            selected=observe(self.engine,source,self.groups,self.public_digest,arrival=True,counter=self.counter)
             return condition_prefix(selected,source,self.groups,self.prefix)[1] if getattr(self,'prefix',()) else selected
         graph=getattr(self.engine,'evaluation_graph',None)
         projection=graph.public_projection(source,self.groups,evaluate=True,counter=self.counter) if graph is not None else None

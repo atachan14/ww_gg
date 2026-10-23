@@ -36,7 +36,7 @@ def mix(weighted):
  if any(observation_key(source)!=observation_key(rows[0][1]) for weight,source in rows):raise ValueError('Different private observations cannot converge')
  return public_mix(rows)
 
-def observe(engine,source,groups,identity,*,arrival=False):
+def observe(engine,source,groups,identity,*,arrival=False,counter=False):
  """Cold recipe replay asks the SAME evaluator for its actual records.
 
  This is not a Tree-specific transition simulator. Value-only reductions still
@@ -46,10 +46,14 @@ def observe(engine,source,groups,identity,*,arrival=False):
  from .public_convergence import digest
  graph=getattr(engine,'evaluation_graph',None)
  if graph is None:engine.evaluation_graph=graph=EvaluationGraph(engine)
- result=graph.personal_projection(source,groups)
+ result=graph.personal_projection(source,groups,counter=counter)
  if result is None:
   engine.solve(*source,physical=source.physical)
-  result=graph.personal_projection(source,groups)
+  result=graph.personal_projection(source,groups,counter=counter)
+ if result is None:
+  from contextlib import nullcontext
+  with engine.group_scope(groups) if hasattr(engine,'group_scope') else nullcontext():graph.personal_program(source,groups,evaluate=True)
+  result=graph.personal_projection(source,groups,counter=counter)
  if result is None:
   from .information_set_forecast import Pending
   raise Pending('personal_evaluated_projection_not_retained')

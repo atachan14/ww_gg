@@ -7,8 +7,13 @@ from app import create_app
 from tests.test_seer_table_records import SeerTableRecordTests
 import subprocess,sys
 with TemporaryDirectory() as directory:
- hidden='--hidden' in sys.argv
- public=(SeerTableRecordTests().hidden_document() if hidden else SeerTableRecordTests().document());before=public.export()
+ hidden='--hidden' in sys.argv;maximum='--max' in sys.argv
+ if maximum:
+  from tests.test_max_seer_records import MaxSeerRecordTests
+  from werewolf.navigation_store import NavigationDocument
+  calculation,_=MaxSeerRecordTests().night();public=NavigationDocument(calculation.data);public.game.action(3)
+ else:public=SeerTableRecordTests().hidden_document() if hidden else SeerTableRecordTests().document()
+ before=public.export()
  app=create_app(dict(TESTING=True,SECRET_KEY='isolated-seer-table',PERSISTENT_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
  app.extensions['navigation_store'].get=lambda *_:public
  server=make_server('127.0.0.1',0,app,threaded=True);worker=Thread(target=server.serve_forever,daemon=True);worker.start()
@@ -24,7 +29,7 @@ with TemporaryDirectory() as directory:
   await wait(()=>evaluate(`PersonalNavigation.context?.view.role==='seer'`),90000);
   const tree=await evaluate(`PersonalNavigation.request('tree',{expand:true})`);
   assert.equal(tree.evaluation_trace.owner,'evaluator');
-  const arrival=Object.entries(tree.items).find(([key,row])=>row.day_start&&row.alive.length===4);assert.ok(arrival);
+  const arrival=Object.entries(tree.items).find(([key,row])=>row.day_start&&row.alive.length===4&&!row.counterfactual);assert.ok(arrival);
   await evaluate(`(async()=>{const r=await PersonalNavigation.request('current',{node:${JSON.stringify(arrival[0])}});await PersonalNavigation.install(r);})()`);
   await wait(()=>evaluate(`document.querySelector('#personal-navigation-seed')&&PersonalNavigation.context?.view.history.current!=='h0'`));
   await navigate('http://127.0.0.1:18821/main');
@@ -38,6 +43,10 @@ with TemporaryDirectory() as directory:
   assert.deepEqual(errors,[]);console.log('PASS seer Table->recorded Tree->Current->cold restore->back->public->seer view');
   await call('Browser.close',{},null).catch(()=>{});
 """
+  if maximum:
+   body=body.replace("day:'random',night:'random',fake_reports:'random'","day:'max',night:'max',fake_reports:'max'")
+   body=body.replace("assert.equal(tree.evaluation_trace.owner,'evaluator');","assert.equal(tree.evaluation_trace.owner,'evaluator');assert.ok(Object.values(tree.items).some(row=>row.counterfactual));")
+   body=body.replace('PASS seer Table','PASS MAX seer Table')
   if hidden:
    body=body.replace('tr[data-player="1"]','tr[data-player="2"]')
    marker="  await wait(()=>evaluate(`PersonalNavigation.context?.view.role==='seer'`),90000);"
