@@ -4401,3 +4401,14 @@ Remaining route classification:
 * No cursor migration requirement: nonpersistent standalone compatibility value APIs have no persistent Table/Current contract.
 * Unsupported semantics remain unsupported: hunter MAX dependency/mixed hunter policies not selected by the existing engine, multiple fake-CO joint report laws, and deferred automatic future CO timing. No new policy law was inferred.
 * Anonymous-belief ownership is a separate remaining architecture unit and unchanged.
+
+
+### Anonymous-owned vertical foundation (not activated, 2026-10-24)
+
+AnonymousCalculation/AnonymousNode now create an immutable OwnedState directly from anonymous Belief.initial, without SavedOrigin or named assignments. The admitted entry is unchanged-public citizen/seer/wolf, all-random, no self-attack and the existing initial/full-disclosure rule. Node/history identity owns the anonymous value law AND its deferred acquisition recipe; representative NameMap is separate occurrence data. NavigationHistory can intern this identity without invoking named state_key. No application or Tree entry point has been switched yet.
+
+The existing anonymous Evaluator now retains actual day/forced-night/policy-night transition tuples and actual terminal/certificate/evaluated reduction reasons. Its recurrence/formula is unchanged. AnonymousNode consumes these tuples. Value-only scans remain eliminated; AcquisitionRecipe retains original full anonymous prior and exact semantic actions/observations. Explicit full_belief resolves acquisitions with the existing anonymous kernel against each historical night-start roster, before attack death, rather than reconstructing scans from current survivor counts. It does not materialize named assignments.
+
+First vertical verification: new ownership tests plus existing anonymous value and history tests, 16 passed in 7.765s. New tests forbid SavedOrigin/expand/expand_laws during source creation, value, one execution/night cycle and history interning; compare full deferred Q/P including private scan histories to the existing named public-observation kernel; check representative mapping, immutability and no transition generator rerun when records exist. A fixture initially called the legacy test-data builder inside the forbidden-named-prior scope; preparing input before that scope fixed the test setup, without weakening the source-creation assertion.
+
+Remaining within the approved slice: public/Tree consumer integration, explicit Current/named projection, history cold recipes and navigation API adaptation, manual zero-weight compatibility exit, full-game/adversarial/multiple-seer tests, relevant browser/regression checks. Normal server stays 5f50dd5 until the complete slice passes. MAX, other roles/private views and excluded compatibility paths are not switched.

@@ -33,7 +33,7 @@ class Evaluator:
     def __init__(self,day='random',night='random',win_cutoff=False):
         if day not in ('random','max') or night not in ('random','max'):raise ValueError('Existing random/MAX choices required')
         self.win_cutoff=win_cutoff and day=='max';self.cutoff_hits=0
-        self.day=day;self.night=night;self.values={};self.policies={};self.scores={}
+        self.day=day;self.night=night;self.values={};self.policies={};self.scores={};self.transitions={};self.reductions={}
     def scalar(self,b):
         living=set(alive(b));groups=[]
         for group in b.groups:
@@ -47,7 +47,7 @@ class Evaluator:
         if b in self.values:return self.values[b]
         from .win_certificate import certify_anonymous
         if certify_anonymous(b,self.win_cutoff) is not None:
-            self.cutoff_hits+=1;self.values[b]=F(1);return F(1)
+            self.cutoff_hits+=1;self.values[b]=F(1);self.reductions[b]='guaranteed-win-certificate';return F(1)
         tick();terminal={winner(a.population) for m,a in b.p.rows}
         if len(terminal)==1 and None not in terminal:result=F(next(iter(terminal))=='village')
         elif None not in terminal or len(terminal)>1:raise ValueError('Separate observed terminal states before evaluation')
@@ -56,14 +56,8 @@ class Evaluator:
             selected=[(group,v) for group,v in scores if self.day=='random' or v==best];total=sum(len(g) for g,v in selected)
             result=sum((F(len(g),total)*self.force_day(b,g[0]) for g,v in selected),F())
         else:
-            flow=self.night_flow(b);result=F()
-            for observation in flow.observations():
-                try:mass,child=flow.branch(observation)
-                except ValueError as error:
-                    if str(error)!='Anonymous observation has zero support':raise
-                    continue
-                result+=mass*self.value(child)
-        self.values[b]=result;return result
+            result=sum((mass*self.value(child) for mass,observation,child in self.night_children(b)),F())
+        self.values[b]=result;self.reductions[b]='terminal' if None not in terminal else 'evaluated-anonymous-'+b.phase;return result
     def day_scores(self,b):
         key=(b.groups,b.q,b.day,b.history)
         if key not in self.scores:
@@ -71,7 +65,17 @@ class Evaluator:
             groups=tuple(tuple(p for p in group if p in living) for group in b.groups)
             self.scores[key]=tuple((g,self.force_day(public,g[0])) for g in groups if g)
         return self.scores[key]
-    def force_day(self,b,target):return sum((mass*self.value(child) for mass,result,child in b.execute(target)),F())
+    def day_children(self,b,target):
+        key=('day',b,target)
+        if key not in self.transitions:self.transitions[key]=b.execute(target)
+        return self.transitions[key]
+    def night_children(self,b,target=None):
+        key=('night',b,target)
+        if key not in self.transitions:
+            flow=self.night_flow(b) if target is None else self.forced_night_flow(b,target)
+            self.transitions[key]=tuple((pair[0],obs,pair[1]) for obs in flow.observations() if (pair:=self.positive(flow,obs)) is not None)
+        return self.transitions[key]
+    def force_day(self,b,target):return sum((mass*self.value(child) for mass,result,child in self.day_children(b,target)),F())
     def actor(self,b,info):
         partitions=[];wolves=set()
         for group,count in zip(b.groups,info):
@@ -96,12 +100,12 @@ class Evaluator:
             best=min(v for g,n,v in scores);total=sum(n for g,n,v in scores if v==best)
             result={g:F(1,total) if v==best else F() for g,n,v in scores}
         self.policies[key]=result;return result
-    def night_flow(self,b):
+    def night_flow(self,b,*,acquire=False):
         def factory(atom):
             policy=self.wolf_policy(b,information(atom,b.groups))
             return lambda choice,bindings:policy.get(choice.population.people[choice.target].group,F())
-        return b.night(factory,acquire=False)
-    def forced_night_flow(self,b,target):
+        return b.night(factory,acquire=acquire)
+    def forced_night_flow(self,b,target,*,acquire=False):
         groups=[]
         for group in b.groups:
             if target in group and len(group)>1:groups.extend(((target,),tuple(p for p in group if p!=target)))
@@ -122,10 +126,9 @@ class Evaluator:
         def factory(atom):
             ref=dict(atom.pins)[target]
             return lambda choice,bindings:F(choice.target==ref)
-        return b.night(factory,acquire=False)
+        return b.night(factory,acquire=acquire)
     def force_night(self,b,target):
-        flow=self.forced_night_flow(b,target)
-        return sum((mass*self.value(child) for obs in flow.observations() if (pair:=self.positive(flow,obs)) is not None for mass,child in (pair,)),F())
+        return sum((mass*self.value(child) for mass,obs,child in self.night_children(b,target)),F())
     def horizon(self,b,target):
         from .by_dawn import HorizonValues
         v=w=F()
