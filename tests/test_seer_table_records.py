@@ -81,7 +81,7 @@ class SeerTableRecordTests(unittest.TestCase):
    self.assertEqual(r.status_code,200);self.assertEqual(r.json['evaluation_trace']['owner'],'evaluator')
    record=r.json['private_view'];public.private_views={}
    restored=client.post('/private-navigation',json=dict(public_revision=public.revision,view=record,operation='restore'))
-   self.assertEqual(restored.status_code,200);self.assertIn('personal-navigation-seed',restored.json['html'])
+   self.assertEqual(restored.status_code,200);self.assertIn('personal-navigation-seed',restored.json['html']);self.assertIn('占い師 1 の視点',restored.json['html'])
    self.assertEqual(public.export(),before)
 
  def test_display_bijection_maps_owner_acquisitions_and_intervention(self):
