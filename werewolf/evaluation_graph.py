@@ -151,9 +151,9 @@ class EvaluationGraph:
   return result
  def hunter_flow_scope(self,board,payload):
   e=self.engine
-  from .actor_information import PersonalInformation,GuardInformation,GuardSelection
+  from .actor_information import PersonalInformation,GuardInformation,GuardSelection,WolfObserver
   from .seer_intervention import SeerObserver
-  return (board.initial_hunter_count==1 and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection))
+  return (board.initial_hunter_count==1 and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver,GuardInformation,GuardSelection,WolfObserver))
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
  def personal_flow_scope(self,board,payload):
   """Supported seer ownership through the ordinary evaluated action flow."""
@@ -167,7 +167,7 @@ class EvaluationGraph:
  def wolf_observer_scope(self,board,payload):
   from .actor_information import WolfObserver
   e=self.engine
-  return (type(payload.observer)is WolfObserver and not board.initial_hunter_count
+  return (type(payload.observer)is WolfObserver and board.initial_hunter_count<=1
    and board.initial_role_counts['wolf']>0 and any(c=='seer' for c in board.claims)
    and e.strategy.disclosure_for('seer')=='all'
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
@@ -311,6 +311,8 @@ class EvaluationGraph:
   if any(r.source is None and r.outcome.context is None for r in rows):
    acquired,outcomes=resolve_action(b,payload,target,e.action_policy,terminal_payoffs=False)
    previous={outcome_key(r.outcome):r for r in rows}
+   if len(previous)!=len(rows):raise ValueError('Ambiguous retained personal observations')
+   if any(previous[outcome_key(o)].outcome.probability!=o.probability for o in outcomes):raise ValueError('Requested personal detail changed observation mass')
    rows=tuple(EvaluatedOutcome(o,None,previous[outcome_key(o)].value) for o in outcomes)
   rebuilt=[]
   for row in rows:

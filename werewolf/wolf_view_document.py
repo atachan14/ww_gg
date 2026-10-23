@@ -16,7 +16,7 @@ class WolfViewDocument(GuardViewDocument):
  @staticmethod
  def supports(public,players):
   s=public.game.node.read();e=public.game.node._Node__calculation._ClosedCalculation__engine
-  return (not s.public.initial_hunter_count and s.public.initial_role_counts['wolf']>0
+  return (s.public.initial_hunter_count<=1 and s.public.initial_role_counts['wolf']>0
    and any(s.public.claims[p-1]=='seer' for p in s.public.alive)
    and not e.rules.allow_self_bite and not e.strategy.include_self_bite
    and e.strategy.disclosure_for('seer')=='all'
@@ -24,7 +24,7 @@ class WolfViewDocument(GuardViewDocument):
  def __init__(self,public,owner,players,results,*,target=None):
   occurrence=public.game.history.occurrence(owner);base=public.game.history.state(owner).node
   source=base.read();e=base._Node__calculation._ClosedCalculation__engine;self.names=occurrence.names
-  if (source.public.initial_hunter_count or source.public.initial_role_counts['wolf']<1
+  if (source.public.initial_hunter_count>1 or source.public.initial_role_counts['wolf']<1
    or e.rules.allow_self_bite or e.strategy.include_self_bite or e.strategy.disclosure_for('seer')!='all'
    or (e.strategy.day,e.strategy.night,e.strategy.fake_reports)!=('random',)*3
    or not any(source.public.claims[p-1]=='seer' for p in source.public.alive)):raise Pending('wolf_table_recorded_scope_unimplemented')

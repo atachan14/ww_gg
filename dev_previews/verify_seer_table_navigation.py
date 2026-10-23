@@ -7,14 +7,14 @@ from app import create_app
 from tests.test_seer_table_records import SeerTableRecordTests
 import subprocess,sys
 with TemporaryDirectory() as directory:
- hidden='--hidden' in sys.argv;maximum='--max' in sys.argv;multiwolf='--multiwolf' in sys.argv;wolf='--wolf' in sys.argv or multiwolf
+ hidden='--hidden' in sys.argv;maximum='--max' in sys.argv;multiwolf='--multiwolf' in sys.argv;hunterwolf='--wolf-hunter' in sys.argv;wolf='--wolf' in sys.argv or multiwolf or hunterwolf
  if maximum:
   from tests.test_max_seer_records import MaxSeerRecordTests
   from werewolf.navigation_store import NavigationDocument
   calculation,_=MaxSeerRecordTests().night();public=NavigationDocument(calculation.data);public.game.action(3)
  elif wolf:
   from tests.test_wolf_table_records import WolfTableRecordTests
-  public=WolfTableRecordTests().multi_document() if multiwolf else WolfTableRecordTests().document()
+  public=WolfTableRecordTests().hunter_document() if hunterwolf else WolfTableRecordTests().multi_document() if multiwolf else WolfTableRecordTests().document()
  else:public=SeerTableRecordTests().hidden_document() if hidden else SeerTableRecordTests().document()
  before=public.export()
  app=create_app(dict(TESTING=True,SECRET_KEY='isolated-seer-table',PERSISTENT_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
@@ -50,6 +50,9 @@ with TemporaryDirectory() as directory:
    body=body.replace('[data-viewpoint-role="seer"]','[data-viewpoint-role="wolf"]').replace('tr[data-player="1"]','tr[data-player="4"]')
    body=body.replace("view.role==='seer'","view.role==='wolf'")
    body=body.replace('PASS seer Table','PASS wolf Table').replace('->seer view','->wolf view')
+  if hunterwolf:
+   body=body.replace("citizens:'4',seers:'1',wolves:'1'","citizens:'2',seers:'1',hunters:'1',wolves:'1'")
+   body=body.replace('PASS wolf Table','PASS hunter wolf Table deathless Current')
   if multiwolf:
    body=body.replace("wolves:'1'","wolves:'2'")
    body=body.replace('row.alive.length===4','row.alive.length===5')

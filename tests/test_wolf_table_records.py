@@ -185,3 +185,75 @@ class WolfTableRecordTests(unittest.TestCase):
    self.assertTrue(all(p['physical_wolf_probability']=='1' for p in shown['players'] if p['player'] in (3,4)))
    cold=WolfViewDocument.restore(NavigationDocument.restore(json.loads(json.dumps(public.export()))),json.loads(json.dumps(view.export())))
    self.assertTrue(state_key(cold.root.read())==state_key(s),'selected representative changed pack in cold history')
+
+ def hunter_document(self,repeat=True):
+  from tests.test_hunter_evaluated_flow_record import HunterEvaluatedFlowRecordTests
+  from werewolf.navigation_store import NavigationDocument
+  c,node=HunterEvaluatedFlowRecordTests().case(repeat=repeat)
+  public=NavigationDocument(c.data);public.game.action(3);return public
+ def test_hunter_random_pack_values_joint_records_and_no_death(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.root_secret_flow import RootSecretBranch,root_wolf_forecast
+  from tests.test_personal_recorded_projection import PersonalRecordedProjectionTests
+  from werewolf.navigation_store import NavigationDocument
+  with calculation_budget(4000000,max_seconds=90):
+   for repeat in (True,False):
+    public=self.hunter_document(repeat);before=public.export()
+    view=WolfViewDocument(public,public.game.current,[4],[]);result=view.result();s=view.root.read()
+    e=view.root._Node__calculation._ClosedCalculation__engine;g=e.evaluation_graph;base=public.game.node.read()
+    expected=root_wolf_forecast(RootSecretBranch(base.public,base.public_state,base.physical,base.private,base.past),(4,),(),e.rules,e.strategy)
+    self.assertTrue(isinstance(expected,tuple),'existing hunter/wolf evaluator rejected supported random input')
+    self.assertEqual({p['id']:F(p['final']['village']) for p in result['players'] if p.get('final')},dict(expected[0]))
+    for p in result['players']:
+     if p.get('dawn'):self.assertEqual((F(p['dawn']['village']),F(p['dawn']['wolf'])),(expected[1][p['id']].village_win,expected[1][p['id']].wolf_win))
+    with e.group_scope(view.root.groups),view.root.relation_scope():g.personal_program(s,view.root.groups,evaluate=True)
+    named=PersonalRecordedProjectionTests().oracle(e,s,view.root.groups,True)
+    with patch('werewolf.action_flow.resolve_action',side_effect=AssertionError('hunter wolf projection replayed')),patch.object(e,'solve',side_effect=AssertionError('hunter wolf projection solved')),patch.object(e,'wolf_policy',side_effect=AssertionError('hunter wolf policy reselected')):
+     projection=g.personal_projection(s,view.root.groups)
+     self.assertTrue({state_key(r.source):r.probability for r in projection.edges}==named,'hunter pack Q/P law differs')
+     shown=view.tree().read(view.tree().current_key(),True)
+    self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+    self.assertTrue(any(len(r.source.public.alive)==4 for r in projection.edges),'guard-success branch missing')
+    self.assertTrue(any(len(r.source.public.alive)==3 for r in projection.edges),'death branch missing')
+    self.assertTrue(all(h.guards or h.roles[3]&(1<<2) for r in projection.edges for h in r.source.private.hypotheses),'guard memory lost')
+    chosen=next(k for k,r in shown['items'].items() if r.get('day_start') and len(r['alive'])==4)
+    view.tree().select(chosen);current=view.game.node.read()
+    cold=WolfViewDocument.restore(NavigationDocument.restore(json.loads(json.dumps(public.export()))),json.loads(json.dumps(view.export())))
+    self.assertTrue(state_key(cold.game.node.read())==state_key(current),'guard-success pack Current/cold state differs')
+    self.assertEqual(public.export(),before)
+
+ def test_hunter_no_death_attack_input_retains_private_guard_correlation(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.navigation_tree import NavigationTree
+  from werewolf.information_set_forecast import Pending
+  with calculation_budget(4000000,max_seconds=90):
+   public=self.hunter_document(False);tree=NavigationTree(public);shown=tree.read(tree.current_key(),True)
+   choice=next(k for k,r in shown['items'].items() if r.get('day_arrival') and len(r['alive'])==4 and any(a['acquired_day']==2 and a['target']==4 and a['color']=='black' for a in r['reports']))
+   tree.select(choice);public.game.action(2);before=public.export()
+   with self.assertRaises(Pending) as missing:WolfViewDocument(public,public.game.current,[4],[])
+   self.assertEqual(missing.exception.reason,'wolf_view_past_attack_history_unresolved')
+   view=WolfViewDocument(public,public.game.current,[4],[dict(day=1,target=1,color=None)])
+   s=view.root.read();self.assertEqual(s.observer.attacks,(WolfAttack(1,1),))
+   self.assertTrue(all(h.attacks==(WolfAttack(1,1),) for h in s.private.hypotheses))
+   self.assertTrue(all(any(g.night==1 and g.target==1 for g in h.guards) for h in s.private.hypotheses),'protected victim correlation lost')
+   self.assertTrue(any(h.attacks!=(WolfAttack(1,1),) for h in s.public_state.hypotheses),'pack attack leaked into public Q')
+   result=view.result();self.assertTrue(any(p.get('final') for p in result['players']))
+   self.assertEqual(public.export(),before)
+
+ def test_two_wolves_with_hunter_keep_shared_attack_and_exact_values(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.navigation_store import NavigationDocument
+  from werewolf.root_secret_flow import RootSecretBranch,root_wolf_forecast
+  with calculation_budget(4000000,max_seconds=90):
+   game=data(5,'random',wolves=2).to_game();game['hunters']=1
+   game.update(claims=['seer',*['latent']*4],seer_inputs=[dict(day=1,reporter=1,target=2,color='white')])
+   public=NavigationDocument(BoardData.from_game(game));public.game.action(3)
+   for pack in ((3,4),(3,5)):
+    view=WolfViewDocument(public,public.game.current,pack,[]);result=view.result();s=public.game.node.read();e=view.root._Node__calculation._ClosedCalculation__engine
+    expected=root_wolf_forecast(RootSecretBranch(s.public,s.public_state,s.physical,s.private,s.past),pack,(),e.rules,e.strategy)
+    self.assertTrue(isinstance(expected,tuple),'existing random hunter evaluator rejected known pack')
+    self.assertEqual({p['id']:F(p['final']['village']) for p in result['players'] if p.get('final')},dict(expected[0]));self.assertFalse(set(pack)&set(view.targets()))
+    shown=view.tree().read(view.tree().current_key(),True);self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+    graph=e.evaluation_graph;projection=graph.personal_projection(view.root.read(),view.root.groups)
+    self.assertEqual(sum(r.probability for r in projection.edges),1)
+    self.assertTrue(all(len(h.attacks)==1 for r in projection.edges for h in r.source.private.hypotheses),'pack produced independent attacks')
