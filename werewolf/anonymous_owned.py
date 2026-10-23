@@ -3,6 +3,14 @@ from dataclasses import dataclass,replace,field
 from .anonymous_belief import Belief,winner
 from .anonymous_value import Evaluator,alive
 from .closed_calculation import ActionBranch
+from .calculation_budget import calculation_budget,DEFAULT_MAX_WORK,DEFAULT_MAX_SECONDS
+from functools import wraps
+
+def bounded(method):
+    @wraps(method)
+    def run(*args,**kwargs):
+        with calculation_budget(DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):return method(*args,**kwargs)
+    return run
 
 @dataclass(frozen=True)
 class AcquisitionRecipe:
@@ -27,11 +35,16 @@ class PublicFacts:
     history:tuple
     winner:str|None
     claims:tuple
+    reports:tuple=()
 
 @dataclass(frozen=True)
 class OwnedState:
     belief:Belief
     recipe:AcquisitionRecipe
+    @property
+    def past(self):return ()
+    @property
+    def observer(self):return None
     @property
     def public(self):
         b=self.belief;terminal={winner(atom.population) for mass,atom in b.p.rows}
@@ -51,12 +64,21 @@ class AnonymousNode:
     def state_identity(self):return ('anonymous-owned-v1',self.owned)
     @property
     def solver_identity(self):return self.calculation.identity
+    @bounded
     def forecast(self):return self.calculation.evaluator.forecast(self.owned.belief)
+    @bounded
     def action(self,target):
         b=self.owned.belief;e=self.calculation.evaluator
         if type(target)is not int or target not in alive(b) or self.read().public.winner:raise ValueError('Illegal anonymous action')
+        living=tuple(tuple(p for p in group if p in alive(b)) for group in b.groups)
+        living=tuple(group for group in living if group)
+        # The admitted hidden random path distinguishes only dead public pins.
+        # Its one live orbit's representative victim is the policy observation
+        # already evaluated, not another forced-action simulation for the Tree.
+        if b.phase=='night' and len(living)==1 and target==living[0][0]:return self.night()
         rows=e.day_children(b,target) if b.phase=='day' else e.night_children(b,target)
         return tuple(ActionBranch(mass,self.calculation.node(child,self.owned.recipe.append((b.phase,target,observation)))) for mass,observation,child in rows)
+    @bounded
     def night(self):
         b=self.owned.belief
         if b.phase!='night' or self.read().public.winner:raise ValueError('Ongoing anonymous night required')
@@ -73,6 +95,11 @@ class AnonymousNode:
         c=ClosedCalculation(self.data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True)
         source=AnonymousProjectionEvidence(self.owned.recipe)(c.root.read())
         return c._ClosedCalculation__node(source,self.groups,(('full_trace',),('anonymous_owned',self.owned.recipe)))
+    def win_certificate(self):return None
+    def reports(self):
+        from .closed_calculation import ReportBranch
+        from fractions import Fraction as F
+        return (ReportBranch(F(1),F(1),self),)
     def export_request(self):return self.project_named().export_request()
     def observe_public_input(self,evidence):return self.project_named().observe_public_input(evidence)
     def selection_probability(self,target):
@@ -89,6 +116,7 @@ class AnonymousNode:
 @dataclass(frozen=True)
 class AnonymousProjectionEvidence:
     recipe:AcquisitionRecipe
+    @bounded
     def __call__(self,template):
         from .anonymous_materialization import expand_laws
         from .seer_acquisition import public_worlds
@@ -117,6 +145,7 @@ class AnonymousCalculation:
           and (not g.get('seers') or g.get('seer_mode')=='information-fixed-v1'
             and g.get('seer_options',{}).get('likelihood')=='compatibility'
             and g.get('seer_options',{}).get('initial_rule')=='random_white'))
+    @bounded
     def __init__(self,data):
         if not self.supports(data):raise ValueError('Anonymous owned slice does not support this entry')
         from .exact import Strategy

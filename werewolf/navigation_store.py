@@ -14,7 +14,7 @@ from .navigation_game import NavigationGame
 class StaleNavigation(ValueError):pass
 
 class NavigationDocument:
-    def __init__(self,data,game=None,revision=0):
+    def __init__(self,data,game=None,revision=0,*,anonymous_owned=False):
         self.data=data;self.revision=revision;self.lock=RLock();self.views=None
         if game is not None:self.game=game;return
         saved=data.to_game();origin=data;targets=()
@@ -25,7 +25,9 @@ class NavigationDocument:
         from .tree_public_updates import recorded_games
         baseline,records=recorded_games(origin)
         self.data=baseline
-        self.game=NavigationGame(ClosedCalculation(baseline,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root)
+        from .anonymous_owned import AnonymousCalculation
+        root=(AnonymousCalculation(baseline).root if anonymous_owned and not records and not targets and AnonymousCalculation.supports(baseline) else ClosedCalculation(baseline,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root)
+        self.game=NavigationGame(root)
         for snapshot,events in records:self.game.recorded(snapshot,events)
         if targets:
             from .exact import MediumReport
@@ -35,21 +37,26 @@ class NavigationDocument:
                 reports=tuple(SeerReport(day,day,r['reporter'],r['target'],r['color']) for r in saved.get('seer_inputs',()) if r['day']==day) if self.game.node.read().public.phase=='night' else ()
                 medium=tuple(MediumReport(**r) for r in saved.get('reports',()) if r['day']==day) if reports else ()
                 self.game.observed(target,reports,medium)
-    def export(self):return dict(version=1,root=self.data.to_game(),revision=self.revision,history=self.game.export())
+    def export(self):
+        result=dict(version=1,root=self.data.to_game(),revision=self.revision,history=self.game.export())
+        if hasattr(self.game.history.state(self.game.history.root).node,'owned'):result['anonymous_owned']=True
+        return result
     @classmethod
     def restore(cls,record):
         if record.get('version')!=1:raise ValueError('Unsupported navigation document')
-        data=BoardData.from_game(record['root']);root=ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root
+        data=BoardData.from_game(record['root'])
+        from .anonymous_owned import AnonymousCalculation
+        root=AnonymousCalculation(data).root if record.get('anonymous_owned') is True else ClosedCalculation(data,grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True).root
         return cls(data,NavigationGame.restore(root,record['history']),record['revision'])
 
 class NavigationStore:
-    def __init__(self,directory):self.directory=Path(directory);self._documents={};self._lock=RLock()
+    def __init__(self,directory,*,anonymous_owned=False):self.directory=Path(directory);self.anonymous_owned=anonymous_owned;self._documents={};self._lock=RLock()
     def _path(self,identity):return self.directory/(sha256(identity.encode()).hexdigest()+'.json')
     def get(self,identity,data):
         with self._lock:
             if identity in self._documents:return self._documents[identity]
             path=self._path(identity)
-            doc=NavigationDocument.restore(json.loads(path.read_text(encoding='utf-8'))) if path.exists() else NavigationDocument(data)
+            doc=NavigationDocument.restore(json.loads(path.read_text(encoding='utf-8'))) if path.exists() else NavigationDocument(data,anonymous_owned=self.anonymous_owned)
             self._documents[identity]=doc;return doc
     def save(self,identity,document):
         self.directory.mkdir(parents=True,exist_ok=True)

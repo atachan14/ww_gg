@@ -16,6 +16,7 @@ class SeerViewDocument(GuardViewDocument):
  role='seer'
  @staticmethod
  def supports(public,players):
+  if hasattr(public.game.node,'owned'):return False # Explicit private request retains its existing compatibility adapter.
   if len(players)!=1:return False
   node=public.game.node
   s=node.read();strategy=node._Node__calculation._ClosedCalculation__strategy

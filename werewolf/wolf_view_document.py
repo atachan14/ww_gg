@@ -20,6 +20,7 @@ class WolfViewDocument(GuardViewDocument):
    not board.initial_hunter_count and policy==('max',)*3)
  @staticmethod
  def supports(public,players):
+  if hasattr(public.game.node,'owned'):return False # Explicit private request retains its existing compatibility adapter.
   s=public.game.node.read();e=public.game.node._Node__calculation._ClosedCalculation__engine
   return (WolfViewDocument.policy_scope(s.public,e) and s.public.initial_role_counts['wolf']>0
    and any(s.public.claims[p-1]=='seer' for p in s.public.alive)

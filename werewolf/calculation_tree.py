@@ -95,6 +95,10 @@ class CalculationTree:
         View IDs/routes are local to this entry. Navigation occurrences own their
         parents and transports; the solver state can be shared independently.
         """
+        from .anonymous_owned import AnonymousNode
+        if type(node)is AnonymousNode:
+            from .anonymous_ui_tree import AnonymousCalculationTree
+            return AnonymousCalculationTree(node,role_order=role_order)
         from .exact import ROLES
         tree=cls.__new__(cls);tree.calculation=node._Node__calculation
         tree.data=node.data;tree.rules=tree.data.game_data.rules

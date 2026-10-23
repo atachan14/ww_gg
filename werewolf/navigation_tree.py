@@ -10,10 +10,22 @@ from .anonymous_night import Symbol,SymbolStep
 from .ability_labels import marked
 from .tree_public_updates import event_label,publication_label
 
+def _presentation_source(node,names):
+    if not hasattr(node,'owned'):return transport_source(node.read(),names.forward)
+    from dataclasses import replace
+    from types import SimpleNamespace
+    from .public_convergence import transport_record
+    b=node.read().public
+    return SimpleNamespace(public=replace(b,alive=tuple(sorted(names.display(p) for p in b.alive)),history=tuple(transport_record(e,names.forward) for e in b.history)),past=())
+
 class NavigationTree:
     def __init__(self,document,role_order=None):
         self.document=document;self.role_order=role_order;self.views={};self.board_numbers={};self.origins={};self.origin_owners={}
-        self.snapshot=view_snapshot(document.data,document.game.history.state(document.game.history.root).source,document.game.history.occurrence(document.game.history.root).names)
+        root=document.game.history.state(document.game.history.root).node
+        if hasattr(root,'owned'):
+            from hashlib import sha256
+            self.snapshot=sha256(repr((root.state_identity,root.solver_identity)).encode()).hexdigest()[:24]
+        else:self.snapshot=view_snapshot(document.data,root.read(),document.game.history.occurrence(document.game.history.root).names)
     def owner(self,key):return key.split('@',1)[0]
     def view(self,owner):
         if '@' in owner and owner not in self.views:
@@ -42,6 +54,13 @@ class NavigationTree:
     def current_key(self):return self.key(self.document.game.current,self.view(self.document.game.current)[0].root)
     def _binding(self,owner,local):
         tree,names=self.view(owner);source=tree.nodes[local]['node'].read()
+        if hasattr(tree.nodes[local]['node'],'owned'):
+            candidates=list(self.document.game.history.children(self.owner(owner)))
+            if '@' in owner:candidates.append(self.document.game.history.occurrence(owner.split('@',1)[1]))
+            for child in reversed(candidates):
+                other=self.document.game.history.state(child.key).node
+                if child.names==names and hasattr(other,'owned') and other.state_identity==tree.nodes[local]['node'].state_identity:return child.key
+            return None
         start=bool(tree.nodes[local].get('day_start'))
         if '@' in owner:
             # A selected historical occurrence may predate representative
@@ -137,7 +156,7 @@ class NavigationTree:
             tree.expand(local);raw=tree.summary(local,True)
         out=deepcopy(raw);out.pop('items',None);out['node']=self.key(owner,local)
         out['board_number']=self.board_numbers.setdefault(out['node'],len(self.board_numbers))
-        s=transport_source(tree.nodes[local]['node'].read(),names.forward);b=s.public
+        s=_presentation_source(tree.nodes[local]['node'],names);b=s.public
         from dataclasses import asdict
         out.update(alive=list(b.alive),public_claims=list(b.claims),history=[asdict(e) for e in b.history],reports=[asdict(r) for r in s.past],navigation_owner=owner,navigation_depth=self.depth(owner,out['column_day'],out['column_phase']),navigation_phase_updates=self.phase_updates())
         for player in out['players']:player['player']=names.display(player['player'])
@@ -168,8 +187,9 @@ class NavigationTree:
         if local==tree.root and '@' not in owner:
             out['navigation_occurrence']=owner
             if row.edge_kind in ('manual_public','recorded_input'):
-                before=self.document.game.history.state(row.parent).source
-                out['navigation_label']=event_label(row.selector['events']) if row.edge_kind=='recorded_input' else publication_label(transport_source(before,names.forward),s)
+                before_node=self.document.game.history.state(row.parent).node
+                before=before_node.read()
+                out['navigation_label']=event_label(row.selector['events']) if row.edge_kind=='recorded_input' else publication_label(_presentation_source(before_node,names),s)
             out['manual_updates']=[dict(node=self.key(c.key,'0'),probability=None if c.edge_kind=='recorded_input' else '0') for c in self.document.game.history.children(self.owner(owner)) if c.edge_kind in ('manual_public','recorded_input')]
             for child in reversed(self.document.game.history.children(self.owner(owner))):
                 step=child.selector
@@ -219,6 +239,10 @@ class NavigationTree:
         for row in self.document.game.history.export():
             anchor=row['key'];view,_=self.view(anchor)
             k=self.key(anchor,view.root);items[k]=self._summary(anchor,view.root,self._raw_summary(view,view.root))
+            if hasattr(view.entry_node,'owned'):
+                # A bound history root may already expose recorded stages. Its
+                # referenced children must accompany that root in this response.
+                for local in tuple(view.nodes):items[self.key(anchor,local)]=self._summary(anchor,local,self._raw_summary(view,local))
         out['items']=items;out.update(snapshot=self.snapshot,current_node=self.current_key(),navigation_revision=self.document.revision,display_path=[self.key(r.key,'0') for r in self.document.game.history.path(self.document.game.current)])
         if analysis:
             origin=self.origins.get(owner) if local==tree.root else None

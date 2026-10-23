@@ -73,10 +73,10 @@ def create_app(test_config=None, *, deployment=False):
         from werewolf.navigation_store import NavigationStore
         from werewolf.navigation_http import register_navigation
         directory=app.config.get('NAVIGATION_DIRECTORY',os.path.join(app.root_path,'.artifacts','navigation'))
-        navigation_store=NavigationStore(directory)
+        navigation_store=NavigationStore(directory,anonymous_owned=app.config.get('ANONYMOUS_OWNERSHIP_PREVIEW',False))
         app.extensions['navigation_store']=navigation_store
         def navigation_owner():
-            state=game()
+            state=game(validate_roles=False)
             if state is None:return None,None
             return session.setdefault('co_display_game',secrets.token_hex(8)),board_data(state)
         def navigation_document(state=None):
@@ -194,7 +194,7 @@ def create_app(test_config=None, *, deployment=False):
     @app.get('/game-tree')
     def game_tree():
         if not app.config.get('GAME_TREE_PREVIEW'):abort(404)
-        state=game()
+        state=game(validate_roles=not app.config.get('PERSISTENT_TREE_PREVIEW'))
         if state is None:return jsonify(error='村を開始してください。'),409
         if navigation_active():
             from werewolf.information_set_forecast import Pending
