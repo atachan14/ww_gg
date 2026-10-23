@@ -73,6 +73,16 @@ class GuardViewDocument:
   belief_source=replace(source,private=self.belief,physical=physical_board(source.public,self.belief,source.physical))
   belief=transport_view_source(belief_source,self.names.forward).physical
   return dict(players=private_api_rows(private_role_rates(belief),targets=tuple(values),final_values=values,dawn_for=dawn.get),acquisitions=[],reason='本人の護衛履歴を保持し、公開情報の方針で評価します。',recorded_guards=records,private_view=self.export())
+ def table_projection(self,*,max_work=DEFAULT_MAX_WORK,max_seconds=DEFAULT_MAX_SECONDS):
+  """The anchored night Table compares guards, not hypothetical wolf victims."""
+  source=self.game.node.read()
+  if self.game.current!=self.game.history.root or source.public.phase!='night' or source.public.winner:return None,None
+  result=self.result(max_work=max_work,max_seconds=max_seconds)
+  node=self.game.node;calculation=node._Node__calculation;e=calculation._ClosedCalculation__engine
+  with calculation_budget(max_work,max_seconds=max_seconds),calculation._ClosedCalculation__kernel(),e.group_scope(node.groups),node.relation_scope():
+   value=e.solve(*source,physical=source.physical)
+  from .forecast_result import Forecast
+  return result,Forecast(value,())
  def export(self):
   return dict(version=1,owner=self.owner,anchor=self.anchor,role='hunter',players=list(self.players),results=[dict(r) for r in self.results],target=self.target,revision=self.revision,history=self.game.export())
  @classmethod

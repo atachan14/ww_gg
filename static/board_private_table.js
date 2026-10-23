@@ -49,6 +49,7 @@
   };
   root.addEventListener('viewpointchange',event=>{
    const {mode,role,selected}=event.detail;
+   if(mode==='selecting'||mode==='loading')document.dispatchEvent(new CustomEvent('personal-view-loading'));
    if(mode==='selecting'&&window.PersonalNavigation?.context)window.PersonalNavigation.activate(null);
    if(mode==='public'){if(controller&&window.PersonalNavigation?.context)window.PersonalNavigation.activate(null);return;}
    if(scope)scope.textContent=`${seed.roles[role].label}（公開情報＋秘密情報）`;

@@ -4211,8 +4211,9 @@ Final-verification repair checkpoint: the CO normal18821 smoke passed. The defau
 all-hidden diagnostic selected the real controller (mode loading, selected4), and
 /private-view completed143961work in39.141s. Its180s browser wrapper nevertheless
 expired during subsequent Tree work; default end-to-end success is NOT claimed.
-The server process later was absent and18821 had no listener; no exit/OOM cause
-was established. Preserve these failures and do not infer unsupported semantics.
+An unprivileged process query did not see the server; privileged recheck confirmed
+the same15696 listener alive. No process exit/OOM is established. Preserve the
+browser timeout and do not infer unsupported semantics.
 
 A separate real defect was found: Pending for incomplete no-repeat guard evidence
 escaped the NDJSON generator. Guard streams now frame it as event:error, while
@@ -4228,3 +4229,43 @@ without resetting this checkout or deleting saved navigation data. New changes
 remain reviewable in commits; this stage is not declared fully delivered until
 actual default and CO browser paths both finish under an appropriate measured
 verification envelope and the process exit cause is understood.
+
+
+Restoration correction:1aae531 archive preparation completed, but the duplicate
+listener guard prevented starting it. Privileged inspection confirmed the existing
+62fe56f server15696 (created20:47:43). No rollback actually occurred; unprivileged
+process visibility was misleading. Current source changes remain intact.
+
+Private view selection/loading now cancels pending background public Tree automatic
+traversal, including a pause flag before initial loading completes. The actual
+in-flight exact calculation is not replaced or approximated. This avoids enqueuing
+unneeded public expansion alongside observer-specific work; scope activation and
+public return retain their normal expansion behavior. P/Q and policies unchanged.
+
+
+Table guard final verification (2026-10-23): default all-hidden normal-browser flow
+completed with stage times setup3.637s, Table3.292s, recorded Tree9.823s,
+Current1.266s, cold restore2.945s, public return33.145s. CO flow completed with
+4.581s/1.203s/.160s/.255s/1.067s/28.528s respectively. Public return remains a
+measured performance limitation; no new optimizer was added. Both verify restored
+public role probabilities and reject private snapshots on public Current mutation.
+A plain public Tree GET is a fresh read, so expecting409 there was a probe error.
+Likewise day_start marks pre-publication update stages, not every unreported Day2
+Board; navigation probes now select by actual phase/public-current contract.
+
+Four orphaned headless roots from this task's failed probes were identified by
+its dedicated temporary profiles and exited Node parents and closed. Normal user
+browser profiles were excluded. Test cleanup now sends Browser.close even after a
+failed stage. No healthy test or unrelated service was stopped.
+
+The final missing-history browser regression also checks guard target values before
+and after root-night cold restore. It found that ordinary night rendering compared
+wolf victims instead of guards. Root-night personal rendering now consumes the
+same GuardViewDocument Table output (Q-conditioned actor belief, exact P action
+values) and only the actual root scalar forecast; it does not compute an unrelated
+wolf-action table. Transient Table output is not put in saved private evidence.
+Other future phase projections remain the established read-only Board view.
+Twelve affected Python tests passed16.857s; real browser missing guard history,
+valid input recovery, no-repeat eligibility and unchanged restored target5 value
+passed. The existing53 JS interaction/layout tests include scope cancellation.
+Pending fallback and other adapter limitations listed above remain explicit.

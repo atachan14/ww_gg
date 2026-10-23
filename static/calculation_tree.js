@@ -9,7 +9,7 @@
   if(root.dataset.treeBound)return;root.dataset.treeBound='1';
   root.querySelectorAll('.tree-conditions,.compact-tree-legend,[data-tree-inspector]').forEach(e=>e.remove());
   const content=root.querySelector('[data-tree-content]'),status=root.querySelector('[data-tree-status]');
-  let expansion=window.TreeExpansion.create();const nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
+  let pausedForView=false;let expansion=window.TreeExpansion.create();const nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
   const viewport=window.TreeViewport,headerViewport=el('div',undefined,'tree-header-viewport');headerViewport.dataset.treeHeader='';frame.before(headerViewport);
   let scale=1,worldWidth=0,worldHeight=0,scene=null,headerScene=null;
   const distributions=new Map(),analysisOpen=new Set(),accordionOpen=new Set(),analysisErrors=new Map();
@@ -190,10 +190,11 @@
    for(const [x,y] of arrows.values()){const tip=document.createElementNS(ns,'polygon');tip.setAttribute('points',`${x-5},${y-3} ${x},${y} ${x-5},${y+3}`);tip.setAttribute('fill','#94aa9e');svg.append(tip);}canvas.prepend(svg);worldWidth=width;worldHeight=tree.height+24;applyView();frame.scrollLeft=oldLeft;frame.scrollTop=oldTop;syncHeader();
    requestAnimationFrame(()=>{if(version!==renderVersion)return;if(anchorId){const target=root.querySelector(`[data-tree-key="${anchorId}"]`);if(!target)return;const rect=target.getBoundingClientRect();if(anchorRect){frame.scrollLeft+=rect.left-anchorRect.left;frame.scrollTop+=rect.top-anchorRect.top;syncHeader();}else{frame.scrollLeft=Math.max(0,parseFloat(target.style.left)*scale-frame.clientWidth/2);frame.scrollTop=Math.max(0,parseFloat(target.dataset.center)*scale-frame.clientHeight/2);syncHeader();}}});
   }
+  document.addEventListener('personal-view-loading',()=>{if(root.isConnected){pausedForView=true;expansion.cancel();}});
   document.addEventListener('personal-view-change',async()=>{
    if(!root.isConnected)return;
-   expansion.cancel();expansion=window.TreeExpansion.create();nodes.clear();distributions.clear();analysisOpen.clear();accordionOpen.clear();analysisErrors.clear();snapshot=null;rootId=null;++renderVersion;
-   try{const d=await load(null,true);rootId=d.node;frame.hidden=false;headerViewport.hidden=false;render();await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,alive:()=>root.isConnected});status.textContent='';root.dataset.treeAuto='complete';}
+   pausedForView=false;expansion.cancel();expansion=window.TreeExpansion.create();nodes.clear();distributions.clear();analysisOpen.clear();accordionOpen.clear();analysisErrors.clear();snapshot=null;rootId=null;++renderVersion;
+   try{const d=await load(null,true);rootId=d.node;frame.hidden=false;headerViewport.hidden=false;render();await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,alive:()=>root.isConnected&&!pausedForView});status.textContent='';root.dataset.treeAuto='complete';}
    catch(error){if(error.name!=='AbortError')status.textContent=error.message;}
   });
   document.addEventListener('navigation-board-change',async event=>{
@@ -203,7 +204,7 @@
     const collapse=event.detail?.collapse_owner;
     if(collapse){const entry=[...root.querySelectorAll('[data-tree-item]')].find(e=>e.dataset.treeItem===collapse);if(entry&&expansion.isOpen(entry.dataset.treeKey))expansion.toggle(entry.dataset.treeKey);}
     await load(rootId,true);render();
-    await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,onlyPathUntilCurrent:!!collapse,alive:()=>root.isConnected});
+    await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,onlyPathUntilCurrent:!!collapse,alive:()=>root.isConnected&&!pausedForView});
     status.textContent='';root.dataset.navigationUpdate='complete';
    }catch(error){status.textContent=error.message;root.dataset.navigationUpdate='error';}
   });
@@ -217,7 +218,7 @@
   (async()=>{
    try{const d=await load(null,true);rootId=d.node;render();}catch(e){if(e.name!=='AbortError')unavailable(e);return;}
    root.dataset.treeAuto='loading';root.setAttribute('aria-busy','true');
-   try{await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,onlyPathUntilCurrent:displayPath.length>1&&root.dataset.navigationRevision!==undefined,alive:()=>root.isConnected});if(root.isConnected){status.textContent='';root.dataset.treeAuto='complete';}}
+   try{await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,onlyPathUntilCurrent:displayPath.length>1&&root.dataset.navigationRevision!==undefined,alive:()=>root.isConnected&&!pausedForView});if(root.isConnected){status.textContent='';root.dataset.treeAuto='complete';}}
    catch(e){if(root.isConnected){status.textContent=e.message;root.dataset.treeAuto='error';}}
    finally{root.setAttribute('aria-busy','false');}
   })();

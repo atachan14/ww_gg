@@ -99,7 +99,8 @@ def create_app(test_config=None, *, deployment=False):
             from werewolf.navigation_current import NavigationCurrent
             current=NavigationCurrent(view.game)
             current.data=current.data.updated(revision=view.revision)
-            return render_main(current.data.to_game(),navigation_current=current,private_context=dict(view=view.export(),public_revision=view.public.revision))[0]
+            table,forecast=view.table_projection(max_work=app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
+            return render_main(current.data.to_game(),navigation_current=current,personal_forecast=forecast,private_context=dict(view=view.export(),public_revision=view.public.revision,table=table))[0]
         from werewolf.personal_navigation_http import register as register_personal_navigation
         register_personal_navigation(app,navigation_document,render_personal,render_navigation)
 
@@ -388,7 +389,7 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None, private_context=None):
+    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None, private_context=None,personal_forecast=None):
         if navigation_current is not None:
             role_state=navigation_current.roles;state=navigation_current.data.to_game()
         if generated_current is not None:
@@ -437,7 +438,7 @@ def create_app(test_config=None, *, deployment=False):
                 with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) if manual else None):
                     from werewolf.seer_future_uniform import FuturePending
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
-                    forecast=None
+                    forecast=personal_forecast
                     if app.config.get('ANONYMOUS_NIGHT_PREVIEW') and generated_current is None and navigation_current is None:
                         from werewolf.anonymous_value import initial_forecast
                         forecast=initial_forecast(role_state.owner)

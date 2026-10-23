@@ -45,3 +45,12 @@ test('pruning markers coexist with required manual Current paths and keep siblin
  const {state,refresh}=setup(make);await state.auto('root',()=>assert.fail(),refresh,{current:'manual',path:['cert','manual'],onlyPathUntilCurrent:true});
  const root=refresh();assert.equal(root.expanded,true);assert.equal(root.children[0].item.kind,'cutoff');assert.equal(root.children[1].item.id,'manual');
 });
+
+test('scope cancellation stops pending automatic traversal without changing a sibling policy',async()=>{
+ let release,loaded=false,requests=0;
+ const make=()=>n('board','0',[e(n('board','lazy',loaded?[e(n('board','tail',[],true))]:[],!loaded))]);
+ const {state,refresh}=setup(make);
+ const run=state.auto('root',()=>{requests++;return new Promise(resolve=>release=()=>{loaded=true;resolve();});},refresh);
+ await Promise.resolve();state.cancel();release();await run;refresh();
+ assert.equal(requests,1);assert.equal(state.item('root').next[0].item.next[0].item.expanded,false);
+});

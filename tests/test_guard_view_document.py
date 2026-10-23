@@ -35,6 +35,11 @@ class GuardViewDocumentTests(unittest.TestCase):
     for p in result['players']:
      if p.get('dawn'):
       h=dawn[view.names.canonical(p['id'])];self.assertEqual((F(p['dawn']['village']),F(p['dawn']['wolf'])),(h.village_win,h.wolf_win))
+    projected,forecast=view.table_projection()
+    self.assertEqual(projected['players'],result['players'])
+    e=view.root._Node__calculation._ClosedCalculation__engine;source=view.root.read()
+    self.assertEqual(forecast.village_win,e.solve(*source,physical=source.physical))
+    self.assertEqual(forecast.action_values,())
     self.assertEqual(public.export(),before)
     self.assertIs(view.root.read().public_state,public.game.node.read().public_state)
     self.assertTrue(all(h.roles[3]&(1<<3) for h in view.root.read().private.hypotheses))

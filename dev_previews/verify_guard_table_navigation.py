@@ -17,6 +17,7 @@ with TemporaryDirectory() as directory:
  server=make_server('127.0.0.1',0,app,threaded=True);worker=Thread(target=server.serve_forever,daemon=True);worker.start()
  try:
   original=Path('dev_previews/verify_role_stages.cjs').read_text(encoding='utf-8');prefix=original.split("  const kind=process.argv[2]")[0];suffix=original[original.index(' }finally{if(ws)'):]
+  suffix=suffix.replace(' }finally{if(ws)', ' }finally{if(ws?.readyState===1){try{ws.send(JSON.stringify({id:999999,method:"Browser.close"}));}catch(_){}}await new Promise(resolve=>setTimeout(resolve,250));if(ws)',1)
   body=r"""
   await navigate('http://127.0.0.1:18821/');
   await evaluate(`fetch('/start',{method:'POST',body:new URLSearchParams({citizens:'2',seers:'1',hunters:'1',wolves:'1',day:'random',night:'random',win_cutoff:'0'})})`);
@@ -52,6 +53,7 @@ with TemporaryDirectory() as directory:
   await evaluate(`document.querySelector('[data-personal-public]').click()`);
   await wait(()=>evaluate(`!PersonalNavigation.context&&!document.querySelector('#personal-navigation-seed')&&document.querySelector('[data-viewpoint-role="hunter"]')`));
   await wait(()=>evaluate(`document.querySelector('[data-calculation-tree]')?.dataset.treeAuto==='complete'`),90000);
+  console.log('BEGIN past-guard input and recovery');
   await evaluate(`fetch('/fixture/later',{method:'POST'})`);await navigate('http://127.0.0.1:18821/main');
   await wait(()=>evaluate(`document.querySelector('[data-viewpoint-role="hunter"]')`));
   await evaluate(`document.querySelector('[data-viewpoint-role="hunter"]').click();document.querySelector('tr[data-player="4"] .player-name').click()`);
@@ -59,7 +61,9 @@ with TemporaryDirectory() as directory:
   await evaluate(`(()=>{const input=document.querySelector('[data-private-target="1"]');input.value='1';input.dispatchEvent(new Event('change',{bubbles:true}));})()`);
   await wait(()=>evaluate(`PersonalNavigation.context?.view.results?.some(row=>row.day===1&&row.target===1)`));
   const late=await evaluate(`PersonalNavigation.context`);assert.equal(late.view.players[0],4);
+  const guardCell=await evaluate(`document.querySelector('tr[data-player="5"] [data-value-cell="final"]').textContent.trim()`);
   await navigate('http://127.0.0.1:18821/main');await wait(()=>evaluate(`document.querySelector('#personal-navigation-seed')&&PersonalNavigation.context?.view.results?.some(row=>row.day===1&&row.target===1)`));
+  assert.equal(await evaluate(`document.querySelector('tr[data-player="5"] [data-value-cell="final"]').textContent.trim()`),guardCell,'guard target value must survive cold restore');
   await evaluate(`document.querySelector('[data-personal-public]').click()`);await wait(()=>evaluate(`!PersonalNavigation.context&&!document.querySelector('#personal-navigation-seed')`));
   assert.deepEqual(errors,[]);console.log('PASS past Table guard input/no-repeat and browser cold restore; real Table hunter selection, evaluator Tree, Current Table Day2, private back/forward, browser cold restore, public return, mobile capture');
   await call('Browser.close',{},null).catch(()=>{});

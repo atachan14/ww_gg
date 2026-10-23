@@ -22,7 +22,8 @@
   const seed=document.querySelector('#personal-navigation-seed');
   if(!seed)return;
   if(seed.dataset.bound)return;seed.dataset.bound='1';
-  activate(JSON.parse(seed.textContent),false);
+  const projection=JSON.parse(seed.textContent);
+  activate({view:projection.view,public_revision:projection.public_revision},false);
   const main=seed.closest('main');main.dataset.personalNavigation='1';
   // This projection is a private cursor, not a public evidence editor.
   main.querySelectorAll('input,select,textarea,button').forEach(control=>{if(!control.closest('[data-calculation-tree]')&&!control.matches('[data-personal-public]')&&!control.closest('#display-options-form')&&control.getAttribute('form')!=='display-options-form'&&!control.matches('[name="probability-format"]'))control.disabled=true;});
@@ -31,6 +32,19 @@
   const back=main.querySelector('#back-button'),forward=main.querySelector('#advance-button');
   if(back)back.disabled=!row?.parent;
   if(forward)forward.disabled=!context.view.history.forward[current];
+  if(projection.table){
+   const probability=value=>{const node=document.createElement('strong'),formats=window.ProbabilityDisplay.formats(value);node.className='probability';node.dataset.fraction=formats.fraction;node.dataset.percent=formats.percent;let format;try{format=localStorage.getItem('ww_gg.probability-format');}catch(_){}node.textContent=window.ProbabilityDisplay.text(value,format);return node;};
+   for(const player of projection.table.players){
+    const row=main.querySelector(`tr[data-player="${player.id}"]`);
+    for(const cell of row.querySelectorAll('[data-value-cell]')){
+     const key=cell.dataset.valueCell;cell.replaceChildren();
+     if(key in player.probabilities)cell.append(probability(player.probabilities[key]));
+     else if(player[key])cell.append(probability(player[key].village),' / ',probability(player[key].wolf));
+     else cell.textContent='?';
+    }
+   }
+   for(const kind of ['dawn','final']){const cell=main.querySelector(`[data-value-cell="${kind}"]`);if(cell)cell.closest('table').tHead.rows[0].cells[cell.cellIndex].textContent=kind==='dawn'?'能力使用後・次の昼まで 村 / 狼':'能力使用後・最終 村 / 狼';}
+  }
   main.querySelector('[data-table-scope]').textContent='狩人 '+context.view.players.join(',')+' の視点';
   main.querySelector('[data-personal-public]').onclick=()=>exit().catch(error=>{main.querySelector('[data-personal-scope]').append(error.message);});
  }
