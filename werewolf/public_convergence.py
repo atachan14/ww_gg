@@ -215,7 +215,9 @@ class NightObservationEvidence:
     prefix:tuple=()
     counter:bool=False
     def __call__(self,source):
-        rows=public_night_observations(self.engine,source,self.groups,counter=self.counter)
+        graph=getattr(self.engine,'evaluation_graph',None)
+        projection=graph.public_projection(source,self.groups,evaluate=True) if graph is not None else None
+        rows=tuple((e.probability,e.source,e.target) for e in projection.edges) if projection is not None else public_night_observations(self.engine,source,self.groups,counter=self.counter)
         selected=next((after for weight,after,target in rows if matches_digest(after,self.public_digest)),None)
         if selected is None:raise ValueError('Public night observation unavailable')
         return condition_prefix(selected,source,self.groups,self.prefix)[1] if self.prefix else selected
@@ -229,7 +231,9 @@ class ArrivalObservationEvidence:
     groups:tuple
     counter:bool=False
     def __call__(self,source):
-        rows=public_night_observations(self.engine,source,self.groups,counter=self.counter,publish=False)
+        graph=getattr(self.engine,'evaluation_graph',None)
+        projection=graph.public_projection(source,self.groups,evaluate=True) if graph is not None else None
+        rows=tuple((e.probability,e.source,e.target) for e in projection.arrivals) if projection is not None else public_night_observations(self.engine,source,self.groups,counter=self.counter,publish=False)
         selected=next((after for weight,after,target in rows if matches_digest(after,self.public_digest)),None)
         if selected is None:raise ValueError('Pre-report public arrival unavailable')
         return selected

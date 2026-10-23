@@ -149,6 +149,9 @@ class Leaf:
     selection:tuple
     correspondence:tuple
     belief:object=None
+    arrival:object=None # Actual pre-publication source formed by the evaluator.
+    population:object=None
+    named_transport:object=None
 
 @dataclass(frozen=True)
 class Branch:
@@ -287,7 +290,7 @@ def compile_anonymous(engine,source,groups):
                 if owned_row is not None:
                     from .anonymous_belief import Law
                     leaf_belief=replace(flow.branch(owned_row.observation,counter=True)[1],p=Law(((F(1),owned_row.atom),)))
-                leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h),tuple(named),leaf_belief))
+                leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,offsets[info],target,index,outcome_key(death),report,wolves,acquired,_fix(groups,(*wolves,target,*(p for pair in acquired for p in pair))),path.multiplicity,binding_map,selection(leaf_h),tuple(named),leaf_belief,arrival=child,population=path.population,named_transport=Transport(names,tuple(tuple(p for p in row if p not in names) for row in transport.free))))
     result=Program(source,groups,leaves,dict(named_prior_atoms=0 if belief is not None else len(source.private.hypotheses),relational_families=family_count,structural_joint_paths=native_paths,permutation_checks=0,belief_owned=belief is not None))
     result.belief=belief;result.belief_flow=flow
     cache[key]=result;return result

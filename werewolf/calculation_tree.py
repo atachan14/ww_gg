@@ -128,7 +128,10 @@ class CalculationTree:
     def value(self,key):
         row=self.nodes[key]
         if row['value'] is not None:return row['value']
-        node=row['node'];s=node.read();canonical=self.equivalence(node)
+        node=row['node'];s=node.read()
+        graph=getattr(self.engine,'evaluation_graph',None)
+        if graph is not None and s in graph.values:row['value']=graph.values[s].value;return row['value']
+        canonical=self.equivalence(node)
         if canonical in self.values:row['value']=self.values[canonical];row['reused']=True
         else:
             with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
@@ -362,8 +365,15 @@ class CalculationTree:
         recorded=self._recorded_night(key)
         if recorded is not None:return recorded
         node=record['node'];program=self._program(node);groups=program.groups;result={}
+        graph=getattr(self.engine,'evaluation_graph',None)
+        projection=graph.public_projection(node.read(),groups) if graph is not None else None
+        if projection is not None:record['evaluation_projection']=projection
         with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
-            if getattr(program,'belief_flow',None) is not None:
+            if projection is not None:
+                for edge in projection.edges:
+                    public=digest(edge.source)
+                    result[public]=dict(target=edge.target,sources={False:(edge.probability,edge.source),True:(edge.probability,edge.source)})
+            elif getattr(program,'belief_flow',None) is not None:
                 from .anonymous_materialization import source as named_boundary
                 from .public_convergence import public_transport,transport_source
                 flow=program.belief_flow;templates={}
@@ -399,24 +409,33 @@ class CalculationTree:
             from .tree_public_updates import state_summary,publication_label
             with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
                 arrivals={}
-                for counter in (False,True):
-                    for reach,before,target in public_night_observations(self.engine,node.read(),groups,counter=counter,publish=False):
+                if projection is not None:
+                    arrival_rows=[(counter,row.probability,row.source,row.target,row) for counter in (False,True) for row in projection.arrivals]
+                else:
+                    arrival_rows=[(counter,reach,before,target,None) for counter in (False,True) for reach,before,target in public_night_observations(self.engine,node.read(),groups,counter=counter,publish=False)]
+                for counter,reach,before,target,projected_arrival in arrival_rows:
                         if before.public.winner:continue
                         total=reach
                         updates=[]
-                        for public,entry in result.items():
-                            if entry['target']!=target or counter not in entry['sources']:continue
-                            weight,after=entry['sources'][counter]
-                            if after.public.winner!=before.public.winner:continue
-                            updates.append(dict(node=entry['node'],probability=str(weight/total),label=publication_label(before,after)))
+                        if projected_arrival is not None:
+                            for update in projected_arrival.updates:
+                                entry=result[digest(update.source)]
+                                updates.append(dict(node=entry['node'],probability=str(update.probability),label=publication_label(before,update.source)))
+                        else:
+                            for public,entry in result.items():
+                                if entry['target']!=target or counter not in entry['sources']:continue
+                                weight,after=entry['sources'][counter]
+                                if after.public.winner!=before.public.winner:continue
+                                updates.append(dict(node=entry['node'],probability=str(weight/total),label=publication_label(before,after)))
                         if not updates:continue
                         identity='arrival:'+key+':'+digest(before)+':'+str(counter)
-                        value=sum((F(u['probability'])*self.value(u['node']) for u in updates),F())
+                        value=projected_arrival.value if projected_arrival is not None else sum((F(u['probability'])*self.value(u['node']) for u in updates),F())
                         arrival=dict(id=identity,state=state_summary(before.public,before.private,identity,self.data.game_data,self.role_order,value=value,past=before.past),updates=updates,kind='generated_updates')
                         arrival_node=node._public_arrival(before,target,digest(before),groups,counter)
                         selector=dict(public_arrival=dict(target=target,public=digest(before),counter=counter))
                         arrival_key='start:'+identity
                         self.nodes[arrival_key]=dict(node=arrival_node,value=value,actions=[],reused=False,route=(*record['route'],selector),public_bundle=True,day_start=True,public_updates=updates)
+                        if projected_arrival is not None:self.nodes[arrival_key]['recorded_arrival']=True
                         arrival['node']=arrival_key
                         record.setdefault('arrival_selectors',{})[(target,digest(before),counter)]=arrival_key
                         from .public_convergence import legacy_digest
@@ -720,7 +739,10 @@ class CalculationTree:
         if recorded:graph.value(s)
         program_record=graph.evaluated_program(s,node.groups) if graph is not None else None
         trace=dict(owner='evaluator' if recorded else 'mixed-evaluator-program' if program_record else 'legacy-reconstruction',reduction=graph.values[s].reduction if recorded else program_record.reason if program_record else None)
-        if program_record is not None:trace.update(ability_program='evaluated',public_projection='legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
+        if program_record is not None:
+            projected='evaluation_projection' in row
+            trace.update(owner='evaluator' if projected else 'mixed-evaluator-program',ability_program='evaluated',public_projection='evaluated' if projected else 'legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
+        if row.get('recorded_arrival'):trace=dict(owner='evaluator',reduction='recorded-pre-report-mixture',public_projection='evaluated')
         return {'evaluation_trace':trace,'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),

@@ -8,7 +8,7 @@ from dataclasses import replace
 from fractions import Fraction as F
 from .anonymous_abilities import Context,run,resolve
 from .ability_adapters import Medium,Divination,Guard,WolfAttack
-from .anonymous_night import ingest,Program,Leaf,symbolic_steps,selection,SymbolStep
+from .anonymous_night import ingest,Program,Leaf,symbolic_steps,selection,SymbolStep,Transport
 from .actor_information import WolfInformation
 from .evaluation_branch import ActionInputs,physical_board
 from .seer_acquisition import Acquisition
@@ -91,7 +91,7 @@ def compile_abilities(engine,source,groups):
                             _,cell,slot=ref;person=tuple(p for p in transport.free[cell] if p not in names)[slot]
                         correspondence.append((symbol.index,person))
                     factor=family_mass*death.probability*report_mass
-                    leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,owner_index,target,index,outcome_key(death),report,wolves,scans,_fix(groups,(*wolves,*names)),path.multiplicity,binding_map,selection(after.private.hypotheses[0]),tuple(correspondence)))
+                    leaves.append(Leaf(factor*path.mass,factor*path.counter,replace(after,board_data=None,provenance=None),steps,info,owner_index,target,index,outcome_key(death),report,wolves,scans,_fix(groups,(*wolves,*names)),path.multiplicity,binding_map,selection(after.private.hypotheses[0]),tuple(correspondence),arrival=child,population=path.population,named_transport=Transport(names,tuple(tuple(p for p in row if p not in names) for row in transport.free))))
     program=Program(source,groups,leaves,dict(named_prior_atoms=len(source.private.hypotheses),relational_families=len(families),structural_joint_paths=paths,permutation_checks=0,belief_owned=False,ability_adapters=True))
     program.private_contexts=not (b.initial_medium_count or b.initial_hunter_count)
     cache[key]=program;return program

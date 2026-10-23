@@ -3726,3 +3726,36 @@ Next unit: retain the pre-publication states already formed during evaluation,
 then derive public convergence and arrival/update edges from those records,
 comparing full Q/P/private histories against the current reconstruction. Only
 after that passes should CO public projection claim evaluator ownership.
+
+
+## Recorded CO public projection and morning updates (2026-10-23)
+
+Completed evaluated CO all-random/no-hunter programs now retain the actual
+pre-publication source, anonymous population and name transport already used by
+evaluation. PublicProjection and ArrivalRecord integrate those exact leaves;
+they do not run another acquisition/attack/report simulation. Recorded positive
+leaf continuation values supply exact public-mixture and update values, with
+mass and weighted-value invariants checked before publishing the projection.
+
+A representative leaf is not a complete named private-history law. The explicit
+public Board boundary materializes its anonymous population under public pins
+using the existing common materializer, then transports names canonically. The
+pre-report and post-report pins differ: a newly published target must not be
+conditioned into the pre-report Board. This named boundary still enumerates
+assignments; no compression/performance claim is made for it. Private relations
+are retained instead of being inferred from scalar counts.
+
+Tree public convergence, day-start Board and subsequent update columns consume
+these records; Current/cold recipes request the same evaluator-owned projection
+when available. Trace provenance says evaluated only for this completed path.
+Program-less shortcuts, the existing belief-owned path, MAX/counterfactual policy
+laws, hunters, personal views and other unmigrated cases keep explicit fallbacks.
+The fast all-hidden first scope is unchanged. No role rules or CO timing strategy
+were added.
+
+Validation: 143 relevant Python regressions passed (176.774s). New comparisons
+cover full post/pre-report Q/P/private histories against the prior exact kernel,
+independent named weighted values, linked multiple CO and seer+medium cases,
+manual zero-weight updates, representative5 and cold Current/history restoration.
+An isolated Edge run passed visible Table/Footer and pre-report Current with
+Day2 update columns, desktop/narrow captures, and no browser exceptions.

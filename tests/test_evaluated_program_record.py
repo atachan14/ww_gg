@@ -30,12 +30,12 @@ class EvaluatedProgramRecordTests(unittest.TestCase):
    c,node=self.case();e=c._ClosedCalculation__engine;node.forecast()
    record=e.evaluation_graph.evaluated_program(node.read(),node.groups,evaluate=True)
    self.assertIsNotNone(record);tree=CalculationTree.from_node(node)
-   with patch('werewolf.anonymous_night.shared_night',side_effect=AssertionError('Tree recompiled a completed evaluator program')):
+   with patch('werewolf.anonymous_night.shared_night',side_effect=AssertionError('Tree recompiled a completed evaluator program')),patch('werewolf.public_convergence.public_night_observations',side_effect=AssertionError('Tree replayed independent public projection')):
     data=tree.read('0',True)
    self.assertIs(tree._program(node),record.program)
-   self.assertEqual(data['evaluation_trace']['owner'],'mixed-evaluator-program')
+   self.assertEqual(data['evaluation_trace']['owner'],'evaluator')
    self.assertEqual(data['evaluation_trace']['ability_program'],'evaluated')
-   self.assertEqual(data['evaluation_trace']['public_projection'],'legacy-reconstruction')
+   self.assertEqual(data['evaluation_trace']['public_projection'],'evaluated')
    self.assertTrue(data['night_stages']['branches'])
  def test_MAX_and_shortcut_are_not_falsely_recorded_as_evaluated_program(self):
   with calculation_budget(1000000,max_seconds=45):
