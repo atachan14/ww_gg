@@ -134,12 +134,15 @@ class WolfConditionalForecastTests(unittest.TestCase):
         past=(SeerReport(1,1,1,3,'white'),SeerReport(1,1,2,3,'black'))
         result=wolf_forecast(b,10,Rules(),Strategy(),scan_state=s,past=past,max_work=1000000)
         self.assertNotIsInstance(result,FuturePending)
-        # Unvisited corpse2 is uninformative1/3; scans4/5 identify the wolf2/3.
-        self.assertEqual(dict(result)[3],F(1,3)*F(1,2)+F(2,3))
-        self.assertEqual(dict(result)[1],F(1,2))
+        from tests.seer_night_rule_oracle import known_seer_forced_bite
+        expected={target:known_seer_forced_bite(4,target)[0] for target in (1,3,5)}
+        self.assertEqual(expected,{1:F(1,2),3:F(1),5:F(1)})
+        #2 was already executed; legal unvisited scans4/5 always identify the wolf if seer1 survives.
+        self.assertEqual(dict(result),expected)
         other=wolf_forecast(b,18,Rules(),Strategy(),scan_state=s,past=past,max_work=1000000)
-        self.assertEqual(dict(other)[1],F(1,2))
-        self.assertEqual(dict(other)[3],F(5,6))
+        expected_other={target:known_seer_forced_bite(5,target)[0] for target in (1,3,4)}
+        self.assertEqual(expected_other,{1:F(1,2),3:F(1),4:F(1)})
+        self.assertEqual(dict(other),expected_other)
         self.assertEqual((b,s),before)
 
     def test_multiple_fake_future_model_stays_pending_without_partial_table(self):
