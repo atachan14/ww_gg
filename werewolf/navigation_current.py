@@ -9,7 +9,7 @@ from .board_flow import BoardData,RoleState
 from .board_roles import role_rates,role_summary
 from .exact import Progress,BoardOutcome
 from .forecast_result import Forecast
-from .public_convergence import transport_source
+from .public_convergence import transport_view_source as transport_source
 
 @dataclass(frozen=True)
 class NavigationRoleState(RoleState):
@@ -51,7 +51,8 @@ class NavigationCurrent:
         if next_key:
             step=navigation.history.occurrence(next_key).selector
             if step.get('requested') is not None:view['selection']=row.names.display(step['requested']);self.prefilled_selection=True
-        self.identity='navigation-'+row.key
+        from .calculation_tree import view_snapshot
+        self.identity='navigation-'+row.key+('-'+view_snapshot(root,self.source) if self.source.observer is not None else '')
         data=BoardData.from_game(view,game_data=root.game_data,runtime=root.runtime)
         self.data=replace(data,facts=replace(data.facts,board_id=self.identity))
         if row.active_mass:

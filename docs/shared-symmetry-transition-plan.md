@@ -4086,3 +4086,45 @@ work. Normal18821 stays on27bb8a4 while this foundation is reviewed.
 
 Final personal-provenance focused tests4 passed in5.759s. No active test workers
 remain for this unit; normal18821 was not restarted or updated.
+
+
+Personal projection/navigation checkpoint: observer-scoped mixing now validates
+identical immutable observer frames and uses complete Q/P bijections, fixing known
+owner/target identities before public event representative construction. Personal
+and public projection APIs stay distinct. Per-view digests, Tree snapshots and
+Current identities include the observer-conditioned source to prevent cross-view
+cache/navigation collisions. Existing public identities are unchanged.
+
+CalculationTree consumes the personal evaluator program/mixture and defers
+unretained composition values instead of evaluating them just for rendering.
+Cold personal observation recipes ask the SAME evaluator for its actual recorded
+projection; they do not invoke the separate public-only night simulator. Scoped
+NavigationGame/NavigationCurrent preserve observer and display bijections, including
+empty nights, pre/post-report updates and history restoration. This adds no normal
+HTTP route for selecting secret-conditioned states into a public game.
+
+Focused projection+record tests8 passed in11.711s: exact independent named pre/
+post-report Q/P laws for five typed views, values/mass, forbidden secondary solve/
+policy/resolve in consumers, full typed map roundtrip, cross-observer mixture
+rejection, distinct identities, Current/history/deathless/death/cold restore.
+Broader regressions and isolated browser verification remain pending; changes are
+not committed and normal18821 remains27bb8a4.
+
+
+Personal projection final verification: affected public/hunter/MAX/navigation
+suite71 passed in48.516s. Existing private evidence/Table UI suite10 passed in
+1.857s. A real nonrepresentative selection5 from an owner-fixed exchangeable root
+matched the complete named5 Q/P/history and cold navigation replay (0.487s).
+Isolated Edge exercised the production Tree widget with real recorded personal
+outputs: white/black view switches, distinct snapshot/Current identity, stale
+snapshot409, unchanged public-Q/policy digest, scoped deathless pre/post-report
+Current, back/forward and fresh-root cold history reconstruction. Desktop/390px
+screenshots were inspected; no production private HTTP route was added.
+
+Browser harness boundary: eager auto traversal into unported later adapters was
+paused only in the test harness; exact full-game evaluation was not limited. The
+normal application's Table guard-history adapter and private-view root persistence
+wiring are not claimed migrated. Covered navigation starts from an explicitly
+owned typed personal node. Non-hunter personal, incomplete ordinary adapters and
+native anonymous-belief ownership retain their documented boundaries. Legitimate
+value-only reductions do not gain invented detailed states or child values.

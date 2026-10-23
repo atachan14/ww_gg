@@ -16,6 +16,11 @@ from .calculation_budget import tick
 
 def input_snapshot(data):return sha256(data.inputs.encode()).hexdigest()[:20]
 
+def view_snapshot(data,source):
+    if source.observer is None:return input_snapshot(data)
+    from .public_convergence import state_key
+    return sha256(repr((input_snapshot(data),state_key(source))).encode()).hexdigest()[:20]
+
 def supported(data,board):
     g=data.game_data
     return (g.wolves>=1 and g.hunters<=1
@@ -96,7 +101,7 @@ class CalculationTree:
         tree.strategy=tree.calculation._ClosedCalculation__strategy
         tree.engine=tree.calculation._ClosedCalculation__engine
         tree.role_order=tuple(ROLES if role_order is None else role_order)
-        tree.snapshot=input_snapshot(tree.data)
+        tree.snapshot=view_snapshot(tree.data,node.read())
         tree.nodes={};tree.sources={};tree.keys={};tree.values={};tree.traces={};tree.lock=RLock()
         tree.entry_node=node;tree.root=tree.register(node)
         from .navigation_history import NavigationHistory
@@ -337,7 +342,14 @@ class CalculationTree:
         graph=getattr(self.engine,'evaluation_graph',None)
         if graph is not None:
             with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
-                record=graph.evaluated_program(node.read(),node.groups,evaluate=True)
+                if node.read().observer is not None:
+                    record=graph.personal_program(node.read(),node.groups)
+                    if record is None:
+                        graph.value(node.read());record=graph.personal_program(node.read(),node.groups)
+                    if record is None:
+                        from .information_set_forecast import Pending
+                        raise Pending('personal_evaluated_night_detail_not_retained')
+                else:record=graph.evaluated_program(node.read(),node.groups,evaluate=True)
             if record is not None:return record.program
         return node._night_program()
 
@@ -372,8 +384,9 @@ class CalculationTree:
         if recorded is not None:return recorded
         node=record['node'];program=self._program(node);groups=program.groups;result={}
         graph=getattr(self.engine,'evaluation_graph',None)
-        projection=graph.public_projection(node.read(),groups) if graph is not None else None
-        counter_projection=graph.public_projection(node.read(),groups,counter=True) if projection is not None else None
+        projector=(graph.personal_projection if node.read().observer is not None else graph.public_projection) if graph is not None else None
+        projection=projector(node.read(),groups) if projector is not None else None
+        counter_projection=projector(node.read(),groups,counter=True) if projection is not None else None
         if projection is not None and counter_projection is not None:record['evaluation_projection']=projection
         with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
             if projection is not None:
@@ -510,6 +523,8 @@ class CalculationTree:
                 total=stage.mass or stage.counter
                 if native:
                     from .public_convergence import public_transport,transport_source,digest
+                    if node.read().observer is not None:
+                        from .personal_convergence import public_transport,transport_source
                     grouped={}
                     for mass,counter,leaf,images in stage.outcomes():
                         mapping=public_transport(self.nodes[base_key]['node'].read(),leaf.source,self._program(self.nodes[base_key]['node']).groups)
@@ -670,7 +685,7 @@ class CalculationTree:
             child=key if len(parts)==1 else self.register(node._select_physical('composition',composition),(*row['route'],{'physical':'composition','value':composition}))
             if child!=key:
                 self.nodes[child]['public_parent']=row.get('public_parent',key)
-                if row.get('defer_value'):self.nodes[child]['defer_value']=True
+                if row.get('defer_value') or node.read().observer is not None:self.nodes[child]['defer_value']=True
                 if 'stage_roles' in row:self.nodes[child]['stage_roles']=row['stage_roles']
             result.append(dict(node=child,counts=dict(wolves=w,mediums=m,seers=seer,hunters=h,citizens=v),label=label,probability=str(probability)))
         row['composition_rows']=result;return result
@@ -753,7 +768,7 @@ class CalculationTree:
                             label='・'.join(('霊能結果：'+(r[1] if len(r)==2 else str(display(r[1]))+'→'+str(display(r[2]))+colors(r[3]))) if r[0]=='medium' else ('占い結果：'+alias(r[0])+' '+colors(r[1])) for r in results)
                         else:label='占いなし' if not results else ('占い結果：'+colors(results[0][1]) if len(results)==1 else '占い結果：'+'・'.join(alias(actor)+' '+colors(color) for actor,color in results))
                         children.append(dict(id=f'{index}/r{result_index}',label=label,probability=str(subtotal/total),children=leaves))
-                output.append(dict(id=str(index),label=part['label'],probability=part['probability'],village_win=str(self.value(part['node'])),children=children))
+                output.append(dict(id=str(index),label=part['label'],probability=part['probability'],village_win=None if source.observer is not None and self.nodes[part['node']].get('defer_value') else str(self.value(part['node'])),children=children))
             row[cache]=output;return output
 
     def summary(self,key,actions=False):
@@ -764,11 +779,11 @@ class CalculationTree:
         graph=getattr(self.engine,'evaluation_graph',None)
         recorded=graph is not None and graph.supports(s)
         if recorded:graph.value(s)
-        program_record=graph.evaluated_program(s,node.groups) if graph is not None else None
+        program_record=(graph.personal_program(s,node.groups) if s.observer is not None else graph.evaluated_program(s,node.groups)) if graph is not None else None
         trace=dict(owner='evaluator' if recorded else 'mixed-evaluator-program' if program_record else 'legacy-reconstruction',reduction=graph.values[s].reduction if recorded else program_record.reason if program_record else None)
         if program_record is not None:
             projected='evaluation_projection' in row
-            trace.update(owner='evaluator' if projected else 'mixed-evaluator-program',ability_program='factored-evaluated-flow' if program_record.reason=='factored-evaluated-action-flow' else 'evaluated',public_projection='evaluated' if projected else 'legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
+            trace.update(owner='evaluator' if projected else 'mixed-evaluator-program',ability_program='factored-evaluated-flow' if program_record.reason.startswith('factored-evaluated') else 'evaluated',public_projection='evaluated' if projected else 'legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
         if program_record is None and 'evaluation_projection' in row:
             trace.update(owner='mixed-evaluator-public',public_projection='evaluated',ability_program='legacy-reconstruction')
         if row.get('recorded_arrival'):trace=dict(owner='evaluator',reduction='recorded-pre-report-mixture',public_projection='evaluated')

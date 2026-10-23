@@ -65,9 +65,14 @@ def public_key(source):return canonical_board(source.public),source.public_state
 
 def legacy_digest(source):return sha256(repr((source.public,source.public_state,source.past)).encode()).hexdigest()[:24]
 
-def matches_digest(source,value):return value in (digest(source),legacy_digest(source))
+def matches_digest(source,value):return value==digest(source) if source.observer is not None else value in (digest(source),legacy_digest(source))
 
-def digest(source):return sha256(repr(public_key(source)).encode()).hexdigest()[:24]
+def digest(source):return sha256(repr(public_key(source) if source.observer is None else (public_key(source),source.observer)).encode()).hexdigest()[:24]
+
+def transport_view_source(source,mapping):
+    if source.observer is None:return transport_source(source,mapping)
+    from .personal_convergence import transport_source as personal_transport
+    return personal_transport(source,mapping)
 
 def mix(weighted):
     rows=tuple((weight,source) for weight,source in weighted if weight>0)
@@ -82,7 +87,7 @@ def mix(weighted):
 @dataclass(frozen=True)
 class TransportEvidence:
     mapping:tuple
-    def __call__(self,source):return transport_source(source,self.mapping)
+    def __call__(self,source):return transport_view_source(source,self.mapping)
 
 @dataclass(frozen=True)
 class MixtureEvidence:
@@ -215,6 +220,10 @@ class NightObservationEvidence:
     prefix:tuple=()
     counter:bool=False
     def __call__(self,source):
+        if source.observer is not None:
+            from .personal_convergence import observe
+            selected=observe(self.engine,source,self.groups,self.public_digest,arrival=False)
+            return condition_prefix(selected,source,self.groups,self.prefix)[1] if getattr(self,'prefix',()) else selected
         graph=getattr(self.engine,'evaluation_graph',None)
         projection=graph.public_projection(source,self.groups,evaluate=True,counter=self.counter) if graph is not None else None
         rows=tuple((e.probability,e.source,e.target) for e in projection.edges) if projection is not None else public_night_observations(self.engine,source,self.groups,counter=self.counter)
@@ -231,6 +240,10 @@ class ArrivalObservationEvidence:
     groups:tuple
     counter:bool=False
     def __call__(self,source):
+        if source.observer is not None:
+            from .personal_convergence import observe
+            selected=observe(self.engine,source,self.groups,self.public_digest,arrival=True)
+            return condition_prefix(selected,source,self.groups,self.prefix)[1] if getattr(self,'prefix',()) else selected
         graph=getattr(self.engine,'evaluation_graph',None)
         projection=graph.public_projection(source,self.groups,evaluate=True,counter=self.counter) if graph is not None else None
         rows=tuple((e.probability,e.source,e.target) for e in projection.arrivals) if projection is not None else public_night_observations(self.engine,source,self.groups,counter=self.counter,publish=False)

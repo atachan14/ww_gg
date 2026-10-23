@@ -4,8 +4,8 @@ A view owns a branch-local name bijection. Math nodes remain canonical and share
 manual input adds a zero selection edge, never an evaluator child or payoff term.
 """
 from copy import deepcopy
-from .calculation_tree import CalculationTree,input_snapshot
-from .public_convergence import transport_source,state_key
+from .calculation_tree import CalculationTree,input_snapshot,view_snapshot
+from .public_convergence import transport_view_source as transport_source,state_key
 from .anonymous_night import Symbol,SymbolStep
 from .ability_labels import marked
 from .tree_public_updates import event_label,publication_label
@@ -13,7 +13,7 @@ from .tree_public_updates import event_label,publication_label
 class NavigationTree:
     def __init__(self,document,role_order=None):
         self.document=document;self.role_order=role_order;self.views={};self.board_numbers={};self.origins={};self.origin_owners={}
-        self.snapshot=input_snapshot(document.data)
+        self.snapshot=view_snapshot(document.data,document.game.history.state(document.game.history.root).source)
     def owner(self,key):return key.split('@',1)[0]
     def view(self,owner):
         if '@' in owner and owner not in self.views:

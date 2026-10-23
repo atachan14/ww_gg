@@ -150,10 +150,12 @@ class EvaluationGraph:
   """Read completed observer-conditioned records; never request missing detail.
 
   Public convergence deliberately excludes these sources. Keep this explicit
-  boundary until observer-aware projection/navigation is migrated separately.
+  boundary; observer-aware projection/navigation uses its separate entry.
   """
   if source.observer is None:return None
-  return self._recorded_action_program(source,groups)
+  record=self._recorded_action_program(source,groups)
+  if record is not None:self.values.setdefault(source,ValueRecord(record.value,'evaluated-personal-action-flow'))
+  return record
  def evaluated_program(self,source,groups,*,evaluate=False):
   # The existing Tree entry is public. A personal record must not silently enter
   # its public-only convergence/transport path.
@@ -214,6 +216,16 @@ class EvaluationGraph:
   if found is None:return None
   rows,expected=found
   return self._public_mixture(source,groups,(row[:5] for row in rows),expected=expected)
+ def personal_projection(self,source,groups,*,counter=False):
+  if source.observer is None:return None
+  key=(source,tuple(groups),'personal')
+  if key in self.projections:return self.projections[key]
+  found=self.hunter_rows(source)
+  if found is None:return None
+  result=self._public_mixture(source,groups,(row[:5] for row in found[0]),expected=found[1],personal=True)
+  from dataclasses import replace
+  result=replace(result,reason='evaluated-personal-mixture')
+  self.projections[key]=result;return result
  def public_projection(self,source,groups,*,evaluate=False,counter=False):
   key=(source,tuple(groups),counter)
   if key in self.projections:return self.projections[key]
@@ -238,8 +250,10 @@ class EvaluationGraph:
    rows.append((weight,self._named_leaf(leaf,leaf.arrival,groups),self._named_leaf(leaf,leaf.source,groups),leaf.target,value))
   result=self._public_mixture(source,groups,rows,counter=counter,expected=None if counter else record.value)
   self.projections[key]=result;return result
- def _public_mixture(self,source,groups,rows,*,counter=False,expected=None):
+ def _public_mixture(self,source,groups,rows,*,counter=False,expected=None,personal=False):
   from .public_convergence import public_transport,transport_source,public_key,mix
+  if personal:
+   from .personal_convergence import public_transport,transport_source,observation_key as public_key,mix
   afters={};befores={};total=F();weighted=F();known=True
   from .calculation_budget import tick
   def add(table,identity,weight,child,target,value):
