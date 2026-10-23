@@ -57,8 +57,39 @@ class DayDecisionRecord:
  information:str='public-Q'
  complete:bool=True
 
+@dataclass(frozen=True)
+class EvaluatedOutcome:
+ outcome:object
+ source:object
+ value:F
+
+@dataclass(frozen=True)
+class ActionRecord:
+ acquired:object
+ outcomes:tuple
+ value:F
+ policies:tuple=()
+
+@dataclass(frozen=True)
+class MorningRecord:
+ branches:tuple
+ value:F
+
 class EvaluationGraph:
- def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={};self.day_decisions={}
+ def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={};self.day_decisions={};self.actions={};self.mornings={}
+ def hunter_flow_scope(self,board,payload):
+  e=self.engine
+  return (board.initial_hunter_count==1 and payload.observer is None
+   and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
+ def record_action(self,board,payload,target,acquired,outcomes,value):
+  if not self.hunter_flow_scope(board,payload):return
+  from .actor_information import wolf_information_keys
+  policies=tuple((info,self.engine.policies.get((board,payload.public_state,payload.past,info))) for info in wolf_information_keys(payload.private))
+  self.actions[board,payload,target]=ActionRecord(acquired,tuple(EvaluatedOutcome(*row) for row in outcomes),value,policies)
+ def recorded_action(self,board,payload,target):
+  return self.actions.get((board,payload,target))
+ def record_morning(self,payload,branches,value):
+  self.mornings[payload]=MorningRecord(tuple(branches),value)
  def supports(self,source):
   e=self.engine;b=source.public
   return (source not in getattr(e,'anonymous_beliefs',{})
@@ -102,6 +133,16 @@ class EvaluationGraph:
   self.programs[source,tuple(groups)]=ProgramRecord(program,value,tuple(program.values),policies)
  def evaluated_program(self,source,groups,*,evaluate=False):
   key=(source,tuple(groups))
+  if source.public.initial_hunter_count:
+   if key not in self.programs:
+    found=self.hunter_rows(source)
+    if found is None:return None
+    from .recorded_hunter_program import factor
+    program=factor(source,tuple(groups),found[0])
+    if program is None:return None
+    policies=tuple((info,self.engine.policies[source.public,source.public_state,source.past,info]) for info in dict.fromkeys(row[5] for row in found[0]))
+    self.programs[key]=ProgramRecord(program,found[1],tuple(program.values),policies,'factored-evaluated-action-flow')
+   return self.programs[key]
   if key not in self.programs and evaluate and self.program_scope(source):
    self.engine.solve(*source,physical=source.physical)
   # A count/value shortcut may never have formed an ability program. It remains
@@ -128,9 +169,41 @@ class EvaluationGraph:
   law=Law.weighted(((F(1),Atom(pop,tuple(pins))),))[1]
   own=replace(template.private,hypotheses=expand(law,groups))
   return replace(template,private=own,physical=physical_board(template.public,own,template.physical),board_data=None,provenance=None)
+ def hunter_rows(self,source):
+  b=source.public;e=self.engine
+  if b.phase!='night' or b.winner or not self.hunter_flow_scope(b,source) or source in getattr(e,'anonymous_beliefs',{}):return None
+  from .actor_information import wolf_information_groups
+  from .evaluation_branch import ActionInputs,physical_board
+  rows=[];expected=F();offset=0
+  for info,mass,own in wolf_information_groups(source.private):
+   policy=e.policies.get((b,source.public_state,source.past,info))
+   if policy is None:return None
+   payload=ActionInputs(source.public_state,source.past,own,source.observer,physical_board(b,own,source.physical))
+   for target,q in policy:
+    if not q:continue
+    action=self.recorded_action(b,payload,target)
+    if action is None:return None # A value-only reduction is not a state trace.
+    expected+=mass*q*action.value
+    for index,outcome in enumerate(action.outcomes):
+     if outcome.source is None:return None # Terminal-payoff reductions kept no Board.
+     morning=self.mornings.get(outcome.source)
+     if morning is None:return None
+     rows.extend((mass*q*outcome.outcome.probability*p,outcome.source,after,target,value,info,offset,index,outcome.outcome) for p,after,value in morning.branches)
+   offset+=len(policy)
+  return tuple(rows),expected
+ def hunter_projection(self,source,groups):
+  found=self.hunter_rows(source)
+  if found is None:return None
+  rows,expected=found
+  return self._public_mixture(source,groups,(row[:5] for row in rows),expected=expected)
  def public_projection(self,source,groups,*,evaluate=False,counter=False):
   key=(source,tuple(groups),counter)
   if key in self.projections:return self.projections[key]
+  if source.public.initial_hunter_count:
+   if counter:return self.public_projection(source,groups) # Supported hunter policies are uniform.
+   result=self.hunter_projection(source,groups)
+   if result is not None:self.projections[key]=result
+   return result
   record=self.evaluated_program(source,groups,evaluate=evaluate)
   if record is None:return None
   program=record.program
@@ -138,6 +211,16 @@ class EvaluationGraph:
   if counter and all(leaf.mass==leaf.counter for leaf in program.leaves):
    result=self.public_projection(source,groups,evaluate=evaluate)
    self.projections[key]=result;return result
+  rows=[]
+  for leaf in program.leaves:
+   weight=leaf.counter if counter else leaf.mass
+   if not weight:continue
+   value=program.values.get(leaf.source)
+   if value is None and not counter:return None
+   rows.append((weight,self._named_leaf(leaf,leaf.arrival,groups),self._named_leaf(leaf,leaf.source,groups),leaf.target,value))
+  result=self._public_mixture(source,groups,rows,counter=counter,expected=None if counter else record.value)
+  self.projections[key]=result;return result
+ def _public_mixture(self,source,groups,rows,*,counter=False,expected=None):
   from .public_convergence import public_transport,transport_source,public_key,mix
   afters={};befores={};total=F();weighted=F();known=True
   from .calculation_budget import tick
@@ -147,23 +230,17 @@ class EvaluationGraph:
    if value is None:row['known']=False
    else:row['weighted']+=weight*value
    return row
-  for leaf in program.leaves:
-   tick();weight=leaf.counter if counter else leaf.mass
-   if not weight:continue
-   value=program.values.get(leaf.source)
-   if value is None:
-    if not counter:return None
-    known=False
-   mapping=public_transport(source,leaf.source,groups)
-   after=transport_source(self._named_leaf(leaf,leaf.source,groups),mapping)
-   before_mapping=public_transport(source,leaf.arrival,groups)
-   before=transport_source(self._named_leaf(leaf,leaf.arrival,groups),before_mapping)
-   target=mapping[leaf.target-1];a=public_key(after);b=public_key(before)
+  for weight,before,after,target,value in rows:
+   tick()
+   if value is None:known=False
+   mapping=public_transport(source,after,groups);after=transport_source(after,mapping)
+   before_mapping=public_transport(source,before,groups);before=transport_source(before,before_mapping)
+   target=mapping[target-1];a=public_key(after);b=public_key(before)
    add(afters,a,weight,after,target,value)
    row=add(befores,b,weight,before,target,value);row['links'][a]=row['links'].get(a,F())+weight
    total+=weight
    if value is not None:weighted+=weight*value
-  if total!=1 or not counter and weighted!=record.value:raise ValueError('Recorded public mixture changed evaluated mass/value')
+  if total!=1 or expected is not None and weighted!=expected:raise ValueError('Recorded public mixture changed evaluated mass/value')
   edges=[];sources={};values={}
   for identity,row in afters.items():
    child=mix(row['rows']);sources[identity]=child
@@ -180,7 +257,7 @@ class EvaluationGraph:
    if value is not None and all(values[a] is not None for a in row['links']) and sum(weight/row['mass']*values[a] for a,weight in row['links'].items())!=value:raise ValueError('Recorded update value changed')
    arrivals.append(ArrivalRecord(row['mass'],child,row['target'],updates,value))
   result=PublicProjection(tuple(edges),tuple(arrivals),weighted if known else None)
-  self.projections[key]=result;return result
+  return result
  def record_counts(self,source,value):
   if not self.supports(source):return
   b=source.public;counts={}

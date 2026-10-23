@@ -30,7 +30,18 @@ class NavigationCurrent:
         row=self.occurrence;self.source=transport_source(navigation.node.read(),row.names.forward)
         b=self.source.public;root=navigation.history.state(navigation.history.root).node.data
         game=root.to_game();base={k:game[k] for k in ('policy','claim_policy','seer_options','strategy_ui','result_disclosure_model') if k in game}
-        history=[{**base,'target':e.target,'claims':list(b.claims)} for e in b.history]
+        # A prevented bite advances the public phase without adding a corpse
+        # event. Preserve that observed empty night in the ordinary Board view;
+        # otherwise Day2 reports are incorrectly attached to a Day1 snapshot.
+        from .dawn import OBSERVATION
+        events={(2*(e.day-1)+(e.phase=='night')):e for e in b.history}
+        history=[]
+        for slot in range(2*(b.day-1)+(b.phase=='night')):
+            event=events.get(slot)
+            if event is None:
+                if slot%2==0:raise ValueError('Missing public execution history')
+                history.append({**base,'target':None,'observation':OBSERVATION,'deaths':[],'claims':list(b.claims)})
+            else:history.append({**base,'target':event.target,'claims':list(b.claims)})
         view={**game,'history':history,'claims':list(b.claims),'selection':None,
               'seer_inputs':[dict(day=r.acquired_day,reporter=r.player,target=r.target,color=r.color) for r in self.source.past],
               'reports':[asdict(r) for r in b.reports]}

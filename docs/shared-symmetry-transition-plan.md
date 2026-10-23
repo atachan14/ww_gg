@@ -3879,3 +3879,64 @@ unsupported adapter policies and unformed shortcut detail remain explicit fallba
 
 Final endpoint-separated implementation: Python133 passed in108.513s; Tree JS54 passed. Isolated Edge passed real Table zero/tied choices, representative/back navigation, deferred null values, pre-report Current selection and explicit post-report Current selection. Multiple report alternatives are selected explicitly, not treated as deterministic Footer updates.
 
+
+## Hunter actual-flow recording: focused checkpoint (2026-10-24)
+
+RootSecretEngine's existing named evaluation is retained. Optional action-flow
+and morning hooks capture only completed evaluated outputs: acquired laws,
+guard-correlated physical outcomes, pre-report sources, actual publication
+branches and their exact values. Policy provenance is read from actual public-Q
+information-set caches; an unavailable policy remains unavailable. No error is
+suppressed and no shared-program replacement is used.
+
+For a complete supported ordinary random hunter night, the Tree's public
+convergence/morning-update consumer can compose those records through the same
+public-mixture operation as other evaluator records. Missing action records,
+value-only reductions, or terminal-payoff outputs without retained Board context
+fall back explicitly. Guard ability-stage factorization remains legacy; provenance
+is therefore mixed-evaluator-public, not a claim of full hunter migration.
+
+Focused independent tests: six passed in4.348s, including full named Q/P death and
+no-death laws, reports, no-repeat guard memories, no secondary public simulation,
+Current/cold restore, and value-only reduction isolation. Normal44deaaa unchanged.
+Broader regressions and browser verification are still pending; no activation yet.
+
+An existing compatibility omission was found: exact_renaming.configuration did
+not recognize Strategy.win_cutoff and therefore declined the uniform scalar
+reduction as Unsupported. The known symbolic option is now included in the full
+configuration identity; On/Off remain different keys. This requires the broader
+renaming/shortcut regressions before delivery. Forecast's explicit action-detail
+request is not a valid test that a value-only reduction creates no action records.
+Failure messages now compare bounded summaries rather than printing whole laws.
+
+## Hunter recorded guard-detail delivery (2026-10-24)
+
+Complete ordinary random hunter records can now be factored into the existing
+symbolic role-stage representation using only the actual retained acquisition,
+guard, attack, casualty and publication histories. This factorization generates
+zero game actions and performs no policy selection or continuation evaluation.
+Its provenance is factored-evaluated-flow: the scalar evaluator used the named
+joint flow, while Tree factors those exact evaluated outputs. It does not claim
+native anonymous scalar computation. Per-hypothesis projected states receive no
+invented values. Original private memories and branch-local name correspondence
+remain in the joint leaves, and every stage keeps the original public Q.
+
+Independent tests match the complete joint identity/memory masses and value,
+forbid shared_night/public-night regeneration by Tree, and preserve no-repeat,
+self-target exclusions and cold Current reconstruction. Unsupported or missing
+records retain fallback: value-only/terminal-payoff reductions without full Board
+context, personal views, anonymous-owned states, nonrandom hunter policy, and
+medium+ hunter ability-detail factorization. Complete public projections may
+still reuse actual records when only the detail adapter is unsupported.
+
+Final broad suite147 passed in259.880s; JS54 passed. It exposed an obsolete test
+expecting divination of already-dead5, corrected to existing night-start-alive
+legality. Browser then exposed a view-only history bug: guard success advanced the
+source day without a corpse event, so ordinary Board data omitted that empty
+night and rejected newly published Day2 reports as an absent legacy Board.
+NavigationCurrent now retains the already-observed empty night when constructing
+ordinary view data. No solver law or persistent history recipe changed. Following
+that fix, affected navigation/role/report/cold-restore suite70 passed in94.606s.
+Isolated desktop/narrow Edge passed Table/CO, genuine guard stages, no-death
+pre/post-report Current, alternate ordinary-death Current and history. Screenshots
+were inspected. Saved data and normal runtime were preserved during verification.

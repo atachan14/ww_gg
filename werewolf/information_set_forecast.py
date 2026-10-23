@@ -636,6 +636,7 @@ class InformationSetActionPolicy:
 
     def morning_value(self,payload):
         child,st,past,own,observer=payload;e=self.engine
+        recorder=getattr(self,'morning_recorder',lambda payload:None)(payload)
         ledger=getattr(e,'acquisition_provenance',None)
         if ledger is not None and ledger._reports_supported() and ledger.groups_for(payload.provenance,child,payload) is not None:
             return sum((mass*e.solve(*source,physical=source.physical) for q,mass,source in e.report_children(payload)),F())
@@ -644,19 +645,28 @@ class InformationSetActionPolicy:
         if published==((F(1),child,st,past),):
             # No observation occurred. Keep the physical/observer measure;
             # a report likelihood ratio would spuriously intersect it with Q.
-            return e.solve(child,st,past,own,observer,
-                           physical=physical_board(child,own,payload.physical))
+            physical=physical_board(child,own,payload.physical)
+            value=e.solve(child,st,past,own,observer,physical=physical)
+            if recorder is not None:
+                source=ContinuationInputs(child,st,past,own,observer,physical)
+                recorder(((F(1),source,value),),value)
+            return value
         branches=e.push(st,own,published)
         from .board_future import reconstruct_publication,publication_key
         observations={}
         for q,c,ns,p,priv in branches:
             key=publication_key(c,p);observations[key]=observations.get(key,0)+1
+        recorded=[] if recorder is not None else None
         def evaluate(c,ns,p,priv):
             rebuilt=reconstruct_publication(e,payload,c,ns,p,priv,
                                             physical_board(c,priv,payload.physical),
                                             replay_unique=observations[publication_key(c,p)]==1)
-            return e.solve(*rebuilt,physical=rebuilt.physical)
-        return continuation_value(branches,evaluate)
+            value=e.solve(*rebuilt,physical=rebuilt.physical)
+            if recorded is not None:recorded.append((rebuilt,value))
+            return value
+        value=continuation_value(branches,evaluate)
+        if recorder is not None:recorder(tuple((branch[0],source,result) for branch,(source,result) in zip(branches,recorded)),value)
+        return value
 
     def day_value(self,payload):return self.engine.solve(*payload,physical=payload.physical)
 

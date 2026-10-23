@@ -763,7 +763,9 @@ class CalculationTree:
         trace=dict(owner='evaluator' if recorded else 'mixed-evaluator-program' if program_record else 'legacy-reconstruction',reduction=graph.values[s].reduction if recorded else program_record.reason if program_record else None)
         if program_record is not None:
             projected='evaluation_projection' in row
-            trace.update(owner='evaluator' if projected else 'mixed-evaluator-program',ability_program='evaluated',public_projection='evaluated' if projected else 'legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
+            trace.update(owner='evaluator' if projected else 'mixed-evaluator-program',ability_program='factored-evaluated-flow' if program_record.reason=='factored-evaluated-action-flow' else 'evaluated',public_projection='evaluated' if projected else 'legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
+        if program_record is None and 'evaluation_projection' in row:
+            trace.update(owner='mixed-evaluator-public',public_projection='evaluated',ability_program='legacy-reconstruction')
         if row.get('recorded_arrival'):trace=dict(owner='evaluator',reduction='recorded-pre-report-mixture',public_projection='evaluated')
         decision=graph.day_decision(s) if graph is not None else None
         if decision is not None:

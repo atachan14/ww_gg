@@ -84,7 +84,7 @@ def observer_signature(observer,ids,masks,record_cache=None):
 def configuration(obj):
     # Current policy selectors contain symbolic items, never player IDs.
     expected={"Rules":{"allow_self_bite","initial_seer","allow_repeat_guard"},
-              "Strategy":{"day","night","include_self_bite","fake_reports","disclosure_common","seer_disclosure","medium_disclosure","seer_position","fake_seer_policy","guard_position"}}
+              "Strategy":{"day","night","include_self_bite","fake_reports","disclosure_common","seer_disclosure","medium_disclosure","seer_position","fake_seer_policy","guard_position","win_cutoff"}}
     if not is_dataclass(obj) or {f.name for f in fields(obj)}!=expected.get(type(obj).__name__):raise Unsupported()
     return tuple((f.name,getattr(obj,f.name)) for f in fields(obj))
 

@@ -145,6 +145,6 @@ class UniformFixedBackupTests(unittest.TestCase):
             with patch('werewolf.root_secret_flow.RootSecretEngine',FullCommonReference),                 patch('werewolf.fixed_actor_continuation.fixed_uniform_action_value',return_value=None):
                 expected=root_seer_forecast(later,2,results,rules,strategy)
             self.assertEqual(actual,expected)
-            self.assertEqual({t for t,v in actual},{1,4,5})  # unvisited includes corpse5
+            self.assertEqual({t for t,v in actual},{1,4})  # Already-dead5 is not eligible at night start.
             self.assertEqual(len({v for t,v in actual}),1)
             self.assertEqual(later,before)

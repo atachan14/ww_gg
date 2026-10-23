@@ -84,10 +84,13 @@ def action_flow(board, state, target, policy):
     A policy may preflight terminal death only when acquisition cannot change
     casualties. Future casualty-changing laws must disable terminal preflight.
     """
+    recorder=getattr(policy,'action_recorder',lambda board,state:None)(board,state)
+    recorded=[] if recorder is not None else None
     acquired,outcomes=resolve_action(board,state,target,policy,terminal_payoffs=True)
     night=board.phase=='night'
     value = F()
     for outcome in outcomes:
+        projected=None
         if outcome.board.winner is not None:
             continuation = F(outcome.board.winner == 'village')
         else:
@@ -95,6 +98,8 @@ def action_flow(board, state, target, policy):
             continuation = (policy.morning_value(projected) if night
                             else policy.day_value(projected))
         value += outcome.probability * continuation
+        if recorded is not None:recorded.append((outcome,projected,continuation))
+    if recorder is not None:recorder(target,acquired,recorded,value)
     return value
 
 
