@@ -493,6 +493,7 @@ class CalculationTree:
         from .night_program import NightStage
         node=row['node'];program=self._program(node)
         if program is None:return None
+        row['stage_roles']=getattr(program,'stage_roles',dict(mediums=self.data.game_data.mediums,seers=self.data.game_data.seers,hunters=self.data.game_data.hunters))
         def leaf_row(leaf):
             child=node._stage_child(leaf)
             route=(*row['route'],(leaf.owner_index,leaf.target,leaf.outcome_index,leaf.report),{'physical':'joint','value':(node.read().public.day,leaf.wolves,leaf.scans)})
@@ -521,8 +522,8 @@ class CalculationTree:
                 if getattr(program,'method',None)=='anonymous-relational-v1':
                     from dataclasses import asdict
                     label=step.label();symbol=lambda x:None if x is None else asdict(x)
-                    mediums=self.data.game_data.mediums;seers=self.data.game_data.seers;hunters=self.data.game_data.hunters;prefix=stage.prefix
-                    stage_kind=lambda s:s.value if s.kind=='ability_dead' else s.kind
+                    mediums=row['stage_roles']['mediums'];seers=row['stage_roles']['seers'];hunters=row['stage_roles']['hunters'];prefix=stage.prefix
+                    stage_kind=lambda s:s.value if s.kind in ('ability_dead','ability_reduced') else s.kind
                     effective=stage_kind(step)
                     position=(sum(stage_kind(s)=='medium_result' for s in prefix) if effective=='medium_result' else mediums+sum(stage_kind(s) in ('seer_target','seer_result') for s in prefix) if effective in ('seer_target','seer_result') else mediums+2*seers+sum(stage_kind(s)=='guard_target' for s in prefix) if effective=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
                     branches.append(dict(stage_column=position,public_fact=step.public_fact,kind=step.kind,actor=None if step.actor is None else step.actor.index+1,actors=[x.index+1 for x in step.actors],value=step.value,label=label,targets=[],symbols=dict(actor=symbol(step.actor),target=symbol(step.target) if hasattr(step.target,'members') else None,actors=[symbol(x) for x in step.actors]),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),children=build(branch.state),images=[]))
@@ -532,7 +533,7 @@ class CalculationTree:
                     prefix=stage.prefix;role_column=None
                     if native:
                         mediums=self.data.game_data.mediums;seers=self.data.game_data.seers;hunters=self.data.game_data.hunters
-                        stage_kind=lambda s:s.value if s.kind=='ability_dead' else s.kind
+                        stage_kind=lambda s:s.value if s.kind in ('ability_dead','ability_reduced') else s.kind
                         effective=stage_kind(step)
                         role_column=(sum(stage_kind(s)=='medium_result' for s in prefix) if effective=='medium_result' else mediums+sum(stage_kind(s) in ('seer_target','seer_result') for s in prefix) if effective in ('seer_target','seer_result') else mediums+2*seers+sum(stage_kind(s)=='guard_target' for s in prefix) if effective=='guard_target' else mediums+2*seers+hunters+(step.kind=='death_notice')+(2 if step.kind=='publication' else 0))
                     branches.append(dict(stage_column=role_column,kind=step.kind,actor=step.actor,actor_groups=actor_groups,joint_choices=joint_choices,actors=list(step.actors),value=step.value,label=label,targets=list(branch.targets),probability=str(branch.probability),policy_probability=str(branch.policy_probability),counter_probability=str(branch.counter_probability),mass=str(branch.mass),private=step.kind not in ('death_notice','publication'),public_observation=step.kind in ('death_notice','publication'),visible_to=list(step.visible_to),multiplicity=len(branch.images),children=build(branch.state),images=[dict(transport=list(mapping),nodes=[leaf_row(leaf) for leaf in leaves],children=None if mapping==program.identity else build(NightStage(program,leaves,(*stage.prefix,named)))) for named,leaves,mapping in branch.images]))
@@ -658,7 +659,10 @@ class CalculationTree:
 
     def _composition_rows(self,key):
         row=self.nodes[key]
-        if 'composition_rows' in row:return row['composition_rows']
+        if 'composition_rows' in row:
+            if 'stage_roles' in row:
+                for part in row['composition_rows']:self.nodes[part['node']]['stage_roles']=row['stage_roles']
+            return row['composition_rows']
         node=row['node'];result=[];parts=node._compositions()
         for composition,probability in parts:
             w,m,seer,h,v=composition
@@ -667,6 +671,7 @@ class CalculationTree:
             if child!=key:
                 self.nodes[child]['public_parent']=row.get('public_parent',key)
                 if row.get('defer_value'):self.nodes[child]['defer_value']=True
+                if 'stage_roles' in row:self.nodes[child]['stage_roles']=row['stage_roles']
             result.append(dict(node=child,counts=dict(wolves=w,mediums=m,seers=seer,hunters=h,citizens=v),label=label,probability=str(probability)))
         row['composition_rows']=result;return result
 
@@ -783,7 +788,7 @@ class CalculationTree:
             'players':[{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p)),
                 'seer_probability':str(b.role_probability(p,'seer')),
                 'physical_wolf_probability':str(sum((h.mass for h in s.private.hypotheses if h.roles[0]&(1<<(p-1))),F()))} for p in range(1,b.player_count+1)],
-            'compositions':self._composition_rows(key),'night_stages':row.get('night_stages'),'stage_roles':dict(seers=0,mediums=0,hunters=0) if recorded else dict(seers=self.data.game_data.seers,mediums=self.data.game_data.mediums,hunters=self.data.game_data.hunters),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':f'{self.data.game_data.players} players / {self.data.game_data.seers} seers / {self.data.game_data.wolves} wolves',
+            'compositions':self._composition_rows(key),'night_stages':row.get('night_stages'),'stage_roles':dict(seers=0,mediums=0,hunters=0) if recorded else row.get('stage_roles',dict(seers=self.data.game_data.seers,mediums=self.data.game_data.mediums,hunters=self.data.game_data.hunters)),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':f'{self.data.game_data.players} players / {self.data.game_data.seers} seers / {self.data.game_data.wolves} wolves',
             'method':'完全なQ/P・履歴・物理枝の既存の名前付替え同値でまとめます。全ての成員Boardを選択できます。'}
 
     def read(self,key,expand=False):

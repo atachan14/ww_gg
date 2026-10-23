@@ -69,6 +69,8 @@
     const at=d=>(d.column_day-1)*2+(d.column_phase==='night'?1:0);
     let rows=[...nodes.values()].filter(d=>!d.winner&&at(d)===phase);
     if(!rows.length)rows=[...nodes.values()].filter(d=>!d.winner&&at(d)===phase-1);
+    // Lazy Board summaries carry roster counts, not evaluated ability columns.
+    rows=rows.filter(d=>d.night_stages||d.ability_choices);
     const counts={seerCount:Math.max(0,...rows.map(d=>d.stage_roles?.seers??Math.max(0,...(d.compositions||[]).map(c=>c.counts?.seers||0)))),mediumCount:Math.max(0,...rows.map(d=>d.stage_roles?.mediums||0)),hunterCount:Math.max(0,...rows.map(d=>d.stage_roles?.hunters||0))};
     phaseRoles.set(phase,counts);return counts;
    }
@@ -93,9 +95,12 @@
       }
       if(stage.leaves)return stage.leaves.map(leaf=>{const exact=(leaf.variants||[]).find(v=>displayPath.includes(v.node));return {probability:leaf.probability,item:build(exact?exact.node:leaf.node,path,undefined,mass(parentReach,leaf.probability),leaf.context_node)};}).filter(x=>x.item);
       return (stage.branches||[]).map(branch=>{const reach=mass(parentReach,branch.probability),position=d.night_stages.method==='evaluation-recorded-v1'?mediumCount+2*seerCount+hunterCount+(branch.kind==='death_notice'?1:0):branch.stage_column??(branch.kind==='wolf_target'?2*seerCount:branch.kind==='death_notice'?2*seerCount+1:branch.kind==='publication'?2*seerCount+2:index);
+       // Separate records may omit unused roles; align their actual stages in the phase union.
+       const local=d.stage_roles||{mediums:mediumCount,seers:seerCount,hunters:hunterCount},effective=['ability_dead','ability_reduced'].includes(branch.kind)?branch.value:branch.kind;
+       const shift=d.night_stages.method==='anonymous-relational-v1'?(effective==='medium_result'?0:mediumCount-local.mediums+(effective==='seer_target'||effective==='seer_result'?0:2*(seerCount-local.seers)+(effective==='guard_target'?0:hunterCount-local.hunters))):0;
        const image=(branch.images||[]).find(image=>image.children&&image.nodes.some(id=>displayPath.includes(id)));
        const descendants=walk(image?image.children:branch.children,index+1,reach);
-       return {probability:branch.probability,item:make('action',column+position,{text:branch.label,title:(native?'同時行動 / 夜内の到達 '+branch.mass:'\u540c\u6642\u884c\u52d5 / \u5230\u9054 '+reach)+' / \u62ec\u5f27\u306f\u4ee3\u8868\u914d\u7f6e\u3002\u80fd\u529b\u8005\u3068\u5bfe\u8c61\u306f\u540c\u3058\u540d\u524d\u7f6e\u63db\u306b\u5f93\u3044\u307e\u3059\u3002'},descendants)};
+       return {probability:branch.probability,item:make('action',column+position+shift,{text:branch.label,title:(native?'同時行動 / 夜内の到達 '+branch.mass:'\u540c\u6642\u884c\u52d5 / \u5230\u9054 '+reach)+' / \u62ec\u5f27\u306f\u4ee3\u8868\u914d\u7f6e\u3002\u80fd\u529b\u8005\u3068\u5bfe\u8c61\u306f\u540c\u3058\u540d\u524d\u7f6e\u63db\u306b\u5f93\u3044\u307e\u3059\u3002'},descendants)};
       });
      };
      return walk(d.night_stages,0,reach);
@@ -147,12 +152,17 @@
    }
    const complete=build(rootId);if(!complete)return;const tree=expansion.project(complete);
    const seen=new Set();function collect(item){if(seen.has(item))return;seen.add(item);entries.push(item);for(const child of item.children){collect(child.item);links.push([item,child.item,child.probability,child]);}}collect(tree);
-   const columns=base(maxPhase+1),canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(canvas);headerViewport.replaceChildren(headers);scene=canvas;headerScene=headers;
+   const occupied=new Set(entries.map(item=>item.column)),columnMap=new Map();let columns=0;
+   const canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(canvas);headerViewport.replaceChildren(headers);scene=canvas;headerScene=headers;
    for(let phase=0;phase<=maxPhase;phase++){
     const {seerCount,mediumCount,hunterCount}=rolesAt(phase),start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'夜':'昼'}`,...(native?[]:['内訳']),...(night?[...Array.from({length:mediumCount},(_,i)=>'霊能結果'+(mediumCount>1?i+1:'')),...Array.from({length:seerCount},(_,i)=>['占い位置'+(seerCount>1?i+1:''),'占い結果'+(seerCount>1?i+1:'')]).flat(),...Array.from({length:hunterCount},(_,i)=>'護衛位置'+(hunterCount>1?i+1:'')),'襲撃位置',...(native?['死亡通知']:[])]:[...Array(updateCount(phase)).fill('盤面更新'),'処刑位置'])];
-    const group=el('div',undefined,'compact-phase-group'+(night?' night':''));group.dataset.phaseGroup=phase;headers.append(group);selectionHeads.push({element:group,start,end:start+labels.length-1});
-    labels.forEach((text,index)=>{const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=start+index;h.dataset.phase=phase;headers.append(h);headings.push(h);});
+    const first=columns,abilityStart=native?1:2,abilityEnd=abilityStart+mediumCount+2*seerCount+hunterCount;
+    const visible=labels.map((text,index)=>({text,index})).filter(({index})=>!native||!night||index<abilityStart||index>=abilityEnd||occupied.has(start+index));
+    const group=el('div',undefined,'compact-phase-group'+(night?' night':''));group.dataset.phaseGroup=phase;headers.append(group);selectionHeads.push({element:group,start:first,end:first+visible.length-1});
+    visible.forEach(({text,index})=>{const column=columns++;columnMap.set(start+index,column);const h=el('h3',text,'compact-tree-phase phase-heading'+(index>1?' action-heading':''));h.dataset.column=column;h.dataset.phase=phase;headers.append(h);headings.push(h);});
    }
+   // Closed alternatives must not reserve empty ability columns for visible paths.
+   for(const item of entries)item.column=columnMap.get(item.column);
    for(const item of entries){
     let row;if(item.kind==='action'||item.kind==='cutoff'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;if(item.kind==='cutoff')row.dataset.cutoffMarker='';}
     else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);if(item.kind==='board'||!item.hideGo)row.dataset.treeItem=d.node;else row.dataset.treeComposition=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;

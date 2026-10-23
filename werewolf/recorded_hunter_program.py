@@ -13,15 +13,14 @@ from .board_future import outcome_key
 from .joint_action_kernel import report_signature
 from .tree_public_updates import publication_label
 from .anonymous_abilities import dead_stage_kinds
-from .ability_adapters import Divination,Guard
+from .ability_adapters import Medium,Divination,Guard
 from .calculation_budget import tick
 
 def factor(source,groups,rows):
  b=source.public
- # Medium private-result reconstruction is a separate adapter boundary.
- if b.initial_medium_count:return None
  groups=groups+tuple((p,) for p in range(1,b.player_count+1) if not any(p in g for g in groups))
- leaves=[];values={}
+ medium_used=any(r.day==b.day+1 and r not in b.reports and any(h.roles[1]&(1<<(r.reporter-1)) for h in after.private.hypotheses) for row in rows for after in (row[2],) for r in after.public.reports)
+ leaves=[];values={};medium_recorded=0;medium_reduced=0
  for weight,before,after,target,value,info,owner,index,outcome in rows:
   values[after]=value
   for h in after.private.hypotheses:
@@ -32,6 +31,18 @@ def factor(source,groups,rows):
      symbols[person]=Symbol(len(symbols),group)
     return symbols[person]
    scans=tuple(sorted((a.player,a.target) for a in h.acquisitions if a.day==b.day+1))
+   if medium_used:
+    mediums=tuple(p for p in b.alive if h.roles[1]&(1<<(p-1)))
+    steps.extend(SymbolStep('ability_dead',None,kind) for kind in dead_stage_kinds(bool(h.roles[1]),bool(mediums),Medium().stages))
+    for actor in mediums:
+     reports=tuple(r for r in after.public.reports if r.reporter==actor and r.day==b.day+1 and r not in b.reports)
+     if reports:
+      for report in reports:
+       steps.append(SymbolStep('medium_result',symbol(actor),symbol(report.target),public_fact=report.color));medium_recorded+=1
+     else:
+      # Existing evaluation did not retain/use this actor's private result.
+      # Preserve its implicit role/history relation; do not invent a color.
+      steps.append(SymbolStep('ability_reduced',symbol(actor),'medium_result',public_fact='unretained-private-result'));medium_reduced+=1
    for role,ability in ((2,Divination()),(3,Guard())):
     actors=tuple(p for p in b.alive if h.roles[role]&(1<<(p-1)))
     steps.extend(SymbolStep('ability_dead',None,kind) for kind in dead_stage_kinds(bool(h.roles[role]),bool(actors),ability.stages))
@@ -55,6 +66,7 @@ def factor(source,groups,rows):
    child=replace(after,private=own,physical=physical_board(after.public,own,after.physical),board_data=None,provenance=None)
    mass=weight*h.mass
    leaves.append(Leaf(mass,mass,child,tuple(steps),info,owner,target,index,outcome_key(outcome),report_signature(after),tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1))),scans,_fix(groups,tuple(symbols)),1,(),selection(h),tuple((s.index,p) for p,s in symbols.items()),arrival=before))
- program=Program(source,groups,leaves,dict(recorded_action_flow=True,generated_actions=0,permutation_checks=0))
+ program=Program(source,groups,leaves,dict(recorded_action_flow=True,generated_actions=0,permutation_checks=0,medium_results_recorded=medium_recorded,medium_results_reduced=medium_reduced,medium_stage_omitted=bool(b.initial_medium_count and not medium_used)))
+ program.stage_roles=dict(mediums=b.initial_medium_count if medium_used else 0,seers=b.initial_seer_count,hunters=b.initial_hunter_count)
  program.values.update(values);program.private_contexts=False
  return program

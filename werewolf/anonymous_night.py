@@ -90,6 +90,7 @@ class SymbolStep:
     def visible_to(self):return (self.actor.index+1,) if self.actor else ()
     def label(self):
         if self.kind=='ability_dead':return '\u6b7b\u4ea1\u6e08\u307f'
+        if self.kind=='ability_reduced':return '\u7701\u7565'
         if self.kind=='seer_target':return self.actor.label()+'が'+self.target.label()+'を占い'
         if self.kind=='guard_target':return self.actor.label()+'が'+self.target.label()+'を護衛'
         if self.kind=='medium_result':return self.actor.label()+'：'+self.target.label()+('黒' if self.public_fact=='black' else '白')

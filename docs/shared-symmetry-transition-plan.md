@@ -3940,3 +3940,94 @@ that fix, affected navigation/role/report/cold-restore suite70 passed in94.606s.
 Isolated desktop/narrow Edge passed Table/CO, genuine guard stages, no-death
 pre/post-report Current, alternate ordinary-death Current and history. Screenshots
 were inspected. Saved data and normal runtime were preserved during verification.
+
+## Fallback inventory and next finite migration units (2026-10-24)
+
+1. Legitimate value-only reductions: exchangeable count recurrence, certified win
+   cutoff, fixed uniform hunter reductions, terminal-payoff-only outputs. They may
+   have no concrete ability/Board output. Preserve reduction/value records; never
+   expand whole hidden laws just to pretend detail was previously calculated.
+2. Ordinary no-hunter records: public/unowned/no-observer CO night programs under
+   all-random or ordinary MAX night, and complete public MAX day choice/refinement
+   records. Unsupported adapter selectors/self-bite or missing evaluated programs
+   still use explicit legacy reconstruction. Migrate each actual evaluated adapter
+   output separately; do not change its policy to obtain a record.
+3. Ordinary hunter records: one hunter, no observer, all day/night/fake-report
+   policies random; night ongoing and not anonymous-owned. Need actual cached
+   information-set policy plus every positive action/morning output. Missing
+   action records or full terminal Board context legitimately decline projection.
+4. Personal sources (observer not None): not yet recorded end-to-end. Next unit
+   after ordinary-role coverage: record their actual observer-conditioned action/
+   publication outputs without replacing Q by private knowledge.
+5. Anonymous-belief-owned sources: native scalar recursion caches are not yet
+   retained as a common presentation graph. Next subsequent unit: emit exact
+   native transition/value records at the owner recursion, retaining law weights,
+   identity relations and named Current boundary, not replay a named simulation.
+6. Unsupported hunter MAX/role-policy dependencies and future CO timing remain
+   unsupported gameplay/strategy work, not a trace-migration task.
+
+Current extension: hunter+medium factorization reads true medium results only
+from actual retained evaluated report outputs. A private result not retained in
+those outputs gets a typed ability_reduced marker (label: 省略), with no invented
+color. Role/history relations remain in full private atoms for future evaluation.
+Already-dead holders keep the distinct death marker. Medium result/reduction
+stages occupy their role-order column without affecting later actors' original Q.
+Focused tests2 passed in19.913s: five-player uncertain joint laws/Q/P/no replay,
+plus seven-player known-world actual true black and white reports. Browser,
+Current/history and broad regression verification remain pending for this unit.
+Finite plan: finish this ordinary-role unit; then observer records; then native
+owned-belief recursion records. Keep genuine value-only reductions as reductions.
+
+
+Hunter+medium verification extension: an entirely unretained medium stage has
+stage_roles.mediums=0 and no artificial reduced/dead column. In a mixed evaluated
+stage, unretained results remain typed reductions and dead holders remain distinct.
+Focused four tests passed (22.055s), including full named Q/P equality, true black
+and white report records, no-secondary-simulation guards, globally unused stage
+omission, death/deathless Current and cold history reconstruction. Additional
+67 evaluation-record/navigation regressions passed (22.351s); 52 JS layout,
+expansion and viewport tests passed. Isolated Edge Table/CO, medium+guard detail,
+pre/post-report deathless Current and ordinary-death Current passed. Desktop and
+390px screenshots were inspected. Further role/shortcut regressions and globally
+omitted-column DOM check are recorded in .artifacts/hunter-medium-* logs.
+
+Browser verification exposed an additional presentation boundary: lazy Board
+summaries still carry configured role counts. Phase headers now derive ability
+columns from materialized night stages, not lazy roster metadata. Actual records
+with different omitted roles align their stage offsets to the shared phase union.
+Cached composition rows inherit their parent's evaluated stage-role metadata on
+subsequent reads as well as on creation. No evaluator law or policy changed.
+
+Legacy benchmark audit: tests.test_cut_out_live_medium_forecast/reports/white
+produce the same three failures and one error on untouched 7a98dfd exported into
+a temporary directory (8 tests, 1.585s). These are recorded baseline failures,
+not silently updated expectations. A parallel 8/9-player regression exceeded its
+existing 25s budget; the supported resource failure remains explicit.
+
+The real persistent browser fixture also includes a different execution (seer
+already executed) whose medium adapter remains explicit legacy reconstruction.
+That visible branch legitimately keeps the phase's shared medium column. The
+column must disappear only after all medium-bearing visible alternatives close;
+never suppress their existing stage merely because the current branch omits it.
+After expansion projection, empty ability columns are compacted with one shared
+column map for cards, headers and orthogonal edges. This is presentation metadata,
+not an extra transition or a new result likelihood.
+
+Final dynamic-column browser test passed: preserve the occupied medium column
+while a separate legacy execution alternative is visible, collapse that alternative,
+then verify no medium header and retained seer/guard headers on the evaluated
+current path. Final affected record/navigation suite67 passed in29.679s; JS52
+passed after column-map compaction. Earlier broad suite's legacy failures are
+unchanged on committed baseline and remain disclosed separately.
+
+The previously resource-limited 8/9-player stage/transport/cold-Current test passed
+when rerun alone (30.306s across both sizes, original per-case budgets unchanged).
+The normal runtime is updated only after final isolated browser and commit checks.
+
+Final isolated Edge verification passed again after visible-column compaction:
+Table CO, genuine medium/guard records, no-death pre/post-report Current,
+ordinary-death Current and main rendering. Desktop and narrow screenshots were
+inspected. The former whole-phase absence assertion was intentionally corrected:
+a visible different legacy execution branch does require its medium column.
+The final test verifies this fact, then closes those branches and verifies absence.
+No fabricated result or changed evaluator strategy was used to satisfy the UI test.
