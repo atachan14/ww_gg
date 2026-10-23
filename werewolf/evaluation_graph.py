@@ -79,7 +79,9 @@ class EvaluationGraph:
  def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={};self.day_decisions={};self.actions={};self.mornings={}
  def hunter_flow_scope(self,board,payload):
   e=self.engine
-  return (board.initial_hunter_count==1 and payload.observer is None
+  from .actor_information import PersonalInformation
+  from .seer_intervention import SeerObserver
+  return (board.initial_hunter_count==1 and (payload.observer is None or type(payload.observer) in (PersonalInformation,SeerObserver))
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
  def record_action(self,board,payload,target,acquired,outcomes,value):
   if not self.hunter_flow_scope(board,payload):return
@@ -131,18 +133,33 @@ class EvaluationGraph:
   # result partitions. Retain those actual cache entries, not viewer-P choices.
   policies=tuple((info,self.engine.policies[source.public,source.public_state,source.past,info]) for info in dict.fromkeys(leaf.information for leaf in program.leaves))
   self.programs[source,tuple(groups)]=ProgramRecord(program,value,tuple(program.values),policies)
- def evaluated_program(self,source,groups,*,evaluate=False):
+ def _recorded_action_program(self,source,groups):
+  if source.public.phase!='night' or source.public.winner or not self.hunter_flow_scope(source.public,source) or source in getattr(self.engine,'anonymous_beliefs',{}):return None
   key=(source,tuple(groups))
-  if source.public.initial_hunter_count:
-   if key not in self.programs:
-    found=self.hunter_rows(source)
-    if found is None:return None
-    from .recorded_hunter_program import factor
-    program=factor(source,tuple(groups),found[0])
-    if program is None:return None
-    policies=tuple((info,self.engine.policies[source.public,source.public_state,source.past,info]) for info in dict.fromkeys(row[5] for row in found[0]))
-    self.programs[key]=ProgramRecord(program,found[1],tuple(program.values),policies,'factored-evaluated-action-flow')
-   return self.programs[key]
+  if key not in self.programs:
+   found=self.hunter_rows(source)
+   if found is None:return None
+   from .recorded_hunter_program import factor
+   program=factor(source,tuple(groups),found[0])
+   if program is None:return None
+   policies=tuple((info,self.engine.policies[source.public,source.public_state,source.past,info]) for info in dict.fromkeys(row[5] for row in found[0]))
+   reason='factored-evaluated-personal-action-flow' if source.observer is not None else 'factored-evaluated-action-flow'
+   self.programs[key]=ProgramRecord(program,found[1],tuple(program.values),policies,reason)
+  return self.programs[key]
+ def personal_program(self,source,groups):
+  """Read completed observer-conditioned records; never request missing detail.
+
+  Public convergence deliberately excludes these sources. Keep this explicit
+  boundary until observer-aware projection/navigation is migrated separately.
+  """
+  if source.observer is None:return None
+  return self._recorded_action_program(source,groups)
+ def evaluated_program(self,source,groups,*,evaluate=False):
+  # The existing Tree entry is public. A personal record must not silently enter
+  # its public-only convergence/transport path.
+  if source.observer is not None:return None
+  key=(source,tuple(groups))
+  if source.public.initial_hunter_count:return self._recorded_action_program(source,groups)
   if key not in self.programs and evaluate and self.program_scope(source):
    self.engine.solve(*source,physical=source.physical)
   # A count/value shortcut may never have formed an ability program. It remains
@@ -192,6 +209,7 @@ class EvaluationGraph:
    offset+=len(policy)
   return tuple(rows),expected
  def hunter_projection(self,source,groups):
+  if source.observer is not None:return None
   found=self.hunter_rows(source)
   if found is None:return None
   rows,expected=found

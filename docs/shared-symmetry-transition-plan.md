@@ -4031,3 +4031,58 @@ inspected. The former whole-phase absence assertion was intentionally corrected:
 a visible different legacy execution branch does require its medium column.
 The final test verifies this fact, then closes those branches and verifies absence.
 No fabricated result or changed evaluator strategy was used to satisfy the UI test.
+
+
+## Personal evaluated outputs: first finite unit (2026-10-23)
+
+Existing entry points are distinct:
+- ClosedCalculation._Node.personal accepts typed PersonalInformation (villager,
+  seer with own acquisitions, medium role), SeerObserver (own target intervention),
+  and WolfInformation. WolfInformation conditions P but keeps observer=None.
+- private_view.condition_private also supports wolf roster/attack history, seer
+  acquisitions, hunter guard history and medium executed-target results. These
+  Table adapters are not the same typed ClosedCalculation entry.
+- root_seer_forecast/root_wolf_forecast/root_guard_forecast and non-root view
+  evaluators retain their existing support/failure contracts; no strategy or CO
+  timing support is added here. Public rankings use Q; viewer evidence changes P.
+
+This unit expands only existing RootSecretPolicy recording for one-hunter,
+all-random flows with immutable PersonalInformation or SeerObserver. It records
+completed actual acquisition/death/morning outputs, not another transition pass.
+EvaluationGraph.personal_program reads those complete records without asking for
+missing detail. Programs and action records are keyed by full observer, P and Q;
+actual wolf policy keys remain (public Board, Q, public past, wolf information).
+The ordinary evaluated_program/public_projection boundary still excludes these
+personal sources. Existing public-only renaming/convergence must not receive them.
+
+A personal recorded program is read-only: a value for an unretained refined
+secret-history leaf raises evaluated_continuation_detail_not_retained instead of
+solving it or copying a mixed parent's value. Its ProgramRecord.value and actual
+recorded continuation values remain available. This restriction does not alter
+existing scalar evaluation or discard hidden correlations.
+
+Verification: independent named action/outcome/report flow compared complete Q/P,
+observer and physical Board distributions, exact values and mass1 for genuinely
+private two-claimant seer, villager and medium views and own white/black scan
+interventions. Consumers were tested with solve/policy/resolve patched to fail.
+Public policy cache entries survive unchanged across private interventions. Cold
+source/action reconstruction and fixed owner/known-target groups are tested,
+including simultaneous owner death. Focused and affected record regression28
+passed in45.239s before the final provenance label assertion.
+
+Remaining finite sequence:
+1. Observer-aware projection/transport/navigation of these recorded components;
+   preserve the owner/known identities and do not publicly merge distinct private
+   posteriors. The current public Tree is deliberately unchanged in this unit.
+2. Connect Table-specific root/non-root view adapters (including guard history)
+   through explicit typed observation descriptors; do not infer a generic callable's
+   meaning or claim their independent engines already emit this graph.
+3. Non-hunter personal action hooks and ordinary incomplete adapters from their
+   actual completed outputs; preserve explicit no-detail shortcut behavior.
+4. Native anonymous-belief-owned recursion records, retaining its exact law and
+   named Current boundary. No named replay masquerading as native traces.
+Hunter MAX and automatic CO timing remain separate unsupported/deferred gameplay
+work. Normal18821 stays on27bb8a4 while this foundation is reviewed.
+
+Final personal-provenance focused tests4 passed in5.759s. No active test workers
+remain for this unit; normal18821 was not restarted or updated.

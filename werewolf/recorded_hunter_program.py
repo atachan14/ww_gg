@@ -16,6 +16,14 @@ from .anonymous_abilities import dead_stage_kinds
 from .ability_adapters import Medium,Divination,Guard
 from .calculation_budget import tick
 
+class RecordedProgram(Program):
+ def continuation(self,engine,leaf):
+  if leaf.source not in self.values:
+   from .information_set_forecast import Pending
+   raise Pending('evaluated_continuation_detail_not_retained')
+  return self.values[leaf.source]
+
+
 def factor(source,groups,rows):
  b=source.public
  groups=groups+tuple((p,) for p in range(1,b.player_count+1) if not any(p in g for g in groups))
@@ -66,7 +74,8 @@ def factor(source,groups,rows):
    child=replace(after,private=own,physical=physical_board(after.public,own,after.physical),board_data=None,provenance=None)
    mass=weight*h.mass
    leaves.append(Leaf(mass,mass,child,tuple(steps),info,owner,target,index,outcome_key(outcome),report_signature(after),tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1))),scans,_fix(groups,tuple(symbols)),1,(),selection(h),tuple((s.index,p) for p,s in symbols.items()),arrival=before))
- program=Program(source,groups,leaves,dict(recorded_action_flow=True,generated_actions=0,permutation_checks=0,medium_results_recorded=medium_recorded,medium_results_reduced=medium_reduced,medium_stage_omitted=bool(b.initial_medium_count and not medium_used)))
+ program_type=RecordedProgram if source.observer is not None else Program
+ program=program_type(source,groups,leaves,dict(recorded_action_flow=True,generated_actions=0,permutation_checks=0,medium_results_recorded=medium_recorded,medium_results_reduced=medium_reduced,medium_stage_omitted=bool(b.initial_medium_count and not medium_used)))
  program.stage_roles=dict(mediums=b.initial_medium_count if medium_used else 0,seers=b.initial_seer_count,hunters=b.initial_hunter_count)
  program.values.update(values);program.private_contexts=False
  return program
