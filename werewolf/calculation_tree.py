@@ -149,15 +149,21 @@ class CalculationTree:
         with self.calculation._ClosedCalculation__kernel(),e.group_scope(node.groups),node.relation_scope():
             if b.phase=='day':
                 belief=getattr(e,'anonymous_beliefs',{}).get(s)
-                scores=({p:v for group,v in e.anonymous_values.day_scores(e.anonymous_values.scalar(belief)) for p in group}
+                graph=getattr(e,'evaluation_graph',None)
+                decision=graph.day_decision(s,evaluate=True) if graph is not None else None
+                scores=(dict(decision.scores) if decision is not None else
+                        {p:v for group,v in e.anonymous_values.day_scores(e.anonymous_values.scalar(belief)) for p in group}
                         if belief is not None else dict(e.day_scores(b,s.public_state,s.past)))
-                best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
+                if decision is not None:weights=dict(decision.policy)
+                else:
+                    best=max(scores.values());selected=[t for t,v in scores.items() if e.strategy.day=='random' or v==best]
+                    weights={t:F(1,len(selected)) if t in selected else F() for t in scores}
                 legal=legal_targets(s.physical,self.rules,self.strategy)
                 orbits=node.action_orbits() if getattr(e,'anonymous_nights',False) else tuple((p,) for p in legal)
                 for orbit in orbits:
                     target=orbit[0]
                     rows.append({'node':node,'target':target,'orbit':orbit,'q_score':scores[target],
-                        'policy_mass':F(sum(p in selected for p in orbit),len(selected)),
+                        'policy_mass':sum((weights[p] for p in orbit),F()),
                         'fallback_mass':F(len(orbit),len(scores)),'information':'公開Q','owner_index':None})
             else:
                 # Selection is from PUBLIC Q conditioned by actor information;
@@ -743,6 +749,8 @@ class CalculationTree:
             projected='evaluation_projection' in row
             trace.update(owner='evaluator' if projected else 'mixed-evaluator-program',ability_program='evaluated',public_projection='evaluated' if projected else 'legacy-reconstruction',evaluated_sources=len(program_record.evaluated_sources))
         if row.get('recorded_arrival'):trace=dict(owner='evaluator',reduction='recorded-pre-report-mixture',public_projection='evaluated')
+        decision=graph.day_decision(s) if graph is not None else None
+        if decision is not None:trace.update(owner='mixed-evaluator-selection',selection='evaluated-public-MAX',selection_complete=decision.complete,transition='legacy-reconstruction')
         return {'evaluation_trace':trace,'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),

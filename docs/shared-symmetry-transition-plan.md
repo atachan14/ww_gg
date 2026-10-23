@@ -3759,3 +3759,31 @@ independent named weighted values, linked multiple CO and seer+medium cases,
 manual zero-weight updates, representative5 and cold Current/history restoration.
 An isolated Edge run passed visible Table/Footer and pre-report Current with
 Day2 update columns, desktop/narrow captures, and no browser exceptions.
+
+
+## Complete ordinary day-MAX decision records (2026-10-23)
+
+DayDecisionRecord retains the ordinary evaluator's COMPLETE public-Q score
+vector and exact uniform maximum-tie policy. The day_scores cache records it
+only after all candidates are evaluated; public_day_max early bounds and scalar
+win certificates never become fabricated complete policies. Explicit requests
+for missing candidate detail run the same evaluator and append its actual
+completed score record. Tree and concrete Current selection consume this policy
+record, including zero probability for nonchosen actions and multiplicity sums
+for constructed representative action orbits.
+
+The decision key contains public Board, Q and public history, not viewer P. A
+physical secret-history selection cannot change the execution policy. The record
+is limited to ordinary MAX day decisions without hunter/personal/belief-owned
+input; other existing routes remain explicit fallbacks. It does NOT migrate MAX
+night actions, minimization, counter-policy outcome projections or day transition
+construction. Trace owner=mixed-evaluator-selection, selection=evaluated-public-MAX
+and transition=legacy-reconstruction states that boundary honestly.
+
+Validation: 60 targeted policy/certificate/navigation/CO/projection/first-fast-path
+tests passed (32.048s). New tests compare every score with the ordinary named
+solver; verify both tied CO candidates receive1/2, nonchosen candidates receive0,
+partial win bounds have no decision record, Tree does not rerun completed target
+scoring, private P shares the same public policy, and concrete tied/nonchosen
+choices preserve named Current and cold history. Normal18821 stays on2d97cdc
+until a separately verified coherent MAX stage is ready for activation.

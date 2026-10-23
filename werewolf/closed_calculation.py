@@ -361,6 +361,9 @@ class _Node:
         s=self.__source;e=self.__calculation._ClosedCalculation__engine
         with self.__calculation._ClosedCalculation__kernel(),e.group_scope(self.__groups),self.relation_scope():
             if s.public.phase=='day':
+                graph=getattr(e,'evaluation_graph',None)
+                decision=graph.day_decision(s,evaluate=True) if graph is not None else None
+                if decision is not None:return dict(decision.policy).get(target,F())
                 scores=dict(e.day_scores(s.public,s.public_state,s.past));best=max(scores.values())
                 chosen=tuple(p for p,v in scores.items() if e.strategy.day=='random' or v==best)
                 return F(1,len(chosen)) if target in chosen else F()

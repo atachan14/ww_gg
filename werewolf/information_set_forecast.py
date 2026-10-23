@@ -475,6 +475,8 @@ class InformationSetForecast:
         key=(b,s,past)
         if key not in self.scores:
             self.scores[key]=tuple(self.score_day_targets(b,s,past))
+        graph=getattr(self,'evaluation_graph',None)
+        if graph is not None:graph.record_day_scores(b,s,past,self.scores[key])
         return self.scores[key]
 
     def score_day_targets(self,b,s,past):

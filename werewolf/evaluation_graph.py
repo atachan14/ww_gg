@@ -48,8 +48,15 @@ class PublicProjection:
  value:F
  reason:str='evaluated-public-mixture'
 
+@dataclass(frozen=True)
+class DayDecisionRecord:
+ scores:tuple
+ policy:tuple
+ information:str='public-Q'
+ complete:bool=True
+
 class EvaluationGraph:
- def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={}
+ def __init__(self,engine):self.engine=engine;self.values={};self.refinements={};self.programs={};self.projections={};self.day_decisions={}
  def supports(self,source):
   e=self.engine;b=source.public
   return (source not in getattr(e,'anonymous_beliefs',{})
@@ -64,6 +71,25 @@ class EvaluationGraph:
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
    and any(c in ('seer','medium') for c in b.claims)
    and source not in getattr(e,'anonymous_beliefs',{}))
+ def day_scope(self,source):
+  e=self.engine;b=source.public
+  return (b.phase=='day' and not b.winner and e.strategy.day=='max'
+   and not b.initial_hunter_count and source.observer is None
+   and source not in getattr(e,'anonymous_beliefs',{}))
+ def record_day_scores(self,board,public,past,scores):
+  if self.engine.strategy.day!='max' or board.phase!='day' or board.winner or board.initial_hunter_count:return
+  scores=tuple(scores)
+  # The ordinary evaluator installs this cache only after every candidate is
+  # evaluated. A scalar bound/early win certificate is not a decision table.
+  if {target for target,value in scores}!=set(board.alive):return
+  best=max(value for target,value in scores);chosen=tuple(target for target,value in scores if value==best)
+  policy=tuple((target,F(1,len(chosen)) if target in chosen else F()) for target,value in scores)
+  self.day_decisions[board,public,past]=DayDecisionRecord(scores,policy)
+ def day_decision(self,source,*,evaluate=False):
+  if not self.day_scope(source):return None
+  key=(source.public,source.public_state,source.past)
+  if key not in self.day_decisions and evaluate:self.engine.day_scores(*key)
+  return self.day_decisions.get(key)
  def record_program(self,source,groups,program,value):
   if not self.program_scope(source) or program.method!='anonymous-relational-v1':return
   # Record only after the evaluator has completed this exact owned program.
