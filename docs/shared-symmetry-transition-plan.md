@@ -4311,3 +4311,17 @@ Remaining boundaries: undeclared/latent automatic future CO, nonrandom strategie
 
 
 Seer adapter inventory after this stage: non-persistent/standalone Table calls and nonrandom supported seer forecasts still use prepare_private → root_seer_forecast or seer_forecast. Hidden seer entries that root_seer_forecast can evaluate with its fixed-policy reduction remain on that legacy value path; non-root hidden-future-CO and selective-publication continuation are already explicit Pending in private_adapter, not newly supported by this migration. The new no-hunter recorded adapter covers declared-seer/all-random/full-disclosure action and grouped morning records; terminal scalar-report reductions remain explicit no-detail boundaries. Thus this is a delivered subset of the seer inventory, not completion of all seer configurations.
+
+
+### Hidden seer with evaluated public observations (2026-10-23)
+
+A seer need not personally have CO'd to use the typed Table/cursor adapter. With an existing living public seer/medium declaration, the all-random/full-disclosure evaluator can retain actual hidden-seer intervention/action/morning records; the adapter now admits these owner facts without changing claims or scheduling a future CO. Filled/counter-CO rules must permit the hidden role in the first place. Record factoring and Q/P transport are unchanged.
+
+The pure all-hidden no-report root remains on the original root_seer_forecast value-only route. Its fixed_uniform_action_value cut is preserved: no scan/report detail is computed merely to show a Tree. A regression patches RootSecretEngine.solve to fail and confirms that this original shortcut still supplies exact per-target values. Dead declarations alone do not qualify a hidden view for the detailed route.
+
+Finite remaining supported legacy routes: (1) pure no-public-ability hidden-root value reductions; (2) root seer settings accepted by root_scope outside all-random/full-disclosure, including the existing day-random/night-MAX hunter route when its prerequisites hold; (3) ordinary nonroot seer_forecast nonrandom/full-disclosure configurations it already supports; (4) nonpersistent/standalone private Table calls. Root publication settings retain their existing root_scope/evaluator contract; nonroot selective-publication and hidden-future-CO are explicitly Pending in private_adapter. This migration does not declare those previously supported. Wolf observers and native anonymous ownership are separate units and unchanged.
+
+Focused hidden-stage 6 tests passed (56.453s), including exact old-root value parity, acquired history, private Current and cold restore. Isolated real browser hidden Table acquisition input→recorded Tree→Current→cold restore→back→public→seer switching passed with public history unchanged. Final broader/no-replay/shortcut validation is recorded below when complete.
+
+
+Final hidden-stage regression: affected run completed 51 tests in 102.490s, with 50 passing and one test-only canonical/displayed target expectation mismatch. The actual selected display 3 is canonical 1; expected canonical choices were corrected and both canonical and displayed maps asserted. That shortcut test plus the HTTP record/restore regression then passed (2 tests, 1.273s). The existing final CO-holder death path also remains recorded even when the declared player dies during that night; Table admission alone checks living public declarations. No unresolved functional test failure remains. The normal server was kept on b94f866 throughout isolated validation.

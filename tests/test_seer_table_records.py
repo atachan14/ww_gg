@@ -101,3 +101,53 @@ class SeerTableRecordTests(unittest.TestCase):
   self.assertEqual(value,F(1,3))
   self.assertIsNone(g.personal_program(s,node.groups))
   self.assertIsNone(g.personal_program(s,node.groups,evaluate=True))
+
+ def hidden_document(self):
+  from werewolf.navigation_store import NavigationDocument
+  game=data(6,'random').to_game();game['claim_policy']['seer']='none'
+  game.update(claims=['seer',*['latent']*5],seer_inputs=[dict(day=1,reporter=1,target=2,color='white')])
+  public=NavigationDocument(BoardData.from_game(game));public.game.action(3);return public
+ def test_hidden_seer_with_public_observations_keeps_existing_root_semantics(self):
+  import json
+  from werewolf.seer_view_document import SeerViewDocument
+  from werewolf.navigation_store import NavigationDocument
+  from werewolf.root_secret_flow import RootSecretBranch,root_seer_forecast
+  with calculation_budget(4000000,max_seconds=90):
+   public=self.hidden_document();before=public.export()
+   inputs=[dict(day=1,target=4,color='white')]
+   self.assertTrue(SeerViewDocument.supports(public,[2]))
+   view=SeerViewDocument(public,public.game.current,[2],inputs);result=view.result()
+   source=public.game.node.read();engine=view.root._Node__calculation._ClosedCalculation__engine
+   branch=RootSecretBranch(source.public,source.public_state,source.physical,source.private,source.past)
+   expected=root_seer_forecast(branch,2,view.acquisitions,engine.rules,engine.strategy)
+   self.assertTrue(isinstance(expected,tuple),'existing root seer evaluator rejected hidden input')
+   actual={r['id']:F(r['final']['village']) for r in result['players'] if r.get('final')}
+   self.assertEqual(actual,dict(expected));self.assertEqual(source.public.claims[1],'latent')
+   tree=view.tree();shown=tree.read(tree.current_key(),True)
+   self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+   e=view.root._Node__calculation._ClosedCalculation__engine
+   with patch('werewolf.action_flow.resolve_action',side_effect=AssertionError('hidden recorded Tree replayed transition')),patch.object(e,'solve',side_effect=AssertionError('hidden recorded Tree solved')):
+    cached=CalculationTree.from_node(view.root).read('0',True)
+   self.assertEqual(cached['evaluation_trace']['owner'],'evaluator')
+   children=[(k,r) for k,r in shown['items'].items() if r.get('day_start') and len(r['alive'])==4]
+   self.assertTrue(bool(children),'no recorded morning')
+   tree.select(children[0][0]);current=view.game.node.read()
+   self.assertTrue(all(h.roles[2]&(1<<1) for h in current.private.hypotheses))
+   self.assertTrue(any(a.player==2 and a.day==1 and a.target==4 for a in current.observer.acquisitions))
+   cold=SeerViewDocument.restore(NavigationDocument.restore(json.loads(json.dumps(public.export()))),json.loads(json.dumps(view.export())))
+   self.assertTrue(state_key(cold.game.node.read())==state_key(current),'hidden seer cold Current changed')
+   self.assertEqual(public.export(),before)
+
+ def test_all_hidden_value_only_root_keeps_original_shortcut_route(self):
+  from werewolf.seer_view_document import SeerViewDocument
+  from werewolf.navigation_store import NavigationDocument
+  from werewolf.root_secret_flow import RootSecretBranch,root_seer_forecast,RootSecretEngine
+  from werewolf.seer_acquisition import Acquisition
+  public=NavigationDocument(data(5,'random'));public.game.action(3)
+  self.assertFalse(SeerViewDocument.supports(public,[2]))
+  s=public.game.node.read();e=public.game.node._Node__calculation._ClosedCalculation__engine
+  branch=RootSecretBranch(s.public,s.public_state,s.physical,s.private,s.past)
+  with patch.object(RootSecretEngine,'solve',side_effect=AssertionError('value-only shortcut expanded detail')):
+   result=root_seer_forecast(branch,2,(Acquisition(1,2,4,'white'),),e.rules,e.strategy)
+  self.assertEqual(dict(result),{p:F(1,3) for p in s.public.alive if p not in (2,4)})
+  self.assertEqual({public.game.occurrence.names.display(p):v for p,v in result},{1:F(1,3),5:F(1,3)})

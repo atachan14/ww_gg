@@ -5,9 +5,10 @@ from threading import Thread
 from werkzeug.serving import make_server
 from app import create_app
 from tests.test_seer_table_records import SeerTableRecordTests
-import subprocess
+import subprocess,sys
 with TemporaryDirectory() as directory:
- public=SeerTableRecordTests().document();before=public.export()
+ hidden='--hidden' in sys.argv
+ public=(SeerTableRecordTests().hidden_document() if hidden else SeerTableRecordTests().document());before=public.export()
  app=create_app(dict(TESTING=True,SECRET_KEY='isolated-seer-table',PERSISTENT_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
  app.extensions['navigation_store'].get=lambda *_:public
  server=make_server('127.0.0.1',0,app,threaded=True);worker=Thread(target=server.serve_forever,daemon=True);worker.start()
@@ -37,6 +38,14 @@ with TemporaryDirectory() as directory:
   assert.deepEqual(errors,[]);console.log('PASS seer Table->recorded Tree->Current->cold restore->back->public->seer view');
   await call('Browser.close',{},null).catch(()=>{});
 """
+  if hidden:
+   body=body.replace('tr[data-player="1"]','tr[data-player="2"]')
+   marker="  await wait(()=>evaluate(`PersonalNavigation.context?.view.role==='seer'`),90000);"
+   evidence=r"""  await wait(()=>evaluate(`document.querySelector('[data-private-details="2:seer"] [data-private-target="1"]')`));
+  await evaluate(`(()=>{const row=document.querySelector('[data-private-details="2:seer"]');row.querySelector('[data-private-target="1"]').value='4';const color=row.querySelector('[data-private-color="1"]');color.value='white';color.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+"""
+   body=body.replace(marker,evidence+marker,1)
+   body=body.replace('PASS seer Table','PASS hidden seer Table')
   probe=Path(directory)/'verify.cjs';probe.write_text((prefix+body+suffix).replace('http://127.0.0.1:18821','http://127.0.0.1:'+str(server.server_port)),encoding='utf-8')
   subprocess.run(['node',str(probe)],check=True,timeout=180)
   assert public.export()==before,'public history changed'

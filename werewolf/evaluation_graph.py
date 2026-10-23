@@ -152,7 +152,7 @@ class EvaluationGraph:
   return (not board.initial_hunter_count and
    (type(observer)is SeerObserver or type(observer)is PersonalInformation and observer.role=='seer')
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3
-   and board.claims[observer.actor-1]=='seer' and e.strategy.disclosure_for('seer')=='all')
+   and any(c in ('seer','medium') for c in board.claims) and e.strategy.disclosure_for('seer')=='all')
  def recorded_flow_scope(self,board,payload):
   return self.hunter_flow_scope(board,payload) or self.personal_flow_scope(board,payload)
  def record_action(self,board,payload,target,acquired,outcomes,value):
