@@ -3850,3 +3850,32 @@ unformed shortcut detail.
 
 Validation: final selected Python suite 119 tests passed in 87.234s; isolated Edge MAX-night/manual-CO/representative flow passed. Normal18821 remains a5250c9 pending activation of this milestone.
 
+
+## Nonuniform MAX public convergence and morning updates (2026-10-23)
+
+Completed evaluator programs now project two separately keyed exact measures:
+selected-policy reach and uniform counterfactual inspection reach. Both use the
+actual already-created post-action populations, pre-report arrivals, publications
+and named transports. Public Q and actor policy remain fixed at their proper
+information sets; viewer P is mixed separately for each measure. Counterfactual
+projections can carry unknown values and do not call solve to fill them. Tree
+keeps those values deferred until explicitly requested, including composition
+children and private-path contexts. Unknown is not a numerical zero.
+
+Normal and inspection public nodes/arrival-update endpoints use their own full P
+law. Identical public text or Q alone does not authorize merging them. An exact
+same-state node may still be reused. Cold evidence reconstruction explicitly
+selects the corresponding measure; zero-path inspection cannot silently reuse a
+selected-policy posterior. Existing count/certificate shortcuts are unchanged.
+
+Independent named enumeration compares selected and inspection masses, full
+pre/post-report Q/P/private histories, known exact values, and linked multiple CO
+cases. Projection is tested with solve disabled. Tree tests prohibit legacy
+public-night replay and verify every measure's rendered endpoint source plus cold
+Current reconstruction. Final selected regression suite: 133 passed, 108.513s.
+The scope remains ordinary no-hunter public CO states with an actually evaluated
+anonymous ability program. Hunter, personal observers, anonymous-belief ownership,
+unsupported adapter policies and unformed shortcut detail remain explicit fallback.
+
+Final endpoint-separated implementation: Python133 passed in108.513s; Tree JS54 passed. Isolated Edge passed real Table zero/tied choices, representative/back navigation, deferred null values, pre-report Current selection and explicit post-report Current selection. Multiple report alternatives are selected explicitly, not treated as deterministic Footer updates.
+

@@ -37,7 +37,7 @@ class EvaluatedProgramRecordTests(unittest.TestCase):
    self.assertEqual(data['evaluation_trace']['ability_program'],'evaluated')
    self.assertEqual(data['evaluation_trace']['public_projection'],'evaluated')
    self.assertTrue(data['night_stages']['branches'])
- def test_MAX_retains_actual_program_without_claiming_counterfactual_projection(self):
+ def test_MAX_retains_actual_program_and_separate_counterfactual_projection(self):
   with calculation_budget(1000000,max_seconds=45):
    c,node=self.case('max');e=c._ClosedCalculation__engine
    self.assertTrue(e.evaluation_graph.program_scope(node.read()))
@@ -45,7 +45,7 @@ class EvaluatedProgramRecordTests(unittest.TestCase):
    record=e.evaluation_graph.evaluated_program(node.read(),node.groups)
    self.assertIsNotNone(record);self.assertEqual(record.value,value)
    self.assertTrue(any(leaf.mass!=leaf.counter for leaf in record.program.leaves))
-   self.assertIsNone(e.evaluation_graph.public_projection(node.read(),node.groups))
+   self.assertIsNotNone(e.evaluation_graph.public_projection(node.read(),node.groups))
  def test_record_identity_includes_the_full_public_source(self):
   # A program is keyed by the full immutable source plus groups, never a label.
   with calculation_budget(1000000,max_seconds=45):

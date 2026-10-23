@@ -29,7 +29,7 @@ class MaxNightProgramRecordTests(unittest.TestCase):
    # original record's completed-source snapshot and source value do not change.
    self.assertEqual(record.program.continuation(e,zero),oracle.solve(*zero.source,physical=zero.source.physical))
    self.assertEqual(record.evaluated_sources,before);self.assertEqual(record.value,value)
- def test_tree_reuses_actual_program_and_keeps_projection_fallback(self):
+ def test_tree_reuses_actual_program_and_recorded_projections(self):
   with calculation_budget(2000000,max_seconds=60):
    c,node=fixture.EvaluatedProgramRecordTests().case('max');e=c._ClosedCalculation__engine;node.forecast()
    record=e.evaluation_graph.evaluated_program(node.read(),node.groups);tree=CalculationTree.from_node(node)
@@ -37,9 +37,9 @@ class MaxNightProgramRecordTests(unittest.TestCase):
     data=tree.read('0',True)
    self.assertIs(tree._program(node),record.program)
    self.assertEqual(data['evaluation_trace']['ability_program'],'evaluated')
-   self.assertEqual(data['evaluation_trace']['public_projection'],'legacy-reconstruction')
-   self.assertEqual(data['evaluation_trace']['owner'],'mixed-evaluator-program')
-   self.assertIsNone(e.evaluation_graph.public_projection(node.read(),node.groups))
+   self.assertEqual(data['evaluation_trace']['public_projection'],'evaluated')
+   self.assertEqual(data['evaluation_trace']['owner'],'evaluator')
+   self.assertIsNotNone(e.evaluation_graph.public_projection(node.read(),node.groups))
    def branches(stage):
     for branch in stage.get('branches',()):
      yield branch;yield from branches(branch['children'])

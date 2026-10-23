@@ -41,13 +41,13 @@ class ArrivalRecord:
  source:object
  target:int
  updates:tuple
- value:F
+ value:F|None
 
 @dataclass(frozen=True)
 class PublicProjection:
  edges:tuple
  arrivals:tuple
- value:F
+ value:F|None
  reason:str='evaluated-public-mixture'
 
 @dataclass(frozen=True)
@@ -128,39 +128,47 @@ class EvaluationGraph:
   law=Law.weighted(((F(1),Atom(pop,tuple(pins))),))[1]
   own=replace(template.private,hypotheses=expand(law,groups))
   return replace(template,private=own,physical=physical_board(template.public,own,template.physical),board_data=None,provenance=None)
- def public_projection(self,source,groups,*,evaluate=False):
-  key=(source,tuple(groups))
+ def public_projection(self,source,groups,*,evaluate=False,counter=False):
+  key=(source,tuple(groups),counter)
   if key in self.projections:return self.projections[key]
   record=self.evaluated_program(source,groups,evaluate=evaluate)
   if record is None:return None
   program=record.program
-  # This migration covers uniform policies only. Counterfactual-policy laws
-  # remain on the explicit legacy path until independently recorded.
-  if any(leaf.mass!=leaf.counter or leaf.arrival is None or leaf.population is None or leaf.named_transport is None for leaf in program.leaves):return None
+  if any(leaf.arrival is None or leaf.population is None or leaf.named_transport is None for leaf in program.leaves):return None
+  if counter and all(leaf.mass==leaf.counter for leaf in program.leaves):
+   result=self.public_projection(source,groups,evaluate=evaluate)
+   self.projections[key]=result;return result
   from .public_convergence import public_transport,transport_source,public_key,mix
-  afters={};befores={};total=F();weighted=F()
+  afters={};befores={};total=F();weighted=F();known=True
   from .calculation_budget import tick
+  def add(table,identity,weight,child,target,value):
+   row=table.setdefault(identity,dict(rows=[],mass=F(),weighted=F(),known=True,target=target,links={}))
+   row['rows'].append((weight,child));row['mass']+=weight
+   if value is None:row['known']=False
+   else:row['weighted']+=weight*value
+   return row
   for leaf in program.leaves:
-   tick()
-   if not leaf.mass:continue
-   if leaf.source not in program.values:return None
-   weight=leaf.mass;value=program.values[leaf.source]
+   tick();weight=leaf.counter if counter else leaf.mass
+   if not weight:continue
+   value=program.values.get(leaf.source)
+   if value is None:
+    if not counter:return None
+    known=False
    mapping=public_transport(source,leaf.source,groups)
    after=transport_source(self._named_leaf(leaf,leaf.source,groups),mapping)
    before_mapping=public_transport(source,leaf.arrival,groups)
    before=transport_source(self._named_leaf(leaf,leaf.arrival,groups),before_mapping)
    target=mapping[leaf.target-1];a=public_key(after);b=public_key(before)
-   row=afters.setdefault(a,dict(rows=[],mass=F(),weighted=F(),target=target))
-   row['rows'].append((weight,after));row['mass']+=weight;row['weighted']+=weight*value
-   row=befores.setdefault(b,dict(rows=[],mass=F(),weighted=F(),target=target,links={}))
-   row['rows'].append((weight,before));row['mass']+=weight;row['weighted']+=weight*value
-   row['links'][a]=row['links'].get(a,F())+weight
-   total+=weight;weighted+=weight*value
-  if total!=1 or weighted!=record.value:raise ValueError('Recorded public mixture changed evaluated mass/value')
-  edges=[];sources={}
+   add(afters,a,weight,after,target,value)
+   row=add(befores,b,weight,before,target,value);row['links'][a]=row['links'].get(a,F())+weight
+   total+=weight
+   if value is not None:weighted+=weight*value
+  if total!=1 or not counter and weighted!=record.value:raise ValueError('Recorded public mixture changed evaluated mass/value')
+  edges=[];sources={};values={}
   for identity,row in afters.items():
    child=mix(row['rows']);sources[identity]=child
-   self.values[child]=ValueRecord(row['weighted']/row['mass'],'evaluated-public-mixture')
+   value=row['weighted']/row['mass'] if row['known'] else None;values[identity]=value
+   if value is not None:self.values[child]=ValueRecord(value,'evaluated-counterfactual-mixture' if counter else 'evaluated-public-mixture')
    edges.append(Edge(row['mass'],child,row['target']))
   arrivals=[]
   for row in befores.values():
@@ -168,10 +176,10 @@ class EvaluationGraph:
    if child.public.winner:continue
    updates=tuple(Edge(weight/row['mass'],sources[a],row['target']) for a,weight in row['links'].items())
    if sum(edge.probability for edge in updates)!=1:raise ValueError('Recorded update mass changed')
-   value=row['weighted']/row['mass']
-   if sum(edge.probability*self.values[edge.source].value for edge in updates)!=value:raise ValueError('Recorded update value changed')
+   value=row['weighted']/row['mass'] if row['known'] else None
+   if value is not None and all(values[a] is not None for a in row['links']) and sum(weight/row['mass']*values[a] for a,weight in row['links'].items())!=value:raise ValueError('Recorded update value changed')
    arrivals.append(ArrivalRecord(row['mass'],child,row['target'],updates,value))
-  result=PublicProjection(tuple(edges),tuple(arrivals),weighted)
+  result=PublicProjection(tuple(edges),tuple(arrivals),weighted if known else None)
   self.projections[key]=result;return result
  def record_counts(self,source,value):
   if not self.supports(source):return

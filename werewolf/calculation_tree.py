@@ -373,12 +373,14 @@ class CalculationTree:
         node=record['node'];program=self._program(node);groups=program.groups;result={}
         graph=getattr(self.engine,'evaluation_graph',None)
         projection=graph.public_projection(node.read(),groups) if graph is not None else None
-        if projection is not None:record['evaluation_projection']=projection
+        counter_projection=graph.public_projection(node.read(),groups,counter=True) if projection is not None else None
+        if projection is not None and counter_projection is not None:record['evaluation_projection']=projection
         with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
             if projection is not None:
-                for edge in projection.edges:
-                    public=digest(edge.source)
-                    result[public]=dict(target=edge.target,sources={False:(edge.probability,edge.source),True:(edge.probability,edge.source)})
+                for counter,measure in ((False,projection),(True,counter_projection)):
+                    for edge in measure.edges:
+                        public=digest(edge.source);entry=result.setdefault(public,dict(target=edge.target,sources={}))
+                        entry['sources'][counter]=(edge.probability,edge.source)
             elif getattr(program,'belief_flow',None) is not None:
                 from .anonymous_materialization import source as named_boundary
                 from .public_convergence import public_transport,transport_source
@@ -403,20 +405,25 @@ class CalculationTree:
                         public=digest(source);entry=result.setdefault(public,dict(target=target,sources={}))
                         entry['sources'][counter]=(reach,source)
             for public,entry in result.items():
-                counter=False if False in entry['sources'] else True
-                reach,source=entry['sources'][counter]
-                child=node._public_night(source,entry['target'],public,groups,counter=counter)
-                route=(*record['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[],counter=counter)})
-                child_key=self.register(child,route);entry['node']=child_key
-                self.nodes[child_key].update(public_bundle=True,public_digest=public,public_reach=str(reach if not counter else F()),counterfactual=counter,hidden_contexts=[])
-                self.nodes[child_key]['distribution_origin']=(key,program,public)
+                measures=tuple(entry['sources']) if projection is not None else (False if False in entry['sources'] else True,)
+                entry['nodes']={}
+                for counter in measures:
+                    reach,source=entry['sources'][counter]
+                    child=node._public_night(source,entry['target'],public,groups,counter=counter)
+                    route=(*record['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[],counter=counter)})
+                    child_key=self.register(child,route);entry['nodes'][counter]=child_key
+                    if 'node' not in entry:entry['node']=child_key
+                    if counter and child_key==entry['nodes'].get(False):continue
+                    self.nodes[child_key].update(public_bundle=True,public_digest=public,public_reach=str(reach if not counter else F()),counterfactual=counter,hidden_contexts=[])
+                    if projection is not None and counter and source not in graph.values:self.nodes[child_key]['defer_value']=True
+                    self.nodes[child_key]['distribution_origin']=(key,program,public)
         record['public_bundles']=result
         if any(step.kind=='publication' for leaf in program.leaves for step in leaf.steps):
             from .tree_public_updates import state_summary,publication_label
             with self.calculation._ClosedCalculation__kernel(),self.engine.group_scope(node.groups),node.relation_scope():
                 arrivals={}
                 if projection is not None:
-                    arrival_rows=[(counter,row.probability,row.source,row.target,row) for counter in (False,True) for row in projection.arrivals]
+                    arrival_rows=[(counter,row.probability,row.source,row.target,row) for counter,measure in ((False,projection),(True,counter_projection)) for row in measure.arrivals]
                 else:
                     arrival_rows=[(counter,reach,before,target,None) for counter in (False,True) for reach,before,target in public_night_observations(self.engine,node.read(),groups,counter=counter,publish=False)]
                 for counter,reach,before,target,projected_arrival in arrival_rows:
@@ -426,7 +433,7 @@ class CalculationTree:
                         if projected_arrival is not None:
                             for update in projected_arrival.updates:
                                 entry=result[digest(update.source)]
-                                updates.append(dict(node=entry['node'],probability=str(update.probability),label=publication_label(before,update.source)))
+                                updates.append(dict(node=entry['nodes'].get(counter,entry['node']),probability=str(update.probability),label=publication_label(before,update.source)))
                         else:
                             for public,entry in result.items():
                                 if entry['target']!=target or counter not in entry['sources']:continue
@@ -441,7 +448,9 @@ class CalculationTree:
                         selector=dict(public_arrival=dict(target=target,public=digest(before),counter=counter))
                         arrival_key='start:'+identity
                         self.nodes[arrival_key]=dict(node=arrival_node,value=value,actions=[],reused=False,route=(*record['route'],selector),public_bundle=True,day_start=True,public_updates=updates)
-                        if projected_arrival is not None:self.nodes[arrival_key]['recorded_arrival']=True
+                        if projected_arrival is not None:
+                            self.nodes[arrival_key]['recorded_arrival']=True
+                            if value is None:self.nodes[arrival_key]['defer_value']=True
                         arrival['node']=arrival_key
                         record.setdefault('arrival_selectors',{})[(target,digest(before),counter)]=arrival_key
                         from .public_convergence import legacy_digest
@@ -467,10 +476,13 @@ class CalculationTree:
         child=self.nodes[key]['node']._public_night(source,entry['target'],public,self._program(self.nodes[key]['node']).groups,prefix,counter)
         route=(*self.nodes[key]['route'],{'public_night':dict(target=entry['target'],public=public,prefix=[asdict(step) for step in prefix],counter=counter)})
         child_key=self.register(child,route)
-        self.nodes[child_key]['public_parent_bundle']=entry['node']
-        if counter:self.nodes[child_key]['counterfactual']=True
-        contexts=self.nodes[entry['node']]['hidden_contexts']
-        if child_key!=entry['node'] and not any(row['node']==child_key for row in contexts):
+        public_node=entry.get('nodes',{}).get(counter,entry['node'])
+        self.nodes[child_key]['public_parent_bundle']=public_node
+        if counter:
+            self.nodes[child_key]['counterfactual']=True
+            if 'evaluation_projection' in self.nodes[key]:self.nodes[child_key]['defer_value']=True
+        contexts=self.nodes[public_node]['hidden_contexts']
+        if child_key!=public_node and not any(row['node']==child_key for row in contexts):
             label=' → '.join(step.label() for step in prefix if step.kind in ('seer_result','wolf_target'))
             contexts.append(dict(node=child_key,label=(label or '経路')+(' · 方策0' if counter else '')))
         return child_key
@@ -501,7 +513,7 @@ class CalculationTree:
                     for mass,counter,leaf,images in stage.outcomes():
                         mapping=public_transport(self.nodes[base_key]['node'].read(),leaf.source,self._program(self.nodes[base_key]['node']).groups)
                         public=digest(transport_source(leaf.source,mapping));entry=grouped.setdefault(public,F());grouped[public]=entry+(mass if stage.mass else counter)
-                    return dict(leaves=[dict(node=bundles[public]['node'],context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)) if symbolic and getattr(program,'private_contexts',True) else None,probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
+                    return dict(leaves=[dict(node=bundles[public].get('nodes',{}).get(not bool(stage.mass),bundles[public]['node']),context_node=self._public_context(base_key,public,stage.prefix,not bool(stage.mass)) if symbolic and getattr(program,'private_contexts',True) else None,probability=str(mass/total),variants=[]) for public,mass in grouped.items()])
                 return dict(leaves=[dict(node=leaf_row(leaf),probability=str((mass if stage.mass else counter)/total),variants=[dict(node=leaf_row(image),transport=list(mapping)) for image,mapping in images]) for mass,counter,leaf,images in stage.outcomes()])
             branches=[]
             for branch in stage.branches():
@@ -652,7 +664,9 @@ class CalculationTree:
             w,m,seer,h,v=composition
             label=composition_label(composition,self.data.game_data,self.role_order)
             child=key if len(parts)==1 else self.register(node._select_physical('composition',composition),(*row['route'],{'physical':'composition','value':composition}))
-            if child!=key:self.nodes[child]['public_parent']=row.get('public_parent',key)
+            if child!=key:
+                self.nodes[child]['public_parent']=row.get('public_parent',key)
+                if row.get('defer_value'):self.nodes[child]['defer_value']=True
             result.append(dict(node=child,counts=dict(wolves=w,mediums=m,seers=seer,hunters=h,citizens=v),label=label,probability=str(probability)))
         row['composition_rows']=result;return result
 
@@ -738,7 +752,7 @@ class CalculationTree:
             row[cache]=output;return output
 
     def summary(self,key,actions=False):
-        row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=self.value(key)
+        row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=None if row.get('defer_value') else self.value(key)
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
         certificate=node.win_certificate()
@@ -758,7 +772,7 @@ class CalculationTree:
         return {'evaluation_trace':trace,'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
-            'village_win':str(value),'wolf_win':str(1-value),'evaluation':'computed',
+            'village_win':None if value is None else str(value),'wolf_win':None if value is None else str(1-value),'evaluation':'not-requested' if value is None else 'computed',
             'win_certificate':asdict(certificate) if certificate else None,
             'cutoff_marker':certificate.marker(point.day) if certificate and row['actions'] is None else None,
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],
@@ -773,6 +787,7 @@ class CalculationTree:
     def read(self,key,expand=False):
         with self.lock:
             if key not in self.nodes:raise KeyError(key)
+            self.nodes[key].pop('defer_value',None)
             if expand and not self.nodes[key]['node'].win_certificate():self.expand(key)
             result=self.summary(key,True);items={};pending=[key];seen=set()
             while pending:
