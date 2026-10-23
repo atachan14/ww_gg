@@ -4269,3 +4269,22 @@ Twelve affected Python tests passed16.857s; real browser missing guard history,
 valid input recovery, no-repeat eligibility and unchanged restored target5 value
 passed. The existing53 JS interaction/layout tests include scope cancellation.
 Pending fallback and other adapter limitations listed above remain explicit.
+
+
+Activated implementation7c205a8 on normal18821 (process43388). Final live default
+flow passed: setup4.953s, Table3.088s, Tree9.885s, Current1.390s, cold restore2.663s,
+public return32.992s. Final live CO flow passed:4.726s/.419s/.189s/.288s/1.130s/
+30.383s respectively. Public-role probabilities restore exactly and a private
+snapshot is rejected by public Current mutation. The approximately33s public return
+remains a measured limitation; no further optimization was introduced.
+
+Latest-code isolated browser guard-history recovery passed including identical
+restored target5 win value0%/100%, no-repeat filtering, own-view4/5 switching,
+Current/back/forward and cold reconstruction. Evidence: .artifacts/18821-7c205a8-
+default.log,18821-7c205a8-co.log,guard-table-pending-browser-final.log and
+ guard-table-projection-regression.log. Normal-served personal_navigation.js,
+board_private_table.js and calculation_tree.js were HTTP200 and byte/SHA256-equal
+to the committed sources. Tracked worktree/index clean; pre-existing untracked
+.artifacts and docs/previews outputs intentionally preserved. No push, external
+deployment or saved-data deletion. Remaining adapter families and unsupported
+strategies are unchanged from the finite inventory above.
