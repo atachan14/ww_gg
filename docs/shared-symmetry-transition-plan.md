@@ -4197,3 +4197,11 @@ other previously unsupported strategies remain unsupported as before. Value-only
 reductions remain valid boundaries, with no fabricated detailed child states. This
 stage does not add new role/strategy semantics or enable public editing in a private
 future projection. No saved data deleted and no external push/deployment performed.
+
+
+Normal-configuration activation check found the legacy dawn-flow enable gate still
+returned404 before binding a persistent night owner. Persistent Boards now use the
+existing exact owner regardless of that old preview flag; nonpersistent behavior
+is unchanged. The HTTP/current/restore test now runs with DAWN_BOARD_PREVIEW=False.
+Eight affected real HTTP/private adapter tests passed10.914s. Initial normal smoke
+failed on that404 and is retained as evidence, not counted as passed.

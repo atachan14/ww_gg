@@ -1072,7 +1072,7 @@ def create_app(test_config=None, *, deployment=False):
         from flask import jsonify
         from werewolf.information_set_forecast import Pending
         state = game(validate_roles=not wants_calculation_stream())
-        if state is None or not dawn_enabled(state):
+        if state is None or (not dawn_enabled(state) and not app.config.get('PERSISTENT_TREE_PREVIEW')):
             return jsonify(error='夜の視点表示はこのBoardでは利用できません。'), 404
         private_owner=None
         if navigation_active():

@@ -84,7 +84,7 @@ class GuardViewHttpTests(unittest.TestCase):
   from werewolf.navigation_current import NavigationCurrent
   with TemporaryDirectory() as directory:
    public=GuardViewDocumentTests().public();public.revision=7
-   app=create_app(dict(TESTING=True,SECRET_KEY='guard-http-tests',PERSISTENT_TREE_PREVIEW=True,DAWN_BOARD_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
+   app=create_app(dict(TESTING=True,SECRET_KEY='guard-http-tests',PERSISTENT_TREE_PREVIEW=True,DAWN_BOARD_PREVIEW=False,HYBRID_TABLE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
    client=app.test_client()
    started=client.post('/start',data=dict(citizens='2',seers='1',hunters='1',wolves='1',day='random',night='random',win_cutoff='0'))
    self.assertEqual(started.status_code,303)
