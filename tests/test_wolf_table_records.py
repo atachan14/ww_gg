@@ -114,3 +114,74 @@ class WolfTableRecordTests(unittest.TestCase):
    without=WolfViewDocument(public,public.game.current,[4],[])
    self.assertTrue(state_key(without.root.read())==state_key(view.root.read()),'observed corpse did not retain unique pack attack')
    with self.assertRaises(ValueError):WolfViewDocument(public,public.game.current,[4],[dict(day=1,target=1,color=None)])
+
+ def multi_document(self):
+  from werewolf.navigation_store import NavigationDocument
+  game=data(7,'random',wolves=2).to_game();game.update(claims=['seer',*['latent']*6],seer_inputs=[dict(day=1,reporter=1,target=2,color='white')])
+  public=NavigationDocument(BoardData.from_game(game));public.game.action(3);return public
+ def test_multiwolf_Table_named_parity_shared_attack_and_view_isolation(self):
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.root_secret_flow import RootSecretBranch,root_wolf_forecast
+  from werewolf.navigation_store import NavigationDocument
+  from werewolf.personal_navigation_http import key
+  with calculation_budget(4000000,max_seconds=90):
+   public=self.multi_document();before=public.export();views=[];snapshots=[]
+   for incomplete in ([4],[4,4]):
+    with self.assertRaises(ValueError):WolfViewDocument(public,public.game.current,incomplete,[])
+   for pack in ((4,5),(4,6),(3,4)):
+    view=WolfViewDocument(public,public.game.current,pack,[]);views.append(view)
+    result=view.result();s=view.root.read();base=public.game.node.read();e=view.root._Node__calculation._ClosedCalculation__engine
+    reverse=WolfViewDocument(public,public.game.current,list(reversed(pack)),[])
+    self.assertTrue(state_key(reverse.root.read())==state_key(s),'pack click order changed owned state')
+    self.assertEqual(key(reverse.export()),key(view.export()))
+    expected=root_wolf_forecast(RootSecretBranch(base.public,base.public_state,base.physical,base.private,base.past),pack,(),e.rules,e.strategy)
+    self.assertTrue(isinstance(expected,tuple),'existing evaluator rejected multiple-wolf pack')
+    actual={p['id']:F(p['final']['village']) for p in result['players'] if p.get('final')}
+    self.assertEqual(actual,dict(expected[0]));self.assertFalse(set(pack)&set(actual))
+    self.assertTrue(all(h.roles[0]==sum(1<<(p-1) for p in pack) for h in s.private.hypotheses))
+    self.assertIs(s.public_state,base.public_state)
+    info=WolfInformation(s.observer.initial_roster,s.observer.attacks)
+    policy=e.wolf_policy(s.public,s.public_state,s.past,info.initial_roster,info.attacks)
+    self.assertEqual(dict(policy),{view.names.canonical(p):F(1,len(actual)) for p in actual})
+    with e.group_scope(view.root.groups),view.root.relation_scope():e.evaluation_graph.personal_program(s,view.root.groups,evaluate=True)
+    from tests.test_personal_recorded_projection import PersonalRecordedProjectionTests
+    named=PersonalRecordedProjectionTests().oracle(e,s,view.root.groups,True)
+    with patch('werewolf.action_flow.resolve_action',side_effect=AssertionError('multiwolf projection replayed')),patch.object(e,'solve',side_effect=AssertionError('multiwolf projection solved')),patch.object(e,'wolf_policy',side_effect=AssertionError('multiwolf policy reselected')):
+     projection=e.evaluation_graph.personal_projection(s,view.root.groups)
+     self.assertTrue({state_key(r.source):r.probability for r in projection.edges}==named,'multiwolf event Q/P law differs')
+     shown=view.tree().read(view.tree().current_key(),True)
+    snapshots.append(view.tree().snapshot)
+    self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+    self.assertEqual(sum(r.probability for r in projection.edges),1)
+    self.assertTrue(all(all(len(h.attacks)==1 for h in r.source.private.hypotheses) for r in projection.edges),'pack generated more than one attack')
+    choice=next(k for k,r in shown['items'].items() if r.get('day_start') and len(r['alive'])==5)
+    view.tree().select(choice);current=view.game.node.read()
+    cold=WolfViewDocument.restore(NavigationDocument.restore(json.loads(json.dumps(public.export()))),json.loads(json.dumps(view.export())))
+    self.assertTrue(state_key(cold.game.node.read())==state_key(current),'multiwolf Current/cold state differs')
+   self.assertEqual(len(set(snapshots)),3)
+   self.assertEqual(len({key(v.export()) for v in views}),3)
+   self.assertEqual(public.export(),before)
+
+ def test_multiple_fake_CO_joint_reporting_remains_unsupported(self):
+  from werewolf.information_set_forecast import Pending
+  game=data(7,'random',wolves=2).to_game();game.update(claims=['seer','seer','seer',*['latent']*4],seer_inputs=[dict(day=1,reporter=p,target=4,color='white') for p in (1,2,3)])
+  c=ClosedCalculation(BoardData.from_game(game),grouped=True,aggregate_wolf=True,aggregate_reports=True,anonymous=True)
+  with self.assertRaises(Pending) as failure:c.root.forecast()
+  self.assertEqual(failure.exception.reason,'multiple_fake_report_correlation_unselected')
+
+ def test_multiwolf_noncanonical_execution_lifts_full_pack_and_cold_history(self):
+  from werewolf.navigation_store import NavigationDocument
+  from werewolf.wolf_view_document import WolfViewDocument
+  from werewolf.navigation_current import NavigationCurrent
+  with calculation_budget(4000000,max_seconds=90):
+   game=data(7,'random',wolves=2).to_game();game.update(claims=['seer',*['latent']*6],seer_inputs=[dict(day=1,reporter=1,target=2,color='white')])
+   public=NavigationDocument(BoardData.from_game(game));public.game.action(7)
+   view=WolfViewDocument(public,public.game.current,[3,4],[]);s=view.root.read()
+   self.assertEqual(s.observer.initial_roster,sum(1<<(view.names.canonical(p)-1) for p in (3,4)))
+   displayed=NavigationCurrent(view.game).source
+   self.assertEqual(displayed.observer.initial_roster,(1<<2)|(1<<3))
+   self.assertNotIn(7,displayed.public.alive);self.assertFalse({3,4}&set(view.targets()))
+   shown=view.tree().read(view.tree().current_key(),True);self.assertEqual(shown['evaluation_trace']['owner'],'evaluator')
+   self.assertTrue(all(p['physical_wolf_probability']=='1' for p in shown['players'] if p['player'] in (3,4)))
+   cold=WolfViewDocument.restore(NavigationDocument.restore(json.loads(json.dumps(public.export()))),json.loads(json.dumps(view.export())))
+   self.assertTrue(state_key(cold.root.read())==state_key(s),'selected representative changed pack in cold history')

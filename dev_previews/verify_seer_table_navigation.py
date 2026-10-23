@@ -7,14 +7,14 @@ from app import create_app
 from tests.test_seer_table_records import SeerTableRecordTests
 import subprocess,sys
 with TemporaryDirectory() as directory:
- hidden='--hidden' in sys.argv;maximum='--max' in sys.argv;wolf='--wolf' in sys.argv
+ hidden='--hidden' in sys.argv;maximum='--max' in sys.argv;multiwolf='--multiwolf' in sys.argv;wolf='--wolf' in sys.argv or multiwolf
  if maximum:
   from tests.test_max_seer_records import MaxSeerRecordTests
   from werewolf.navigation_store import NavigationDocument
   calculation,_=MaxSeerRecordTests().night();public=NavigationDocument(calculation.data);public.game.action(3)
  elif wolf:
   from tests.test_wolf_table_records import WolfTableRecordTests
-  public=WolfTableRecordTests().document()
+  public=WolfTableRecordTests().multi_document() if multiwolf else WolfTableRecordTests().document()
  else:public=SeerTableRecordTests().hidden_document() if hidden else SeerTableRecordTests().document()
  before=public.export()
  app=create_app(dict(TESTING=True,SECRET_KEY='isolated-seer-table',PERSISTENT_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
@@ -50,6 +50,22 @@ with TemporaryDirectory() as directory:
    body=body.replace('[data-viewpoint-role="seer"]','[data-viewpoint-role="wolf"]').replace('tr[data-player="1"]','tr[data-player="4"]')
    body=body.replace("view.role==='seer'","view.role==='wolf'")
    body=body.replace('PASS seer Table','PASS wolf Table').replace('->seer view','->wolf view')
+  if multiwolf:
+   body=body.replace("wolves:'1'","wolves:'2'")
+   body=body.replace('row.alive.length===4','row.alive.length===5')
+   select="document.querySelector('tr[data-player=\"4\"] .player-name').click()"
+   body=body.replace(select,select+";document.querySelector('tr[data-player=\"5\"] .player-name').click()")
+   marker="  assert.deepEqual(errors,[]);"
+   extra=r"""  assert.deepEqual(await evaluate(`PersonalNavigation.context.view.players`),[4,5]);
+  await evaluate(`document.querySelector('[data-viewpoint-role="public"]').click()`);await wait(()=>evaluate(`!PersonalNavigation.context`),90000);
+  await evaluate(`document.querySelector('[data-viewpoint-role="wolf"]').click();document.querySelector('tr[data-player="4"] .player-name').click();document.querySelector('tr[data-player="6"] .player-name').click()`);
+  await wait(()=>evaluate(`PersonalNavigation.context?.view.players.includes(6)`),90000);
+  const alternate=await evaluate(`PersonalNavigation.request('tree',{expand:true})`);assert.notEqual(alternate.snapshot,tree.snapshot);
+  assert.equal(await evaluate(`!!document.querySelector('tr[data-player="6"] [data-value-cell="final"] .probability')`),false);
+  assert.equal(await evaluate(`!!document.querySelector('tr[data-player="5"] [data-value-cell="final"] .probability')`),true);
+"""
+   body=body.replace(marker,extra+marker)
+   body=body.replace('PASS wolf Table','PASS multiwolf Table alternate-pack isolation')
   if maximum:
    body=body.replace("day:'random',night:'random',fake_reports:'random'","day:'max',night:'max',fake_reports:'max'")
    body=body.replace("assert.equal(tree.evaluation_trace.owner,'evaluator');","assert.equal(tree.evaluation_trace.owner,'evaluator');assert.ok(Object.values(tree.items).some(row=>row.counterfactual));")

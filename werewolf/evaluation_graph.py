@@ -168,7 +168,7 @@ class EvaluationGraph:
   from .actor_information import WolfObserver
   e=self.engine
   return (type(payload.observer)is WolfObserver and not board.initial_hunter_count
-   and board.initial_role_counts['wolf']==1 and any(c=='seer' for c in board.claims)
+   and board.initial_role_counts['wolf']>0 and any(c=='seer' for c in board.claims)
    and e.strategy.disclosure_for('seer')=='all'
    and (e.strategy.day,e.strategy.night,e.strategy.fake_reports)==('random',)*3)
  def recorded_flow_scope(self,board,payload):
