@@ -4618,3 +4618,8 @@ Actual isolated Edge passes two fixtures: default TOP FormData selects ONLY setu
 ## Bounded broad verification after14a5dbf
 
 See docs/repository-verification-2026-10-24.md and its committed JSON for exact coverage and exclusions. JS56 pass; Python834/1616 complete (753success/62failures/19errors),782 incomplete,13 time-limit module events. This is NOT a full-suite pass. One independently obsolete eight-player unsupported expectation was replaced by admission/normalized-QP/resource-budget checks and its unchanged owner checks passed in0.062s. No production or personal-view behavior changed. Known cold-source comparisons differ in tracking metadata and remain unresolved rather than ignored. Benchmark JSON side effects were preserved and original references restored; normal18821/14a5dbf/PID18904 stayed running.
+
+
+## Limited tracking research checkpoint
+
+Saved four bounded evidence tests and current/pre-maintenanceff7cf69 reproducer; see docs/tracking-evidence-2026-10-24.md. The helper is restricted to the single-possible-owner research examples and is unused by production/broad fixtures. The denied broad fixture assertion rewrite was not executed or retried. Public code and normal18821 remain unchanged.
