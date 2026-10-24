@@ -17,7 +17,7 @@ class CalculationCancellationTests(unittest.TestCase):
   self.assertTrue(jobs.begin('one',token).is_set())
   fresh=jobs.begin('one','b'*32);self.assertFalse(fresh.is_set())
   jobs.finish('one','b'*32,fresh)
- def run_cancel(self,streaming,path="/main"):
+ def run_cancel(self,streaming,path="/main",plain=False):
   app=create_app({'TESTING':True,'SECRET_KEY':'cancel-test-only'})
   client=app.test_client();client.post('/start',data={'citizens':'4','wolves':'1','day':'max','night':'max'})
   client.get('/main',headers={'Sec-Fetch-Dest':'document'})
@@ -37,6 +37,8 @@ class CalculationCancellationTests(unittest.TestCase):
    if streaming:headers['Accept']='application/x-ndjson'
    with c.get(path,headers=headers,buffered=False) as r:
     outcome['status']=r.status_code;outcome['body']=b''.join(r.response)
+  old_main=app.view_functions['main']
+  if plain:app.view_functions['main']=lambda:heavy(None)
   if path=='/game-tree':
    endpoint=next(rule.endpoint for rule in app.url_map.iter_rules() if rule.rule=='/game-tree')
    app.view_functions[endpoint]=lambda:heavy(None)
@@ -46,7 +48,8 @@ class CalculationCancellationTests(unittest.TestCase):
    self.assertEqual(client.post('/calculation-cancel',data={'calculation_id':'c'*32}).status_code,200)
    self.assertTrue(stopped.wait(1));worker.join(2);self.assertFalse(worker.is_alive())
    self.assertLess(time.monotonic()-now,1)
-  if not streaming:self.assertEqual(outcome['status'],499)
+  app.view_functions['main']=old_main
+  if not streaming or plain:self.assertEqual(outcome['status'],499)
   else:self.assertNotIn(b'"event":"complete"',outcome['body'])
   self.assertFalse(app.extensions['calculation_jobs'].active)
   self.assertEqual(client.post('/calculation-cancel',data={'calculation_id':'c'*32}).status_code,200)
@@ -108,3 +111,5 @@ class CalculationCancellationTests(unittest.TestCase):
   with c.get('/main',headers={'X-WW-Calculation-ID':'0'*32}) as r:
    self.assertEqual(r.status_code,200);self.assertEqual(re.findall(rb'data-fraction="([^"]+)"',r.data),expected)
   self.assertFalse(app.extensions['calculation_jobs'].active)
+
+ def test_stream_accept_with_plain_json_adapter_still_cancels(self):self.run_cancel(True,plain=True)

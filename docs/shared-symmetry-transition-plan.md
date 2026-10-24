@@ -4640,3 +4640,7 @@ See `public-ui-asset-triage-2026-10-24.md`. Four distinct failures addressed: th
 
 ## 2026-10-24: cooperative obsolete calculation cancellation
 See `calculation-cancellation-2026-10-24.md`. Explicit session/request-scoped stop connects obsolete reads to existing solver cancellation, retaining actual slot ownership until worker exit. Final53 Python/59 JS tests and isolated real-browser rapid valid preview checks pass; no formula/history normalization or strategy change. Local activation follows verified commit.
+
+
+## 2026-10-25: optional default-off input calculation
+See `input-calculation-option-2026-10-25.md`. Compact display checkbox gates automatic public Table previews; Update remains unconditional. Help explanation added through existing bookshelf.83 Python/62 JS checks and persistent-browser state/network/value parity pass. Also bind cancellation context for actual JSON adapters with streaming Accept, as proven necessary for Off during active previews. No solver formula or unresolved-fixture changes.

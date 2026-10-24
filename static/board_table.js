@@ -9,6 +9,7 @@
   const conflicts=document.querySelectorAll('[data-public-open],[data-public-edit],[data-public-delete],[data-legacy-open],#advance-button,#back-button');
   const draft=window.createBoardDeclarationDraft(baseline,{update,cancel:document.querySelector('[data-table-cancel]'),conflictingButtons:conflicts});
   let version=0,timer,controller,lastPreview=null,rendering=false,navigating=false,clearedSavedDraft=false,clearSavedPromise=Promise.resolve();
+  let inputCalculation=main.querySelector('#display-input-calculation')?.checked===true,submitting=false;
   const labels={latent:'--',villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'人狼'};
   const clone=x=>JSON.parse(JSON.stringify(x));
   const selectors=[];const roleStash=new Map();
@@ -88,6 +89,7 @@
     const detail=document.createElement('tr');detail.className='co-detail-row';detail.dataset.tableDetails=String(player);const spacer=document.createElement('td'),roleCell=document.createElement('td'),td=document.createElement('td');roleCell.dataset.tableRoleLabel='';roleCell.className='co-role-label';td.dataset.tableResults='';td.colSpan=row.cells.length-2;const host=document.createElement('div');host.className='co-line';td.append(host);detail.append(spacer,roleCell,td);row.after(detail);selectors.push({player,picker,host,row,detail});
   }
   const preview=async id=>{
+    if(!inputCalculation||id!==version||!draft.isDirty()||submitting||window.isStrategyCalculationPending?.())return;
     let receivedRoles=false;controller=new AbortController();try{
       const response=await fetch('/table-preview',{method:'POST',headers:{Accept:'application/x-ndjson'},signal:controller.signal,body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,request_id:String(id),payload:JSON.stringify(draft.snapshot())})});const data=await window.readCalculationResponse(response,event=>{
         if(!main.isConnected||id!==version||!draft.isDirty()||String(event.request_id)!==String(id)||event.revision!==seed.revision||event.board_id!==seed.board_id)return;
@@ -100,7 +102,18 @@
   };
   if(seed.finished){render();window.boardTableDraft=draft;return;}
   let commitControls=null;
+  main.addEventListener('input-calculation-change',event=>{
+    inputCalculation=event.detail.enabled===true;
+    // Invalidate both queued work and already received streaming results;
+    // changing this display preference never edits or submits the draft.
+    version++;clearTimeout(timer);controller?.abort();lastPreview=null;
+    if(navigating||submitting||!draft.isDirty())return;
+    if(!inputCalculation){showWaiting('未計算');status.textContent='';return;}
+    showWaiting('計算中');status.textContent='プレビュー・計算中';
+    const id=version;timer=setTimeout(()=>preview(id),180);
+  });
   draft.onChange(({dirty,busy})=>{
+    submitting=busy;
     if(busy&&!commitControls){commitControls=new Map([...document.querySelectorAll('[data-table-co],[data-table-details] select,#strategy-editor button,#strategy-editor input,#strategy-editor select')].map(e=>[e,e.disabled]));commitControls.forEach((_,e)=>e.disabled=true);}
     if(!busy&&commitControls){commitControls.forEach((disabled,e)=>{if(e.isConnected)e.disabled=disabled;});commitControls=null;}
     if(navigating)return;
@@ -110,6 +123,7 @@
     try{sessionStorage.setItem(storageKey,JSON.stringify({revision:seed.revision,board_id:seed.board_id,inherited_revision:seed.inherited_revision,snapshot:draft.snapshot()}));}catch(_){}
     document.dispatchEvent(new CustomEvent('board-table-dirty'));
     if(seed.draft&&!clearedSavedDraft){clearedSavedDraft=true;clearSavedPromise=fetch('/public-log',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,operation:'cancel',payload:'{}'})}).then(async r=>{if(!r.ok)throw Error((await r.json()).error);});clearSavedPromise.catch(e=>{status.textContent=e.message;});}
+    if(!inputCalculation){showWaiting('未計算');status.textContent='';return;}
     showWaiting('計算中');status.textContent='プレビュー・計算中';if(window.isStrategyCalculationPending?.()){if(window.strategyCalculationState?.()==='failed'){showWaiting('未計算');status.textContent='戦略の更新が未完了です。入力は保持されています。';}return;}const id=version;timer=setTimeout(()=>preview(id),180);
   });
   let publishWaiting=false;

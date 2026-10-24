@@ -63,7 +63,19 @@ function initializeBoardLog(root = document) {
   });
 }
 
+function initializeInputCalculationOption(root=document) {
+  const input=root.querySelector('#display-input-calculation');
+  if(!input||input.dataset.inputCalculationBound)return;
+  input.dataset.inputCalculationBound='1';
+  try{input.checked=localStorage.getItem('ww_gg.input-calculation')==='true';}catch(_){input.checked=false;}
+  input.addEventListener('change',()=>{
+    try{localStorage.setItem('ww_gg.input-calculation',String(input.checked));}catch(_){}
+    input.dispatchEvent(new CustomEvent('input-calculation-change',{bubbles:true,detail:{enabled:input.checked}}));
+  });
+}
+
 function initializeUI() {
+  initializeInputCalculationOption();
   initializeBoardLog();
   const formatInputs = document.querySelectorAll('input[name="probability-format"]');
   let probabilityFormat = "percent";

@@ -600,9 +600,11 @@ def create_app(test_config=None, *, deployment=False):
             try:event=calculation_jobs.begin(owner,token)
             except ValueError:return jsonify(error='Calculation request ID already active'),409
             request.environ['wwgg.calculation_job']=(owner,token,event)
-            if not wants_calculation_stream():
-                from werewolf.calculation_budget import cancellation_scope
-                scope=cancellation_scope(event);scope.__enter__();g.calculation_cancel_scope=scope
+            # A streaming Accept header may still select a JSON adapter (the
+            # persistent Table route). Bind the request thread too; real stream
+            # workers independently bind this same event when they are created.
+            from werewolf.calculation_budget import cancellation_scope
+            scope=cancellation_scope(event);scope.__enter__();g.calculation_cancel_scope=scope
         if request.endpoint in ('static','help_five_asset','help_medium_asset') or wants_calculation_stream():return
         scope=calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                  max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
@@ -752,6 +754,9 @@ def create_app(test_config=None, *, deployment=False):
 
     @app.get('/help')
     def help_route():return render_template('help.html')
+
+    @app.get('/help/operations/display')
+    def help_display_operations():return render_template('help_operations_display.html')
 
     @app.get('/help/program/')
     @app.get('/help/program/<page>')
