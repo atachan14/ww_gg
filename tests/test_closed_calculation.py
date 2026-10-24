@@ -66,8 +66,13 @@ class ClosedCalculationTests(unittest.TestCase):
         c=self.calculation();root=c.root
         with self.assertRaises(TypeError):ClosedCalculation({})
         with self.assertRaises(Pending):ClosedCalculation(c.data.updated(policy={'day':'random','night':'max','fake_reports':'random'}))
-        with self.assertRaises(Pending):
-            ClosedCalculation(type(c.data).from_game(c.data.to_game()|dict(players=8,claims=['seer']+['latent']*7))).root.forecast()
+        # Eight-player inputs are admitted; resource exhaustion is not an
+        # unsupported-count Pending. Do not launch an unbounded value search.
+        large=ClosedCalculation(type(c.data).from_game(c.data.to_game()|dict(players=8,claims=['seer']+['latent']*7)))
+        source=large.root.read();self.assertEqual(source.public.player_count,8)
+        self.assertEqual(sum(h.mass for h in source.public_state.hypotheses),1)
+        self.assertEqual(sum(h.mass for h in source.private.hypotheses),1)
+        with self.assertRaises(CalculationBudgetExceeded),calculation_budget(1):large.root.forecast()
         with self.assertRaises(ValueError):root.action(0)
         with self.assertRaises(ValueError):root.personal(PersonalInformation(1,'villager'))
         with self.assertRaises(ValueError):root.personal(lambda h,s:True)
