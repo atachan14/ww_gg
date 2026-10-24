@@ -392,7 +392,7 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None, private_context=None,personal_forecast=None):
+    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None, private_context=None,personal_forecast=None,future_deferred=False):
         if navigation_current is not None:
             role_state=navigation_current.roles;state=navigation_current.data.to_game()
         if generated_current is not None:
@@ -428,7 +428,7 @@ def create_app(test_config=None, *, deployment=False):
             alive = progress.last_outcomes[0].board.alive
         elif roles_only and not seer_pending:
             from werewolf.seer_manual import Pending
-            seer_pending=Pending('役職率を表示しています。勝率を計算中です。')
+            seer_pending=Pending('未計算' if future_deferred else '役職率を表示しています。勝率を計算中です。')
             primary=cumulative={'village_win':seer_pending,'wolf_win':seer_pending}
             action_values={};event_history,alive=board.history,board.alive
         elif seer_pending:
@@ -504,7 +504,7 @@ def create_app(test_config=None, *, deployment=False):
         players=player_view.players
         from werewolf.seer_manual import report_slots
         seer_slots=report_slots(board,rules,navigation_current.source.public_state.rosters if navigation_current is not None else None)
-        return render_template("main.html", private_context=private_context,seer_slots=seer_slots,navigation_log=navigation_current.public_log if navigation_current is not None else None, cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", future_deferred=future_deferred,private_context=private_context,seer_slots=seer_slots,navigation_log=navigation_current.public_log if navigation_current is not None else None, cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None or navigation_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
@@ -1205,7 +1205,7 @@ def create_app(test_config=None, *, deployment=False):
         except (ValueError, TypeError, KeyError, DisclosureInconsistent) as exc:
             return jsonify(error=str(exc)), 400
 
-    def navigation_table(publish=False):
+    def navigation_table(publish=False,preview_mode='all'):
         from werewolf.information_set_forecast import Pending
         from werewolf.seer_acquisition import SeerReport
         try:
@@ -1231,7 +1231,7 @@ def create_app(test_config=None, *, deployment=False):
                 from werewolf.navigation_current import NavigationCurrent
                 preview=doc.game.fork();preview.public_input(tuple(payload['claims']),reports)
                 current=NavigationCurrent(preview);current.data=current.data.updated(revision=doc.revision)
-                html,status=render_main(current.data.to_game(),role_state=current.roles,navigation_current=current)
+                html,status=render_main(current.data.to_game(),role_state=current.roles,navigation_current=current,roles_only=preview_mode=='roles',future_deferred=preview_mode=='roles')
                 from werewolf.public_log import migrate
                 before=NavigationCurrent(doc.game).data.to_game();before['revision']=doc.revision
                 return jsonify(html=html,batch=None,request_id=request.form.get('request_id'),revision=doc.revision,board_id=migrate(before)['board_id']),status
@@ -1242,7 +1242,9 @@ def create_app(test_config=None, *, deployment=False):
     def table_preview():
         from flask import jsonify
         if not app.config.get('HYBRID_TABLE_PREVIEW'):return jsonify(error='Not enabled'),404
-        if navigation_active():return navigation_table()
+        mode=request.form.get('preview_mode','all')
+        if mode not in ('roles','all'):return jsonify(error='Invalid input preview mode'),400
+        if navigation_active():return navigation_table(preview_mode=mode)
         state=game(validate_roles=not wants_calculation_stream())
         if state is None or not revision_matches(state):return jsonify(error='確定状態が変わりました。再読み込みしてください。'),409
         try:
@@ -1254,13 +1256,13 @@ def create_app(test_config=None, *, deployment=False):
                     identity={'batch':batch,'request_id':request_id,
                               'revision':state['revision'],'board_id':state['public_log']['board_id']}
                     prepared=board_data(proposed).roles()
-                    for stage in ('roles','complete'):
-                        html,status=render_main(proposed,role_state=prepared,roles_only=stage=='roles')
+                    for stage in (('complete',) if mode=='roles' else ('roles','complete')):
+                        html,status=render_main(proposed,role_state=prepared,roles_only=mode=='roles' or stage=='roles',future_deferred=mode=='roles')
                         yield dict(event=stage,html=html,**identity)
                 return calculation_stream(events)
             proposed,batch=table_proposal(state,json.loads(request.form.get('payload','')))
             replay(proposed)
-            html,status=render_main(proposed)
+            html,status=render_main(proposed,roles_only=mode=='roles',future_deferred=mode=='roles')
             return jsonify(html=html,batch=batch,request_id=request.form.get('request_id'),revision=state['revision'],board_id=state['public_log']['board_id']),status
         except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc),request_id=request.form.get('request_id')),400
 

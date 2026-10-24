@@ -4644,3 +4644,7 @@ See `calculation-cancellation-2026-10-24.md`. Explicit session/request-scoped st
 
 ## 2026-10-25: optional default-off input calculation
 See `input-calculation-option-2026-10-25.md`. Compact display checkbox gates automatic public Table previews; Update remains unconditional. Help explanation added through existing bookshelf.83 Python/62 JS checks and persistent-browser state/network/value parity pass. Also bind cancellation context for actual JSON adapters with streaming Accept, as proven necessary for Off during active previews. No solver formula or unresolved-fixture changes.
+
+
+## 2026-10-25: three-mode input calculation
+See `input-calculation-three-modes-2026-10-25.md`. New/unset defaultroles, explicit oldOff/On retained asOff/All. Server role-only returns before future evaluation; exact joint state retained, win cells未計算.87 Python/63 JS checks and named/anonymous/Day2/browser parity passed. Update remains full and mode-independent; saved data and unrelated fixtures untouched.

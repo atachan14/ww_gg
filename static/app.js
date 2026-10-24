@@ -67,10 +67,18 @@ function initializeInputCalculationOption(root=document) {
   const input=root.querySelector('#display-input-calculation');
   if(!input||input.dataset.inputCalculationBound)return;
   input.dataset.inputCalculationBound='1';
-  try{input.checked=localStorage.getItem('ww_gg.input-calculation')==='true';}catch(_){input.checked=false;}
+  input.value='roles';
+  try{
+    const saved=localStorage.getItem('ww_gg.input-calculation');
+    const mode=saved==='false'?'off':saved==='true'?'all':saved;
+    if(['off','roles','all'].includes(mode))input.value=mode;
+    // The previous checkbox wrote only explicit changes. Missing storage was
+    // its untouched default, so it adopts roles; explicit false/true survive.
+    if(saved==='false'||saved==='true')localStorage.setItem('ww_gg.input-calculation',mode);
+  }catch(_){}
   input.addEventListener('change',()=>{
-    try{localStorage.setItem('ww_gg.input-calculation',String(input.checked));}catch(_){}
-    input.dispatchEvent(new CustomEvent('input-calculation-change',{bubbles:true,detail:{enabled:input.checked}}));
+    try{localStorage.setItem('ww_gg.input-calculation',input.value);}catch(_){}
+    input.dispatchEvent(new CustomEvent('input-calculation-change',{bubbles:true,detail:{mode:input.value}}));
   });
 }
 
