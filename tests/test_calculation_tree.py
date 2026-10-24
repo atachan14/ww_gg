@@ -41,13 +41,21 @@ class CalculationTreeTests(unittest.TestCase):
         self.assertEqual(a['policy_probability'],'1')
         self.assertEqual({b['probability'] for b in a['branches']},{'1/5','4/5'})
         for branch in a['branches']:
-            # The established grouped kernel emits one representative with the
-            # full orbit mass; named cases are checked independently below.
-            self.assertEqual(len(branch['variants']),1)
+            # The group is one decision; variants are the concrete name
+            # recipes. Uniform named choice contributes 1/5 of each event.
+            self.assertEqual(sorted(v['target'] for v in branch['variants']),list(range(1,6)))
             self.assertEqual(sum(F(v['mixture_probability']) for v in branch['variants']),F(branch['probability']))
+            for variant in branch['variants']:
+                hit=F(1,5);event=hit if branch['probability']=='1/5' else 1-hit
+                self.assertEqual(F(variant['conditional_probability']),event)
+                self.assertEqual(F(variant['mixture_probability']),event/F(5))
             for v in branch['variants']:
                 d=self.c.get('/game-tree',query_string={'node':v['node']}).json
                 self.assertEqual(d['history'][-1]['target'],v['target'])
+                for player in d['players']:
+                    expected_wolf=F(int(player['player']==v['target'])) if d['winner']=='village' else F(int(player['player']!=v['target']),4)
+                    self.assertEqual(F(player['wolf_probability']),expected_wolf)
+                    self.assertEqual(F(player['physical_wolf_probability']),expected_wolf)
                 self.assertEqual(d['village_win'],'1' if d['winner']=='village' else '1/3')
         queue=[root];seen=set();terminal=set()
         while queue:
@@ -98,34 +106,53 @@ class CalculationTreeTests(unittest.TestCase):
         plain=create_app({'TESTING':True,'SECRET_KEY':'default'}).test_client();self.assertEqual(plain.get('/game-tree').status_code,404)
     def test_scope_and_budget_are_explicit_without_approximate_results(self):
         self.c.post('/start',data={'players':'6','day':'max','night':'max'})
-        self.assertEqual(self.c.get('/game-tree').status_code,422)
+        response=self.c.get('/game-tree');self.assertEqual(response.status_code,200)
+        expected=independent(tuple(range(1,7)),tuple((p,F(1,6)) for p in range(1,7)),'day')
+        self.assertEqual(expected,F(3,8));self.assertEqual(F(response.json['village_win']),expected)
+        self.assertEqual(response.json['alive'],list(range(1,7)))
+        self.assertNotIn('unsupported',response.json)
         self.c.post('/start',data={'players':'5','seers':'1','day':'max','night':'max'})
         self.app.config['MANUAL_CALC_MAX_WORK']=1
         r=self.c.get('/game-tree?expand=1');self.assertEqual(r.status_code,503);self.assertTrue(r.json['pending'])
-    def test_ordinary_top_form_defaults_report_actual_mismatch_without_edit(self):
+        self.assertEqual(r.json['budget_kind'],'work');self.assertNotIn('village_win',r.json)
+        self.app.config['MANUAL_CALC_MAX_WORK']=4000000
+        recovered=self.c.get('/game-tree?expand=1');self.assertEqual(recovered.status_code,200)
+        self.assertEqual(F(recovered.json['village_win']),independent((1,2,3,4,5),tuple((p,F(1,5)) for p in range(1,6)),'day'))
+    def test_ordinary_top_form_submits_only_its_controls_without_edit(self):
         from html.parser import HTMLParser
+        from copy import deepcopy
         class Form(HTMLParser):
-            def __init__(self):super().__init__();self.fields={};self.select=None
+            """Successful controls associated with setup-form, not all forms."""
+            def __init__(self):super().__init__();self.fields={};self.form=None;self.select=None
             def handle_starttag(self,tag,attrs):
                 d=dict(attrs)
-                if tag=='input' and 'name' in d:self.fields[d['name']]=d.get('value','')
-                if tag=='select':self.select=d.get('name')
-                if tag=='option' and self.select and ('selected' in d or self.select not in self.fields):self.fields[self.select]=d.get('value','')
+                if tag=='form':self.form=d.get('id')
+                owner=d.get('form',self.form)
+                if tag=='input' and owner=='setup-form' and 'name' in d and 'disabled' not in d:
+                    if d.get('type') not in ('checkbox','radio') or 'checked' in d:self.fields[d['name']]=d.get('value','')
+                if tag=='select':self.select=(d['name'],[]) if owner=='setup-form' and 'name' in d and 'disabled' not in d else None
+                if tag=='option' and self.select:self.select[1].append((d.get('value',''),'selected' in d))
             def handle_endtag(self,tag):
-                if tag=='select':self.select=None
-        client=self.app.test_client();form=Form();form.feed(client.get('/').data.decode());payload=form.fields
+                if tag=='form':self.form=None
+                if tag=='select' and self.select:
+                    name,options=self.select
+                    self.fields[name]=next((v for v,selected in options if selected),options[0][0])
+                    self.select=None
+        client=self.app.test_client();form=Form();form.feed(client.get('/').get_data(as_text=True));payload=form.fields
         self.assertEqual((payload['citizens'],payload['seers']),('4','0'))
-        client.post('/start',data=payload)
-        with client.session_transaction() as session:before=session['game'].copy()
-        response=client.get('/game-tree?expand=1');self.assertEqual(response.status_code,422)
-        self.assertEqual(response.json['reason'],'game_tree_scope')
-        self.assertEqual(response.json['actual']['counts']['citizens'],4)
-        self.assertEqual(response.json['actual']['counts']['seers'],0)
-        self.assertTrue(response.json['issues']);self.assertEqual(response.json['settings_url'],'/')
+        self.assertNotIn('probability-format',payload)
+        started=client.post('/start',data=payload);self.assertEqual(started.status_code,303)
+        with client.session_transaction() as session:before=deepcopy(session['game'])
+        response=client.get('/game-tree?expand=1');self.assertEqual(response.status_code,200)
+        self.assertEqual(F(response.json['village_win']),independent((1,2,3,4,5),tuple((p,F(1,5)) for p in range(1,6)),'day'))
+        self.assertTrue(all(p['seer_probability']=='0' for p in response.json['players']))
         with client.session_transaction() as session:self.assertEqual(session['game'],before)
-        self.assertIn('actual',response.json)
-        payload.update(citizens='3',seers='1');client.post('/start',data=payload)
-        self.assertEqual(client.get('/game-tree?expand=1').json['village_win'],'7/15')
+        # Unrelated display controls must not be accepted as game-rule input.
+        self.assertEqual(client.post('/start',data={**payload,'probability-format':'fraction'}).status_code,400)
+        with client.session_transaction() as session:self.assertEqual(session['game'],before)
+        payload.update(citizens='3',seers='1');self.assertEqual(client.post('/start',data=payload).status_code,303)
+        result=client.get('/game-tree?expand=1');self.assertEqual(result.status_code,200)
+        self.assertEqual(F(result.json['village_win']),F(7,15))
     def test_precise_rule_and_policy_rejections_keep_saved_conditions(self):
         for change,expected in [({'allow_self_bite':'1'},'自噛み'),({'initial_seer':'normal'},'ランダム白'),({'day':'random'},'混在')]:
             client=self.app.test_client();client.post('/start',data={'citizens':'3','seers':'1','wolves':'1','day':'max','night':'max',**change})
