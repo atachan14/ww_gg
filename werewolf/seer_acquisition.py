@@ -83,15 +83,24 @@ def normalize(entries):
     result=[]
     for key,q in sorted(grouped.items()):
         roles,records,guards,attacks=key;mass=q/total;original=originals[key]
-        # Already-validated immutable data need no second constructor pass when
-        # normalization changes NOTHING. Unknown/subclass/mutable inputs keep
-        # the original full validation; no history or positive mass is invented.
+        # Normalization changes only positive exact mass. Reuse already
+        # validated immutable role/history fields; external, subclass and
+        # mutable inputs still take the complete constructor validation.
         reusable=(type(original)is Hypothesis and type(mass)is Fraction and
-            type(original.mass)is Fraction and mass==original.mass and
+            type(original.mass)is Fraction and
             type(roles)is tuple and type(records)is tuple and type(guards)is tuple and type(attacks)is tuple and
             all(type(a)is Acquisition and type(a.color)is str for a in records) and
             all(type(g)is GuardIntent for g in guards) and all(type(a)is WolfAttack for a in attacks))
-        result.append(original if reusable else Hypothesis(roles,records,mass,guards,attacks))
+        if not reusable:result.append(Hypothesis(roles,records,mass,guards,attacks));continue
+        if mass==original.mass:result.append(original);continue
+        # q/total is positive; every other field is the identical immutable
+        # value from the validated original. No missing record is synthesized.
+        weighted=object.__new__(Hypothesis)
+        for name,value in zip(('roles','acquisitions','mass','guards','attacks'),(roles,records,mass,guards,attacks)):
+            object.__setattr__(weighted,name,value)
+        from .joint_value_sharing import share_hypothesis_records
+        share_hypothesis_records(weighted)
+        result.append(weighted)
     return tuple(result)
 
 

@@ -4,7 +4,7 @@ from tempfile import TemporaryDirectory
 from threading import Thread
 from werkzeug.serving import make_server
 from app import create_app
-import subprocess
+import subprocess,argparse
 
 SCRIPT=r"""
 const {chromium}=require('C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
@@ -17,6 +17,7 @@ const assert=require('node:assert/strict');
   page.on('response',async r=>{if(r.url().includes('/game-tree?')){const d=await r.json();tree.push({url:r.url(),d});}});
   const base=process.argv[2];
   await page.request.post(base+'/start',{form:{citizens:'3',seers:'1',wolves:'1',day:'max',night:'max',fake_reports:'max',win_cutoff:'0'}});
+  if(process.argv[3]==='co'){const update=await page.request.post(base+'/navigation/public-input',{data:{revision:0,claims:['seer','latent','latent','latent','latent'],reports:[{acquired_day:1,published_day:1,player:1,target:2,color:'white'}]}});assert.equal(update.status(),200);}
   let start=Date.now();await page.goto(base+'/main');
   await page.waitForFunction(()=>document.querySelector('[data-calculation-tree]')?.dataset.treeAuto==='complete',null,{timeout:60000});
   console.log(JSON.stringify({phase:'initial-public-auto',ms:Date.now()-start,cards:await page.locator('[data-tree-item]').count()}));
@@ -27,11 +28,12 @@ const assert=require('node:assert/strict');
   await page.waitForSelector('[data-distribution-for]');
   await page.locator('.compact-tree-board .compact-tree-select').first().click();
   await page.waitForSelector('[data-distribution-for]',{state:'detached'});
-  const target=page.locator('.compact-tree-board .compact-tree-go:not(:disabled)').nth(1);
+  const beforeCurrent=await page.evaluate(()=>fetch('/navigation').then(r=>r.json()));
+  const target=page.locator('.compact-tree-board:not(.current):not(.village):not(.wolf):not([data-tree-item="h0~0"]) .compact-tree-go:not(:disabled)').first();
   assert(await target.count());
   await target.click();await page.waitForLoadState('networkidle');
   await page.waitForFunction(()=>document.querySelector('[data-calculation-tree]')?.dataset.treeAuto==='complete',null,{timeout:60000});
-  const current=await page.evaluate(()=>fetch('/navigation').then(r=>r.json()));assert.notEqual(current.current.occurrence,'h0');
+  const current=await page.evaluate(()=>fetch('/navigation').then(r=>r.json()));assert.notEqual(current.current.occurrence,'h0');assert.notEqual(current.current.occurrence,beforeCurrent.current.occurrence);
   await page.reload();await page.waitForFunction(()=>document.querySelector('[data-calculation-tree]')?.dataset.treeAuto==='complete',null,{timeout:60000});
   const restored=await page.evaluate(()=>fetch('/navigation').then(r=>r.json()));assert.equal(restored.current.occurrence,current.current.occurrence);
   await page.setViewportSize({width:390,height:844});
@@ -49,11 +51,12 @@ const assert=require('node:assert/strict');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e.stack);process.exitCode=1});
 """
+parser=argparse.ArgumentParser();parser.add_argument('--co',action='store_true');args=parser.parse_args()
 with TemporaryDirectory() as directory:
  app=create_app(dict(TESTING=True,SECRET_KEY='public-tree-response-browser',PERSISTENT_TREE_PREVIEW=True,GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,ANONYMOUS_OWNERSHIP_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
  server=make_server('127.0.0.1',0,app,threaded=True);worker=Thread(target=server.serve_forever,daemon=True);worker.start()
  try:
   script=Path(directory)/'verify.cjs';script.write_text(SCRIPT,encoding='utf-8')
-  completed=subprocess.run(['C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe',str(script),'http://127.0.0.1:'+str(server.server_port)],timeout=150)
+  completed=subprocess.run(['C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe',str(script),'http://127.0.0.1:'+str(server.server_port),'co' if args.co else 'hidden'],timeout=150)
   if completed.returncode:raise SystemExit(completed.returncode)
  finally:server.shutdown();worker.join(timeout=5)
