@@ -47,6 +47,28 @@ class TrueScanState:
         from .joint_value_sharing import share_hypothesis_tuple
         shared=share_hypothesis_tuple(self.hypotheses)
         if shared is not self.hypotheses:object.__setattr__(self,'hypotheses',shared)
+    def __hash__(self):
+        cached=self.__dict__.get('_hash_cache')
+        if cached is not None:return cached
+        value=hash((self.hypotheses,self.rosters,self.initial_rule,self.tracked,self.observed_prefix))
+        # Frozen containers can still be constructed from mutable/subclass
+        # inputs. Cache only the exact deeply immutable value representation.
+        from .guard_effect import GuardIntent
+        from .night_knowledge import WolfAttack
+        immutable=(type(self)is TrueScanState and type(self.hypotheses)is tuple and
+            type(self.rosters)is tuple and all(type(r)is tuple for r in self.rosters) and
+            type(self.initial_rule)is str and (self.tracked is None or type(self.tracked)is tuple) and
+            all(type(h)is Hypothesis and type(h.roles)is tuple and type(h.mass)is F and
+                type(h.acquisitions)is tuple and type(h.guards)is tuple and type(h.attacks)is tuple and
+                all(type(a)is Acquisition and type(a.color)is str for a in h.acquisitions) and
+                all(type(g)is GuardIntent for g in h.guards) and all(type(a)is WolfAttack for a in h.attacks)
+                for h in self.hypotheses))
+        if immutable:object.__setattr__(self,'_hash_cache',value)
+        return value
+    def __getstate__(self):
+        # Python string hashes differ between processes; never persist this
+        # derived cache through pickle/copy. All mathematical fields survive.
+        return {key:value for key,value in self.__dict__.items() if key!='_hash_cache'}
     @property
     def public_roles(self):
         cached=self.__dict__.get('_public_roles_cache')
