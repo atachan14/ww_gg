@@ -84,7 +84,7 @@ def edits_case():
     from werewolf.seer_acquisition import SeerReport
     from werewolf.exact import action_outcomes
     from werewolf.board_future import outcome_key
-    base,registry=setup();states=[registry];input_before=registry.data.inputs;root_before=registry.read()
+    base,registry=setup(day2_target=5);states=[registry];input_before=registry.data.inputs;root_before=registry.read()
     first,screen,preview=assert_snapshot(registry)
     old=event(registry,('seer',2,1))
     corrected=registry.edited({'mode':'single','events':[dict(old,target=4,action='change',ref=old['id'])]})
@@ -101,14 +101,14 @@ def edits_case():
     rebound=corrected.rebind(old_binding);assert rebound._request is None
     assert isinstance(rebound.read(),InvalidatedBranch) and isinstance(rebound.mass(),InvalidatedBranch)
     cancelled=withdraw(corrected,(('seer',2,1),));states.append(cancelled);rows.append(assert_snapshot(cancelled)[0])
-    restored=cancelled.edited({'mode':'single','events':[{'kind':'seer','player':1,'day':2,'target':2,'color':'white'}]})
+    restored=cancelled.edited({'mode':'single','events':[{'kind':'seer','player':1,'day':2,'target':5,'color':'white'}]})
     states.append(restored);rows.append(assert_snapshot(restored)[0])
     assert restored.read().public_state==root_before.public_state and restored.read().private==root_before.private
     assert restored.rebind(old_binding).read().private==old_binding.read().private
     root_cancel=registry.corrected_root(replace(base,claims=('latent',)*6,reports=()),())
     states.append(root_cancel);rows.append(assert_snapshot(root_cancel)[0])
     assert len(root_cancel.read().public_state.hypotheses)>len(root_before.public_state.hypotheses)
-    root_restore=root_cancel.corrected_root(base,(SeerReport(2,2,1,2,'white'),))
+    root_restore=root_cancel.corrected_root(base,(SeerReport(2,2,1,5,'white'),))
     states.append(root_restore);rows.append(assert_snapshot(root_restore)[0])
     assert root_restore.read().public_state==root_before.public_state and root_restore.read().private==root_before.private
     assert registry.data.inputs==input_before and registry.read()==root_before
@@ -150,7 +150,7 @@ blocked_case=historical_withdraw_case
 def own_case():
     from .cut_out_uniform_game import OwnView
     from werewolf.seer_acquisition import Acquisition
-    base,registry=setup();view=OwnView(1,'seer',(Acquisition(1,1,3,'white'),))
+    base,registry=setup(day2_target=5);view=OwnView(1,'seer',(Acquisition(1,1,3,'white'),))
     row,_,_=assert_snapshot(registry,view)
     return dict(own_screen=row)
 
@@ -205,7 +205,7 @@ def medium_case():
     from werewolf.seer_acquisition import SeerReport
     base=replace(spec(),mediums=1,claims=('seer','medium','medium','latent','latent','latent'),reports=(SeerReport(1,1,1,4,'white'),))
     reports=(MediumReport(2,2,5,'white'),MediumReport(2,3,5,'white'))
-    registry=SixInputRegistry.create(base,(5,6),(SeerReport(2,2,1,5,'white'),),reports)
+    registry=SixInputRegistry.create(base,(5,6),(SeerReport(2,2,1,6,'white'),),reports)
     assert registry.problem is None,registry.problem
     screen=current_screen(registry);reference=current_screen(registry,official_reference=True)
     assert screen.forecast==reference.forecast and screen.table==reference.table

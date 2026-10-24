@@ -24,7 +24,7 @@ class SixInputRegistryTests(unittest.TestCase):
         from benchmarks.player_match_groups.cut_out_uniform_game import OwnView
         from benchmarks.player_match_groups.cut_out_saved_recipes import InvalidatedBranch
         from werewolf.seer_acquisition import Acquisition
-        _,registry=setup()
+        _,registry=setup(day2_target=5)
         self.assertIsInstance(preview_action(registry,5,view=OwnView(1,'seer',(Acquisition(1,4,3,'white'),))),InvalidatedBranch)
         result=own_case()['own_screen']
         self.assertTrue(result['joint_table_forecast_pairwise_equal'])
