@@ -2,7 +2,7 @@
 import argparse,hashlib,importlib.abc,importlib.util,io,json,subprocess,sys,tarfile
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT))
-parser=argparse.ArgumentParser();parser.add_argument('--baseline');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--baseline');parser.add_argument('--bridge',action='store_true');args=parser.parse_args()
 if args.baseline:
  archive=subprocess.check_output(['git','archive',args.baseline,'werewolf'],cwd=ROOT)
  with tarfile.open(fileobj=io.BytesIO(archive)) as tar:sources={m.name:tar.extractfile(m).read() for m in tar.getmembers() if m.isfile() and m.name.endswith('.py')}
@@ -15,6 +15,17 @@ if args.baseline:
   def exec_module(self,module):
    relative=module.__name__.replace('.','/')+'.py';module.__file__=str(ROOT/relative);exec(compile(sources[relative],module.__file__,'exec'),module.__dict__)
  sys.meta_path.insert(0,Snapshot())
+if args.bridge:
+ from benchmarks.player_match_groups.cut_out_six_registry_fixture import setup
+ from benchmarks.player_match_groups.cut_out_six_source_bridge import issue
+ from werewolf.calculation_budget import calculation_budget
+ with calculation_budget(300000,max_seconds=15):
+  rows=[]
+  for target in (2,4):
+   _,registry=setup(day2_target=target);answer=issue(registry)
+   rows.append(dict(target=target,problem=getattr(registry.problem,'reason',None),answer=type(answer).__name__,reason=getattr(answer,'reason',None)))
+  print(json.dumps(dict(baseline=args.baseline or 'working',bridge=rows)))
+ raise SystemExit(0)
 from benchmarks.player_match_groups.closed_full_tree_fixture import case
 from benchmarks.player_match_groups.cut_out_compact_terminal_fixture import independent_cold
 from werewolf.closed_calculation import ClosedCalculation

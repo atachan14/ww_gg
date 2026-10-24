@@ -7,13 +7,13 @@ from datetime import datetime,timezone
 START=time.perf_counter()
 
 
-def setup():
+def setup(*,day2_target=2):
     from .cut_out_two_nights import spec
     from .cut_out_six_registry import SixInputRegistry
     from werewolf.exact import ClaimPolicy
     from werewolf.seer_acquisition import SeerReport
     base=replace(spec(),claim_policy=ClaimPolicy(villager='none',medium='none',seer='none',hunter='none'))
-    return base,SixInputRegistry.create(base,(2,3),(SeerReport(2,2,1,2,'white'),))
+    return base,SixInputRegistry.create(base,(2,3),(SeerReport(2,2,1,day2_target,'white'),))
 
 
 def event(registry,key):

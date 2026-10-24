@@ -4623,3 +4623,8 @@ See docs/repository-verification-2026-10-24.md and its committed JSON for exact 
 ## Limited tracking research checkpoint
 
 Saved four bounded evidence tests and current/pre-maintenanceff7cf69 reproducer; see docs/tracking-evidence-2026-10-24.md. The helper is restricted to the single-possible-owner research examples and is unused by production/broad fixtures. The denied broad fixture assertion rewrite was not executed or retried. Public code and normal18821 remain unchanged.
+
+
+## Narrow source-bridge fixture triage
+
+See docs/source-bridge-fixture-triage-2026-10-24.md and failure-triage-2026-10-24.json. Three failures were stale fixture inputs (Day2 scan2 after Day1 execution2), not API removal. Current and pre-maintenanceff7cf69 reject2 and admit4. Only the3 source-bridge audits use legal4, with edit5 and redo4; no numerical or full-state assertions changed. Focused9/9 pass; related76 has75pass/1 isolated existing UI-hook failure, disclosed. No production/broad fixture changes or normal-server restart. The denied broad normalization remains unexecuted.

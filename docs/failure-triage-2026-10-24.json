@@ -1,0 +1,36 @@
+{
+  "original_failures": 62,
+  "original_errors": 19,
+  "total": 81,
+  "provisional_symptom_clusters": {
+    "strict source / cold comparison (unresolved)": 10,
+    "numeric or structural expectation (unresolved)": 46,
+    "night-start eligibility / retired scan API": 11,
+    "pending / removed API / conditioning (unresolved)": 6,
+    "legacy source-bridge registry API": 3,
+    "initial-none fake report semantics": 2,
+    "public UI / built-asset contracts": 3
+  },
+  "confirmed_stale_fixture_fixed": [
+    "tests.test_cut_out_six_source_bridge.SixSourceBridgeTests.test_replayed_public_and_physical_sources_stay_separate_and_bound",
+    "tests.test_cut_out_six_source_bridge.SixSourceBridgeTests.test_old_witness_and_actor_do_not_cross_edit_cancel_redo",
+    "tests.test_cut_out_six_source_bridge.SixSourceBridgeTests.test_unissued_unknown_CO_and_invalid_revision_are_refused"
+  ],
+  "remaining_original_cases_unresolved": 78,
+  "confirmed_recent_production_regressions": 0,
+  "production_regressions_not_ruled_out": true,
+  "resource_limits_separate": 13,
+  "runner_import_errors_separate": 8,
+  "unresolved_extra_ui_case": "tests.test_seer_game_rule.SeerGameRuleTests.test_draft_controls_belong_to_separate_inert_form",
+  "focused": {
+    "run": 9,
+    "success": 9
+  },
+  "related": {
+    "run": 76,
+    "success": 75,
+    "failure": 1
+  },
+  "broad_fixture_unchanged": true,
+  "production_unchanged": true
+}

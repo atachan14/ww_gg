@@ -53,7 +53,7 @@ def audit_source():
     from .cut_out_six_registry_fixture import setup
     from .cut_out_day_night import moved_law,point_fix
     from werewolf.seer_acquisition import Acquisition
-    registry=setup()[1];before=registry.read();stack,mocks=zero_legacy()
+    registry=setup(day2_target=4)[1];before=registry.read();stack,mocks=zero_legacy()
     with stack:witness=require_ok(issue(registry))
     assert all(m.call_count==0 for m in mocks)
     assert witness.source==before and before.public_state!=before.private
@@ -66,7 +66,7 @@ def audit_source():
                 assert moved_law(branch.physical_law,group[0],p,6)==branch.physical_law
                 swaps+=1
     compare_screen(registry,witness)
-    compare_screen(registry,witness,OwnView(1,'seer',(Acquisition(1,1,3,'white'),Acquisition(2,1,2,'white'))))
+    compare_screen(registry,witness,OwnView(1,'seer',(Acquisition(1,1,3,'white'),Acquisition(2,1,4,'white'))))
     assert registry.read()==before
     return dict(case='source',public_physical_separate=True,issued_replay_contexts=len(witness.contexts),both_carrier_swaps=swaps,
         complete_Table_joint_mass_old_two_modes_equal=True,public_and_own_cold_branch_equal=True,
@@ -75,11 +75,11 @@ def audit_source():
 
 def audit_edits():
     from .cut_out_six_registry_fixture import setup,event,withdraw
-    registry=setup()[1];before=registry.data.inputs;original=registry.read();old=require_ok(issue(registry))
+    registry=setup(day2_target=4)[1];before=registry.data.inputs;original=registry.read();old=require_ok(issue(registry))
     report=event(registry,('seer',2,1))
-    changed=registry.edited({'mode':'single','events':[dict(report,target=4,action='change',ref=report['id'])]})
+    changed=registry.edited({'mode':'single','events':[dict(report,target=5,action='change',ref=report['id'])]})
     cancelled=withdraw(changed,(('seer',2,1),))
-    restored=cancelled.edited({'mode':'single','events':[{'kind':'seer','player':1,'day':2,'target':2,'color':'white'}]})
+    restored=cancelled.edited({'mode':'single','events':[{'kind':'seer','player':1,'day':2,'target':4,'color':'white'}]})
     previous=None
     for current in (changed,cancelled,restored):
         assert isinstance(screen(current,witness=old),UnsupportedPartition)
@@ -99,7 +99,7 @@ def audit_rejections():
     from .cut_out_six_registry_fixture import setup,withdraw
     from .cut_out_six_registry import SixInputRegistry
     from werewolf.board_future import SavedOrigin,GeneratedBoard
-    registry=setup()[1];witness=require_ok(issue(registry));rejected=[]
+    registry=setup(day2_target=4)[1];witness=require_ok(issue(registry));rejected=[]
     assert isinstance(screen(registry),UnsupportedPartition);rejected.append('unbound')
     assert isinstance(screen(registry,witness=replace(witness)),UnsupportedPartition);rejected.append('unissued_copy')
     forged=replace(witness.source,private=witness.source.public_state,physical=witness.source.public)
