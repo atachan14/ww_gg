@@ -20,7 +20,7 @@ def current_path(thread_id):
         path.reverse();return len(path),path[-12:]
     finally:del frame,board,local
 
-def position_stream(produce,*,view='public',interval=1.0,diagnostic=None):
+def position_stream(produce,*,view='public',interval=1.0,diagnostic=None,cancel_event=None):
     """One request worker, bounded output, no persistent job registry.
 
     produce must be wrapped in a COPY of Flask's request context. It owns its
@@ -29,7 +29,7 @@ def position_stream(produce,*,view='public',interval=1.0,diagnostic=None):
     if interval<1:raise ValueError('Position interval must be at least one second')
     def note(event,**fields):
         if diagnostic is not None:diagnostic.emit(event,**fields)
-    messages=Queue(maxsize=2);cancel=Event();finished=Event();run_id=secrets.token_hex(6);identity=None
+    messages=Queue(maxsize=2);cancel=cancel_event if cancel_event is not None else Event();finished=Event();run_id=secrets.token_hex(6);identity=None
     done=object();worker_id=[None]
     def put(item):
         while not cancel.is_set():

@@ -30,18 +30,28 @@
     if(task.cancelled){pump();return;}
     active=task;paint();
     const transport=new AbortController();let failure=null,idle=null;
+    task.stop=()=>{
+      if(!task.readonly||task.stopping)return;
+      task.stopping=true;
+      // Ask the owning server worker to stop at its next cooperative check.
+      // Only abort transport after acknowledgement; writes remain serialized.
+      nativeFetch.call(window,'/calculation-cancel',{method:'POST',body:new URLSearchParams({calculation_id:task.id}),credentials:'same-origin'})
+        .then(response=>{if(response.ok)transport.abort();})
+        .catch(()=>{}); // On unavailable cancellation keep the slot until EOF.
+    };
     const expire=kind=>{failure=Object.assign(new Error(kind==='idle'?'計算の通信が停止しました。入力は保持しています。再計算してください。':'計算の通信が時間切れになりました。入力は保持しています。処理結果を確認してください。'),{name:'CalculationTransportTimeout'});transport.abort();};
     const deadline=setTimeout(()=>expire('deadline'),TRANSPORT_DEADLINE_MS);
     const armIdle=()=>{clearTimeout(idle);idle=setTimeout(()=>expire('idle'),STREAM_IDLE_MS);};
     try{
-      // Caller abort invalidates its result. Keep the actual request alive and
-      // retain this slot until a terminal event, EOF or transport error.
-      // Abort of an obsolete caller is not server cancellation.
+      // The server receives the request ID before computation. Cancellation
+      // uses a separate unqueued request and the same session owner.
       const signal=transport.signal;
       const input=task.input instanceof Request?new Request(task.input,{signal}):task.input;
-      const response=await nativeFetch.call(window,input,{...task.init,signal});
+      const headers=new Headers(task.init.headers||(input instanceof Request?input.headers:undefined));
+      if(task.readonly)headers.set('X-WW-Calculation-ID',task.id);
+      const response=await nativeFetch.call(window,input,{...task.init,headers,signal});
       const streaming=response.headers.get('content-type')?.includes('application/x-ndjson');
-      task.response=response;transportFailures.set(response,()=>failure);
+      task.response=response;transportFailures.set(response,()=>failure||(task.cancelled?aborted():null));
       if(streaming){
         const copy=response.clone();
         if(!task.cancelled)task.resolve(response);else cancelBody(response.body);
@@ -55,15 +65,17 @@
     const url=new URL(input instanceof Request?input.url:String(input),location.href);
     const method=(init.method||(input instanceof Request?input.method:'GET')).toUpperCase();
     const streaming=new Headers(init.headers||(input instanceof Request?input.headers:undefined)).get('Accept')==='application/x-ndjson';
-    if(url.origin!==location.origin||(method!=='POST'&&!streaming))return nativeFetch.apply(this,arguments);
-    const readonly=['/main','/table-preview','/private-view','/comparison'].includes(url.pathname);
+    const treeRead=url.pathname==='/game-tree'&&method==='GET';
+    if(url.origin!==location.origin||(method!=='POST'&&!streaming&&!treeRead))return nativeFetch.apply(this,arguments);
+    const readonly=treeRead||['/main','/table-preview','/private-view','/comparison'].includes(url.pathname);
     const signal=init.signal||(input instanceof Request?input.signal:null);
     return new Promise((resolve,reject)=>{
-      const task={input,init,key:url.pathname,resolve,reject,cancelled:false,sequence:++sequence,detach:()=>{}};
-      const cancel=()=>{if(task.cancelled)return;task.cancelled=true;cancelBody(task.response?.body);if(reads.get(task.key)===task)reads.delete(task.key);reject(aborted());paint();};
+      const task={input,init,key:treeRead?url.pathname+url.search:url.pathname,readonly,id:readonly?crypto.randomUUID().replaceAll('-',''):null,resolve,reject,cancelled:false,sequence:++sequence,detach:()=>{}};
+      const cancel=()=>{if(task.cancelled)return;task.cancelled=true;cancelBody(task.response?.body);if(reads.get(task.key)===task)reads.delete(task.key);reject(aborted());task.stop?.();paint();};
       task.cancel=cancel;
       if(signal?.aborted){cancel();return;}
       signal?.addEventListener('abort',cancel,{once:true});task.detach=()=>signal?.removeEventListener('abort',cancel);
+      if(active?.readonly&&(!readonly||!treeRead&&(active.key===task.key||active.key==='/main')))active.cancel();
       if(readonly){const old=reads.get(task.key);if(old){old.cancel();old.detach();}reads.set(task.key,task);}
       else writes.push(task); // Accepted edits/saves are never discarded/coalesced.
       paint();pump();
@@ -101,7 +113,7 @@
     try{while(true){const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});let pos;while((pos=buffer.indexOf('\n'))>=0){consume(buffer.slice(0,pos));buffer=buffer.slice(pos+1);if(complete||redirected)break;}if(done||complete||redirected)break;}if(!complete&&!redirected)consume(buffer);}
     catch(error){throw transportFailures.get(response)?.()||error;}
     finally{reader.cancel().catch(()=>{});reader.releaseLock();if(identity?.run_id)window.hideCalculationPosition(identity.run_id);}
-    if(!complete)throw Error('計算応答が途中で終了しました。入力は保持されています。');return complete;
+    if(!complete)throw transportFailures.get(response)?.()||Error('計算応答が途中で終了しました。入力は保持されています。');return complete;
   };
   document.addEventListener('submit',event=>{
     if(!event.defaultPrevented&&event.target.method?.toLowerCase()==='post'){

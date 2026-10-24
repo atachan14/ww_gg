@@ -44,9 +44,13 @@ def calculation_budget(max_work=None,*,max_seconds=None):
     try:yield
     finally:_current.reset(token)
 
-def tick(work=1):
+def check_cancelled():
+    """Poll cooperative stop without charging work or altering budget identity."""
     cancelled=_cancelled.get()
     if cancelled is not None and cancelled.is_set():raise CalculationCancelled()
+
+def tick(work=1):
+    check_cancelled()
     state=_current.get()
     if state is None:return
     now=monotonic() if state[2] is not None else None

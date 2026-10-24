@@ -62,6 +62,9 @@ def create_app(test_config=None, *, deployment=False):
     from werewolf.game_runtime import GameRuntimes
     game_runtimes=GameRuntimes()
     calculation_slot=BoundedSemaphore(1)
+    from werewolf.calculation_jobs import CalculationJobs
+    calculation_jobs=CalculationJobs()
+    app.extensions["calculation_jobs"]=calculation_jobs
     app.extensions['board_game_runtimes']=game_runtimes
 
     def board_data(state):
@@ -548,6 +551,8 @@ def create_app(test_config=None, *, deployment=False):
                     if acquired:
                         calculation_slot.release();note('stream_released')
                     note('stream_exit',reason='cancelled' if cancelled else stop_kind or ('complete' if completed else 'error'))
+        job=request.environ.get('wwgg.calculation_job')
+        g.calculation_job_streaming=True
         if app.config.get('CALCULATION_POSITION_ENABLED',True):
             from werewolf.exploration_position import position_stream
             @copy_current_request_context
@@ -556,9 +561,22 @@ def create_app(test_config=None, *, deployment=False):
                 try:
                     for chunk in source:send(chunk)
                 finally:source.close()
-            iterator=position_stream(produce,view=view,diagnostic=trace)
-        else:iterator=generate()
-        return Response(stream_with_context(iterator),mimetype='application/x-ndjson',headers={'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'})
+            iterator=position_stream(produce,view=view,diagnostic=trace,cancel_event=job[2] if job else None)
+        else:
+            from werewolf.calculation_budget import cancellation_scope
+            def cancellable():
+                with cancellation_scope(job[2] if job else None):yield from generate()
+            iterator=cancellable()
+        def owned_iterator():
+            try:yield from iterator
+            finally:
+                if job:calculation_jobs.finish(*job)
+        response=Response(stream_with_context(owned_iterator()),mimetype='application/x-ndjson',headers={'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'})
+        if job:
+            def close_job():
+                job[2].set();calculation_jobs.finish(*job)
+            response.call_on_close(close_job)
+        return response
 
     @app.before_request
     def begin_request_budget():
@@ -573,6 +591,18 @@ def create_app(test_config=None, *, deployment=False):
                 return 'Cross-site form submission is not allowed',403
         reset_diagnostics()
         if request.method=='POST':g.calculation_previous_session=deepcopy(dict(session))
+        if request.path=='/calculation-cancel':return
+        token=request.headers.get('X-WW-Calculation-ID')
+        readonly=(request.path in ('/main','/table-preview','/private-view','/comparison') or request.path=='/game-tree' and request.method=='GET')
+        if token is not None and readonly:
+            if not calculation_jobs.valid(token):return jsonify(error='Invalid calculation request ID'),400
+            owner=session.setdefault('co_display_game',secrets.token_hex(8))
+            try:event=calculation_jobs.begin(owner,token)
+            except ValueError:return jsonify(error='Calculation request ID already active'),409
+            request.environ['wwgg.calculation_job']=(owner,token,event)
+            if not wants_calculation_stream():
+                from werewolf.calculation_budget import cancellation_scope
+                scope=cancellation_scope(event);scope.__enter__();g.calculation_cancel_scope=scope
         if request.endpoint in ('static','help_five_asset','help_medium_asset') or wants_calculation_stream():return
         scope=calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK),
                                  max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS))
@@ -580,7 +610,10 @@ def create_app(test_config=None, *, deployment=False):
         if request.method=='POST' or request.path in ('/main','/comparison','/game-tree'):
             trace=request.environ.get('wwgg.lifecycle')
             if trace is not None:trace.emit('request_wait')
-            acquired=calculation_slot.acquire(timeout=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
+            deadline=monotonic()+(app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) or DEFAULT_MAX_SECONDS)
+            acquired=False
+            while not acquired and monotonic()<deadline:
+                tick(0);acquired=calculation_slot.acquire(timeout=.05)
             if not acquired:
                 app.logger.warning('wwgg_budget_stop kind=time phase=request_queue')
                 raise CalculationBudgetExceeded('Calculation queue time limit',kind='time')
@@ -594,8 +627,26 @@ def create_app(test_config=None, *, deployment=False):
             calculation_slot.release()
             trace=request.environ.get('wwgg.lifecycle')
             if trace is not None:trace.emit('request_released')
+        job=request.environ.get('wwgg.calculation_job')
+        if job and not g.get('calculation_job_streaming'):calculation_jobs.finish(*job)
+        cancel_scope=g.pop('calculation_cancel_scope',None)
+        if cancel_scope is not None:cancel_scope.__exit__(None,None,None)
         scope=g.pop('calculation_scope',None)
         if scope is not None:scope.__exit__(None,None,None)
+
+    @app.post('/calculation-cancel')
+    def cancel_calculation():
+        token=request.form.get('calculation_id');owner=session.get('co_display_game')
+        if not owner or not calculation_jobs.valid(token):return jsonify(error='Invalid calculation cancellation'),400
+        return jsonify(cancelled=True,active=calculation_jobs.cancel(owner,token))
+
+    @app.errorhandler(CalculationCancelled)
+    def calculation_cancelled(error):
+        g.calculation_stop_kind='cancelled'
+        previous=g.get('calculation_previous_session')
+        if previous is not None:
+            session.clear();session.update(previous);session.modified=False
+        return jsonify(cancelled=True),499
 
     @app.errorhandler(CalculationBudgetExceeded)
     def calculation_stopped(error):

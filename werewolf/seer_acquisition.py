@@ -74,14 +74,17 @@ class Hypothesis:
 def normalize(entries):
     from .guard_effect import GuardIntent
     from .night_knowledge import WolfAttack
+    from .calculation_budget import check_cancelled
     grouped={};originals={}
-    for h in entries:
+    for index,h in enumerate(entries):
+        if index%128==0:check_cancelled()
         key=(h.roles,h.acquisitions,h.guards,h.attacks)
         grouped[key]=grouped.get(key,Fraction())+h.mass;originals.setdefault(key,h)
     total=sum(grouped.values(),Fraction())
     if not total:raise ValueError('No compatible acquisition/report hypothesis')
     result=[]
-    for key,q in sorted(grouped.items()):
+    for index,(key,q) in enumerate(sorted(grouped.items())):
+        if index%128==0:check_cancelled()
         roles,records,guards,attacks=key;mass=q/total;original=originals[key]
         # Normalization changes only positive exact mass. Reuse already
         # validated immutable role/history fields; external, subclass and
@@ -105,13 +108,21 @@ def normalize(entries):
 
 
 def from_board(board):
-    return tuple(Hypothesis(world[:-1],(),world[-1]) for world in board.worlds)
+    from .calculation_budget import check_cancelled
+    def entries():
+        for index,world in enumerate(board.worlds):
+            if index%128==0:check_cancelled()
+            yield Hypothesis(world[:-1],(),world[-1])
+    return tuple(entries())
 
 
 def public_worlds(entries):
     """Marginalize secrets before public decision making, preserving role correlation."""
+    from .calculation_budget import check_cancelled
     grouped={}
-    for h in entries:grouped[h.roles]=grouped.get(h.roles,Fraction())+h.mass
+    for index,h in enumerate(entries):
+        if index%128==0:check_cancelled()
+        grouped[h.roles]=grouped.get(h.roles,Fraction())+h.mass
     return tuple((*roles,q) for roles,q in sorted(grouped.items()))
 
 
@@ -142,8 +153,10 @@ def initial_random_white(entries, alive):
     This reference kernel is deliberately unoptimized; callers must benchmark
     before using it for larger casts. No random generator is used.
     """
+    from .calculation_budget import check_cancelled
     result=[]
-    for h in entries:
+    for index,h in enumerate(entries):
+        if index%128==0:check_cancelled()
         players=tuple(p for p in alive if h.roles[2] & (1<<(p-1)))
         if any(a.day==1 for a in h.acquisitions):raise ValueError('Initial acquisition already recorded')
         choices=tuple(tuple(t for t in alive if t!=p and not h.roles[0] & (1<<(t-1))) for p in players)

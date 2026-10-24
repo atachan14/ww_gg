@@ -516,5 +516,5 @@ document.addEventListener('DOMContentLoaded',async()=>{
   if(mounted.dataset.viewpointMode&&mounted.dataset.viewpointMode!=='public'){
    finalDocument=doc;const remote=doc.querySelector('#information-panel');if(remote)mounted.querySelector('#information-panel').innerHTML=remote.innerHTML;
   }else install(doc);
- }catch(error){if(mounted.isConnected&&!generation){const pending=mounted.querySelector('[data-seer-pending]');if(pending)pending.textContent='勝率は未計算です。役職率は表示済みです。';mounted.querySelectorAll('[data-value-cell="dawn"],[data-value-cell="final"]').forEach(cell=>cell.textContent='未計算');const note=document.createElement('p');note.className='error';note.setAttribute('role','alert');note.textContent=error.message;mounted.append(note);}}
+ }catch(error){if(error.name==='AbortError')return;if(mounted.isConnected&&!generation){const pending=mounted.querySelector('[data-seer-pending]');if(pending)pending.textContent='勝率は未計算です。役職率は表示済みです。';mounted.querySelectorAll('[data-value-cell="dawn"],[data-value-cell="final"]').forEach(cell=>cell.textContent='未計算');const note=document.createElement('p');note.className='error';note.setAttribute('role','alert');note.textContent=error.message;mounted.append(note);}}
 });

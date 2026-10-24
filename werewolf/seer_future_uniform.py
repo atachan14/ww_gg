@@ -30,7 +30,9 @@ class TrueScanState:
         for i,alive in enumerate(self.rosters):
             validate_roster(alive)
             if i and not set(alive)<=set(self.rosters[i-1]):raise ValueError('Acquisition roster cannot resurrect players')
-        for h in self.hypotheses:
+        from .calculation_budget import check_cancelled
+        for index,h in enumerate(self.hypotheses):
+            if index%128==0:check_cancelled()
             for record in (*h.guards,*h.attacks):
                 if record.night>=len(self.rosters) or record.target not in self.rosters[record.night]:
                     raise ValueError('Private night record lacks its acquisition roster')

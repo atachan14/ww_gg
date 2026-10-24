@@ -4636,3 +4636,7 @@ See `registry-night-fixture-triage-2026-10-24.md`. Correct only three illegal in
 
 ## 2026-10-24: read-only Log contracts and generated public assets
 See `public-ui-asset-triage-2026-10-24.md`. Four distinct failures addressed: three obsolete Log-editor hooks and stale generated assets. Related25 tests and18 JS syntax checks passed; no source template/JS/calculation or normalserver change. Stop maintenance here; remaining night8 untouched.
+
+
+## 2026-10-24: cooperative obsolete calculation cancellation
+See `calculation-cancellation-2026-10-24.md`. Explicit session/request-scoped stop connects obsolete reads to existing solver cancellation, retaining actual slot ownership until worker exit. Final53 Python/59 JS tests and isolated real-browser rapid valid preview checks pass; no formula/history normalization or strategy change. Local activation follows verified commit.
