@@ -200,7 +200,7 @@ def create_app(test_config=None, *, deployment=False):
             from werewolf.information_set_forecast import Pending
             try:
                 doc=navigation_document()
-                with doc.lock:return jsonify(navigation_view(doc).read(request.args.get('node'),request.args.get('expand')=='1',request.args.get('analysis')=='1'))
+                with doc.lock:return jsonify(navigation_view(doc).read(request.args.get('node'),request.args.get('expand')=='1',request.args.get('analysis')=='1',compact=request.args.get('format')=='public-tree'))
             except Pending as exc:return jsonify(error=exc.reason,unsupported=True),422
             except (ValueError,KeyError) as exc:return jsonify(error=str(exc)),409
         from werewolf.information_set_forecast import Pending

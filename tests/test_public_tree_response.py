@@ -50,3 +50,58 @@ class PublicTreeResponseTests(unittest.TestCase):
   out=view._summary(owner,local,raw)
   self.assertNotIn('items',out)
   self.assertEqual(out['village_win'],raw['village_win'])
+
+ def assert_compact(self,view,key=None):
+  from werewolf.tree_payload import public_tree_payload,DETAIL_FIELDS
+  full=view.read(key,True,analysis=True)
+  compact=view.read(key,True,analysis=True,compact=True)
+  expected=public_tree_payload(full)
+  expected['items']={k:public_tree_payload(row) for k,row in full['items'].items()}
+  self.assertEqual(compact,expected)
+  for row in [compact,*compact['items'].values()]:self.assertFalse(DETAIL_FIELDS.intersection(row))
+  self.assertIn('players',view.read(key))
+  return full,compact
+
+ def test_compact_keeps_manual_zero_edges_representatives_and_restore(self):
+  import json
+  doc=NavigationDocument(ManualPublicInputTests().root().data);view=NavigationTree(doc)
+  self.assert_compact(view)
+  doc.game.action(3);self.assert_compact(view)
+  doc.game.back();doc.game.public_input(('seer','latent','latent','latent','latent'),())
+  full,compact=self.assert_compact(view)
+  self.assertEqual(compact['manual_updates'][-1]['probability'],'0')
+  cold=NavigationDocument.restore(json.loads(json.dumps(doc.export())))
+  self.assert_compact(NavigationTree(cold))
+
+ def test_compact_anonymous_owned_and_mixed_manual_exit(self):
+  from tests.test_anonymous_owned import AnonymousOwnedTests
+  doc=NavigationDocument(AnonymousOwnedTests().document(),anonymous_owned=True);view=NavigationTree(doc)
+  self.assert_compact(view)
+  doc.game.action(4);self.assert_compact(view)
+  doc.game.back();doc.game.public_input(('seer','latent','latent','latent','latent'),())
+  self.assert_compact(view)
+
+ def test_compact_skips_unused_named_player_probabilities(self):
+  doc=NavigationDocument(ManualPublicInputTests().root().data);view=NavigationTree(doc)
+  owner,local,tree,names=view.parse(view.current_key())
+  tree.summary(local,True)
+  board=tree.nodes[local]['node'].read().public
+  with patch.object(type(board),'role_probability',side_effect=AssertionError('unused player marginal')):
+   compact=tree.summary(local,True,compact=True)
+  self.assertNotIn('players',compact)
+
+ def test_http_compact_is_opt_in_and_analysis_still_available(self):
+  import tempfile
+  from app import create_app
+  from werewolf.tree_payload import public_tree_payload
+  with tempfile.TemporaryDirectory() as directory:
+   app=create_app(dict(TESTING=True,SECRET_KEY='compact-response-test',PERSISTENT_TREE_PREVIEW=True,GAME_TREE_PREVIEW=True,NAVIGATION_DIRECTORY=directory))
+   client=app.test_client();client.post('/start',data=dict(citizens=3,seers=1,wolves=1,day='max',night='max',fake_reports='max',win_cutoff=0))
+   full=client.get('/game-tree?expand=1').json
+   response=client.get('/game-tree?expand=1&format=public-tree')
+   self.assertEqual(response.status_code,200)
+   expected=public_tree_payload(full);expected['items']={k:public_tree_payload(v) for k,v in full['items'].items()}
+   self.assertEqual(response.json,expected)
+   self.assertIn('players',client.get('/game-tree').json)
+   analysis=client.get('/game-tree?format=public-tree&analysis=1')
+   self.assertEqual(analysis.status_code,200);self.assertIn('distribution',analysis.json)

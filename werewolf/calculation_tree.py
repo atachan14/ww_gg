@@ -781,7 +781,7 @@ class CalculationTree:
                 output.append(dict(id=str(index),label=part['label'],probability=part['probability'],village_win=None if source.observer is not None and self.nodes[part['node']].get('defer_value') else str(self.value(part['node'])),children=children))
             row[cache]=output;return output
 
-    def summary(self,key,actions=False):
+    def summary(self,key,actions=False,*,compact=False):
         row=self.nodes[key];node=row['node'];s=node.read();b=s.public;value=None if row.get('defer_value') else self.value(key)
         from .board_flow import BoardFacts
         point=BoardFacts.from_inputs(self.data.game_data,{'history':[asdict(e) for e in b.history]})
@@ -804,29 +804,34 @@ class CalculationTree:
         if decision is not None:
             transitions=bool(row.get('actions')) and all(action.get('evaluation_transition')=='evaluated' for action in row['actions'])
             trace.update(owner='evaluator' if transitions else 'mixed-evaluator-selection',selection='evaluated-public-MAX',selection_complete=decision.complete,transition='evaluated' if transitions else 'legacy-reconstruction')
-        return {'evaluation_trace':trace,'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
+        result={'evaluation_trace':trace,'snapshot':self.snapshot,'node':key,'day':b.day,'phase':b.phase,'column_day':point.day if b.winner else b.day,'column_phase':point.phase if b.winner else b.phase,'alive':list(b.alive),'winner':b.winner,
             'day_arrival':row.get('day_arrival'),'day_start':row.get('day_start',False),'public_updates':row.get('public_updates'),'public_current':self.public_current(key),'public_claims':list(b.claims),'native_mode':getattr(self.engine,'anonymous_nights',False),'counterfactual':row.get('counterfactual',False),'public_bundle':row.get('public_bundle',False),'public_parent_bundle':row.get('public_parent_bundle'),'hidden_contexts':list(row.get('hidden_contexts',[])),'public_reach':row.get('public_reach'),
             'viewpoint':'公開Qで方針決定 / 物理Pで評価'+('（本人条件付き枝）' if s.private!=s.public_state else ''),
             'village_win':None if value is None else str(value),'wolf_win':None if value is None else str(1-value),'evaluation':'not-requested' if value is None else 'computed',
             'win_certificate':asdict(certificate) if certificate else None,
             'cutoff_marker':certificate.marker(point.day) if certificate and row['actions'] is None else None,
             'expansion':'computed' if row['actions'] is not None or b.winner else 'pending','reused':row['reused'],
-            'mode':getattr(self.strategy,b.phase),'rules':asdict(self.rules),'policy':asdict(self.strategy),
+            'mode':getattr(self.strategy,b.phase),'rules':None if compact else asdict(self.rules),'policy':None if compact else asdict(self.strategy),
             'history':[asdict(e) for e in b.history],'reports':[asdict(r) for r in s.past],
-            'players':[{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p)),
+            'players':[] if compact else [{'player':p,'alive':p in b.alive,'wolf_probability':str(b.wolf_probability(p)),
                 'seer_probability':str(b.role_probability(p,'seer')),
                 'physical_wolf_probability':str(sum((h.mass for h in s.private.hypotheses if h.roles[0]&(1<<(p-1))),F()))} for p in range(1,b.player_count+1)],
             'compositions':self._composition_rows(key),'night_stages':row.get('night_stages'),'stage_roles':dict(seers=0,mediums=0,hunters=0) if recorded else row.get('stage_roles',dict(seers=self.data.game_data.seers,mediums=self.data.game_data.mediums,hunters=self.data.game_data.hunters)),'ability_choices':row.get('ability_choices'),'ability_pending':row.get('ability_pending'),'actions':row['actions'] if actions else None,'fixture':f'{self.data.game_data.players} players / {self.data.game_data.seers} seers / {self.data.game_data.wolves} wolves',
             'method':'完全なQ/P・履歴・物理枝の既存の名前付替え同値でまとめます。全ての成員Boardを選択できます。'}
 
-    def read(self,key,expand=False):
+        if compact:
+            from .tree_payload import public_tree_payload
+            return public_tree_payload(result)
+        return result
+
+    def read(self,key,expand=False,*,compact=False):
         with self.lock:
             if key not in self.nodes:raise KeyError(key)
             self.nodes[key].pop('defer_value',None)
             if expand and not self.nodes[key]['node'].win_certificate():self.expand(key)
             summaries={}
             def summary(child):
-                if child not in summaries:summaries[child]=self.summary(child,True)
+                if child not in summaries:summaries[child]=self.summary(child,True,compact=True) if compact else self.summary(child,True)
                 return summaries[child]
             result=dict(summary(key));items={};pending=[key];seen=set()
             while pending:

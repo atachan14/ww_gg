@@ -52,7 +52,7 @@ class AnonymousCalculationTree:
    value=node.calculation.evaluator.value(replace(b,p=own))
    result.append(dict(id=str(i),label=composition_label(counts,self.data.game_data,self.role_order),probability=str(mass),village_win=str(value),children=[]))
   return result
- def summary(self,key,actions=False):
+ def summary(self,key,actions=False,*,compact=False):
   row=self.nodes[key];node=row['node'];b=node.read().public;law=node.owned.belief;value=self.value(key)
   point=b
   result=dict(node=key,snapshot=self.snapshot,day=b.day,phase=b.phase,column_day=point.day,column_phase=point.phase,alive=list(b.alive),winner=b.winner,
@@ -60,7 +60,7 @@ class AnonymousCalculationTree:
    public_current=True,public_bundle=False,day_start=row.get('day_start',False),compositions=[],stage_roles=dict(seers=0,mediums=0,hunters=0),
    actions=row['actions'] if actions else None,night_stages=None,evaluation='computed',expansion='computed' if row['actions'] is not None or b.winner else 'pending',
    win_certificate=None,cutoff_marker=None,evaluation_trace=dict(owner='evaluator',representation='anonymous-owned',reduction=node.calculation.evaluator.reductions.get(law)),mode='random',public_updates=None)
-  for p in range(1,b.player_count+1):
+  for p in (() if compact else range(1,b.player_count+1)):
    result['players'].append(dict(player=p,alive=p in b.alive,wolf_probability=str(law.q.marginal(p,law.groups,'wolf')),seer_probability=str(law.q.marginal(p,law.groups,'seer')),physical_wolf_probability=str(law.p.marginal(p,law.groups,'wolf'))))
   if b.phase=='night' and row['actions'] is not None:
    branches=[]
@@ -70,8 +70,11 @@ class AnonymousCalculationTree:
      deaths.append(dict(kind='death_notice',actor=None,actors=[],value=target,targets=a['targets'],label='襲撃死：'+str(target),probability=r['probability'],mass=r['probability'],children=dict(leaves=[dict(node=r['node'],probability='1',variants=[])])))
     branches.append(dict(kind='public_attack',actor=None,actors=[],value=target,targets=a['targets'],label=a['label'],probability=a['policy_probability'],mass=a['policy_probability'],children=dict(branches=deaths)))
    result['night_stages']=dict(method='evaluation-recorded-v1',branches=branches);result['actions']=[]
+  if compact:
+   from .tree_payload import public_tree_payload
+   return public_tree_payload(result)
   return result
  @bounded
- def read(self,key,expand=False):
+ def read(self,key,expand=False,*,compact=False):
   if expand:self.expand(key)
-  result=self.summary(key,True);result['items']={k:self.summary(k,True) for k in self.nodes};return result
+  result=self.summary(key,True,compact=compact);result['items']={k:self.summary(k,True,compact=compact) for k in self.nodes};return result
