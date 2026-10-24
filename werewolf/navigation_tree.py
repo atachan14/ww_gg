@@ -233,10 +233,19 @@ class NavigationTree:
             if update and (board.day,board.phase)==(day,phase):total+=1
         return total
     def phase_updates(self):
-        totals={}
+        # Occurrences are append-only: export puts each parent before its
+        # children. Keep per-path phase counts, never sum sibling histories.
+        totals={};prefixes={}
         for row in self.document.game.history.export():
             b=self.document.game.history.state(row['key']).source.public
-            phase=(b.day-1)*2+(b.phase=='night');totals[str(phase)]=max(totals.get(str(phase),0),self.depth(row['key']))
+            phase=(b.day,b.phase)
+            counts=dict(prefixes[row['parent']]) if row['parent'] is not None else {}
+            step=row['selector']
+            if row['edge_kind'] in ('manual_public','recorded_input') or step is not None and step.get('kind')=='published':
+                counts[phase]=counts.get(phase,0)+1
+            prefixes[row['key']]=counts
+            column=str((b.day-1)*2+(b.phase=='night'))
+            totals[column]=max(totals.get(column,0),counts.get(phase,0))
         return totals
     def read(self,key=None,expand=False,analysis=False,*,compact=False):
         owner,local,tree,names=self.parse(key or self.key(self.document.game.history.root,'0'))
