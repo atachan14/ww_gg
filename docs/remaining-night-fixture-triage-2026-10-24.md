@@ -1,0 +1,22 @@
+# Remaining eight night-action/API cases: bounded investigation
+
+No verified fixture correction in this pass. Production, server, numerical assertions and complete-state comparisons unchanged. No broad tracking normalization attempted.
+
+## Exact cases and purpose
+
+1. `tests.test_cut_out_latent_max.LatentMaxTests.test_missing_own_history_is_explicit_and_other_owner_secret_rejected`: missing own-history/foreign-owner rejection and exact initial-none private scan values `(1/4,1/4,1/4)`. Fails importing removed `scan_target_players`. A temporary development-only replacement with the explicit `root.public.alive` roster removed the ImportError but returned `UnsupportedPartition(reason='seer_view_scan_outside_public_support')`; unchanged test then errors on subscripting that result (0.083s). The replacement was reverted. Thus this is not proven to be a signature-only fix: inspect how a pre-execution scan intervention is restricted to policy-supported post-execution acquisition rosters before changing its domain or expected values. No unsupported result converted to success.
+
+2. `tests.test_cut_out_user_seven_intermediate.SevenIntermediateEntryTests.test_initial_dispatch_is_wired_without_solving`: initial/intermediate dispatch and bounded engine identity.
+3. `tests.test_cut_out_user_seven_preparation.UserSevenPreparationTests.test_real_cast_prior_batch_and_synthetic_prefix_without_full_search`: real cast/batch prior, no solve, exact synthetic `P_dead_wolf7=4/9`.
+4. `tests.test_cut_out_user_seven_source.UserSevenSourceTests.test_batch_provenance_and_reissued_edit_cancel_redo`: same-batch identity and correction roundtrip.
+5. `tests.test_cut_out_user_seven_source.UserSevenSourceTests.test_prefix_has_bound_two_wolf_source_without_full_forecast`: issued two-carrier source, no full evaluation, complete cold equality.
+6. `tests.test_cut_out_user_seven_source.UserSevenSourceTests.test_stale_owner_revision_unbound_and_one_carrier_are_rejected`: invalid identity/revision/ownership rejection.
+7. `tests.test_cut_out_user_seven_source.UserSevenSourceTests.test_tiny_endgame_matches_exact_public_and_own_values`: exact terminal public/private action values and joint table mass.
+
+Cases2 and4–7 share `cut_out_user_seven_source.synthetic_registry`: execute7, bite6, then simultaneously report seer1/2 white7 and medium3 white7. The seer targets are already dead; medium target7 is correct. Case3 has the same distinction in `cut_out_user_seven_uniform_preparation.probe_first_night`. Later endgame executes5, bites4, then seer/medium reports black5: the later seer target is also already executed. A bulk target replacement would corrupt medium semantics; making seer target the same-night victim would also conflict with black under no-self-attack. Changing these coupled reports changes the synthetic posterior and requires independent recomputation of the literal4/9 and exact1/3 action values. These six tests were not modified or rerun as a group in this pass; saved traceback inventory establishes their current first failure. No claim their deeper assertions pass.
+
+8. `tests.test_dead_history_scalar.DeadHistoryScalarTests.test_quotient_cannot_create_support_for_an_unknown_dead_secret`: intended zero-support protection for unknown dead-owner history. `dead_two_seers` executes4 then bites1; replacing seer1 Day2 acquisition by target4 constructs an illegal night-start history. `TrueScanState.__post_init__` raises before the expected solve-time Pending. This is distinct from supported-but-zero-likelihood evidence. Preserve the original test until choosing a legal, genuinely unsupported private history that still exercises solver support rather than merely changing it to expect constructor rejection. No tracking distinction discarded.
+
+## Result and stopping boundary
+
+Before/after resolved count:0/8. The narrow API experiment failed1/1 after bypassing the initial obsolete import and was reverted. No full baseline rerun, full suite, expensive seven-player solve or browser run was needed or claimed. Known prior ff7cf69 evidence already shows the removed helper and alive-at-night-start contract predate maintenance; this pass makes no new baseline parity claim. The actionable next slice is a small independent pre-execution intervention-support oracle, or reconstruction of legal seven-player synthetic observations with independently recomputed posterior—not assertion weakening. This pass stops at that concrete support/fixture-contract boundary.
