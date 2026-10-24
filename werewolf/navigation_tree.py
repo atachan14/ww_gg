@@ -155,18 +155,22 @@ class NavigationTree:
             result.update(snapshot_only=False,public_current=True,actions=None,compositions=[],pending=exc.reason,stage_roles=dict(seers=tree.data.game_data.seers))
             return result
 
-    def _summary(self,owner,local,raw):
+    def _summary(self,owner,local,raw,context=None):
         tree,names=self.view(owner);row=self.document.game.history.occurrence(self.owner(owner))
         # A recorded action is an explicit detail request. Restore its real
         # edges before presenting a certificate-only stop, so Current stays
         # reachable and its parent is not mistaken for the pruned endpoint.
         if local==tree.root and raw.get('actions') is None and any(c.selector.get('requested') is not None for c in self.document.game.history.children(self.owner(owner))):
             tree.expand(local);raw=tree.summary(local,True)
-        out=deepcopy(raw);out.pop('items',None);out['node']=self.key(owner,local)
+        out=deepcopy({k:v for k,v in raw.items() if k!='items'});out['node']=self.key(owner,local)
         out['board_number']=self.board_numbers.setdefault(out['node'],len(self.board_numbers))
         s=_presentation_source(tree.nodes[local]['node'],names);b=s.public
         from dataclasses import asdict
-        out.update(alive=list(b.alive),public_claims=list(b.claims),history=[asdict(e) for e in b.history],reports=[asdict(r) for r in s.past],navigation_owner=owner,navigation_depth=self.depth(owner,out['column_day'],out['column_phase']),navigation_phase_updates=self.phase_updates())
+        depth_key=(self.owner(owner),out['column_day'],out['column_phase'])
+        if context is None:context=({},self.phase_updates())
+        depths,updates=context
+        if depth_key not in depths:depths[depth_key]=self.depth(*depth_key)
+        out.update(alive=list(b.alive),public_claims=list(b.claims),history=[asdict(e) for e in b.history],reports=[asdict(r) for r in s.past],navigation_owner=owner,navigation_depth=depths[depth_key],navigation_phase_updates=dict(updates))
         for player in out['players']:player['player']=names.display(player['player'])
         for part in out.get('compositions',()):part['node']=self._id(owner,part['node'])
         for action in out.get('actions') or ():
@@ -190,7 +194,7 @@ class NavigationTree:
         if local==tree.root and owner in self.origins and not out.get('day_arrival'):
             previous,previous_local=self.origins[owner]
             if previous.nodes[previous_local].get('day_arrival'):
-                original=self._summary(self.origin_owners[owner],previous_local,previous.summary(previous_local,True))
+                original=self._summary(self.origin_owners[owner],previous_local,previous.summary(previous_local,True),context)
                 out['day_arrival']=original.get('day_arrival')
         if local==tree.root and '@' not in owner:
             out['navigation_occurrence']=owner
@@ -237,20 +241,21 @@ class NavigationTree:
         try:raw=tree.read(local,expand)
         except Pending:
             raw=self._raw_summary(tree,local);raw['items']={}
-        out=self._summary(owner,local,raw);items={}
-        for id,r in raw['items'].items():items[self.key(owner,id)]=self._summary(owner,id,r)
+        context=({},self.phase_updates())
+        out=self._summary(owner,local,raw,context);items={}
+        for id,r in raw['items'].items():items[self.key(owner,id)]=self._summary(owner,id,r,context)
         for alternate in tuple(self.views):
             if alternate.startswith(self.owner(owner)+'@'):
-                for id,r in raw['items'].items():items[self.key(alternate,id)]=self._summary(alternate,id,r)
+                for id,r in raw['items'].items():items[self.key(alternate,id)]=self._summary(alternate,id,r,context)
         # Include every explicitly navigated occurrence, without calculating its
         # descendants or opening hidden composition accordions.
         for row in self.document.game.history.export():
             anchor=row['key'];view,_=self.view(anchor)
-            k=self.key(anchor,view.root);items[k]=self._summary(anchor,view.root,self._raw_summary(view,view.root))
+            k=self.key(anchor,view.root);items[k]=self._summary(anchor,view.root,self._raw_summary(view,view.root),context)
             if hasattr(view.entry_node,'owned'):
                 # A bound history root may already expose recorded stages. Its
                 # referenced children must accompany that root in this response.
-                for local in tuple(view.nodes):items[self.key(anchor,local)]=self._summary(anchor,local,self._raw_summary(view,local))
+                for local in tuple(view.nodes):items[self.key(anchor,local)]=self._summary(anchor,local,self._raw_summary(view,local),context)
         out['items']=items;out.update(snapshot=self.snapshot,current_node=self.current_key(),navigation_revision=self.document.revision,display_path=[self.key(r.key,'0') for r in self.document.game.history.path(self.document.game.current)])
         if analysis:
             origin=self.origins.get(owner) if local==tree.root else None

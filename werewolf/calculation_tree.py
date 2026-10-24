@@ -824,24 +824,28 @@ class CalculationTree:
             if key not in self.nodes:raise KeyError(key)
             self.nodes[key].pop('defer_value',None)
             if expand and not self.nodes[key]['node'].win_certificate():self.expand(key)
-            result=self.summary(key,True);items={};pending=[key];seen=set()
+            summaries={}
+            def summary(child):
+                if child not in summaries:summaries[child]=self.summary(child,True)
+                return summaries[child]
+            result=dict(summary(key));items={};pending=[key];seen=set()
             while pending:
                 parent=pending.pop()
                 if parent in seen:continue
                 seen.add(parent)
                 for update in self.nodes[parent].get('public_updates') or ():
-                    child=update['node'];items[child]=self.summary(child,True);pending.append(child)
+                    child=update['node'];items[child]=summary(child);pending.append(child)
                 arrival=self.nodes[parent].get('day_arrival')
                 if arrival and arrival.get('node'):
-                    child=arrival['node'];items[child]=self.summary(child,True);pending.append(child)
+                    child=arrival['node'];items[child]=summary(child);pending.append(child)
                 for composition in self._composition_rows(parent):
                     child=composition['node']
-                    if child!=parent:items[child]=self.summary(child,True);pending.append(child)
+                    if child!=parent:items[child]=summary(child);pending.append(child)
                 for choice in self.nodes[parent].get('ability_choices') or []:
                     for attack in choice['attacks']:
                         for branch in attack['branches']:
                             for child in [branch['node'],*[v['node'] for v in branch.get('variants',[])]]:
-                                items[child]=self.summary(child,True);pending.append(child)
+                                items[child]=summary(child);pending.append(child)
                 stage_pending=[self.nodes[parent].get('night_stages')]
                 while stage_pending:
                     stage=stage_pending.pop()
@@ -849,12 +853,12 @@ class CalculationTree:
                     for branch in stage.get('branches',[]):
                         stage_pending.append(branch['children'])
                         for image in branch['images']:
-                            for child in image['nodes']:items[child]=self.summary(child,True);pending.append(child)
+                            for child in image['nodes']:items[child]=summary(child);pending.append(child)
                     for leaf in stage.get('leaves',[]):
-                        child=leaf['node'];items[child]=self.summary(child,True);pending.append(child)
+                        child=leaf['node'];items[child]=summary(child);pending.append(child)
                 for choice in self.nodes[parent]['actions'] or []:
                     for branch in choice['branches']:
-                        child=branch['node'];items[child]=self.summary(child,True);pending.append(child)
+                        child=branch['node'];items[child]=summary(child);pending.append(child)
             result['items']=items
             if key==self.root:
                 if not hasattr(self,'input_updates'):
