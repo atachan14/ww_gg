@@ -9,7 +9,7 @@
   const conflicts=document.querySelectorAll('[data-public-open],[data-public-edit],[data-public-delete],[data-legacy-open],#advance-button,#back-button');
   const draft=window.createBoardDeclarationDraft(baseline,{update,cancel:document.querySelector('[data-table-cancel]'),conflictingButtons:conflicts});
   let version=0,timer,controller,lastPreview=null,rendering=false,navigating=false,clearedSavedDraft=false,clearSavedPromise=Promise.resolve();
-  const labels={latent:'--',villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'};
+  const labels={latent:'--',villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'人狼'};
   const clone=x=>JSON.parse(JSON.stringify(x));
   const selectors=[];const roleStash=new Map();
   const storageKey=`wwgg-table-draft:${main.dataset.coGame}:${seed.board_id}`;
@@ -50,14 +50,19 @@
     if(!['seer','medium'].includes(role))return;
     host.closest('tr').querySelector('[data-table-role-label]').textContent=labels[role];
     const current=draft.snapshot();
-    if(role==='seer')for(let day=1;day<=seed.day;day++){
+    const slots=seed.seer_slots||Array.from({length:seed.day},(_,i)=>({day:i+1,players:Array.from({length:seed.players},(_,j)=>j+1),available:true}));
+    if(role==='seer')for(const slot of slots){
+      const day=slot.day;
+      if(!slot.available){const none=document.createElement('span');none.className='co-day';none.textContent=`Day${day}: --`;host.append(none);continue;}
+      if(!slot.players.includes(player))continue;
       const row=current.seers.find(r=>r.day===day&&r.reporter===player)||{day,reporter:player,target:null,color:null};
       const span=document.createElement('span');span.className='co-day';span.append(`Day${day}: `);
-      const targets=Array.from({length:seed.players},(_,i)=>i+1).filter(p=>p!==player);
+      const targets=slot.players.filter(p=>p!==player);
+      const published=baseline.seers.some(r=>r.day===day&&r.reporter===player);
       const change=(key,value)=>mutate(next=>{if(key==='color'&&!value){next.seers=next.seers.filter(x=>!(x.day===day&&x.reporter===player));return;}let r=next.seers.find(x=>x.day===day&&x.reporter===player);if(!r){r={...row};next.seers.push(r);}r[key]=key==='target'?(value?Number(value):null):(value||null);if(r.target===null&&r.color===null)next.seers=next.seers.filter(x=>x!==r);});
       const target=select([['','対象'],...targets.map(p=>[String(p),`Player${p}`])],row.target,(v)=>change('target',v));target.dataset.tableTarget=`${day}:${player}`;
-      target.disabled=seed.finished||!seed.alive.includes(player);
-      const color=select([['','未公開'],['white','白'],['black','黒']],row.color,v=>{change('color',v);if(!v){render();document.querySelector(`[data-table-color="${day}:${player}"]`)?.focus();}});color.disabled=seed.finished||!seed.alive.includes(player);color.dataset.tableColor=`${day}:${player}`;span.append(target,color);host.append(span);
+      target.disabled=seed.finished||!seed.alive.includes(player)||published;
+      const color=select([['','未公開'],['white','白'],['black','黒']],row.color,v=>{change('color',v);if(!v){render();document.querySelector(`[data-table-color="${day}:${player}"]`)?.focus();}});color.disabled=seed.finished||!seed.alive.includes(player)||published;color.dataset.tableColor=`${day}:${player}`;span.append(target,color);host.append(span);
     }
     const mediumSlots=Array.from({length:Math.max(0,seed.day-1)},(_,i)=>[i+2,player,seed.targets[2*i]]);
     if(role==='medium'){const none=document.createElement('span');none.textContent='Day1: --';host.append(none);}
@@ -116,7 +121,7 @@
       if(!main.isConnected){document.querySelector('[data-table-update]')?.click();return;}
     }
     try{await draft.submit(async(current)=>{
-      clearTimeout(timer);controller?.abort();await clearSavedPromise;const response=await fetch('/table-publish',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify(current)})});const data=await response.json();if(!response.ok)throw Error(data.error);try{sessionStorage.removeItem(storageKey);}catch(_){}navigating=true;location.reload();return current;
+      clearTimeout(timer);controller?.abort();await clearSavedPromise;const response=await fetch('/table-publish',{method:'POST',body:new URLSearchParams({revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify(current)})});const data=await response.json();if(!response.ok)throw Error(data.error);try{sessionStorage.removeItem(storageKey);}catch(_){}navigating=true;if(window.BoardNavigation&&main.dataset.navigationOccurrence)await window.BoardNavigation.install(data);else location.reload();return current;
     });}catch(e){status.textContent=`保存できません: ${e.message}`;}
   });
   document.querySelector('#action-form').addEventListener('submit',event=>{if(draft.isDirty()){event.preventDefault();event.stopImmediatePropagation();status.textContent='先に更新またはキャンセルしてください。';}},true);

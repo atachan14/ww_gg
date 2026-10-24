@@ -114,8 +114,25 @@ class DeploymentTests(unittest.TestCase):
     def test_public_assets_exist_before_build_and_match_source(self):
         # Vercel must see real public files when planning static outputs, not
         # only files introduced later by the Python function's build hook.
-        expected = {"calculation_wait.js", "styles.css", "app.js", "strategy.js", "parallel.js", "comparison.js", "board_draft.js", "board_table.js", "board_viewpoint.js", "board_private_draft.js", "board_private_row.js", "board_private_table.js"}
+        # Match the build contract, including new split Tree modules, rather
+        # than freezing a historical module list. Every emitted template asset
+        # is additionally checked through the HTTP smoke below.
+        expected = {p.name for p in Path("static").iterdir()
+                    if p.is_file() and p.suffix in (".css", ".js")}
+        self.assertTrue({"styles.css", "app.js", "calculation_tree.js"} <= expected)
         self.assertEqual({p.name for p in Path("public/static").iterdir()}, expected)
         for name in expected:
             self.assertEqual((Path("public/static")/name).read_bytes(),
                              (Path("static")/name).read_bytes())
+
+    def test_main_template_assets_are_available_through_static_http(self):
+        import re
+        c=create_app({"TESTING":True,"SECRET_KEY":TEST_KEY}).test_client()
+        c.post('/start',data={"players":"5","day":"max","night":"max"})
+        html=c.get('/main').get_data(as_text=True)
+        urls=set(re.findall(r'(?:src|href)="(/static/[^"?]+)',html))
+        self.assertTrue(urls)
+        for url in urls:
+            with c.get(url) as response:
+                self.assertEqual(response.status_code,200,url)
+                self.assertEqual(response.data,(Path('public')/url.lstrip('/')).read_bytes(),url)

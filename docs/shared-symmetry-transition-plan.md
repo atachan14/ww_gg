@@ -4632,3 +4632,7 @@ See docs/source-bridge-fixture-triage-2026-10-24.md and failure-triage-2026-10-2
 
 ## 2026-10-24: three registry night-start fixture repairs
 See `registry-night-fixture-triage-2026-10-24.md`. Correct only three illegal input scenarios; retain complete-state/numeric comparisons. 3 original +11 related checks passed. Production, server and broad tracking comparisons unchanged. Eight cases in the provisional night-start/API group remain unexamined.
+
+
+## 2026-10-24: read-only Log contracts and generated public assets
+See `public-ui-asset-triage-2026-10-24.md`. Four distinct failures addressed: three obsolete Log-editor hooks and stale generated assets. Related25 tests and18 JS syntax checks passed; no source template/JS/calculation or normalserver change. Stop maintenance here; remaining night8 untouched.

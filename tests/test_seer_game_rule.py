@@ -72,4 +72,9 @@ class SeerGameRuleTests(unittest.TestCase):
 
  def test_draft_controls_belong_to_separate_inert_form(self):
   self.start();html=self.c.get('/main').data
-  self.assertIn(b'id="public-log-draft-form"',html);self.assertIn(b'data-public-mode form="public-log-draft-form"',html)
+  self.assertIn(b'<form id="public-log-draft-form"></form>',html)
+  # Log input was removed; retain the inert compatibility form without editors.
+  section=html.split(b'<section id="system-log"',1)[1].split(b'</section>',1)[0]
+  self.assertIn(b'data-log-readonly',section)
+  for control in (b'<input',b'<select',b'<button',b'data-public-mode'):self.assertNotIn(control,section)
+  self.assertIn(b'data-co-add',html)

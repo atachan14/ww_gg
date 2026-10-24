@@ -51,7 +51,20 @@ function initializeCOEditor() {
   }));
 }
 
+// Scope the read-only list, never its evidence seed or inherited Table state.
+// The aria fallback also supports HTML already cached by a running preview.
+function initializeBoardLog(root = document) {
+  const log = root.querySelector('#system-log'), seed = root.querySelector('#public-log-seed');
+  if (!log || !seed) return;
+  const day = JSON.parse(seed.textContent).day;
+  log.querySelectorAll('.board-log-item').forEach(item => {
+    const published = item.dataset.logDay || item.getAttribute('aria-label')?.match(/\bDay(\d+)\b/)?.[1];
+    if (published !== undefined) item.hidden = Number(published) !== day;
+  });
+}
+
 function initializeUI() {
+  initializeBoardLog();
   const formatInputs = document.querySelectorAll('input[name="probability-format"]');
   let probabilityFormat = "percent";
   try {
@@ -63,6 +76,7 @@ function initializeUI() {
       element.textContent = probabilityFormat === "fraction" ? element.dataset.fraction : element.dataset.percent;
     });
     formatInputs.forEach((input) => { input.checked = input.value === probabilityFormat; });
+    document.dispatchEvent(new CustomEvent('probability-format-change',{detail:{format:probabilityFormat}}));
     window.refreshParallelLayout?.();
   }
 
@@ -74,6 +88,12 @@ function initializeUI() {
     });
   });
   applyProbabilityFormat();
+  const roleDetailOption=document.querySelector('#display-role-details'),displayMain=document.querySelector('main');
+  if(roleDetailOption&&displayMain){
+    try{displayMain.dataset.roleDetails ??= localStorage.getItem('ww_gg.role-details')||'true';}catch(_){displayMain.dataset.roleDetails ??= 'true';}
+    roleDetailOption.checked=displayMain.dataset.roleDetails!=='false';
+    roleDetailOption.addEventListener('change',()=>{displayMain.dataset.roleDetails=String(roleDetailOption.checked);try{localStorage.setItem('ww_gg.role-details',displayMain.dataset.roleDetails);}catch(_){}});
+  }
 
 
   document.querySelectorAll("form[data-submit-once]").forEach((form) => {
@@ -130,10 +150,11 @@ function initializeUI() {
     rulePreset.addEventListener('change', () => {
       const preset = setupPresets.rules[rulePreset.value];
       if (preset) {ruleInput.value = preset.values.allow_self_bite ? '1' : '0';initialSeerInput.value=preset.values.initial_seer;repeatGuardInput.value=preset.values.allow_repeat_guard ? '1' : '0';}
-      refreshSetupPresets();
+      refreshSetupPresets();updateCast();
     });
     rulePreset.addEventListener('blur',refreshSetupPresets);
     ruleInput.addEventListener('change', refreshSetupPresets);
+    ruleInput.addEventListener('change',()=>updateCast());
     initialSeerInput.addEventListener('change',refreshSetupPresets);
     repeatGuardInput.addEventListener('change',refreshSetupPresets);
   }
@@ -147,6 +168,8 @@ function initializeUI() {
     refreshSetupPresets();
     const village = Number(citizens.value) + Number(mediums.value) + Number(seers.value) + Number(hunters.value);
     const total = village + Number(wolves.value);
+    const roles=[['villager',citizens],['medium',mediums],['seer',seers],['hunter',hunters],['wolf',wolves]].filter(([,input])=>Number(input.value)>0).map(([role])=>role);
+    document.dispatchEvent(new CustomEvent('setup-settings-change',{detail:{roles,allowSelfBite:ruleInput.value==='1'}}));
     const experimental = Number(seers.value)>0;
     wolves.max = experimental ? '9' : '4';
     document.querySelector('#villager-count').innerHTML = `${village}<small>人</small>`;
@@ -154,7 +177,7 @@ function initializeUI() {
     document.querySelector('#total-count').innerHTML = `${total}人<small>（最大9人）</small>`;
     const valid = [citizens, mediums, wolves, seers, hunters].every(input => input.value !== "" && Number.isInteger(Number(input.value)) && Number(input.value) >= 0 && input.checkValidity()) && total >= 1 && total <= 9 && (experimental || total <= 2 || Number(wolves.value) >= 1 && Number(wolves.value) < village);
     const validation = document.querySelector('#cast-validation');
-    validation.textContent = valid ? '' : experimental ? '合計1～9人、各役職0～9人の配役にしてください。' : '合計1～9人。3人以上では狼より村陣営が多い配役にしてください。';
+    validation.textContent = valid ? '' : experimental ? '合計1～9人、各役職0～9人の配役にしてください。' : '合計1～9人。3人以上では人狼より村陣営が多い配役にしてください。';
     validation.hidden = valid;
     document.querySelector('form[action$="/start"] button[type="submit"]').disabled = !valid;
     const mediumSettings=document.querySelector('[data-medium-calculation]');
@@ -336,8 +359,9 @@ window.addEventListener("pageshow", (event) => {
 function initializePublicLog() {
   const seedNode=document.querySelector('#public-log-seed');if(!seedNode)return;
   const seed=JSON.parse(seedNode.textContent),root=document.querySelector('#system-log'),dialog=root.querySelector('#board-log-dialog');
+  if(!root||!dialog)return; // Current BoardLog is read-only; keep the future input adapter separate.
   const rows=root.querySelector('[data-public-rows]'),status=root.querySelector('[data-public-status]'),editor=root.querySelector('[data-public-editor]'),picker=root.querySelector('[data-legacy-picker]'),mode=root.querySelector('[data-public-mode]');
-  const labels={villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'狼'};
+  const labels={villager:'市民',seer:'占い師',medium:'霊能',hunter:'狩人',wolf:'人狼'};
   let disabledStates=new Map();
   let saved=seed.draft?.revision===seed.revision&&seed.draft.board_id===seed.board_id?seed.draft.payload:null,editing=null,legacyKey=null,busy=false,navigating=false,contextDay=seed.day,contextPhase=seed.phase,returnFocus=null;
   document.querySelector('#public-log-draft-form').addEventListener('submit',event=>event.preventDefault());

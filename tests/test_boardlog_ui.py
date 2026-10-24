@@ -10,8 +10,8 @@ class BoardLogUITests(unittest.TestCase):
  def publish(self,events):return self.c.post('/public-log',data={'revision':str(self.g()['revision']),'operation':'publish','payload':json.dumps({'mode':'simultaneous','events':events})})
  def events(self):return [{'kind':'co','player':1,'role':'seer'},{'kind':'seer','player':1,'day':1,'target':3,'color':'white'},{'kind':'co','player':2,'role':'seer'},{'kind':'seer','player':2,'day':1,'target':3,'color':'black'}]
  def test_permanent_boardlog_has_no_forms_or_instructions(self):
-  html=self.c.get('/main').get_data(as_text=True);section=html.split('<section id="system-log"')[1].split('<dialog')[0]
-  self.assertIn('>BoardLog</h3>',section);self.assertNotIn('<select',section);self.assertNotIn('<input',section);self.assertNotIn('<p',section);self.assertIn('data-public-open',section)
+  html=self.c.get('/main').get_data(as_text=True);section=html.split('<section id="system-log"')[1].split('</section>',1)[0]
+  self.assertIn('>BoardLog</h3>',section);self.assertNotIn('<select',section);self.assertNotIn('<input',section);self.assertNotIn('<p',section);self.assertIn('data-log-readonly',section);self.assertNotIn('<button',section);self.assertNotIn('data-public-open',section);self.assertIn('data-co-add',html)
  def test_one_simultaneous_item_two_player_lines_with_combined_tokens(self):
   self.assertEqual(self.publish(self.events()).status_code,200)
   html=self.c.get('/main').get_data(as_text=True);self.assertEqual(html.count('data-public-batch="1"'),1)
@@ -27,8 +27,8 @@ class BoardLogUITests(unittest.TestCase):
  def test_legacy_baseline_is_not_labeled_simultaneous(self):
   self.publish(self.events());g=self.g();g.pop('public_log')
   with self.c.session_transaction() as s:s['game']=g
-  html=self.c.get('/main').get_data(as_text=True);section=html.split('<section id="system-log"')[1].split('<dialog')[0]
-  self.assertIn('旧保存：順序不明',section);self.assertNotIn('data-public-batch=',section);self.assertIn('data-legacy-open',section)
+  html=self.c.get('/main').get_data(as_text=True);section=html.split('<section id="system-log"')[1].split('</section>',1)[0]
+  self.assertIn('旧保存：順序不明',section);self.assertNotIn('data-public-batch=',section);self.assertIn('data-legacy-order',section);self.assertNotIn('data-legacy-open',section);self.assertNotIn('<button',section)
  def test_old_flat_draft_preserved_and_duplicate_publish_rejected(self):
   old=self.g();payload={'mode':'simultaneous','events':self.events()}
   self.assertEqual(self.c.post('/public-log',data={'revision':str(old['revision']),'operation':'draft','payload':json.dumps(payload)}).status_code,200)

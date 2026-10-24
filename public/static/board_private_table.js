@@ -1,6 +1,7 @@
 /* Mount private navigation without writing public forms, cookies or logs. */
 (() => {
  window.initializeBoardPrivateTable=()=>{
+  if(document.querySelector('#personal-navigation-seed'))return;
   const seedNode=document.querySelector('#board-viewpoint-seed');
   if(!seedNode||seedNode.dataset.initialized)return;
   seedNode.dataset.initialized='true';
@@ -24,7 +25,7 @@
   };
   const probability=(value)=>{
    const node=document.createElement('strong');node.className='probability';
-   const [n,d='1']=value.split('/');const percent=String(Math.round(Number(n)/Number(d)*10000)/100)+'%';
+   const {percent}=window.ProbabilityDisplay.formats(value);
    node.dataset.fraction=value;node.dataset.percent=percent;
    let fraction=false;try{fraction=localStorage.getItem('ww_gg.probability-format')==='fraction';}catch(_){}
    node.textContent=fraction?value:percent;return node;
@@ -40,7 +41,7 @@
    const team=role==='wolf'?players:[];
    const draft=store.open({player,role,team,claims:role==='wolf'?['wolf']:[seed.claims[player-1]],publicResults:role==='hunter'?[]:role==='wolf'?(seed.public_attacks||[]).map(r=>({...r,player,role:'wolf'})):seed.public_results});
    if(!table.querySelector(`[data-private-details="${player}:${role}"]`)){
-    const row=window.renderBoardPrivateRow({table,player,role,label:role==='seer'?'占い師':role==='wolf'?'狼':'狩人',
+    const row=window.renderBoardPrivateRow({table,player,role,label:role==='seer'?'占い師':role==='wolf'?'人狼':'狩人',
      slots:role==='seer'?seed.slots[String(player)]:role==='wolf'?(seed.attack_slots||[]).map(slot=>({...slot,targets:slot.targets.filter(p=>seed.allow_self_bite||!team.includes(p))})):(seed.guard_slots?.[String(player)]||[]),draft,onChange:edit=>{store.edit({...edit,team});controller.refresh();}});
 
    }
@@ -48,11 +49,13 @@
   };
   root.addEventListener('viewpointchange',event=>{
    const {mode,role,selected}=event.detail;
-   if(mode==='public')return;
+   if(mode==='selecting'||mode==='loading')document.dispatchEvent(new CustomEvent('personal-view-loading'));
+   if(mode==='selecting'&&window.PersonalNavigation?.context)window.PersonalNavigation.activate(null);
+   if(mode==='public'){if(controller&&window.PersonalNavigation?.context)window.PersonalNavigation.activate(null);return;}
    if(scope)scope.textContent=`${seed.roles[role].label}（公開情報＋秘密情報）`;
    heading();
    if(mode==='selecting'){
-    pending('選択中');status.textContent=`${seed.roles[role].label}：行をクリックして ${seed.roles[role].required}人選択してください。死亡済みの狼仲間も選択できます。`;
+    pending('選択中');status.textContent=`${seed.roles[role].label}：行をクリックして ${seed.roles[role].required}人選択してください。死亡済みの人狼仲間も選択できます。`;
    }else if(mode==='loading'){
     pending('計算中');status.textContent='私的情報で再計算中です。BoardOverviewの勝率は公開情報の計算です。';
    }
@@ -67,6 +70,7 @@
     return result;
    },
    show:result=>{
+    if(result.private_view)window.PersonalNavigation?.activate({view:result.private_view,public_revision:result.revision});
     for(const player of result.players){
      const row=table.querySelector(`tr[data-player="${player.id}"]`);
      for(const cell of row.querySelectorAll('[data-value-cell]')){
