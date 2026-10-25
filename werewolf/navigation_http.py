@@ -46,10 +46,17 @@ def register_navigation(app,store,owner,render=None):
             if owned is None:return jsonify(error='Not enabled'),404
             payload=request.get_json()
             if type(payload)is not dict or type(payload.get('revision'))is not int:raise ValueError('Navigation revision required')
-            allowed={'move':{'occurrence'},'back':set(),'forward':{'occurrence'},'advance':{'target','outcome','reuse_forward'},'public-input':{'claims','reports'}}
+            allowed={'move':{'occurrence'},'back':set(),'forward':{'occurrence'},'advance':{'target','outcome','reuse_forward'},'phase-back':set(),'phase-next':{'target','outcome','reuse_forward'},'public-input':{'claims','reports'}}
             if operation not in allowed:return jsonify(error='Unknown navigation operation'),404
             if set(payload)-({'revision'}|allowed[operation]):raise ValueError('Unknown navigation field')
             def action(game):
+                if operation=='phase-back':
+                    from .phase_navigation import phase_back
+                    return phase_back(game)
+                if operation=='phase-next':
+                    from .phase_navigation import phase_next
+                    if type(payload.get('reuse_forward',True)) is not bool:raise ValueError('Invalid forward intent')
+                    return phase_next(game,payload.get('target',0),reuse_forward=payload.get('reuse_forward',True),outcome=payload.get('outcome'))
                 if operation=='move':return game.move(payload['occurrence'])
                 if operation=='back':return game.back()
                 if operation=='forward':return game.forward(payload.get('occurrence'))

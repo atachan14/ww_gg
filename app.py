@@ -1015,7 +1015,8 @@ def create_app(test_config=None, *, deployment=False):
             try:
                 doc=navigation_document();identity,data=navigation_owner()
                 target=int(request.form.get('target','0'))
-                navigation_store.apply(identity,data,int(request.form.get('revision','-1')),lambda game:game.action(target))
+                from werewolf.phase_navigation import phase_next
+                navigation_store.apply(identity,data,int(request.form.get('revision','-1')),lambda game:phase_next(game,target))
                 return redirect(url_for('main'),code=303)
             except (ValueError,KeyError) as exc:return render_main(state,str(exc),409)
         rules, progress = structural_replay(state)
@@ -1342,7 +1343,8 @@ def create_app(test_config=None, *, deployment=False):
     def back():
         if navigation_active():
             doc=navigation_document();identity,data=navigation_owner()
-            navigation_store.apply(identity,data,int(request.form.get('revision','-1')),lambda game:game.back())
+            from werewolf.phase_navigation import phase_back
+            navigation_store.apply(identity,data,int(request.form.get('revision','-1')),phase_back)
             return redirect(url_for('main'),code=303)
         token=request.form.get('current')
         if token:

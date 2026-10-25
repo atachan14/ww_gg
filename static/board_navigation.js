@@ -29,7 +29,7 @@
    if(window.boardTableDraft?.isDirty()){document.querySelector('[data-table-preview-status]').textContent='先に更新またはキャンセルしてください';return;}
    if(!form.checkValidity()){form.reportValidity();return;}
    const values=new FormData(form),operation=path==='/back'?'back':'advance',payload=operation==='advance'?{target:Number(values.get('target')),reuse_forward:form.dataset.manualSelection!=='true'}:{};
-   send(operation,payload).catch(error=>{const status=document.querySelector('[data-table-preview-status]');if(status)status.textContent=error.message;});
+   send(operation==='back'?'phase-back':'phase-next',payload).catch(error=>{const status=document.querySelector('[data-table-preview-status]');if(status)status.textContent=error.message;});
   },true);
  }
  window.BoardNavigation={install,send};document.addEventListener('DOMContentLoaded',bind);

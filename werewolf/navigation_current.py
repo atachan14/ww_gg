@@ -116,4 +116,6 @@ class NavigationCurrent:
             b=self.navigation.history.state(key).source.public;forward=dict(key=key,day=b.day,phase=b.phase)
         if forward is None and self.automatic_update() is not None:
             forward=dict(key=None,day=self.source.public.day,phase=self.source.public.phase,automatic=True)
-        return dict(occurrence=self.occurrence.key,state=self.occurrence.state,identity=self.identity,parent=parent,forward=forward,prefilled=self.prefilled_selection)
+        from .phase_navigation import phase_targets
+        phases=phase_targets(self.navigation)
+        return dict(occurrence=self.occurrence.key,state=self.occurrence.state,identity=self.identity,parent=parent,forward=forward,phase_parent=phases['previous'],phase_forward=phases['next'],prefilled=self.prefilled_selection)

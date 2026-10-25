@@ -4648,3 +4648,7 @@ See `input-calculation-option-2026-10-25.md`. Compact display checkbox gates aut
 
 ## 2026-10-25: three-mode input calculation
 See `input-calculation-three-modes-2026-10-25.md`. New/unset defaultroles, explicit oldOff/On retained asOff/All. Server role-only returns before future evaluation; exact joint state retained, win cells未計算.87 Python/63 JS checks and named/anonymous/Day2/browser parity passed. Update remains full and mode-independent; saved data and unrelated fixtures untouched.
+
+
+## 2026-10-25: phase-only Footer navigation
+See `phase-footer-navigation-2026-10-25.md`. Previous follows actual ancestry; next chooses the last-created adjacent-phase update within current descendants, with start fallback. Target lookup creates no future. Explicit action intent/solver semantics unchanged. Footer Help removed consistently, Overview scrolls document top.112 Python/63 JS checks and real browser branch/scroll/replace/reload checks pass.

@@ -25,7 +25,14 @@ window.initializeParallelLayout=function(){
  const schedule=()=>requestAnimationFrame(refresh);window.refreshParallelLayout=schedule;
  panes.forEach(p=>p.addEventListener('toggle',()=>{if(p.open)panes.forEach(other=>{if(other!==p)other.open=false;});schedule();}));
  main.querySelector('[data-collapse-settings]')?.addEventListener('click',()=>{panes.forEach(p=>p.open=false);schedule();});
- main.querySelectorAll('[data-scroll-to]').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.scrollTo)?.scrollIntoView({block:'start',behavior:'smooth'})));
+ main.querySelectorAll('[data-scroll-to]').forEach(b=>b.addEventListener('click',()=>{
+  if(b.dataset.scrollTo!=='page-top'){document.getElementById(b.dataset.scrollTo)?.scrollIntoView({block:'start',behavior:'smooth'});return;}
+  // Scroll the page/outer scroll owner, preserving Table and Tree internal pan.
+  window.scrollTo({top:0,behavior:'smooth'});
+  for(let owner=main;owner&&owner!==document.scrollingElement;owner=owner.parentElement){
+   if(owner.scrollHeight>owner.clientHeight&&/auto|scroll/.test(getComputedStyle(owner).overflowY))owner.scrollTo({top:0,behavior:'smooth'});
+  }
+ }));
  const observer=new ResizeObserver(schedule);observer.observe(info);observer.observe(player);observer.observe(footer);
  const mutations=new MutationObserver(schedule);mutations.observe(main.querySelector('#strategy-editor'),{childList:true,subtree:true});
  window.addEventListener('resize',schedule);

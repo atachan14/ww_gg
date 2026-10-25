@@ -1,3 +1,1 @@
-{% if request.endpoint not in ('top','main') %}
-<a class="footer-help" id="help-button" href="{{ url_for('help_route') }}">Help</a>
-{% endif %}
+{# Help remains available in the site header; phase footers contain navigation only. #}
