@@ -4652,3 +4652,7 @@ See `input-calculation-three-modes-2026-10-25.md`. New/unset defaultroles, expli
 
 ## 2026-10-25: phase-only Footer navigation
 See `phase-footer-navigation-2026-10-25.md`. Previous follows actual ancestry; next chooses the last-created adjacent-phase update within current descendants, with start fallback. Target lookup creates no future. Explicit action intent/solver semantics unchanged. Footer Help removed consistently, Overview scrolls document top.112 Python/63 JS checks and real browser branch/scroll/replace/reload checks pass.
+
+
+## 2026-10-25 physical convergence count descriptor
+See `count-joint-tree-2026-10-25.md`: derive live-count metadata from the actual mixed P law, preserving complete Q/P histories and constructor validation. No closure normalization or mathematical-policy changes.

@@ -1,0 +1,195 @@
+{
+  "history": {
+    "current": "h1",
+    "forward": {
+      "h0": "h1",
+      "h1": "h2"
+    },
+    "rows": [
+      {
+        "edge_kind": "root",
+        "key": "h0",
+        "names": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "parent": null,
+        "selection_weight": "1",
+        "selector": null,
+        "settled": [
+          "0",
+          "0"
+        ]
+      },
+      {
+        "edge_kind": "manual_public",
+        "key": "h1",
+        "names": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "parent": "h0",
+        "selection_weight": "0",
+        "selector": {
+          "claims": [
+            "seer",
+            "seer",
+            "medium",
+            "latent",
+            "latent",
+            "latent",
+            "latent"
+          ],
+          "kind": "public_input",
+          "reports": [
+            {
+              "acquired_day": 1,
+              "color": "white",
+              "player": 1,
+              "published_day": 1,
+              "target": 3
+            },
+            {
+              "acquired_day": 1,
+              "color": "white",
+              "player": 2,
+              "published_day": 1,
+              "target": 3
+            }
+          ]
+        },
+        "settled": [
+          "0",
+          "0"
+        ]
+      },
+      {
+        "edge_kind": "strategy",
+        "key": "h2",
+        "names": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "parent": "h1",
+        "selection_weight": "1/4",
+        "selector": {
+          "kind": "advance",
+          "requested": 4,
+          "target": 4
+        },
+        "settled": [
+          "0",
+          "0"
+        ]
+      }
+    ]
+  },
+  "revision": 3,
+  "root": {
+    "claim_policy": {
+      "hunter": [
+        "filled"
+      ],
+      "medium": [
+        "filled"
+      ],
+      "seer": [
+        "filled"
+      ],
+      "villager": [
+        "filled"
+      ],
+      "wolf": "none"
+    },
+    "claims": [
+      "latent",
+      "latent",
+      "latent",
+      "latent",
+      "latent",
+      "latent",
+      "latent"
+    ],
+    "history": [],
+    "hunters": 0,
+    "mediums": 1,
+    "model": "group",
+    "players": 7,
+    "policy": {
+      "day": "max",
+      "disclosure_common": "all",
+      "fake_reports": "max",
+      "fake_seer_policy": [
+        "noncontradictory",
+        "uniform"
+      ],
+      "guard_position": [
+        "uniform"
+      ],
+      "include_self_bite": false,
+      "medium_disclosure": "inherit",
+      "night": "max",
+      "seer_disclosure": "inherit",
+      "seer_position": [
+        "unvisited",
+        "uniform"
+      ],
+      "win_cutoff": true
+    },
+    "reports": [],
+    "revision": 0,
+    "rules": {
+      "allow_repeat_guard": true,
+      "allow_self_bite": false,
+      "initial_seer": "random_white"
+    },
+    "seer_inputs": [],
+    "seer_mode": "information-fixed-v1",
+    "seer_options": {
+      "initial_rule": "random_white",
+      "likelihood": "compatibility"
+    },
+    "seers": 1,
+    "selection": null,
+    "strategy_ui": {
+      "common": [
+        "filled"
+      ],
+      "roles": {
+        "hunter": {
+          "disabled": [],
+          "local": []
+        },
+        "medium": {
+          "disabled": [],
+          "local": []
+        },
+        "seer": {
+          "disabled": [],
+          "local": []
+        },
+        "villager": {
+          "disabled": [],
+          "local": []
+        }
+      }
+    },
+    "wolves": 2
+  },
+  "version": 1
+}

@@ -53,3 +53,36 @@ class EvaluationBranchTests(unittest.TestCase):
             values.append(e.solve(b,s,(),s,None,physical=b))
             self.assertEqual(e.solve(b,s,(),s,None,physical=b),values[-1])
         self.assertEqual(values,[F(1,8),F(1,8)])
+
+    def test_mixed_physical_components_rederive_live_count_without_changing_law(self):
+        from werewolf.exact import PublicEvent
+        from werewolf.public_convergence import mix
+        from werewolf.evaluation_branch import ContinuationInputs
+        for seers,mediums in ((0,0),(1,0),(1,1)):
+            with self.subTest(seers=seers,mediums=mediums):
+                b=initial_board(7,2,mediums,seers,0)
+                b=replace(b,alive=tuple(range(2,8)),history=(PublicEvent(1,'day',1),),phase='night',wolf_count=None)
+                state,_=prepare_public_prior({},b,Rules(),track_live_seers=False)
+                components=[]
+                for count in (1,2):
+                    law=replace(state,hypotheses=normalize(tuple(h for h in state.hypotheses if (h.roles[0]&b.alive_mask).bit_count()==count)))
+                    physical=replace_worlds(b,law.public_roles,wolf_count=None)
+                    self.assertEqual(physical.wolf_count,count)
+                    components.append(ContinuationInputs(b,state,(),law,None,physical))
+                for weights in ((F(1,3),F(2,3)),(F(3,4),F(1,4))):
+                    expected=normalize(tuple(replace(h,mass=h.mass*w) for w,c in zip(weights,components) for h in c.private.hypotheses))
+                    # Reusing the first component's count with this exact law
+                    # is the old failure, independently of Tree construction.
+                    merged=replace(state,hypotheses=expected)
+                    with self.assertRaisesRegex(ValueError,'Count and joint distribution disagree'):
+                        replace_worlds(components[0].physical,merged.public_roles)
+                    result=mix(tuple(zip(weights,components)))
+                    reverse=mix(tuple(reversed(tuple(zip(weights,components)))))
+                    self.assertEqual(result.private.hypotheses,expected)
+                    self.assertEqual(result.physical.worlds,result.private.public_roles)
+                    self.assertEqual(result.physical.wolf_count_distribution,dict(zip((1,2),weights)))
+                    self.assertIsNone(result.physical.wolf_count)
+                    self.assertEqual(result,reverse)
+                    self.assertIs(result.public,b)
+                    self.assertIs(result.public_state,state)
+                    self.assertEqual([c.physical.wolf_count for c in components],[1,2])

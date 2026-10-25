@@ -15,7 +15,7 @@ def physical_board(public,law,physical=None):
         # The complete explicit law is already canonical: no new Board or
         # count validation is needed. This never replaces a supplied P base.
         if public.world_belief and public.world_belief==law.public_roles:return public
-        return replace_worlds(public,law.public_roles)
+        return replace_worlds(public,law.public_roles,wolf_count=None)
     facts=('player_count','alive','day','phase','history')
     if any(getattr(public,k)!=getattr(physical,k) for k in facts):
         raise ValueError('Public and physical branch facts disagree')
@@ -24,7 +24,10 @@ def physical_board(public,law,physical=None):
     updates={k:getattr(public,k) for k in fields}
     if physical.worlds==law.public_roles and all(getattr(physical,k)==v for k,v in updates.items()):
         return physical
-    return replace_worlds(physical,law.public_roles,**updates)
+    # The supplied law may mix components with different live wolf counts.
+    # A template's scalar count describes its old law, not this replacement.
+    # Let Board derive the count from the complete new law; validation remains.
+    return replace_worlds(physical,law.public_roles,wolf_count=None,**updates)
 
 
 def require_public_observation(public,physical,pending):
