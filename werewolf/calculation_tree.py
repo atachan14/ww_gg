@@ -824,7 +824,7 @@ class CalculationTree:
             return public_tree_payload(result)
         return result
 
-    def read(self,key,expand=False,*,compact=False):
+    def read(self,key,expand=False,*,compact=False,defer_analysis=False):
         with self.lock:
             if key not in self.nodes:raise KeyError(key)
             self.nodes[key].pop('defer_value',None)
@@ -843,9 +843,12 @@ class CalculationTree:
                 arrival=self.nodes[parent].get('day_arrival')
                 if arrival and arrival.get('node'):
                     child=arrival['node'];items[child]=summary(child);pending.append(child)
-                for composition in self._composition_rows(parent):
-                    child=composition['node']
-                    if child!=parent:items[child]=summary(child);pending.append(child)
+                # Native public rendering does not traverse the secret analysis
+                # hierarchy. Its conditional values belong to explicit analysis.
+                if not (defer_analysis and getattr(self.engine,'anonymous_nights',False)):
+                    for composition in self._composition_rows(parent):
+                        child=composition['node']
+                        if child!=parent:items[child]=summary(child);pending.append(child)
                 for choice in self.nodes[parent].get('ability_choices') or []:
                     for attack in choice['attacks']:
                         for branch in attack['branches']:

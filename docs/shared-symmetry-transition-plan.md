@@ -4656,3 +4656,7 @@ See `phase-footer-navigation-2026-10-25.md`. Previous follows actual ancestry; n
 
 ## 2026-10-25 physical convergence count descriptor
 See `count-joint-tree-2026-10-25.md`: derive live-count metadata from the actual mixed P law, preserving complete Q/P histories and constructor validation. No closure normalization or mathematical-policy changes.
+
+
+## 2026-10-25 defer unopened Tree analysis
+See `deferred-tree-analysis-2026-10-25.md`: opt-in public response avoids secret-composition solves; explicit panel remains exact, compatibility output unchanged. Includes same-condition timings and the separate unchanged deep-generated-Current graph visibility limit.

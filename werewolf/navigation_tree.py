@@ -247,10 +247,13 @@ class NavigationTree:
             column=str((b.day-1)*2+(b.phase=='night'))
             totals[column]=max(totals.get(column,0),counts.get(phase,0))
         return totals
-    def read(self,key=None,expand=False,analysis=False,*,compact=False):
+    def read(self,key=None,expand=False,analysis=False,*,compact=False,defer_analysis=False):
         owner,local,tree,names=self.parse(key or self.key(self.document.game.history.root,'0'))
         from .information_set_forecast import Pending
-        try:raw=tree.read(local,expand,compact=True) if compact else tree.read(local,expand)
+        try:
+            if compact and defer_analysis and not hasattr(tree.entry_node,'owned'):
+                raw=tree.read(local,expand,compact=True,defer_analysis=True)
+            else:raw=tree.read(local,expand,compact=True) if compact else tree.read(local,expand)
         except Pending:
             raw=self._raw_summary(tree,local,compact);raw['items']={}
         context=({},self.phase_updates())
