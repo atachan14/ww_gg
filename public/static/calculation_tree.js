@@ -12,16 +12,21 @@
   let pausedForView=false;let expansion=window.TreeExpansion.create();const nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
   const viewport=window.TreeViewport,headerViewport=el('div',undefined,'tree-header-viewport');headerViewport.dataset.treeHeader='';frame.before(headerViewport);
   let scale=1,worldWidth=0,worldHeight=0,scene=null,headerScene=null;
+  const rowCache=new Map(),measurementCache=new WeakMap();let loadGeneration=0;
+  const refresh=window.TreeExpansion.createRefresh({project:()=>render(undefined,true),paint:()=>render(),alive:()=>root.isConnected&&!pausedForView&&rootId!==null});
+  const cancelRender=()=>refresh.cancel(),flushRender=()=>refresh.flush(),refreshModel=()=>refresh.update();
+  async function autoExpand(options){const generation=loadGeneration;try{await expansion.auto('root',entry=>expansion.load(loadGeneration+':'+entry.d.node,()=>load(entry.d.node,true)),refreshModel,{...options,alive:()=>generation===loadGeneration&&options.alive()});if(generation!==loadGeneration)throw new DOMException('Tree changed','AbortError');}finally{if(generation===loadGeneration)flushRender();}}
   const distributions=new Map(),analysisOpen=new Set(),accordionOpen=new Set(),analysisErrors=new Map();
   function win(value,cls=''){const node=el('span',undefined,'probability '+cls),formatted=window.ProbabilityDisplay.formats(value);node.dataset.fraction=formatted.fraction;node.dataset.percent=formatted.percent;let mode=document.querySelector('[name="probability-format"]:checked')?.value;try{mode ||= localStorage.getItem('ww_gg.probability-format');}catch(_){}node.textContent=window.ProbabilityDisplay.text(value,mode);return node;}
   document.addEventListener('probability-format-change',()=>{if(root.isConnected&&rootId!==null)render();});
 
   async function openAnalysis(d,id=d.node){
+   d=nodes.get(d.node)||d;
    if(analysisOpen.has(id)){analysisOpen.delete(id);render();return;}
    analysisOpen.add(id);render();
    if(d.snapshot_only||distributions.has(id))return;
-   try{const data=await expansion.load('analysis:'+id,()=>load(id,false,true));if(data.distribution)distributions.set(id,data.distribution);if(root.isConnected)render();}
-   catch(error){analysisErrors.set(id,error.message);if(root.isConnected)render();}
+   try{const data=await expansion.load(loadGeneration+':analysis:'+id,()=>load(id,false,true));if(data.distribution)distributions.set(id,data.distribution);if(root.isConnected)render();}
+   catch(error){if(error.name!=='AbortError'){analysisErrors.set(id,error.message);if(root.isConnected)render();}}
   }
   function inlineAnalysis(item){
    const d=item.d,rows=distributions.get(item.id)||d.distribution||(d.compositions||[]).map(c=>({id:c.node,label:c.label,probability:c.probability,village_win:nodes.get(c.node)?.village_win??null,children:[]}));
@@ -43,7 +48,7 @@
   function fitArea(){const footerHeight=footer?.getBoundingClientRect().height||0,height=window.visualViewport?.height||window.innerHeight;root.style.setProperty('--tree-footer-height',footerHeight+'px');root.closest('.page-shell')?.style.setProperty('--tree-footer-height',footerHeight+'px');root.style.height=viewport.areaHeight(height,footerHeight)+'px';if(scene)applyView();}
   const footerObserver=new ResizeObserver(fitArea);if(footer)footerObserver.observe(footer);window.addEventListener('resize',fitArea);window.visualViewport?.addEventListener('resize',fitArea);fitArea();
   function keep(d){if(!d.column_phase){d.column_day=1+Math.floor(d.history.length/2);d.column_phase=d.history.length%2?'night':'day';}const old=nodes.get(d.node);nodes.set(d.node,old?.actions&&!d.actions?{...d,actions:old.actions}:d);for(const item of Object.values(d.items||{}))keep(item);}
-  async function load(id,expand=false,analysis=false){const q=new URLSearchParams();if(id!==null)q.set('node',id);if(snapshot)q.set('snapshot',snapshot);if(expand)q.set('expand','1');if(analysis)q.set('analysis','1');const current=new URL(location.href).searchParams.get('current');if(current)q.set('current',current);const scope=window.PersonalNavigation,version=scope?.generation;let d;if(scope?.context)d=await scope.request('tree',{node:id,expand,analysis,snapshot});else{q.set('format','public-tree');q.set('defer_analysis','1');const response=await fetch('/game-tree?'+q,{cache:'no-store'});d=await response.json();if(!response.ok)throw Object.assign(Error(d.error),{detail:d});}if(version!==scope?.generation)throw new DOMException('View changed','AbortError');snapshot=d.snapshot;if(d.navigation_revision!==undefined)root.dataset.navigationRevision=d.navigation_revision;currentNode=d.current_node||'0';displayPath=d.display_path||[];keep(d);return d;}
+  async function load(id,expand=false,analysis=false){const q=new URLSearchParams();if(id!==null)q.set('node',id);if(snapshot)q.set('snapshot',snapshot);if(expand)q.set('expand','1');if(analysis)q.set('analysis','1');const current=new URL(location.href).searchParams.get('current');if(current)q.set('current',current);const scope=window.PersonalNavigation,version=scope?.generation,generation=loadGeneration;let d;if(scope?.context)d=await scope.request('tree',{node:id,expand,analysis,snapshot});else{q.set('format','public-tree');q.set('defer_analysis','1');const response=await fetch('/game-tree?'+q,{cache:'no-store'});d=await response.json();if(!response.ok)throw Object.assign(Error(d.error),{detail:d});}if(version!==scope?.generation||generation!==loadGeneration||!root.isConnected)throw new DOMException('View changed','AbortError');snapshot=d.snapshot;if(d.navigation_revision!==undefined)root.dataset.navigationRevision=d.navigation_revision;currentNode=d.current_node||'0';displayPath=d.display_path||[];keep(d);return d;}
   function inspect(d){root.querySelectorAll('.tree-item').forEach(e=>e.classList.toggle('selected',e.dataset.treeItem===d.node));}
   function guardDragClick(button){let start=null,moved=false;
    button.addEventListener('pointerdown',event=>{start={clientX:event.clientX,clientY:event.clientY};moved=false;});
@@ -55,12 +60,13 @@
    if(!item.expandable)return;
    const opened=expansion.toggle(item.key);render(item.key);
    if(!opened)return;
-   try{await expansion.chain(item.key,entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected){status.textContent='';render(item.key);}});}
-   catch(error){if(root.isConnected&&expansion.isOpen(item.key))status.textContent=error.message;}
+   try{await expansion.chain(item.key,entry=>expansion.load(loadGeneration+':'+entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected){status.textContent='';render(item.key);}});}
+   catch(error){if(error.name!=='AbortError'&&root.isConnected&&expansion.isOpen(item.key))status.textContent=error.message;}
   }
 
-  function render(anchorId){
-   const version=++renderVersion,oldLeft=frame.scrollLeft,oldTop=frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-key="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
+  function render(anchorId,projectOnly=false){
+   if(!projectOnly)cancelRender();
+   const version=projectOnly?renderVersion:++renderVersion,oldLeft=projectOnly?0:frame.scrollLeft,oldTop=projectOnly?0:frame.scrollTop,oldAnchor=anchorId?root.querySelector(`[data-tree-key="${anchorId}"]`):null,anchorRect=oldAnchor?.getBoundingClientRect();
    const entries=[],links=[],ROW=44,GAP=14;let maxPhase=3;
    const native=[...nodes.values()].some(d=>d.native_mode),publication=[...nodes.values()].some(d=>(d.public_claims||[]).some(c=>c==='seer'||c==='medium')),timeline=nodes.get(rootId)?.input_timeline;
    const phaseRoles=new Map();
@@ -150,10 +156,10 @@
     const children=path.has(id)?[]:compositions.map(composition=>{const c=nodes.get(composition.node)||d;return {probability:composition.probability,item:make('composition',base(phase)+1,{d:c,id:c.node,text:composition.label,hideGo:c.node===id,lazy:!c.winner&&!c.actions},choices(c,next,mass(reach,composition.probability)))};});
     return make('board',base(phase),{d,id,arrival,lazy:!d.winner&&!d.win_certificate&&!d.compositions?.length},children);
    }
-   const complete=build(rootId);if(!complete)return;const tree=expansion.project(complete);
+   const complete=build(rootId);if(!complete)return;const tree=expansion.project(complete);if(projectOnly)return;
    const seen=new Set();function collect(item){if(seen.has(item))return;seen.add(item);entries.push(item);for(const child of item.children){collect(child.item);links.push([item,child.item,child.probability,child]);}}collect(tree);
    const occupied=new Set(entries.map(item=>item.column)),columnMap=new Map();let columns=0;
-   const canvas=el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';content.replaceChildren(canvas);headerViewport.replaceChildren(headers);scene=canvas;headerScene=headers;
+   const canvas=scene||el('div',undefined,'compact-tree-canvas'),headers=el('div',undefined,'compact-tree-headers'),headings=[],selectionHeads=[];canvas.style.height=(tree.height+24)+'px';canvas.style.transform='';if(canvas.parentElement!==content)content.replaceChildren(canvas);canvas.querySelectorAll('.compact-tree-lines,.compact-tree-edge,.tree-inline-distribution').forEach(e=>e.remove());const visibleKeys=new Set(entries.map(item=>item.key));for(const child of [...canvas.children])if(!visibleKeys.has(child.dataset.treeKey))child.remove();headerViewport.replaceChildren(headers);scene=canvas;headerScene=headers;
    for(let phase=0;phase<=maxPhase;phase++){
     const {seerCount,mediumCount,hunterCount}=rolesAt(phase),start=base(phase),night=phase%2,labels=[`Day${Math.floor(phase/2)+1}${night?'夜':'昼'}`,...(native?[]:['内訳']),...(night?[...Array.from({length:mediumCount},(_,i)=>'霊能結果'+(mediumCount>1?i+1:'')),...Array.from({length:seerCount},(_,i)=>['占い位置'+(seerCount>1?i+1:''),'占い結果'+(seerCount>1?i+1:'')]).flat(),...Array.from({length:hunterCount},(_,i)=>'護衛位置'+(hunterCount>1?i+1:'')),'襲撃位置',...(native?['死亡通知']:[])]:[...Array(updateCount(phase)).fill('盤面更新'),'処刑位置'])];
     const first=columns,abilityStart=native?1:2,abilityEnd=abilityStart+mediumCount+2*seerCount+hunterCount;
@@ -164,15 +170,17 @@
    // Closed alternatives must not reserve empty ability columns for visible paths.
    for(const item of entries)item.column=columnMap.get(item.column);
    const panelMaxWidth=analysisOpen.size?Math.min(420,Math.max(220,frame.clientWidth-40)):0;
+   let previousRow=null;let probabilityMode='';try{probabilityMode=localStorage.getItem('ww_gg.probability-format')||'';}catch(_){}
    for(const item of entries){
-    let row;if(item.kind==='action'||item.kind==='cutoff'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;if(item.kind==='cutoff')row.dataset.cutoffMarker='';}
+    const signature=JSON.stringify([item.kind,item.text,item.arrival,item.update,item.hideGo,item.id,item.d?.node,item.d?.board_number,item.d?.alive?.length,item.d?.winner,item.d?.snapshot_only,item.d?.village_win,item.d?.public_current,item.title,item.d?.column_day,item.d?.column_phase,root.dataset.treeNavigation,document.querySelector('[name="probability-format"]:checked')?.value,probabilityMode]);
+    const cached=rowCache.get(item.key);let row;if(cached?.signature===signature)row=cached.row;else{ if(item.kind==='action'||item.kind==='cutoff'){row=el('div',item.text,'compact-action-item');row.dataset.actionColumn=item.column;row.title=item.title;if(item.kind==='cutoff')row.dataset.cutoffMarker='';}
     else{const {d}=item;row=el('article',undefined,`tree-item compact-tree-item ${d.winner||''}`);if(item.kind==='board'||!item.hideGo)row.dataset.treeItem=d.node;else row.dataset.treeComposition=d.node;row.classList.toggle('current',d.node===currentNode);row.dataset.phase=`${d.column_day}-${d.column_phase}`;row.dataset.column=item.column;
      const main=el('button',item.update?undefined:(item.kind==='composition'?item.text:(item.arrival?item.arrival+' · ':'')+(d.snapshot_only?'昼開始':`B${d.board_number??d.node}`)+` · ${d.alive.length}人`),'compact-tree-select');if(item.update){row.classList.add('compact-tree-update');for(const line of item.text.split(' / '))main.append(el('span',line,'tree-log-row'));}if(item.kind==='board')row.classList.add('compact-tree-board');if(d.village_win!=null){if(item.kind==='board')row.append(win(d.village_win,'tree-win-corner'));else{main.append(' \u00b7 \u6751 ');main.append(win(d.village_win));}};main.type='button';main.onclick=()=>{inspect(d);openAnalysis(d,item.id);};main.disabled=item.kind!=='board';if(item.kind==='board')main.setAttribute('aria-haspopup','dialog');const go=el('button','→','compact-tree-go');go.type='button';go.disabled=root.dataset.treeNavigation!=='1'||d.public_current===false;go.title='このBoardをCurrentにする';go.setAttribute('aria-label',`B${d.board_number??d.node}へ遷移`);go.onclick=async e=>{e.stopPropagation();if(busy)return;busy=true;go.disabled=true;try{let result;if(window.PersonalNavigation?.context){result=await window.PersonalNavigation.request('current',{snapshot,node:d.node});await window.PersonalNavigation.install(result);busy=false;return;}const response=await fetch('/game-tree/current',{method:'POST',body:new URLSearchParams({snapshot,node:d.node,...(root.dataset.navigationRevision!==undefined?{revision:root.dataset.navigationRevision}:{})})});result=await response.json();if(!response.ok)throw Error(result.error);if(result.html&&window.BoardNavigation){await window.BoardNavigation.install(result);busy=false;}else if(new URL(result.url,location.origin).href===location.href)location.reload();else location.assign(result.url);}catch(error){status.textContent=error.message;go.disabled=false;busy=false;}};row.append(main);if(!item.hideGo&&item.kind==='board'&&d.public_current!==false)row.append(go);}
-    if(item.kind!=='action')row.querySelectorAll('button').forEach(guardDragClick);row.dataset.treeKey=item.key;row.style.top=(item.cy-13.5)+'px';row.dataset.center=String(item.cy);if(item.span)row.dataset.span=item.span.join(',');item.element=row;canvas.append(row);
+    if(item.kind!=='action')row.querySelectorAll('button').forEach(guardDragClick);if(cached)cached.row.remove();rowCache.set(item.key,{signature,row});}row.classList.toggle('current',item.d?.node===currentNode);const go=row.querySelector('.compact-tree-go');if(go)go.disabled=root.dataset.treeNavigation!=='1'||item.d?.public_current===false;row.dataset.treeKey=item.key;if(item.kind==='action')row.dataset.actionColumn=item.column;else row.dataset.column=item.column;if(item.span)row.dataset.span=item.span.join(',');item.element=row;const before=previousRow?previousRow.nextSibling:canvas.firstChild;if(before!==row)canvas.insertBefore(row,before);previousRow=row;
     if(item.kind==='board'&&analysisOpen.has(item.id)){const panel=inlineAnalysis(item);panel.style.maxWidth=panelMaxWidth+'px';canvas.append(panel);item.panel=panel;}
    }
    // The same intrinsic columns and final wrapped heights, measured in batches.
-   const widths=window.TreeLayout.measure(entries,headings,{row:ROW});
+   const widths=window.TreeLayout.measure(entries,headings,{row:ROW,cache:measurementCache});
    tree.height=window.TreeLayout.arrange(entries,{row:ROW,gap:GAP,padding:12});
    for(const item of entries){item.cardTop=item.cy-13.5;item.cy=item.cardTop+item.cardHeight/2;item.span=[item.cardTop,item.cardTop+item.ownHeight];}
    const offsets=[];let width=6;for(let i=0;i<columns;i++){offsets.push(width);headings[i].style.left=width+'px';headings[i].style.width=widths[i]+'px';width+=widths[i]+64;}headers.style.width=width+'px';canvas.style.width=width+'px';for(const h of selectionHeads){h.element.style.left=(offsets[h.start]-3)+'px';h.element.style.width=(offsets[h.end]+widths[h.end]-offsets[h.start]+6)+'px';}
@@ -189,23 +197,23 @@
    for(const [x,y] of arrows.values()){const tip=document.createElementNS(ns,'polygon');tip.setAttribute('points',`${x-5},${y-3} ${x},${y} ${x-5},${y+3}`);tip.setAttribute('fill','#94aa9e');svg.append(tip);}canvas.prepend(svg);worldWidth=width;worldHeight=tree.height+24;applyView();frame.scrollLeft=oldLeft;frame.scrollTop=oldTop;syncHeader();
    requestAnimationFrame(()=>{if(version!==renderVersion)return;if(anchorId){const target=root.querySelector(`[data-tree-key="${anchorId}"]`);if(!target)return;const rect=target.getBoundingClientRect();if(anchorRect){frame.scrollLeft+=rect.left-anchorRect.left;frame.scrollTop+=rect.top-anchorRect.top;syncHeader();}else{frame.scrollLeft=Math.max(0,parseFloat(target.style.left)*scale-frame.clientWidth/2);frame.scrollTop=Math.max(0,parseFloat(target.dataset.center)*scale-frame.clientHeight/2);syncHeader();}}});
   }
-  document.addEventListener('personal-view-loading',()=>{if(root.isConnected){pausedForView=true;expansion.cancel();}});
+  document.addEventListener('personal-view-loading',()=>{if(root.isConnected){pausedForView=true;cancelRender();expansion.cancel();}});
   document.addEventListener('personal-view-change',async()=>{
    if(!root.isConnected)return;
-   pausedForView=false;expansion.cancel();expansion=window.TreeExpansion.create();nodes.clear();distributions.clear();analysisOpen.clear();accordionOpen.clear();analysisErrors.clear();snapshot=null;rootId=null;++renderVersion;
-   try{const d=await load(null,true);rootId=d.node;frame.hidden=false;headerViewport.hidden=false;render();await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,alive:()=>root.isConnected&&!pausedForView});status.textContent='';root.dataset.treeAuto='complete';}
+   pausedForView=false;++loadGeneration;rowCache.clear();scene?.replaceChildren();cancelRender();expansion.cancel();expansion=window.TreeExpansion.create();nodes.clear();distributions.clear();analysisOpen.clear();accordionOpen.clear();analysisErrors.clear();snapshot=null;rootId=null;++renderVersion;
+   try{const d=await load(null,true);rootId=d.node;frame.hidden=false;headerViewport.hidden=false;render();await autoExpand({current:currentNode,path:displayPath,alive:()=>root.isConnected&&!pausedForView});status.textContent='';root.dataset.treeAuto='complete';}
    catch(error){if(error.name!=='AbortError')status.textContent=error.message;}
   });
   document.addEventListener('navigation-board-change',async event=>{
-   if(!root.isConnected)return;root.dataset.navigationUpdate='loading';
+   if(!root.isConnected)return;++loadGeneration;cancelRender();expansion.cancel();root.dataset.navigationUpdate='loading';
    const oldFooter=footer;footer=document.querySelector('.phase-footer');if(oldFooter)footerObserver.unobserve(oldFooter);if(footer)footerObserver.observe(footer);fitArea();
    try{
     const collapse=event.detail?.collapse_owner;
     if(collapse){const entry=[...root.querySelectorAll('[data-tree-item]')].find(e=>e.dataset.treeItem===collapse);if(entry&&expansion.isOpen(entry.dataset.treeKey))expansion.toggle(entry.dataset.treeKey);}
-    await load(rootId,true);render();
-    await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,onlyPathUntilCurrent:!!collapse,alive:()=>root.isConnected&&!pausedForView});
+    const updated=await load(rootId,true);rootId=updated.node;render();
+    await autoExpand({current:currentNode,path:displayPath,onlyPathUntilCurrent:!!collapse,alive:()=>root.isConnected&&!pausedForView});
     status.textContent='';root.dataset.navigationUpdate='complete';
-   }catch(error){status.textContent=error.message;root.dataset.navigationUpdate='error';}
+   }catch(error){if(error.name!=='AbortError'){status.textContent=error.message;root.dataset.navigationUpdate='error';}}
   });
   let pan=null;
   frame.addEventListener('pointerdown',event=>{if(pan||event.button!==0||event.target.closest('button,a,input,select,textarea,.compact-tree-item,.compact-action-item,.compact-tree-edge,.phase-heading,.compact-tree-toggle,.tree-inline-distribution'))return;pan={id:event.pointerId,x:event.clientX,y:event.clientY,left:frame.scrollLeft,top:frame.scrollTop};frame.setPointerCapture(event.pointerId);frame.classList.add('is-panning');event.preventDefault();});
@@ -217,8 +225,8 @@
   (async()=>{
    try{const d=await load(null,true);rootId=d.node;render();}catch(e){if(e.name!=='AbortError')unavailable(e);return;}
    root.dataset.treeAuto='loading';root.setAttribute('aria-busy','true');
-   try{await expansion.auto('root',entry=>expansion.load(entry.d.node,()=>load(entry.d.node,true)),()=>{if(root.isConnected)render();},{current:currentNode,path:displayPath,onlyPathUntilCurrent:displayPath.length>1&&root.dataset.navigationRevision!==undefined,alive:()=>root.isConnected&&!pausedForView});if(root.isConnected){status.textContent='';root.dataset.treeAuto='complete';}}
-   catch(e){if(root.isConnected){status.textContent=e.message;root.dataset.treeAuto='error';}}
+   try{await autoExpand({current:currentNode,path:displayPath,onlyPathUntilCurrent:displayPath.length>1&&root.dataset.navigationRevision!==undefined,alive:()=>root.isConnected&&!pausedForView});if(root.isConnected){status.textContent='';root.dataset.treeAuto='complete';}}
+   catch(e){if(root.isConnected&&e.name!=='AbortError'){status.textContent=e.message;root.dataset.treeAuto='error';}}
    finally{root.setAttribute('aria-busy','false');}
   })();
  }

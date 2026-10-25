@@ -27,3 +27,12 @@ test('repeat and changed panel size are measured afresh without reordered entrie
  measure(rows,headings);assert.equal(rows[0].ownHeight,348);assert.deepEqual(rows.map(x=>x.element),order);
  rows[0].panel=null;measure(rows,headings);assert.deepEqual(rows.map(x=>x.cardHeight),[40,22,54,20]);assert.equal(rows[0].ownHeight,44);
 });
+
+
+test('unchanged cards reuse intrinsic width and height; new columns remeasure height only',()=>{
+ const events=[],cache=new WeakMap(),{rows,headings}=fixture(events);measure(rows,headings,{cache});events.length=0;
+ assert.deepEqual(measure(rows,headings,{cache}),[240,260]);assert.equal(events.filter(x=>x[0]==='read'&&['a','b','c','d','corner'].includes(x[1])).length,0);
+ rows.push({column:1,element:element('new',events,{natural:400,content:500}),children:[]});events.length=0;
+ assert.deepEqual(measure(rows,headings,{cache}),[240,400]);assert.deepEqual(rows.map(x=>x.cardHeight),[40,22,36,20,40]);
+ assert.equal(events.filter(x=>x[0]==='read'&&x[1]==='c').length,1);assert.equal(events.filter(x=>x[0]==='read'&&x[1]==='corner').length,0);
+});

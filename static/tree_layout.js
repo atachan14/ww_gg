@@ -3,11 +3,16 @@
  // Elements must already be attached. Read intrinsic widths together, write
  // every final width together, then read wrapped heights together. No DOM
  // write may interleave a measurement phase and force a layout per Item.
- function measure(entries,headings,{row=44}={}){
+ function measure(entries,headings,{row=44,cache=null}={}){
   const widths=headings.map(h=>Math.ceil(h.getBoundingClientRect().width));
-  for(const item of entries)widths[item.column]=Math.max(widths[item.column],Math.ceil(item.element.getBoundingClientRect().width),Math.ceil((item.element.querySelector('.tree-win-corner')?.getBoundingClientRect().width||0)+2),Math.ceil(item.panel?.getBoundingClientRect().width||0));
-  for(const item of entries){item.element.style.width=widths[item.column]+'px';if(item.panel)item.panel.style.width=widths[item.column]+'px';}
-  for(const item of entries){item.cardHeight=item.element.getBoundingClientRect().height;item.ownHeight=Math.max(row,item.cardHeight+(item.panel?8+item.panel.getBoundingClientRect().height:0));}
+  const pending=[];
+  for(const item of entries){
+   let metric=cache?.get(item.element);
+   if(!metric){metric={intrinsic:Math.max(Math.ceil(item.element.getBoundingClientRect().width),Math.ceil((item.element.querySelector('.tree-win-corner')?.getBoundingClientRect().width||0)+2))};cache?.set(item.element,metric);}
+   widths[item.column]=Math.max(widths[item.column],metric.intrinsic,Math.ceil(item.panel?.getBoundingClientRect().width||0));pending.push([item,metric]);
+  }
+  for(const [item] of pending){const width=widths[item.column]+'px';if(item.element.style.width!==width)item.element.style.width=width;if(item.panel)item.panel.style.width=width;}
+  for(const [item,metric] of pending){const width=widths[item.column];if(!cache||metric.width!==width){metric.height=item.element.getBoundingClientRect().height;metric.width=width;}item.cardHeight=metric.height;item.ownHeight=Math.max(row,item.cardHeight+(item.panel?8+item.panel.getBoundingClientRect().height:0));}
   return widths;
  }
  function arrange(entries,{row=44,gap=14,padding=12}={}){

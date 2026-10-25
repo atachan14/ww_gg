@@ -4664,3 +4664,8 @@ See `deferred-tree-analysis-2026-10-25.md`: opt-in public response avoids secret
 
 ## 2026-10-25 legal victim support and DOM measurement batching
 Separate fixes: public-Q grouping cannot discard P-legal targets; renderer batches width writes/geometry reads without changing tree semantics. See `night-target-support-2026-10-25.md` and `tree-dom-batching-2026-10-25.md` for full mass proofs, bounded normal-UI acceptance and residual limits.
+
+
+## 2026-10-25 Tree render coalescing
+
+Automatic expansion projects each acquired response immediately and coalesces DOM paints; unchanged keyed card DOM and per-element intrinsic/width-dependent measurements are reused. No solver, branch, probability or expansion-policy change. See `tree-render-coalescing-2026-10-25.md` for tests, timings and limits.

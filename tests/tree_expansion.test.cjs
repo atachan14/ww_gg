@@ -22,3 +22,15 @@ test('reopen repeats only the deterministic chain and resets alternative descend
 test('closing an auto-opened descendant cancels its ancestor run awaiting lazy data',async()=>{const s=create();let resolve,loaded=false;const refresh=()=>s.project(node('board','0',[node('composition','0',[node('board','lazy',loaded?[node('action','next')]:[],!loaded)])]));refresh();s.toggle('root');refresh();const request=s.chain('root',()=>new Promise(r=>{resolve=()=>{loaded=true;r();};}),refresh);s.toggle('root/composition:0:0');refresh();resolve();await request;assert.equal(s.isOpen('root'),true);assert.equal(s.isOpen('root/composition:0:0'),false);assert.equal(s.isOpen('root/composition:0:0/board:lazy:0'),false);});
 
 test('convergent Board keeps expansion while another visible incoming branch remains',()=>{const s=create();const make=()=>{const shared={...node('board','public',[node('action','future')]),shared:true};return node('board','0',[node('action','left',[shared]),node('action','right',[shared])]);};let tree=s.project(make());s.toggle('root');s.toggle('root/action:left:0');s.toggle('root/action:right:1');s.toggle('public:public');tree=s.project(make());assert.equal(tree.children[0].item.children[0].item,tree.children[1].item.children[0].item);s.toggle('root/action:left:0');tree=s.project(make());assert.equal(s.isOpen('public:public'),true);assert.equal(tree.children[1].item.children[0].item.children.length,1);s.toggle('root/action:right:1');s.project(make());assert.equal(s.isOpen('public:public'),false);});
+
+
+test('automatic refresh projects every ingestion but coalesces paints; final flush loses no data',()=>{
+ const {createRefresh}=require('../static/tree_expansion.js');let project=0,paint=0,next=0;const jobs=new Map();
+ const s=createRefresh({project:()=>project++,paint:()=>paint++,schedule:fn=>{jobs.set(++next,fn);return next;},cancel:id=>jobs.delete(id)});
+ for(let i=0;i<313;i++)s.update();assert.equal(project,313);assert.equal(paint,0);assert.equal(jobs.size,1);
+ const run=[...jobs.values()][0];jobs.clear();run();assert.equal(paint,1);s.update();s.flush();assert.equal(project,314);assert.equal(paint,2);assert.equal(jobs.size,0);
+});
+test('cancelled refresh cannot repaint a removed or superseded view; new view can render',()=>{
+ const {createRefresh}=require('../static/tree_expansion.js');let live=true,paint=0,project=0,job;const s=createRefresh({project:()=>project++,paint:()=>paint++,alive:()=>live,schedule:fn=>{job=fn;return 1;},cancel:()=>{job=null;}});
+ s.update();s.cancel();assert.equal(job,null);live=false;s.update();s.flush();assert.equal(project,1);assert.equal(paint,0);live=true;s.update();s.flush();assert.equal(project,2);assert.equal(paint,1);
+});
