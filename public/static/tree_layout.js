@@ -1,5 +1,15 @@
 "use strict";
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory();else root.TreeLayout=factory();})(typeof globalThis==='object'?globalThis:this,()=>{
+ // Elements must already be attached. Read intrinsic widths together, write
+ // every final width together, then read wrapped heights together. No DOM
+ // write may interleave a measurement phase and force a layout per Item.
+ function measure(entries,headings,{row=44}={}){
+  const widths=headings.map(h=>Math.ceil(h.getBoundingClientRect().width));
+  for(const item of entries)widths[item.column]=Math.max(widths[item.column],Math.ceil(item.element.getBoundingClientRect().width),Math.ceil((item.element.querySelector('.tree-win-corner')?.getBoundingClientRect().width||0)+2),Math.ceil(item.panel?.getBoundingClientRect().width||0));
+  for(const item of entries){item.element.style.width=widths[item.column]+'px';if(item.panel)item.panel.style.width=widths[item.column]+'px';}
+  for(const item of entries){item.cardHeight=item.element.getBoundingClientRect().height;item.ownHeight=Math.max(row,item.cardHeight+(item.panel?8+item.panel.getBoundingClientRect().height:0));}
+  return widths;
+ }
  function arrange(entries,{row=44,gap=14,padding=12}={}){
   // A skipped ability column still needs a visible lane. Without these routing
   // slots, a long edge can pass directly behind an unrelated collapsed Item.
@@ -46,5 +56,5 @@
   const groups=new Map();for(const edge of edges){const key=edge.merging?'merge:'+edge.to.key:'split:'+edge.from.key;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(edge);}
   return {edges,strokes:[...groups.values()],joins:[...joins.values()],stubs:entries.filter(n=>n.closedContinuation).map(from=>({from,d:`M${from.x+from.width},${from.cy} h12`,x:from.x+from.width+12,y:from.cy}))};
  }
- return {arrange,connect};
+ return {arrange,connect,measure};
 });

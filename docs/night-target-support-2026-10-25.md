@@ -31,4 +31,10 @@ The separate initial-read-cancel/early-edit empty-Tree race remains untouched. A
 
 ## Preserved state
 
-Normal18821 remains0d67f0a; no runtime restart/application of this pending repair, no user saved history changes, push or deployment. Source/test changes retained for review; all test processes ended. Artifacts: night-target-regression.log, night-target-support-final.log, day2-key-replay.log, day2-key-diagnostic2.log, day2-ui-fixed.log, day2-ui-browser.json, day2-ui-server.json; the process-local mathematical source pickle is for local diagnostics only. Existing unrelated test failures/normalization assertions were not changed.
+At the pre-batching checkpoint normal18821 remained0d67f0a; no runtime restart/application of the pending repair had occurred, no user saved history changes, push or deployment. Source/test changes retained for review; all test processes ended. Artifacts: night-target-regression.log, night-target-support-final.log, day2-key-replay.log, day2-key-diagnostic2.log, day2-ui-fixed.log, day2-ui-browser.json, day2-ui-server.json; the process-local mathematical source pickle is for local diagnostics only. Existing unrelated test failures/normalization assertions were not changed.
+
+
+## Subsequent renderer acceptance
+The separately implemented DOM batching reached stable completion on the same normal-UI path. See `tree-dom-batching-2026-10-25.md`; the above timeout is retained as the pre-batching baseline, not the final outcome.
+
+Final normal-runtime acceptance of both fixes is recorded in `tree-dom-batching-2026-10-25.md` (stable87.576s, exact public values retained).

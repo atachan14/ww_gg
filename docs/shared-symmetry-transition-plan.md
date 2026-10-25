@@ -4660,3 +4660,7 @@ See `count-joint-tree-2026-10-25.md`: derive live-count metadata from the actual
 
 ## 2026-10-25 defer unopened Tree analysis
 See `deferred-tree-analysis-2026-10-25.md`: opt-in public response avoids secret-composition solves; explicit panel remains exact, compatibility output unchanged. Includes same-condition timings and the separate unchanged deep-generated-Current graph visibility limit.
+
+
+## 2026-10-25 legal victim support and DOM measurement batching
+Separate fixes: public-Q grouping cannot discard P-legal targets; renderer batches width writes/geometry reads without changing tree semantics. See `night-target-support-2026-10-25.md` and `tree-dom-batching-2026-10-25.md` for full mass proofs, bounded normal-UI acceptance and residual limits.
