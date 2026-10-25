@@ -127,9 +127,12 @@ def public_observation_orbits(engine,source,target,groups,*,counter=False,publis
 def public_night_observations(engine,source,groups,*,counter=False,publish=True):
     """Integrate unobserved bites too, notably every bite behind a guard success."""
     buckets={}
-    # Named-Q boundary: a prevented attack leaves its target unobserved.
-    # Integrate every name instead of pinning an invisible representative.
-    target_groups=tuple((p,) for p in source.public.alive) if source.public.initial_hunter_count else groups
+    # This compatibility boundary conditions each concrete target on P.
+    # Public-Q groups need not be symmetries of the conditioned physical law:
+    # their first member can be a wolf while another member is a legal victim.
+    # Integrate actual names before canonical public convergence. This also
+    # retains unobserved attack choices behind guard success.
+    target_groups=tuple((p,) for p in source.public.alive)
     for group in target_groups:
         living=tuple(p for p in group if p in source.public.alive)
         if not living:continue
