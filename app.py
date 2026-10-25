@@ -203,7 +203,18 @@ def create_app(test_config=None, *, deployment=False):
             from werewolf.information_set_forecast import Pending
             try:
                 doc=navigation_document()
-                with doc.lock:return jsonify(navigation_view(doc).read(request.args.get('node'),request.args.get('expand')=='1',request.args.get('analysis')=='1',compact=request.args.get('format')=='public-tree',defer_analysis=request.args.get('defer_analysis')=='1'))
+                with doc.lock:
+                    keys=request.args.getlist('node')
+                    if len(keys)>8:raise ValueError('At most 8 Tree nodes per request')
+                    view=navigation_view(doc)
+                    def read(key):
+                        row=view.read(key,request.args.get('expand')=='1',request.args.get('analysis')=='1',compact=request.args.get('format')=='public-tree',defer_analysis=request.args.get('defer_analysis')=='1')
+                        row['tree_batch_size']=4
+                        return row
+                    if len(keys)>1:
+                        if request.args.get('analysis')=='1':raise ValueError('Analysis requires one Tree node')
+                        return jsonify(batch=[read(key) for key in keys])
+                    return jsonify(read(keys[0] if keys else None))
             except Pending as exc:return jsonify(error=exc.reason,unsupported=True),422
             except (ValueError,KeyError) as exc:return jsonify(error=str(exc)),409
         from werewolf.information_set_forecast import Pending

@@ -12,10 +12,10 @@
   let pausedForView=false;let expansion=window.TreeExpansion.create();const nodes=new Map(),frame=root.querySelector('.tree-flow-frame');let snapshot=null,rootId=null,busy=false,currentNode='0',displayPath=[],renderVersion=0;
   const viewport=window.TreeViewport,headerViewport=el('div',undefined,'tree-header-viewport');headerViewport.dataset.treeHeader='';frame.before(headerViewport);
   let scale=1,worldWidth=0,worldHeight=0,scene=null,headerScene=null;
-  const rowCache=new Map(),measurementCache=new WeakMap();let loadGeneration=0;
+  const rowCache=new Map(),measurementCache=new WeakMap();let loadGeneration=0,serverBatchSize=1,batchDisabled=false;
   const refresh=window.TreeExpansion.createRefresh({project:()=>render(undefined,true),paint:()=>render(),alive:()=>root.isConnected&&!pausedForView&&rootId!==null});
   const cancelRender=()=>refresh.cancel(),flushRender=()=>refresh.flush(),refreshModel=()=>refresh.update();
-  async function autoExpand(options){const generation=loadGeneration;try{await expansion.auto('root',entry=>expansion.load(loadGeneration+':'+entry.d.node,()=>load(entry.d.node,true)),refreshModel,{...options,alive:()=>generation===loadGeneration&&options.alive()});if(generation!==loadGeneration)throw new DOMException('Tree changed','AbortError');}finally{if(generation===loadGeneration)flushRender();}}
+  async function autoExpand(options){const generation=loadGeneration;try{await expansion.auto('root',entry=>expansion.load(loadGeneration+':'+entry.d.node,()=>load(entry.d.node,true)),refreshModel,{...options,batchSize:window.PersonalNavigation?.context?1:serverBatchSize,ensureMany:loadBatch,alive:()=>generation===loadGeneration&&options.alive()});if(generation!==loadGeneration)throw new DOMException('Tree changed','AbortError');}finally{if(generation===loadGeneration)flushRender();}}
   const distributions=new Map(),analysisOpen=new Set(),accordionOpen=new Set(),analysisErrors=new Map();
   function win(value,cls=''){const node=el('span',undefined,'probability '+cls),formatted=window.ProbabilityDisplay.formats(value);node.dataset.fraction=formatted.fraction;node.dataset.percent=formatted.percent;let mode=document.querySelector('[name="probability-format"]:checked')?.value;try{mode ||= localStorage.getItem('ww_gg.probability-format');}catch(_){}node.textContent=window.ProbabilityDisplay.text(value,mode);return node;}
   document.addEventListener('probability-format-change',()=>{if(root.isConnected&&rootId!==null)render();});
@@ -48,7 +48,19 @@
   function fitArea(){const footerHeight=footer?.getBoundingClientRect().height||0,height=window.visualViewport?.height||window.innerHeight;root.style.setProperty('--tree-footer-height',footerHeight+'px');root.closest('.page-shell')?.style.setProperty('--tree-footer-height',footerHeight+'px');root.style.height=viewport.areaHeight(height,footerHeight)+'px';if(scene)applyView();}
   const footerObserver=new ResizeObserver(fitArea);if(footer)footerObserver.observe(footer);window.addEventListener('resize',fitArea);window.visualViewport?.addEventListener('resize',fitArea);fitArea();
   function keep(d){if(!d.column_phase){d.column_day=1+Math.floor(d.history.length/2);d.column_phase=d.history.length%2?'night':'day';}const old=nodes.get(d.node);nodes.set(d.node,old?.actions&&!d.actions?{...d,actions:old.actions}:d);for(const item of Object.values(d.items||{}))keep(item);}
-  async function load(id,expand=false,analysis=false){const q=new URLSearchParams();if(id!==null)q.set('node',id);if(snapshot)q.set('snapshot',snapshot);if(expand)q.set('expand','1');if(analysis)q.set('analysis','1');const current=new URL(location.href).searchParams.get('current');if(current)q.set('current',current);const scope=window.PersonalNavigation,version=scope?.generation,generation=loadGeneration;let d;if(scope?.context)d=await scope.request('tree',{node:id,expand,analysis,snapshot});else{q.set('format','public-tree');q.set('defer_analysis','1');const response=await fetch('/game-tree?'+q,{cache:'no-store'});d=await response.json();if(!response.ok)throw Object.assign(Error(d.error),{detail:d});}if(version!==scope?.generation||generation!==loadGeneration||!root.isConnected)throw new DOMException('View changed','AbortError');snapshot=d.snapshot;if(d.navigation_revision!==undefined)root.dataset.navigationRevision=d.navigation_revision;currentNode=d.current_node||'0';displayPath=d.display_path||[];keep(d);return d;}
+  async function load(id,expand=false,analysis=false){const q=new URLSearchParams();if(id!==null)q.set('node',id);if(snapshot)q.set('snapshot',snapshot);if(expand)q.set('expand','1');if(analysis)q.set('analysis','1');const current=new URL(location.href).searchParams.get('current');if(current)q.set('current',current);const scope=window.PersonalNavigation,version=scope?.generation,generation=loadGeneration;let d;if(scope?.context)d=await scope.request('tree',{node:id,expand,analysis,snapshot});else{q.set('format','public-tree');q.set('defer_analysis','1');const response=await fetch('/game-tree?'+q,{cache:'no-store'});d=await response.json();assertLive(version,generation);if(!response.ok)throw Object.assign(Error(d.error),{detail:d});}return accept(d,version,generation);}
+  function assertLive(version,generation){if(version!==window.PersonalNavigation?.generation||generation!==loadGeneration||!root.isConnected)throw new DOMException('View changed','AbortError');}
+  function accept(d,version,generation){assertLive(version,generation);serverBatchSize=d.tree_batch_size||1;snapshot=d.snapshot;if(d.navigation_revision!==undefined)root.dataset.navigationRevision=d.navigation_revision;currentNode=d.current_node||'0';displayPath=d.display_path||[];keep(d);return d;}
+  async function loadBatch(entries){
+   const generation=loadGeneration,version=window.PersonalNavigation?.generation,ids=new Map(entries.map(entry=>[generation+':'+entry.d.node,entry.d.node]));
+   return expansion.loadMany([...ids.keys()],async keys=>{
+    const single=async()=>{const rows=[];for(const key of keys){assertLive(version,generation);rows.push(await load(ids.get(key),true));refreshModel();}return rows;};if(batchDisabled)return single();
+    const q=new URLSearchParams({snapshot,expand:'1',format:'public-tree',defer_analysis:'1'});for(const key of keys)q.append('node',ids.get(key));
+    const response=await fetch('/game-tree?'+q,{cache:'no-store'}),data=await response.json();assertLive(version,generation);if(response.status===503&&['work','time'].includes(data.budget_kind)&&keys.length>1){batchDisabled=true;return single();}if(!response.ok)throw Object.assign(Error(data.error),{detail:data});
+    const rows=data.batch||[data];if(rows.length!==keys.length||rows.some((row,i)=>row.node!==ids.get(keys[i])))throw Error('Incomplete Tree batch');
+    return rows.map(row=>accept(row,version,generation));
+   });
+  }
   function inspect(d){root.querySelectorAll('.tree-item').forEach(e=>e.classList.toggle('selected',e.dataset.treeItem===d.node));}
   function guardDragClick(button){let start=null,moved=false;
    button.addEventListener('pointerdown',event=>{start={clientX:event.clientX,clientY:event.clientY};moved=false;});
@@ -212,7 +224,7 @@
     if(collapse){const entry=[...root.querySelectorAll('[data-tree-item]')].find(e=>e.dataset.treeItem===collapse);if(entry&&expansion.isOpen(entry.dataset.treeKey))expansion.toggle(entry.dataset.treeKey);}
     const updated=await load(rootId,true);rootId=updated.node;render();
     await autoExpand({current:currentNode,path:displayPath,onlyPathUntilCurrent:!!collapse,alive:()=>root.isConnected&&!pausedForView});
-    status.textContent='';root.dataset.navigationUpdate='complete';
+    status.textContent='';root.dataset.navigationUpdate='complete';root.dataset.treeAuto='complete';root.setAttribute('aria-busy','false');
    }catch(error){if(error.name!=='AbortError'){status.textContent=error.message;root.dataset.navigationUpdate='error';}}
   });
   let pan=null;

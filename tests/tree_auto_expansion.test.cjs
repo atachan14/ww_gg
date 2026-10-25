@@ -54,3 +54,18 @@ test('scope cancellation stops pending automatic traversal without changing a si
  await Promise.resolve();state.cancel();release();await run;refresh();
  assert.equal(requests,1);assert.equal(state.item('root').next[0].item.next[0].item.expanded,false);
 });
+
+
+test('bounded frontier batches preserve exact BFS request order, zero stops and final graph',async()=>{
+ async function run(batched){const loaded=new Set(),calls=[],sizes=[];const make=()=>n('board','0',[...Array.from({length:9},(_,i)=>e(n('action','a'+i,[e(n('board','b'+i,loaded.has('b'+i)?[e(n('board','tail'+i,[],!loaded.has('tail'+i)))]:[],!loaded.has('b'+i),{d:{node:'b'+i}}))]))),e(n('board','zero',[],true),'0')]);const {state,refresh}=setup(make);const ensure=async item=>{assert.notEqual(item.id,'zero');calls.push(item.id);loaded.add(item.id);};await state.auto('root',ensure,refresh,batched?{batchSize:4,ensureMany:async items=>{sizes.push(items.length);for(const item of items)await ensure(item);}}:{});const graph=()=>{const rows=[],visit=item=>{rows.push([item.key,item.id,item.expanded,item.next.map(x=>x.probability)]);for(const edge of item.children)visit(edge.item);};visit(refresh());return rows;};return {calls,sizes,graph:graph()};}
+ const serial=await run(false),batch=await run(true);assert.deepEqual(batch.calls,serial.calls);assert.deepEqual(batch.graph,serial.graph);assert.ok(batch.sizes.some(n=>n===4));assert.ok(batch.sizes.every(n=>n<=4));
+});
+test('collapse during a frontier batch does not reopen it or suppress independent siblings',async()=>{
+ const loaded=new Set();let release;const make=()=>n('board','0',['a','b'].map(id=>e(n('action',id,[e(n('board',id,loaded.has(id)?[e(n('board','leaf'+id))]:[],!loaded.has(id)))]))));const {state,refresh}=setup(make);const run=state.auto('root',()=>assert.fail(),refresh,{batchSize:4,ensureMany:items=>new Promise(resolve=>release=()=>{for(const item of items)loaded.add(item.id);resolve();})});await Promise.resolve();const a=state.item('root').next[0].item;state.toggle(a.key);refresh();release();await run;const tree=refresh();assert.equal(tree.children[0].item.expanded,false);assert.equal(tree.children[1].item.expanded,true);
+});
+
+
+test('batched Current path preserves manual zero updates and refuses unrelated old futures',async()=>{
+ const loaded=new Set(),calls=[];const make=()=>n('board','0',[e(n('board','old',[],true)),e(n('board','current',loaded.has('current')?[e(n('board','next',[],!loaded.has('next'))),e(n('board','zero-future',[],true),'0')]:[],!loaded.has('current')),'0')]);const {state,refresh}=setup(make);
+ await state.auto('root',()=>assert.fail(),refresh,{current:'current',path:['0','current'],onlyPathUntilCurrent:true,batchSize:4,ensureMany:async items=>{for(const item of items){calls.push(item.id);loaded.add(item.id);}}});assert.deepEqual(calls,['current','next']);assert.equal(state.item('root').next[0].item.expanded,false);assert.equal(state.item('root').next[1].item.expanded,true);
+});

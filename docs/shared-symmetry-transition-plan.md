@@ -4669,3 +4669,8 @@ Separate fixes: public-Q grouping cannot discard P-legal targets; renderer batch
 ## 2026-10-25 Tree render coalescing
 
 Automatic expansion projects each acquired response immediately and coalesces DOM paints; unchanged keyed card DOM and per-element intrinsic/width-dependent measurements are reused. No solver, branch, probability or expansion-policy change. See `tree-render-coalescing-2026-10-25.md` for tests, timings and limits.
+
+
+## 2026-10-25 Ordered Tree frontier transport
+
+Already eligible lazy public nodes are read in the existing BFS order in bounded batches through the same locked evaluator consumer, reducing requests and whole-model projections without changing policies, branches or state ownership. See `tree-frontier-batches-2026-10-25.md` for full output parity and measured stages.

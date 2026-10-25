@@ -11,6 +11,13 @@
    for(const [root,run] of runs)if([...run.paths].some(key=>key===id||((key.startsWith(id+'/')||descendants.has(key))&&!visible.has(key))))runs.delete(root);return false;
   }open.add(id);return true;},
   load(key,fetch){if(pending.has(key))return pending.get(key);const request=Promise.resolve().then(fetch).finally(()=>{if(pending.get(key)===request)pending.delete(key);});pending.set(key,request);return request;},
+  loadMany(keys,fetch){
+   const missing=[...new Set(keys)].filter(key=>!pending.has(key)),resolvers=new Map();
+   for(const key of missing){const promise=new Promise((resolve,reject)=>resolvers.set(key,{resolve,reject}));pending.set(key,promise);resolvers.get(key).promise=promise;}
+   const result=Promise.all(keys.map(key=>pending.get(key)));
+   if(missing.length)Promise.resolve().then(()=>fetch(missing)).then(values=>{if(values.length!==missing.length)throw Error('Incomplete Tree batch');missing.forEach((key,i)=>resolvers.get(key).resolve(values[i]));}).catch(error=>{for(const key of missing)resolvers.get(key).reject(error);}).finally(()=>{for(const key of missing)if(pending.get(key)===resolvers.get(key).promise)pending.delete(key);});
+   return result;
+  },
   item:id=>items.get(id),
   async chain(root,ensure,refresh){const run={paths:new Set([root])};runs.set(root,run);const live=()=>runs.get(root)===run&&open.has(root);let id=root;
    try{while(live()){let item=items.get(id);if(!item)return;run.paths.add(id);
@@ -18,7 +25,7 @@
     if(item.next.length!==1)return;const child=item.next[0].item;if(!child.expandable)return;id=child.key;run.paths.add(id);open.add(id);refresh();
    }}finally{if(runs.get(root)===run)runs.delete(root);}
   },
-  async auto(root,ensure,refresh,{current=null,path=[],onlyPathUntilCurrent=false,alive=()=>true}={}){
+  async auto(root,ensure,refresh,{current=null,path=[],onlyPathUntilCurrent=false,alive=()=>true,ensureMany=null,batchSize=1}={}){
    const run={blocked:new Set()};automatic=run;
    const required=new Set(),memo=new Map(),allowed=new Set(path);
    function reaches(item){if(!item)return false;if(item.id===current||item.d?.node===current){required.add(item.key);return true;}if(memo.has(item.key))return memo.get(item.key);if(allowed.size&&item.kind==='board'&&!item.d?.snapshot_only&&item.id!==undefined&&!allowed.has(item.id)){memo.set(item.key,false);return false;}memo.set(item.key,false);let found=false;for(const edge of item.next)if(reaches(edge.item)){required.add(item.key);found=true;}memo.set(item.key,found);return found;}
@@ -30,7 +37,11 @@
     if(item.d?.pending)continue;
     const marker=item.next.some(edge=>edge.item.kind==='cutoff');
     if(item.d?.win_certificate&&!marker&&(!required.has(item.key)||item.id===current||item.d?.node===current))continue;
-    if(item.lazy){if(dirty){refresh();dirty=false;}await ensure(item);refresh();if(!live(entry))continue;item=items.get(entry.key);if(!item||item.lazy)continue;}
+    if(item.lazy){if(dirty){refresh();dirty=false;}if(ensureMany&&batchSize>1){
+     const batch=[],seen=new Set();
+     for(let j=i;j<queue.length&&batch.length<batchSize;j++){const candidate=queue[j],next=items.get(candidate.key);if(!live(candidate)||visited.has(candidate.key)||seen.has(candidate.key)||!next?.lazy||next.d?.pending)continue;const cutoff=next.next.some(edge=>edge.item.kind==='cutoff');if(next.d?.win_certificate&&!cutoff&&(!required.has(next.key)||next.id===current||next.d?.node===current))continue;seen.add(candidate.key);batch.push(next);}
+     await ensureMany(batch);
+    }else await ensure(item);refresh();if(!live(entry))continue;item=items.get(entry.key);if(!item||item.lazy)continue;}
     visited.add(entry.key);if(!item.expandable)continue;open.add(entry.key);dirty=true;
     for(const edge of item.next)if((!item.d?.win_certificate||edge.item.kind==='cutoff'||required.has(edge.item.key))&&(!onlyPathUntilCurrent||edge.item.kind==='cutoff'||!required.has(item.key)||item.id===current||item.d?.node===current||required.has(edge.item.key))&&(!isZero(edge.probability)||required.has(edge.item.key)))queue.push({key:edge.item.key,parents:entry.parents.concat(entry.key)});
    }}finally{if(automatic===run)automatic=null;if(dirty&&alive())refresh();}

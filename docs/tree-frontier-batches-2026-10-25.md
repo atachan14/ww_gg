@@ -1,0 +1,34 @@
+# Ordered public Tree frontier requests
+
+## Measured cause and bounded change
+
+The persistent public endpoint already serializes reads under the document lock. Parallel HTTP would not parallelize that computation. TreeExpansion now takes up to4 already eligible lazy queue entries in existing breadth-first order. The server advertises this optional transport capability; the old single-node/legacy/personal paths remain unchanged. Multiple node parameters are read in order under the same existing lock; no new evaluator or policy is used. At most8 nodes are accepted as a transport/work bound (not a player/game-depth cap). Analysis remains single-node. Errors are not converted to placeholder branches.
+
+Each batch reserves per-node pending slots, so a concurrent manual load reuses the same promise. Failure rejects/clears every reserved slot for retry. Client generation and view checks precede result ingestion, and its queue still decides which branches open. Exact-zero, Current path, cutoff, collapse and shared-node rules stay in force. Only already queued nonzero/required nodes are batched, never arbitrary closed alternatives. A completed batch is ingested in order and projects/paints once, reducing the same global work that previously repeated per node. We did not truncate, virtualize, change probabilities or parallelize strategy evaluation.
+
+## Evidence before normal activation
+
+Fresh cc2dd76 baseline on normal18821: automatic Tree37.801s,313 HTTP requests,116 layout passes, browser Task19.552s (layout2.086/style2.150/script7.660). This differs from the earlier62.630s/35.519s run and demonstrates host/run variance; do not use the older number as the only comparison.
+
+Isolated ordered-frontier candidate:15.199s,81 completed HTTP requests,no duplicates;50 layout passes, browser Task7.600s (layout0.874/style0.945/script3.149). Same741 Boards and66 manual Day2-night Boards. All2094 Item rows,2169 exact-probability connections and1728 expanded/closed toggles compare exactly with the fresh baseline, including keys, labels, exact fractions and order. Physical node reads are not removed:314 reads in82 server requests across the complete automatic window including carry-in (81 observed HTTP requests after the measurement origin). Auto server active8.629s; Navigation.read7.974s/expand4.028s/outer solve0.647s/JSON0.387s are nested and must not be added.
+
+The separate Update request took104.064s active,103.624s inside the existing exact InformationSetForecast.solve. Full Update was104.120s visible, versus110.812s in the fresh baseline; no engine optimization or speed claim for Update. Initial Tree18.665s versus23.476s. These are separate stages, not included in the15.199s auto window.
+
+64 Tree JS tests and19 affected API tests pass. Tests compare complete ordered batch responses against sequential independent sessions, retain full/numeric assertions and subsequent compatibility responses, enforce bounds/error handling, exact BFS order, zero/manual Current paths, collapse, per-node dedup and failed-batch retry. Original7p actual Table browser checks pass for narrow/zoom/manual collapse/Current/reload and delayed analysis responses. Final normal activation and delayed whole-batch check are recorded below when completed.
+
+No full-suite, new private feature, unsupported policy, saved-data deletion, push or external deployment claim. Full MAX Update remains expensive. Headers/SVG and model/layout still rebuild per refresh, but fewer refreshes are needed. No viewport truncation or evaluator ownership redesign is included.
+
+
+## Final normal18821 acceptance and limits
+
+Local normal server was switched from verifiedPID23340 toPID32012 with the same existing launcher/port/cookie name; saved journals were not deleted. Auto Tree12.974s,79 completed observed HTTP requests,no duplicates/errors,46 layout passes. Browser Task5.923s, layout0.659/style0.731/script2.477. Initial Tree18.405s and separate Update95.543s are outside the auto window.741 Boards/66 Day2-night Boards remain, all2094 rows/2169 edges/1728 toggles equal the fresh baseline exactly; logical expanded-node sets also equal the isolated candidate.79 vs81 HTTP windows differ in carry-in/batch frontier grouping, not missing expanded nodes.
+
+The old62.630s/35.519s browser result and the fresh37.801s/19.552s baseline both remain documented. Single runs vary; this stage does not guarantee a fixed speed ratio. The primary safe gain is fewer HTTP exchanges and full model/projection/layout passes, with exact output equality; no game-model optimization is attributed.
+
+Normal core browser checks passed through narrow/zoom/inline analysis/manual collapse/reopen/Current/reload and delayed single-analysis-response protection. An extra test then timed out trying to intercept a whole batch on an already cached warm reload: only the root request was made, so that fixture's premise was false. Its assumption was removed, not the stale-response invariant. `dev_previews/verify_frontier_requests.cjs` replaces it with fresh5-player two-CO fixtures: a completed whole batch held across a new Current generation is ignored, Current finishes and no stale/error appears; all pass. The first normal CLI therefore exited1 at this obsolete extra gate, and is not reported as an entirely passing CLI.
+
+The same small fixtures verify request work-budget fallback: if a multi-node transport hits a structured503 work/time bound, it disables batching for that mounted Tree and retries through the existing scalar read/budget path. No approximation or budget exemption is added. Scalar failures still surface. Memory, cancellation, unknown503 errors and unsupported policy errors are not retried. Fresh synthetic work503 completes, synthetic memory503 stays visible with no scalar retry. Error responses are generation-checked before handling, so superseded errors cannot overwrite Current. No large-case behavior changes were needed.
+
+Final verification:64 JS tests,19 affected API tests; isolated full original-case browser exit0; normal core acceptance as above; dedicated fresh batch/resource browser exit0. No full repository-suite claim or old unrelated test normalization. Normal server/committed-asset HTTP checks are recorded in the final response. Remaining significant cost is existing exact MAX Update (~95-104s here), not Tree DOM; per-paint graph building, serialization, and sequential reads inside each batch remain. No additional optimization stage started.
+
+Artifacts: `day2-frontier-baseline-browser.json/graph.json`, `day2-frontier-candidate-browser.json/server.json/graph.json`, `day2-frontier-normal-browser.json/graph.json`, matching .log/.png files, `frontier-js.log`, `frontier-api-regression.log`, `frontier-request-browser.log`. All run sessions collected; only the normal server is left intentionally running.

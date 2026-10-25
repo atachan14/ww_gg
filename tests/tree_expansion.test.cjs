@@ -34,3 +34,11 @@ test('cancelled refresh cannot repaint a removed or superseded view; new view ca
  const {createRefresh}=require('../static/tree_expansion.js');let live=true,paint=0,project=0,job;const s=createRefresh({project:()=>project++,paint:()=>paint++,alive:()=>live,schedule:fn=>{job=fn;return 1;},cancel:()=>{job=null;}});
  s.update();s.cancel();assert.equal(job,null);live=false;s.update();s.flush();assert.equal(project,1);assert.equal(paint,0);live=true;s.update();s.flush();assert.equal(project,2);assert.equal(paint,1);
 });
+
+
+test('batch slots deduplicate manual loads and clear failed slots for retry',async()=>{
+ const s=create();let resolve,calls=0;const batch=s.loadMany(['a','b'],keys=>{calls++;assert.deepEqual(keys,['a','b']);return new Promise(r=>resolve=r);});const single=s.load('b',()=>assert.fail('reserved in batch'));await Promise.resolve();resolve([11,22]);assert.deepEqual(await batch,[11,22]);assert.equal(await single,22);assert.equal(calls,1);await Promise.resolve();await assert.rejects(s.loadMany(['c'],()=>[]),/Incomplete/);await Promise.resolve();assert.equal(await s.load('c',()=>33),33);
+});
+
+
+test('failed frontier request rejects every reserved slot and permits exact retry',async()=>{const s=create();await assert.rejects(s.loadMany(['a','b'],()=>Promise.reject(Error('server failure'))),/server failure/);await Promise.resolve();assert.deepEqual(await s.loadMany(['a','b'],async keys=>keys.map(x=>x+' done')),['a done','b done']);});
