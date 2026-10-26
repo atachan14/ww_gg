@@ -26,4 +26,15 @@ New6JS behavior cases: pending→complete legal widgets/payload1; manual2preserv
 
 New3HTTP cases check actual staged/roles/completed markup, target0rejection without mutation, validtarget1advance with unchanged exact symmetric value, and existing history reuse without target/new occurrence. Combined staged/phase-footer/navigation/deployment26Python tests pass. No old numerical expectations were edited. The unrelated3model/phase failures and mixed-evaluator-day owner-label expectation from prior milestones were not rerun or fixed here. Full repository/large hunter oracle not rerun.
 
-Real browser after local activation pending. No push/external deployment/saved-data deletion. All data created for this check is ephemeral; old saved journals are preserved.
+Real browser after local activation completed on normal http://127.0.0.1:18821/main, implementation 5bd611f, server PID25732. No push/external deployment/saved-data deletion. All data created for this check is ephemeral; old saved journals are preserved.
+
+
+## Normal browser acceptance
+
+The original three-player citizen2/wolf1 case now completes staged calculation with enabled legal controls and a valid checked target. Selecting visible Player2 and using the Footer advances h0/revision0 to h1/revision1 with exact value1/3 and no Invalid player response.
+
+Five-player citizen4/wolf1 verifies a nonterminal adjacent-phase roundtrip: h0 Day1day (7/15) -> h1/revision1 Day1night (1/3) -> h0/revision2 -> existing h1/revision3, then reload preserves h1/revision3. The cumulative result remains7/15. Existing history is reused rather than a new occurrence created. Source/public/live HTTP bytes match for both changed JS assets. Screenshot: .artifacts/footer-target-normal.jpg.
+
+Browser request bodies were not directly recorded: the exact target0 JSON proof is from the production JS handler executed in the bounded Node fixture against the independently observed disabled-control state. The old normal browser did reproduce HTTP400; the new normal browser completed the operations above.
+
+No further optimization was started. No active tests remain. The prior three mathematical/phase expectation disagreements and evaluator-owner label expectation remain outside this fix and unchanged. No approval blocker, push, external deployment or saved-data deletion.
