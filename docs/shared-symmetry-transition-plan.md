@@ -4674,3 +4674,8 @@ Automatic expansion projects each acquired response immediately and coalesces DO
 ## 2026-10-25 Ordered Tree frontier transport
 
 Already eligible lazy public nodes are read in the existing BFS order in bounded batches through the same locked evaluator consumer, reducing requests and whole-model projections without changing policies, branches or state ownership. See `tree-frontier-batches-2026-10-25.md` for full output parity and measured stages.
+
+
+## 2026-10-26 Shared Current adoption/evaluation flow
+
+Public UI adoption is opt-in staged: validation and journal commit remain exact; read-only role/win stages use a captured immutable Current with its existing calculation owner. The journal lock is not held through exploration; existing global calculation serialization and cooperative cancellation remain. Complete forecast reuse is distinct from value-only shortcuts and occurrence-specific cumulative mass. See `staged-navigation-evaluation-2026-10-26.md`.

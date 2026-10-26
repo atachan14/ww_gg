@@ -67,7 +67,7 @@
     const streaming=new Headers(init.headers||(input instanceof Request?input.headers:undefined)).get('Accept')==='application/x-ndjson';
     const treeRead=url.pathname==='/game-tree'&&method==='GET';
     if(url.origin!==location.origin||(method!=='POST'&&!streaming&&!treeRead))return nativeFetch.apply(this,arguments);
-    const readonly=treeRead||['/main','/table-preview','/private-view','/comparison'].includes(url.pathname);
+    const readonly=treeRead||['/main','/table-preview','/private-view','/comparison','/navigation/calculation'].includes(url.pathname);
     const signal=init.signal||(input instanceof Request?input.signal:null);
     return new Promise((resolve,reject)=>{
       const task={input,init,key:treeRead?url.pathname+url.search:url.pathname,readonly,id:readonly?crypto.randomUUID().replaceAll('-',''):null,resolve,reject,cancelled:false,sequence:++sequence,detach:()=>{}};
@@ -75,7 +75,7 @@
       task.cancel=cancel;
       if(signal?.aborted){cancel();return;}
       signal?.addEventListener('abort',cancel,{once:true});task.detach=()=>signal?.removeEventListener('abort',cancel);
-      if(active?.readonly&&(!readonly||!treeRead&&(active.key===task.key||active.key==='/main')))active.cancel();
+      if(active?.readonly&&(!readonly||!treeRead&&(active.key===task.key||['/main','/navigation/calculation'].includes(active.key))))active.cancel();
       if(readonly){const old=reads.get(task.key);if(old){old.cancel();old.detach();}reads.set(task.key,task);}
       else writes.push(task); // Accepted edits/saves are never discarded/coalesced.
       paint();pump();

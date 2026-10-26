@@ -90,14 +90,19 @@ def create_app(test_config=None, *, deployment=False):
                 from werewolf.navigation_tree import NavigationTree
                 doc.views=NavigationTree(doc,app.jinja_env.globals['role_order'])
             return doc.views
-        def render_navigation(doc,*,roles_only=False):
-            with doc.lock:
-                from werewolf.navigation_current import NavigationCurrent
-                current=NavigationCurrent(doc.game)
-                current.data=current.data.updated(revision=doc.revision)
-                html,status=render_main(current.data.to_game(),role_state=current.roles,roles_only=roles_only,navigation_current=current)
-                return html
-        register_navigation(app,navigation_store,navigation_owner,render_navigation)
+        from werewolf.navigation_evaluation import capture as capture_navigation
+        def render_navigation(doc,*,roles_only=False,evaluation=None,staged=None):
+            staged=(request.headers.get('X-WW-Staged')=='1') if staged is None else staged
+            evaluation=evaluation or capture_navigation(doc,details=request.args.get('details')=='1')
+            current=evaluation.current
+            current.data=current.data.updated(revision=evaluation.revision)
+            deferred=roles_only or staged
+            forecast=None if deferred else evaluation.forecast()
+            html,status=render_main(current.data.to_game(),role_state=current.roles,roles_only=deferred,
+                navigation_current=current,prepared_forecast=forecast,future_deferred=deferred,
+                navigation_calculation_pending=bool(staged))
+            return html
+        register_navigation(app,navigation_store,navigation_owner,render_navigation,capture=capture_navigation)
         def render_personal(view):
             from werewolf.navigation_current import NavigationCurrent
             current=NavigationCurrent(view.game)
@@ -403,7 +408,7 @@ def create_app(test_config=None, *, deployment=False):
             raise ValueError("生存している対象を1人選んでください。")
         return int(values[0])
 
-    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None, private_context=None,personal_forecast=None,future_deferred=False):
+    def render_main(state, error=None, status=200, night_context=None, *, role_state=None, roles_only=False, generated_current=None, navigation_current=None, private_context=None,personal_forecast=None,future_deferred=False,prepared_forecast=None,navigation_calculation_pending=False):
         if navigation_current is not None:
             role_state=navigation_current.roles;state=navigation_current.data.to_game()
         if generated_current is not None:
@@ -418,7 +423,7 @@ def create_app(test_config=None, *, deployment=False):
         except DisclosureInconsistent as exc:
             disclosure_error=str(exc);role_state=structural_roles(state);rules,progress=role_state.replay_result
         strategy = Strategy(**state["policy"])
-        cutoff_details=False
+        cutoff_details=bool(prepared_forecast is not None and 'win_cutoff_details' in getattr(prepared_forecast,'pending_metrics',()))
         manual = state.get("seer_mode") == "information-fixed-v1"
         from werewolf.seer_manual import pending as manual_pending
         role_evidence_pending = manual_pending(state) if manual and not progress.finished and generated_current is None else None
@@ -452,7 +457,7 @@ def create_app(test_config=None, *, deployment=False):
                 with calculation_budget(app.config.get('MANUAL_CALC_MAX_WORK',DEFAULT_MAX_WORK) if manual else None, max_seconds=app.config.get('MANUAL_CALC_MAX_SECONDS',DEFAULT_MAX_SECONDS) if manual else None):
                     from werewolf.seer_future_uniform import FuturePending
                     tick()  # Enforce the request deadline even when a complete snapshot is cached.
-                    forecast=personal_forecast
+                    forecast=prepared_forecast if prepared_forecast is not None else personal_forecast
                     if app.config.get('ANONYMOUS_NIGHT_PREVIEW') and generated_current is None and navigation_current is None:
                         from werewolf.anonymous_value import initial_forecast
                         forecast=initial_forecast(role_state.owner)
@@ -515,12 +520,12 @@ def create_app(test_config=None, *, deployment=False):
         players=player_view.players
         from werewolf.seer_manual import report_slots
         seer_slots=report_slots(board,rules,navigation_current.source.public_state.rosters if navigation_current is not None else None)
-        return render_template("main.html", future_deferred=future_deferred,private_context=private_context,seer_slots=seer_slots,navigation_log=navigation_current.public_log if navigation_current is not None else None, cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
+        return render_template("main.html", navigation_calculation_pending=navigation_calculation_pending,future_deferred=future_deferred,private_context=private_context,seer_slots=seer_slots,navigation_log=navigation_current.public_log if navigation_current is not None else None, cutoff_details=cutoff_details, navigation_current=navigation_current.metadata if navigation_current is not None else None, generated_current=generated_current.metadata if generated_current is not None else None,current_token=request.args.get("current",""), guard_scope_pending=guard_scope_pending, viewpoint_seed=viewpoint_seed, night_context=night_context, public_log=migrate(state), dawn_flow=dawn_enabled(state), disclosure_error=disclosure_error, future_preview=manual, future_active=manual and strategy.disclosure_for("seer")=="all", state=state, co_game=session.setdefault("co_display_game", secrets.token_hex(8)), co_labels=CO_LABELS, role_labels=({**ROLE_LABELS,"seer":("占い師（手動入力＋未来均等）" if manual and strategy.disclosure_for("seer")=="all" else "占い師（手動のみ）")} if manual else ROLE_LABELS), co_renderers=({**CO_RENDERERS,"seer":"co_roles/seer_manual.html"} if manual else CO_RENDERERS), seer_pending=seer_pending, display_selection=display_selection, report_opportunities=available_medium_opportunities(board) if not finished else (), report_colors={(r.day,r.reporter,r.target):r.color for r in board.reports}, rules=rules, progress=progress,
                                board=board, finished=finished, rates=primary, cumulative=cumulative,
                                players=players, player_view=player_view, error=error, strategy_seed={'co':state.get('strategy_ui',co_editor(state.get('claim_policy',{}))), 'model':state.get('model','equal'), 'policy':state['policy'], 'finished':finished or bool(night_context) or generated_current is not None or navigation_current is not None, 'model_locked':bool(state['history']), 'allow_self_bite':rules.allow_self_bite, 'board_key':str(state['players'])+'-'+str(state.get('wolves',1))+'-'+','.join(str(x['target']) for x in state['history']), 'future_available':manual, 'roles':[r for r in ('villager','medium','seer','hunter','wolf') if board.initial_role_counts[r]]}, co_groups=role_state.groups if not finished and not seer_pending and state.get("model")=="group" else [], claim_policy=ClaimPolicy(**state.get("claim_policy", {})), counts=({} if disclosure_error else role_state.counts)), status
 
     def wants_calculation_stream():
-        return (request.path in ('/main','/table-preview','/private-view') and
+        return (request.path in ('/main','/table-preview','/private-view','/navigation/calculation') and
                 request.headers.get('Accept')=='application/x-ndjson')
 
     def calculation_stream(events,*,view='public'):
@@ -604,7 +609,7 @@ def create_app(test_config=None, *, deployment=False):
         if request.method=='POST':g.calculation_previous_session=deepcopy(dict(session))
         if request.path=='/calculation-cancel':return
         token=request.headers.get('X-WW-Calculation-ID')
-        readonly=(request.path in ('/main','/table-preview','/private-view','/comparison') or request.path=='/game-tree' and request.method=='GET')
+        readonly=(request.path in ('/main','/table-preview','/private-view','/comparison','/navigation/calculation') or request.path=='/game-tree' and request.method=='GET')
         if token is not None and readonly:
             if not calculation_jobs.valid(token):return jsonify(error='Invalid calculation request ID'),400
             owner=session.setdefault('co_display_game',secrets.token_hex(8))
@@ -894,6 +899,30 @@ def create_app(test_config=None, *, deployment=False):
             created=session['game'];session['game']=project(created,upgrade(migrate({**created,'_owner_game_id':secrets.token_hex(8)})))
         return redirect(url_for("main"), code=303)
 
+    @app.get('/navigation/calculation')
+    def navigation_calculation():
+        if not app.config.get('PERSISTENT_TREE_PREVIEW'):abort(404)
+        doc=navigation_document()
+        expected_occurrence=request.args.get('occurrence');expected_revision=request.args.get('revision')
+        with doc.lock:
+            if expected_occurrence!=doc.game.current or expected_revision!=str(doc.revision):return jsonify(error='Board changed',stale=True),409
+        request_id=request.args.get('request_id');details=request.args.get('details')=='1'
+        def events():
+            # The existing global calculation slot is held here. Named boundary
+            # projection may touch the shared evaluator, so capture only now.
+            evaluation=capture_navigation(doc,details=details)
+            if evaluation.occurrence!=expected_occurrence or str(evaluation.revision)!=expected_revision:raise ValueError('Board changed')
+            identity={**evaluation.identity,'request_id':request_id}
+            if not evaluation.is_current():raise ValueError('Board changed')
+            yield dict(event='roles',html=render_navigation(doc,roles_only=True,evaluation=evaluation,staged=False),**identity)
+            forecast=evaluation.forecast()
+            if not evaluation.is_current():raise ValueError('Board changed')
+            html=render_navigation(doc,evaluation=evaluation,staged=False)
+            reason=getattr(forecast,'reason',None)
+            yield dict(event='complete',html=html,calculation_status='blocked' if reason else 'complete',
+                value_complete=not bool(reason),details_complete=not bool(reason or getattr(forecast,'pending_metrics',())),**identity)
+        return calculation_stream(events)
+
     @app.get("/main")
     def main():
         shell=request.headers.get('Sec-Fetch-Dest')=='document' and request.args.get('complete')!='1' and not wants_calculation_stream()
@@ -902,7 +931,7 @@ def create_app(test_config=None, *, deployment=False):
             return redirect(url_for("top"), code=303)
         if app.config.get('PERSISTENT_TREE_PREVIEW'):
             from werewolf.information_set_forecast import Pending
-            try:return render_navigation(navigation_document())
+            try:return render_navigation(navigation_document(),staged=shell or request.headers.get('X-WW-Staged')=='1')
             except Pending as exc:
                 return render_main(state,'この履歴は従来の盤面表示を維持しています：'+exc.reason)
         token=request.args.get('current')

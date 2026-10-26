@@ -10,7 +10,7 @@ from .navigation_store import StaleNavigation
 from .seer_acquisition import SeerReport
 from .information_set_forecast import Pending
 
-def register_navigation(app,store,owner,render=None):
+def register_navigation(app,store,owner,render=None,*,capture=None):
     bp=Blueprint('navigation',__name__)
     def document():
         if not app.config.get('PERSISTENT_TREE_PREVIEW'):return None
@@ -18,18 +18,20 @@ def register_navigation(app,store,owner,render=None):
         if identity is None:raise ValueError('Start a game first')
         return identity,data,store.get(identity,data)
     def summary(doc):
-        current=NavigationCurrent(doc.game);row=doc.game.occurrence
+        evaluation=capture(doc,details=request.args.get('details')=='1') if capture else None
+        current=evaluation.current if evaluation else NavigationCurrent(doc.game);row=current.occurrence
+        staged=request.headers.get('X-WW-Staged')=='1'
         from .forecast_result import Forecast
         from fractions import Fraction
-        forecast=(Forecast(Fraction(1),()) if doc.game.node.win_certificate() else current.roles.forecast()) if not current.roles.progress.finished else None
-        pending=getattr(forecast,'reason',None)
+        forecast=(None if staged else evaluation.forecast() if evaluation else (Forecast(Fraction(1),()) if doc.game.node.win_certificate() else current.roles.forecast())) if not current.roles.progress.finished else None
+        pending='calculation_queued' if staged and not current.roles.progress.finished else getattr(forecast,'reason',None)
         total=None if pending else current.roles.progress.total_values(forecast)
         result=dict(revision=doc.revision,current=current.metadata,root=doc.game.history.root,
             path=[r.key for r in doc.game.history.path(row.key)],
             occurrences=[dict(key=r['key'],parent=r['parent'],edge_kind=r['edge_kind'],selection_weight=r['selection_weight']) for r in doc.game.history.export()],
             board=dict(day=current.roles.board.day,phase=current.roles.board.phase,alive=list(current.roles.board.alive),claims=list(current.roles.board.claims)),
             village_win=None if total is None else str(total.village_win),pending=pending)
-        if render is not None:result['html']=render(doc)
+        if render is not None:result['html']=render(doc,evaluation=evaluation,staged=staged) if capture else render(doc)
         return result
     @bp.get('/navigation')
     def read():
