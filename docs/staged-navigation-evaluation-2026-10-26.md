@@ -35,3 +35,14 @@ Unprofiled separate cold owners, same fixture/initial Tree request sequence: bef
 Final affected Python suite41 passed (including independent terminal-support enumeration, differing posterior/child identity, mutable compatibility, legacy derived cache and navigation/Tree tests). Existing JS71 and stream/cancellation18 passed in Stage1. The normal browser result is recorded after final application. No full repository pass is claimed; preexisting unrelated disagreements remain outside this work.
 
 Next potential optimization requires separating actual physical/public child construction and normalization work without skipping semantic validation or private correlations; it is a separate measured task, not included here.
+
+
+## Normal18821 final verification
+
+Stage1 commit98f431b; Stage2 implementation555e794. Controlled normal-server restart touched only the identified WW_GG listener, PID34168 afterward. No saved journals/data deleted. HTTP JS bodies equal static and public/static for board_navigation, board_table, calculation_tree and calculation_wait.
+
+Fresh isolated Edge profile on normal http://127.0.0.1:18821/main, actual Table input for the original7-player configuration: initial Main plus auto Tree17.643s; update adoption46.2ms with exact role cells available; completed win83.1704s; completed automatic Tree94.8156s total after Update. This is browser wall time, not pure solve time. Server navigation_calculation budget completion was recorded separately. Value89/224; Current h1 survived reload with89/224;390px view remained within viewport; Runtime exceptions none. Screenshot .artifacts/navigation-final-normal.png. The probe counted749 data-tree-item elements; this selector includes navigable non-Board items and must not be equated with the prior741 compact-tree-board metric. This final probe did not redo the prior full graph fingerprint comparison; full exact source/Forecast and affected branch regressions were verified separately.
+
+Local terminal microbenchmark200,000 reads: previous expression0.144162s, cached result0.038843s. It demonstrates reduced local repeated work, not an equivalent end-to-end speedup. Unprofiled end-to-end85.08-to84.32s change remains a single-pair observation. The dominant future search cost remains; no broad next optimization was silently added.
+
+All launched final test/benchmark/browser sessions completed (73259,90157,95753,40178); no pending verification worker. Normal server remains running. Only generated .artifacts and preexisting docs/previews are untracked.
