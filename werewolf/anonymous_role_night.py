@@ -78,9 +78,9 @@ def compile_abilities(engine,source,groups):
                     steps=tuple(replace(step,public_fact=child.public.winner) if step.kind=='death_notice' else step for step in symbols)
                     if child.public.winner is None and any(c in ('seer','medium') for c in b.claims):
                         from .tree_public_updates import publication_label
-                        from .public_convergence import public_transport,transport_source
+                        from .public_convergence import public_transport
                         mapping=public_transport(source,after,groups)
-                        label=publication_label(transport_source(child,mapping),transport_source(after,mapping))
+                        label=publication_label(child,after,mapping=mapping)
                         steps=(*steps,SymbolStep('publication',None,label))
                     wolves=tuple(p for p in range(1,b.player_count+1) if h.roles[0]&(1<<(p-1)))
                     scans=tuple(sorted((a.player,a.target) for a in acquired if a.day==b.day+1))

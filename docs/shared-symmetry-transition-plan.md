@@ -4692,3 +4692,8 @@ Public UI adoption is opt-in staged: validation and journal commit remain exact;
 ### 2026-10-27 night public conditioning investigation
 
 See docs/night-conditioning-reuse-2026-10-27.md.26,383 condition calls/2,613 complete inputs cost only1.453CPU seconds. A calculation-owned bounded no-hunter public-outcome memo was trialled and rejected: two cold unprofiled alternating pairs had slower wall and only0.7-1.3%CPU decrease. Exact89/224, all candidates/horizons, source fingerprint and expansion/cache records matched. No production change, no private-state equivalence relaxation; stableef24b6d retained. Diagnostic extension and nonexecutable candidate patch preserve the negative result.
+
+
+### 2026-10-27 remove display-only full joint transport
+
+Full native-clock call profile identifies84,910 full-source renamings used only by publication labels. Labels now project only published seer/medium reports and claims, retaining exact mapped order; mathematical/Current/convergence transforms remain. No cache or policy change. Two alternating unprofiled pairs improve evaluatorwall10.7-11.5% andCPU5.0-6.1%, with89/224/full candidate/horizon/source fingerprint/expansion parity. See docs/public-label-projection-performance-2026-10-27.md for profiler overhead, exact old-flow control and baseline failure evidence.

@@ -70,10 +70,25 @@ def input_timeline(data,role_order):
         events.extend(group);snapshots.append(dict(label=event_label(group),state=capture(events,index+1),probability=None))
     return dict(before=before,updates=snapshots,kind='recorded_inputs')
 
-def publication_label(before,after):
-    events=[dict(kind='seer',player=r.player,day=r.acquired_day,published_day=r.published_day,target=r.target,color=r.color) for r in after.past if r not in before.past]
-    events.extend(dict(kind='medium',player=r.reporter,day=r.day,target=r.target,color=r.color) for r in after.public.reports if r not in before.public.reports)
-    events.extend(dict(kind='co',player=p,role=claim) for p,claim in enumerate(after.public.claims,1) if claim!=before.public.claims[p-1])
+def _publication_facts(source,mapping):
+    public=source.public
+    if mapping is None or mapping==tuple(range(1,public.player_count+1)):
+        return source.past,public.reports,public.claims
+    from .public_convergence import transport_record
+    # Match transport_source's visible projection exactly: seer reports sort
+    # after renaming; medium report order is retained; claims use named slots.
+    past=tuple(sorted(transport_record(r,mapping) for r in source.past))
+    reports=tuple(transport_record(r,mapping) for r in public.reports)
+    claims=tuple(c for p,c in sorted((mapping[p-1],c) for p,c in enumerate(public.claims,1)))
+    return past,reports,claims
+
+
+def publication_label(before,after,*,mapping=None):
+    before_past,before_reports,before_claims=_publication_facts(before,mapping)
+    after_past,after_reports,after_claims=_publication_facts(after,mapping)
+    events=[dict(kind='seer',player=r.player,day=r.acquired_day,published_day=r.published_day,target=r.target,color=r.color) for r in after_past if r not in before_past]
+    events.extend(dict(kind='medium',player=r.reporter,day=r.day,target=r.target,color=r.color) for r in after_reports if r not in before_reports)
+    events.extend(dict(kind='co',player=p,role=claim) for p,claim in enumerate(after_claims,1) if claim!=before_claims[p-1])
     return event_label(events) or '更新なし'
 
 

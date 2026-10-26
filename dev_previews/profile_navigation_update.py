@@ -9,7 +9,7 @@ from app import create_app
 from werewolf.information_set_forecast import InformationSetForecast
 from werewolf.grouped_forecast import GroupedForecast
 
-parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--sample',action='store_true');parser.add_argument('--partition-count',action='store_true');parser.add_argument('--transition-count',action='store_true');parser.add_argument('--uncached-death-transitions',action='store_true');parser.add_argument('--clone-actor-hypotheses',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--cpu-profile',action='store_true');parser.add_argument('--call-profile',action='store_true');parser.add_argument('--legacy-publication-label-flow',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--sample',action='store_true');parser.add_argument('--partition-count',action='store_true');parser.add_argument('--transition-count',action='store_true');parser.add_argument('--uncached-death-transitions',action='store_true');parser.add_argument('--clone-actor-hypotheses',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
 # Optional dev-only stack sampler; do not label sampled time uninstrumented.
 from threading import Thread,Event,get_ident
 from collections import Counter
@@ -155,6 +155,10 @@ if args.uncached_death_transitions:
  def direct_transition(self,b,target,rules,strategy):return transition_module.action_outcomes(b,target,rules,strategy)
  InformationSetForecast.transition_children=direct_transition
 
+if args.legacy_publication_label_flow:
+ from dev_previews.publication_label_reference import install
+ install()
+
 transition_records={}
 if args.transition_count:
  from collections import OrderedDict
@@ -207,12 +211,20 @@ with tempfile.TemporaryDirectory() as directory:
  metrics.clear();forecast_times.clear();transition_records.clear()
  if args.sample:
   sample_thread=Thread(target=sample_stacks,daemon=True);sample_thread.start()
+ if args.cpu_profile or args.call_profile:
+  import cProfile
+  cpu_profile=(cProfile.Profile(timer=process_time,builtins=False) if args.cpu_profile else cProfile.Profile());cpu_profile.enable()
+ else:cpu_profile=None
  cpu_start=process_time();t=perf_counter();response=client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'},buffered=False);roles=None;complete=None
- for raw in response.response:
-  row=json.loads(raw)
-  if row['event']=='roles':roles=perf_counter()-t
-  if row['event']=='error':raise RuntimeError(row)
-  if row['event']=='complete':complete=row
+ try:
+  for raw in response.response:
+   row=json.loads(raw)
+   if row['event']=='roles':roles=perf_counter()-t
+   if row['event']=='error':raise RuntimeError(row)
+   if row['event']=='complete':complete=row
+ finally:
+  if cpu_profile is not None:
+   cpu_profile.disable();cpu_profile.dump_stats(str(Path(args.output).with_suffix('.prof')))
  solve_s=perf_counter()-t;cpu_seconds=process_time()-cpu_start;sample_stop.set();
  if sample_thread is not None:sample_thread.join(2)
  evaluator_times=tuple(forecast_times);response.close();assert complete and complete['value_complete']
@@ -224,6 +236,6 @@ with tempfile.TemporaryDirectory() as directory:
  engine=getattr(node,'_Node__calculation')._ClosedCalculation__engine
  sizes={name:len(getattr(engine,name)) for name in ('values','action_values','scores','policies','mornings')}
  transition_summary={name:{**{k:v for k,v in row.items() if k not in ('seen','caches')},'distinct_completed_inputs':len(row['seen'])} for name,row in transition_records.items()}
- result=dict(uncached_death_transitions=args.uncached_death_transitions,transitions=transition_summary,transition_instrumented=args.transition_count,profiled=args.profile,sampled=args.sample,clone_actor_hypotheses=args.clone_actor_hypotheses,partition_instrumented=args.partition_count,partition_stats=partition_stats,samples=[(list(k),v) for k,v in samples.most_common()],initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,calculation_cpu_seconds=cpu_seconds,evaluator_forecast_seconds=evaluator_times,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
+ result=dict(legacy_publication_label_flow=args.legacy_publication_label_flow,call_profiled=args.call_profile,cpu_profiled=args.cpu_profile,uncached_death_transitions=args.uncached_death_transitions,transitions=transition_summary,transition_instrumented=args.transition_count,profiled=args.profile,sampled=args.sample,clone_actor_hypotheses=args.clone_actor_hypotheses,partition_instrumented=args.partition_count,partition_stats=partition_stats,samples=[(list(k),v) for k,v in samples.most_common()],initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,calculation_cpu_seconds=cpu_seconds,evaluator_forecast_seconds=evaluator_times,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
  t=perf_counter();again=events(client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'}));result['warm_win_seconds']=perf_counter()-t;assert again[-1]['event']=='complete'
  Path(args.output).write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps({k:v for k,v in result.items() if k not in ('metrics','samples')}));print('profile',args.output)
