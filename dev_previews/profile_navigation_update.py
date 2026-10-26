@@ -1,0 +1,105 @@
+"""Single cold seven-player public Update; optional process-local profiling only."""
+import argparse,json,tempfile,hashlib,sys
+from pathlib import Path
+from time import perf_counter
+from collections import defaultdict
+from threading import local
+from functools import wraps
+from app import create_app
+from werewolf.information_set_forecast import InformationSetForecast
+from werewolf.grouped_forecast import GroupedForecast
+
+parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
+metrics=defaultdict(lambda:dict(calls=0,seconds=0.,exclusive=0.,hits=0,misses=0));stack=local()
+def measured(name,fn,*a,**kw):
+ frames=getattr(stack,'frames',None)
+ if frames is None:frames=[];stack.frames=frames
+ frame=[perf_counter(),0.];frames.append(frame)
+ try:return fn(*a,**kw)
+ finally:
+  elapsed=perf_counter()-frame[0];frames.pop();row=metrics[name];row['calls']+=1;row['seconds']+=elapsed;row['exclusive']+=elapsed-frame[1]
+  if frames:frames[-1][1]+=elapsed
+class Cache(dict):
+ def __init__(self,name,source):super().__init__(source);self.name=name
+ def __contains__(self,key):
+  found=measured('cache.'+self.name+'.contains',super().__contains__,key);metrics['cache.'+self.name+'.contains']['hits' if found else 'misses']+=1;return found
+ def __getitem__(self,key):return measured('cache.'+self.name+'.getitem',super().__getitem__,key)
+ def __setitem__(self,key,value):return measured('cache.'+self.name+'.setitem',super().__setitem__,key,value)
+ def get(self,key,default=None):return measured('cache.'+self.name+'.get',super().get,key,default)
+if args.profile:
+ init=InformationSetForecast.__init__
+ def initialize(self,*a,**kw):
+  init(self,*a,**kw)
+  for name in ('values','action_values','scores','policies','mornings','publication_values','public_support_values','exact_keys','reduced_descriptors','joint_keys','board_key_hashes'):
+   value=getattr(self,name,None)
+   if type(value)is dict:setattr(self,name,Cache(name,value))
+ InformationSetForecast.__init__=initialize
+ for cls in (InformationSetForecast,GroupedForecast):
+  for name in ('solve','act','cached_flow','continuation_context','full_renamed_key','renamed_value_key','value_law','day_scores','public_day_max','wolf_policy','report_children','acquire','equivalent_targets','actor_equivalent_targets','scalar_descriptor',*(() if not args.detail else ('uncached_act','project','physical_children','public_children','generate_morning','morning','publications','report_outcomes','terminal_report_value','terminal_max_report_value','publication_kernel'))):
+   if name not in cls.__dict__:continue
+   original=getattr(cls,name)
+   def wrapper(self,*a,__fn=original,__name=cls.__name__+'.'+name,**kw):return measured(__name,__fn,self,*a,**kw)
+   setattr(cls,name,wraps(original)(wrapper))
+ # Wrap imported references to the same pure normalization/key functions, no
+ # argument changes or additional equality/hash operation is performed.
+ from werewolf.seer_acquisition import normalize
+ from werewolf.public_convergence import state_key
+ for original,label in [(normalize,'normalize'),(state_key,'state_key')]:
+  def wrapper(*a,__fn=original,__name=label,**kw):return measured(__name,__fn,*a,**kw)
+  for module in list(sys.modules.values()):
+   if not getattr(module,'__name__','').startswith('werewolf'):continue
+   for name,value in list(vars(module).items()):
+    if value is original:setattr(module,name,wraps(original)(wrapper))
+
+if args.profile and args.detail:
+ from werewolf.exact import Board
+ from werewolf.seer_future_uniform import TrueScanState
+ from werewolf.seer_acquisition import Hypothesis
+ for cls in (Board,TrueScanState,Hypothesis):
+  original=cls.__post_init__
+  def wrapper(self,*a,__fn=original,__name=cls.__name__+'.construct',**kw):return measured(__name,__fn,self,*a,**kw)
+  cls.__post_init__=wraps(original)(wrapper)
+  for name in ('winner','worlds','alive_mask','wolf_count_distribution','initial_role_counts','public_roles'):
+   prop=vars(cls).get(name)
+   if not isinstance(prop,property):continue
+   def getter(self,__fn=prop.fget,__name=cls.__name__+'.'+name):return measured(__name,__fn,self)
+   setattr(cls,name,property(getter,prop.fset,prop.fdel,prop.__doc__))
+ from werewolf.evaluation_branch import physical_board
+ from werewolf.belief_projection import project_private,_normalized_immutable_state
+ from werewolf.action_flow import resolve_action,action_flow
+ from werewolf.board_future import reconstruct_child
+ from werewolf.win_certificate import certify
+ for original in (physical_board,project_private,_normalized_immutable_state,resolve_action,action_flow,reconstruct_child,certify):
+  def wrapper(*a,__fn=original,__name=original.__name__,**kw):return measured(__name,__fn,*a,**kw)
+  for module in list(sys.modules.values()):
+   if not getattr(module,'__name__','').startswith('werewolf'):continue
+   for name,value in list(vars(module).items()):
+    if value is original:setattr(module,name,wraps(original)(wrapper))
+
+def events(response):return [json.loads(row) for row in response.data.splitlines() if row.strip()]
+with tempfile.TemporaryDirectory() as directory:
+ app=create_app(dict(TESTING=True,SECRET_KEY='profile-fixture-only',PERSISTENT_TREE_PREVIEW=True,GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,ANONYMOUS_OWNERSHIP_PREVIEW=True,CALCULATION_POSITION_ENABLED=False,NAVIGATION_DIRECTORY=directory))
+ client=app.test_client();client.post('/start',data=dict(citizens=3,mediums=1,seers=1,wolves=2,day='max',night='max',fake_reports='max',win_cutoff=1))
+ t=perf_counter();client.get('/main',headers={'Sec-Fetch-Dest':'document'});initial=events(client.get('/navigation/calculation?occurrence=h0&revision=0',headers={'Accept':'application/x-ndjson'}));assert initial[-1]['event']=='complete';initial_s=perf_counter()-t
+ # Replay the actual initial browser expansion sequence from the baseline.
+ for node in [None,'h0~1','h0~6','h0~16','h0~28']:
+  response=client.get('/game-tree',query_string={**({} if node is None else dict(node=node)),**dict(expand=1,format='public-tree',defer_analysis=1)});assert response.status_code==200,response.status_code
+ payload=dict(claims=['seer','seer','medium','latent','latent','latent','latent'],seers=[dict(day=1,reporter=p,target=3,color='white') for p in (1,2)],mediums=[])
+ t=perf_counter();adopted=client.post('/table-publish',data=dict(revision=0,payload=json.dumps(payload)),headers={'X-WW-Staged':'1'});adopt_s=perf_counter()-t;assert adopted.status_code==200,adopted.json
+ metrics.clear();t=perf_counter();response=client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'},buffered=False);roles=None;complete=None
+ for raw in response.response:
+  row=json.loads(raw)
+  if row['event']=='roles':roles=perf_counter()-t
+  if row['event']=='error':raise RuntimeError(row)
+  if row['event']=='complete':complete=row
+ solve_s=perf_counter()-t;response.close();assert complete and complete['value_complete']
+ doc=next(iter(app.extensions['navigation_store']._documents.values()))
+ from werewolf.navigation_evaluation import capture
+ from werewolf.public_convergence import state_key as source_key
+ evaluation=capture(doc);value=evaluation.forecast();node=evaluation.current.navigation.node
+ fingerprint=hashlib.sha256(repr(source_key(node.read())).encode()).hexdigest()
+ engine=getattr(node,'_Node__calculation')._ClosedCalculation__engine
+ sizes={name:len(getattr(engine,name)) for name in ('values','action_values','scores','policies','mornings')}
+ result=dict(profiled=args.profile,initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
+ t=perf_counter();again=events(client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'}));result['warm_win_seconds']=perf_counter()-t;assert again[-1]['event']=='complete'
+ Path(args.output).write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps({k:v for k,v in result.items() if k!='metrics'}));print('profile',args.output)

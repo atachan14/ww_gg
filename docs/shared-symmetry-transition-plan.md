@@ -4679,3 +4679,5 @@ Already eligible lazy public nodes are read in the existing BFS order in bounded
 ## 2026-10-26 Shared Current adoption/evaluation flow
 
 Public UI adoption is opt-in staged: validation and journal commit remain exact; read-only role/win stages use a captured immutable Current with its existing calculation owner. The journal lock is not held through exploration; existing global calculation serialization and cooperative cancellation remain. Complete forecast reuse is distinct from value-only shortcuts and occurrence-specific cumulative mass. See `staged-navigation-evaluation-2026-10-26.md`.
+
+2026-10-26: staged Current adoption/value evaluation completed; bounded terminal reuse and profiling evidence in docs/staged-navigation-evaluation-2026-10-26.md. No reduction in supported branches or Q/P changes.

@@ -406,7 +406,9 @@ class Board:
         if (type(self.alive)is tuple and type(self.belief)is tuple and
                 all(type(pair)is tuple and type(pair[0])is int and type(pair[1])is Fraction
                     for pair in self.belief)):
-            object.__setattr__(self,'_wolf_counts_cache',(self.alive,self.belief,items))
+            winners={winner_for(len(self.alive),count) for count,_ in items}
+            winner=next(iter(winners)) if len(winners)==1 else None
+            object.__setattr__(self,'_wolf_counts_cache',(self.alive,self.belief,items,winner))
         return dict(items)
 
     @property
@@ -415,6 +417,9 @@ class Board:
 
     @property
     def winner(self) -> Winner | None:
+        cached=getattr(self,'_wolf_counts_cache',None)
+        if cached is not None and len(cached)==4 and cached[0] is self.alive and cached[1] is self.belief:
+            return cached[3]
         winners = {winner_for(len(self.alive), w) for w in self.wolf_count_distribution}
         return next(iter(winners)) if len(winners) == 1 else None
 
