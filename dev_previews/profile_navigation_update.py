@@ -9,7 +9,19 @@ from app import create_app
 from werewolf.information_set_forecast import InformationSetForecast
 from werewolf.grouped_forecast import GroupedForecast
 
-parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--sample',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
+# Optional dev-only stack sampler; do not label sampled time uninstrumented.
+from threading import Thread,Event,get_ident
+from collections import Counter
+samples=Counter();sample_stop=Event();sample_thread=None;sample_owner=get_ident()
+def sample_stacks():
+ while not sample_stop.wait(.005):
+  frame=sys._current_frames().get(sample_owner);stack=[]
+  while frame is not None:
+   if '/werewolf/' in frame.f_code.co_filename.replace('\\','/'):
+    stack.append((Path(frame.f_code.co_filename).name,frame.f_code.co_name,frame.f_lineno))
+   frame=frame.f_back
+  if stack:samples[tuple(stack)]+=1
 metrics=defaultdict(lambda:dict(calls=0,seconds=0.,exclusive=0.,hits=0,misses=0));stack=local()
 def measured(name,fn,*a,**kw):
  frames=getattr(stack,'frames',None)
@@ -35,7 +47,7 @@ if args.profile:
    if type(value)is dict:setattr(self,name,Cache(name,value))
  InformationSetForecast.__init__=initialize
  for cls in (InformationSetForecast,GroupedForecast):
-  for name in ('solve','act','cached_flow','continuation_context','full_renamed_key','renamed_value_key','value_law','day_scores','public_day_max','wolf_policy','report_children','acquire','equivalent_targets','actor_equivalent_targets','scalar_descriptor',*(() if not args.detail else ('uncached_act','project','physical_children','public_children','generate_morning','morning','publications','report_outcomes','terminal_report_value','terminal_max_report_value','publication_kernel'))):
+  for name in ('solve','act','cached_flow','continuation_context','full_renamed_key','renamed_value_key','value_law','day_scores','public_day_max','wolf_policy','report_children','acquire','equivalent_targets','actor_equivalent_targets','scalar_descriptor',*(() if not args.detail else ('uncached_act','project','physical_children','public_children','generate_morning','morning','publications','report_outcomes','terminal_report_value','terminal_max_report_value','publication_kernel','wolf_cells','target_orbits','weighted_actor_targets','exchangeable','score_day_targets'))):
    if name not in cls.__dict__:continue
    original=getattr(cls,name)
    def wrapper(self,*a,__fn=original,__name=cls.__name__+'.'+name,**kw):return measured(__name,__fn,self,*a,**kw)
@@ -76,6 +88,31 @@ if args.profile and args.detail:
    for name,value in list(vars(module).items()):
     if value is original:setattr(module,name,wraps(original)(wrapper))
 
+# Dev-only wall timer around the actual evaluator entry; excludes streamed HTML.
+from werewolf.closed_calculation import _Node
+forecast_times=[]
+_original_forecast=_Node.forecast
+def _timed_forecast(node):
+ t=perf_counter()
+ try:return _original_forecast(node)
+ finally:forecast_times.append(perf_counter()-t)
+_Node.forecast=_timed_forecast
+if args.profile and args.detail:
+ from werewolf import guard_history_prior,guard_model,actor_information
+ from werewolf.evaluation_graph import EvaluationGraph
+ for module,names in [(guard_history_prior,('guard_history_ready','public_history_ready')),(guard_model,('scope_reason','live_guard_mass')),(actor_information,('wolf_information_groups','condition_actor_state'))]:
+  for name in names:
+   original=getattr(module,name)
+   def wrapper(*a,__fn=original,__name=module.__name__+'.'+name,**kw):return measured(__name,__fn,*a,**kw)
+   for m in list(sys.modules.values()):
+    if not getattr(m,'__name__','').startswith('werewolf'):continue
+    for key,value in list(vars(m).items()):
+     if value is original:setattr(m,key,wraps(original)(wrapper))
+ for name in ('record_day_value','recorded_day_scope','random_day_scope','personal_max_scope'):
+  original=getattr(EvaluationGraph,name)
+  def wrapper(self,*a,__fn=original,__name='EvaluationGraph.'+name,**kw):return measured(__name,__fn,self,*a,**kw)
+  setattr(EvaluationGraph,name,wraps(original)(wrapper))
+
 def events(response):return [json.loads(row) for row in response.data.splitlines() if row.strip()]
 with tempfile.TemporaryDirectory() as directory:
  app=create_app(dict(TESTING=True,SECRET_KEY='profile-fixture-only',PERSISTENT_TREE_PREVIEW=True,GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,ANONYMOUS_OWNERSHIP_PREVIEW=True,CALCULATION_POSITION_ENABLED=False,NAVIGATION_DIRECTORY=directory))
@@ -86,13 +123,18 @@ with tempfile.TemporaryDirectory() as directory:
   response=client.get('/game-tree',query_string={**({} if node is None else dict(node=node)),**dict(expand=1,format='public-tree',defer_analysis=1)});assert response.status_code==200,response.status_code
  payload=dict(claims=['seer','seer','medium','latent','latent','latent','latent'],seers=[dict(day=1,reporter=p,target=3,color='white') for p in (1,2)],mediums=[])
  t=perf_counter();adopted=client.post('/table-publish',data=dict(revision=0,payload=json.dumps(payload)),headers={'X-WW-Staged':'1'});adopt_s=perf_counter()-t;assert adopted.status_code==200,adopted.json
- metrics.clear();t=perf_counter();response=client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'},buffered=False);roles=None;complete=None
+ metrics.clear();forecast_times.clear()
+ if args.sample:
+  sample_thread=Thread(target=sample_stacks,daemon=True);sample_thread.start()
+ t=perf_counter();response=client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'},buffered=False);roles=None;complete=None
  for raw in response.response:
   row=json.loads(raw)
   if row['event']=='roles':roles=perf_counter()-t
   if row['event']=='error':raise RuntimeError(row)
   if row['event']=='complete':complete=row
- solve_s=perf_counter()-t;response.close();assert complete and complete['value_complete']
+ solve_s=perf_counter()-t;sample_stop.set();
+ if sample_thread is not None:sample_thread.join(2)
+ evaluator_times=tuple(forecast_times);response.close();assert complete and complete['value_complete']
  doc=next(iter(app.extensions['navigation_store']._documents.values()))
  from werewolf.navigation_evaluation import capture
  from werewolf.public_convergence import state_key as source_key
@@ -100,6 +142,6 @@ with tempfile.TemporaryDirectory() as directory:
  fingerprint=hashlib.sha256(repr(source_key(node.read())).encode()).hexdigest()
  engine=getattr(node,'_Node__calculation')._ClosedCalculation__engine
  sizes={name:len(getattr(engine,name)) for name in ('values','action_values','scores','policies','mornings')}
- result=dict(profiled=args.profile,initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
+ result=dict(profiled=args.profile,sampled=args.sample,samples=[(list(k),v) for k,v in samples.most_common()],initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,evaluator_forecast_seconds=evaluator_times,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
  t=perf_counter();again=events(client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'}));result['warm_win_seconds']=perf_counter()-t;assert again[-1]['event']=='complete'
- Path(args.output).write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps({k:v for k,v in result.items() if k!='metrics'}));print('profile',args.output)
+ Path(args.output).write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps({k:v for k,v in result.items() if k not in ('metrics','samples')}));print('profile',args.output)

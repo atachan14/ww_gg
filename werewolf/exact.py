@@ -122,6 +122,11 @@ def actual_role(board, world, player):
 
 
 def replace_worlds(board, worlds, **changes):
+    # Complete laws are validated and projected by Board.__post_init__.
+    # Do not first construct role_belief that that constructor overwrites.
+    # Keep iterable/mutable compatibility inputs on the existing path.
+    if type(worlds)is tuple and (board.initial_seer_count or board.initial_hunter_count):
+        return replace(board,belief=(),role_belief=(),world_belief=worlds,**changes)
     projection={}
     for w,m,seer,hunter,q in worlds:
         projection[w,m]=projection.get((w,m),Fraction(0))+q
