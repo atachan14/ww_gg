@@ -1,0 +1,48 @@
+diff --git a/werewolf/grouped_forecast.py b/werewolf/grouped_forecast.py
+index 24d8457..d8840be 100644
+--- a/werewolf/grouped_forecast.py
++++ b/werewolf/grouped_forecast.py
+@@ -1,5 +1,6 @@
+ """Configured-policy H0 consumer of constructed closed-node partitions."""
+ from contextlib import contextmanager
++from collections import OrderedDict
+ from fractions import Fraction as F
+ from .information_set_forecast import InformationSetForecast,InformationSetActionPolicy,exchangeable_value
+ from .group_partition import _fix,_report_groups,_frame_groups
+@@ -26,6 +27,7 @@ class GroupedForecast(InformationSetForecast):
+         if (self.strategy.day,self.strategy.night,self.strategy.fake_reports) not in (('random',)*3,('max',)*3):raise ValueError('Uniform or MAX representative mode only')
+         self.aggregate_wolf=aggregate_wolf;self.aggregate_reports=aggregate_reports
+         self.report_kernels={};self.value_laws={};self.scalar_projections={}
++        self.frame_partitions=OrderedDict()
+         from .morning_publications import PublicMomentCache
+         self.terminal_moments=PublicMomentCache()
+         self.groups=();self.orbit_stats={'target_members':0,'target_representatives':0}
+@@ -210,10 +212,27 @@ class GroupedForecast(InformationSetForecast):
+         return (self.strategy.day=='max' and self.aggregate_wolf and self.aggregate_reports and not self.strategy.include_self_bite
+                 and not self.retire_uninformative_scans and self.acquisition_provenance is None and self.trace is None)
+ 
++    def frame_groups(self,b,past,observer=None,*,target=None):
++        from .exact import Board
++        if not self.memoize_flows or type(b)is not Board or type(past)is not tuple:
++            return _frame_groups(self.groups,b,past,observer,target=target)
++        # This pure refinement reads public event meaning, not role masses or
++        # private hypotheses. Keep every actual input, including parent order.
++        key=(self.groups,b.player_count,b.alive,b.history,b.reports,
++             b.medium_opportunities,b.report_resolved,past,observer,target)
++        try:groups=self.frame_partitions.get(key)
++        except TypeError:return _frame_groups(self.groups,b,past,observer,target=target)
++        if groups is not None:
++            self.frame_partitions.move_to_end(key);return groups
++        groups=_frame_groups(self.groups,b,past,observer,target=target)
++        self.frame_partitions[key]=groups
++        if len(self.frame_partitions)>256:self.frame_partitions.popitem(last=False)
++        return groups
++
+     @contextmanager
+     def frame_scope(self,b,past,observer=None,*,target=None):
+         tick(0)
+-        groups=() if self.strategy.day=='max' and b.initial_hunter_count else _frame_groups(self.groups,b,past,observer,target=target)
++        groups=() if self.strategy.day=='max' and b.initial_hunter_count else self.frame_groups(b,past,observer,target=target)
+         with self.group_scope(groups):yield
+ 
+     def score_day_targets(self,b,s,past):

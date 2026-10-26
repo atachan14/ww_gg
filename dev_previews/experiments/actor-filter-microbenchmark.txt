@@ -1,0 +1,20 @@
+"""Interleaved same-process filter/clone comparison; not full-search timing."""
+from statistics import median
+from timeit import timeit
+from werewolf.actor_information import condition_actor_state
+from werewolf.seer_future_uniform import TrueScanState
+from werewolf.seer_acquisition import from_board
+from werewolf.exact import initial_board
+from tests.test_actor_filter_reuse import legacy
+from tests import test_actor_information as fixtures
+
+if __name__=='__main__':
+ b=initial_board(7,2,1,1)
+ states=[fixtures.ActorInformationTests().mixed_state(),TrueScanState(from_board(b),(b.alive,),initial_rule='none',tracked=())]
+ for state in states:
+  predicate=lambda h:bool(h.roles[0]&1);before=[];after=[]
+  assert legacy(state,predicate)==condition_actor_state(state,predicate)
+  for _ in range(5):
+   before.append(timeit(lambda:legacy(state,predicate),number=100))
+   after.append(timeit(lambda:condition_actor_state(state,predicate),number=100))
+  print(dict(hypotheses=len(state.hypotheses),before=before,after=after,median_ratio=median(after)/median(before)))

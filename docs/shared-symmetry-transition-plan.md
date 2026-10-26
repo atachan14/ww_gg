@@ -4683,3 +4683,5 @@ Public UI adoption is opt-in staged: validation and journal commit remain exact;
 2026-10-26: staged Current adoption/value evaluation completed; bounded terminal reuse and profiling evidence in docs/staged-navigation-evaluation-2026-10-26.md. No reduction in supported branches or Q/P changes.
 
 2026-10-26 common state-generation pass: remove only discarded complete-role premarginalization; no cache identity or Q/P change. Evidence and explicit no-total-speedup result in docs/complete-law-projection-performance-2026-10-26.md.
+
+2026-10-26 follow-up:3 common-search candidates rejected after whole-run/CPU controls; no production changes retained. Reproducers and stable acceptance in docs/common-search-experiments-2026-10-26.md.

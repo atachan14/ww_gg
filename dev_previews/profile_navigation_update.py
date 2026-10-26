@@ -1,7 +1,7 @@
 """Single cold seven-player public Update; optional process-local profiling only."""
 import argparse,json,tempfile,hashlib,sys
 from pathlib import Path
-from time import perf_counter
+from time import perf_counter,process_time
 from collections import defaultdict
 from threading import local
 from functools import wraps
@@ -9,7 +9,7 @@ from app import create_app
 from werewolf.information_set_forecast import InformationSetForecast
 from werewolf.grouped_forecast import GroupedForecast
 
-parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--sample',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--sample',action='store_true');parser.add_argument('--partition-count',action='store_true');parser.add_argument('--clone-actor-hypotheses',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
 # Optional dev-only stack sampler; do not label sampled time uninstrumented.
 from threading import Thread,Event,get_ident
 from collections import Counter
@@ -113,6 +113,43 @@ if args.profile and args.detail:
   def wrapper(self,*a,__fn=original,__name='EvaluationGraph.'+name,**kw):return measured(__name,__fn,self,*a,**kw)
   setattr(EvaluationGraph,name,wraps(original)(wrapper))
 
+if args.clone_actor_hypotheses:
+ # Process-local old-flow control; no production file or policy is changed.
+ from dataclasses import replace as actor_replace
+ from werewolf.seer_acquisition import normalize as actor_normalize
+ from werewolf.night_knowledge import merge_night_records as actor_merge
+ def clone_actor(state,compatible,guards=(),attacks=()):
+  entries=tuple(actor_replace(h,guards=actor_merge(h.guards,guards) if guards else h.guards,
+      attacks=actor_merge(h.attacks,attacks) if attacks else h.attacks)
+      for h in state.hypotheses if compatible(h))
+  return actor_replace(state,hypotheses=actor_normalize(entries))
+ from werewolf.actor_information import condition_actor_state as original_actor
+ for module in list(sys.modules.values()):
+  if getattr(module,'__name__','').startswith('werewolf'):
+   for name,value in list(vars(module).items()):
+    if value is original_actor:setattr(module,name,clone_actor)
+
+partition_stats=dict(calls=0,hits256=0,hits1024=0,seconds=0.)
+if args.partition_count:
+ from collections import OrderedDict
+ from werewolf.group_partition import _frame_groups as _original_partition
+ simulated={256:OrderedDict(),1024:OrderedDict()}
+ def _count_partition(groups,b,past,observer=None,*,target=None):
+  key=(groups,b,past,observer,target);partition_stats['calls']+=1
+  for capacity,cache in simulated.items():
+   if key in cache:
+    partition_stats['hits'+str(capacity)]+=1;cache.move_to_end(key)
+   else:
+    cache[key]=None
+    if len(cache)>capacity:cache.popitem(last=False)
+  t=perf_counter()
+  try:return _original_partition(groups,b,past,observer,target=target)
+  finally:partition_stats['seconds']+=perf_counter()-t
+ for module in list(sys.modules.values()):
+  if getattr(module,'__name__','').startswith('werewolf'):
+   for name,value in list(vars(module).items()):
+    if value is _original_partition:setattr(module,name,_count_partition)
+
 def events(response):return [json.loads(row) for row in response.data.splitlines() if row.strip()]
 with tempfile.TemporaryDirectory() as directory:
  app=create_app(dict(TESTING=True,SECRET_KEY='profile-fixture-only',PERSISTENT_TREE_PREVIEW=True,GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True,ANONYMOUS_OWNERSHIP_PREVIEW=True,CALCULATION_POSITION_ENABLED=False,NAVIGATION_DIRECTORY=directory))
@@ -126,13 +163,13 @@ with tempfile.TemporaryDirectory() as directory:
  metrics.clear();forecast_times.clear()
  if args.sample:
   sample_thread=Thread(target=sample_stacks,daemon=True);sample_thread.start()
- t=perf_counter();response=client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'},buffered=False);roles=None;complete=None
+ cpu_start=process_time();t=perf_counter();response=client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'},buffered=False);roles=None;complete=None
  for raw in response.response:
   row=json.loads(raw)
   if row['event']=='roles':roles=perf_counter()-t
   if row['event']=='error':raise RuntimeError(row)
   if row['event']=='complete':complete=row
- solve_s=perf_counter()-t;sample_stop.set();
+ solve_s=perf_counter()-t;cpu_seconds=process_time()-cpu_start;sample_stop.set();
  if sample_thread is not None:sample_thread.join(2)
  evaluator_times=tuple(forecast_times);response.close();assert complete and complete['value_complete']
  doc=next(iter(app.extensions['navigation_store']._documents.values()))
@@ -142,6 +179,6 @@ with tempfile.TemporaryDirectory() as directory:
  fingerprint=hashlib.sha256(repr(source_key(node.read())).encode()).hexdigest()
  engine=getattr(node,'_Node__calculation')._ClosedCalculation__engine
  sizes={name:len(getattr(engine,name)) for name in ('values','action_values','scores','policies','mornings')}
- result=dict(profiled=args.profile,sampled=args.sample,samples=[(list(k),v) for k,v in samples.most_common()],initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,evaluator_forecast_seconds=evaluator_times,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
+ result=dict(profiled=args.profile,sampled=args.sample,clone_actor_hypotheses=args.clone_actor_hypotheses,partition_instrumented=args.partition_count,partition_stats=partition_stats,samples=[(list(k),v) for k,v in samples.most_common()],initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,calculation_cpu_seconds=cpu_seconds,evaluator_forecast_seconds=evaluator_times,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
  t=perf_counter();again=events(client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'}));result['warm_win_seconds']=perf_counter()-t;assert again[-1]['event']=='complete'
  Path(args.output).write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps({k:v for k,v in result.items() if k not in ('metrics','samples')}));print('profile',args.output)

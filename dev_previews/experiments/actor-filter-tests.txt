@@ -1,0 +1,71 @@
+import copy,unittest
+from dataclasses import replace
+from fractions import Fraction as F
+from unittest.mock import patch
+from werewolf.actor_information import condition_actor_state
+from werewolf.seer_acquisition import Hypothesis,Acquisition,normalize
+from werewolf.night_knowledge import merge_night_records,WolfAttack
+from werewolf.guard_effect import GuardIntent
+from werewolf.seer_future_uniform import TrueScanState
+from tests import test_actor_information as fixtures
+
+
+def legacy(state,compatible,guards=(),attacks=()):
+    entries=tuple(replace(h,guards=merge_night_records(h.guards,guards) if guards else h.guards,attacks=merge_night_records(h.attacks,attacks) if attacks else h.attacks) for h in state.hypotheses if compatible(h))
+    return replace(state,hypotheses=normalize(entries))
+
+
+class ActorFilterReuseTests(unittest.TestCase):
+    def test_unequal_joint_histories_and_metadata_equal_old_formula(self):
+        state=fixtures.ActorInformationTests().mixed_state();before=copy.deepcopy(state)
+        for keep in (lambda h:True,lambda h:h.mass==F(1,4),lambda h:h.guards[0].target==3):
+            for guards,attacks in (((),()),((GuardIntent(2,4,5),),()),((),(WolfAttack(2,3),))):
+                got=condition_actor_state(state,keep,guards=guards,attacks=attacks)
+                self.assertEqual(got,legacy(state,keep,guards,attacks))
+                self.assertEqual(sum(h.mass for h in got.hypotheses),1)
+                self.assertEqual((got.rosters,got.initial_rule,got.tracked,got.observed_prefix),(state.rosters,state.initial_rule,state.tracked,state.observed_prefix))
+        self.assertEqual(state,before)
+        with self.assertRaises(ValueError):condition_actor_state(state,lambda h:False)
+
+    def test_unchanged_hypotheses_are_not_reconstructed_before_normalize(self):
+        state=fixtures.ActorInformationTests().mixed_state()
+        def clone(value,**kw):
+            if type(value)is Hypothesis:self.fail('unchanged hypothesis reconstructed')
+            return replace(value,**kw)
+        with patch('werewolf.actor_information.replace',side_effect=clone):
+            self.assertEqual(condition_actor_state(state,lambda h:True),legacy(state,lambda h:True))
+
+    def test_mutable_acquisition_validation_is_not_skipped(self):
+        records=[Acquisition(1,1,3,'white')]
+        h=Hypothesis((2,0,1,0),records,F(1))
+        state=TrueScanState((h,),((1,2,3),),initial_rule='normal',tracked=(1,))
+        for fn in (condition_actor_state,legacy):
+            with self.assertRaises(TypeError):fn(state,lambda h:True)
+        records.append(records[0])
+        for fn in (condition_actor_state,legacy):
+            with self.assertRaises(ValueError):fn(state,lambda h:True)
+
+    def test_subclass_constructor_contract_is_preserved(self):
+        class Sub(Hypothesis):
+            calls=0
+            def __post_init__(self):
+                type(self).calls+=1;super().__post_init__()
+        h=Sub((2,0,1,0),(),F(1));state=TrueScanState((h,),((1,2,3),),initial_rule='none',tracked=())
+        Sub.calls=0;condition_actor_state(state,lambda h:True);self.assertEqual(Sub.calls,1)
+
+    def test_shared_eligibility_matches_previous_normalization_rule(self):
+        from werewolf.seer_acquisition import _immutable_hypothesis
+        class Sub(Hypothesis):pass
+        class Mass(F):pass
+        class Color(str):pass
+        base=fixtures.ActorInformationTests().mixed_state().hypotheses[0]
+        cases=[base,Sub(base.roles,base.acquisitions,base.mass,base.guards,base.attacks),
+               replace(base,roles=list(base.roles)),replace(base,acquisitions=list(base.acquisitions)),
+               replace(base,mass=Mass(base.mass)),
+               replace(base,acquisitions=(replace(base.acquisitions[0],color=Color('white')),))]
+        for h in cases:
+            expected=(type(h)is Hypothesis and type(h.mass)is F and type(h.roles)is tuple and
+                      type(h.acquisitions)is tuple and type(h.guards)is tuple and type(h.attacks)is tuple and
+                      all(type(a)is Acquisition and type(a.color)is str for a in h.acquisitions) and
+                      all(type(g)is GuardIntent for g in h.guards) and all(type(a)is WolfAttack for a in h.attacks))
+            self.assertEqual(_immutable_hypothesis(h),expected)

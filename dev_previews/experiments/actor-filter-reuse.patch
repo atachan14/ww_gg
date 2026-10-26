@@ -1,0 +1,70 @@
+diff --git a/werewolf/actor_information.py b/werewolf/actor_information.py
+index 687e20f..91c89ed 100644
+--- a/werewolf/actor_information.py
++++ b/werewolf/actor_information.py
+@@ -6,7 +6,7 @@ the key. Public policy beliefs and actual branch masses remain separate inputs.
+ from dataclasses import dataclass,replace
+ from fractions import Fraction as F
+ from .night_knowledge import WolfAttack,merge_night_records
+-from .seer_acquisition import normalize
++from .seer_acquisition import normalize,_immutable_hypothesis
+ 
+ 
+ def condition_actor_state(state,compatible,*,guards=(),attacks=()):
+@@ -16,10 +16,16 @@ def condition_actor_state(state,compatible,*,guards=(),attacks=()):
+     scan results, other actors' records and state metadata survive. Explicit
+     owner records are merged only after compatibility has been established.
+     """
+-    entries=tuple(replace(h,
+-                  guards=merge_night_records(h.guards,guards) if guards else h.guards,
+-                  attacks=merge_night_records(h.attacks,attacks) if attacks else h.attacks)
+-                  for h in state.hypotheses if compatible(h))
++    if not guards and not attacks:
++        # Filtering changes support/mass, not an existing validated hypothesis.
++        # normalize still validates mutable/subclass compatibility inputs.
++        entries=tuple(h if _immutable_hypothesis(h) and h.mass>0 else replace(h)
++                      for h in state.hypotheses if compatible(h))
++    else:
++        entries=tuple(replace(h,
++                      guards=merge_night_records(h.guards,guards) if guards else h.guards,
++                      attacks=merge_night_records(h.attacks,attacks) if attacks else h.attacks)
++                      for h in state.hypotheses if compatible(h))
+     return replace(state,hypotheses=normalize(entries))
+ 
+ 
+diff --git a/werewolf/seer_acquisition.py b/werewolf/seer_acquisition.py
+index bd0faf7..bbd7076 100644
+--- a/werewolf/seer_acquisition.py
++++ b/werewolf/seer_acquisition.py
+@@ -71,9 +71,17 @@ class Hypothesis:
+         share_hypothesis_records(self)
+ 
+ 
+-def normalize(entries):
++def _immutable_hypothesis(h):
++    """Existing normalized-law reuse eligibility, shared by pure filters."""
+     from .guard_effect import GuardIntent
+     from .night_knowledge import WolfAttack
++    return (type(h)is Hypothesis and type(h.mass)is Fraction and
++            type(h.roles)is tuple and type(h.acquisitions)is tuple and type(h.guards)is tuple and type(h.attacks)is tuple and
++            all(type(a)is Acquisition and type(a.color)is str for a in h.acquisitions) and
++            all(type(g)is GuardIntent for g in h.guards) and all(type(a)is WolfAttack for a in h.attacks))
++
++
++def normalize(entries):
+     from .calculation_budget import check_cancelled
+     grouped={};originals={}
+     for index,h in enumerate(entries):
+@@ -89,11 +97,7 @@ def normalize(entries):
+         # Normalization changes only positive exact mass. Reuse already
+         # validated immutable role/history fields; external, subclass and
+         # mutable inputs still take the complete constructor validation.
+-        reusable=(type(original)is Hypothesis and type(mass)is Fraction and
+-            type(original.mass)is Fraction and
+-            type(roles)is tuple and type(records)is tuple and type(guards)is tuple and type(attacks)is tuple and
+-            all(type(a)is Acquisition and type(a.color)is str for a in records) and
+-            all(type(g)is GuardIntent for g in guards) and all(type(a)is WolfAttack for a in attacks))
++        reusable=type(mass)is Fraction and _immutable_hypothesis(original)
+         if not reusable:result.append(Hypothesis(roles,records,mass,guards,attacks));continue
+         if mass==original.mass:result.append(original);continue
+         # q/total is positive; every other field is the identical immutable
