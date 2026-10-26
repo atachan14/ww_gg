@@ -490,10 +490,12 @@ function initializeStatusChoices() {
  const main=document.querySelector('main[data-screen="main"],main[data-screen="result"]');
  if(!main||main.dataset.statusInitialized)return;main.dataset.statusInitialized='true';
  const night=main.hasAttribute('data-night-board');
- const refresh=()=>{if(night)return;const chosen=main.querySelector('input[name="target"]:checked');
+ const refresh=()=>{if(night)return;const chosen=main.querySelector('input[name="target"]:checked:not(:disabled)');
   main.querySelectorAll('[data-status-target]').forEach(b=>{const active=chosen?.value===b.dataset.statusTarget;b.setAttribute('aria-pressed',String(active));b.textContent=active?b.dataset.statusSelected:'生存';});
-  const next=document.querySelector('#advance-button');if(next){next.dataset.noTarget=String(!chosen);if(!chosen)next.disabled=true;}
+  const form=main.querySelector('#action-form'),reuseForward=form?.dataset.navigationPhaseForward==='true'&&form.dataset.manualSelection!=='true';
+  const next=document.querySelector('#advance-button');if(next){next.dataset.noTarget=String(!chosen);if(!chosen&&!reuseForward)next.disabled=true;}
  };
+ window.refreshStatusChoices=refresh;
  main.querySelectorAll('[data-status-target]').forEach(button=>button.addEventListener('click',()=>{
   if(night){if(main.dataset.statusSubmitting)return;main.dataset.statusSubmitting='true';
    const form=document.createElement('form');form.method='post';form.action=main.dataset.nightReportUrl;

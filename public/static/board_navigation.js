@@ -6,10 +6,16 @@
   const scroll={x:window.scrollX,y:window.scrollY},anchor=document.activeElement,anchorTop=anchor&&anchor!==document.body?anchor.getBoundingClientRect().top:null;
   const remote=typeof doc==='string'?new DOMParser().parseFromString(doc,'text/html'):doc;
   const overview=document.querySelector('#information-panel'),next=remote.querySelector('#information-panel');if(overview&&next)overview.innerHTML=next.innerHTML;
-  for(const row of document.querySelectorAll('.player-table tr[data-player]')){const source=remote.querySelector('.player-table tr[data-player="'+row.dataset.player+'"]');if(!source)continue;for(const cell of row.querySelectorAll('[data-value-cell]')){const value=source.querySelector('[data-value-cell="'+cell.dataset.valueCell+'"]');if(value)cell.innerHTML=value.innerHTML;}}
+  for(const row of document.querySelectorAll('.player-table tr[data-player]')){
+   const source=remote.querySelector('.player-table tr[data-player="'+row.dataset.player+'"]');if(!source)continue;
+   for(const cell of row.querySelectorAll('[data-value-cell]')){const value=source.querySelector('[data-value-cell="'+cell.dataset.valueCell+'"]');if(value)cell.innerHTML=value.innerHTML;}
+   // Roles-only frames disable choices; completion must adopt the server's
+   // legal controls too, without remounting them or changing a manual pick.
+   for(const selector of ['input[name="target"]','[data-status-target]']){const control=row.querySelector(selector),updated=source.querySelector(selector);if(control&&updated)control.disabled=updated.disabled;}
+  }
   const groups=document.querySelector('[data-hybrid-groups]'),nextGroups=remote.querySelector('[data-hybrid-groups]');groups?.remove();if(nextGroups)document.querySelector('#action-form')?.append(nextGroups.cloneNode(true));
   const fraction=document.querySelector('[name="probability-format"]:checked')?.value==='fraction';document.querySelectorAll('.probability[data-fraction]').forEach(e=>{e.textContent=fraction?e.dataset.fraction:e.dataset.percent;});
-  window.refreshParallelLayout?.();if(anchorTop!==null&&anchor.isConnected)window.scrollBy(0,anchor.getBoundingClientRect().top-anchorTop);else window.scrollTo(scroll.x,scroll.y);
+  window.refreshStatusChoices?.();window.updateTargetPreview?.();window.refreshParallelLayout?.();if(anchorTop!==null&&anchor.isConnected)window.scrollBy(0,anchor.getBoundingClientRect().top-anchorTop);else window.scrollTo(scroll.x,scroll.y);
  }
  function stopCalculation(){++generation;controller?.abort();controller=null;}
  async function calculate(){
@@ -26,8 +32,8 @@
     const remote=new DOMParser().parseFromString(result.html,'text/html'),advance=root.querySelector('#advance-button'),next=remote.querySelector('#advance-button');if(advance&&next)advance.disabled=next.disabled;
     if(root.querySelector('#action-form')?.dataset.manualSelection!=='true'){
      for(const input of root.querySelectorAll('input[name="target"]'))input.checked=!!remote.querySelector('input[name="target"][value="'+input.value+'"]')?.checked;
-     window.updateTargetPreview?.();
     }
+    window.refreshStatusChoices?.();window.updateTargetPreview?.();
    }
    if(!window.boardTableDraft?.isDirty())window.boardTableDraft?.refreshBaseline?.();
    root.dataset.navigationCalculation=result.value_complete?'complete':'blocked';root.dataset.navigationDetails=result.details_complete?'complete':'pending';

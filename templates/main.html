@@ -12,7 +12,7 @@
   <p class="hint calculation-estimate">計算時間は配役・履歴で変わり、1回の計算は最大約5分です。計算中も編集でき、変更が続いた場合は最後の入力を順番に反映します。</p>
   <form id="public-log-draft-form"></form>
   {% if night_context %}{% include 'dawn_observation_forms.html' %}{% endif %}
-  <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none and not (navigation_current and navigation_current.prefilled) else 'false' }}">
+  <form method="post" action="{{ url_for('advance_route') }}" id="action-form" data-navigation-phase-forward="{{ 'true' if navigation_current and navigation_current.phase_forward else 'false' }}" data-submit-once data-manual-selection="{{ 'true' if state.selection is not none and not (navigation_current and navigation_current.prefilled) else 'false' }}">
     <input type="hidden" name="revision" value="{{ state.revision }}">
     {% if generated_current %}<fieldset class="generated-current-fields" disabled>{% endif %}
     <div class="board-layout">
