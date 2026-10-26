@@ -37,6 +37,7 @@ def observed_night_strategy(rules, strategy):
     return replace(strategy, include_self_bite=rules.allow_self_bite)
 
 
-def night_observation_outcomes(board, target, rules, strategy,*,guard_state=None):
-    return action_outcomes(condition_night_corpse(board, target, rules,guard_state=guard_state), target,
-                           rules, observed_night_strategy(rules, strategy))
+def night_observation_outcomes(board, target, rules, strategy,*,guard_state=None,transition=None):
+    resolve=action_outcomes if transition is None else transition
+    return resolve(condition_night_corpse(board, target, rules,guard_state=guard_state), target,
+                   rules, observed_night_strategy(rules, strategy))

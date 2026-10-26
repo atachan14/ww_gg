@@ -4685,3 +4685,5 @@ Public UI adoption is opt-in staged: validation and journal commit remain exact;
 2026-10-26 common state-generation pass: remove only discarded complete-role premarginalization; no cache identity or Q/P change. Evidence and explicit no-total-speedup result in docs/complete-law-projection-performance-2026-10-26.md.
 
 2026-10-26 follow-up:3 common-search candidates rejected after whole-run/CPU controls; no production changes retained. Reproducers and stable acceptance in docs/common-search-experiments-2026-10-26.md.
+
+2026-10-26: full-input forced-death memo retains all private/value states; alternating controls show wall+CPU reduction. Scope, bounded immutable eligibility and3 baseline failures in docs/death-transition-reuse-2026-10-26.md.

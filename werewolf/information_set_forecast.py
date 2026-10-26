@@ -72,6 +72,8 @@ class InformationSetForecast:
         self.joint_descriptors={}
         self.joint_keys={}
         self.action_policy=InformationSetActionPolicy(self)
+        from .morning_publications import PublicMomentCache
+        self.death_transitions=PublicMomentCache(max_entries=256,max_rows=768)
 
     def wolf_cells(self,state):return wolf_information_groups(state)
     def group_scope(self,groups):return nullcontext()
@@ -230,13 +232,30 @@ class InformationSetForecast:
             if masses.get((swapped,m,t,scans),F())!=q:return False
         return True
 
+    def transition_children(self,b,target,rules,strategy):
+        # Only the pure forced-death Board carrier, never a joint history or
+        # selected policy. Bound both entries and each retained role law.
+        from .transition_cache import cacheable_transition
+        if type(target)is not int or not self.memoize_flows or len(b.worlds)>64 or not cacheable_transition(b,rules,strategy):
+            return action_outcomes(b,target,rules,strategy)
+        from .board_future import EvidenceKey
+        values=(b,target,rules,strategy)
+        try:key=EvidenceKey(values,tuple(map(hash,values)))
+        except TypeError:return action_outcomes(b,target,rules,strategy)
+        rows=self.death_transitions.get(key)
+        if rows is not None:
+            tick(0);return rows
+        rows=action_outcomes(b,target,rules,strategy)
+        self.death_transitions.put(key,rows)
+        return rows
+
     def physical_children(self,b,target):
-        return action_outcomes(b,target,self.rules,self.strategy)
+        return self.transition_children(b,target,self.rules,self.strategy)
 
     def public_children(self,b,target,guard_state=None):
-        if b.phase=='day':return action_outcomes(b,target,self.rules,self.strategy)
+        if b.phase=='day':return self.transition_children(b,target,self.rules,self.strategy)
         try:
-            return night_observation_outcomes(b,target,self.rules,self.strategy,guard_state=guard_state)
+            return night_observation_outcomes(b,target,self.rules,self.strategy,guard_state=guard_state,transition=self.transition_children)
         except ValueError:
             raise Pending('information_set_public_corpse_inconsistent')
 
