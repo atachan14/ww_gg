@@ -1,0 +1,47 @@
+--- a/dev_previews/profile_navigation_update.py
++++ b/dev_previews/profile_navigation_update.py
+@@ -9,7 +9,7 @@
+ from werewolf.information_set_forecast import InformationSetForecast
+ from werewolf.grouped_forecast import GroupedForecast
+ 
+-parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--sample',action='store_true');parser.add_argument('--partition-count',action='store_true');parser.add_argument('--transition-count',action='store_true');parser.add_argument('--uncached-death-transitions',action='store_true');parser.add_argument('--clone-actor-hypotheses',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
++parser=argparse.ArgumentParser();parser.add_argument('--profile',action='store_true');parser.add_argument('--detail',action='store_true');parser.add_argument('--sample',action='store_true');parser.add_argument('--partition-count',action='store_true');parser.add_argument('--transition-count',action='store_true');parser.add_argument('--uncached-death-transitions',action='store_true');parser.add_argument('--trial-night-observation-memo',action='store_true');parser.add_argument('--clone-actor-hypotheses',action='store_true');parser.add_argument('--output',default='.artifacts/navigation-update-timing.json');args=parser.parse_args()
+ # Optional dev-only stack sampler; do not label sampled time uninstrumented.
+ from threading import Thread,Event,get_ident
+ from collections import Counter
+@@ -155,6 +155,27 @@
+  def direct_transition(self,b,target,rules,strategy):return transition_module.action_outcomes(b,target,rules,strategy)
+  InformationSetForecast.transition_children=direct_transition
+ 
++# Dev-only candidate; no change to installed solver or supported game rules.
++if args.trial_night_observation_memo:
++ from werewolf.morning_publications import PublicMomentCache
++ from werewolf.transition_cache import cacheable_transition
++ from werewolf.board_future import EvidenceKey
++ from werewolf.calculation_budget import tick
++ original_public_children=InformationSetForecast.public_children
++ def trial_public_children(self,b,target,guard_state=None):
++  # No hunter means phase_updates never reads guard_state. This memo owns only
++  # the public role carrier, not the caller's correlated private projection.
++  if (b.phase!='night' or b.initial_hunter_count or type(target)is not int or
++      not self.memoize_flows or len(b.worlds)>64 or not cacheable_transition(b,self.rules,self.strategy)):
++   return original_public_children(self,b,target,guard_state)
++  values=(b,target,self.rules,self.strategy);key=EvidenceKey(values,tuple(map(hash,values)))
++  memo=self.__dict__.get('_trial_night_observation_memo')
++  if memo is None:memo=PublicMomentCache(max_entries=256,max_rows=768);self._trial_night_observation_memo=memo
++  result=memo.get(key)
++  if result is not None:tick(0);return result
++  result=original_public_children(self,b,target,guard_state);memo.put(key,result);return result
++ InformationSetForecast.public_children=trial_public_children
++
+ transition_records={}
+ if args.transition_count:
+  from collections import OrderedDict
+@@ -224,6 +245,6 @@
+  engine=getattr(node,'_Node__calculation')._ClosedCalculation__engine
+  sizes={name:len(getattr(engine,name)) for name in ('values','action_values','scores','policies','mornings')}
+  transition_summary={name:{**{k:v for k,v in row.items() if k not in ('seen','caches')},'distinct_completed_inputs':len(row['seen'])} for name,row in transition_records.items()}
+- result=dict(uncached_death_transitions=args.uncached_death_transitions,transitions=transition_summary,transition_instrumented=args.transition_count,profiled=args.profile,sampled=args.sample,clone_actor_hypotheses=args.clone_actor_hypotheses,partition_instrumented=args.partition_count,partition_stats=partition_stats,samples=[(list(k),v) for k,v in samples.most_common()],initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,calculation_cpu_seconds=cpu_seconds,evaluator_forecast_seconds=evaluator_times,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
++ result=dict(trial_night_observation_memo=args.trial_night_observation_memo,uncached_death_transitions=args.uncached_death_transitions,transitions=transition_summary,transition_instrumented=args.transition_count,profiled=args.profile,sampled=args.sample,clone_actor_hypotheses=args.clone_actor_hypotheses,partition_instrumented=args.partition_count,partition_stats=partition_stats,samples=[(list(k),v) for k,v in samples.most_common()],initial_seconds=initial_s,adoption_seconds=adopt_s,roles_seconds=roles,win_seconds=solve_s,calculation_cpu_seconds=cpu_seconds,evaluator_forecast_seconds=evaluator_times,forecast=dict(village_win=str(value.village_win),action_values=[(p,str(v)) for p,v in value.action_values],by_dawn_values=[(p,str(v)) for p,v in value.by_dawn_values]),source_fingerprint=fingerprint,cache_sizes=sizes,expansions=engine.expansions,metrics=dict(metrics))
+  t=perf_counter();again=events(client.get('/navigation/calculation?occurrence=h1&revision=1',headers={'Accept':'application/x-ndjson'}));result['warm_win_seconds']=perf_counter()-t;assert again[-1]['event']=='complete'
+  Path(args.output).write_text(json.dumps(result,indent=2),encoding='utf-8');print(json.dumps({k:v for k,v in result.items() if k not in ('metrics','samples')}));print('profile',args.output)

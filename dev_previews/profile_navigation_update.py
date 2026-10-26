@@ -181,12 +181,14 @@ if args.transition_count:
     cache[key]=None
     if len(cache)>size:cache.popitem(last=False)
    return result
- original_action=exact.action_outcomes;original_night=phase_updates.night_observation_outcomes
+ original_action=exact.action_outcomes;original_night=phase_updates.night_observation_outcomes;original_condition=phase_updates.condition_night_corpse
  def counted_action(b,target,rules,strategy):
   args=(b,target,rules,strategy);return transition_call('action_outcomes',original_action,args,args,{})
  def counted_night(b,target,rules,strategy,*,guard_state=None,transition=None):
   args=(b,target,rules,strategy);return transition_call('night_observation_outcomes',original_night,(*args,guard_state,transition),args,dict(guard_state=guard_state,transition=transition))
- for original,wrapper in ((original_action,counted_action),(original_night,counted_night)):
+ def counted_condition(b,target,rules,*,guard_state=None):
+  args=(b,target,rules);return transition_call('condition_night_corpse',original_condition,(*args,guard_state),args,dict(guard_state=guard_state))
+ for original,wrapper in ((original_action,counted_action),(original_night,counted_night),(original_condition,counted_condition)):
   for module in list(sys.modules.values()):
    if getattr(module,'__name__','').startswith('werewolf'):
     for name,value in list(vars(module).items()):

@@ -4687,3 +4687,8 @@ Public UI adoption is opt-in staged: validation and journal commit remain exact;
 2026-10-26 follow-up:3 common-search candidates rejected after whole-run/CPU controls; no production changes retained. Reproducers and stable acceptance in docs/common-search-experiments-2026-10-26.md.
 
 2026-10-26: full-input forced-death memo retains all private/value states; alternating controls show wall+CPU reduction. Scope, bounded immutable eligibility and3 baseline failures in docs/death-transition-reuse-2026-10-26.md.
+
+
+### 2026-10-27 night public conditioning investigation
+
+See docs/night-conditioning-reuse-2026-10-27.md.26,383 condition calls/2,613 complete inputs cost only1.453CPU seconds. A calculation-owned bounded no-hunter public-outcome memo was trialled and rejected: two cold unprofiled alternating pairs had slower wall and only0.7-1.3%CPU decrease. Exact89/224, all candidates/horizons, source fingerprint and expansion/cache records matched. No production change, no private-state equivalence relaxation; stableef24b6d retained. Diagnostic extension and nonexecutable candidate patch preserve the negative result.
