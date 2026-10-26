@@ -50,3 +50,16 @@ Final affected suite101 tests:98 pass,3 fail identically on independent git-arch
 These unresolved comparisons are not introduced by the memo and were deliberately left unchanged. This is not a full-suite pass. Baseline log .artifacts/death-memo-baseline-failures.log; final .artifacts/death-memo-final-regression.log. Existing JS71 and transport26+cutout2 passed. The known expensive6-person hunter oracle and unrelated full-suite groups were not rerun.
 
 Normal-server graph/Current/browser acceptance is recorded after activation. No saved-data deletion, push or external deployment.
+
+
+## Normal18821 acceptance
+
+Implementationef24b6d was committed before activation. Only verified PID7424 (known run_current_app.py --port18821) was restarted; normalPID12796 now runs the tested code, same cookie name and saved directories. Static/public/actual HTTPJS bytes match. No additional app authorization, denial or pending approval occurred.
+
+Actual isolated Edge, original7-player Table scenario: initial Main plus initial Tree16.409s; update adoption46.9ms; correct89/224 win83.4058s; complete Tree94.9621s total. These normal browser timings include live stream/render/network overhead and are not compared to a historical different-load run as a speed claim.749 rendered Boards,69 Day2night. Selected public Day2night h1~93 withvalue1; Main matched1 and Current survived reload/390px view. No Runtime errors. Desktop .artifacts/death-memo-normal-tree.png visually checked; mobile screenshot also saved. The browser process finished successfully, normal server remains running.
+
+Full displayed graph saved in .artifacts/death-memo-normal-graph.json. The older pre-staging-layout reference has2094 rows/2169edges/1728toggles; current2108/2183/1738. Key comparison: zero missing baseline rows/edges, all common row/edge contents and probabilities exact. Entire updatedh1 branch rows, edges and toggle order/state are byte-data equal to the reference. Only the oldh0 continuation is additionally open (14 rows/14edges/10toggles; its root toggle changed closed→open). Frontend assets were not changed in this optimization. Thus a whole-screen equality claim is deliberately not made against that old open-state reference; no current branch was discarded or probability normalized to force the comparison. public_current remains route/bundle based, not Board object identity, and explicitly rejects private physical/prefix routes.
+
+Final code8 dedicated tests pass. Final101-test selected suite98 pass/3 independently reproduced baseline failures; JS71 and transport28 pass. No full repository or expensive6-person hunter oracle pass is claimed. All launched benchmark/test/browser sessions finished; only the normal app server is intentionally running. Existing generated .artifacts/docs/previews remain untracked and user files/data preserved.
+
+Next measured residual: night-observation wrapping still costs~2.94CPU seconds and includes~2.61CPU on repeated complete inputs. This overlaps the remaining inner kernel and needs separate cost/identity/memory validation before another memo; no further cache was silently added in this milestone. Most remaining evaluation work is in distinct joint-information states, not these4,112 pure role-carrier inputs.
