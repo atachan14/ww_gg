@@ -4697,3 +4697,8 @@ See docs/night-conditioning-reuse-2026-10-27.md.26,383 condition calls/2,613 com
 ### 2026-10-27 remove display-only full joint transport
 
 Full native-clock call profile identifies84,910 full-source renamings used only by publication labels. Labels now project only published seer/medium reports and claims, retaining exact mapped order; mathematical/Current/convergence transforms remain. No cache or policy change. Two alternating unprofiled pairs improve evaluatorwall10.7-11.5% andCPU5.0-6.1%, with89/224/full candidate/horizon/source fingerprint/expansion parity. See docs/public-label-projection-performance-2026-10-27.md for profiler overhead, exact old-flow control and baseline failure evidence.
+
+
+## 2026-10-27 local workspace relocation
+
+Formal workspace is G:/source/repos/Python/ww_gg; immutable solver/Tree behavior is unchanged. Full recovery Git/history/artifacts and121navigation journals retained; previous repos preserved as a complete sibling backup. See repos-migration-2026-10-27.md for acceptance, environment and no-deletion rollback.
