@@ -4717,3 +4717,6 @@ Verified common journal reconstruction versus isolated filesystems and per-proce
 ## 2026-10-27 browser-owned history prototype
 
 Opt-in request-owned BrowserStore reuses the existing exact NavigationDocument replay, handlers and evaluator. IndexedDB commits recipes before UI adoption; semantic Tree routes reconstruct across fresh workers. Local real TCP cancellation exits the CPU worker near1second. See browser-history-prototype-2026-10-27.md for43Python/86JS checks, actual Current/Tree/Table/cold-restart evidence, payload limits and explicit non-public/unported scopes. No existing121journals migrated or production entry enabled.
+
+
+2026-10-27 browser-owned private cursor transport: see docs/browser-history-private-cold-acceptance-2026-10-27.md. Public policy immutable; typed observer recipes replayed by existing exact validators; no new numerical strategy or production deployment.

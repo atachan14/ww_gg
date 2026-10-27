@@ -2,7 +2,7 @@
 (() => {
  const nativeFetch=window.fetch.bind(window),seedNode=document.getElementById('browser-history-seed');
  if(!seedNode)return;
- const seed=JSON.parse(seedNode.textContent),initialMain=document.querySelector('main'),restoreNote=document.createElement('p');restoreNote.setAttribute('role','status');restoreNote.textContent='ブラウザー履歴を復元中です';if(initialMain){initialMain.hidden=true;initialMain.before(restoreNote);}let state=null,db=null,resolveReady,rejectReady;
+ const seed=JSON.parse(seedNode.textContent),initialMain=document.querySelector('main'),restoreNote=document.createElement('p');restoreNote.setAttribute('role','status');restoreNote.textContent='ブラウザー履歴を復元中です';if(initialMain){initialMain.hidden=true;initialMain.before(restoreNote);}let state=null,db=null,resolveReady,rejectReady,privateGeneration=0;
  const ready=new Promise((resolve,reject)=>{resolveReady=resolve;rejectReady=reject;});ready.catch(()=>{});
  const abort=()=>new DOMException('Browser history changed','AbortError');
  function open(){return new Promise((resolve,reject)=>{const r=indexedDB.open('wwgg-browser-history-v1',1);r.onupgradeneeded=()=>r.result.createObjectStore('games',{keyPath:'game'});r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);r.onblocked=()=>reject(Error('Browser history storage is blocked'));});}
@@ -12,11 +12,11 @@
   r.onsuccess=()=>{const old=r.result;
    if(old&&old.token!==expected&&old.token!==result.browser_history){stale=true;t.abort();return;}
    const numbers={...(old?.numbers||{})};function label(value){if(!value||typeof value!=='object')return;if(value.node&&Object.hasOwn(value,'board_number')){numbers[value.node]??=Object.keys(numbers).length;value.board_number=numbers[value.node];}for(const child of Object.values(value))label(child);}label(result);
-   updated={game:seed.game,numbers,token:result.browser_history,revision:result.browser_revision,routes:{...(old?.token===result.browser_history?old.routes:{}),...(result.browser_routes||{})}};s.put(updated);
+   updated={game:seed.game,numbers,personal:Object.hasOwn(result,'private_view')?(result.private_view?{view:result.private_view,public_revision:result.public_revision}:null):(old?.token===result.browser_history?old.personal:null),token:result.browser_history,revision:result.browser_revision,routes:{...(old?.token===result.browser_history?old.routes:{}),...(result.browser_routes||{})}};s.put(updated);
   };
   t.oncomplete=()=>resolve(updated);t.onerror=()=>reject(t.error||Error('Browser history could not be saved'));t.onabort=()=>reject(stale?abort():t.error||Error('Browser history save was aborted'));
  });}
- function route(url){return url.origin===location.origin&&(['/navigation','/navigation/calculation','/game-tree','/game-tree/current','/table-preview','/table-publish'].includes(url.pathname)||/^\/navigation\/(move|back|forward|advance|phase-back|phase-next|public-input)$/.test(url.pathname));}
+ function route(url){return url.origin===location.origin&&(['/navigation','/navigation/calculation','/game-tree','/game-tree/current','/table-preview','/table-publish','/private-view','/private-navigation','/strategy'].includes(url.pathname)||/^\/navigation\/(move|back|forward|advance|phase-back|phase-next|public-input)$/.test(url.pathname));}
  async function unframe(response){
   if(response.headers.get('X-WW-Browser-Stream')!=='1')return response;
   const reader=response.body.getReader(),decoder=new TextDecoder();let pending='',ended=false;
@@ -27,22 +27,23 @@
  }
  async function wire(url,options={},bootstrap=false){
   if(!bootstrap)await ready;
-  const before=state.token,headers=new Headers(options.headers||{});let body=options.body||'';
+  const before=state.token,privateRequest=url.pathname.startsWith('/private-'),generation=privateRequest&&(url.pathname==='/private-view'||JSON.parse(options.body||'{}').operation!=='tree')?++privateGeneration:privateGeneration,headers=new Headers(options.headers||{});let body=options.body||'';
   if(body instanceof FormData){body=new URLSearchParams(body).toString();headers.set('Content-Type','application/x-www-form-urlencoded');}
   else if(body instanceof URLSearchParams){body=body.toString();headers.set('Content-Type','application/x-www-form-urlencoded');}
   if(typeof body!=='string')throw Error('Unsupported browser operation body');
   const keys=url.searchParams.getAll('node');if(url.pathname==='/game-tree/current'){const key=new URLSearchParams(body).get('node');if(key)keys.push(key);}
+  if(url.pathname==='/private-navigation'){const key=JSON.parse(body).node;if(key)keys.push(key);}
   const routes={};for(const key of keys){if(state.routes[key])routes[key]=state.routes[key];else if(!key.endsWith('~0'))throw Error('Tree route is unavailable; reload the Tree');}
   headers.set('Content-Type','application/json');headers.set('X-WW-Browser-Stream','1');
   const response=await unframe(await nativeFetch('/browser-history/request',{...options,method:'POST',headers,body:JSON.stringify({url:url.pathname+url.search,method:options.method||'GET',body,content_type:options.body instanceof FormData||options.body instanceof URLSearchParams?'application/x-www-form-urlencoded':new Headers(options.headers||{}).get('Content-Type')||'',token:before,routes})}));
-  if(response.headers.get('Content-Type')?.includes('application/x-ndjson'))return response;
+  if(response.headers.get('Content-Type')?.includes('application/x-ndjson')){if(url.pathname==='/private-view'){response.browserPrivateCommit=async result=>{if(state.token!==before||generation!==privateGeneration)throw abort();if(result.private_view)state=await save({browser_history:before,browser_revision:state.revision,private_view:result.private_view,public_revision:result.revision},before);};}return response;}
   if(!response.headers.get('Content-Type')?.includes('application/json'))return response;
-  const result=await response.json();if(state.token!==before&&state.token!==result.browser_history)throw abort();
+  const result=await response.json();if(privateRequest&&generation!==privateGeneration)throw abort();if(state.token!==before&&state.token!==result.browser_history)throw abort();
   if(response.ok&&result.browser_history){state=await save(result,before);}
   return new Response(JSON.stringify(result),{status:response.status,statusText:response.statusText,headers:response.headers});
  }
  window.fetch=(input,options={})=>{const url=new URL(typeof input==='string'?input:input.url,location.href);return route(url)?wire(url,options):nativeFetch(input,options);};
- window.BrowserHistory={ready};
+ window.BrowserHistory={ready,get personal(){return state?.personal||null;}};
  document.addEventListener('DOMContentLoaded',async()=>{
   try{
    db=await open();state=await read()||{game:seed.game,token:seed.token,revision:seed.revision,routes:{}};

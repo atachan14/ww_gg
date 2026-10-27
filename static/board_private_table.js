@@ -67,6 +67,7 @@
      revision:String(seed.revision),board_id:seed.board_id,payload:JSON.stringify({role,players,results})})});
     const result=await window.readCalculationResponse(response,event=>{if(event.board_id===seed.board_id&&event.revision===seed.revision){receivedRoles=true;onPartial(event);}},event=>{if(event.view===role&&event.board_id===seed.board_id&&event.revision===seed.revision)onPosition(event);});if(!response.ok)throw Error(result.error);
     if(result.board_id!==seed.board_id||result.revision!==seed.revision)throw Error('Boardが変更されています。再読み込みしてください。');
+    if(response.browserPrivateCommit)await response.browserPrivateCommit(result);
     return result;
    },
    show:result=>{

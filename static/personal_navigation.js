@@ -49,8 +49,9 @@
   main.querySelector('[data-personal-public]').onclick=()=>exit().catch(error=>{main.querySelector('[data-personal-scope]').append(error.message);});
  }
  async function cold(){
+  if(window.BrowserHistory)await window.BrowserHistory.ready;
   bind();if(context||restoring)return;
-  let stored;try{stored=JSON.parse(sessionStorage.getItem(storageKey)||'null');}catch(_){}
+  let stored;if(window.BrowserHistory)stored=window.BrowserHistory.personal;else try{stored=JSON.parse(sessionStorage.getItem(storageKey)||'null');}catch(_){}
   if(!stored)return;restoring=true;activate(stored,false);
   try{await install(await request('restore'));document.dispatchEvent(new CustomEvent('personal-view-change'));}
   catch(_){activate(null);}

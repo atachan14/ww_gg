@@ -13,6 +13,31 @@ class BrowserHistoryTests(unittest.TestCase):
   seed=json.loads(re.search(r'id="browser-history-seed">(.*?)</script>',h).group(1));return app,c,seed
  def wire(self,c,token,url='/navigation',method='GET',body='',routes=None,headers=None):
   return c.post('/browser-history/request',json=dict(url=url,method=method,body=body,content_type='application/json' if method=='POST' else '',token=token,routes=routes or {}),headers={'X-WW-Staged':'1',**(headers or {})})
+ def test_private_guard_recipe_replays_across_workers_without_public_mutation(self):
+  from tests.test_guard_view_document import GuardViewDocumentTests
+  from werewolf.guard_view_document import GuardViewDocument
+  public=GuardViewDocumentTests().public();view=GuardViewDocument(public,public.game.current,[4],[])
+  recipe=view.export();signer=URLSafeSerializer(KEY,salt='browser-history-prototype-v1');token=signer.dumps(public.export())
+  _,c,_=self.setup_client();payload=dict(operation='tree',view=recipe,public_revision=public.revision,expand=True)
+  a=self.wire(c,token,'/private-navigation','POST',json.dumps(payload));self.assertEqual(a.status_code,200,a.get_json().get('error'));a=a.get_json()
+  self.assertEqual(a['private_view'],json.loads(json.dumps(recipe)));self.assertEqual(signer.loads(a['browser_history']),json.loads(json.dumps(public.export())))
+  key=next(k for k in a['browser_routes'] if k.startswith('private:'))
+  fresh=self.app().test_client();fresh.set_cookie('session',c.get_cookie('session').value)
+  payload.update(node=key)
+  b=self.wire(fresh,token,'/private-navigation','POST',json.dumps(payload),routes={key:a['browser_routes'][key]})
+  self.assertEqual(b.status_code,200,b.get_json().get('error'));self.assertEqual(b.get_json()['node'],key)
+  wrong=self.wire(fresh,token,'/game-tree?node='+key,routes={key:a['browser_routes'][key]})
+  self.assertEqual(wrong.status_code,400)
+  payload['view']=dict(recipe,players=[0]);self.assertEqual(self.wire(fresh,token,'/private-navigation','POST',json.dumps(payload)).status_code,400)
+ def test_strategy_transport_preserves_existing_immutable_policy_contract(self):
+  from urllib.parse import urlencode
+  _,c,seed=self.setup_client()
+  response=c.post('/browser-history/request',json=dict(url='/strategy',method='POST',body=urlencode(dict(revision=0,day='random',night='random')),content_type='application/x-www-form-urlencoded',token=seed['token'],routes={}))
+  self.assertEqual(response.status_code,409);self.assertIn('main',response.get_data(as_text=True))
+  self.assertEqual(self.wire(c,seed['token']).get_json()['browser_history'],seed['token'])
+ def test_different_worker_key_rejects_recipe_without_creating_history(self):
+  _,c,seed=self.setup_client();other=create_app(dict(TESTING=True,SECRET_KEY='different-local-test-fixture',BROWSER_HISTORY_PREVIEW=True,GAME_TREE_PREVIEW=True,PERSISTENT_TREE_PREVIEW=True)).test_client()
+  response=self.wire(other,seed['token']);self.assertEqual(response.status_code,400);self.assertNotIn('browser_history',response.get_json())
  def test_cold_worker_keeps_Current_and_exact_history(self):
   app,c,seed=self.setup_client();a=self.wire(c,seed['token'],'/navigation/advance','POST',json.dumps(dict(revision=0,target=2))).get_json();self.assertEqual(a['current']['occurrence'],'h1')
   other=self.app().test_client();other.set_cookie('session',c.get_cookie('session').value)

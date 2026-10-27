@@ -1,7 +1,7 @@
 """Private cursor HTTP boundary. Public navigation is never mutated."""
 from hashlib import sha256
 import json
-from flask import request,jsonify
+from flask import request,jsonify,g
 from .guard_view_document import GuardViewDocument
 from .information_set_forecast import Pending
 
@@ -14,11 +14,27 @@ def remember(public,view):
  views[key(view.export())]=view
  return view
 
+class PrivateViewChanged(ValueError):pass
+
+def restore_view(public,record):
+ """Common evidence/cursor reconstruction; no public policy is replaced."""
+ if type(record)is not dict:raise ValueError('Private evidence required')
+ views=getattr(public,'private_views',{});view=views.get(key(record))
+ if view is None:
+  from .seer_view_document import SeerViewDocument
+  from .wolf_view_document import WolfViewDocument
+  kind={'hunter':GuardViewDocument,'seer':SeerViewDocument,'wolf':WolfViewDocument}.get(record.get('role'))
+  if kind is None:raise ValueError('Unsupported private navigation role')
+  return remember(public,kind.restore(public,record))
+ if json.dumps(record,sort_keys=True)!=json.dumps(view.export(),sort_keys=True):raise PrivateViewChanged('Private view changed')
+ return view
+
 def register(app,document,render,public_render):
  @app.post('/private-navigation')
  def private_navigation():
   try:
-   public=document();payload=request.get_json()
+   public=document();payload=getattr(g,'browser_private_payload',None)
+   if payload is None:payload=request.get_json()
    if type(payload)is not dict or set(payload)-{'view','operation','node','expand','analysis','snapshot','public_revision'}:raise ValueError('Private navigation input required')
    if type(payload.get('public_revision'))is not int or payload['public_revision']!=public.revision:return jsonify(error='Public Board changed'),409
    operation=payload.get('operation','tree')
@@ -26,14 +42,7 @@ def register(app,document,render,public_render):
    record=payload.get('view')
    if type(record)is not dict:raise ValueError('Private evidence required')
    with public.lock:
-    views=getattr(public,'private_views',{});view=views.get(key(record))
-    if view is None:
-     from .seer_view_document import SeerViewDocument
-     from .wolf_view_document import WolfViewDocument
-     kind={'hunter':GuardViewDocument,'seer':SeerViewDocument,'wolf':WolfViewDocument}.get(record.get('role'))
-     if kind is None:raise ValueError('Unsupported private navigation role')
-     view=remember(public,kind.restore(public,record))
-    elif json.dumps(record,sort_keys=True)!=json.dumps(view.export(),sort_keys=True):return jsonify(error='Private view changed'),409
+    view=restore_view(public,record)
    with view.lock:
     tree=view.tree()
     if payload.get('snapshot') not in (None,tree.snapshot):return jsonify(error='Private snapshot changed'),409
@@ -54,5 +63,6 @@ def register(app,document,render,public_render):
     else:raise ValueError('Unknown private navigation operation')
     result.update(private_view=view.export(),public_revision=public.revision)
     return jsonify(result)
+  except PrivateViewChanged as exc:return jsonify(error=str(exc)),409
   except Pending as exc:return jsonify(error=exc.reason,unsupported=True),422
   except (ValueError,TypeError,KeyError) as exc:return jsonify(error=str(exc)),400
