@@ -69,6 +69,46 @@ class BrowserHistoryTests(unittest.TestCase):
   events=[json.loads(x) for x in text.splitlines()];self.assertTrue(any(x['event']=='error' for x in events));self.assertFalse(any(x['event']=='complete' for x in events))
   events=[json.loads(x) for x in self.wire(c,seed['token'],url,headers={'Accept':'application/x-ndjson'}).get_data(as_text=True).splitlines()]
   self.assertTrue(any(x['event']=='complete' and x['value_complete'] for x in events))
+ def test_explicit_cancel_stops_recipe_evaluation_on_owning_worker(self):
+  import threading,time
+  from werewolf.calculation_budget import tick,CalculationCancelled
+  app,c,seed=self.setup_client();started=threading.Event();stopped=threading.Event();outcome={}
+  cookie=c.get_cookie('session').value;identifier='e'*32
+  def expensive(unused):
+   started.set();deadline=time.monotonic()+3
+   try:
+    while time.monotonic()<deadline:tick(0);time.sleep(.001)
+    raise AssertionError('explicit cancellation did not stop evaluator')
+   finally:stopped.set()
+  def run():
+   worker=app.test_client();worker.set_cookie('session',cookie)
+   response=self.wire(worker,seed['token'],'/navigation/calculation?occurrence=h0&revision=0&request_id=11',headers={'Accept':'application/x-ndjson','X-WW-Calculation-ID':identifier,'X-WW-Browser-Stream':'1'})
+   outcome['body']=response.get_data()
+  with patch('werewolf.navigation_evaluation.NavigationEvaluation.forecast',expensive):
+   thread=threading.Thread(target=run);thread.start();self.assertTrue(started.wait(2));begin=time.monotonic()
+   ack=c.post('/calculation-cancel',data={'calculation_id':identifier});self.assertTrue(ack.get_json()['active'])
+   self.assertTrue(stopped.wait(1));thread.join(2);self.assertFalse(thread.is_alive());self.assertLess(time.monotonic()-begin,1)
+  self.assertFalse(app.extensions['calculation_jobs'].active)
+  import base64
+  frames=[json.loads(line) for line in outcome['body'].splitlines()]
+  inner=b''.join(base64.b64decode(row['data']) for row in frames if row.get('event')=='browser-chunk')
+  self.assertFalse(any(json.loads(line).get('event')=='complete' for line in inner.splitlines()))
+  self.assertEqual(self.wire(c,seed['token']).get_json()['browser_history'],seed['token'])
+ def test_real_time_budget_yields_pending_then_exact_retry(self):
+  import time
+  from werewolf.calculation_budget import tick
+  app,c,seed=self.setup_client();app.config['MANUAL_CALC_MAX_SECONDS']=.03
+  def expensive(unused):
+   for _ in range(200):tick(0);time.sleep(.001)
+   raise AssertionError('real deadline was not checked')
+  with patch('werewolf.navigation_evaluation.NavigationEvaluation.forecast',expensive):
+   response=self.wire(c,seed['token'],'/navigation/calculation?occurrence=h0&revision=0&request_id=12',headers={'Accept':'application/x-ndjson'})
+   rows=[json.loads(line) for line in response.get_data(as_text=True).splitlines()]
+  self.assertTrue(any(row['event']=='error' and row.get('pending') for row in rows));self.assertFalse(any(row['event']=='complete' for row in rows))
+  app.config['MANUAL_CALC_MAX_SECONDS']=270
+  response=self.wire(c,seed['token'],'/navigation/calculation?occurrence=h0&revision=0&request_id=13',headers={'Accept':'application/x-ndjson'})
+  rows=[json.loads(line) for line in response.get_data(as_text=True).splitlines()];done=next(row for row in rows if row['event']=='complete')
+  self.assertTrue(done['value_complete']);self.assertIn('data-fraction="7/15"',done['html'])
  def test_stream_disconnect_really_stops_the_CPU_worker(self):
   import http.client,threading,time
   from werkzeug.serving import make_server

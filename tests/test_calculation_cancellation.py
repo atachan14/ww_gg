@@ -17,6 +17,11 @@ class CalculationCancellationTests(unittest.TestCase):
   self.assertTrue(jobs.begin('one',token).is_set())
   fresh=jobs.begin('one','b'*32);self.assertFalse(fresh.is_set())
   jobs.finish('one','b'*32,fresh)
+ def test_cancellation_registry_is_explicitly_worker_local(self):
+  owner,token='same-owner','f'*32;first,second=CalculationJobs(),CalculationJobs()
+  event=first.begin(owner,token)
+  self.assertFalse(second.cancel(owner,token));self.assertFalse(event.is_set())
+  self.assertTrue(first.cancel(owner,token));self.assertTrue(event.is_set());first.finish(owner,token,event)
  def run_cancel(self,streaming,path="/main",plain=False):
   app=create_app({'TESTING':True,'SECRET_KEY':'cancel-test-only'})
   client=app.test_client();client.post('/start',data={'citizens':'4','wolves':'1','day':'max','night':'max'})

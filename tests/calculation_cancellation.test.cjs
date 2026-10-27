@@ -1,17 +1,18 @@
 
 const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),crypto=require('node:crypto').webcrypto;
 function fixture(){
- const events=[],listeners={},document={hidden:false,body:{prepend(){},setAttribute(){},removeAttribute(){}},createElement(){return {hidden:false,dataset:{},setAttribute(){},append(){},isConnected:true};},addEventListener(name,fn){listeners[name]=fn;}};
+ const events=[],calls=[],listeners={},document={hidden:false,body:{prepend(){},setAttribute(){},removeAttribute(){}},createElement(){return {hidden:false,dataset:{},setAttribute(){},append(){},isConnected:true};},addEventListener(name,fn){listeners[name]=fn;}};
  let first=true,release;const nativeFetch=(input,init={})=>{
   const url=new URL(String(input),'http://localhost');
   if(url.pathname==='/calculation-cancel'){events.push('cancel-ack');return Promise.resolve(new Response('{}'));}
+  calls.push({url:url.pathname,headers:new Headers(init.headers),body:init.body});
   events.push(url.pathname);
   if(first){first=false;const token=new Headers(init.headers).get('X-WW-Calculation-ID');if(url.pathname==='/table-preview')assert.match(token,/^[a-f0-9]{32}$/);return new Promise((resolve,reject)=>{release=()=>resolve(new Response('{}'));init.signal.addEventListener('abort',()=>{events.push('transport-abort');reject(new DOMException('stopped','AbortError'));});});}
   return Promise.resolve(new Response('{}'));
  };
  const window={fetch:nativeFetch,addEventListener(){}};
  vm.runInNewContext(fs.readFileSync('static/calculation_wait.js','utf8'),{window,document,location:new URL('http://localhost/main'),URL,URLSearchParams,Headers,Request,Response,DOMException,AbortController,TextDecoder,crypto,setTimeout,clearTimeout,queueMicrotask});
- return {window,events,release:()=>release()};
+ return {window,events,calls,release:()=>release()};
 }
 test('caller cancellation acknowledges server stop before next queued read starts',async()=>{
  const f=fixture(),controller=new AbortController();
@@ -30,4 +31,24 @@ test('aborting a queued read does not cancel the active accepted write',async()=
  const read=f.window.fetch('/table-preview',{method:'POST',signal:controller.signal}).catch(e=>e.name);controller.abort();
  // The fixture's token assertion applies only to readonly calculations.
  f.release();await save;assert.equal(await read,'AbortError');assert.deepEqual(f.events,['/table-publish']);
+});
+
+const packet=(url,method='GET')=>JSON.stringify({url,method,body:'',content_type:'',token:'synthetic',routes:{}});
+test('browser recipe read receives a cooperative token and really aborts transport before the next read',async()=>{
+ const f=fixture(),controller=new AbortController();
+ const old=f.window.fetch('/browser-history/request',{method:'POST',body:packet('/navigation/calculation?occurrence=h1'),signal:controller.signal}).catch(e=>e.name);
+ controller.abort();const next=f.window.fetch('/browser-history/request',{method:'POST',body:packet('/navigation/calculation?occurrence=h2')});
+ assert.equal(await old,'AbortError');await next;
+ assert.deepEqual(f.events,['/browser-history/request','cancel-ack','transport-abort','/browser-history/request']);
+ assert.match(f.calls[0].headers.get('X-WW-Calculation-ID'),/^[a-f0-9]{32}$/);
+});
+test('browser recipe saves retain write serialization and cannot be cancelled by a queued read',async()=>{
+ const f=fixture(),save=f.window.fetch('/browser-history/request',{method:'POST',body:packet('/navigation/public-input','POST')}),controller=new AbortController();
+ const read=f.window.fetch('/browser-history/request',{method:'POST',body:packet('/game-tree?node=h0~0'),signal:controller.signal}).catch(e=>e.name);
+ controller.abort();f.release();await save;assert.equal(await read,'AbortError');assert.deepEqual(f.events,['/browser-history/request']);assert.equal(f.calls[0].headers.get('X-WW-Calculation-ID'),null);
+});
+test('new recipe save cancels obsolete recipe calculation but never an accepted recipe save',async()=>{
+ const f=fixture(),old=f.window.fetch('/browser-history/request',{method:'POST',body:packet('/navigation/calculation')}).catch(e=>e.name);
+ const one=f.window.fetch('/browser-history/request',{method:'POST',body:packet('/table-publish','POST')}),two=f.window.fetch('/browser-history/request',{method:'POST',body:packet('/navigation/public-input','POST')});
+ await Promise.all([old,one,two]);assert.deepEqual(f.events,['/browser-history/request','cancel-ack','transport-abort','/browser-history/request','/browser-history/request']);
 });

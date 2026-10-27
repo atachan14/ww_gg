@@ -62,11 +62,19 @@
     finally{clearTimeout(deadline);clearTimeout(idle);task.detach();active=null;queueMicrotask(pump);}
   }
   window.fetch=function(input,init={}){
-    const url=new URL(input instanceof Request?input.url:String(input),location.href);
-    const method=(init.method||(input instanceof Request?input.method:'GET')).toUpperCase();
+    let url=new URL(input instanceof Request?input.url:String(input),location.href);
+    let method=(init.method||(input instanceof Request?input.method:'GET')).toUpperCase();
+    let transported=false;
+    // Browser-owned history wraps the ordinary route in one POST. Classify its
+    // inner operation, not the envelope; the server still validates the packet.
+    if(url.origin===location.origin&&url.pathname==='/browser-history/request'&&method==='POST'&&typeof init.body==='string'){
+      try{const packet=JSON.parse(init.body),inner=new URL(packet.url,location.href);
+        if(inner.origin===location.origin&&['GET','POST'].includes(packet.method)){url=inner;method=packet.method;transported=true;}
+      }catch(_){}
+    }
     const streaming=new Headers(init.headers||(input instanceof Request?input.headers:undefined)).get('Accept')==='application/x-ndjson';
     const treeRead=url.pathname==='/game-tree'&&method==='GET';
-    if(url.origin!==location.origin||(method!=='POST'&&!streaming&&!treeRead))return nativeFetch.apply(this,arguments);
+    if(url.origin!==location.origin||(!transported&&method!=='POST'&&!streaming&&!treeRead))return nativeFetch.apply(this,arguments);
     const readonly=treeRead||['/main','/table-preview','/private-view','/comparison','/navigation/calculation'].includes(url.pathname);
     const signal=init.signal||(input instanceof Request?input.signal:null);
     return new Promise((resolve,reject)=>{
