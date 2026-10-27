@@ -50,7 +50,7 @@ def create_app(test_config=None, *, deployment=False):
         app.config.update(test_config)
     if hosted:
         app.config.update(SECRET_KEY=key, SESSION_COOKIE_SECURE=True)
-    if hosted and app.config.get('GAME_TREE_PREVIEW'):
+    if hosted and app.config.get('GAME_TREE_PREVIEW') and not app.config.get('BROWSER_HISTORY_PREVIEW'):
         raise ValueError('GameTree inspection is local only')
     if hosted and app.config.get('EXACT_FUTURE_REUSE_PREVIEW'):
         raise ValueError('Exact future reuse is a local-only experiment')
@@ -76,7 +76,10 @@ def create_app(test_config=None, *, deployment=False):
         from werewolf.navigation_store import NavigationStore
         from werewolf.navigation_http import register_navigation
         directory=app.config.get('NAVIGATION_DIRECTORY',os.path.join(app.root_path,'.artifacts','navigation'))
-        navigation_store=NavigationStore(directory,anonymous_owned=app.config.get('ANONYMOUS_OWNERSHIP_PREVIEW',False))
+        if app.config.get('BROWSER_HISTORY_PREVIEW'):
+            from werewolf.browser_history import BrowserStore
+            navigation_store=BrowserStore(directory,anonymous_owned=app.config.get('ANONYMOUS_OWNERSHIP_PREVIEW',False))
+        else:navigation_store=NavigationStore(directory,anonymous_owned=app.config.get('ANONYMOUS_OWNERSHIP_PREVIEW',False))
         app.extensions['navigation_store']=navigation_store
         def navigation_owner():
             state=game(validate_roles=False)
@@ -1420,6 +1423,10 @@ def create_app(test_config=None, *, deployment=False):
         session.modified=True
         return redirect(url_for("main"), code=303)
 
+    if app.config.get('BROWSER_HISTORY_PREVIEW'):
+        if not(app.config.get('GAME_TREE_PREVIEW') and app.config.get('PERSISTENT_TREE_PREVIEW')):raise ValueError('Browser history requires common Tree navigation')
+        from werewolf.browser_history import install
+        install(app)
     return app
 
 

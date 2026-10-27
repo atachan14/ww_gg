@@ -4712,3 +4712,8 @@ Resolved the two omitted pre-bb3f5b6 numerical expectations using independent Fr
 ## 2026-10-27 hosted Tree decision gate
 
 Verified common journal reconstruction versus isolated filesystems and per-process cancellation ownership. No current shared backend is wired; hosted activation is pending an authorized actual durable destination/runtime, not a guard-only patch. See v06-hosted-tree-decision-gate.md. Saved121journals remain unchanged.
+
+
+## 2026-10-27 browser-owned history prototype
+
+Opt-in request-owned BrowserStore reuses the existing exact NavigationDocument replay, handlers and evaluator. IndexedDB commits recipes before UI adoption; semantic Tree routes reconstruct across fresh workers. Local real TCP cancellation exits the CPU worker near1second. See browser-history-prototype-2026-10-27.md for43Python/86JS checks, actual Current/Tree/Table/cold-restart evidence, payload limits and explicit non-public/unported scopes. No existing121journals migrated or production entry enabled.

@@ -19,7 +19,8 @@
  }
  function stopCalculation(){++generation;controller?.abort();controller=null;}
  async function calculate(){
-  const root=main();if(!root||window.PersonalNavigation?.context||root.dataset.navigationCalculation==='complete'||window.boardTableDraft?.isDirty())return;
+  if(window.BrowserHistory){try{await window.BrowserHistory.ready;}catch{return;}}
+  const root=main();if(!root||window.PersonalNavigation?.context||['complete','running'].includes(root.dataset.navigationCalculation)||window.boardTableDraft?.isDirty())return;
   stopCalculation();const run=generation,occurrence=root.dataset.navigationOccurrence,revision=root.dataset.navigationRevision;
   const live=event=>run===generation&&root.isConnected&&root===main()&&root.dataset.navigationOccurrence===occurrence&&root.dataset.navigationRevision===revision&&(!event||(event.occurrence===occurrence&&String(event.revision)===revision&&String(event.request_id)===String(run)));
   controller=new AbortController();root.dataset.navigationCalculation='running';const note=root.querySelector('[data-navigation-calculation-status]');if(note)note.textContent='勝率計算中';root.querySelector('[data-navigation-retry]')?.setAttribute('hidden','');

@@ -9,6 +9,7 @@
   <script src="{{ url_for('static', filename='strategy.js') }}" defer></script>
   <script src="{{ url_for('static', filename='calculation_wait.js') }}" defer></script>
   <script src="{{ url_for('static', filename='probability_display.js') }}" defer></script>
+  {% if config.get('BROWSER_HISTORY_PREVIEW') %}<script src="{{ url_for('static',filename='browser_history.js') }}" defer></script>{% endif %}
   <script src="{{ url_for('static', filename='app.js') }}" defer></script>
   {% if config.get("PERSISTENT_TREE_PREVIEW") %}<script src="{{ url_for('static', filename='personal_navigation.js') }}" defer></script>{% endif %}
   {% if config.get("PERSISTENT_TREE_PREVIEW") %}<script src="{{ url_for('static', filename='board_navigation.js') }}" defer></script>{% endif %}
@@ -24,6 +25,7 @@
 <body {% block body_attributes %}{% endblock %}>
   <div class="{% block shell_class %}page-shell{% endblock %}">
     {% include 'site_header.html' %}
+    {% if browser_history_seed %}<script type="application/json" id="browser-history-seed">{{ browser_history_seed|tojson }}</script>{% endif %}
     {% block content %}{% endblock %}
     {% block site_footer %}{% endblock %}
   </div>
