@@ -1,0 +1,34 @@
+# Vercel Preview acceptance — 2026-10-27
+
+## Source and isolated deployment
+
+Preview source65c5fa749e8b648187c93dee58e615990fb49965 on preview/v06-browser-history-20261027. The user explicitly approved a separate Preview and synthetic fixtures, conditional on checking resource/cost controls first. Production Branch Tracking was read in the dashboard and is exactly master; origin/master remains03e4e31f965247da65a62386b8f38863459b5cc1. Only the isolated branch was pushed. Git integration produced exactly one READY Preview, dpl_HkNS4bWis5f82sXuNNTkzqHFz5dR, with target null (Preview).
+
+Immutable URL: https://ww-qn815g40n-aklius14pg-8355s-projects.vercel.app/
+Stable branch origin: https://ww-gg-git-preview-v06-browser-54993f-aklius14pg-8355s-projects.vercel.app/
+
+wsgi.py enables the existing browser-owned prototype flags only when VERCEL_ENV==preview. Production behavior, version0.5.2, aliases and signing settings are unchanged. New entrypoint regression plus browser protocol17/17 passed in5.722s (.artifacts/preview-entry-regression.log). Vercel build used Python3.12 and build_vercel.py; build completed in2s in its log. No cloud contracts, credentials, paid upgrades, bypass links or authentication/protection changes were created.
+
+## Read-only cost gate
+
+API get_team omitted plan details and billing charges returned404 costs_not_found; neither is evidence of free usage. Existing authenticated browser dashboard showed Active Hobby, no payment methods, Add Budget unavailable on Hobby, no team budget and AI auto-reloadOff. Usage page Last30Days Sep26 23:00-Oct26 23:00 displayed FluidCPU44m7s/4h, memory2.4/360GB-hrs, invocations4936/1000000, buildtime1h/100h, Functions storage1.81/10GB. Values are a dated UI snapshot, not a real-time guaranteed remaining balance. Official Hobby docs state a free plan with limits that generally pause use instead of on-demand overage; no paid plan/add-on was enabled. Preview shares Team resource limits, so exhausted allowance can affect other projects. Representative tests were bounded; no full unbounded Tree stress test was run.
+
+## Actual Preview verification
+
+- Existing Vercel SSO remained enabled all_except_custom_domains per project metadata. The existing logged-in Chrome could access Preview without protection changes.
+-5player citizen4/wolf1 initial Main and Tree:7/15; choose2 -> nightCurrent, completed navigation calculation and reload restoration. Reload issued before one navigation response committed left the preceding valid Current intact; this is not counted as successful adoption of that interrupted request.
+- On the stable branch origin,5player citizen3/seer1/wolf1: CO1seer Day1white2, execute3 -> night; select seer1; private Table and typed Tree load; reload restores seer1/private night. Evidence .artifacts/vercel-preview-private.png. Actual new-process/private restoration was not proven on Vercel; independent fresh-app tests cover local reconstruction.
+-7player citizen3/medium1/seer1/wolf2, allMAX/cutoffOn; CO1/2seer bothDay1white3, CO3medium. Initial22.86%=8/35. Root Tree was folded with ordinary UI to bound automatic branch retrieval; branches were not deleted. One heavy Update completed: navigation_calculation work591913, elapsed105.890679s, process_peak_mb611.176, stopcomplete. Log request rm887-1793078682962-045b37ab8123, Preview regionkix1, Python3.12. Server elapsed includes the handler work, not a pure CPU or browser timing. No remote per-request CPU measurement was obtained. Prior local cold result was62.129097wall/61.4375CPU; no speedup or same-machine comparison is claimed.
+- Browser exact DOM fractions:89/224 village,135/224wolf; candidates1/2=5/16,3=4/15,4..7=89/224 with complementary wolf values. Matches prior exact fixture. Evidence .artifacts/vercel-preview-heavy.png. No full source fingerprint is exposed by the remote UI, so remote full-state equality is not claimed merely from matching values.
+- Cancelling a later pending heavy-fixture draft restored the preceding visible89/224 values. Returning to TOP and starting a fresh5player case completed7/15, so ordinary new work remained usable. This does not prove the old cloud CPU stopped; no conclusive remote cancellation/finally evidence was obtained.
+- Small invalid-input check: two wolfCOs in a one-wolf/no-bluff game -> explicit CO/roster/CCO contradiction and retained selections; no false completed winrate. Correcting to one wolfCO and updating after validation committed the log and100% village. Reload during the uncommitted retry retained the draft; subsequently clicking Update completed it. Do not count an interrupted early submission as a completed retry.
+- Public calculation finishing while personal observer selection is still in progress could reset that not-yet-adopted selection in one interaction sequence. Waiting for public completion then selecting succeeded. This race needs a focused follow-up; it is not silently accepted as full pending-input preservation.
+- Normal local18821 remains PID18648. SHA256 of all121original saved journals remains exact; none were sent to Vercel. .artifacts and .env are untracked/ignored and not pushed. Production deployment remains dpl_3snY41q1ujeKpDjNZkf5b9ZYPzyz/03e4e31 READY; no production promotion or alias operation was used.
+
+## Blocked action and unverified cases
+
+A request to create one same-commit Preview redeployment from dpl_HkNS4bWis5f82sXuNNTkzqHFz5dR for worker-replacement testing was rejected by automatic approval review: an additional external quota-consuming deployment was considered not specifically authorized/necessary after an already READY Preview. It did not execute. No retry, indirect deployment or workaround followed. A subsequent deployment listing confirms exactly one deployment for this branch. Actual replacement-worker testing on the stable branch origin remains blocked pending explicit additional authorization.
+
+Preview URLs have separate origins: the immutable deployment URL and branch alias started independent IndexedDB histories, as expected. No copying browser storage/cookies across origins was performed. The stable branch origin is the appropriate place to test restoration across a future authorized redeployment; old immutable deployment URLs would keep serving old code and would not establish worker replacement.
+
+Still unverified: actual Vercel disconnect-to-CPU-stop latency, hard300s platform timeout and application270s budget UI, actual worker replacement/cold restoration of an existing recipe, browser real quota/eviction and multi-tab races. Existing local budget tests remain evidence for pending/error without settled values, not substitutes for cloud execution evidence. No additional heavy timeout loop was launched merely to hit a limit. Current Preview is usable for review but the full requested release acceptance is not complete. Production publication remains unauthorized.
