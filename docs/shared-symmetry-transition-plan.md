@@ -4707,3 +4707,8 @@ Formal workspace is G:/source/repos/Python/ww_gg; immutable solver/Tree behavior
 ## 2026-10-27 v0.6 numerical gate
 
 Resolved the two omitted pre-bb3f5b6 numerical expectations using independent Fraction chance laws and matching minimax bounds. No production evaluator change. See v06-numeric-contract-resolution.md. Hosted Tree is a separate unresolved lifecycle/storage gate.
+
+
+## 2026-10-27 hosted Tree decision gate
+
+Verified common journal reconstruction versus isolated filesystems and per-process cancellation ownership. No current shared backend is wired; hosted activation is pending an authorized actual durable destination/runtime, not a guard-only patch. See v06-hosted-tree-decision-gate.md. Saved121journals remain unchanged.
