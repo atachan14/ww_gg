@@ -49,12 +49,12 @@
   main.querySelector('[data-personal-public]').onclick=()=>exit().catch(error=>{main.querySelector('[data-personal-scope]').append(error.message);});
  }
  async function cold(){
-  if(window.BrowserHistory)await window.BrowserHistory.ready;
+  if(window.BrowserHistory){try{await window.BrowserHistory.ready;}catch{return;}}
   bind();if(context||restoring)return;
   let stored;if(window.BrowserHistory)stored=window.BrowserHistory.personal;else try{stored=JSON.parse(sessionStorage.getItem(storageKey)||'null');}catch(_){}
-  if(!stored)return;restoring=true;activate(stored,false);
+  if(!stored)return;restoring=true;activate(stored,false);const version=generation;
   try{await install(await request('restore'));document.dispatchEvent(new CustomEvent('personal-view-change'));}
-  catch(_){activate(null);}
+  catch(_){if(generation===version)activate(null);}
   finally{restoring=false;}
  }
  window.PersonalNavigation={activate,request,install,exit,get context(){return context;},get generation(){return generation;}};
