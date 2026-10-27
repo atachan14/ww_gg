@@ -4702,3 +4702,8 @@ Full native-clock call profile identifies84,910 full-source renamings used only 
 ## 2026-10-27 local workspace relocation
 
 Formal workspace is G:/source/repos/Python/ww_gg; immutable solver/Tree behavior is unchanged. Full recovery Git/history/artifacts and121navigation journals retained; previous repos preserved as a complete sibling backup. See repos-migration-2026-10-27.md for acceptance, environment and no-deletion rollback.
+
+
+## 2026-10-27 v0.6 numerical gate
+
+Resolved the two omitted pre-bb3f5b6 numerical expectations using independent Fraction chance laws and matching minimax bounds. No production evaluator change. See v06-numeric-contract-resolution.md. Hosted Tree is a separate unresolved lifecycle/storage gate.

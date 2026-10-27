@@ -67,6 +67,7 @@ class ModelATests(unittest.TestCase):
         self.assertEqual(child.wolf_count_distribution,{1:F(1)})
 
     def test_new_private_black_holder_does_not_change_wolf_information_policy(self):
+        from tests.test_model_a_night_oracles import two_seer_attack_score
         seed=replace(replace_worlds(initial_board(7,2,0,2),((12,0,3,0,F(1,2)),(24,0,3,0,F(1,2)))),
                      claims=('seer','seer')+('latent',)*5)
         b=next(o.board for o in action_outcomes(seed,7,Rules(initial_seer='none'),Strategy()) if o.board.winner is None)
@@ -83,8 +84,8 @@ class ModelATests(unittest.TestCase):
             self.assertEqual(value,F(3,4))
             root=next(x for x in trace['wolf_policies'] if x['history']==b.history and x['mask']==12)
             self.assertEqual(root['policy'],((1,F(1,2)),(2,F(1,2))))
-            self.assertEqual(dict(root['scores'])[1],F(2,3))
-            self.assertEqual(dict(root['scores'])[2],F(2,3))
+            self.assertEqual(dict(root['scores'])[1],two_seer_attack_score(1))
+            self.assertEqual(dict(root['scores'])[2],two_seer_attack_score(2))
 
     def test_self_bite_preference_and_dead_initial_teammate_are_respected(self):
         b,s=self.fixture()
@@ -96,7 +97,8 @@ class ModelATests(unittest.TestCase):
         self.assertEqual(InformationSetForecast(Rules(),Strategy('random','random')).wolf_policy(b,s,(),3),
                          ((3,F(1,3)),(4,F(1,3)),(5,F(1,3))))
 
-    def test_corrected_corpse_targets_preserve_explicit_model_difference(self):
+    def test_night_start_targets_preserve_explicit_model_difference(self):
+        from tests.test_model_a_night_oracles import one_night_value
         from werewolf.seer_acquisition import Acquisition,SeerReport
         from werewolf.seer_future_forecast import forecast
         seed=replace(replace_worlds(initial_board(5,2,0,1),((9,0,2,0,F(1,2)),(17,0,2,0,F(1,2)))),
@@ -106,8 +108,8 @@ class ModelATests(unittest.TestCase):
         s=project_private(TrueScanState(hs,((1,2,3,4,5),),initial_rule='normal',tracked=(2,)),b)
         past=(SeerReport(1,1,1,3,'white'),SeerReport(1,1,2,3,'white'))
         policy=Strategy('max','random');rules=Rules(initial_seer='normal')
-        self.assertEqual(forecast(b,s,past,rules,policy).village_win,F(5,6))
-        self.assertEqual(InformationSetForecast(rules,policy).scalar(b,s,past),F(7,9))
-        # Bite seer / known-white / unknown-citizen each has mass1/3.
-        # Only the middle branch needs the scan: corpse1 is uninformative1/3.
-        self.assertEqual(F(7,9),F(1,3)*(F(1,2)+F(5,6)+1))
+        # bb3f5b6 supersedes corpse-target rules: executed1 is not a target.
+        # The two evaluators intentionally have different attack measures.
+        self.assertEqual(forecast(b,s,past,rules,policy).village_win,one_night_value(physical=False))
+        self.assertEqual(InformationSetForecast(rules,policy).scalar(b,s,past),one_night_value(physical=True))
+        self.assertEqual(F(5,6),F(1,3)*(F(1,2)+1+1))
