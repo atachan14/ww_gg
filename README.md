@@ -80,7 +80,8 @@ ww_gg/
   werewolf/reports.py            将来報告の厳密キャッシュ
   templates/, static/           HTML・CSS・JS
   tests/                        公開Board・3〜9人／複数狼の計算と昼夜進行の確認
-  docs/archive/20261029/requirements.md          新版の要件基準
+  docs/README.md                 docs の入口(目的・状態・重さ・仕様・開発手順)
+  docs/archive/20261029/        2026-10-29 までの docs 一式(要件の台帳 requirements.md など)
   archive/
     python-legacy/              旧Python版の現内容
     wwExpected-java/            初期Java版の参考スナップショット
