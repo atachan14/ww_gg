@@ -1,3 +1,5 @@
+> Superseded target-legality rule: the later user correction requires targets alive at night start (`bb3f5b6`). Same-night death preserves acquisition. The old values below belong to the earlier rule; see [independent numerical resolution](v06-numeric-contract-resolution.md). Retained for chronology.
+
 # Corpse scans and acquisition chronology
 
 The user clarified: a dead target still yields its role color. Only a seer who died before acquisition has no new result. This is a semantic bug fix, separate from matching optimizations.

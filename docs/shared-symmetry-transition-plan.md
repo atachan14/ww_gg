@@ -4722,3 +4722,6 @@ Opt-in request-owned BrowserStore reuses the existing exact NavigationDocument r
 2026-10-27 browser-owned private cursor transport: see docs/browser-history-private-cold-acceptance-2026-10-27.md. Public policy immutable; typed observer recipes replayed by existing exact validators; no new numerical strategy or production deployment.
 
 2026-10-27 local public-equivalent UI follow-up: generation-fence obsolete personal cold restore; real deadline/failure/retry UI checks and explicit next-Preview cancellation limits in docs/browser-history-ui-followup-2026-10-27.md. No further cloud deployment.
+
+
+2026-10-29 docs-only AI handoff: docs/README.md indexes current contracts (CURRENT.md), operation/test/release boundaries (HANDOFF.md), and the preserved historical catalogue (CATALOG.md). No rule, evaluator, storage, setting or deployment change. Supersession notes link the earlier corpse-target and hosted-Tree decision records to later verified evidence.

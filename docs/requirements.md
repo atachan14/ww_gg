@@ -1,3 +1,5 @@
+> Status note (2026-10-29): historical requirement ledger. The v0.3 status and deferred Tree text below are not the current implementation inventory. See [CURRENT](CURRENT.md) and [docs index](README.md).
+
 # ww_gg 要件基準
 
 この会話でユーザーが明示・承認した要件をまとめる。現在の実装や旧ww_ggの仕組みを、そのまま要件として採用しない。

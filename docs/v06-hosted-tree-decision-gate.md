@@ -1,3 +1,5 @@
+> Historical decision gate: written before the approved browser-owned-history Preview. Its hosted guard and shared-backend proposal are not the current Preview implementation or a mandatory DB decision. See [CURRENT](CURRENT.md) and [latest cloud evidence](fixed-preview-acceptance-2026-10-27.md).
+
 # Hosted Tree lifecycle decision gate (2026-10-27)
 
 Numerical gate is resolved in898a01a; see v06-numeric-contract-resolution.md. This document records the next stage's verified boundary, not a completed hosted implementation or permission to publish.
