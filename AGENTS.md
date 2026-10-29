@@ -7,4 +7,4 @@
 - Own immutable inputs and caches per calculation; create internal children only through common generators. Do not put issued ledgers, proof tickets or repeated owner/frame authentication in production loops.
 - Reuse common probability, legal-action, configured-policy, Q/P-update and group-splitting operations. Do not add case-specific evaluators.
 
-Record migration scope and evidence in docs/shared-symmetry-transition-plan.md.
+Start from docs/README.md. Record design decisions and evidence in the current docs (performance work in docs/PERFORMANCE.md). The previous migration ledger docs/archive/20261029/shared-symmetry-transition-plan.md is read-only history.

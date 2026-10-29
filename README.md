@@ -80,7 +80,7 @@ ww_gg/
   werewolf/reports.py            将来報告の厳密キャッシュ
   templates/, static/           HTML・CSS・JS
   tests/                        公開Board・3〜9人／複数狼の計算と昼夜進行の確認
-  docs/requirements.md          新版の要件基準
+  docs/archive/20261029/requirements.md          新版の要件基準
   archive/
     python-legacy/              旧Python版の現内容
     wwExpected-java/            初期Java版の参考スナップショット
@@ -88,4 +88,4 @@ ww_gg/
     streamlit_proto/            以前の試作（既存位置を維持）
 ```
 
-[v0.5.2の変更記録](docs/v0.5.2.md)、[v0.5.1の変更記録](docs/v0.5.1.md)、[v0.5の仕様・確認記録](docs/v0.5.md)、[v0.4記録](docs/v0.4.md)、[9人実測](docs/v0.4-benchmark.json)、[v0.3記録](docs/v0.3.md)、[v0.4計画](docs/v0.4-plan.md)、[v0.2記録](docs/v0.2.md)、[v0.1の確認記録](docs/v0.1-board-checks.md)、[旧World版の確認記録](docs/v0.1-checks.md)、[旧3人版の確認記録](docs/minimal-checks.md) を参照。
+[v0.5.2の変更記録](docs/archive/20261029/v0.5.2.md)、[v0.5.1の変更記録](docs/archive/20261029/v0.5.1.md)、[v0.5の仕様・確認記録](docs/archive/20261029/v0.5.md)、[v0.4記録](docs/archive/20261029/v0.4.md)、[9人実測](docs/archive/20261029/v0.4-benchmark.json)、[v0.3記録](docs/archive/20261029/v0.3.md)、[v0.4計画](docs/archive/20261029/v0.4-plan.md)、[v0.2記録](docs/archive/20261029/v0.2.md)、[v0.1の確認記録](docs/archive/20261029/v0.1-board-checks.md)、[旧World版の確認記録](docs/archive/20261029/v0.1-checks.md)、[旧3人版の確認記録](docs/archive/20261029/minimal-checks.md) を参照。
