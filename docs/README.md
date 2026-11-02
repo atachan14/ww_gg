@@ -16,6 +16,7 @@
    - [rules.md](redesign/rules.md) — ゲームのルール(役職の構造、投票)
    - [calculation.md](redesign/calculation.md) — 計算の定義(役職率の読み方、戦略、最大化)
    - [tree.md](redesign/tree.md) — 盤面の編集と Tree
+   - [scope.md](redesign/scope.md) — v0.7・v0.8 の範囲
 6. [DEVELOPMENT.md](DEVELOPMENT.md) — 起動、テスト、公開の手順
 7. そのほか
    - [design-review-20261030.md](design-review-20261030.md) — 2026-10-30 の全体レビュー
