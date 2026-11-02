@@ -15,6 +15,7 @@
 |---|---|
 | `app.py` | HTTP とストリームの制御 |
 | `werewolf/` | 厳密な計算のモデル、盤面の移動、評価の記録、再構築 |
+| `wwcore/` | v0.7 の新しい計算の芯(試作。画面からはまだ使わない。[redesign/core-v07.md](redesign/core-v07.md)) |
 | `templates/`、`static/` | 画面の元のファイル |
 | `public/static/` | ホスト用の静的ファイルのコピー。`build_vercel.py` で同期する(片方だけを手で直さない) |
 | `tests/` | 独立した検証、契約のテスト、DOM のテスト |
@@ -38,8 +39,11 @@
 1. まず小さい厳密なケースで確かめる。
 2. 次に、影響する範囲の結合テストを実行する。
 
+新しい芯のテスト(独立の数え上げとの照合。合わせて7分ほどかかる)は `tests.test_wwcore`。
+
 ```powershell
 $env:PYTHONPATH='.;tests'
+.venv/Scripts/python.exe -X utf8 -m unittest tests.test_wwcore
 .venv/Scripts/python.exe -X utf8 -m unittest tests.test_model_a_night_oracles
 .venv/Scripts/python.exe -X utf8 -m unittest tests.test_browser_history tests.test_calculation_cancellation
 node --test tests/personal_cold_generation.test.cjs tests/calculation_cancellation.test.cjs tests/browser_history.test.cjs tests/input_calculation_option.test.cjs
