@@ -22,7 +22,7 @@ class CoreBoard(unittest.TestCase):
         return self.client.post('/core/board' + query, json=body)
 
     def test_page(self):
-        response = self.client.get('/core')
+        response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn('core.js', response.text)
 

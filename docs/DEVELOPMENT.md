@@ -5,7 +5,7 @@
 ## 起動
 
 - 作業場所: `G:\source\repos\Python\ww_gg`。
-- `start.cmd` で起動する(リポジトリ内の `.venv` の Python、`-X utf8`、`dev_previews/run_current_app.py --port 18821`)。URL は `http://127.0.0.1:18821/main`。
+- `start.cmd` で起動する(リポジトリ内の `.venv` の Python、`-X utf8`、`dev_previews/run_current_app.py --port 18821`)。URL は `http://127.0.0.1:18821/`(古い画面は、整理するまで `/setup`)。
 - 新しい環境では、仮想環境を作って `requirements.txt`(Flask 3.1.2)を入れる。古いフォルダから `.env` や認証情報をコピーしない。
 - サーバーを再起動するときは、今動いているプロセスとコマンドを確かめてから。古い記録の PID は今のものではない。
 

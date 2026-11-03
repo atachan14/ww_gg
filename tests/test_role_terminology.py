@@ -8,7 +8,7 @@ class RoleTerminologyTests(unittest.TestCase):
   self.assertEqual(ROLE_LABELS['wolf'],'人狼');self.assertEqual(CO_LABELS['wolf'],'人狼')
   self.assertEqual(ROLES,('villager','medium','seer','hunter','wolf'))
   app=create_app(dict(TESTING=True,SECRET_KEY='role-terminology',GAME_TREE_PREVIEW=True,HYBRID_TABLE_PREVIEW=True,ANONYMOUS_NIGHT_PREVIEW=True))
-  client=app.test_client();setup=client.get('/').get_data(as_text=True)
+  client=app.test_client();setup=client.get('/setup').get_data(as_text=True)
   self.assertIn('<span>人狼</span>',setup);self.assertIn('狼陣営',setup);self.assertNotIn('人狼陣営',setup)
   client.post('/start',data=dict(citizens='3',seers='1',wolves='1',day='max',night='max',fake_reports='max'))
   main=client.get('/main').get_data(as_text=True)

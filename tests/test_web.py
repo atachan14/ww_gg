@@ -39,7 +39,7 @@ class WebTests(unittest.TestCase):
         return self.client.get(path, follow_redirects=True).get_data(as_text=True)
 
     def test_top_default_five_rule_and_strategy_defaults(self):
-        html = self.page('/')
+        html = self.page('/setup')
         self.assertIn('id="citizen-count" name="citizens" value="4"', html)
         self.assertNotIn('id="include-self-bite"', html)
         self.assertIn('id="allow-self-bite"', html)
@@ -183,7 +183,7 @@ class WebTests(unittest.TestCase):
 
     def test_navigation_and_no_store(self):
         for path in ('/main', '/result'):
-            self.assertTrue(self.client.get(path).location.endswith('/'))
+            self.assertTrue(self.client.get(path).location.endswith('/setup'))
         self.start()
         self.assertTrue(self.client.get('/result').location.endswith('/main'))
         response = self.client.get('/main')
@@ -196,7 +196,7 @@ class WebTests(unittest.TestCase):
         self.assertEqual(set(state), {'players','wolves','mediums','claims','claim_policy','rules','policy','history','selection','revision','model'})
         with self.client.session_transaction() as session:
             session['game'] = {**state, 'actual_roles': {1:'wolf'}}
-        self.assertTrue(self.client.get('/main').location.endswith('/'))
+        self.assertTrue(self.client.get('/main').location.endswith('/setup'))
 
     def test_exact_display_rounding_only(self):
         self.assertEqual(percent(Fraction(1,3)), '33.33')
@@ -247,18 +247,18 @@ class WebTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn('id="game-cast"><span id="game-cast-label">配役</span> 9人村:市民4 · 霊能1 · 占い師1 · 狩人1（護衛：均等化） · 人狼2</p>', response.get_data(as_text=True))
         self.assertEqual(self.state()['players'], 9)
-        self.assertIn('id="total-count">9人<small>（最大9人）</small>', self.page('/'))
+        self.assertIn('id="total-count">9人<small>（最大9人）</small>', self.page('/setup'))
         self.client.post('/start', data={'citizens':'1','wolves':'1','day':'max','night':'max'})
         self.assertIn('id="game-cast"><span id="game-cast-label">配役</span> 2人村:市民1 · 人狼1</p>', self.page())
 
 
     def test_footer_phase_destinations_target_labels_and_terminal(self):
-        self.assertIn('Day1・昼へ <span aria-hidden="true">→</span>', self.page('/'))
+        self.assertIn('Day1・昼へ <span aria-hidden="true">→</span>', self.page('/setup'))
         self.start()
         html = self.page()
         self.assertIn('Day1・夜へ <span aria-hidden="true">→</span>', html)
         self.assertIn('処刑：Player1', html)
-        self.assertIn('id="settings-return" href="/"', html)
+        self.assertIn('id="settings-return" href="/setup"', html)
         self.assertEqual(self.client.post('/strategy', data=self.form(2)).status_code, 303)
         self.assertIn('処刑：Player2', self.page())
         bad = self.client.post('/advance', data=self.form(0))
@@ -289,9 +289,9 @@ class WebTests(unittest.TestCase):
             self.assertNotIn('data-target-preview', html)
             self.assertNotIn('id="advance-button"', html)
             self.assertNotIn('id="back-button"', html)
-            self.assertIn('id="settings-return" href="/"', html)
+            self.assertIn('id="settings-return" href="/setup"', html)
             saved = self.state()
-            self.client.get('/')
+            self.client.get('/setup')
             self.assertEqual(self.state(), saved)
 
 

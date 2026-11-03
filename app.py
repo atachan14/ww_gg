@@ -832,7 +832,7 @@ def create_app(test_config=None, *, deployment=False):
                         'help-header-integration.css','medium-co.css','medium-co.js'):abort(404)
         return send_from_directory(os.path.join(app.root_path,'help_assets'),name)
 
-    @app.get("/")
+    @app.get("/setup")
     def top():
         state = game()
         config = GameConfig.from_game(state) if state else GameConfig.default()

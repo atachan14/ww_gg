@@ -6,7 +6,7 @@ class HelpTests(unittest.TestCase):
  def g(self):
   with self.c.session_transaction() as q:return copy.deepcopy(q['game'])
  def test_top_help_link_is_in_header_without_footer_duplicate(self):
-  h=self.c.get('/').get_data(as_text=True)
+  h=self.c.get('/setup').get_data(as_text=True)
   self.assertIn('class="header-help" href="/help"',h)
   self.assertNotIn('id="help-button"',h);self.assertNotIn('data-future-preview-top',h)
  def test_help_routes_preserve_game_and_explain_full_disclosure_consistency(self):

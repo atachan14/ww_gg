@@ -12,7 +12,7 @@ class TopSettingsTests(unittest.TestCase):
  def form(self):
   return dict(citizens='3',seers='1',wolves='1',day='random',night='random',fake_reports='random',win_cutoff='0',include_self_bite='0',initial_seer='random_white',allow_repeat_guard='0',allow_self_bite='0',model='group',strategy_ui=json.dumps(co_editor({})),seer_position=json.dumps(['unvisited','uniform']),guard_position=json.dumps(['uniform']),fake_seer_policy=json.dumps(['uniform']),disclosure_common='all',seer_disclosure='inherit',medium_disclosure='inherit')
  def test_same_order_shared_markup_default_and_external_display_form(self):
-  response=self.client.get('/');text=response.get_data(as_text=True);seed=self.seed(response)
+  response=self.client.get('/setup');text=response.get_data(as_text=True);seed=self.seed(response)
   self.assertEqual(re.findall(r'data-settings-pane="([^"]+)"',text),['display','rules','strategy'])
   self.assertTrue(seed['setup']);self.assertTrue(seed['policy']['win_cutoff']);self.assertFalse(seed['finished'])
   self.assertIn('form="display-options-form"',text);self.assertEqual(text.count('id="display-options-form"'),1)
@@ -23,7 +23,7 @@ class TopSettingsTests(unittest.TestCase):
   self.assertEqual(self.client.post('/start',data=data).status_code,303)
   saved=self.state();self.assertEqual(saved['policy']['day'],'random');self.assertFalse(saved['policy']['win_cutoff'])
   self.assertEqual(saved['strategy_ui']['common'],['counter','filled']);self.assertEqual(saved['rules']['allow_repeat_guard'],False)
-  top=self.client.get('/');seed=self.seed(top)
+  top=self.client.get('/setup');seed=self.seed(top)
   self.assertEqual(seed['policy']['fake_seer_policy'],['uniform']);self.assertEqual(seed['policy']['night'],'random')
   self.assertEqual(seed['co'],saved['strategy_ui']);self.assertFalse(seed['policy']['win_cutoff']);self.assertEqual(seed['roles'],['villager','seer','wolf'])
   self.assertEqual(self.state(),saved)

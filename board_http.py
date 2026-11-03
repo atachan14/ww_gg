@@ -123,7 +123,7 @@ def parse_board(data):
 
 
 def register_core(app):
-    @app.get('/core')
+    @app.get('/')
     def core_page():
         return render_template('core.html', strategy_defaults={
             'seer_target': SEER_TARGET_STAGES, 'fake_report': FAKE_REPORT_STAGES})

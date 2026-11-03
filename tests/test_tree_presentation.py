@@ -15,7 +15,7 @@ class TreePresentationTests(unittest.TestCase):
   first=client.get('/game-tree?expand=1').json
   self.assertEqual(first['compositions'][0]['label'],'\u5e02\u6c113\u5360\u30441\u4eba\u72fc1')
   app.jinja_env.globals['role_order']=('seer','hunter','medium','villager','wolf')
-  top=client.get('/').data.decode()
+  top=client.get('/setup').data.decode()
   self.assertLess(top.index('id="seer-count"'),top.index('id="citizen-count"'))
   second=client.get('/game-tree?expand=1').json
   self.assertEqual(second['compositions'][0]['label'],'\u5360\u30441\u5e02\u6c113\u4eba\u72fc1')

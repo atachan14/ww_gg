@@ -26,7 +26,7 @@ class Rates(HTMLParser):
 class InputCalculationOptionTests(unittest.TestCase):
  def setUp(self):self.c=create_app({'TESTING':True,'SECRET_KEY':'input-display-only','HYBRID_TABLE_PREVIEW':True}).test_client()
  def test_top_and_main_use_one_compact_default_roles_external_display_control(self):
-  top=self.c.get('/').get_data(as_text=True)
+  top=self.c.get('/setup').get_data(as_text=True)
   self.c.post('/start',data={'citizens':'3','seers':'1','wolves':'1','day':'random','night':'random','fake_reports':'random','win_cutoff':'0'})
   main=self.c.get('/main').get_data(as_text=True)
   for html in (top,main):

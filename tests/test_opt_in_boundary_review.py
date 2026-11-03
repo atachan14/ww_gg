@@ -22,9 +22,9 @@ class OptInBoundaryReviewTests(unittest.TestCase):
             self.assertTrue(all(type(e)is InformationSetForecast for e in engines))
             app=create_app({'TESTING':True,'SECRET_KEY':'boundary-test-only'})
             self.assertFalse(app.config['EXACT_FUTURE_REUSE_PREVIEW'])
-            client=app.test_client();self.assertEqual(client.get('/').status_code,200)
+            client=app.test_client();self.assertEqual(client.get('/setup').status_code,200)
             self.assertEqual(client.post('/start',data={'players':'5','day':'max','night':'max'}).status_code,303)
-            self.assertEqual(client.get('/').status_code,200)
+            self.assertEqual(client.get('/setup').status_code,200)
 
     def test_closed_uniform_default_and_MAX_flags_keep_distinct_admission(self):
         data=case(5,'dual').data

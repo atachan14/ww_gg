@@ -47,7 +47,7 @@ class SetupWebTests(unittest.TestCase):
             return copy.deepcopy(session.get('game'))
 
     def top(self):
-        return Controls(self.client.get('/').get_data(as_text=True))
+        return Controls(self.client.get('/setup').get_data(as_text=True))
 
     def start(self, **changes):
         return self.client.post('/start', data={**self.sample, **changes})
@@ -59,7 +59,7 @@ class SetupWebTests(unittest.TestCase):
         self.assertEqual(controls['allow-self-bite'], '0')
         self.assertEqual(controls['citizens'], '4')
         self.assertIsNone(self.state())
-        html = self.client.get('/').get_data(as_text=True)
+        html = self.client.get('/setup').get_data(as_text=True)
         self.assertIn('サンプル②', html)
         self.assertIn('>サンプル</option>', html)
         self.assertEqual(html.count('class="exclusive-field inactive-item"'), 2)
@@ -73,7 +73,7 @@ class SetupWebTests(unittest.TestCase):
     def test_sample_three_cast_and_top_restore(self):
         self.assertEqual(CAST_PRESETS['seer_sample']['label'], 'サンプル⓷')
         self.assertEqual(CAST_PRESETS['seer_sample']['values'], dict(citizens=2,mediums=0,seers=1,hunters=0,wolves=2))
-        html=self.client.get('/').get_data(as_text=True)
+        html=self.client.get('/setup').get_data(as_text=True)
         self.assertIn('value="seer_sample"', html)
         self.assertIn('サンプル⓷', html)
         self.assertNotIn('5人サンプル', html)
@@ -87,8 +87,8 @@ class SetupWebTests(unittest.TestCase):
         state = self.state()
         main = Controls(self.client.get('/main').get_data(as_text=True))
         self.assertEqual(main.links['brand'], '/')
-        self.assertEqual(main.links['settings-return'], '/')
-        for route in (main.links['brand'], main.links['settings-return']):
+        self.assertEqual(main.links['settings-return'], '/setup')
+        for route in (main.links['settings-return'],):
             values = Controls(self.client.get(route).get_data(as_text=True)).values
             for role, count in dict(citizens='4',mediums='1',seers='1',hunters='1',wolves='2').items():
                 self.assertEqual(values[role], count)

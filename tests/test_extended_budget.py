@@ -38,7 +38,7 @@ class ExtendedBudgetTests(unittest.TestCase):
   self.assertIn('計算時間',r.get_data(as_text=True));self.assertNotIn('id="village-rate"',r.get_data(as_text=True))
  def clock(self):self.now+=2;return self.now
  def test_defaults_and_forecast_still_exact(self):
-  self.assertEqual((DEFAULT_MAX_WORK,DEFAULT_MAX_SECONDS),(4000000,270));app,c=self.client();r=c.get('/main');self.assertIn('data-fraction="7/15"',r.get_data(as_text=True));self.assertIn('最大約5分',r.get_data(as_text=True));self.assertIn('最大約5分',c.get('/').get_data(as_text=True))
+  self.assertEqual((DEFAULT_MAX_WORK,DEFAULT_MAX_SECONDS),(4000000,270));app,c=self.client();r=c.get('/main');self.assertIn('data-fraction="7/15"',r.get_data(as_text=True));self.assertIn('最大約5分',r.get_data(as_text=True));self.assertIn('最大約5分',c.get('/setup').get_data(as_text=True))
 
  def test_concurrent_requests_use_one_slot_and_release_after_error(self):
   import time

@@ -138,7 +138,7 @@ class CalculationTreeTests(unittest.TestCase):
                     name,options=self.select
                     self.fields[name]=next((v for v,selected in options if selected),options[0][0])
                     self.select=None
-        client=self.app.test_client();form=Form();form.feed(client.get('/').get_data(as_text=True));payload=form.fields
+        client=self.app.test_client();form=Form();form.feed(client.get('/setup').get_data(as_text=True));payload=form.fields
         self.assertEqual((payload['citizens'],payload['seers']),('4','0'))
         self.assertNotIn('probability-format',payload)
         started=client.post('/start',data=payload);self.assertEqual(started.status_code,303)

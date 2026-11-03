@@ -15,7 +15,7 @@ class SeerGameRuleTests(unittest.TestCase):
  def test_three_choices_snapshot_and_main_readonly_top_editable(self):
   for initial in ('normal','random_white','none'):
    self.assertEqual(self.start(initial).status_code,303);g=self.g();self.assertEqual(g['rules']['initial_seer'],initial);self.assertEqual(g['seer_options'],{'initial_rule':initial,'likelihood':'compatibility'});self.assertEqual(g['seer_mode'],MODE)
-   top=self.c.get('/').data;main=self.c.get('/main').data
+   top=self.c.get('/setup').data;main=self.c.get('/main').data
    self.assertIn(b'id="first-seer" name="initial_seer"',top);self.assertNotIn(b'id="seer-mode"',top)
    self.assertIn(b'id="view-first-seer" disabled',main);self.assertNotIn(b'name="seer_initial_rule"',main);self.assertNotIn(b'name="seer_likelihood"',main)
    self.assertEqual(GameConfig.from_game(g).draft().initial_seer,initial)

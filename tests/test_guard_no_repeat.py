@@ -163,7 +163,7 @@ class NoRepeatGuardRouteTests(unittest.TestCase):
 
     def test_minimal_rule_control_default_and_false_save(self):
         from tests.test_setup import Controls
-        top=self.c.get('/').get_data(as_text=True)
+        top=self.c.get('/setup').get_data(as_text=True)
         self.assertEqual(Controls(top).values['repeat-guard'],'1')
         self.assertIn('name="allow_repeat_guard"',top)
         self.assertNotIn('なし（未対応）',top)
@@ -174,7 +174,7 @@ class NoRepeatGuardRouteTests(unittest.TestCase):
         self.assertEqual(main.status_code,200)
         self.assertIn(b'data-fraction="11/24"',main.data)
         self.assertEqual(Controls(main.get_data(as_text=True)).values['view-repeat-guard'],'0')
-        self.assertEqual(Controls(self.c.get('/').get_data(as_text=True)).values['repeat-guard'],'0')
+        self.assertEqual(Controls(self.c.get('/setup').get_data(as_text=True)).values['repeat-guard'],'0')
 
     def test_saved_reentry_two_gj_private_back_and_corpse_edit(self):
         import json
