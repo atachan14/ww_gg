@@ -11,7 +11,7 @@
   disclose_all: true, seer_target: [...defaults.seer_target], fake_report: [...defaults.fake_report], bite: 'max', execution: 'max'});
 
  let db = null, game = null, flash = '', inflight = null, calculating = null, draft = {}, editingStrategy = null;
- let target = null, openCo = new Set(), breakdown = true, backgroundPaused = false;
+ let target = null, breakdown = true, backgroundPaused = false;
  const panes = {display: false, rules: false, strategy: false};
  let fractions = false;
  try { fractions = localStorage.getItem('ww_gg.probability-format') === 'fraction'; } catch (_) {}
@@ -188,7 +188,7 @@
  function select(id) {
   game.current = id;
   nodeOf(id).visited = true;
-  draft = {}; editingStrategy = null; target = null; openCo = new Set(); backgroundPaused = false;
+  draft = {}; editingStrategy = null; target = null; backgroundPaused = false;
   for (let at = nodeOf(id); at && at.parent; at = nodeOf(at.parent)) nodeOf(at.parent).open = true;
   save();
   const node = current();
@@ -513,12 +513,13 @@
     : kind ? el('button', {type: 'button', class: 'status-choice', disabled: !ends, 'aria-pressed': String(chosen === player), onclick: () => { target = player; render(); }},
      chosen === player ? `D${dayOf(node.log)} ${kind === 'exec' ? '処刑' : '襲撃'}` : '生存')
     : el('span', {class: 'status alive'}, '生存');
-   const open = openCo.has(player);
+   const roleChoices = ['seer', 'medium'].filter(role => game.cast[role]), shownRole = claim || entry.co;
    rows.push(el('tr', {class: alive ? '' : 'executed', 'data-player': player},
     el('td', {class: 'index'}, String(player)),
     el('td', {class: 'player-name'}, `Player ${player}`),
-    el('td', {'data-col': 'co'}, editable && alive ? el('button', {type: 'button', class: 'co-summary', 'aria-expanded': String(open), 'aria-label': `Player ${player}のCO詳細`,
-      onclick: () => { if (open) openCo.delete(player); else openCo.add(player); render(); }}, claim ? ROLE[claim] : (entry.co ? ROLE[entry.co] + '(入力中)' : '--'), el('span', {class: 'co-arrow', 'aria-hidden': 'true'}, open ? '▾' : '▸'))
+    el('td', {'data-col': 'co'}, editable && alive && !claim
+     ? el('select', {class: 'co-select', 'aria-label': `Player ${player}のCO`, onchange: event => { entry.co = event.target.value; render(); }},
+      el('option', {value: ''}, '--'), roleChoices.map(role => el('option', {value: role, selected: entry.co === role}, ROLE[role])))
      : el('span', {}, claim ? ROLE[claim] : '--')),
     el('td', {class: 'village-text'}, row ? probability(village(row)) : loading()),
     detail && breakdown ? roles.map(role => el('td', {'data-role-detail': ''}, row ? probability(row[role]) : loading())) : null,
@@ -527,15 +528,18 @@
     el('td', {class: 'action-rates'}, rate !== undefined ? [el('span', {class: 'village-text'}, probability(rate)), ' / ', el('span', {class: 'wolf-text'}, probability(complement(rate)))]
      : alive && kind ? el('span', {class: 'muted'}, node.result ? '—' : '未計算') : ''),
     el('td', {'data-col': 'status'}, statusCell)));
-   if (open && editable && alive) {
-    const roleChoices = ['seer', 'medium'].filter(role => game.cast[role]);
-    rows.push(el('tr', {class: 'co-detail-row'}, el('td', {}), el('td', {colSpan: 7 + (detail && breakdown ? roles.length : 0)}, el('div', {class: 'report-editor'},
-     claim ? el('span', {}, ROLE[claim] + 'CO済み') : el('label', {}, 'CO ', el('select', {'aria-label': `Player ${player}のCO`, onchange: event => { entry.co = event.target.value; render(); }},
-      el('option', {value: ''}, 'なし'), roleChoices.map(role => el('option', {value: role, selected: entry.co === role}, ROLE[role])))),
-     claim || entry.co ? [el('label', {}, '報告 ', el('select', {'aria-label': `Player ${player}の報告先`, onchange: event => { entry.target = event.target.value; render(); }},
-       el('option', {value: ''}, 'なし'), Array.from({length: players()}, (_, i) => i + 1).filter(other => other !== player).map(other => el('option', {value: other, selected: Number(entry.target) === other}, `Player${other}`)))),
+   // As in v0.6: a claimed role always shows its results, and today's report is entered on the same line.
+   if (shownRole) {
+    const past = state.columns.flatMap(item => item.event.acts.filter(act => act.kind === 'report' && act.player === player)
+     .map(act => el('span', {class: 'co-day'}, `D${item.day} P${act.target}=${COLOR[act.color]}`)));
+    const targets = Array.from({length: players()}, (_, i) => i + 1).filter(other => other !== player);
+    rows.push(el('tr', {class: 'co-detail-row'}, el('td', {}), el('td', {colSpan: 7 + (detail && breakdown ? roles.length : 0)}, el('div', {class: 'co-line'},
+     el('span', {class: 'co-role-label'}, ROLE[shownRole]),
+     past.length ? el('div', {class: 'co-timeline'}, past) : null,
+     editable && alive ? [el('select', {'aria-label': `Player ${player}の報告先`, onchange: event => { entry.target = event.target.value; render(); }},
+       el('option', {value: ''}, '報告なし'), targets.map(other => el('option', {value: other, selected: Number(entry.target) === other}, `Player${other}`))),
       el('select', {'aria-label': `Player ${player}の報告の色`, onchange: event => { entry.color = event.target.value; render(); }},
-       Object.keys(COLOR).map(color => el('option', {value: color, selected: (entry.color || 'white') === color}, COLOR[color])))] : null))));
+       Object.keys(COLOR).map(color => el('option', {value: color, selected: (entry.color || 'white') === color}, COLOR[color])))] : !past.length ? el('span', {class: 'co-ability-note'}, '結果なし') : null))));
    }
   }
   const toggle = detail ? el('button', {type: 'button', class: 'role-breakdown-toggle', 'aria-expanded': String(breakdown), 'aria-label': '村陣営の役職内訳を開閉', onclick: () => { breakdown = !breakdown; render(); }},
@@ -627,7 +631,7 @@
   const id = location.hash.slice(1);
   cancelInflight();
   game = id ? await store('readonly', games => games.get(id)) || null : null;
-  draft = {}; editingStrategy = null; target = null; openCo = new Set(); backgroundPaused = false;
+  draft = {}; editingStrategy = null; target = null; backgroundPaused = false;
   if (id && !game) { flash = 'この履歴は見つかりません。'; location.hash = ''; }
   await render();
   if (game) { const node = current(); if (!node.settled && !node.result && !node.failure) calculate(node); else next(); }
