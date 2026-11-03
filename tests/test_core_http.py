@@ -30,6 +30,7 @@ class CoreBoard(unittest.TestCase):
         data = self.post(FIVE).get_json()
         self.assertEqual(data['win_rates']['village'], '7/15')
         self.assertEqual(data['stage'], 'closed')
+        self.assertEqual(data['alive_wolves'], {'1': '1'})
         self.assertEqual(data['role_rates']['1']['wolf'], '1/5')
         self.assertEqual(data['action_ends']['1'], {'village': '1/5', 'wolf': '0'})
         self.assertEqual(sum(F(b['probability']) for b in data['branches']), 1)

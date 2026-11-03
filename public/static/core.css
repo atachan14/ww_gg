@@ -1,53 +1,34 @@
-:root { color-scheme: light; --ink: #1e293b; --muted: #697586; --line: #dfe5e8; --village: #116c58; --wolf: #9c4727; --accent: #1b614e; }
-* { box-sizing: border-box; }
-body { margin: 0; padding: 16px 24px 40px; background: #f2f4f3; color: var(--ink); font-family: "Segoe UI", "Yu Gothic UI", system-ui, sans-serif; font-size: 14px; line-height: 1.6; }
-.head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin: 0 auto 16px; max-width: 1400px; }
-.brand { color: var(--ink); text-decoration: none; font-weight: 800; font-size: 22px; }
-.brand small { font-size: 12px; font-weight: 500; color: var(--muted); margin-left: 8px; }
-#app { max-width: 1400px; margin: 0 auto; }
-.panel { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; min-width: 0; }
-h1 { font-size: 22px; margin: 0 0 8px; }
-h2 { font-size: 14px; margin: 0 0 10px; }
-h3 { font-size: 12px; color: var(--muted); margin: 12px 0 4px; }
-.grid { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 16px; align-items: start; }
-.muted { color: var(--muted); font-size: 12px; }
+/* Only what styles.css (the v0.6 look) does not have. */
+.order-item { display: flex; align-items: center; gap: 6px; margin: 2px 0; font-size: 12px; }
+.order-item button { min-width: 0; min-height: 22px; padding: 0 6px; font-size: 12px; font-weight: 400; }
+.strategy-section { margin: 6px 0 10px; font-size: 12px; }
+.strategy-section h4 { font-size: 12px; margin: 0 0 4px; color: var(--muted); font-weight: 600; }
+.strategy-section .checkbox-label { margin: 3px 0; }
+.strategy-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 4px 0; }
+.strategy-row select { width: auto; padding: 4px 8px; font-size: 12px; }
+.strategy-apply-row { display: flex; gap: 6px; margin-top: 8px; }
+.strategy-apply-row button { flex: 1; min-width: 0; min-height: 32px; padding: 4px 8px; font-size: 12px; }
+.report-editor { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 12px; }
+.report-editor select { width: auto; padding: 3px 6px; font-size: 12px; }
+.update-list { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 6px 0; font-size: 12px; }
+.update-list button { min-width: 0; min-height: 26px; padding: 2px 8px; font-size: 12px; font-weight: 400; }
+.board-table-heading .board-table-note { font-size: 11px; color: var(--muted); }
+.saved-list { list-style: none; margin: 0; padding: 0; font-size: 12px; }
+.saved-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 4px 0; }
+.saved-list button { min-width: 0; min-height: 28px; padding: 2px 10px; font-size: 12px; font-weight: 400; }
+.history-panel { margin-top: 18px; }
+.calc-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; font-size: 12px; }
+.calc-controls button { min-width: 0; min-height: 28px; padding: 2px 10px; font-size: 12px; font-weight: 400; }
 .error { color: #b42318; }
-.rates { display: flex; flex-wrap: wrap; gap: 12px; margin: 8px 0; }
-.rate { border-radius: 10px; padding: 8px 16px; min-width: 130px; }
-.rate small { display: block; font-size: 12px; }
-.rate strong { font-size: 24px; }
-.village { background: #eef7f2; color: var(--village); }
-.wolf { background: #fcf2eb; color: var(--wolf); }
-button { font: inherit; font-size: 13px; padding: 4px 10px; border: 1px solid #b9c4cb; border-radius: 7px; background: #fff; color: var(--ink); cursor: pointer; }
-button:hover:not(:disabled) { background: #f0f4f3; }
-button:disabled { color: var(--muted); cursor: default; }
-button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-button.primary:hover:not(:disabled) { background: #164f40; }
-button.primary:disabled { background: #cfd8d5; border-color: #cfd8d5; color: #fff; }
-select, input[type=number] { font: inherit; font-size: 13px; padding: 3px 6px; border: 1px solid #ccd4d9; border-radius: 6px; background: #fff; color: var(--ink); }
-input[type=number] { width: 64px; }
-.table-wrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-th, td { border-bottom: 1px solid var(--line); padding: 5px 8px; text-align: left; white-space: nowrap; }
-th { font-size: 12px; color: var(--muted); font-weight: 600; }
-tr.dead td { color: var(--muted); background: #f8f9f9; }
-td.best { font-weight: 700; }
-.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 6px 0; }
-.check { display: flex; gap: 6px; align-items: flex-start; margin: 4px 0; }
-.order-item { display: flex; align-items: center; gap: 6px; margin: 2px 0; }
-.order-item button { padding: 0 6px; }
-.log { margin: 0; padding-left: 18px; }
-.branches { list-style: none; margin: 0; padding: 0; }
-.branches li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 3px 0; }
-.tree-frame { overflow: auto; max-height: 70vh; padding-bottom: 4px; }
-.tree-node { display: flex; align-items: flex-start; }
-.tree-children { display: flex; flex-direction: column; gap: 4px; margin-left: 16px; padding-left: 12px; border-left: 2px solid var(--line); }
-.tree-card { flex: none; width: 210px; border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; background: #fff; text-align: left; font-size: 12px; line-height: 1.5; display: block; }
-.tree-card.current { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
-.tree-card.manual { border-style: dashed; }
-.tree-card b { display: block; font-size: 12px; white-space: normal; }
-.tree-item { display: flex; gap: 4px; align-items: flex-start; margin-bottom: 4px; }
-.toggle { flex: none; padding: 0 5px; }
-.saved { list-style: none; margin: 0; padding: 0; }
-.saved li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 4px 0; }
-@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr); } body { padding: 12px 16px 32px; } }
+.phase-buttons [data-target-preview] { white-space: nowrap; }
+/* The v0.6 Tree without its zoom viewport: the frame scrolls and the headers stick. */
+.core-tree .tree-flow-frame { padding: 0; margin: 10px 0 0; max-height: 72vh; overflow: auto; }
+.core-tree .tree-flowchart { min-width: 0; }
+.core-tree .compact-tree-headers { position: sticky; top: 0; height: 36px; }
+.core-tree .compact-tree-phase { padding: 7px 4px; background: transparent; border-bottom: 0; }
+.core-tree .compact-tree-canvas { touch-action: auto; cursor: default; }
+.core-tree .compact-tree-item.manual { border-style: dashed; }
+.core-tree .compact-tree-lines > path.manual { stroke-dasharray: 4 3; }
+.core-tree .compact-tree-select { cursor: pointer; }
+.core-tree .compact-tree-item.settled { background: #f7f8f8; }
+.core-tree .compact-action-item.manual { border-style: dashed; }

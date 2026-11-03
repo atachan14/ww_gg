@@ -283,6 +283,7 @@ class Edge:
 class Evaluation:
     stage: str
     role_rates: dict  # player -> role name -> Fraction
+    alive_wolves: dict  # number of living wolves -> Fraction
     win_rates: dict  # 'village' | 'wolf' -> Fraction
     action_rates: dict  # player -> village win rate if this player is executed / bitten
     action_ends: dict  # player -> {'village': p, 'wolf': p}, the game ending right at this action
@@ -968,6 +969,13 @@ class Calculation:
                 ends.update((p, row) for p in node.groups[i])
         return ends
 
+    def alive_wolves(self, node):
+        counts = {}
+        for state, mass in node.rate.items():
+            count = sum(wolves_in(vector) for i, vector in enumerate(state) if i in node.alive_groups)
+            counts[count] = counts.get(count, F()) + mass
+        return counts
+
     def read_board(self):
         """Everything of this board that needs no future: rates, stage, column branches, ends."""
         node, labels = self.locate()
@@ -976,6 +984,7 @@ class Calculation:
         return Evaluation(
             stage=stage_node.stage,
             role_rates=self.role_rates(node, labels),
+            alive_wolves=self.alive_wolves(node),
             win_rates={},
             action_rates={},
             action_ends={back[p]: row for p, row in self.action_ends(stage_node).items()},
@@ -1013,6 +1022,7 @@ class Calculation:
         return Evaluation(
             stage=stage_node.stage,
             role_rates=role_rates,
+            alive_wolves=self.alive_wolves(node),
             win_rates={'village': village, 'wolf': 1 - village},
             action_rates={back[p]: v for p, v in action_rates.items()},
             action_ends={back[p]: row for p, row in self.action_ends(stage_node).items()},

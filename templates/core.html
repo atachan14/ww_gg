@@ -3,17 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ww_gg 新しい計算</title>
+  <title>ww_gg</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('help_five_asset', name='help-header-integration.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='core.css') }}">
+  <script src="{{ url_for('static', filename='tree_layout.js') }}" defer></script>
   <script src="{{ url_for('static', filename='core.js') }}" defer></script>
 </head>
 <body>
-  <header class="head">
-    <a class="brand" href="{{ url_for('core_page') }}">ww_gg <small>新しい計算(v0.8)</small></a>
-    <label class="format"><input type="checkbox" id="fraction-format"> 分数で表示</label>
-  </header>
-  <script type="application/json" id="strategy-defaults">{{ strategy_defaults|tojson }}</script>
-  <div id="app"><p role="status">読み込み中…</p></div>
-  <noscript><p class="error">この画面には JavaScript が必要です。</p></noscript>
+  <div class="page-shell" id="page-top">
+    <header class="site-head">
+      <a class="brand" href="{{ url_for('core_page') }}">ww_gg<span>人狼の期待勝率</span></a>
+      <div class="head-end"><a class="header-help" href="{{ url_for('help_route') }}">HELP</a><span class="badge">v0.8 試作</span></div>
+    </header>
+    <script type="application/json" id="strategy-defaults">{{ strategy_defaults|tojson }}</script>
+    <div id="app"><p role="status">読み込み中…</p></div>
+    <noscript><p class="error">この画面には JavaScript が必要です。</p></noscript>
+  </div>
 </body>
 </html>

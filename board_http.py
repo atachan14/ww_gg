@@ -27,6 +27,7 @@ def result_json(result, stage_only=False):
     return {
         'stage': result.stage,
         'role_rates': fraction_rows(result.role_rates),
+        'alive_wolves': {str(count): str(p) for count, p in sorted(result.alive_wolves.items())},
         'win_rates': {name: str(value) for name, value in result.win_rates.items()},
         'action_rates': {str(player): str(value) for player, value in result.action_rates.items()},
         'action_ends': fraction_rows(result.action_ends),
