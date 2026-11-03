@@ -171,7 +171,7 @@
  function failed(node, {status, data}) {
   if (status === 499) return;
   calculating = null;
-  if (status === 422) node.failure = {kind: 'contradiction', message: '盤面が戦略と矛盾しています(役職の候補が残りません)。'};
+  if (status === 422 && data.kind === 'contradiction') node.failure = {kind: 'contradiction', message: '盤面が戦略と矛盾しています(役職の候補が残りません)。'};
   else if (status === 503) { node.failure = {kind: 'pending', message: node.result ? 'この先の Board は未計算: 時間か作業量の上限に達しました。' : '未計算: 時間か作業量の上限に達しました。'}; backgroundPaused = true; }
   else node.failure = {kind: 'invalid', message: data.error || '計算できません'};
   save();

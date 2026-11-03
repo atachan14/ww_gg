@@ -74,7 +74,7 @@ def install(app):
     def restore_browser_document():
         packet=request.environ.get('wwgg.browser_packet')
         if packet is None:
-            if request.method=='POST' and request.path not in ('/start','/calculation-cancel'):return jsonify(error='Browser-history prototype requires its public recipe transport'),422
+            if request.method=='POST' and request.path not in ('/start','/calculation-cancel','/core/board'):return jsonify(error='Browser-history prototype requires its public recipe transport'),422
             return
         try:
             record=signer.loads(packet['token'])

@@ -45,6 +45,12 @@ class CoreBoard(unittest.TestCase):
             self.assertEqual(child['result'], alone)
             self.assertNotIn('children', child['result'])
 
+    def test_preview_configuration_lets_the_screen_through(self):
+        client = create_app({'TESTING': True, 'SECRET_KEY': 'core-http-test', 'BROWSER_HISTORY_PREVIEW': True, 'GAME_TREE_PREVIEW': True,
+                             'PERSISTENT_TREE_PREVIEW': True, 'ANONYMOUS_NIGHT_PREVIEW': True, 'ANONYMOUS_OWNERSHIP_PREVIEW': True}).test_client()
+        self.assertEqual(client.post('/core/board?scope=read', json=FIVE).status_code, 200)
+        self.assertEqual(client.post('/core/board', json=FIVE).get_json()['win_rates']['village'], '7/15')
+
     def test_read_scope_has_no_future(self):
         data = self.post(FIVE, '?scope=read').get_json()
         self.assertEqual(data['win_rates'], {})
