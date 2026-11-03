@@ -15,7 +15,8 @@
 |---|---|
 | `app.py` | HTTP とストリームの制御 |
 | `werewolf/` | 厳密な計算のモデル、盤面の移動、評価の記録、再構築 |
-| `wwcore/` | v0.7 の新しい計算の芯(試作。画面からはまだ使わない。[redesign/core-v07.md](redesign/core-v07.md)) |
+| `wwcore/` | 新しい計算の芯([redesign/core-v07.md](redesign/core-v07.md))。`/core` の画面だけが使う |
+| `board_http.py`、`templates/core.html`、`static/core.js`、`static/core.css` | `/core` の画面(v0.8)。サーバーは Board ごとに計算するだけで状態を持たず、履歴はブラウザ内(IndexedDB) |
 | `templates/`、`static/` | 画面の元のファイル |
 | `public/static/` | ホスト用の静的ファイルのコピー。`build_vercel.py` で同期する(片方だけを手で直さない) |
 | `tests/` | 独立した検証、契約のテスト、DOM のテスト |
@@ -44,6 +45,7 @@
 ```powershell
 $env:PYTHONPATH='.;tests'
 .venv/Scripts/python.exe -X utf8 -m unittest tests.test_wwcore
+.venv/Scripts/python.exe -X utf8 -m unittest tests.test_core_http
 .venv/Scripts/python.exe -X utf8 -m unittest tests.test_model_a_night_oracles
 .venv/Scripts/python.exe -X utf8 -m unittest tests.test_browser_history tests.test_calculation_cancellation
 node --test tests/personal_cold_generation.test.cjs tests/calculation_cancellation.test.cjs tests/browser_history.test.cjs tests/input_calculation_option.test.cjs

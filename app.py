@@ -59,6 +59,9 @@ def create_app(test_config=None, *, deployment=False):
     app.jinja_env.filters["fraction"] = str
     app.jinja_env.globals.update(role_labels=ROLE_LABELS, role_order=ROLES)
 
+    from board_http import register_core
+    register_core(app)
+
     from werewolf.game_runtime import GameRuntimes
     game_runtimes=GameRuntimes()
     calculation_slot=BoundedSemaphore(1)
@@ -612,7 +615,7 @@ def create_app(test_config=None, *, deployment=False):
         if request.method=='POST':g.calculation_previous_session=deepcopy(dict(session))
         if request.path=='/calculation-cancel':return
         token=request.headers.get('X-WW-Calculation-ID')
-        readonly=(request.path in ('/main','/table-preview','/private-view','/comparison','/navigation/calculation') or request.path=='/game-tree' and request.method=='GET')
+        readonly=(request.path in ('/main','/table-preview','/private-view','/comparison','/navigation/calculation','/core/board') or request.path=='/game-tree' and request.method=='GET')
         if token is not None and readonly:
             if not calculation_jobs.valid(token):return jsonify(error='Invalid calculation request ID'),400
             owner=session.setdefault('co_display_game',secrets.token_hex(8))
@@ -677,7 +680,7 @@ def create_app(test_config=None, *, deployment=False):
             session.clear();session.update(previous);session.modified=True
         message=stop_message(error.kind)
         if request.path.startswith('/game-tree'):return jsonify(error=message,pending=True,budget_kind=error.kind),503
-        if request.method=='POST' and request.path in ('/private-view','/table-preview','/table-publish','/public-log','/dawn-report'):
+        if request.method=='POST' and request.path in ('/private-view','/table-preview','/table-publish','/public-log','/dawn-report','/core/board'):
             return jsonify(error=message,budget_kind=(budget_stop() or {}).get('kind',error.kind),pending=True),503
         return render_template('budget_pending.html',message=message),503
 

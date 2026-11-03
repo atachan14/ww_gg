@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ww_gg 新しい計算</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='core.css') }}">
+  <script src="{{ url_for('static', filename='core.js') }}" defer></script>
+</head>
+<body>
+  <header class="head">
+    <a class="brand" href="{{ url_for('core_page') }}">ww_gg <small>新しい計算(v0.8)</small></a>
+    <label class="format"><input type="checkbox" id="fraction-format"> 分数で表示</label>
+  </header>
+  <script type="application/json" id="strategy-defaults">{{ strategy_defaults|tojson }}</script>
+  <div id="app"><p role="status">読み込み中…</p></div>
+  <noscript><p class="error">この画面には JavaScript が必要です。</p></noscript>
+</body>
+</html>

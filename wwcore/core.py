@@ -1,4 +1,4 @@
-"""The v0.7 calculation: reading (蠖ｹ閨ｷ邇・ and forward outcomes (蜍晉紫), board by board.
+"""The v0.7 calculation: reading (役職率) and forward outcomes (勝率), board by board.
 
 A state counts, per 荳閾ｴ繧ｰ繝ｫ繝ｼ繝・ how many members have each kind (role plus what
 the seer knows about them). `Node.rate` is the reading of a board; `outcome` is
@@ -285,6 +285,7 @@ class Evaluation:
     role_rates: dict  # player -> role name -> Fraction
     win_rates: dict  # 'village' | 'wolf' -> Fraction
     action_rates: dict  # player -> village win rate if this player is executed / bitten
+    action_ends: dict  # player -> {'village': p, 'wolf': p}, the game ending right at this action
     branches: tuple  # (event, probability), in user labels; a column stands for its renamings in a group
     stats: dict
 
@@ -292,13 +293,13 @@ class Evaluation:
 class Calculation:
     """Immutable input and caches of one calculation; nothing is shared between boards."""
 
-    def __init__(self, board, max_work=None):
+    def __init__(self, board, max_work=None, check=None):
         validate(board)
         self.board = board
         self.cast, self.rules, self.strategy = board.cast, board.rules, board.strategy
         self.n = board.cast.players
         self.wolf_claims = {ROLE_OF[name] for name in board.strategy.wolf_claims}
-        self.max_work, self.work = max_work, 0
+        self.max_work, self.work, self.check = max_work, 0, check
         self.nodes = {}
         self.layouts = {}
         self.splits = {}
@@ -311,6 +312,8 @@ class Calculation:
 
     def tick(self):
         self.work += 1
+        if self.check is not None:
+            self.check()
         if self.max_work is not None and self.work > self.max_work:
             raise WorkLimitExceeded(f'Work limit {self.max_work} reached')
 
@@ -433,7 +436,7 @@ class Calculation:
             return F(0)
         return None
 
-    # --- reading (蠖ｹ閨ｷ邇・ ----------------------------------------------------------
+    # --- reading (役職率) ----------------------------------------------------------
 
     def first_night(self, masses):
         """Night 0: the seer's result is uniform in the rule's range."""
@@ -462,6 +465,7 @@ class Calculation:
 
     def read(self, node, event):
         """Rate of the child of `node` through `event`: the only reading step."""
+        self.tick()
         edge = node.edges[event]
         if event[0] == 'col':
             masses = self.read_column(node, event[1], edge)
@@ -882,7 +886,7 @@ class Calculation:
         log = self.board.log
         for position, event in enumerate(log):
             if event[0] == 'exec' and not (position and log[position - 1][0] == 'col' and not log[position - 1][1]):
-                edge = self.edge(node, ('col', ()))  # a day always closes with 譖ｴ譁ｰ縺ｪ縺・before the execution
+                edge = self.edge(node, ('col', ()))  # a day always closes with 更新なし before the execution
                 node, labels = edge.child, [edge.perm[p] for p in labels]
             inner = self.to_inner(event, labels)
             edge = self.edge(node, inner)
@@ -927,21 +931,61 @@ class Calculation:
             rates[user + 1] = row
         return rates
 
+    def stage_of(self, node, labels):
+        """The stage shown for this board, and its column branches while it is open."""
+        if node.stage != 'open':
+            return node, labels, []
+        masses = {}
+        for state, mass in node.rate.items():
+            for key, items in self.column_law(node, state).items():
+                masses[key] = masses.get(key, F()) + mass * sum(items.values(), F())
+        if set(masses) == {()}:  # no update can happen: the same board, closed
+            edge = self.edge(node, ('col', ()))
+            return edge.child, [edge.perm[p] for p in labels], []
+        return node, labels, [(('col', key), p) for key, p in masses.items()]
+
+    def action_ends(self, node):
+        """Per candidate of this board: how likely the game ends right at that action."""
+        if node.stage == 'open':
+            return {}
+        kind, ends = ('exec' if node.stage == 'closed' else 'bite'), {}
+        for i in node.alive_groups:
+            player = node.groups[i][0]
+            edge = self.edge(node, (kind, player))
+            layout, alive = edge.layout, node.alive - {player}
+            where = layout.where[player]
+            weight, rates = F(), {1: F(), 0: F()}
+            for state, mass in node.rate.items():
+                for new, q in self.split(state, layout):
+                    if kind == 'bite' and ROLE[single(new[where])] == WOLF and not self.rules.self_bite:
+                        continue
+                    weight += mass * q
+                    end = self.decided(new, layout.groups, alive)
+                    if end is not None:
+                        rates[end] += mass * q
+            if weight:
+                row = {'village': rates[1] / weight, 'wolf': rates[0] / weight}
+                ends.update((p, row) for p in node.groups[i])
+        return ends
+
+    def read_board(self):
+        """Everything of this board that needs no future: rates, stage, column branches, ends."""
+        node, labels = self.locate()
+        stage_node, stage_labels, branches = self.stage_of(node, labels)
+        back = {inner: user + 1 for user, inner in enumerate(stage_labels)}
+        return Evaluation(
+            stage=stage_node.stage,
+            role_rates=self.role_rates(node, labels),
+            win_rates={},
+            action_rates={},
+            action_ends={back[p]: row for p, row in self.action_ends(stage_node).items()},
+            branches=tuple((self.to_user(event, stage_labels), p) for event, p in branches),
+            stats={'boards': len(self.nodes), 'states': 0, 'work': self.work})
+
     def evaluate(self):
         node, labels = self.locate()
         role_rates = self.role_rates(node, labels)
-        stage_node, stage_labels = node, labels
-        branches = []
-        if node.stage == 'open':
-            masses = {}
-            for state, mass in node.rate.items():
-                for key, items in self.column_law(node, state).items():
-                    masses[key] = masses.get(key, F()) + mass * sum(items.values(), F())
-            if set(masses) == {()}:  # no update can happen: the same board, closed
-                edge = self.edge(node, ('col', ()))
-                stage_node, stage_labels = edge.child, [edge.perm[p] for p in labels]
-            else:
-                branches = [(('col', key), p) for key, p in masses.items()]
+        stage_node, stage_labels, branches = self.stage_of(node, labels)
         action_rates = {}
         if stage_node.stage == 'closed':
             policy = self.execution_policy(stage_node)
@@ -971,6 +1015,7 @@ class Calculation:
             role_rates=role_rates,
             win_rates={'village': village, 'wolf': 1 - village},
             action_rates={back[p]: v for p, v in action_rates.items()},
+            action_ends={back[p]: row for p, row in self.action_ends(stage_node).items()},
             branches=tuple((self.to_user(event, stage_labels), p) for event, p in branches),
             stats={'boards': len(self.nodes), 'states': sum(len(n.outcomes) for n in self.nodes.values()),
                    'work': self.work})
@@ -992,9 +1037,14 @@ class Calculation:
         return {player: value / weight for player in node.groups[i]} if weight else {}
 
 
-def evaluate(board, max_work=None):
+def evaluate(board, max_work=None, check=None):
     """Board (public information and strategy) -> role rates, win rates, action rates."""
-    return Calculation(board, max_work).evaluate()
+    return Calculation(board, max_work, check).evaluate()
+
+
+def read_board(board, check=None):
+    """Role rates, stage, column branches and ends; no future is computed."""
+    return Calculation(board, check=check).read_board()
 
 
 def read_roles(board):
