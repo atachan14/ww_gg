@@ -24,7 +24,7 @@ def event_json(event):
 
 
 def result_json(result, stage_only=False):
-    return {
+    data = {
         'stage': result.stage,
         'role_rates': fraction_rows(result.role_rates),
         'alive_wolves': {str(count): str(p) for count, p in sorted(result.alive_wolves.items())},
@@ -34,6 +34,9 @@ def result_json(result, stage_only=False):
         'branches': [{'event': event_json(event), 'probability': str(p)} for event, p in result.branches],
         'complete': not stage_only,
     }
+    if result.children:
+        data['children'] = [{'event': event_json(event), 'result': result_json(child)} for event, child in result.children]
+    return data
 
 
 def number(data, key, default=None):

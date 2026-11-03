@@ -36,6 +36,15 @@ class CoreBoard(unittest.TestCase):
         self.assertEqual(sum(F(b['probability']) for b in data['branches']), 1)
         self.assertTrue(data['complete'])
 
+    def test_children_are_what_their_own_requests_return(self):
+        data = self.post(FIVE).get_json()
+        self.assertEqual(len(data['children']), 5)
+        for child in data['children']:
+            alone = self.post({**FIVE, 'log': [col(), child['event']]}).get_json()
+            alone.pop('children', None)
+            self.assertEqual(child['result'], alone)
+            self.assertNotIn('children', child['result'])
+
     def test_read_scope_has_no_future(self):
         data = self.post(FIVE, '?scope=read').get_json()
         self.assertEqual(data['win_rates'], {})

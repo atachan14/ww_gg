@@ -138,7 +138,7 @@
   const owner = game, mine = calculating = node.id, live = () => calculating === mine && game === owner;
   render();
   try {
-   if (!node.read) {
+   if (!node.read && !node.result) {
     const read = await request(node, 'read');
     if (!live()) return;
     if (read.status !== 200) return failed(node, read);
@@ -148,8 +148,14 @@
    const full = await request(node, 'full');
    if (!live()) return;
    if (full.status !== 200) return failed(node, full);
-   node.result = full.data;
-   node.village = full.data.win_rates.village;
+   const {children = [], ...result} = full.data;
+   node.result = result;
+   node.village = result.win_rates.village;
+   node.expanded = true;
+   for (const {event, result: known} of children) {
+    const child = childFor(node, event, result.branches.find(branch => eventKey(branch.event) === eventKey(event)));
+    if (!child.result) Object.assign(child, {result: known, village: known.win_rates.village, failure: null});
+   }
    calculating = null;
    save();
    render();
@@ -166,20 +172,22 @@
   if (status === 499) return;
   calculating = null;
   if (status === 422) node.failure = {kind: 'contradiction', message: '盤面が戦略と矛盾しています(役職の候補が残りません)。'};
-  else if (status === 503) { node.failure = {kind: 'pending', message: '未計算: 時間か作業量の上限に達しました。'}; backgroundPaused = true; }
+  else if (status === 503) { node.failure = {kind: 'pending', message: node.result ? 'この先の Board は未計算: 時間か作業量の上限に達しました。' : '未計算: 時間か作業量の上限に達しました。'}; backgroundPaused = true; }
   else node.failure = {kind: 'invalid', message: data.error || '計算できません'};
   save();
   render();
   next();
  }
- // The win rates of the visible Tree are calculated one at a time, Current first.
+ // Calculated one at a time, Current first. A Board's calculation also fills its direct children,
+ // so a Board already known from its parent only runs when its own children are needed.
  function next() {
   if (calculating || !game || backgroundPaused) return;
-  const pending = visibleBoards().find(node => !node.result && !node.settled && !node.failure);
+  const pending = visibleBoards().find(node => !node.settled && !node.failure && (!node.result || (!node.expanded && (node.open || node === current()))));
   if (pending) calculate(pending);
  }
  function select(id) {
   game.current = id;
+  nodeOf(id).visited = true;
   draft = {}; editingStrategy = null; target = null; openCo = new Set(); backgroundPaused = false;
   for (let at = nodeOf(id); at && at.parent; at = nodeOf(at.parent)) nodeOf(at.parent).open = true;
   save();
@@ -227,7 +235,7 @@
  function actionGroups(node, children) {
   const source = node.result || node.read, onPath = new Set();
   for (let at = current(); at; at = at.parent ? nodeOf(at.parent) : null) onPath.add(at.id);
-  const visited = child => onPath.has(child.id) || child.open || child.result;
+  const visited = child => onPath.has(child.id) || child.open || child.visited;
   const groups = [], byKey = new Map();
   for (const child of children) {
    const key = child.probability === '0' || !source ? 'single:' + child.id : child.probability + positionKey(node, child.event.player, source);
@@ -561,7 +569,7 @@
    node.failure ? el('p', {class: isContradiction(node) ? 'error' : 'hint', role: 'alert'}, node.failure.message) : null,
    el('div', {class: 'calc-controls'},
     running ? el('button', {type: 'button', class: 'secondary', onclick: () => { cancelInflight(); backgroundPaused = true; render(); }}, '計算を止める') : null,
-    !running && !blocked && !node.result ? el('button', {type: 'button', class: 'secondary', onclick: () => { backgroundPaused = false; calculate(node); }}, '再計算') : null));
+    !running && !blocked && (!node.result || !node.expanded) ? el('button', {type: 'button', class: 'secondary', onclick: () => { backgroundPaused = false; calculate(node); }}, '再計算') : null));
   const column = draftColumn(state), chosen = chosenTarget(node, kind);
   const player = blocked ? null : el('section', {class: 'panel player-panel', id: 'player-panel', 'aria-labelledby': 'players-title'},
    el('div', {class: 'panel-heading'}, el('h2', {class: 'board-section-label', id: 'players-title'}, 'BoardInfo'), el('span', {class: 'muted'}, '現在Boardの公開情報')),

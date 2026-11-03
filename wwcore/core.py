@@ -1,11 +1,11 @@
 """The v0.7 calculation: reading (役職率) and forward outcomes (勝率), board by board.
 
-A state counts, per 荳閾ｴ繧ｰ繝ｫ繝ｼ繝・ how many members have each kind (role plus what
+A state counts, per 一致グループ, how many members have each kind (role plus what
 the seer knows about them). `Node.rate` is the reading of a board; `outcome` is
 the village win probability of one state when the future follows the strategy.
 The formulas and the reasons for the symmetry are in docs/redesign/core-v07.md.
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from fractions import Fraction as F
 from itertools import product
 from math import comb
@@ -289,6 +289,7 @@ class Evaluation:
     action_ends: dict  # player -> {'village': p, 'wolf': p}, the game ending right at this action
     branches: tuple  # (event, probability), in user labels; a column stands for its renamings in a group
     stats: dict
+    children: tuple = ()  # (event, Evaluation) of the branches that do not end the game at once
 
 
 class Calculation:
@@ -881,10 +882,10 @@ class Calculation:
 
     # --- entry ------------------------------------------------------------------
 
-    def locate(self):
-        """Walk the input log from the root; returns the node and user -> node labels."""
+    def locate(self, log=None):
+        """Walk a log (the input by default) from the root; returns the node and user -> node labels."""
         node, labels = self.root, list(range(self.n))
-        log = self.board.log
+        log = self.board.log if log is None else log
         for position, event in enumerate(log):
             if event[0] == 'exec' and not (position and log[position - 1][0] == 'col' and not log[position - 1][1]):
                 edge = self.edge(node, ('col', ()))  # a day always closes with 更新なし before the execution
@@ -992,7 +993,19 @@ class Calculation:
             stats={'boards': len(self.nodes), 'states': 0, 'work': self.work})
 
     def evaluate(self):
-        node, labels = self.locate()
+        """This board and its direct children; the children's futures are this board's own."""
+        result = self.evaluate_log(self.board.log)
+        return replace(result, children=tuple(
+            (event, self.evaluate_log(self.board.log + (event,)))
+            for event, _ in result.branches if not self.ends_at_once(result, event)))
+
+    @staticmethod
+    def ends_at_once(result, event):
+        ends = result.action_ends.get(event[1]) if event[0] != 'col' else None
+        return ends is not None and ends['village'] + ends['wolf'] == 1
+
+    def evaluate_log(self, log):
+        node, labels = self.locate(log)
         role_rates = self.role_rates(node, labels)
         stage_node, stage_labels, branches = self.stage_of(node, labels)
         action_rates = {}

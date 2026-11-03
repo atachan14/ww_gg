@@ -239,6 +239,30 @@ class Structure(unittest.TestCase):
             self.assertEqual(average, parent.win_rates['village'])
             self.assertEqual(wolf_rate, parent.role_rates[1]['wolf'])
 
+    def test_children_match_a_cold_calculation(self):
+        def walk(cast, strategy, log, depth):
+            result = evaluate(Board(cast, log, strategy=strategy))
+            for event, child in result.children:
+                cold = evaluate(Board(cast, log + (event,), strategy=strategy))
+                for field in ('stage', 'role_rates', 'alive_wolves', 'win_rates', 'action_rates', 'action_ends'):
+                    self.assertEqual(getattr(child, field), getattr(cold, field), (cast, log, event, field))
+                self.assertEqual(sorted(child.branches, key=repr), sorted(cold.branches, key=repr), (cast, log, event))
+                if depth:
+                    walk(cast, strategy, log + (event,), depth - 1)
+        walk(Cast(villager=4, wolf=1), Strategy(), (), 6)
+        walk(Cast(villager=4, medium=1, wolf=2), UNIFORM_BITE, (), 3)
+        walk(Cast(villager=4, medium=1, wolf=2), Strategy(), (), 3)
+        walk(Cast(villager=4, seer=1, wolf=2), UNIFORM_BITE, (), 1)
+        walk(Cast(villager=2, seer=1, medium=1, wolf=2), Strategy(), (), 2)
+
+    def test_a_child_ending_every_world_is_not_returned(self):
+        result = evaluate(Board(Cast(villager=2, wolf=1), (column(),)))
+        kept = {event for event, _ in result.children}
+        self.assertTrue(result.branches)
+        for event, _ in result.branches:
+            ends = result.action_ends.get(event[1])
+            self.assertEqual(event in kept, not (ends and ends['village'] + ends['wolf'] == 1))
+
     def test_renaming_players_renames_the_answer(self):
         cast = Cast(villager=3, seer=1, medium=1, wolf=2)
         rng = random.Random(7)
