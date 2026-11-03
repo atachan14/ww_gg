@@ -7,7 +7,7 @@ from wwcore import (Board, BoardContradiction, Cast, InvalidBoard, Rules, Strate
                     bite, co, column, evaluate, execute, read_roles, report)
 from wwcore.core import initial_masses
 from wwcore.model import MEDIUM
-from wwcore_oracle import Oracle
+from tests.wwcore_oracle import Oracle
 
 UNIFORM_BITE = Strategy(bite='uniform')
 ROLES = ('villager', 'medium', 'wolf', 'seer')
@@ -50,7 +50,7 @@ class NamedResults(unittest.TestCase):
         self.assertEqual(F(8, 35) * 1 + F(27, 35) * F(2, 27), F(2, 7))
 
     def test_board_c_when_wolves_may_claim(self):
-        # Recorded open point (core-v07.md): a free fake CO stays possible, so X is not confirmed.
+        # core-v07.md: a free fake CO stays possible, so X is not confirmed.
         cast = Cast(villager=4, medium=1, wolf=2)
         log = (column(), execute(1), bite(2), column(co(3, 'medium'), report(3, 1, 'black')))
         self.assertEqual(read_roles(Board(cast, log, strategy=UNIFORM_BITE))[1]['wolf'], F(1, 3))
