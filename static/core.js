@@ -117,7 +117,7 @@
   calculating = null;
   if (!inflight) return;
   inflight.controller.abort();
-  fetch('/calculation-cancel', {method: 'POST', body: new URLSearchParams({calculation_id: inflight.token})}).catch(() => {});
+  fetch('/calculation-cancel', {method: 'POST', keepalive: true, body: new URLSearchParams({calculation_id: inflight.token})}).catch(() => {});
   inflight = null;
  }
  const newToken = () => Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
@@ -226,19 +226,29 @@
   if (source) for (const branch of source.branches) childFor(node, branch.event, branch);
  }
  // Same public position, same rate and same probability: one action card, as in the v0.6 Tree.
- function positionKey(node, player, source) {
-  const acts = node.log.flatMap(event => event.kind === 'col' ? event.acts : [])
+ function publicPosition(node, player) {
+  return node.log.flatMap(event => event.kind === 'col' ? event.acts : [])
    .filter(act => act.player === player || act.target === player)
    .map(act => act.kind === 'co' ? 'co' + act.role : (act.player === player ? 'from' + act.color : 'to' + act.color)).sort();
-  return JSON.stringify([acts, (source.action_rates || {})[player], source.action_ends[player]]);
  }
- function actionGroups(node, children) {
+ function positionKey(node, player, source) {
+  return JSON.stringify([publicPosition(node, player), (source.action_rates || {})[player], source.action_ends[player]]);
+ }
+ const actionKey = (node, child, source) => child.probability === '0' || !source ? 'single:' + child.id : child.probability + positionKey(node, child.event.player, source);
+ // A lone CO by players in the same position, with the same role rates and the same win rate after it.
+ const loneCo = child => child.event && child.event.kind === 'col' && child.event.acts.length === 1 && child.event.acts[0].kind === 'co' ? child.event.acts[0] : null;
+ const coPosition = (node, player, source) => JSON.stringify([publicPosition(node, player), source.role_rates[player]]);
+ function columnKey(node, child, source) {
+  const act = loneCo(child);
+  return act && source && child.village && child.probability !== '0' ? JSON.stringify([act.role, coPosition(node, act.player, source), child.village]) : 'single:' + child.id;
+ }
+ function childGroups(node, children, keyOf) {
   const source = node.result || node.read, onPath = new Set();
   for (let at = current(); at; at = at.parent ? nodeOf(at.parent) : null) onPath.add(at.id);
   const visited = child => onPath.has(child.id) || child.open || child.visited;
   const groups = [], byKey = new Map();
   for (const child of children) {
-   const key = child.probability === '0' || !source ? 'single:' + child.id : child.probability + positionKey(node, child.event.player, source);
+   const key = keyOf(node, child, source);
    if (!byKey.has(key)) { byKey.set(key, {members: []}); groups.push(byKey.get(key)); }
    byKey.get(key).members.push(child);
   }
@@ -256,6 +266,15 @@
    .map(player => player === group.representative.event.player ? `(${player})` : player).join(',');
   return `[${list}]から${verb}`;
  }
+ // The core sends one column for the players it can rename freely; those players stay in the label.
+ function columnLabel(node, group, siblings) {
+  const child = group.representative, act = loneCo(child), source = node.result || node.read;
+  if (!act || !source || child.probability === '0') return child.label;
+  const state = publicState(node.log), explicit = new Set(siblings.map(loneCo).filter(item => item && item.role === act.role).map(item => item.player));
+  const same = [...state.alive].filter(player => !state.claims[player] && !explicit.has(player) && coPosition(node, player, source) === coPosition(node, act.player, source));
+  const list = [...group.members.map(member => loneCo(member).player), ...same].sort((a, b) => a - b);
+  return list.length > 1 ? `[${list.map(player => player === act.player ? `(P${player})` : `P${player}`).join(',')}] ${ROLE[act.role]}CO` : child.label;
+ }
  function visibleBoards() {
   const out = [];
   const walk = node => {
@@ -263,10 +282,10 @@
    if (!node.open) return;
    ensureBranches(node);
    const children = node.children.map(nodeOf);
-   for (const child of children.filter(item => !item.event || item.event.kind === 'col')) walk(child);
+   for (const group of childGroups(node, children.filter(item => !item.event || item.event.kind === 'col'), columnKey)) walk(group.representative);
    for (const kind of ['exec', 'bite']) {
     const acts = children.filter(item => item.event && item.event.kind === kind);
-    for (const group of actionGroups(node, acts)) if (!group.representative.settled) walk(group.representative);
+    for (const group of childGroups(node, acts, actionKey)) if (!group.representative.settled) walk(group.representative);
    }
   };
   walk(nodeOf('b0'));
@@ -277,7 +296,7 @@
  function buildTree() {
   const entries = [], columnKeys = new Set();
   const place = (item, column) => { item.columnKey = column; columnKeys.add(column); entries.push(item); return item; };
-  const boardCard = (node, depth) => {
+  const boardCard = (node, depth, label = node.label) => {
    const day = dayOf(node.log), night = isNight(node.log);
    const update = node.parent && (!node.event || node.event.kind === 'col');
    const manual = node.parent && node.probability === '0';
@@ -287,22 +306,23 @@
    else if (node.failure) article.append(el('span', {class: 'probability tree-win-corner'}, isContradiction(node) ? '矛盾' : '未計算'));
    const main = el('button', {type: 'button', class: 'compact-tree-select', 'aria-expanded': String(Boolean(node.open)),
     onclick: () => { node.open = !node.open; save(); render(); next(); }});
-   if (update) for (const line of (node.label || '').split(' / ')) main.append(el('span', {class: 'tree-log-row'}, line));
+   if (update) for (const line of (label || '').split(' / ')) main.append(el('span', {class: 'tree-log-row'}, line));
    else main.textContent = `B${shownNumber(node)} · ${publicState(node.log).alive.size}人`;
    article.append(main, el('button', {type: 'button', class: 'compact-tree-go', title: 'このBoardをCurrentにする', 'aria-label': `${(node.label || '').split(' / ')[0]} B${shownNumber(node)}へ遷移`, onclick: () => select(node.id)}, '→'));
    return place({key: node.id, element: article, children: [], node}, `${day}-${night ? 'n' : 'd'}-${depth}`);
   };
   const leaf = (key, text, cls, columnKey, onclick) => place({key, children: [], element: el('article', {class: `tree-item compact-tree-item compact-tree-board settled ${cls}`},
    el('button', {type: 'button', class: 'compact-tree-select', onclick}, text))}, columnKey);
-  const build = (node, depth) => {
-   const item = boardCard(node, depth);
+  const build = (node, depth, label) => {
+   const item = boardCard(node, depth, label);
    if (!node.open) return item;
    ensureBranches(node);
    const children = node.children.map(nodeOf), day = dayOf(node.log), night = isNight(node.log);
-   for (const child of children.filter(c => !c.event || c.event.kind === 'col')) item.children.push({item: build(child, depth + 1), probability: child.probability});
+   const columns = children.filter(c => !c.event || c.event.kind === 'col');
+   for (const group of childGroups(node, columns, columnKey)) item.children.push({item: build(group.representative, depth + 1, columnLabel(node, group, columns)), probability: addFractions(group.members.map(member => member.probability))});
    for (const kind of ['exec', 'bite']) {
     const acts = children.filter(c => c.event && c.event.kind === kind);
-    for (const group of actionGroups(node, acts)) {
+    for (const group of childGroups(node, acts, actionKey)) {
      const child = group.representative, manual = child.probability === '0';
      const action = place({key: `${node.id}:act:${child.id}`, children: [], element: el('button', {type: 'button',
       class: `tree-item compact-tree-item compact-action-item${manual ? ' manual' : ''}`, onclick: () => select(child.id)}, actionLabel(group, kind))}, `${day}-${night ? 'n' : 'd'}-act`);
