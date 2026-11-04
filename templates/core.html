@@ -13,7 +13,8 @@
 <body>
   <div class="page-shell" id="page-top">
     <header class="site-head">
-      <a class="brand" href="{{ url_for('core_page') }}">ww_gg<span>人狼の期待勝率</span></a>
+      <a class="brand" href="{{ url_for('core_page') }}">ww_gg</a>
+      <span class="head-context" id="head-context"></span>
       <div class="head-end"><a class="header-help" href="{{ url_for('help_route') }}">HELP</a><span class="badge">v0.8</span></div>
     </header>
     <script type="application/json" id="strategy-defaults">{{ strategy_defaults|tojson }}</script>

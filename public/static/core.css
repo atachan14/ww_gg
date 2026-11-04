@@ -32,3 +32,18 @@
 .core-tree .compact-tree-select { cursor: pointer; }
 .core-tree .compact-tree-item.settled { background: #f7f8f8; }
 .core-tree .compact-action-item.manual { border-style: dashed; }
+/* Header and footer: the cast is in the header, the current Board in the footer. */
+.head-context { flex: 1; min-width: 0; font-size: 13px; color: var(--muted); }
+.phase-buttons { margin-left: auto; }
+.current-board { font-size: 13px; font-weight: 600; white-space: nowrap; padding: 0 4px; }
+/* Inputs in the table read as plain text until pointed at; the same class fits any later clickable cell. */
+#player-panel .flat-select { appearance: none; -webkit-appearance: none; field-sizing: content; width: auto; min-width: 0; min-height: 22px; height: 22px; padding: 0 3px; border: 0; border-radius: 3px; background: transparent; box-shadow: none; color: var(--muted); font-size: 12px; font-weight: 400; cursor: pointer; }
+#player-panel .flat-select.chosen { color: var(--ink); font-weight: 600; }
+#player-panel .flat-select:hover { background: #e6eef1; }
+#player-panel .flat-select:focus-visible { outline: 2px solid var(--village); outline-offset: 1px; }
+.co-slots { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 14px; min-width: 0; }
+/* The Tree pans by dragging, with a scrollbar that is easy to see. */
+.core-tree .tree-flow-frame { scrollbar-width: thin; scrollbar-color: #9fb3ba transparent; }
+.core-tree .compact-tree-canvas { cursor: grab; }
+.core-tree .tree-flow-frame.is-panning, .core-tree .tree-flow-frame.is-panning .compact-tree-canvas { cursor: grabbing; user-select: none; }
+.core-tree .compact-tree-item, .core-tree .compact-action-item { cursor: pointer; }

@@ -11,7 +11,7 @@
   disclose_all: true, seer_target: [...defaults.seer_target], fake_report: [...defaults.fake_report], bite: 'max', execution: 'max'});
 
  let db = null, game = null, flash = '', inflight = null, calculating = null, draft = {}, editingStrategy = null;
- let target = null, breakdown = true, backgroundPaused = false;
+ let target = null, breakdown = true, backgroundPaused = false, treeZoom = 1;
  const panes = {display: false, rules: false, strategy: false};
  let fractions = false;
  try { fractions = localStorage.getItem('ww_gg.probability-format') === 'fraction'; } catch (_) {}
@@ -62,25 +62,40 @@
   if (event.kind === 'bite') return `P${event.player}を噛み`;
   return event.acts.length ? event.acts.map(actLabel).join(' / ') : '更新なし';
  }
- const actKey = act => act.kind === 'co' ? `co:${act.player}:${act.role}` : `report:${act.player}:${act.target}:${act.color}`;
+ const actKey = act => act.kind === 'co' ? `co:${act.player}:${act.role}` : `report:${act.player}:${act.target}:${act.color}${act.day ? ':d' + act.day : ''}`;
  const eventKey = event => event.kind === 'col' ? 'col:' + event.acts.map(actKey).sort().join(',') : `${event.kind}:${event.player}`;
  const dayOf = log => 1 + log.filter(event => event.kind === 'bite').length;
  const isNight = log => { const last = log[log.length - 1]; return Boolean(last && last.kind === 'exec'); };
  const phaseText = log => `Day ${dayOf(log)} · ${isNight(log) ? '夜' : '昼'}`;
  function publicState(log) {
   const alive = new Set(Array.from({length: players()}, (_, i) => i + 1)), claims = {}, deaths = {}, columns = [];
+  const execs = {}, nightAlive = {}, reports = {}, reportDay = new Map();
   let day = 1;
   for (const event of log) {
    if (event.kind === 'col') {
     columns.push({day, event});
     for (const act of event.acts) if (act.kind === 'co') claims[act.player] = act.role;
+    for (const act of event.acts) if (act.kind === 'report') {
+     const taken = reports[act.player] ||= {}, role = claims[act.player];
+     const at = act.day || (role === 'medium' ? Number(Object.keys(execs).find(d => execs[d] === act.target)) + 1
+      : slotDays(role, day, execs).reverse().find(d => !taken[d])) || day;
+     taken[at] = act;
+     reportDay.set(act, at);
+    }
    } else {
     alive.delete(event.player);
     deaths[event.player] = `D${day} ${event.kind === 'exec' ? '処刑' : '襲撃'}`;
+    if (event.kind === 'exec') { execs[day] = event.player; nightAlive[day] = new Set(alive); }
     if (event.kind === 'bite') day++;
    }
   }
-  return {alive, claims, deaths, columns};
+  return {alive, claims, deaths, columns, execs, nightAlive, reports, reportDay, day};
+ }
+ // The days with a result to tell: the seer from the first morning its rule gives one, the medium from the day after an execution.
+ function slotDays(role, day, execs) {
+  const days = [];
+  for (let d = role === 'seer' && game.rules.first_night !== 'none' ? 1 : 2; d <= day; d++) if (role === 'seer' || execs[d - 1]) days.push(d);
+  return days;
  }
  const sameStrategy = (a, b) => JSON.stringify(a) === JSON.stringify(b);
  function castText(cast) {
@@ -383,6 +398,34 @@
   }
   canvas.prepend(svg);
  }
+ // Ctrl+wheel zooms around the pointer, dragging empty space pans. CSS zoom keeps the sticky headers and the
+ // scroll size right; it is set after the layout because TreeLayout measures unzoomed widths.
+ function bindTreeView(frame) {
+  const chart = frame.firstElementChild;
+  chart.style.zoom = treeZoom;
+  frame.addEventListener('wheel', event => {
+   if (!event.ctrlKey) return;
+   event.preventDefault();
+   const box = frame.getBoundingClientRect(), x = event.clientX - box.left, y = event.clientY - box.top;
+   const next = Math.min(1.6, Math.max(0.4, treeZoom * (event.deltaY < 0 ? 1.1 : 1 / 1.1))), ratio = next / treeZoom;
+   treeZoom = next;
+   chart.style.zoom = treeZoom;
+   frame.scrollLeft = (frame.scrollLeft + x) * ratio - x;
+   frame.scrollTop = (frame.scrollTop + y) * ratio - y;
+  }, {passive: false});
+  frame.addEventListener('pointerdown', event => {
+   const box = frame.getBoundingClientRect(), onBar = event.clientX - box.left >= frame.clientWidth || event.clientY - box.top >= frame.clientHeight;
+   if (event.button !== 0 || onBar || event.target.closest('button')) return;
+   const {clientX: x, clientY: y} = event, left = frame.scrollLeft, top = frame.scrollTop;
+   const move = moved => { frame.scrollLeft = left - (moved.clientX - x); frame.scrollTop = top - (moved.clientY - y); };
+   const stop = () => { frame.classList.remove('is-panning'); frame.removeEventListener('pointermove', move); };
+   frame.setPointerCapture(event.pointerId);
+   frame.classList.add('is-panning');
+   frame.addEventListener('pointermove', move);
+   frame.addEventListener('pointerup', stop, {once: true});
+   frame.addEventListener('pointercancel', stop, {once: true});
+  });
+ }
 
  // --- strategy editor ---------------------------------------------------------
  function orderEditor(title, labels, list, onchange) {
@@ -484,18 +527,26 @@
       el('span', {}, castText(item.cast) + ` (${Object.keys(item.nodes).length} Board)`), el('span', {class: 'muted'}, new Date(item.created).toLocaleString('ja-JP')),
       el('button', {type: 'button', class: 'secondary', onclick: () => { location.hash = item.id; }}, '開く'),
       el('button', {type: 'button', class: 'secondary', onclick: async () => { if (confirm('この履歴を消します。元に戻せません。')) { await store('readwrite', games => games.delete(item.id)); render(); } }}, '消す'))))) : null),
-   footer(el('a', {class: 'footer-help', href: '/help'}, 'HELP'), el('div', {class: 'phase-buttons'}, phaseButton('Day1・昼へ', {disabled: !valid, onclick: startGame})))];
+   footer(el('div', {class: 'phase-buttons'}, phaseButton('Day1・昼へ', {disabled: !valid, onclick: startGame})))];
  }
 
  // --- MAIN --------------------------------------------------------------------
  function draftColumn(state) {
   const acts = [];
+  let partial = false;
   for (const player of state.alive) {
    const entry = draft[player] || {};
    if (entry.co && !state.claims[player]) acts.push({kind: 'co', player, role: entry.co});
-   if (entry.target && (state.claims[player] || entry.co)) acts.push({kind: 'report', player, target: Number(entry.target), color: entry.color || 'white'});
+   const role = state.claims[player] || entry.co;
+   if (!role) continue;
+   for (const day of Object.keys(entry.slots || {}).map(Number).sort((a, b) => a - b)) {
+    const {target: chosen, color} = entry.slots[day], reported = role === 'medium' ? state.execs[day - 1] : Number(chosen);
+    // Only an earlier day needs saying: the core reads a report by its target, and the medium's target already fixes its day.
+    if (reported && color) acts.push({kind: 'report', player, target: reported, color, ...(role === 'seer' && day !== state.day ? {day} : {})});
+    else if (reported || color) partial = true;
+   }
   }
-  return {kind: 'col', acts};
+  return {kind: 'col', acts, partial};
  }
  function logView(node, state) {
   const today = state.columns.filter(item => item.day === dayOf(node.log));
@@ -506,7 +557,7 @@
    return [...byPlayer].map(([player, acts]) => el('div', {class: 'board-log-line'},
     el('span', {class: 'board-log-token board-log-player'}, `Player${player}`), el('span', {}, 'が'),
     acts.map(act => el('span', {class: 'board-log-token'}, act.kind === 'co' ? `CO:${ROLE[act.role]}`
-     : `${state.claims[player] === 'medium' ? '霊能' : '占い'} Day${item.day}:Player${act.target}=${COLOR[act.color]}`))));
+     : `${state.claims[player] === 'medium' ? '霊能' : '占い'} Day${state.reportDay.get(act)}:Player${act.target}=${COLOR[act.color]}`))));
   };
   return el('section', {class: 'board-log', 'aria-labelledby': 'system-log-title'},
    el('header', {}, el('h3', {id: 'system-log-title'}, 'BoardLog')),
@@ -538,7 +589,7 @@
     el('td', {class: 'index'}, String(player)),
     el('td', {class: 'player-name'}, `Player ${player}`),
     el('td', {'data-col': 'co'}, editable && alive && !claim
-     ? el('select', {class: 'co-select', 'aria-label': `Player ${player}のCO`, onchange: event => { entry.co = event.target.value; render(); }},
+     ? el('select', {class: 'co-select flat-select' + (entry.co ? ' chosen' : ''), 'aria-label': `Player ${player}のCO`, onchange: event => { entry.co = event.target.value; entry.slots = {}; render(); }},
       el('option', {value: ''}, '--'), roleChoices.map(role => el('option', {value: role, selected: entry.co === role}, ROLE[role])))
      : el('span', {}, claim ? ROLE[claim] : '--')),
     el('td', {class: 'village-text'}, row ? probability(village(row)) : loading()),
@@ -548,18 +599,23 @@
     el('td', {class: 'action-rates'}, rate !== undefined ? [el('span', {class: 'village-text'}, probability(rate)), ' / ', el('span', {class: 'wolf-text'}, probability(complement(rate)))]
      : alive && kind ? el('span', {class: 'muted'}, node.result ? '—' : '未計算') : ''),
     el('td', {'data-col': 'status'}, statusCell)));
-   // As in v0.6: a claimed role always shows its results, and today's report is entered on the same line.
+   // A claimed role shows one slot per day; a day left undisclosed stays open on later days.
    if (shownRole) {
-    const past = state.columns.flatMap(item => item.event.acts.filter(act => act.kind === 'report' && act.player === player)
-     .map(act => el('span', {class: 'co-day'}, `D${item.day} P${act.target}=${COLOR[act.color]}`)));
-    const targets = Array.from({length: players()}, (_, i) => i + 1).filter(other => other !== player);
+    const days = slotDays(shownRole, dayOf(node.log), state.execs), told = state.reports[player] || {};
+    const slot = day => {
+     if (told[day]) return el('span', {class: 'co-day'}, `D${day} P${told[day].target}=${COLOR[told[day].color]}`);
+     if (!editable || !alive) return el('span', {class: 'co-day muted'}, `D${day} 未開示`);
+     const chosen = (entry.slots ||= {})[day] ||= {}, set = key => event => { chosen[key] = event.target.value; render(); };
+     const choices = day === 1 ? Array.from({length: players()}, (_, i) => i + 1) : [...state.nightAlive[day - 1]];
+     return el('span', {class: 'co-day'}, `D${day}`,
+      shownRole === 'medium' ? ` P${state.execs[day - 1]}=` : el('select', {class: 'flat-select' + (chosen.target ? ' chosen' : ''), 'aria-label': `Player ${player} Day${day}の対象`, onchange: set('target')},
+       el('option', {value: ''}, '未開示'), choices.filter(other => other !== player).map(other => el('option', {value: other, selected: Number(chosen.target) === other}, `P${other}`))),
+      el('select', {class: 'flat-select' + (chosen.color ? ' chosen' : ''), 'aria-label': `Player ${player} Day${day}の結果`, onchange: set('color')},
+       el('option', {value: ''}, '未開示'), Object.keys(COLOR).map(color => el('option', {value: color, selected: chosen.color === color}, COLOR[color]))));
+    };
     rows.push(el('tr', {class: 'co-detail-row'}, el('td', {}), el('td', {colSpan: 7 + (detail && breakdown ? roles.length : 0)}, el('div', {class: 'co-line'},
      el('span', {class: 'co-role-label'}, ROLE[shownRole]),
-     past.length ? el('div', {class: 'co-timeline'}, past) : null,
-     editable && alive ? [el('select', {'aria-label': `Player ${player}の報告先`, onchange: event => { entry.target = event.target.value; render(); }},
-       el('option', {value: ''}, '報告なし'), targets.map(other => el('option', {value: other, selected: Number(entry.target) === other}, `Player${other}`))),
-      el('select', {'aria-label': `Player ${player}の報告の色`, onchange: event => { entry.color = event.target.value; render(); }},
-       Object.keys(COLOR).map(color => el('option', {value: color, selected: (entry.color || 'white') === color}, COLOR[color])))] : !past.length ? el('span', {class: 'co-ability-note'}, '結果なし') : null))));
+     days.length ? el('div', {class: 'co-slots'}, days.map(slot)) : el('span', {class: 'co-ability-note'}, '結果なし')))));
    }
   }
   const toggle = detail ? el('button', {type: 'button', class: 'role-breakdown-toggle', 'aria-expanded': String(breakdown), 'aria-label': '村陣営の役職内訳を開閉', onclick: () => { breakdown = !breakdown; render(); }},
@@ -599,8 +655,9 @@
    el('div', {class: 'panel-heading'}, el('h2', {class: 'board-section-label', id: 'players-title'}, 'BoardInfo'), el('span', {class: 'muted'}, '現在Boardの公開情報')),
    logView(node, state),
    el('div', {class: 'board-table-heading'}, el('h3', {class: 'board-child-title', id: 'board-table-title'}, 'BoardTable'),
-    editable ? [el('button', {type: 'button', class: column.acts.length ? 'primary' : '', disabled: !column.acts.length, onclick: () => followEvent(node, column)}, '更新'),
-     el('button', {type: 'button', class: 'secondary', onclick: () => followEvent(node, {kind: 'col', acts: []})}, '更新なし')] : null),
+    editable ? [el('button', {type: 'button', class: column.acts.length && !column.partial ? 'primary' : '', disabled: !column.acts.length || column.partial, onclick: () => followEvent(node, {kind: 'col', acts: column.acts})}, '更新'),
+     el('button', {type: 'button', class: 'secondary', onclick: () => followEvent(node, {kind: 'col', acts: []})}, '更新なし'),
+     column.partial ? el('span', {class: 'board-table-note'}, '対象と結果の片方だけの開示は、まだ計算できません。') : null] : null),
    tableView(node, source, editable, state),
    source && source.stage === 'open' && source.branches.length ? el('div', {class: 'update-list'}, el('span', {class: 'muted'}, '起こり得る更新:'),
     source.branches.map(branch => el('button', {type: 'button', class: 'secondary', onclick: () => followEvent(node, branch.event)}, `${eventLabel(branch.event)} (${show(branch.probability)})`))) : null);
@@ -623,13 +680,13 @@
   const previous = !parent ? el('button', {type: 'button', class: 'secondary settings-return', onclick: () => { cancelInflight(); location.hash = ''; }}, el('span', {'aria-hidden': 'true'}, '←'), ' ゲーム設定に戻る')
    : phaseButton(isNight(parent.log) === isNight(node.log) && dayOf(parent.log) === dayOf(node.log) ? '前のBoardへ' : `Day${dayOf(parent.log)}・${isNight(parent.log) ? '夜' : '昼'}へ`, {id: 'back-button', onclick: () => select(parent.id)}, true);
   const bar = footer(
-   el('nav', {'aria-label': '画面内の移動'}, el('a', {class: 'footer-help', href: '/help'}, 'HELP'), jump('page-top', 'BoardOverview'), jump('player-panel', 'BoardInfo'), jump('tree-reserved', 'GameTree')),
+   el('nav', {'aria-label': '画面内の移動'}, el('button', {type: 'button', onclick: () => window.scrollTo(0, 0)}, 'BoardOverview'), jump('player-panel', 'BoardInfo'), jump('tree-reserved', 'GameTree')),
    el('div', {class: 'phase-buttons'},
     !blocked && kind ? el('span', {'data-target-preview': ''}, `${kind === 'exec' ? '処刑' : '襲撃'}:${chosen ? 'Player' + chosen : '未選択'}`) : null,
     previous,
+    el('span', {class: 'current-board'}, node.settled ? '決着' : phaseText(node.log)),
     !blocked ? phaseButton(kind === 'bite' ? `Day${dayOf(node.log) + 1}・昼へ` : `Day${dayOf(node.log)}・夜へ`, {id: 'advance-button', disabled: !chosen, onclick: () => followEvent(node, {kind, player: chosen})}) : null));
   return [el('main', {'data-screen': node.settled ? 'result' : 'main'},
-   el('p', {class: 'cast-line', id: 'game-cast'}, el('span', {}, '配役'), ' ' + castText(game.cast)),
    el('div', {class: 'board-layout' + (Object.values(panes).some(Boolean) ? ' settings-open' : '')}, information, player, settings), tree), bar];
  }
 
@@ -643,7 +700,8 @@
   if (version !== renderId) return;
   app.replaceChildren(...(flash ? [el('p', {class: 'error', role: 'alert'}, flash)] : []), ...view.filter(Boolean));
   const frame = app.querySelector('.tree-flow-frame');
-  if (frame) { renderTree(frame); frame.scrollLeft = scrollLeft; frame.scrollTop = scrollTop; }
+  if (frame) { renderTree(frame); bindTreeView(frame); frame.scrollLeft = scrollLeft; frame.scrollTop = scrollTop; }
+  document.getElementById('head-context').textContent = game ? castText(game.cast) : 'ルール設定';
   document.title = (game ? (current().settled ? '決着画面' : phaseText(current().log)) : 'TOP') + ' | ww_gg';
   if (focusLabel) for (const node of app.querySelectorAll('[aria-label]')) if (node.getAttribute('aria-label') === focusLabel) { node.focus({preventScroll: true}); break; }
  }
