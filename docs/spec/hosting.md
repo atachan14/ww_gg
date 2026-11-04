@@ -6,8 +6,8 @@
 
 | 環境 | 版 | 内容 |
 |---|---|---|
-| Production(https://ww-gg.vercel.app/) | v0.5.2(`03e4e31`) | 公開中の版。`master` ブランチ |
-| Preview(Vercel) | `4dc7246` 系 | v0.6 の検証用。ブラウザ内の履歴保存と、永続する Tree を有効にしている(`VERCEL_ENV` が preview のときだけ) |
+| Production(https://ww-gg.vercel.app/) | v0.8 | 公開中の版。`master` ブランチ。`/` が新しい画面 |
+| Preview(Vercel) | `master` 以外のブランチ | 公開前の確認用。Vercel へのログインが要る。古い画面のブラウザ内の履歴保存と、永続する Tree を有効にしている(`VERCEL_ENV` が preview のときだけ) |
 | ローカル | 作業中のブランチ | `start.cmd` で起動。`dev_previews/run_current_app.py` が開発用の入口 |
 
 - Preview のブランチに push すると、Vercel が自動でデプロイし、Team の利用量を消費する。

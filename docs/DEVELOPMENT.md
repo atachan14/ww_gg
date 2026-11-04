@@ -57,7 +57,7 @@ node --test tests/personal_cold_generation.test.cjs tests/calculation_cancellati
 
 ## 公開
 
-- v0.6 は未公開。Production(`03e4e31`)と Preview(`4dc7246`)は意図的に違う。
+- Production は v0.8。v0.6 は公開していない。
 - **Preview のブランチに push すると、Vercel が自動でデプロイし、Team の利用量を消費する。** `master` への push は Production のデプロイになる。
 - タグ、GitHub の Release、エイリアス、認証情報の変更は、ユーザーの承認なしにしない。
 
