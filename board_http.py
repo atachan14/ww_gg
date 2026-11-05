@@ -2,7 +2,7 @@
 from flask import jsonify, render_template, request
 
 from werewolf.calculation_budget import tick
-from wwcore import (Board, BoardContradiction, Cast, InvalidBoard, Rules, Strategy, bite, co, column,
+from wwcore import (Board, BoardContradiction, Cast, InvalidBoard, Rules, Strategy, bite, co, column, declare,
                     evaluate, execute, read_board, report)
 from wwcore.model import COLOR_NAMES, FAKE_REPORT_STAGES, ROLE_NAMES, SEER_TARGET_STAGES
 
@@ -18,6 +18,7 @@ def event_json(event):
     if event[0] == 'col':
         return {'kind': 'col', 'acts': [
             {'kind': 'co', 'player': act[1], 'role': ROLE_NAMES[act[2]]} if act[0] == 'co' else
+            {'kind': 'declare', 'player': act[1], 'target': act[2]} if act[0] == 'declare' else
             {'kind': 'report', 'player': act[1], 'target': act[2], 'color': COLOR_NAMES[act[3]]}
             for act in event[1]]}
     return {'kind': event[0], 'player': event[1]}
@@ -83,6 +84,8 @@ def parse_event(data):
                 parsed.append(co(number(act, 'player'), act['role']))
             elif act.get('kind') == 'report' and act.get('color') in COLOR_NAMES:
                 parsed.append(report(number(act, 'player'), number(act, 'target'), act['color']))
+            elif act.get('kind') == 'declare':
+                parsed.append(declare(number(act, 'player'), number(act, 'target')))
             else:
                 raise InvalidBoard('Unknown act')
         return column(*parsed)

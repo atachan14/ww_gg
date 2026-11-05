@@ -75,6 +75,11 @@ def report(player, target, color):
     return ('report', player, target, COLOR_OF[color])
 
 
+def declare(player, target):
+    """A claimed seer says publicly whom they divine tonight."""
+    return ('declare', player, target)
+
+
 def column(*acts):
     return ('col', tuple(sorted(acts, key=repr)))
 
@@ -114,7 +119,7 @@ def validate(board):
         if not stages or stages[-1] != 'uniform' or not set(stages) <= set(known):
             raise InvalidBoard('Ordered filters must use known stages and end in uniform')
     players = range(1, cast.players + 1)
-    alive, claims, night = set(players), {}, False
+    alive, claims, night, declared = set(players), {}, False, set()
     for event in board.log:
         kind = event[0]
         if kind == 'col':
@@ -132,10 +137,18 @@ def validate(board):
                     if player not in claims or player not in alive or target not in players \
                             or target == player or color not in (WHITE, BLACK):
                         raise InvalidBoard(f'Invalid report: {act}')
+                if act[0] == 'declare':
+                    _, player, target = act
+                    if claims.get(player) != SEER or player not in alive or target not in alive \
+                            or target == player or player in declared:
+                        raise InvalidBoard(f'Invalid declaration: {act}')
+                    declared.add(player)
         elif kind in ('exec', 'bite'):
             if night != (kind == 'bite') or event[1] not in alive:
                 raise InvalidBoard(f'Invalid event order or target: {event}')
             alive.discard(event[1])
             night = kind == 'exec'
+            if kind == 'bite':
+                declared = set()
         else:
             raise InvalidBoard(f'Unknown event: {event}')

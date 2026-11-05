@@ -25,7 +25,7 @@ def rename_by_appearance(log, n):
     for event in log:
         if event[0] == 'col':
             for act in event[1]:
-                for p in (act[1:3] if act[0] == 'report' else act[1:2]):
+                for p in (act[1:2] if act[0] == 'co' else act[1:3]):
                     if p not in order:
                         order.append(p)
         elif event[1] not in order:
@@ -38,8 +38,9 @@ def apply_names(log, names):
     result = []
     for event in log:
         if event[0] == 'col':
-            acts = [('co', names[a[1]], a[2]) if a[0] == 'co' else ('report', names[a[1]], names[a[2]], a[3])
-                    for a in event[1]]
+            acts = [('co', names[a[1]], a[2]) if a[0] == 'co'
+                    else ('declare', names[a[1]], names[a[2]]) if a[0] == 'declare'
+                    else ('report', names[a[1]], names[a[2]], a[3]) for a in event[1]]
             result.append(('col', tuple(sorted(acts, key=repr))))
         else:
             result.append((event[0], names[event[1]]))
@@ -78,6 +79,18 @@ class Oracle:
 
     def last_of(self, log, kind):
         return next((e[1] for e in reversed(log) if e[0] == kind), None)
+
+    def declared_target(self, log, player, tonight):
+        """Whom `player` declared for tonight, or for the night that just ended."""
+        current, previous = None, None
+        for event in log:
+            if event[0] == 'bite':
+                current, previous = None, current
+            elif event[0] == 'col':
+                for act in event[1]:
+                    if act[0] == 'declare' and act[1] == player:
+                        current = act[2]
+        return current if tonight else previous
 
     def game_end(self, roles, alive):
         wolves = sum(roles[p] == W for p in alive)
@@ -243,6 +256,9 @@ class Oracle:
             if any(roles[p] == S for p in after):
                 seer = roles.index(S)
                 others = [p for p in before if p != seer]
+                fixed = self.declared_target(log, seer, True)
+                if fixed in before:
+                    others = [fixed]
                 for t in others:
                     key = (roles, seen, t)
                     result[key] = result.get(key, F()) + w / len(others)
@@ -351,6 +367,9 @@ class Oracle:
         roles, seen, _ = world
         before = self.alive(log)
         seer = roles.index(S)
+        fixed = self.declared_target(log, seer, True)
+        if fixed in before:
+            return {fixed: F(1)}
         pool = [p for p in before if p != seer]
         rates = self.role_rates(log)
         claims = self.claims(log)
@@ -410,6 +429,9 @@ class Oracle:
             start = [p for p in start if p != player]
             told = {a[2] for e in log if e[0] == 'col' for a in e[1] if a[0] == 'report' and a[1] == player}
             pool = [p for p in start if p not in told] or start
+            fixed = self.declared_target(log, player, False)
+            if fixed in start:
+                pool = [fixed]
         else:
             pool = [self.last_of(log, 'exec')]
         options = [(t, c) for t in pool for c in (WHITE, BLACK)]
@@ -471,7 +493,8 @@ class Oracle:
         log = []
         for event in self.board.log:
             if event[0] == 'col':
-                acts = [('co', a[1] - 1, a[2]) if a[0] == 'co' else ('report', a[1] - 1, a[2] - 1, a[3])
+                acts = [('co', a[1] - 1, a[2]) if a[0] == 'co' else ('declare', a[1] - 1, a[2] - 1) if a[0] == 'declare'
+                        else ('report', a[1] - 1, a[2] - 1, a[3])
                         for a in event[1]]
                 log.append(('col', tuple(sorted(acts, key=repr))))
             else:

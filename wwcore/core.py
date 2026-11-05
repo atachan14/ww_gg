@@ -148,6 +148,8 @@ def relabel(log, perm):
             for act in event[1]:
                 if act[0] == 'co':
                     acts.append(('co', perm[act[1]], act[2]))
+                elif act[0] == 'declare':
+                    acts.append(('declare', perm[act[1]], perm[act[2]]))
                 else:
                     acts.append(('report', perm[act[1]], perm[act[2]], act[3]))
             result.append(('col', tuple(sorted(acts, key=repr))))
@@ -161,7 +163,7 @@ def event_players(event):
         return {event[1]}
     named = set()
     for act in event[1]:
-        named.update(act[1:3] if act[0] == 'report' else act[1:2])
+        named.update(act[1:2] if act[0] == 'co' else act[1:3])
     return named
 
 
@@ -174,6 +176,10 @@ def canonical_order(log, n):
             for act in event[1]:
                 if act[0] == 'co':
                     marks[act[1]].append((i, 0, act[2]))
+                elif act[0] == 'declare':
+                    marks[act[1]].append((i, 5, 0))
+                    marks[act[2]].append((i, 6, 0))
+                    links.append((i, act[1], act[2]))
                 else:
                     marks[act[1]].append((i, 1, act[3]))
                     marks[act[2]].append((i, 2, act[3]))
@@ -200,11 +206,14 @@ class Node:
         self.alive = set(range(calc.n))
         self.claims, self.executed, self.reported, self.last_exec, self.last_bite = {}, set(), {}, None, None
         self.whites, self.blacks = [0] * calc.n, [0] * calc.n
+        self.declared, self.last_declared = {}, {}  # for tonight, and for the night before this morning
         for event in log:
             if event[0] == 'col':
                 for act in event[1]:
                     if act[0] == 'co':
                         self.claims[act[1]] = act[2]
+                    elif act[0] == 'declare':
+                        self.declared[act[1]] = act[2]
                     else:
                         self.reported.setdefault(act[1], set()).add(act[2])
                         (self.blacks if act[3] == BLACK else self.whites)[act[2]] += 1
@@ -215,6 +224,7 @@ class Node:
                     self.last_exec = event[1]
                 else:
                     self.last_bite = event[1]
+                    self.last_declared, self.declared = self.declared, {}
         last = log[-1] if log else None
         self.first_column = last is None or last[0] == 'bite'
         self.stage = 'night' if last and last[0] == 'exec' else (
@@ -617,9 +627,23 @@ class Calculation:
                     result[projected] = result.get(projected, F()) + weight * r
         return result
 
+    def divine_declared(self, node, state, layout, alive):
+        """A true seer goes where they declared, if that player lived to the night; None when not fixed."""
+        holder = next(g for g, v in zip(layout.groups, state) if v[S] and g[0] in alive)
+        target = node.declared.get(holder[0])
+        if target not in node.alive:
+            return None
+        i = layout.where[target]
+        pool = [(k, c) for k, c in enumerate(state[i]) if c and k != S]
+        total = sum(c for _, c in pool)
+        return [(self.flag_target(state, i, k), F(c, total)) for k, c in pool]
+
     def divine_uniform(self, node, state, layout, alive):
         if not any(v[S] for g, v in zip(layout.groups, state) if g[0] in alive):
             return [(state, ONE)]
+        fixed = self.divine_declared(node, state, layout, alive)
+        if fixed is not None:
+            return fixed
         pool = [(i, k, c) for i, (g, v) in enumerate(zip(layout.groups, state)) if g[0] in node.alive
                 for k, c in enumerate(v) if c and k != S]
         total = sum(c for _, _, c in pool)
@@ -746,6 +770,9 @@ class Calculation:
         """諠ｳ螳・ the seer's ordered filter over who was alive when the night began."""
         if not any(v[S] for g, v in zip(layout.groups, state) if g[0] in alive):
             return [(state, ONE)]
+        fixed = self.divine_declared(node, state, layout, alive)
+        if fixed is not None:
+            return fixed
         pool = [(i, k, c) for i, (g, v) in enumerate(zip(layout.groups, state)) if g[0] in node.alive
                 for k, c in enumerate(v) if c and k != S]
         for stage in self.strategy.seer_target:
@@ -774,7 +801,8 @@ class Calculation:
         role = node.claims[player]
         if role == SEER:
             morning = (node.alive | {node.last_bite}) - {player}
-            pool = sorted(morning - node.reported.get(player, set())) or sorted(morning)
+            declared = node.last_declared.get(player)
+            pool = [declared] if declared in morning else sorted(morning - node.reported.get(player, set())) or sorted(morning)
         else:
             pool = [node.last_exec]
         options = [(t, c) for t in pool for c in (WHITE, BLACK)]
@@ -902,6 +930,8 @@ class Calculation:
             for act in event[1]:
                 if act[0] == 'co':
                     acts.append(('co', labels[act[1] - 1], act[2]))
+                elif act[0] == 'declare':
+                    acts.append(('declare', labels[act[1] - 1], labels[act[2] - 1]))
                 else:
                     acts.append(('report', labels[act[1] - 1], labels[act[2] - 1], act[3]))
             return ('col', tuple(sorted(acts, key=repr)))
@@ -915,6 +945,8 @@ class Calculation:
             for act in event[1]:
                 if act[0] == 'co':
                     acts.append(('co', back[act[1]], act[2]))
+                elif act[0] == 'declare':
+                    acts.append(('declare', back[act[1]], back[act[2]]))
                 else:
                     acts.append(('report', back[act[1]], back[act[2]], act[3]))
             return ('col', tuple(sorted(acts, key=repr)))

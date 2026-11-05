@@ -56,25 +56,26 @@
  const shownNumber = node => { game.shown ??= 0; node.shown ??= game.shown++; return node.shown; };
  const isContradiction = node => Boolean(node.failure && node.failure.kind === 'contradiction');
 
- const actLabel = act => act.kind === 'co' ? `P${act.player} ${ROLE[act.role]}CO` : `P${act.player}→P${act.target} ${COLOR[act.color]}`;
+ const actLabel = act => act.kind === 'co' ? `P${act.player} ${ROLE[act.role]}CO` : act.kind === 'declare' ? `P${act.player} 今夜P${act.target}を占う` : `P${act.player}→P${act.target} ${COLOR[act.color]}`;
  function eventLabel(event) {
   if (event.kind === 'exec') return `P${event.player}を処刑`;
   if (event.kind === 'bite') return `P${event.player}を噛み`;
   return event.acts.length ? event.acts.map(actLabel).join(' / ') : '更新なし';
  }
- const actKey = act => act.kind === 'co' ? `co:${act.player}:${act.role}` : `report:${act.player}:${act.target}:${act.color}${act.day ? ':d' + act.day : ''}`;
+ const actKey = act => act.kind === 'co' ? `co:${act.player}:${act.role}` : act.kind === 'declare' ? `declare:${act.player}:${act.target}` : `report:${act.player}:${act.target}:${act.color}${act.day ? ':d' + act.day : ''}`;
  const eventKey = event => event.kind === 'col' ? 'col:' + event.acts.map(actKey).sort().join(',') : `${event.kind}:${event.player}`;
  const dayOf = log => 1 + log.filter(event => event.kind === 'bite').length;
  const isNight = log => { const last = log[log.length - 1]; return Boolean(last && last.kind === 'exec'); };
  const phaseText = log => `Day ${dayOf(log)} · ${isNight(log) ? '夜' : '昼'}`;
  function publicState(log) {
   const alive = new Set(Array.from({length: players()}, (_, i) => i + 1)), claims = {}, deaths = {}, columns = [];
-  const execs = {}, nightAlive = {}, reports = {}, reportDay = new Map();
+  const execs = {}, nightAlive = {}, reports = {}, reportDay = new Map(), declares = {};
   let day = 1;
   for (const event of log) {
    if (event.kind === 'col') {
     columns.push({day, event});
     for (const act of event.acts) if (act.kind === 'co') claims[act.player] = act.role;
+    for (const act of event.acts) if (act.kind === 'declare') (declares[act.player] ||= {})[day] = act.target;
     for (const act of event.acts) if (act.kind === 'report') {
      const taken = reports[act.player] ||= {}, role = claims[act.player];
      const at = act.day || (role === 'medium' ? Number(Object.keys(execs).find(d => execs[d] === act.target)) + 1
@@ -89,7 +90,7 @@
     if (event.kind === 'bite') day++;
    }
   }
-  return {alive, claims, deaths, columns, execs, nightAlive, reports, reportDay, day};
+  return {alive, claims, deaths, columns, execs, nightAlive, reports, reportDay, declares, day};
  }
  // The days with a result to tell: the seer from the first morning its rule gives one, the medium from the day after an execution.
  function slotDays(role, day, execs) {
@@ -244,7 +245,7 @@
  function publicPosition(node, player) {
   return node.log.flatMap(event => event.kind === 'col' ? event.acts : [])
    .filter(act => act.player === player || act.target === player)
-   .map(act => act.kind === 'co' ? 'co' + act.role : (act.player === player ? 'from' + act.color : 'to' + act.color)).sort();
+   .map(act => act.kind === 'co' ? 'co' + act.role : act.kind === 'declare' ? (act.player === player ? 'declares' : 'declared') : (act.player === player ? 'from' + act.color : 'to' + act.color)).sort();
  }
  function positionKey(node, player, source) {
   return JSON.stringify([publicPosition(node, player), (source.action_rates || {})[player], source.action_ends[player]]);
@@ -531,6 +532,11 @@
  }
 
  // --- MAIN --------------------------------------------------------------------
+ // The target this player declared for the night before `day`'s morning, if that player lived to the night.
+ function declaredTarget(state, player, day) {
+  const declared = (state.declares[player] || {})[day - 1];
+  return declared && state.nightAlive[day - 1] && state.nightAlive[day - 1].has(declared) ? declared : null;
+ }
  function draftColumn(state) {
   const acts = [];
   let partial = false;
@@ -540,11 +546,12 @@
    const role = state.claims[player] || entry.co;
    if (!role) continue;
    for (const day of Object.keys(entry.slots || {}).map(Number).sort((a, b) => a - b)) {
-    const {target: chosen, color} = entry.slots[day], reported = role === 'medium' ? state.execs[day - 1] : Number(chosen);
+    const {target: chosen, color} = entry.slots[day], reported = role === 'medium' ? state.execs[day - 1] : Number(chosen) || declaredTarget(state, player, day);
     // Only an earlier day needs saying: the core reads a report by its target, and the medium's target already fixes its day.
     if (reported && color) acts.push({kind: 'report', player, target: reported, color, ...(role === 'seer' && day !== state.day ? {day} : {})});
-    else if (reported || color) partial = true;
+    else if (color || chosen) partial = true;
    }
+   if (role === 'seer' && entry.declare && !(state.declares[player] || {})[state.day]) acts.push({kind: 'declare', player, target: Number(entry.declare)});
   }
   return {kind: 'col', acts, partial};
  }
@@ -557,7 +564,7 @@
    return [...byPlayer].map(([player, acts]) => el('div', {class: 'board-log-line'},
     el('span', {class: 'board-log-token board-log-player'}, `Player${player}`), el('span', {}, 'が'),
     acts.map(act => el('span', {class: 'board-log-token'}, act.kind === 'co' ? `CO:${ROLE[act.role]}`
-     : `${state.claims[player] === 'medium' ? '霊能' : '占い'} Day${state.reportDay.get(act)}:Player${act.target}=${COLOR[act.color]}`))));
+     : act.kind === 'declare' ? `今夜の占い先:Player${act.target}` : `${state.claims[player] === 'medium' ? '霊能' : '占い'} Day${state.reportDay.get(act)}:Player${act.target}=${COLOR[act.color]}`))));
   };
   return el('section', {class: 'board-log', 'aria-labelledby': 'system-log-title'},
    el('header', {}, el('h3', {id: 'system-log-title'}, 'BoardLog')),
@@ -589,7 +596,7 @@
     el('td', {class: 'index'}, String(player)),
     el('td', {class: 'player-name'}, `Player ${player}`),
     el('td', {'data-col': 'co'}, editable && alive && !claim
-     ? el('select', {class: 'co-select flat-select' + (entry.co ? ' chosen' : ''), 'aria-label': `Player ${player}のCO`, onchange: event => { entry.co = event.target.value; entry.slots = {}; render(); }},
+     ? el('select', {class: 'co-select flat-select' + (entry.co ? ' chosen' : ''), 'aria-label': `Player ${player}のCO`, onchange: event => { entry.co = event.target.value; entry.slots = {}; entry.declare = ''; render(); }},
       el('option', {value: ''}, '--'), roleChoices.map(role => el('option', {value: role, selected: entry.co === role}, ROLE[role])))
      : el('span', {}, claim ? ROLE[claim] : '--')),
     el('td', {class: 'village-text'}, row ? probability(village(row)) : loading()),
@@ -606,16 +613,22 @@
      if (told[day]) return el('span', {class: 'co-day'}, `D${day} P${told[day].target}=${COLOR[told[day].color]}`);
      if (!editable || !alive) return el('span', {class: 'co-day muted'}, `D${day} 未開示`);
      const chosen = (entry.slots ||= {})[day] ||= {}, set = key => event => { chosen[key] = event.target.value; render(); };
+     const shownTarget = Number(chosen.target) || declaredTarget(state, player, day);
      const choices = day === 1 ? Array.from({length: players()}, (_, i) => i + 1) : [...state.nightAlive[day - 1]];
      return el('span', {class: 'co-day'}, `D${day}`,
-      shownRole === 'medium' ? ` P${state.execs[day - 1]}=` : el('select', {class: 'flat-select' + (chosen.target ? ' chosen' : ''), 'aria-label': `Player ${player} Day${day}の対象`, onchange: set('target')},
-       el('option', {value: ''}, '未開示'), choices.filter(other => other !== player).map(other => el('option', {value: other, selected: Number(chosen.target) === other}, `P${other}`))),
+      shownRole === 'medium' ? ` P${state.execs[day - 1]}=` : el('select', {class: 'flat-select' + (shownTarget ? ' chosen' : ''), 'aria-label': `Player ${player} Day${day}の対象`, onchange: set('target')},
+       el('option', {value: ''}, '未開示'), choices.filter(other => other !== player).map(other => el('option', {value: other, selected: shownTarget === other}, `P${other}`))),
       el('select', {class: 'flat-select' + (chosen.color ? ' chosen' : ''), 'aria-label': `Player ${player} Day${day}の結果`, onchange: set('color')},
        el('option', {value: ''}, '未開示'), Object.keys(COLOR).map(color => el('option', {value: color, selected: chosen.color === color}, COLOR[color]))));
     };
+    const declared = (state.declares[player] || {})[state.day], tonight = shownRole !== 'seer' || !alive ? null
+     : declared ? el('span', {class: 'co-day'}, `今夜 P${declared}を占う`)
+     : !editable ? null
+     : el('span', {class: 'co-day'}, '今夜', el('select', {class: 'flat-select' + (entry.declare ? ' chosen' : ''), 'aria-label': `Player ${player}の今夜の占い先`, onchange: event => { entry.declare = event.target.value; render(); }},
+      el('option', {value: ''}, '未宣言'), [...state.alive].filter(other => other !== player).map(other => el('option', {value: other, selected: Number(entry.declare) === other}, `P${other}`))));
     rows.push(el('tr', {class: 'co-detail-row'}, el('td', {}), el('td', {colSpan: 7 + (detail && breakdown ? roles.length : 0)}, el('div', {class: 'co-line'},
      el('span', {class: 'co-role-label'}, ROLE[shownRole]),
-     days.length ? el('div', {class: 'co-slots'}, days.map(slot)) : el('span', {class: 'co-ability-note'}, '結果なし')))));
+     days.length || tonight ? el('div', {class: 'co-slots'}, days.map(slot), tonight) : el('span', {class: 'co-ability-note'}, '結果なし')))));
    }
   }
   const toggle = detail ? el('button', {type: 'button', class: 'role-breakdown-toggle', 'aria-expanded': String(breakdown), 'aria-label': '村陣営の役職内訳を開閉', onclick: () => { breakdown = !breakdown; render(); }},

@@ -4,7 +4,7 @@ import unittest
 from fractions import Fraction as F
 
 from wwcore import (Board, BoardContradiction, Cast, InvalidBoard, Rules, Strategy, WorkLimitExceeded,
-                    bite, co, column, evaluate, execute, read_roles, report)
+                    bite, co, column, declare, evaluate, execute, read_roles, report)
 from wwcore.core import initial_masses
 from wwcore.model import MEDIUM
 from tests.wwcore_oracle import Oracle
@@ -205,6 +205,61 @@ class AgainstOracle(unittest.TestCase):
         except BoardContradiction:
             return True
         return False
+
+
+class Declarations(AgainstOracle):
+    """A declared divination is public; the true seer and a fake's report both follow it."""
+    test_grid = test_every_branch_walk = None
+
+    CAST = Cast(villager=3, seer=1, medium=1, wolf=1)
+    TWO_WOLVES = Cast(villager=2, seer=1, medium=1, wolf=2)
+
+    def test_against_the_oracle(self):
+        d = declare
+        one = (column(co(1, 'seer'), d(1, 2)),)
+        two = (column(co(1, 'seer'), co(2, 'seer'), d(1, 3), d(2, 4)),)
+        logs = [
+            one, one + (column(), execute(3)), one + (column(), execute(3), bite(4)),
+            one + (column(), execute(2)), one + (column(), execute(2), bite(4)),  # the target died first
+            one + (column(), execute(3), bite(2)),  # the target is bitten that night
+            one + (column(), execute(3), bite(4), column(report(1, 2, 'white'))),
+            one + (column(), execute(3), bite(4), column(report(1, 5, 'white'))),  # not the declared player
+            two, two + (column(), execute(5), bite(6)),
+            two + (column(), execute(5), bite(6), column(report(1, 3, 'white'), report(2, 4, 'black'))),
+            (column(co(1, 'seer'), co(2, 'seer'), d(1, 2), d(2, 1)), column(), execute(3), bite(4)),  # mutual
+            (column(co(1, 'seer'), co(2, 'seer'), d(1, 3), d(2, 3)), column(), execute(4), bite(5)),  # same target
+            (column(co(1, 'seer'), co(2, 'seer'), d(1, 3)), column(), execute(4), bite(5)),  # only one declares
+        ]
+        for cast in (self.CAST, self.TWO_WOLVES):
+            for rules in (Rules(), Rules(first_night='none'), Rules(first_night='divine', self_bite=True)):
+                for log in logs:
+                    self.assert_same(Board(cast, log, rules))
+
+    def test_another_target_shows_a_fake(self):
+        log = (column(co(1, 'seer'), co(2, 'seer'), declare(1, 3)), column(), execute(4), bite(5))
+        rules = Rules(first_night='none')
+        told = read_roles(Board(self.CAST, log + (column(report(1, 6, 'white')),), rules))
+        self.assertEqual(told[1]['seer'], 0)
+        kept = read_roles(Board(self.CAST, log + (column(report(1, 3, 'white')),), rules))
+        self.assertGreater(kept[1]['seer'], 0)
+
+    def test_a_declaration_fixes_the_fake_report_too(self):
+        log = (column(co(1, 'seer'), declare(1, 2)), column(), execute(3), bite(4))
+        for event, _ in evaluate(Board(self.TWO_WOLVES, log)).branches:
+            for act in event[1]:
+                if act[0] == 'report' and act[1] == 1:
+                    self.assertEqual(act[2], 2, event)
+
+    def test_invalid_declarations(self):
+        seer = column(co(1, 'seer'))
+        for log in ((column(declare(1, 2)),),  # no claim
+                    (column(co(1, 'medium'), declare(1, 2)),),
+                    (column(co(1, 'seer'), declare(1, 1)),),
+                    (seer, column(declare(1, 2), declare(1, 3))),
+                    (seer, column(declare(1, 2)), column(declare(1, 3))),
+                    (seer, column(), execute(2), bite(3), column(declare(1, 2)))):
+            with self.assertRaises(InvalidBoard, msg=log):
+                evaluate(Board(self.CAST, log))
 
 
 class SevenPlayers(unittest.TestCase):
